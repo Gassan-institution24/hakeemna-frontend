@@ -13,7 +13,7 @@ export default function TableCreateView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Create a new family relation"
+        heading="Create a new checklist"
         links={[
           {
             name: 'dashboard',
@@ -24,10 +24,10 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'family relations',
-            href: paths.superadmin.tables.family_relation.root,
+            name: 'checklists',
+            href: paths.superadmin.tables.checklist.root,
           },
-          { name: 'New family relation' },
+          { name: 'New checklist' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

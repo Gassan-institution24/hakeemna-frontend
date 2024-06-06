@@ -1,40 +1,46 @@
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
+import { useGetCheckList } from 'src/api';
+
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView() {
-
+export default function TableEditView() {
+  // const settings = useSettingsContext();
+  const params = useParams();
+  const { id } = params;
+  const { data } = useGetCheckList(id);
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Create a new family relation"
+        heading="Update checklist"
         links={[
           {
             name: 'dashboard',
             href: paths.superadmin.root,
           },
           {
-            name: 'Tables',
+            name: 'tables',
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'family relations',
-            href: paths.superadmin.tables.family_relation.root,
+            name: 'checklists',
+            href: paths.superadmin.tables.checklist.root,
           },
-          { name: 'New family relation' },
+          { name: 'Update' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-
-      <TableNewEditForm />
+      {data && <TableNewEditForm currentRow={data} />}
     </Container>
   );
 }

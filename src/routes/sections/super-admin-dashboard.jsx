@@ -456,6 +456,11 @@ const FamilyRelationPage = lazy(() => import('src/pages/super-admin/tables/famil
 const FamilyRelationNewPage = lazy(() => import('src/pages/super-admin/tables/family-relation/new'));
 const FamilyRelationEditPage = lazy(() => import('src/pages/super-admin/tables/family-relation/edit'));
 
+// CHECKLIST
+const ChecklistPage = lazy(() => import('src/pages/super-admin/tables/checklist/table'));
+const ChecklistNewPage = lazy(() => import('src/pages/super-admin/tables/checklist/new'));
+const ChecklistEditPage = lazy(() => import('src/pages/super-admin/tables/checklist/edit'));
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -1033,6 +1038,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <FamilyRelationPage /> },
               { path: 'new', element: <FamilyRelationNewPage /> },
               { path: ':id/edit', element: <FamilyRelationEditPage /> },
+            ],
+          },
+          {
+            path: 'checklist',
+            children: [
+              { element: <ChecklistPage />, index: true },
+              { path: 'list', element: <ChecklistPage /> },
+              { path: 'new', element: <ChecklistNewPage /> },
+              { path: ':id/edit', element: <ChecklistEditPage /> },
             ],
           },
         ],
