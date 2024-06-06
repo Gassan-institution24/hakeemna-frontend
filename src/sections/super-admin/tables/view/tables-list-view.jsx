@@ -102,6 +102,7 @@ export default function TablesListView() {
       { tableName: 'companies', documents: [] }, //
       { tableName: 'ticket_categories', documents: [] }, //
       { tableName: 'uploads', documents: [] }, //
+      { tableName: 'family_relation', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,

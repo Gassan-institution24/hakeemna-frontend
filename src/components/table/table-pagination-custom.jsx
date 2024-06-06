@@ -52,7 +52,7 @@ export default function TablePaginationCustom({
           }}
         />
       )}
-      <FormControlLabel
+      {setPage && <FormControlLabel
         label={t('page')}
         control={
           <Select
@@ -86,7 +86,7 @@ export default function TablePaginationCustom({
             sm: 'absolute',
           },
         }}
-      />
+      />}
     </Box>
   );
 }
