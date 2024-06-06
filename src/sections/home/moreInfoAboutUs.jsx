@@ -7,10 +7,10 @@ import { useTranslate } from 'src/locales';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
-import One from './images/1.jpg';
-import Two from './images/2.jpg';
-import Four from './images/4.jpg';
-import Three from './images/3.jpg';
+import One from './images/1.png';
+import Two from './images/2.png';
+import Four from './images/4.png';
+import Three from './images/3.png';
 import Person from './images/person.png';
 // ----------------------------------------------------------------------
 

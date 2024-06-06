@@ -50,7 +50,6 @@ export default function AppointmentsToday() {
   const { entranceData, refetch: refetchEntrance } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
-  console.log(appointmentsData, 'appointmentsData');
   const TABS = [
     {
       value: 'one',
@@ -127,6 +126,7 @@ export default function AppointmentsToday() {
         Appointment_date: data?.start_time,
         service_unit: data?.unit_service?._id,
         appointmentId: data?._id,
+        work_group:data?.work_group?._id
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
