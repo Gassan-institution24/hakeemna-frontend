@@ -352,6 +352,7 @@ export const endpoints = {
       `/api/patient/findpatient?id=${identification_num}&&mobile_num1=${mobile_num1}&&name_english=${name_english}&&name_arabic=${name_arabic}`,
     family: (id) => `/api/patient/myfamily/${id}`,
     familyType: '/api/family',
+    onefamilyType: (id) => `/api/family/${id}`,
     one: (id) => `/api/patient/${id}`,
   },
   history: {
@@ -362,6 +363,10 @@ export const endpoints = {
   generalCheckList: {
     all: '/api/generlaCL',
     one: (id) => `/api/generlaCL/${id}`,
+  },
+  checklist: {
+    all: '/api/checklist',
+    one: (id) => `/api/checklist/${id}`,
   },
   localCheckList: {
     all: '/api/localCL',
