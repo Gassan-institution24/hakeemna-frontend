@@ -33,8 +33,6 @@ export default function TestPage() {
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id);
 
-  // console.log(localListData, 'Data');
-
   const onSubmit = async (answers) => {
     try {
       await axiosInstance.post('/api/answersandquestiones', answers);
@@ -83,7 +81,7 @@ export default function TestPage() {
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom:0.5,mt:2 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2 }}>
         {data?.map((answers, keyI) => (
           <Box key={keyI} sx={{ width: 'calc(33.33% - 16px)', m: 1 }}>
             <Typography>
@@ -113,7 +111,9 @@ export default function TestPage() {
               )}
               {info?.answer_way === 'Check List' && (
                 <Box sx={{ m: 2 }}>
-                  <Typography>{info?.question_english || info?.question?.question_english}</Typography>
+                  <Typography>
+                    {info?.question_english || info?.question?.question_english}
+                  </Typography>
                   <Controller
                     name={`answer_${info?._id}`}
                     control={control}
