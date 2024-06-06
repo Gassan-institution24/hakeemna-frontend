@@ -15,6 +15,9 @@ import { PATH_FOR_US_SERVICES, PATH_FOR_PATIENT_SERVICES } from 'src/config-glob
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
+import US from './images/us.png';
+import Patient from './images/patients.png';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -49,29 +52,16 @@ export default function ServicesWeprovide() {
               height: '300px',
               width: '300px',
               position: 'relative',
-              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://as2.ftcdn.net/v2/jpg/03/13/90/91/1000_F_313909135_kJ9iYYjNgbhWvBJF0H6i8bMCSr48ZZZA.jpg)`,
+              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0), rgba(171, 255, 205, 0.394)), url(${Patient})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
               p: 5,
               '&:hover': {
-                backgroundImage:
-                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://as2.ftcdn.net/v2/jpg/03/13/90/91/1000_F_313909135_kJ9iYYjNgbhWvBJF0H6i8bMCSr48ZZZA.jpg)',
+                backgroundImage: `linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(${Patient})`,
               },
             }}
           >
-            <Typography variant="h6">{t('As Patient')} </Typography>
-            <p
-              style={{
-                fontWeight: '700',
-                width: '250px',
-                textAlign: 'left',
-              }}
-            >
-              {t(
-                'Joining the Hakimna family offers access to a range of services, including electronic health records, doctor communication, electronic prescriptions, medical reports, and more.'
-              )}
-            </p>
             <Button
               target="_blank"
               rel="noopener"
@@ -80,7 +70,7 @@ export default function ServicesWeprovide() {
                 bgcolor: 'success.main',
                 color: '#fff',
                 position: 'relative',
-                top: '20px',
+                top: '123px',
                 width: '100px',
                 '&:hover': {
                   bgcolor: '#fff',
@@ -100,29 +90,16 @@ export default function ServicesWeprovide() {
               height: '300px',
               width: '300px',
               position: 'relative',
-              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)`,
+              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0), rgba(171, 255, 205, 0.394)), url(${US})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
               p: 4,
               '&:hover': {
-                backgroundImage:
-                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)',
+                backgroundImage: `linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(${US})`,
               },
             }}
           >
-            <Typography variant="h6">{t('As Unitservices')} </Typography>
-            <p
-              style={{
-                fontWeight: '700',
-                width: '250px',
-                textAlign: 'left',
-              }}
-            >
-              {t(
-                'Medical institutions face challenges in providing excellent services due to high requirements and competition. Digital transformation is necessary but costly due to the need for adapting to new technology.'
-              )}
-            </p>
             <Button
               target="_blank"
               rel="noopener"
@@ -131,7 +108,7 @@ export default function ServicesWeprovide() {
                 bgcolor: 'success.main',
                 color: '#fff',
                 position: 'relative',
-                top: '10px',
+                top: '130px',
                 width: '100px',
                 '&:hover': {
                   bgcolor: '#fff',
