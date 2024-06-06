@@ -9,6 +9,7 @@ export { default as ServiceTypesTableView } from './service-types-table-view';
 export { default as EmployeeTypesTableView } from './EmployeeTypes-table-view';
 export { default as InsuranceTypesTableView } from './Insurance-types-table-view';
 export { default as PaymentMethodsTableView } from './payment-methods-table-view';
+export { default as FamilyRelationTableView } from './family-relation-table-view';
 export { default as DeductionConfigTableView } from './deduction-config-table-view';
 export { default as MeasurmentTypesTableView } from './measurement-types-table-view';
 export { default as StackholderTypesTableView } from './stakeholder-types-table-view';

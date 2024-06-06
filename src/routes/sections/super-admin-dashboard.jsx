@@ -451,6 +451,11 @@ const MailPage = lazy(() => import('src/pages/super-admin/mail'));
 // UPLOADS
 const UploadsPage = lazy(() => import('src/pages/super-admin/tables/uploads'));
 
+// FAMILY RELATION
+const FamilyRelationPage = lazy(() => import('src/pages/super-admin/tables/family-relation/table'));
+const FamilyRelationNewPage = lazy(() => import('src/pages/super-admin/tables/family-relation/new'));
+const FamilyRelationEditPage = lazy(() => import('src/pages/super-admin/tables/family-relation/edit'));
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -1019,6 +1024,15 @@ export const dashboardRoutes = [
             children: [
               { element: <UploadsPage />, index: true },
               { path: 'list', element: <UploadsPage /> },
+            ],
+          },
+          {
+            path: 'family_relation',
+            children: [
+              { element: <FamilyRelationPage />, index: true },
+              { path: 'list', element: <FamilyRelationPage /> },
+              { path: 'new', element: <FamilyRelationNewPage /> },
+              { path: ':id/edit', element: <FamilyRelationEditPage /> },
             ],
           },
         ],
