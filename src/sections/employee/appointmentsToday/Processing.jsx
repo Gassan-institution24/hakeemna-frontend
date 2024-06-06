@@ -156,11 +156,14 @@ export default function Processing() {
     }
   };
 
-  const handleEndAppointment = async (entranceId) => {
+  const handleEndAppointment = async (entrance) => {
     try {
-      await axiosInstance.patch(`/api/entrance/${entranceId?._id}`, {
+      await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
         Patient_attended: true,
         wating: false,
+      });
+      await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
+        finished_or_not: true,
       });
       enqueueSnackbar('appointment finished', { variant: 'success' });
       router.push(paths.employee.appointmentsToday);
