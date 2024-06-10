@@ -235,7 +235,6 @@ export default function ChecklistTableView() {
         />
       </Card>
     </Container>
-
   );
 }
 

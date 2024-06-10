@@ -52,41 +52,43 @@ export default function TablePaginationCustom({
           }}
         />
       )}
-      {setPage && <FormControlLabel
-        label={t('page')}
-        control={
-          <Select
-            value={page}
-            onChange={(e) => setPage(e.target.value)}
-            variant="filled"
-            sx={{
-              height: 0,
-              width: 68,
-              mr: 1,
-              backgroundColor: 'white',
-              '.MuiSelect-select': {
-                paddingTop: 1,
-                paddingBottom: 1,
-                lineHeight: '40px',
-              },
-            }}
-          >
-            {Array.from({ length: Math.ceil(count / rowsPerPage) }, (_, index) => (
-              <MenuItem value={index} key={index}>
-                {index + 1}
-              </MenuItem>
-            ))}
-          </Select>
-        }
-        sx={{
-          ml: 18,
-          my: 2,
-          top: 5,
-          position: {
-            sm: 'absolute',
-          },
-        }}
-      />}
+      {setPage && (
+        <FormControlLabel
+          label={t('page')}
+          control={
+            <Select
+              value={page}
+              onChange={(e) => setPage(e.target.value)}
+              variant="filled"
+              sx={{
+                height: 0,
+                width: 68,
+                mr: 1,
+                backgroundColor: 'white',
+                '.MuiSelect-select': {
+                  paddingTop: 1,
+                  paddingBottom: 1,
+                  lineHeight: '40px',
+                },
+              }}
+            >
+              {Array.from({ length: Math.ceil(count / rowsPerPage) }, (_, index) => (
+                <MenuItem value={index} key={index}>
+                  {index + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          }
+          sx={{
+            ml: 18,
+            my: 2,
+            top: 5,
+            position: {
+              sm: 'absolute',
+            },
+          }}
+        />
+      )}
     </Box>
   );
 }

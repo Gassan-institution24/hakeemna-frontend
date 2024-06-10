@@ -104,6 +104,27 @@ export const paths = {
       edit: `${ROOTS.DASHBOARD}/user/contactus`,
     },
   },
+
+  // STAKEHOLDERS
+  stakeholder: {
+    root: ROOTS.SUPERADMIN,
+    profile: `${ROOTS.SUPERADMIN}/myprofile`,
+    products: {
+      root: `${ROOTS.SUPERADMIN}/myproducts`,
+      new: `${ROOTS.SUPERADMIN}/myproducts/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/myproducts/${id}/edit`,
+    },
+    offers: {
+      root: `${ROOTS.SUPERADMIN}/myoffers`,
+    },
+    customers: {
+      root: `${ROOTS.SUPERADMIN}/mycustomers`,
+    },
+    accounting: {
+      root: `${ROOTS.SUPERADMIN}/myaccounting`,
+    },
+  },
+
   // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
@@ -510,6 +531,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/checklist/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/checklist/${id}/edit`,
       },
+      productCat: {
+        root: `${ROOTS.SUPERADMIN}/tables/product_categories`,
+        new: `${ROOTS.SUPERADMIN}/tables/product_categories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/product_categories/${id}/edit`,
+      },
     },
   },
 
@@ -743,6 +769,11 @@ export const paths = {
       book: `${ROOTS.SUPERADMIN}/book`,
       root: `${ROOTS.SUPERADMIN}/appointments`,
       edit: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}`,
+    },
+    checklist: {
+      root: `${ROOTS.SUPERADMIN}/checklist`,
+      new: `${ROOTS.SUPERADMIN}/checklist/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/checklist/${id}/edit`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,

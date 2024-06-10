@@ -452,6 +452,13 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
+        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+        title: t('my checklist'),
+        path: paths.employee.checklist.root,
+        icon: <Iconify icon="solar:checklist-outline" />,
+        navItemId: 'EMChecklistNav',
+      },
+      {
         show: true,
         title: t('my work groups'),
         path: paths.employee.workGroups.root,
@@ -596,6 +603,38 @@ export function useNavData() {
         ],
       },
     ];
+    const stakeholderItems = [
+      {
+        subheader: t('Dashboard'),
+        items: [
+          {
+            title: t('products'),
+            path: paths.stakeholder.products.root,
+            icon: <Iconify icon="fluent-mdl2:product" />,
+          },
+          {
+            title: t('offers'),
+            path: paths.stakeholder.offers.root,
+            icon: <Iconify icon="foundation:pricetag-multiple" />,
+          },
+          {
+            title: t('custumers'),
+            path: paths.stakeholder.customers.root,
+            icon: <Iconify icon="streamline:information-desk-customer-solid" />,
+          },
+          {
+            title: t('accounting'),
+            path: paths.stakeholder.accounting.root,
+            icon: <Iconify icon="fa6-solid:money-bill-transfer" />,
+          },
+          {
+            title: t('profile'),
+            path: paths.stakeholder.profile,
+            icon: <Iconify icon="iconamoon:profile-bold" />,
+          },
+        ],
+      },
+    ];
 
     if (!user || !user?.role) {
       router.replace('/');
@@ -608,6 +647,9 @@ export function useNavData() {
     }
     if (user?.role === 'employee') {
       return [...employeeDashboard, ...unitServicesDashboars];
+    }
+    if (user?.role === 'stakeholder') {
+      return stakeholderItems;
     }
     return [...userItems];
   }, [t, user, router, checkAcl, employees_number, messages]);
