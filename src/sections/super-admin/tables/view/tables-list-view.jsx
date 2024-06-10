@@ -104,6 +104,7 @@ export default function TablesListView() {
       { tableName: 'uploads', documents: [] }, //
       { tableName: 'family_relation', documents: [] }, //
       { tableName: 'checklist', documents: [] }, //
+      { tableName: 'product_categories', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,
