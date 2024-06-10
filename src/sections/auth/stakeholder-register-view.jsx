@@ -67,9 +67,9 @@ export default function JwtRegisterView() {
     identification_num: Yup.string().required('Identification number is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
-    US_type: Yup.string().required('unit of service type is required'),
-    speciality: Yup.string().nullable(),
-    sector_type: Yup.string().required('Sector type is required'),
+    // US_type: Yup.string().required('unit of service type is required'),
+    // speciality: Yup.string().nullable(),
+    // sector_type: Yup.string().required('Sector type is required'),
   });
 
   const defaultValues = {
@@ -81,9 +81,9 @@ export default function JwtRegisterView() {
     identification_num: '',
     country: null,
     city: null,
-    US_type: null,
-    speciality: null,
-    sector_type: '',
+    // US_type: null,
+    // speciality: null,
+    // sector_type: '',
   };
 
   const methods = useForm({
@@ -129,7 +129,7 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.({ role: 'admin', userName: data.name_english, ...data });
+      await register?.({ role: 'stakeholder', userName: data.name_english, ...data });
 
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
@@ -218,23 +218,23 @@ export default function JwtRegisterView() {
             ))}
           </RHFSelect>
         </Stack>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect name="US_type" label="unit of service Type">
+        {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
+          {/* <RHFSelect name="US_type" label="unit of service Type">
             {unitserviceTypesData.map((type, idx) => (
               <MenuItem lang="ar" key={idx} value={type._id}>
                 {type.name_english}
               </MenuItem>
             ))}
-          </RHFSelect>
-          <RHFSelect name="speciality" label="Speciality">
+          </RHFSelect> */}
+          {/* <RHFSelect name="speciality" label="Speciality">
             {specialtiesData.map((specialty, idx) => (
               <MenuItem lang="ar" key={idx} value={specialty._id}>
                 {specialty.name_english}
               </MenuItem>
             ))}
-          </RHFSelect>
-        </Stack>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          </RHFSelect> */}
+        {/* </Stack> */}
+        {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="sector_type" label="Sector type">
             <MenuItem lang="ar" value="public">
               Public
@@ -246,7 +246,7 @@ export default function JwtRegisterView() {
               Charity
             </MenuItem>
           </RHFSelect>
-        </Stack>
+        </Stack> */}
 
         <RHFTextField
           name="password"

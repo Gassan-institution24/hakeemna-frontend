@@ -9,7 +9,6 @@ import TableNewEditForm from './table-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs

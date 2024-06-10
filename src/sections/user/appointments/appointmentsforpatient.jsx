@@ -22,8 +22,14 @@ export default function AppointmentData() {
     setCurrentTab(newValue);
   }, []);
 
-  const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending' && info?.started === false && info?.finished_or_not === false  );
-  const finishedAppointments = appointmentsData?.filter((info) => info.status === 'finished' && info?.started === false || info?.finished_or_not === true);
+  const pendingAppointments = appointmentsData.filter(
+    (info) =>
+      info.status === 'pending' && info?.started === false && info?.finished_or_not === false
+  );
+  const finishedAppointments = appointmentsData?.filter(
+    (info) =>
+      (info.status === 'finished' && info?.started === false) || info?.finished_or_not === true
+  );
 
   const TABS = [
     {

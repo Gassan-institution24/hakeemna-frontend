@@ -62,7 +62,7 @@ export default function Processing() {
   const { id } = params;
   const { medicinesData } = useGetMedicines();
   const { user } = useAuthContext();
-  const { Entrance,refetch } = useGetOneEntranceManagement(id);
+  const { Entrance, refetch } = useGetOneEntranceManagement(id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
@@ -137,7 +137,7 @@ export default function Processing() {
           medical_report_status: true,
         });
         enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
-        refetch()
+        refetch();
         medicalReportDialog.onFalse();
         reset();
       }
@@ -147,7 +147,7 @@ export default function Processing() {
           Drugs_report_status: true,
         });
         enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
-        refetch()
+        refetch();
         prescriptionDialog.onFalse();
         reset();
       }
