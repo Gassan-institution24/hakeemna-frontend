@@ -13,11 +13,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({
-  row,
-  selected,
-  onEditRow,
-}) {
+export default function TableDetailsRow({ row, selected, onEditRow }) {
   const {
     code,
     name_english,
@@ -36,7 +32,6 @@ export default function TableDetailsRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
@@ -45,7 +40,6 @@ export default function TableDetailsRow({
       <TableCell align="center">{name_arabic}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
