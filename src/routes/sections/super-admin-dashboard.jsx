@@ -453,13 +453,22 @@ const UploadsPage = lazy(() => import('src/pages/super-admin/tables/uploads'));
 
 // FAMILY RELATION
 const FamilyRelationPage = lazy(() => import('src/pages/super-admin/tables/family-relation/table'));
-const FamilyRelationNewPage = lazy(() => import('src/pages/super-admin/tables/family-relation/new'));
-const FamilyRelationEditPage = lazy(() => import('src/pages/super-admin/tables/family-relation/edit'));
+const FamilyRelationNewPage = lazy(() =>
+  import('src/pages/super-admin/tables/family-relation/new')
+);
+const FamilyRelationEditPage = lazy(() =>
+  import('src/pages/super-admin/tables/family-relation/edit')
+);
 
 // CHECKLIST
 const ChecklistPage = lazy(() => import('src/pages/super-admin/tables/checklist/table'));
 const ChecklistNewPage = lazy(() => import('src/pages/super-admin/tables/checklist/new'));
 const ChecklistEditPage = lazy(() => import('src/pages/super-admin/tables/checklist/edit'));
+
+// PRODUCT CATEGORIES
+const ProductCatPage = lazy(() => import('src/pages/super-admin/tables/product_categories/table'));
+const ProductCatNewPage = lazy(() => import('src/pages/super-admin/tables/product_categories/new'));
+const ProductCatEditPage = lazy(() => import('src/pages/super-admin/tables/product_categories/edit'));
 
 // ----------------------------------------------------------------------
 
@@ -1047,6 +1056,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <ChecklistPage /> },
               { path: 'new', element: <ChecklistNewPage /> },
               { path: ':id/edit', element: <ChecklistEditPage /> },
+            ],
+          },
+          {
+            path: 'product_categories',
+            children: [
+              { element: <ProductCatPage />, index: true },
+              { path: 'list', element: <ProductCatPage /> },
+              { path: 'new', element: <ProductCatNewPage /> },
+              { path: ':id/edit', element: <ProductCatEditPage /> },
             ],
           },
         ],

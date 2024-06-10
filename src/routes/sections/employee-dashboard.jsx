@@ -88,6 +88,10 @@ const AppointmentsToday = lazy(() =>
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/employee/patients/patient-profile'));
 
+// CHECKLIST
+const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
+const ChecklistNewPage = lazy(() => import('src/pages/employee/checklist/new'));
+const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -107,6 +111,15 @@ export const unitServiceEmployeeDashboardRoutes = [
     children: [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
+      {
+        path: 'checklist',
+        children: [
+          { element: <ChecklistPage />, index: true },
+          { path: 'list', element: <ChecklistPage /> },
+          { path: 'new', element: <ChecklistNewPage /> },
+          { path: ':id/edit', element: <ChecklistEditPage /> },
+        ],
+      },
       {
         path: 'entrancemanagement',
         children: [

@@ -1,49 +1,54 @@
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Box, Button, Container, Divider, IconButton, MenuItem, Radio, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  Box,
+  Radio,
+  Button,
+  Divider,
+  MenuItem,
+  Container,
+  IconButton,
+  Typography,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useGetSpecialties } from 'src/api';
 
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
-
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function NewEditForm({ currentRow }) {
   const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar()
-
-  console.log(currentRow,'dataaaaaaaaaaaaa')
+  const { enqueueSnackbar } = useSnackbar();
 
   const ChecklistSchema = Yup.object().shape({
     title: Yup.string().nullable().required('title is required'),
     speciality: Yup.string().nullable(),
     description: Yup.string(),
-    questions:
-      Yup.array().of(
-        Yup.object({
-          question: Yup.string(),
-          answer_way: Yup.string(),
-          options: Yup.array().nullable(),
-        })
-
-      ),
+    questions: Yup.array().of(
+      Yup.object({
+        question: Yup.string(),
+        answer_way: Yup.string(),
+        options: Yup.array().nullable(),
+      })
+    ),
   });
 
-  const { specialtiesData } = useGetSpecialties()
+  const { specialtiesData } = useGetSpecialties();
 
   const defaultValues = useMemo(
     () => ({
@@ -74,7 +79,7 @@ export default function NewEditForm({ currentRow }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch()
+  const values = watch();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -93,19 +98,18 @@ export default function NewEditForm({ currentRow }) {
   };
 
   const handleCreateAndSend = handleSubmit(async (data) => {
-    console.log(data, 'dataaaaaaaaaaaaaaaaaaaaaa')
     try {
       if (currentRow) {
-        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), data)
-        enqueueSnackbar('updated successfuly')
+        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), { ...data, general: true });
+        enqueueSnackbar('updated successfuly');
       } else {
-        await axiosInstance.post(endpoints.checklist.all, data);
-        enqueueSnackbar('created successfuly')
+        await axiosInstance.post(endpoints.checklist.all, { ...data, general: true });
+        enqueueSnackbar('created successfuly');
       }
-      // reset();
-      // router.push(paths.superadmin.tables.checklist.root);
+      reset();
+      router.push(paths.superadmin.tables.checklist.root);
     } catch (error) {
-      enqueueSnackbar(error.message, { variant: 'error' })
+      enqueueSnackbar(error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -114,14 +118,26 @@ export default function NewEditForm({ currentRow }) {
     <Container maxWidth="xl">
       <FormProvider methods={methods}>
         <Card>
-          <Stack spacing={2} sx={{ width: 1, p: 3 }} alignItems='center'>
-            <RHFTextField name='title' label='title' sx={{ width: { md: 0.6, xs: 1 } }} />
-            <RHFSelect size='small' name='speciality' label='speciality' sx={{ width: { md: 0.3, xs: 1 } }}>
+          <Stack spacing={2} sx={{ width: 1, p: 3 }} alignItems="center">
+            <RHFTextField name="title" label="title" sx={{ width: { md: 0.6, xs: 1 } }} />
+            <RHFSelect
+              size="small"
+              name="speciality"
+              label="speciality"
+              sx={{ width: { md: 0.3, xs: 1 } }}
+            >
               {specialtiesData.map((one, idx) => (
-                <MenuItem key={idx} value={one._id}>{one.name_english}</MenuItem>
+                <MenuItem key={idx} value={one._id}>
+                  {one.name_english}
+                </MenuItem>
               ))}
             </RHFSelect>
-            <RHFTextField size='small' name='description' label='description' sx={{ width: { md: 0.5, xs: 1 } }} />
+            <RHFTextField
+              size="small"
+              name="description"
+              label="description"
+              sx={{ width: { md: 0.5, xs: 1 } }}
+            />
           </Stack>
         </Card>
         <Box sx={{ p: 3 }}>
@@ -132,10 +148,7 @@ export default function NewEditForm({ currentRow }) {
             {fields.map((item, index) => (
               <Card sx={{ p: 3 }}>
                 <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-                  <Stack
-                    spacing={2}
-                    sx={{ width: 1 }}
-                  >
+                  <Stack spacing={2} sx={{ width: 1 }}>
                     <Stack
                       direction={{ xs: 'column', md: 'row' }}
                       justifyContent="space-between"
@@ -157,10 +170,7 @@ export default function NewEditForm({ currentRow }) {
                         sx={{ width: { md: 0.5, xs: 1 } }}
                       >
                         {['Text', 'Yes No', 'Options'].map((one) => (
-                          <MenuItem
-                            key={one}
-                            value={one}
-                          >
+                          <MenuItem key={one} value={one}>
                             {one}
                           </MenuItem>
                         ))}
@@ -169,15 +179,16 @@ export default function NewEditForm({ currentRow }) {
                         <Iconify icon="solar:trash-bin-trash-bold" />
                       </Button>
                     </Stack>
-                    {values.questions[index].answer_way === 'Options' && <Stack
-                      justifyContent='flex-end'
-                      alignItems='start'
-                      spacing={1}
-                      sx={{ width: 0.8 }}
-                    >
-                      <QuestionOptions index={index} />
-                    </Stack>
-                    }
+                    {values.questions[index].answer_way === 'Options' && (
+                      <Stack
+                        justifyContent="flex-end"
+                        alignItems="start"
+                        spacing={1}
+                        sx={{ width: 0.8 }}
+                      >
+                        <QuestionOptions index={index} />
+                      </Stack>
+                    )}
                   </Stack>
                 </Stack>
               </Card>
@@ -204,12 +215,7 @@ export default function NewEditForm({ currentRow }) {
         </Box>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>
-
-          <LoadingButton
-            variant="contained"
-            loading={isSubmitting}
-            onClick={handleCreateAndSend}
-          >
+          <LoadingButton variant="contained" loading={isSubmitting} onClick={handleCreateAndSend}>
             {currentRow ? 'Update' : 'Create'}
           </LoadingButton>
         </Stack>
@@ -222,10 +228,8 @@ NewEditForm.propTypes = {
   currentRow: PropTypes.object,
 };
 
-
 function QuestionOptions({ index }) {
-  const { control, setValue, watch } = useFormContext();
-  const values = watch()
+  const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -243,10 +247,14 @@ function QuestionOptions({ index }) {
   return (
     <>
       {fields.map((item, idx) => (
-        <Stack direction='row' alignItems='center'>
+        <Stack direction="row" alignItems="center">
           <Radio disabled />
-          <RHFTextField size='small' variant='standard' name={`questions[${index}].options[${idx}]`} />
-          <Stack direction='row'>
+          <RHFTextField
+            size="small"
+            variant="standard"
+            name={`questions[${index}].options[${idx}]`}
+          />
+          <Stack direction="row">
             <IconButton size="small" color="error" onClick={() => handleRemove(idx)}>
               <Iconify icon="ic:round-close" />
             </IconButton>
@@ -257,9 +265,8 @@ function QuestionOptions({ index }) {
         <Iconify icon="ph:plus-bold" />
         add option
       </Button>
-
     </>
-  )
+  );
 }
 QuestionOptions.propTypes = {
   index: PropTypes.number,

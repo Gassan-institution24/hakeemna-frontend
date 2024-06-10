@@ -177,12 +177,7 @@ export default function TestPage() {
               A field to add questions that can be asked to the patient while managing the
               appointment
             </Typography>
-            <RHFTextField
-              lang="en"
-              name="question"
-              label="Question English"
-              sx={{ mb: 2 }}
-            />
+            <RHFTextField lang="en" name="question" label="Question English" sx={{ mb: 2 }} />
             <RHFSelect
               label="Answer Way"
               name="answer_way"
