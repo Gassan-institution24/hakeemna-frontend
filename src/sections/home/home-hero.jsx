@@ -13,8 +13,8 @@ import { paths } from 'src/routes/paths';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useTranslate } from 'src/locales';
 import { HEADER } from 'src/layouts/config-layout';
+import { useLocales, useTranslate } from 'src/locales';
 import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
@@ -49,7 +49,7 @@ const StyledWrapper = styled('div')(({ theme }) => ({
   },
 }));
 
-const StyledTextGradient = styled(m.h1)(({ theme }) => ({
+const StyledTextGradient = styled(m.h1)(({ theme, curLangAr }) => ({
   ...textGradient(
     `300deg, ${theme.palette.info.main} 0%, ${theme.palette.success.main} 25%, ${theme.palette.warning.main} 50%, ${theme.palette.success.main} 75%, ${theme.palette.info.main} 100%`
     // `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
@@ -59,7 +59,7 @@ const StyledTextGradient = styled(m.h1)(({ theme }) => ({
   lineHeight: 1,
   fontWeight: 900,
   marginBottom: 24,
-  letterSpacing: 8,
+  letterSpacing: curLangAr ? 0 : 8,
   textAlign: 'center',
   backgroundSize: '400%',
   fontSize: `${65 / 18}rem`,
@@ -124,7 +124,8 @@ const StyledPolygon = styled('div')(({ opacity = 1, anchor = 'left', theme }) =>
 export default function HomeHero() {
   const mdUp = useResponsive('up', 'md');
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const theme = useTheme();
 
   const heroRef = useRef(null);
@@ -193,6 +194,7 @@ export default function HomeHero() {
       <m.div variants={varFade().in}>
         <StyledTextGradient
           animate={{ backgroundPosition: '200% center' }}
+          curLangAr={curLangAr}
           transition={{
             repeatType: 'reverse',
             ease: 'linear',

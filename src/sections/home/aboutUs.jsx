@@ -13,6 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 
+// import Cercle from './images/cercle.png';
 import Knowleg from './images/knowlegmap.png';
 import knowlegmapAR from './images/knowlegmapAR.png';
 
@@ -23,7 +24,18 @@ export default function Whydoc() {
   const renderDescription = (
     <Stack spacing={3} sx={{ textAlign: 'center', mb: 5 }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2">{t('About us')}</Typography>
+        <Typography variant="h2" sx={{ position: 'relative', display: 'inline-block' }}>
+          {t('more about ')}
+          <span
+            style={{
+              color: '#00C4CC',
+              // position: 'relative',
+              // display: 'inline-block',
+            }}
+          >
+            {t("hakeemna")}
+          </span>
+        </Typography>
       </m.div>
     </Stack>
   );
@@ -49,7 +61,6 @@ export default function Whydoc() {
           }}
         >
           <Image
-            id="About"
             sx={{
               width: '55%',
               height: '55%',
@@ -63,6 +74,7 @@ export default function Whydoc() {
           size="large"
           href={paths.pages.About}
           variant="contained"
+          id="About"
           sx={{ textAlign: 'center', backgroundColor: 'success.main', mb: 4 }}
         >
           {t('Read more')}
