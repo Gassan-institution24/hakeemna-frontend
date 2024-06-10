@@ -41,6 +41,17 @@ export const endpoints = {
     one: (id) => `/api/cities/${id}`,
     country: (id) => `/api/cities/country/${id}`,
   },
+  products: {
+    all: '/api/products/',
+    many: '/api/products/many',
+    one: (id) => `/api/products/${id}`,
+    country: (id) => `/api/products/stakeholder/${id}`,
+  },
+  productcategories: {
+    all: '/api/productcategories/',
+    many: '/api/productcategories/many',
+    one: (id) => `/api/productcategories/${id}`,
+  },
   currency: {
     all: '/api/currency/',
     many: '/api/currency/many',
@@ -366,6 +377,7 @@ export const endpoints = {
   },
   checklist: {
     all: '/api/checklist',
+    employee: (id) => `/api/checklist/employee/${id}`,
     one: (id) => `/api/checklist/${id}`,
   },
   localCheckList: {
