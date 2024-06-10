@@ -9,7 +9,16 @@ import Typography from '@mui/material/Typography';
 
 import { useTranslate } from 'src/locales';
 
+import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
+
+import Orange from './images/orange.png';
+import Autonomy from './images/Autonomy.png';
+import GreenManagement from './images/GreenManagement.png'
+import Friendly from './images/UserFriendlyAndFlexible.png';
+import MedicalHub from './images/Electronic Medical Hub.png';
+import Credibility from './images/Credibility And Transparency.png';
+import ResearchDevelopment from './images/ResearchAndDevelopment.png';
 
 export default function WhoAreWe() {
   const [expandedCardIndex, setExpandedCardIndex] = useState(null); // Store the index of the expanded card
@@ -24,43 +33,43 @@ export default function WhoAreWe() {
   const { t } = useTranslate();
   const CARDS = [
     {
-      icon: 'https://static.vecteezy.com/system/resources/thumbnails/021/809/795/small/doctors-day-illustration-png.png',
+      icon: MedicalHub,
       title: t('Electronic Medical Hub'),
       description: t(
         'A platform that brings together providers and providers of medical and health care services (institutions, doctors, and others) with users of those services at one conglomeration point, with the goal being for everyone to benefit from this alliance in the new and distinctive Arab world.'
       ),
     },
     {
-      icon: 'https://static.thenounproject.com/png/5140056-200.png',
+      icon: Autonomy,
       title: t('Autonomy'),
       description: t(
         'The currently available electronic health records platforms cannot be used or benefited from them if you are not a subscriber as a beneficiary (patient) in health insurance coverage. Likewise, if you are a provider and provider of medical services or health care, you will not be able to use the platforms available in the market if you are not a member of one of them. Healthcare service management organizations. Therefore, the Hakeemna platform allows everyone (patient and medical service provider) to join our family and benefit from all the benefits independently without the requirement of joining one of the “health care services management” institutions or subscribing to an insurance company.'
       ),
     },
     {
-      icon: 'https://cdn-icons-png.flaticon.com/512/10074/10074030.png',
+      icon: Credibility,
       title: t('Credibility and transparency'),
       description: t(
         'Using our platform enables all categories of users (service providers and users of those services, such as patients) to communicate electronically in a convenient and transparent manner, which helps in expressing opinions and evaluating each party for the other, which increases awareness and raises credibility and transparency. This helps in the continuous development of the services provided and raises loyalty. Users of this distinguished medical group.'
       ),
     },
     {
-      icon: 'https://www.zevenet.com/wp-content/uploads/2019/10/zevenet_website_icons-ABOUT_US_Research_and_development_Green-.svg',
+      icon: ResearchDevelopment,
       title: t('Research and Development'),
       description: t(
         'We seek to support and participate in scientific research in all relevant fields and development aimed at raising the level of performance and excellence in institutions in the Arab and Islamic world. Joining this platform contributes to supporting scientific research, development, and transfer of expertise and knowledge (knowledge transfer) from academic institutions to institutions operating in the private and government sectors.'
       ),
     },
     {
-      icon: 'https://png.pngtree.com/png-vector/20220831/ourmid/pngtree-banyan-tree-logo-design-vector-png-image_6131481.png',
+      icon: GreenManagement,
       title: t('Green Management'),
       description: t(
         'This platform is designed to be a gateway towards sustainability and management committed to protecting the environment. Joining this platform makes you partners in efforts to preserve the environment and combat desertification by raising awareness and reducing activities that pollute the environment.'
       ),
     },
     {
-      icon: 'https://cdn-icons-png.flaticon.com/512/5695/5695909.png',
-      title: t('User friendly and flexible'),
+      icon: Friendly,
+      title: t('User Friendly And Flexible'),
       description: t(
         'Easy to use and flexible: The platform is designed to be easy to learn and use. A free training program is also available for service providers to familiarize themselves with all aspects of this platform.'
       ),
@@ -92,49 +101,28 @@ export default function WhoAreWe() {
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography sx={{}} variant="h2">
-            <Box
-              sx={{
-                flexGrow: 1,
-                backgroundImage: `url(https://png.pngtree.com/png-clipart/20220626/original/pngtree-paint-yellow-line-brush-isolated-transparent-png-image_8187171.png)`,
-                backgroundSize: '290px',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                textAlign: 'center',
-                height: '100px',
-                width: '100%',
-                zIndex: -1,
-                visibility: { md: 'visible', xs: 'hidden' },
-              }}
-            />
-            <span style={{ position: 'relative', top: -80 }}> {t('our mission')}</span>
+          <Typography sx={{ display: 'inline' }} variant="h2">
+            <span style={{ position: 'relative' }}> {t('our')} </span>
+            {/* <span style={{ position: 'relative', display: 'inline-block' }}> */}
+              <span style={{ position: 'relative',  }}>{t('mission')}</span>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '11%',
+                  left: '58%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${Orange})`,
+                  backgroundSize: '10%',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  pointerEvents: 'none',
+                }}
+              />
+            {/* </span> */}
           </Typography>
         </m.div>
-        {/* <Typography
-          component="div"
-          variant="overline"
-          sx={{ color: 'text.disabled', textAlign: 'center' }}
-        >
-          {t(
-            'The Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency in work and production that is compatible with the goals of sustainability and environmental preservation.'
-          )}{' '}
-          <br />
-          {t(
-            'After studying the needs of medical institutions and users ( patients and others ) in the Arab world, a working team was formed to develop this platform.'
-          )}{' '}
-          <br />
-          {t(
-            'This team has full belief in the importance of developing electronic health services, especially the private sector in our Arab world, by raising the level of medical services and improving the efficiency of daily practices.'
-          )}{' '}
-          <br />
-          {t(
-            'For medical service providers, facilitating procedures for patients and keeping their medical information and documents securely and in one place.'
-          )}
-          <br />
-          {t(
-            'The platform is characterized by being comprehensive for all individuals and institutions, whether the user ( medical service provider or patient ) subscribes to the services of insurance companies or not, as you can benefit from the services provided to you independently and without association with any insurance or insurance management groups.'
-          )}
-        </Typography> */}
       </Stack>
 
       <Box
@@ -156,11 +144,14 @@ export default function WhoAreWe() {
                 p: (theme) => theme.spacing(10, 5),
               }}
             >
-              <Box
-                component="img"
+              <Image
                 src={card.icon}
                 alt={card.title}
-                sx={{ mx: 'auto', width: 48, height: 48 }}
+                sx={{ mx: 'auto', width: 100, height: 100 }}
+              />
+              <Box
+                alt={card.title}
+                // sx={{ mx: 'auto', width: 48, height: 48 }}
               />
 
               <Typography variant="h6" sx={{ mt: 8, mb: 2 }}>
