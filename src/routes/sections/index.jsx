@@ -1,9 +1,7 @@
 import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
 
 import MainLayout from 'src/layouts/main';
-// import LoginPage from 'src/pages/auth/login';
 import AuthClassicLayout from 'src/layouts/auth/classic';
 
 import { authRoutes } from './auth';
@@ -20,21 +18,24 @@ const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const isSmallScreen = useMediaQuery({ maxWidth: 767 });
-
   return useRoutes([
     {
       path: '/',
-      element: isSmallScreen ? (
-        <AuthClassicLayout>
-          <JwtLoginPage />
-        </AuthClassicLayout>
-      ) : (
+      element: (
         <MainLayout>
           <HomePage />
         </MainLayout>
       ),
     },
+    
+    // {
+    //   path: '/',
+    //   element: (
+    //     <AuthClassicLayout>
+    //       <JwtLoginPage />
+    //     </AuthClassicLayout>
+    //   ),
+    // },
 
     // Auth routes
     ...authRoutes,
