@@ -119,7 +119,6 @@ export default function ProductNewEditForm({ currentProduct }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('dataaaaaaaa', data)
       const formData = new FormData()
       Object.keys(data).forEach((key) => {
         if (key === 'images' && Array.isArray(data[key])) {
