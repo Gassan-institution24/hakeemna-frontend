@@ -63,13 +63,13 @@ export default function MoreInfoAboutUs() {
               top: 100,
             }}
           >
-            <Image sx={{ m: 2, width: 300, height: 200, borderBottomRightRadius: 5 }} src={One} />
+            <Image sx={{ m: 1.5, width: 300, height: 200, borderBottomRightRadius: 5 }} src={One} />
 
-            <Image sx={{ m: 2, width: 300, height: 200, borderBottomLeftRadius: 5 }} src={Two} />
+            <Image sx={{ m: 1.5, width: 300, height: 200, borderBottomLeftRadius: 5 }} src={Two} />
 
-            <Image sx={{ m: 2, width: 300, height: 200, borderTopRightRadius: 5 }} src={Four} />
+            <Image sx={{ m: 1.5, width: 300, height: 200, borderTopRightRadius: 5 }} src={Four} />
 
-            <Image sx={{ m: 2, width: 300, height: 200, borderTopLeftRadius: 5 }} src={Three} />
+            <Image sx={{ m: 1.5, width: 300, height: 200, borderTopLeftRadius: 5 }} src={Three} />
           </Box>
           <Typography sx={{ position: 'relative', top: 100, left: 20 }}>
             {t('The most important parts of our story')}
