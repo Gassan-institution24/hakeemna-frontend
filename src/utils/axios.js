@@ -45,7 +45,7 @@ export const endpoints = {
     all: '/api/products/',
     many: '/api/products/many',
     one: (id) => `/api/products/${id}`,
-    country: (id) => `/api/products/stakeholder/${id}`,
+    stakeholder: (id) => `/api/products/stakeholder/${id}`,
   },
   productcategories: {
     all: '/api/productcategories/',

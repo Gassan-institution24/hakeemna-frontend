@@ -88,6 +88,32 @@ export function useGetProduct(productId) {
 
 // ----------------------------------------------------------------------
 
+export function useGetStakeholderProducts(id, query) {
+  const URL = [endpoints.products.stakeholder(id), { params: query }];
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      productsData: data?.products || [],
+      length: data?.length || 0,
+      loading: isLoading,
+      error,
+      isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+// ----------------------------------------------------------------------
+
 export function useSearchProducts(query) {
   const URL = query ? [endpoints.product.search, { params: { query } }] : '';
 

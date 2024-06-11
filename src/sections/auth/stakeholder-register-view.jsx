@@ -23,9 +23,9 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import {
   useGetCountries,
-  useGetSpecialties,
+  // useGetSpecialties,
   useGetCountryCities,
-  useGetActiveUSTypes,
+  // useGetActiveUSTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -48,9 +48,9 @@ export default function JwtRegisterView() {
 
   const { countriesData } = useGetCountries();
 
-  const { unitserviceTypesData } = useGetActiveUSTypes();
+  // const { unitserviceTypesData } = useGetActiveUSTypes();
 
-  const { specialtiesData } = useGetSpecialties();
+  // const { specialtiesData } = useGetSpecialties();
 
   const searchParams = useSearchParams();
 

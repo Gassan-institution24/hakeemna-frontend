@@ -14,7 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useGetCheckLists, useGetMyCheckLists } from 'src/api';
+import { useGetMyCheckLists } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';

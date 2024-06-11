@@ -24,11 +24,11 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetEmployeeActiveWorkGroups, useGetSpecialties } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useAuthContext } from 'src/auth/hooks';
+import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
