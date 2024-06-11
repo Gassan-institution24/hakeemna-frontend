@@ -31,6 +31,7 @@ const AboutUs = lazy(() => import('src/sections/home/moreInfoAboutUs'));
 const Patientsservices = lazy(() => import('src/pages/services/patients'));
 const Unitservices = lazy(() => import('src/pages/services/unit'));
 const ServiceUnitPage = lazy(() => import('src/pages/service-unit-page/details'));
+const Training = lazy(() => import('src/sections/home/training'));
 
 // ----------------------------------------------------------------------
 
@@ -44,46 +45,15 @@ export const mainRoutes = [
       </MainLayout>
     ),
     children: [
-      // { path: 'about-us', element: <AboutPage /> },
-      // { path: 'contact-us', element: <ContactPage /> },
       { path: 'patients', element: <Patientsservices /> },
       { path: 'unit', element: <Unitservices /> },
       { path: 'UsPricing', element: <UsPricing /> },
       { path: 'about', element: <AboutUs /> },
+      { path: 'about', element: <AboutUs /> },
+      { path: 'training', element: <Training /> },
       { path: 'serviceunit/:id', element: <ServiceUnitPage /> },
-      // { path: 'faqs', element: <FaqsPage /> },
-      // {
-      //   path: 'product',
-      //   children: [
-      //     { element: <ProductListPage />, index: true },
-      //     { path: 'list', element: <ProductListPage /> },
-      //     { path: ':id', element: <ProductDetailsPage /> },
-      //     { path: 'checkout', element: <ProductCheckoutPage /> },
-      //   ],
-      // },
-      // {
-      //   path: 'post',
-      //   children: [
-      //     { element: <PostListPage />, index: true },
-      //     { path: 'list', element: <PostListPage /> },
-      //     { path: ':title', element: <PostDetailsPage /> },
-      //   ],
-      // },
     ],
   },
-  // {
-  //   element: (
-  //     <SimpleLayout>
-  //       <Suspense fallback={<SplashScreen />}>
-  //         <Outlet />
-  //       </Suspense>
-  //     </SimpleLayout>
-  //   ),
-  //   children: [
-  //     { path: 'pricing', element: <PricingPage /> },
-  //     { path: 'payment', element: <PaymentPage /> },
-  //   ],
-  // },
   {
     element: (
       <CompactLayout>
