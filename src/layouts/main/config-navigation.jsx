@@ -32,9 +32,15 @@ export const navConfig = [
     sectionId: 'home',
   },
   {
+    title: 'Stakeholders',
+    icon: <Iconify icon="iconoir:community" />,
+    path: paths.comingSoon,
+    sectionId: 'home',
+  },
+  {
     title: 'Training',
     icon: <Iconify icon="oui:training" />,
-    path: paths.comingSoon,
+    path: paths.pages.Training,
     sectionId: 'home',
   },
   {

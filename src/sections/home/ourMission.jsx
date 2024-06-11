@@ -14,7 +14,7 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 import Orange from './images/orange.png';
 import Autonomy from './images/Autonomy.png';
-import GreenManagement from './images/GreenManagement.png'
+import GreenManagement from './images/GreenManagement.png';
 import Friendly from './images/UserFriendlyAndFlexible.png';
 import MedicalHub from './images/Electronic Medical Hub.png';
 import Credibility from './images/Credibility And Transparency.png';
@@ -101,27 +101,8 @@ export default function WhoAreWe() {
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography sx={{ display: 'inline' }} variant="h2">
-            <span style={{ position: 'relative' }}> {t('our')} </span>
-            {/* <span style={{ position: 'relative', display: 'inline-block' }}> */}
-              <span style={{ position: 'relative',  }}>{t('mission')}</span>
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '11%',
-                  left: '58%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '100%',
-                  height: '100%',
-                  backgroundImage: `url(${Orange})`,
-                  backgroundSize: '10%',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  pointerEvents: 'none',
-                }}
-              />
-            {/* </span> */}
-          </Typography>
+          <Typography variant="h2">{t('our mission')}</Typography>
+          <Image src={Orange} sx={{position:"absolute", top:29, left:'53.3%'}} />
         </m.div>
       </Stack>
 
