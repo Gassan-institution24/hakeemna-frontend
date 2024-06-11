@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
-import WorkGroupPermissionsBarLayout from 'src/layouts/workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -57,6 +56,15 @@ export const stakeholderDashboardRoutes = [
       },
       {
         path: 'myoffers',
+        children: [
+          { element: <ChecklistPage />, index: true },
+          { path: 'list', element: <ChecklistPage /> },
+          { path: 'new', element: <ChecklistNewPage /> },
+          { path: ':id/edit', element: <ChecklistEditPage /> },
+        ],
+      },
+      {
+        path: 'myorders',
         children: [
           { element: <ChecklistPage />, index: true },
           { path: 'list', element: <ChecklistPage /> },

@@ -618,6 +618,11 @@ export function useNavData() {
             icon: <Iconify icon="foundation:pricetag-multiple" />,
           },
           {
+            title: t('orders'),
+            path: paths.stakeholder.orders.root,
+            icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+          },
+          {
             title: t('custumers'),
             path: paths.stakeholder.customers.root,
             icon: <Iconify icon="streamline:information-desk-customer-solid" />,

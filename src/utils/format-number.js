@@ -6,10 +6,12 @@ export function fNumber(number) {
   return numeral(number).format();
 }
 
-export function fCurrency(number) {
-  const format = number ? numeral(number).format('$0,0.00') : '';
+export function fCurrency(number, symbol = '$') {
+  if (!number && number !== 0) return '';
 
-  return result(format, '.00');
+  const formattedNumber = numeral(number).format('0,0.00');
+
+  return `${symbol} ${formattedNumber}`;
 }
 
 export function fPercent(number) {

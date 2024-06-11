@@ -26,7 +26,6 @@ import { useSettingsContext } from 'src/components/settings';
 
 import ProductList from '../product-list';
 import ProductSort from '../product-sort';
-import CartIcon from '../common/cart-icon';
 import ProductSearch from '../product-search';
 import ProductFilters from '../product-filters';
 // import { useCheckoutContext } from '../../checkout/context';
