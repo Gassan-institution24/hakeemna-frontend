@@ -4,6 +4,7 @@ export { default as Insurance } from './insurance';
 export { default as Doctorpage } from './doctorpage';
 export { default as Pharmaces } from '../pharmacies';
 export { default as Family } from './user-family-view';
+export { default as Traning } from '../../home/training';
 export { default as specialities } from './specialities';
 export { default as UserEditView } from './contactUs-view';
 export { default as MyHealth } from './user-myHealth-view';

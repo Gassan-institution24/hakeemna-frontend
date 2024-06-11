@@ -52,6 +52,8 @@ export const paths = {
     unit: `/unit`,
     UsPricing: `/UsPricing`,
     About: `/about`,
+    Training: `/training`,
+    
     serviceUnit: (id) => `/serviceunit/${id}`,
   },
 
