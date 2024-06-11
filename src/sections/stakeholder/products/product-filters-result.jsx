@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 
 import Iconify from 'src/components/iconify';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -21,26 +22,17 @@ export default function ProductFiltersResult({
   results,
   ...other
 }) {
-  const handleRemoveGender = (inputValue) => {
-    const newValue = filters.gender.filter((item) => item !== inputValue);
-    onFilters('gender', newValue);
-  };
 
-  const handleRemoveCategory = () => {
-    onFilters('category', 'all');
-  };
+  const { t } = useTranslate()
 
-  const handleRemoveColor = (inputValue) => {
-    const newValue = filters.colors.filter((item) => item !== inputValue);
-    onFilters('colors', newValue);
+  const handleRemoveStatus = (e) => {
+    onFilters('status', '');
   };
-
-  const handleRemovePrice = () => {
-    onFilters('priceRange', [0, 200]);
+  const handleRemoveCategory = (e) => {
+    onFilters('categry', '');
   };
-
-  const handleRemoveRating = () => {
-    onFilters('rating', '');
+  const handleRemoveName = (e) => {
+    onFilters('name', '');
   };
 
   return (
@@ -53,62 +45,20 @@ export default function ProductFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {!!filters.gender.length && (
-          <Block label="Gender:">
-            {filters.gender.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveGender(item)}
-              />
-            ))}
+
+        {filters.status !== '' && (
+          <Block label={`${t("status")}:`}>
+            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
-
-        {filters.category !== 'all' && (
-          <Block label="Category:">
+        {filters.category !== '' && (
+          <Block label={`${t("category")}:`}>
             <Chip size="small" label={filters.category} onDelete={handleRemoveCategory} />
           </Block>
         )}
-
-        {!!filters.colors.length && (
-          <Block label="Colors:">
-            {filters.colors.map((item) => (
-              <Chip
-                key={item}
-                size="small"
-                label={
-                  <Box
-                    sx={{
-                      ml: -0.5,
-                      width: 18,
-                      height: 18,
-                      bgcolor: item,
-                      borderRadius: '50%',
-                      border: (theme) => `solid 1px ${alpha(theme.palette.common.white, 0.24)}`,
-                    }}
-                  />
-                }
-                onDelete={() => handleRemoveColor(item)}
-              />
-            ))}
-          </Block>
-        )}
-
-        {(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 200) && (
-          <Block label="Price:">
-            <Chip
-              size="small"
-              label={`$${filters.priceRange[0]} - ${filters.priceRange[1]}`}
-              onDelete={handleRemovePrice}
-            />
-          </Block>
-        )}
-
-        {!!filters.rating && (
-          <Block label="Rating:">
-            <Chip size="small" label={filters.rating} onDelete={handleRemoveRating} />
+        {filters.name !== '' && (
+          <Block label={`${t("search")}:`}>
+            <Chip size="small" label='search' onDelete={handleRemoveName} />
           </Block>
         )}
 

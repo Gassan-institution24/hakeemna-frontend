@@ -1,395 +1,207 @@
+import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import {
-  DataGrid,
-  GridToolbarExport,
-  GridActionsCellItem,
-  GridToolbarContainer,
-  GridToolbarQuickFilter,
-  GridToolbarFilterButton,
-  GridToolbarColumnsButton,
-} from '@mui/x-data-grid';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetProducts } from 'src/api/product';
-// import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
+import { useAuthContext } from 'src/auth/hooks';
+import { useTranslate } from 'src/locales';
+import { useGetAppointmentTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'src/components/snackbar';
-import EmptyContent from 'src/components/empty-content';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import ProductTableToolbar from '../product-table-toolbar';
-import ProductTableFiltersResult from '../product-table-filters-result';
+import Scrollbar from 'src/components/scrollbar';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import { useGetStakeholderProducts } from 'src/api/product';
 import {
-  RenderCellStock,
-  RenderCellPrice,
-  RenderCellPublish,
-  RenderCellProduct,
-  RenderCellCreatedAt,
-} from '../product-table-row';
+  useTable,
+  emptyRows,
+  TableNoData,
+  TableEmptyRows,
+  TableHeadCustom,
+  TablePaginationCustom,
+} from 'src/components/table';
+
+import AppointmentsRow from '../product-table-row';
+import PatientHistoryToolbar from '../product-table-toolbar';
+import HistoryFiltersResult from '../product-filters-result';
 
 // ----------------------------------------------------------------------
-
-const PRODUCT_STOCK_OPTIONS = [
-  { value: 'in stock', label: 'In stock' },
-  { value: 'low stock', label: 'Low stock' },
-  { value: 'out of stock', label: 'Out of stock' },
-];
-
-const PUBLISH_OPTIONS = [
-  { value: 'published', label: 'Published' },
-  { value: 'draft', label: 'Draft' },
-];
 
 const defaultFilters = {
-  publish: [],
-  stock: [],
+  name: '',
+  status: '',
+  category: '',
 };
-
-const HIDE_COLUMNS = {
-  category: false,
-};
-
-const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
-export default function ProductListView() {
-  const { enqueueSnackbar } = useSnackbar();
+export default function AppointmentsView({ employeeData }) {
+  const { t } = useTranslate();
 
-  const confirmRows = useBoolean();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('product') },
+    { id: 'category', label: t('category') },
+    { id: 'quantity', label: t('quantity') },
+    { id: 'price', label: t('price') },
+    // { id: 'currency', label: t('currency') },
+    { id: 'status', label: t('status') },
+    { id: '' },
+  ];
 
-  const router = useRouter();
+  const table = useTable({ defaultOrderBy: 'code' });
 
-  const settings = useSettingsContext();
+  const { user } = useAuthContext();
 
-  const { products, productsLoading } = useGetProducts();
-
-  const [tableData, setTableData] = useState([]);
+  const addModal = useBoolean();
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [selectedRowIds, setSelectedRowIds] = useState([]);
-
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
-
-  useEffect(() => {
-    if (products?.length) {
-      setTableData(products);
-    }
-  }, [products]);
-
-  const dataFiltered = applyFilter({
-    inputData: tableData.map((one) => ({ ...one, id: one._id })),
-    filters,
+  const {
+    productsData,
+    length,
+    refetch,
+  } = useGetStakeholderProducts(user.stakeholder._id, {
+    page: table.page || 0,
+    sortBy: table.orderBy || 'code',
+    rowsPerPage: table.rowsPerPage || 25,
+    order: table.order || 'asc',
+    populate: 'category currency',
+    ...filters,
   });
 
-  const canReset = !isEqual(defaultFilters, filters);
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
-  const handleFilters = useCallback((name, value) => {
-    setFilters((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }, []);
+  const dataFiltered = productsData;
+
+  const denseHeight = table.dense ? 56 : 76;
+
+  const canReset = !isEqual(filters, defaultFilters);
+
+  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+
+  const handleFilters = useCallback(
+    (name, value) => {
+      table.onResetPage();
+      setFilters((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    },
+    [table]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
 
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = tableData.filter((row) => row._id !== id);
-
-      enqueueSnackbar('Delete success!');
-
-      setTableData(deleteRow);
-    },
-    [enqueueSnackbar, tableData]
-  );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row._id));
-
-    enqueueSnackbar('Delete success!');
-
-    setTableData(deleteRows);
-  }, [enqueueSnackbar, selectedRowIds, tableData]);
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.stakeholder.products.edit(id));
-    },
-    [router]
-  );
-
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.stakeholder.products.details(id));
-    },
-    [router]
-  );
-
-  const columns = [
-    {
-      field: 'name_english',
-      headerName: 'name',
-      filterable: false,
-    },
-    {
-      field: 'name',
-      headerName: 'description',
-      flex: 1,
-      minWidth: 360,
-      hideable: false,
-      renderCell: (params) => <RenderCellProduct params={params} />,
-    },
-    // {
-    //   field: 'createdAt',
-    //   headerName: 'Create at',
-    //   width: 160,
-    //   renderCell: (params) => <RenderCellCreatedAt params={params} />,
-    // },
-    {
-      field: 'inventoryType',
-      headerName: 'Stock',
-      width: 160,
-      type: 'singleSelect',
-      valueOptions: PRODUCT_STOCK_OPTIONS,
-      renderCell: (params) => <RenderCellStock params={params} />,
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      width: 140,
-      editable: true,
-      renderCell: (params) => <RenderCellPrice params={params} />,
-    },
-    {
-      field: 'publish',
-      headerName: 'Publish',
-      width: 110,
-      type: 'singleSelect',
-      editable: true,
-      valueOptions: PUBLISH_OPTIONS,
-      renderCell: (params) => <RenderCellPublish params={params} />,
-    },
-    {
-      type: 'actions',
-      field: 'actions',
-      headerName: ' ',
-      align: 'right',
-      headerAlign: 'right',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      getActions: (params) => [
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="View"
-          onClick={() => handleViewRow(params.row._id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:pen-bold" />}
-          label="Edit"
-          onClick={() => handleEditRow(params.row._id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-          label="Delete"
-          onClick={() => {
-            handleDeleteRow(params.row._id);
-          }}
-          sx={{ color: 'error.main' }}
-        />,
-      ],
-    },
-  ];
-
-  const getTogglableColumns = () =>
-    columns
-      .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
-      .map((column) => column.field);
-
   return (
-    <>
-      <Container
-        maxWidth={settings.themeStretch ? false : 'lg'}
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <CustomBreadcrumbs
-          heading="List"
-          links={[
-            { name: 'Dashboard', href: paths.stakeholder.root },
-            {
-              name: 'Product',
-              href: paths.stakeholder.products.root,
-            },
-            { name: 'List' },
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.stakeholder.products.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Product
-            </Button>
-          }
-          sx={{
-            mb: {
-              xs: 3,
-              md: 5,
-            },
-          }}
-        />
-
-        <Card
-          sx={{
-            height: { xs: 800, md: 2 },
-            flexGrow: { md: 1 },
-            display: { md: 'flex' },
-            flexDirection: { md: 'column' },
-          }}
-        >
-          <DataGrid
-            checkboxSelection
-            disableRowSelectionOnClick
-            rows={dataFiltered}
-            columns={columns}
-            loading={productsLoading}
-            getRowHeight={() => 'auto'}
-            pageSizeOptions={[5, 10, 25]}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10 },
-              },
-            }}
-            onRowSelectionModelChange={(newSelectionModel) => {
-              setSelectedRowIds(newSelectionModel);
-            }}
-            columnVisibilityModel={columnVisibilityModel}
-            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-            slots={{
-              toolbar: () => (
-                <>
-                  <GridToolbarContainer>
-                    <ProductTableToolbar
-                      filters={filters}
-                      onFilters={handleFilters}
-                      stockOptions={PRODUCT_STOCK_OPTIONS}
-                      publishOptions={PUBLISH_OPTIONS}
-                    />
-
-                    <GridToolbarQuickFilter />
-
-                    <Stack
-                      spacing={1}
-                      flexGrow={1}
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="flex-end"
-                    >
-                      {!!selectedRowIds?.length && (
-                        <Button
-                          size="small"
-                          color="error"
-                          startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
-                          onClick={confirmRows.onTrue}
-                        >
-                          Delete ({selectedRowIds?.length})
-                        </Button>
-                      )}
-
-                      <GridToolbarColumnsButton />
-                      <GridToolbarFilterButton />
-                      <GridToolbarExport />
-                    </Stack>
-                  </GridToolbarContainer>
-
-                  {canReset && (
-                    <ProductTableFiltersResult
-                      filters={filters}
-                      onFilters={handleFilters}
-                      onResetFilters={handleResetFilters}
-                      results={dataFiltered?.length}
-                      sx={{ p: 2.5, pt: 0 }}
-                    />
-                  )}
-                </>
-              ),
-              noRowsOverlay: () => <EmptyContent title="No Data" />,
-              noResultsOverlay: () => <EmptyContent title="No results found" />,
-            }}
-            slotProps={{
-              columnsPanel: {
-                getTogglableColumns,
-              },
-            }}
-          />
-        </Card>
-      </Container>
-
-      <ConfirmDialog
-        open={confirmRows.value}
-        onClose={confirmRows.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selectedRowIds?.length} </strong> items?
-          </>
-        }
+    <Container maxWidth="xl">
+      <CustomBreadcrumbs
+        heading={t('products')}
+        links={[
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('products') },
+        ]}
         action={
           <Button
+            component={RouterLink}
+            href={paths.stakeholder.products.new}
             variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirmRows.onFalse();
-            }}
+            startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            Delete
+            {t('new product')}
           </Button>
         }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
       />
-    </>
+      <Card>
+
+        <PatientHistoryToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          onAdd={() => addModal.onTrue()}
+          //
+          dateError={dateError}
+        />
+
+        {canReset && (
+          <HistoryFiltersResult
+            filters={filters}
+            onFilters={handleFilters}
+            //
+            onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
+          />
+        )}
+
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              />
+
+              <TableBody>
+                {dataFiltered
+                  ?.map((row, idx) => (
+                    <AppointmentsRow
+                      refetch={refetch}
+                      key={idx}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, length)}
+                />
+
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+
+        <TablePaginationCustom
+          count={length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, filters }) {
-  const { stock, publish } = filters;
-
-  if (stock?.length) {
-    inputData = inputData.filter((product) => stock.includes(product.inventoryType));
-  }
-
-  if (publish?.length) {
-    inputData = inputData.filter((product) => publish.includes(product.publish));
-  }
-
-  return inputData;
-}
+AppointmentsView.propTypes = {
+  employeeData: PropTypes.object,
+};
