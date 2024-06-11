@@ -117,6 +117,9 @@ export const paths = {
     offers: {
       root: `${ROOTS.SUPERADMIN}/myoffers`,
     },
+    orders: {
+      root: `${ROOTS.SUPERADMIN}/myorders`,
+    },
     customers: {
       root: `${ROOTS.SUPERADMIN}/mycustomers`,
     },

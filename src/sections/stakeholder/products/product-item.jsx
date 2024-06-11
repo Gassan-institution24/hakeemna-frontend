@@ -24,22 +24,22 @@ import { ColorPreview } from 'src/components/color-utils';
 export default function ProductItem({ product }) {
   // const { onAddToCart } = useCheckoutContext();
 
-  const { id, name, coverUrl, price, colors, available, sizes, priceSale, newLabel, saleLabel } =
+  const { id, name, coverUrl, price, colors, available, priceSale, newLabel, saleLabel } =
     product;
 
   const linkTo = paths.product.details(id);
 
   const handleAddCart = async () => {
-    const newProduct = {
-      id,
-      name,
-      coverUrl,
-      available,
-      price,
-      colors: [colors[0]],
-      size: sizes[0],
-      quantity: 1,
-    };
+    // const newProduct = {
+    //   id,
+    //   name,
+    //   coverUrl,
+    //   available,
+    //   price,
+    //   colors: [colors[0]],
+    //   size: sizes[0],
+    //   quantity: 1,
+    // };
     try {
       // onAddToCart(newProduct);
     } catch (error) {

@@ -1,106 +1,148 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
+import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useGetProductCategories } from 'src/api/product';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function ProductTableToolbar({
+export default function AppointmentToolbar({
   filters,
   onFilters,
+  onAdd,
   //
-  stockOptions,
-  publishOptions,
+  dateError,
+  options,
 }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const { productCat } = useGetProductCategories();
+
   const popover = usePopover();
 
-  const [stock, setStock] = useState(filters.stock);
-
-  const [publish, setPublish] = useState(filters.publish);
-
-  const handleChangeStock = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setStock(typeof value === 'string' ? value.split(',') : value);
-  }, []);
-
-  const handleChangePublish = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setPublish(typeof value === 'string' ? value.split(',') : value);
-  }, []);
-
-  const handleCloseStock = useCallback(() => {
-    onFilters('stock', stock);
-  }, [onFilters, stock]);
-
-  const handleClosePublish = useCallback(() => {
-    onFilters('publish', publish);
-  }, [onFilters, publish]);
+  const handleFilterStatus = useCallback(
+    (event) => {
+      onFilters('status', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterCategory = useCallback(
+    (event) => {
+      onFilters('category', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterName = useCallback(
+    (event) => {
+      onFilters('name', event.target.value);
+    },
+    [onFilters]
+  );
 
   return (
     <>
-      <FormControl
+      <Stack
+        spacing={2}
+        alignItems={{ xs: 'flex-end', md: 'center' }}
+        direction={{
+          xs: 'column',
+          md: 'row',
+        }}
         sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
+          p: 2.5,
+          pr: { xs: 2.5, md: 1 },
         }}
       >
-        <InputLabel>Stock</InputLabel>
-
-        <Select
-          multiple
-          value={stock}
-          onChange={handleChangeStock}
-          input={<OutlinedInput label="Stock" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          onClose={handleCloseStock}
-          sx={{ textTransform: 'capitalize' }}
+        <FormControl
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
         >
-          {stockOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Checkbox disableRipple size="small" checked={stock.includes(option.value)} />
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel>{`${t('category')}`}</InputLabel>
 
-      <FormControl
-        sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
-        }}
-      >
-        <InputLabel>Publish</InputLabel>
-
-        <Select
-          multiple
-          value={publish}
-          onChange={handleChangePublish}
-          input={<OutlinedInput label="Publish" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          onClose={handleClosePublish}
-          sx={{ textTransform: 'capitalize' }}
+          <Select
+            value={filters.category}
+            onChange={handleFilterCategory}
+            input={<OutlinedInput label={t('category')} />}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            <MenuItem lang="ar" value=''>{t('all')}</MenuItem>
+            {productCat.map((one) => (
+              <MenuItem lang="ar" value={one.name_english}>{curLangAr ? one.name_arabic : one.name_english}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
         >
-          {publishOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Checkbox disableRipple size="small" checked={publish.includes(option.value)} />
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel>{`${t('status')}`}</InputLabel>
+
+          <Select
+            value={filters.status}
+            onChange={handleFilterStatus}
+            input={<OutlinedInput label={t('status')} />}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            <MenuItem lang="ar" value=''>{t('all')}</MenuItem>
+            <MenuItem lang="ar" value='published'>{t('published')}</MenuItem>
+            <MenuItem lang="ar" value='draft'>{t('draft')}</MenuItem>
+          </Select>
+        </FormControl>
+        <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+          <TextField
+            fullWidth
+            value={filters.name}
+            onChange={handleFilterName}
+            placeholder={t('Search name or number...')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <IconButton onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Stack>
+
+        {/* <Stack direction="row">
+          <IconButton onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+            <IconButton color="error" onClick={onAdd}>
+              <Iconify icon="zondicons:add-outline" />
+            </IconButton>
+          )}
+        </Stack> */}
+      </Stack>
+      {/* </Stack> */}
 
       <CustomPopover
         open={popover.open}
@@ -109,39 +151,33 @@ export default function ProductTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t('print')}
         </MenuItem>
 
         <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:import-bold" />
-          Import
-        </MenuItem>
-
-        <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t('export')}
         </MenuItem>
       </CustomPopover>
     </>
   );
 }
 
-ProductTableToolbar.propTypes = {
+AppointmentToolbar.propTypes = {
+  dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  publishOptions: PropTypes.array,
-  stockOptions: PropTypes.array,
+  onAdd: PropTypes.func,
+  options: PropTypes.array,
 };
