@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useParams } from 'react-router';
+import { useTheme } from '@emotion/react';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,6 +32,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  useMediaQuery,
   TableContainer,
 } from '@mui/material';
 
@@ -71,6 +73,9 @@ export default function Processing() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [filterforspecialties, setFilterforspecialties] = useState();
+  const [DoctorComment, setDoctorComment] = useState();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [itemsToShow, setItemsToShow] = useState(2);
   const router = useRouter();
   const PrescriptionsSchema = Yup.object().shape({
@@ -89,17 +94,20 @@ export default function Processing() {
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
   });
+  
   const defaultValues = {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
     service_unit: Entrance?.service_unit,
+    Doctor_Comments: '',
   };
-
+  
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });
+  
   const {
     reset,
     handleSubmit,
@@ -108,17 +116,20 @@ export default function Processing() {
     setValue,
     formState: { isSubmitting },
   } = methods;
-
-  const watchStartTime = watch('Start_time');
-  const watchEndTime = watch('End_time');
-
+  
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
+      Doctor_Comments: '',
     });
   }, [user, Entrance, reset]);
+
+  const watchStartTime = watch('Start_time');
+  const watchEndTime = watch('End_time');
+
+ 
 
   useEffect(() => {
     if (watchStartTime && watchEndTime) {
@@ -131,12 +142,13 @@ export default function Processing() {
 
   const onSubmit = async (submitdata) => {
     try {
+      submitdata.Doctor_Comments = DoctorComment; // Ensure Doctor_Comments is included in the submitdata
       if (medicalReportDialog.value) {
         await axiosInstance.post('/api/examination', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
           medical_report_status: true,
         });
-        enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
         refetch();
         medicalReportDialog.onFalse();
         reset();
@@ -146,15 +158,23 @@ export default function Processing() {
         await axiosInstance.patch(`/api/entrance/${id}`, {
           Drugs_report_status: true,
         });
-        enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
         refetch();
         prescriptionDialog.onFalse();
         reset();
       }
     } catch (error) {
       console.error(error.message);
+      enqueueSnackbar('Error uploading data', { variant: 'error' });
     }
   };
+  useEffect(() => {
+    reset({
+      employee: user?.employee?._id,
+      patient: Entrance?.patient?._id,
+      service_unit: Entrance?.service_unit,
+    });
+  }, [user, Entrance, reset]);
 
   const handleEndAppointment = async (entrance) => {
     try {
@@ -315,7 +335,7 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="description" label={t('description')} />
+            <RHFTextField lang="en" multiline name="description" label={t('description')} />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
@@ -367,7 +387,7 @@ export default function Processing() {
               sx={{ mb: 2 }}
             />
             <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
-
+  
             <Controller
               name="Start_time"
               control={control}
@@ -408,7 +428,10 @@ export default function Processing() {
               lang="en"
               name="Doctor_Comments"
               label={t('Doctor Comments')}
+              multiline
+              // rows={4}
               sx={{ mb: 2 }}
+              onChange={(e) => setDoctorComment(e.target.value)}
             />
           </DialogContent>
           <DialogActions>
@@ -423,7 +446,6 @@ export default function Processing() {
       </Dialog>
     </>
   );
-
   const renderHistory = (
     <Card>
       <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
@@ -466,7 +488,32 @@ export default function Processing() {
     </Card>
   );
 
-  return (
+  const renderTimelineItems = (item) => (
+    <Paper
+      sx={{
+        p: 3,
+        bgcolor: (themee) => alpha(themee.palette.grey[500], 0.12),
+        width: '100%',
+      }}
+    >
+      <Typography variant="subtitle2">{item.title}</Typography>
+      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        {item.title === 'medical report (optional)' && renderMedicalReport}
+        {item.title === 'prescription (optional)' && renderPrescription}
+        {item.key === 1 && renderHistory}
+      </Typography>
+    </Paper>
+);
+
+  return isMobile ? (
+    <div>
+      {TIMELINES.map((item) => (
+        <div key={item.key} style={{ marginBottom: '16px' }}>
+          {renderTimelineItems(item)}
+        </div>
+      ))}
+    </div>
+  ) : (
     <Timeline position="alternate">
       {TIMELINES.map((item) => (
         <TimelineItem key={item.key}>
@@ -475,19 +522,7 @@ export default function Processing() {
             <TimelineConnector />
           </TimelineSeparator>
           <TimelineContent>
-            <Paper
-              sx={{
-                p: 3,
-                bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
-              }}
-            >
-              <Typography variant="subtitle2">{item.title}</Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {item.title === 'medical report (optional)' && renderMedicalReport}
-                {item.title === 'prescription (optional)' && renderPrescription}
-                {item.key === 1 && renderHistory}
-              </Typography>
-            </Paper>
+            {renderTimelineItems(item)}
           </TimelineContent>
         </TimelineItem>
       ))}
