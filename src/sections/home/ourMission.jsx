@@ -102,7 +102,7 @@ export default function WhoAreWe() {
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">{t('our mission')}</Typography>
-          <Image src={Orange} sx={{position:"absolute", top:29, left:'53.3%'}} />
+          <Image src={Orange} sx={{ position: 'absolute', top: 29, left: '53.3%' }} />
         </m.div>
       </Stack>
 

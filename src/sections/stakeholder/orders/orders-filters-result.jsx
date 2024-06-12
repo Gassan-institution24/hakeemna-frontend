@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -7,36 +6,33 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function ProductTableFiltersResult({
+export default function ProductFiltersResult({
   filters,
   onFilters,
   //
+  canReset,
   onResetFilters,
   //
   results,
   ...other
 }) {
-  const handleRemoveStock = useCallback(
-    (inputValue) => {
-      const newValue = filters.stock.filter((item) => item !== inputValue);
+  const { t } = useTranslate();
 
-      onFilters('stock', newValue);
-    },
-    [filters.stock, onFilters]
-  );
-
-  const handleRemovePublish = useCallback(
-    (inputValue) => {
-      const newValue = filters.publish.filter((item) => item !== inputValue);
-
-      onFilters('publish', newValue);
-    },
-    [filters.publish, onFilters]
-  );
+  const handleRemoveStatus = (e) => {
+    onFilters('status', '');
+  };
+  const handleRemoveCategory = (e) => {
+    onFilters('categry', '');
+  };
+  const handleRemoveName = (e) => {
+    onFilters('name', '');
+  };
 
   return (
     <Stack spacing={1.5} {...other}>
@@ -48,40 +44,38 @@ export default function ProductTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {!!filters.stock.length && (
-          <Block label="Stock:">
-            {filters.stock.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveStock(item)} />
-            ))}
+        {filters.status !== '' && (
+          <Block label={`${t('status')}:`}>
+            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+          </Block>
+        )}
+        {filters.category !== '' && (
+          <Block label={`${t('category')}:`}>
+            <Chip size="small" label={filters.category} onDelete={handleRemoveCategory} />
+          </Block>
+        )}
+        {filters.name !== '' && (
+          <Block label={`${t('search')}:`}>
+            <Chip size="small" label="search" onDelete={handleRemoveName} />
           </Block>
         )}
 
-        {!!filters.publish.length && (
-          <Block label="Publish:">
-            {filters.publish.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemovePublish(item)}
-              />
-            ))}
-          </Block>
+        {canReset && (
+          <Button
+            color="error"
+            onClick={onResetFilters}
+            startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+          >
+            Clear
+          </Button>
         )}
-
-        <Button
-          color="error"
-          onClick={onResetFilters}
-          startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
-        >
-          Clear
-        </Button>
       </Stack>
     </Stack>
   );
 }
 
-ProductTableFiltersResult.propTypes = {
+ProductFiltersResult.propTypes = {
+  canReset: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   results: PropTypes.number,

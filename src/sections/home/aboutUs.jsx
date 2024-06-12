@@ -33,7 +33,7 @@ export default function Whydoc() {
               // display: 'inline-block',
             }}
           >
-            {t("hakeemna")}
+            {t('hakeemna')}
           </span>
         </Typography>
       </m.div>

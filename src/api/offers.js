@@ -25,20 +25,24 @@ export function useGetOffers() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetStakeholderOffers(id) {
-  const URL = endpoints.offers.stakeholder.one(id);
+// ----------------------------------------------------------------------
+
+export function useGetStakeholderOffers(id, query) {
+  const URL = [endpoints.offers.stakeholder.one(id), { params: query }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
   const memoizedValue = useMemo(
     () => ({
-      offersData: data || [],
+      offersData: data?.offers || [],
+      length: data?.length || 0,
       loading: isLoading,
       error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
+      isValidating,
     }),
     [data, error, isLoading, isValidating]
   );
+
   const refetch = async () => {
     // Use the mutate function to re-fetch the data for the specified key (URL)
     await mutate(URL);
@@ -46,6 +50,29 @@ export function useGetStakeholderOffers(id) {
 
   return { ...memoizedValue, refetch };
 }
+
+
+// export function useGetStakeholderOffers(id) {
+//   const URL = endpoints.offers.stakeholder.one(id);
+
+//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+//   const memoizedValue = useMemo(
+//     () => ({
+//       offersData: data || [],
+//       loading: isLoading,
+//       error,
+//       validating: isValidating,
+//       empty: !isLoading && !data?.length,
+//     }),
+//     [data, error, isLoading, isValidating]
+//   );
+//   const refetch = async () => {
+//     // Use the mutate function to re-fetch the data for the specified key (URL)
+//     await mutate(URL);
+//   };
+
+//   return { ...memoizedValue, refetch };
+// }
 
 export function useGetOffer(id) {
   const URL = endpoints.offers.one(id);
