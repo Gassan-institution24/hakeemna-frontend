@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
 
-
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditAddress() {
@@ -21,8 +20,9 @@ export default function InvoiceNewEditAddress() {
     // formState: { errors },
   } = useFormContext();
 
-  const { user } = useAuthContext()
-  const myUS = user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+  const { user } = useAuthContext();
+  const myUS =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
 
   // const mdUp = useResponsive('up', 'md');
 
@@ -49,7 +49,6 @@ export default function InvoiceNewEditAddress() {
         sx={{ p: 3 }}
       >
         <Stack sx={{ width: 1 }}>
-
           <Stack spacing={1}>
             <Typography variant="h4">{invoiceFrom?.name || myUS.name_english}</Typography>
             <Typography variant="body2">{invoiceFrom?.fullAddress || myUS.address}</Typography>

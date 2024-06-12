@@ -3,11 +3,10 @@ import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -16,7 +15,7 @@ import SearchNotFound from 'src/components/search-not-found';
 
 // ----------------------------------------------------------------------
 
-export default function ProductSearch({ query, results, onSearch, hrefItem, loading }) {
+export default function JobSearch({ query, results, onSearch, hrefItem }) {
   const router = useRouter();
 
   const handleClick = (id) => {
@@ -26,9 +25,9 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
   const handleKeyUp = (event) => {
     if (query) {
       if (event.key === 'Enter') {
-        const selectItem = results.filter((product) => product.name === query)[0];
+        const selectProduct = results.filter((job) => job.title === query)[0];
 
-        handleClick(selectItem.id);
+        handleClick(selectProduct.id);
       }
     }
   };
@@ -36,29 +35,13 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
   return (
     <Autocomplete
       sx={{ width: { xs: 1, sm: 260 } }}
-      loading={loading}
       autoHighlight
       popupIcon={null}
       options={results}
       onInputChange={(event, newValue) => onSearch(newValue)}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => option.title}
       noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      slotProps={{
-        popper: {
-          placement: 'bottom-start',
-          sx: {
-            minWidth: 320,
-          },
-        },
-        paper: {
-          sx: {
-            [` .${autocompleteClasses.option}`]: {
-              pl: 0.75,
-            },
-          },
-        },
-      }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -71,36 +54,16 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
                 <Iconify icon="eva:search-fill" sx={{ ml: 1, color: 'text.disabled' }} />
               </InputAdornment>
             ),
-            endAdornment: (
-              <>
-                {loading ? <Iconify icon="svg-spinners:8-dots-rotate" sx={{ mr: -3 }} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
           }}
         />
       )}
-      renderOption={(props, product, { inputValue }) => {
-        const matches = match(product.name, inputValue);
-        const parts = parse(product.name, matches);
+      renderOption={(props, job, { inputValue }) => {
+        const matches = match(job.title, inputValue);
+        const parts = parse(job.title, matches);
 
         return (
-          <Box component="li" {...props} onClick={() => handleClick(product.id)} key={product.id}>
-            <Avatar
-              key={product.id}
-              alt={product.name}
-              src={product.coverUrl}
-              variant="rounded"
-              sx={{
-                width: 48,
-                height: 48,
-                flexShrink: 0,
-                mr: 1.5,
-                borderRadius: 1,
-              }}
-            />
-
-            <div key={inputValue}>
+          <Box component="li" {...props} onClick={() => handleClick(job.id)} key={job.id}>
+            <div>
               {parts.map((part, index) => (
                 <Typography
                   key={index}
@@ -122,9 +85,8 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
   );
 }
 
-ProductSearch.propTypes = {
+JobSearch.propTypes = {
   hrefItem: PropTypes.func,
-  loading: PropTypes.bool,
   onSearch: PropTypes.func,
   query: PropTypes.string,
   results: PropTypes.array,

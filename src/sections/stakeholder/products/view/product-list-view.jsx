@@ -14,14 +14,13 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useTranslate } from 'src/locales';
-import { useGetAppointmentTypes } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetStakeholderProducts } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
-import { useGetStakeholderProducts } from 'src/api/product';
 import {
   useTable,
   emptyRows,
@@ -67,11 +66,7 @@ export default function AppointmentsView({ employeeData }) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const {
-    productsData,
-    length,
-    refetch,
-  } = useGetStakeholderProducts(user.stakeholder._id, {
+  const { productsData, length, refetch } = useGetStakeholderProducts(user.stakeholder._id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 25,
@@ -112,10 +107,7 @@ export default function AppointmentsView({ employeeData }) {
     <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('products')}
-        links={[
-          { name: t('dashboard'), href: paths.dashboard.root },
-          { name: t('products') },
-        ]}
+        links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('products') }]}
         action={
           <Button
             component={RouterLink}
@@ -131,7 +123,6 @@ export default function AppointmentsView({ employeeData }) {
         }}
       />
       <Card>
-
         <PatientHistoryToolbar
           filters={filters}
           onFilters={handleFilters}
@@ -165,16 +156,15 @@ export default function AppointmentsView({ employeeData }) {
               />
 
               <TableBody>
-                {dataFiltered
-                  ?.map((row, idx) => (
-                    <AppointmentsRow
-                      refetch={refetch}
-                      key={idx}
-                      row={row}
-                      selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                    />
-                  ))}
+                {dataFiltered?.map((row, idx) => (
+                  <AppointmentsRow
+                    refetch={refetch}
+                    key={idx}
+                    row={row}
+                    selected={table.selected.includes(row._id)}
+                    onSelectRow={() => table.onSelectRow(row._id)}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={denseHeight}
