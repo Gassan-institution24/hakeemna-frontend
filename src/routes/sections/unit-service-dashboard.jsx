@@ -141,9 +141,9 @@ const ReceiptsNewPage = lazy(() => import('src/pages/unit-service/accounting/rec
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
 // OFFERS
-const OffersHomePage = lazy(() => import('src/pages/unit-service/offers/home'));
-const OffersInfoPage = lazy(() => import('src/pages/unit-service/offers/info'));
-const OffersNewPage = lazy(() => import('src/pages/unit-service/offers/new'));
+const OffersHomePage = lazy(() => import('src/pages/unit-service/products/home'));
+const OffersInfoPage = lazy(() => import('src/pages/unit-service/products/info'));
+const OffersNewPage = lazy(() => import('src/pages/unit-service/products/new'));
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/unit-service/communication/home'));
 // QUALITY CONTROL
@@ -206,6 +206,10 @@ const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/hom
 // PATIENTS
 const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
+
+// PRODUCTS
+const ProductsPage = lazy(() => import('src/pages/unit-service/products/home'));
+// const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 
 // PERMISSIONS
 const USPermissions = lazy(() =>
@@ -539,6 +543,14 @@ export const unitServiceDashboardRoutes = [
         path: 'oldpatient',
         children: [
           { element: <OldPatientPage />, index: true },
+          { path: 'new', element: <RoomsNewPage /> },
+          { path: ':id/edit', element: <RoomsEditPage /> },
+        ],
+      },
+      {
+        path: 'products',
+        children: [
+          { element: <ProductsPage />, index: true },
           { path: 'new', element: <RoomsNewPage /> },
           { path: ':id/edit', element: <RoomsEditPage /> },
         ],

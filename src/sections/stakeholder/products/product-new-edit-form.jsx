@@ -7,6 +7,7 @@ import { useMemo, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
@@ -15,30 +16,25 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { useResponsive } from 'src/hooks/use-responsive';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
-import { MenuItem } from '@mui/material';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCurrencies } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetProductCategories } from 'src/api/product';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFUpload,
-  RHFTextField,
-} from 'src/components/hook-form';
-import { useAuthContext } from 'src/auth/hooks';
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
+import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function ProductNewEditForm({ currentProduct }) {
   const router = useRouter();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -46,8 +42,8 @@ export default function ProductNewEditForm({ currentProduct }) {
 
   // const [includeTaxes, setIncludeTaxes] = useState(false);
 
-  const { currencies } = useGetCurrencies()
-  const { productCat } = useGetProductCategories()
+  const { currencies } = useGetCurrencies();
+  const { productCat } = useGetProductCategories();
 
   const NewProductSchema = Yup.object().shape({
     name_english: Yup.string().required('Name is required'),
@@ -134,7 +130,7 @@ export default function ProductNewEditForm({ currentProduct }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       Object.keys(data).forEach((key) => {
         if (key === 'images' && Array.isArray(data[key])) {
           data[key].forEach((image, index) => {
@@ -145,9 +141,9 @@ export default function ProductNewEditForm({ currentProduct }) {
         }
       });
       if (currentProduct) {
-        await axiosInstance.patch(endpoints.products.one(currentProduct?._id), formData)
+        await axiosInstance.patch(endpoints.products.one(currentProduct?._id), formData);
       } else {
-        await axiosInstance.post(endpoints.products.all, formData)
+        await axiosInstance.post(endpoints.products.all, formData);
       }
       reset();
       enqueueSnackbar(currentProduct ? 'Update success!' : 'Create success!');
@@ -210,7 +206,12 @@ export default function ProductNewEditForm({ currentProduct }) {
             <RHFTextField name="name_english" label="Product Name" />
             <RHFTextField name="name_arabic" label="Product Name in arabic" />
 
-            <RHFTextField name="description_english" label="English description" multiline rows={4} />
+            <RHFTextField
+              name="description_english"
+              label="English description"
+              multiline
+              rows={4}
+            />
             <RHFTextField name="description_arabic" label="Arabic description" multiline rows={4} />
 
             <Stack spacing={1.5}>
@@ -258,7 +259,6 @@ export default function ProductNewEditForm({ currentProduct }) {
                 md: 'repeat(2, 1fr)',
               }}
             >
-
               <RHFTextField
                 name="quantity"
                 label="Quantity"
@@ -357,7 +357,15 @@ export default function ProductNewEditForm({ currentProduct }) {
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
         <FormControlLabel
-          control={<Switch checked={values.status === 'published'} onChange={() => setValue('status', values.status === 'published' ? 'draft' : 'published')} defaultChecked />}
+          control={
+            <Switch
+              checked={values.status === 'published'}
+              onChange={() =>
+                setValue('status', values.status === 'published' ? 'draft' : 'published')
+              }
+              defaultChecked
+            />
+          }
           label="Publish"
           sx={{ flexGrow: 1, pl: 3 }}
         />

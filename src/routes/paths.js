@@ -53,7 +53,7 @@ export const paths = {
     UsPricing: `/UsPricing`,
     About: `/about`,
     Training: `/training`,
-    
+
     serviceUnit: (id) => `/serviceunit/${id}`,
   },
 
@@ -118,6 +118,8 @@ export const paths = {
     },
     offers: {
       root: `${ROOTS.SUPERADMIN}/myoffers`,
+      new: `${ROOTS.SUPERADMIN}/myoffers/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/myoffers/${id}/edit`,
     },
     orders: {
       root: `${ROOTS.SUPERADMIN}/myorders`,
@@ -687,9 +689,9 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/us/insurance`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/insurance/${id}/info`,
     },
-    offers: {
-      root: `${ROOTS.SUPERADMIN}/us/offers`,
-      info: (id) => `${ROOTS.SUPERADMIN}/us/offers/${id}/info`,
+    products: {
+      root: `${ROOTS.SUPERADMIN}/us/products`,
+      info: (id) => `${ROOTS.SUPERADMIN}/us/products/${id}/info`,
     },
     communication: {
       root: `${ROOTS.SUPERADMIN}/us/communication`,

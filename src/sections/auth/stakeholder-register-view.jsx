@@ -219,14 +219,14 @@ export default function JwtRegisterView() {
           </RHFSelect>
         </Stack>
         {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
-          {/* <RHFSelect name="US_type" label="unit of service Type">
+        {/* <RHFSelect name="US_type" label="unit of service Type">
             {unitserviceTypesData.map((type, idx) => (
               <MenuItem lang="ar" key={idx} value={type._id}>
                 {type.name_english}
               </MenuItem>
             ))}
           </RHFSelect> */}
-          {/* <RHFSelect name="speciality" label="Speciality">
+        {/* <RHFSelect name="speciality" label="Speciality">
             {specialtiesData.map((specialty, idx) => (
               <MenuItem lang="ar" key={idx} value={specialty._id}>
                 {specialty.name_english}
