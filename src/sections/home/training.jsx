@@ -174,4 +174,3 @@ export default function Training() {
     </Grid>
   );
 }
-// #E8EAF6

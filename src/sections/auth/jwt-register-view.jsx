@@ -32,6 +32,7 @@ import FormProvider, {
   RHFPhoneNumber,
 } from 'src/components/hook-form';
 
+import Form from './form.png';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
@@ -171,10 +172,13 @@ export default function JwtRegisterView() {
       </Stack>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> {t('I am a services provider')}</Typography>
-        <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
-          {t('sign up')}
-        </Link>
+        <Typography variant="body2">
+          {' '}
+          {t('I am a ')}{' '}
+          <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
+            {t('services provider')}
+          </Link>
+        </Typography>
       </Stack>
     </Stack>
   );
@@ -190,11 +194,11 @@ export default function JwtRegisterView() {
       }}
     >
       {'By signing up, I agree to '}
-      <Link underline="always" color="text.primary">
-        {t('Terms of Service')}
+      <Link underline="always" color="success.main">
+        {t('Terms of Service ')}
       </Link>
-      {t('and')}
-      <Link underline="always" color="text.primary">
+      {t('and ')}
+      <Link underline="always" color="success.main">
         {t('Privacy Policy')}
       </Link>
       .
@@ -310,3 +314,11 @@ export default function JwtRegisterView() {
     </>
   );
 }
+
+// {/* <Stack
+// sx={{
+//   backgroundImage: `url(${Form})`,
+//   backgroundSize: 'cover',
+//   backgroundPosition: 'center',
+// }}
+// > */}

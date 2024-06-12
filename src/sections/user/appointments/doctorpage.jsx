@@ -110,6 +110,7 @@ export default function Doctorpage() {
         appointmentinfo: datacheeck,
         note: patientNote,
         info: defaultValues,
+        lang:curLangAr
       });
       await axios.post(endpoints.history.all, {
         patient: patientData,
@@ -426,7 +427,7 @@ export default function Doctorpage() {
               {datacheeck && (
                 <Box sx={{ mt: 1 }}>
                   <Typography sx={{ mb: 1 }}>
-                    Let us know if you have any notes <bt /> to follow for your appointment
+                    Let us know if you have any notes to follow for your appointment
                   </Typography>
                   <textarea
                     placeholder="Ex: I have..."
