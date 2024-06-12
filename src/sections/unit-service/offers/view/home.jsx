@@ -1,93 +1,243 @@
-import PropTypes from 'prop-types';
+import orderBy from 'lodash/orderBy';
+import isEqual from 'lodash/isEqual';
+import { useState, useCallback } from 'react';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import Container from '@mui/material/Container';
 
-import { useCountdownDate } from 'src/hooks/use-countdown';
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
-import { ComingSoonIllustration } from 'src/assets/illustrations';
+import { useBoolean } from 'src/hooks/use-boolean';
+
+// import { countries } from 'src/assets/data';
+// import {
+//   _jobs,
+//   _roles,
+//   JOB_SORT_OPTIONS,
+//   JOB_BENEFIT_OPTIONS,
+//   JOB_EXPERIENCE_OPTIONS,
+//   JOB_EMPLOYMENT_TYPE_OPTIONS,
+// } from 'src/_mock';
+
+import Iconify from 'src/components/iconify';
+import EmptyContent from 'src/components/empty-content';
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useGetStakeholders } from 'src/api';
+
+import JobList from '../job-list';
+import JobSort from '../job-sort';
+import JobSearch from '../job-search';
+import JobFilters from '../job-filters';
+import JobFiltersResult from '../job-filters-result';
 
 // ----------------------------------------------------------------------
 
-export default function ComingSoonView() {
-  const { days, hours, minutes, seconds } = useCountdownDate(new Date('07/07/2024 21:30'));
+const defaultFilters = {
+  roles: [],
+  locations: [],
+  benefits: [],
+  experience: 'all',
+  employmentTypes: [],
+};
+
+// ----------------------------------------------------------------------
+
+export default function JobListView() {
+  const settings = useSettingsContext();
+
+  const openFilters = useBoolean();
+
+  const [sortBy, setSortBy] = useState('latest');
+
+  const [search, setSearch] = useState({
+    query: '',
+    results: [],
+  });
+
+  const [filters, setFilters] = useState(defaultFilters);
+
+  const { stakeholdersData } = useGetStakeholders()
+
+  const dataFiltered = applyFilter({
+    inputData: stakeholdersData,
+    filters,
+    sortBy,
+  });
+
+  const canReset = !isEqual(defaultFilters, filters);
+
+  const notFound = !dataFiltered.length && canReset;
+
+  const handleFilters = useCallback((name, value) => {
+    setFilters((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters);
+  }, []);
+
+  const handleSortBy = useCallback((newValue) => {
+    setSortBy(newValue);
+  }, []);
+
+  const handleSearch = useCallback(
+    (inputValue) => {
+      setSearch((prevState) => ({
+        ...prevState,
+        query: inputValue,
+      }));
+
+      if (inputValue) {
+        const results = stakeholdersData.filter(
+          (job) => job.title.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+        );
+
+        setSearch((prevState) => ({
+          ...prevState,
+          results,
+        }));
+      }
+    },
+    [search.query, stakeholdersData]
+  );
+
+  const renderFilters = (
+    <Stack
+      spacing={3}
+      justifyContent="space-between"
+      alignItems={{ xs: 'flex-end', sm: 'center' }}
+      direction={{ xs: 'column', sm: 'row' }}
+    >
+      <JobSearch
+        query={search.query}
+        results={search.results}
+        onSearch={handleSearch}
+        hrefItem={(id) => paths.dashboard.job.details(id)}
+      />
+
+      <Stack direction="row" spacing={1} flexShrink={0}>
+        <JobFilters
+          open={openFilters.value}
+          onOpen={openFilters.onTrue}
+          onClose={openFilters.onFalse}
+          //
+          filters={filters}
+          onFilters={handleFilters}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
+        //
+        // locationOptions={countries.map((option) => option.label)}
+        // roleOptions={_roles}
+        // benefitOptions={JOB_BENEFIT_OPTIONS.map((option) => option.label)}
+        // experienceOptions={['all', ...JOB_EXPERIENCE_OPTIONS.map((option) => option.label)]}
+        // employmentTypeOptions={JOB_EMPLOYMENT_TYPE_OPTIONS.map((option) => option.label)}
+        />
+
+        {/* <JobSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} /> */}
+      </Stack>
+    </Stack>
+  );
+
+  const renderResults = (
+    <JobFiltersResult
+      filters={filters}
+      onResetFilters={handleResetFilters}
+      //
+      canReset={canReset}
+      onFilters={handleFilters}
+      //
+      results={dataFiltered.length}
+    />
+  );
 
   return (
-    <>
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Coming Soon!
-      </Typography>
-
-      <Typography sx={{ color: 'text.secondary' }}>
-        We are currently working hard on this page!
-      </Typography>
-
-      <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <CustomBreadcrumbs
+        heading="Stakeholders"
+        links={[
+          { name: 'Dashboard', href: paths.unitservice.root },
+          { name: 'List' },
+        ]}
+        // action={
+        //   <Button
+        //     component={RouterLink}
+        //     href={paths.dashboard.job.new}
+        //     variant="contained"
+        //     startIcon={<Iconify icon="mingcute:add-line" />}
+        //   >
+        //     New Job
+        //   </Button>
+        // }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
 
       <Stack
-        direction="row"
-        justifyContent="center"
-        divider={<Box sx={{ mx: { xs: 1, sm: 2.5 } }}>:</Box>}
-        sx={{ typography: 'h2' }}
+        spacing={2.5}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
       >
-        <TimeBlock label="Days" value={days} />
+        {renderFilters}
 
-        <TimeBlock label="Hours" value={hours} />
-
-        <TimeBlock label="Minutes" value={minutes} />
-
-        <TimeBlock label="Seconds" value={seconds} />
+        {canReset && renderResults}
       </Stack>
 
-      <TextField
-        fullWidth
-        placeholder="Enter your email"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button variant="contained" size="large">
-                Notify Me
-              </Button>
-            </InputAdornment>
-          ),
-          sx: {
-            pr: 0.5,
-            [`&.${outlinedInputClasses.focused}`]: {
-              boxShadow: (theme) => theme.customShadows.z20,
-              transition: (theme) =>
-                theme.transitions.create(['box-shadow'], {
-                  duration: theme.transitions.duration.shorter,
-                }),
-              [`& .${outlinedInputClasses.notchedOutline}`]: {
-                border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
-              },
-            },
-          },
-        }}
-        sx={{ my: 5 }}
-      />
-    </>
+      {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
+
+      <JobList jobs={dataFiltered} />
+    </Container>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function TimeBlock({ label, value }) {
-  return (
-    <div>
-      <Box> {value} </Box>
-      <Box sx={{ color: 'text.secondary', typography: 'body1' }}>{label}</Box>
-    </div>
-  );
-}
+const applyFilter = ({ inputData, filters, sortBy }) => {
+  const { employmentTypes, experience, roles, locations, benefits } = filters;
 
-TimeBlock.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
+  // SORT BY
+  if (sortBy === 'latest') {
+    inputData = orderBy(inputData, ['createdAt'], ['desc']);
+  }
+
+  if (sortBy === 'oldest') {
+    inputData = orderBy(inputData, ['createdAt'], ['asc']);
+  }
+
+  if (sortBy === 'popular') {
+    inputData = orderBy(inputData, ['totalViews'], ['desc']);
+  }
+
+  // FILTERS
+  if (employmentTypes.length) {
+    inputData = inputData.filter((job) =>
+      job.employmentTypes.some((item) => employmentTypes.includes(item))
+    );
+  }
+
+  if (experience !== 'all') {
+    inputData = inputData.filter((job) => job.experience === experience);
+  }
+
+  if (roles.length) {
+    inputData = inputData.filter((job) => roles.includes(job.role));
+  }
+
+  if (locations.length) {
+    inputData = inputData.filter((job) => job.locations.some((item) => locations.includes(item)));
+  }
+
+  if (benefits.length) {
+    inputData = inputData.filter((job) => job.benefits.some((item) => benefits.includes(item)));
+  }
+
+  return inputData;
 };

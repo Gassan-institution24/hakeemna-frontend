@@ -35,7 +35,7 @@ import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/componen
 export default function NewEditForm({ currentRow }) {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const ChecklistSchema = Yup.object().shape({
     title: Yup.string().nullable().required('title is required'),
@@ -55,7 +55,9 @@ export default function NewEditForm({ currentRow }) {
   });
 
   // const { specialtiesData } = useGetSpecialties();
-  const { workGroupsData } = useGetEmployeeActiveWorkGroups(user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id);
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
 
   const defaultValues = useMemo(
     () => ({
@@ -115,7 +117,10 @@ export default function NewEditForm({ currentRow }) {
         await axiosInstance.patch(endpoints.checklist.one(currentRow._id), data);
         enqueueSnackbar('updated successfuly');
       } else {
-        await axiosInstance.post(endpoints.checklist.all, { ...data, employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id });
+        await axiosInstance.post(endpoints.checklist.all, {
+          ...data,
+          employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+        });
         enqueueSnackbar('created successfuly');
       }
       reset();
@@ -130,8 +135,13 @@ export default function NewEditForm({ currentRow }) {
     <Container maxWidth="xl">
       <FormProvider methods={methods}>
         <Card>
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1, p: 3 }} alignItems="center">
-            <Stack spacing={2} sx={{ width: 1 }} alignItems="center" justifyContent='flex-start'>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={2}
+            sx={{ width: 1, p: 3 }}
+            alignItems="center"
+          >
+            <Stack spacing={2} sx={{ width: 1 }} alignItems="center" justifyContent="flex-start">
               <RHFTextField name="title" label="title" sx={{ width: { md: 0.8, xs: 1 } }} />
               <RHFTextField
                 size="small"
@@ -140,10 +150,41 @@ export default function NewEditForm({ currentRow }) {
                 sx={{ width: { md: 0.7, xs: 1 } }}
               />
             </Stack>
-            <Stack sx={{ width: { md: 0.5, xs: 1 } }} justifyContent='flex-end'>
-              <RHFCheckbox name='unit_service' label='unit of service level' onChange={() => setValue('unit_service', values.unit_service ? null : user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id)} />
-              {user?.employee?.employee_engagements[user?.employee.selected_engagement]?.department && <RHFCheckbox name='department' label='department level' onChange={() => setValue('department', values.department ? null : user?.employee?.employee_engagements[user?.employee.selected_engagement]?.department?._id)} />}
-              <RHFCheckbox name='general' label='Is it general' onChange={() => setValue('general', !values.general)} />
+            <Stack sx={{ width: { md: 0.5, xs: 1 } }} justifyContent="flex-end">
+              <RHFCheckbox
+                name="unit_service"
+                label="unit of service level"
+                onChange={() =>
+                  setValue(
+                    'unit_service',
+                    values.unit_service
+                      ? null
+                      : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                          ?.unit_service?._id
+                  )
+                }
+              />
+              {user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                ?.department && (
+                <RHFCheckbox
+                  name="department"
+                  label="department level"
+                  onChange={() =>
+                    setValue(
+                      'department',
+                      values.department
+                        ? null
+                        : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.department?._id
+                    )
+                  }
+                />
+              )}
+              <RHFCheckbox
+                name="general"
+                label="Is it general"
+                onChange={() => setValue('general', !values.general)}
+              />
               <RHFSelect
                 size="small"
                 name="work_group"

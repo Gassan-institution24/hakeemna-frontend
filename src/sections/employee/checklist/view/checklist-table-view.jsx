@@ -60,9 +60,11 @@ export default function ChecklistTableView() {
 
   const router = useRouter();
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
-  const { CheckListData, loading } = useGetMyCheckLists(user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id);
+  const { CheckListData, loading } = useGetMyCheckLists(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 

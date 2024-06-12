@@ -5,10 +5,10 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
+
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -22,8 +22,7 @@ export default function ProductFiltersResult({
   results,
   ...other
 }) {
-
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const handleRemoveStatus = (e) => {
     onFilters('status', '');
@@ -45,20 +44,19 @@ export default function ProductFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-
         {filters.status !== '' && (
-          <Block label={`${t("status")}:`}>
+          <Block label={`${t('status')}:`}>
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
         {filters.category !== '' && (
-          <Block label={`${t("category")}:`}>
+          <Block label={`${t('category')}:`}>
             <Chip size="small" label={filters.category} onDelete={handleRemoveCategory} />
           </Block>
         )}
         {filters.name !== '' && (
-          <Block label={`${t("search")}:`}>
-            <Chip size="small" label='search' onDelete={handleRemoveName} />
+          <Block label={`${t('search')}:`}>
+            <Chip size="small" label="search" onDelete={handleRemoveName} />
           </Block>
         )}
 
