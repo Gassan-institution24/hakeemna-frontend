@@ -1,58 +1,46 @@
-// import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { bgGradient } from 'src/theme/css';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
 
-// import Logpage from 'src/sections/home/images/logpage.png';
-
-import LanguagePopover from '../common/language-popover';
+import Video from './Video.mp4';
+import Language from '../common/language-home-page';
 
 // ----------------------------------------------------------------------
 
-export default function AuthClassicLayout({ children, image, title }) {
-  const theme = useTheme();
+export default function AuthClassicLayout({ children, title }) {
   const { t } = useTranslate();
   const mdUp = useResponsive('up', 'md');
-  // const [isZoomed, setIsZoomed] = useState(false);
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const renderLogo = (
-    <Logo
-      sx={{
-        zIndex: 9,
-        position: 'absolute',
-        m: { xs: 2, md: 5 },
-      }}
-    />
+    // <Logo
+    //   sx={{
+    //     zIndex: 9,
+    //     position: 'absolute',
+    //     m: { xs: 2, md: 5 },
+    //   }}
+    // />
+    <Language />
   );
 
   const renderContent = (
     <Stack sx={{ width: { sm: '100vw', md: '100%', lg: '35%' } }}>
       <Stack
         sx={{
-          display: { xs: 'flex', sm: 'block' },
-          justifyContent: { xs: 'flex-end' },
-          alignItems: { xs: 'flex-end' },
-        }}
-      >
-        <LanguagePopover />
-      </Stack>
-      <Stack
-        sx={{
           width: '100%',
           mx: 'auto',
           // my: 'auto',
           maxWidth: 480,
-          px: { xs: 2, md: 8 },
-          pt: { xs: 10, md: 10 },
+          pl: { xs: 2, md: 1 },
+          pr: { xs: 2, md: 4 },
+          pt: { xs: 15, md: 5 },
           pb: { xs: 5, md: 0 },
         }}
       >
@@ -63,47 +51,33 @@ export default function AuthClassicLayout({ children, image, title }) {
 
   const renderSection = (
     <Stack
-      flexGrow={1}
-      spacing={10}
+      flexGrow={0.5}
+      spacing={5}
       alignItems="center"
       justifyContent="center"
       sx={{
-        ...bgGradient({
-          color: alpha(
-            theme.palette.background.default,
-            theme.palette.mode === 'light' ? 0.88 : 0.94
-          ),
-          imgUrl: '/assets/background/overlay_2.jpg',
-        }),
+        bgcolor: '#FFFFFF',
       }}
     >
+      {/* <span style={{border:'2px solid gray', padding:2, borderRadius:10}}> */}
+        <Language/>
+      {/* </span> */}
+    
+
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
         {t(title) || 'Hi, Welcome back'}
       </Typography>
 
-      <Box
-        component="img"
-        alt="auth"
-        src={image || '/assets/illustrations/illustration_dashboard.png'}
-        sx={
-          {
-            // maxWidth: {
-            //   xs: 480,
-            //   lg: 560,
-            //   xl: 720,
-            // },
-            // '&:hover': {
-            //   cursor: 'zoom-in',
-            // },
-            // // Apply zoom effect when isZoomed is true
-            // transform: isZoomed ? 'scale(1.2)' : 'scale(1)',
-            // transition: 'transform 0.3s ease-in-out',
-          }
-        }
-        // Toggle isZoomed state on mouse enter/leave
-        // onMouseEnter={() => setIsZoomed(true)}
-        // onMouseLeave={() => setIsZoomed(false)}
-      />
+      <video style={{ width: '70%', height: '60%' }} loop autoPlay muted>
+        <source src={curLangAr ? Video : Video} type="video/mp4" />
+        <track
+          kind="captions"
+          srcLang="en"
+          src="path/to/your/captions.vtt"
+          label="English"
+          default
+        />
+      </video>
     </Stack>
   );
 
@@ -115,7 +89,7 @@ export default function AuthClassicLayout({ children, image, title }) {
         minHeight: '100%',
       }}
     >
-      {renderLogo}
+      {/* {renderLogo} */}
       {mdUp && renderSection}
 
       {renderContent}
@@ -125,6 +99,5 @@ export default function AuthClassicLayout({ children, image, title }) {
 
 AuthClassicLayout.propTypes = {
   children: PropTypes.node,
-  image: PropTypes.string,
   title: PropTypes.string,
 };
