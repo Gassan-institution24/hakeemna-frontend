@@ -9,10 +9,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function ProductSort({ sort, onSort, sortOptions }) {
+export default function JobSort({ sort, onSort, sortOptions }) {
   const popover = usePopover();
-
-  const sortLabel = sortOptions.find((option) => option.value === sort)?.label;
 
   return (
     <>
@@ -28,8 +26,15 @@ export default function ProductSort({ sort, onSort, sortOptions }) {
         sx={{ fontWeight: 'fontWeightSemiBold' }}
       >
         Sort By:
-        <Box component="span" sx={{ ml: 0.5, fontWeight: 'fontWeightBold' }}>
-          {sortLabel}
+        <Box
+          component="span"
+          sx={{
+            ml: 0.5,
+            fontWeight: 'fontWeightBold',
+            textTransform: 'capitalize',
+          }}
+        >
+          {sort}
         </Box>
       </Button>
 
@@ -51,7 +56,7 @@ export default function ProductSort({ sort, onSort, sortOptions }) {
   );
 }
 
-ProductSort.propTypes = {
+JobSort.propTypes = {
   onSort: PropTypes.func,
   sort: PropTypes.string,
   sortOptions: PropTypes.array,

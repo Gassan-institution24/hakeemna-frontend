@@ -78,7 +78,6 @@ export default function ProductCatTableView() {
 
   const router = useRouter();
 
-
   const { productCat, productCatLoading } = useGetProductCategories();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -269,38 +268,38 @@ export default function ProductCatTableView() {
             // dense={table.dense}
             numSelected={table.selected.length}
             rowCount={dataFiltered.length}
-          // onSelectAllRows={(checked) =>
-          //   table.onSelectAllRows(
-          //     checked,
-          //     dataFiltered.map((row, idx) => row._id)
-          //   )
-          // }
-          // action={
-          //   <>
-          //     {dataFiltered
-          //       .filter((row) => table.selected.includes(row._id))
-          //       .some((data) => data.status === 'inactive') ? (
-          //       <Tooltip title="Activate all">
-          //         <IconButton color="primary" onClick={confirmActivate.onTrue}>
-          //           <Iconify icon="codicon:run-all" />
-          //         </IconButton>
-          //       </Tooltip>
-          //     ) : (
-          //       <Tooltip title="Inactivate all">
-          //         <IconButton color="error" onClick={confirmInactivate.onTrue}>
-          //           <Iconify icon="iconoir:pause-solid" />
-          //         </IconButton>
-          //       </Tooltip>
-          //     )}
-          //   </>
-          // }
-          // color={
-          //   dataFiltered
-          //     .filter((row) => table.selected.includes(row._id))
-          //     .some((data) => data.status === 'inactive')
-          //     ? 'primary'
-          //     : 'error'
-          // }
+            // onSelectAllRows={(checked) =>
+            //   table.onSelectAllRows(
+            //     checked,
+            //     dataFiltered.map((row, idx) => row._id)
+            //   )
+            // }
+            // action={
+            //   <>
+            //     {dataFiltered
+            //       .filter((row) => table.selected.includes(row._id))
+            //       .some((data) => data.status === 'inactive') ? (
+            //       <Tooltip title="Activate all">
+            //         <IconButton color="primary" onClick={confirmActivate.onTrue}>
+            //           <Iconify icon="codicon:run-all" />
+            //         </IconButton>
+            //       </Tooltip>
+            //     ) : (
+            //       <Tooltip title="Inactivate all">
+            //         <IconButton color="error" onClick={confirmInactivate.onTrue}>
+            //           <Iconify icon="iconoir:pause-solid" />
+            //         </IconButton>
+            //       </Tooltip>
+            //     )}
+            //   </>
+            // }
+            // color={
+            //   dataFiltered
+            //     .filter((row) => table.selected.includes(row._id))
+            //     .some((data) => data.status === 'inactive')
+            //     ? 'primary'
+            //     : 'error'
+            // }
           />
 
           <Scrollbar>
@@ -312,12 +311,12 @@ export default function ProductCatTableView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     dataFiltered.map((row, idx) => row._id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row, idx) => row._id)
+                //   )
+                // }
               />
 
               <TableBody>

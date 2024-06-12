@@ -326,6 +326,13 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+        title: t('products and offers'),
+        path: paths.unitservice.products.root,
+        icon: <Iconify icon="fluent-mdl2:product" />,
+        navItemId: 'USProductsNav',
+      },
+      {
         show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
@@ -355,12 +362,6 @@ export function useNavData() {
         path: paths.unitservice.insurance.root,
         icon: <Iconify icon="ic:baseline-security" />,
         navItemId: 'USInsuranceNav',
-      },
-      {
-        show: false && checkAcl({ category: 'unit_service', subcategory: 'offers', acl: 'read' }),
-        title: t('suppliers offers'),
-        path: paths.unitservice.offers.root,
-        icon: <Iconify icon="eos-icons:activate-subscriptions" />,
       },
       {
         show:

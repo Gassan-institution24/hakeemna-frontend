@@ -513,6 +513,11 @@ export const endpoints = {
       one: (id) => `/api/suppliersoffers/stakeholder/${id}`,
     },
   },
+  orders: {
+    all: '/api/orders',
+    one: (id) => `/api/orders/${id}`,
+    stakeholder: (id) => `/api/orders/stakeholder/${id}`,
+  },
   systemErrors: {
     all: '/api/systemerrors',
     one: (id) => `/api/systemerrors/${id}`,
@@ -738,6 +743,8 @@ export const endpoints = {
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',
+    all: '/api/stakeholder',
+    one: (id) => `/api/stakeholder/${id}`,
   },
   posts: {
     getAll: '/api/post',

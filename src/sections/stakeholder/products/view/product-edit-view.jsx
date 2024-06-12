@@ -17,7 +17,7 @@ export default function ProductEditView({ id }) {
   const settings = useSettingsContext();
 
   const { product: currentProduct } = useGetProduct(id);
-  
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

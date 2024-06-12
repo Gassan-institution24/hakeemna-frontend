@@ -68,6 +68,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const walktour = useWalktour({
     // defaultRun: !loading && user && !user.last_online && !dialog,
+    defaultRun: false,
     showProgress: true,
     steps: [
       {
@@ -194,7 +195,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -202,7 +203,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             display: 'flex',
             justifyContent: 'flex-end',
             px: 2,
-            pt: 2,
+            py: 2,
             color: 'warning.dark',
             mb: -4,
             cursor: 'pointer',
@@ -221,7 +222,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         </Tooltip>
       )}
       {/* <Logo sx={{ mt: 3, ml: 4, mb: 1 }} /> */}
-      <Link
+      {/* <Link
         component={RouterLink}
         href={isEmployee ? paths.pages.serviceUnit(USData?._id) : '/'}
         sx={{ display: 'contents' }}
@@ -239,7 +240,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         >
           <img src={isEmployee ? USData?.company_logo : Doclogo} alt="logo" />
         </Box>
-      </Link>
+      </Link> */}
       <NavSectionVertical
         data={navData}
         walktourRun={walktour.run}
@@ -305,17 +306,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-          <>
-            <Divider />
-            <MenuItem
-              lang="ar"
-              sx={{ fontSize: 13, color: 'secondary.dark' }}
-              onClick={() => setDialog(true)}
-            >
-              {t('create first time tables')}
-            </MenuItem>
-          </>
-        )}
+            <>
+              <Divider />
+              <MenuItem
+                lang="ar"
+                sx={{ fontSize: 13, color: 'secondary.dark' }}
+                onClick={() => setDialog(true)}
+              >
+                {t('create first time tables')}
+              </MenuItem>
+            </>
+          )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box
