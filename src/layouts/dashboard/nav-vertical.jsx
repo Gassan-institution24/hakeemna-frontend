@@ -26,7 +26,7 @@ import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import Services from './Srrvices.png';
+import Services from './service.png';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
@@ -327,16 +327,13 @@ export default function NavVertical({ openNav, onCloseNav }) {
             zIndex: 99,
           }}
         >
-          {/* <IconButton onClick={() => setTicketDialog(true)}> */}
           <Badge
             badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
             color="error"
             onClick={() => setTicketDialog(true)}
           >
-            {/* <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" /> */}
             <Image src={Services} width="210px" />
           </Badge>
-          {/* </IconButton> */}
 
           <TicketPopover
             messagesLength={messages}
