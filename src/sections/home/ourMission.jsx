@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
@@ -21,6 +21,10 @@ import Credibility from './images/Credibility And Transparency.png';
 import ResearchDevelopment from './images/ResearchAndDevelopment.png';
 
 export default function WhoAreWe() {
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
+
   const [expandedCardIndex, setExpandedCardIndex] = useState(null); // Store the index of the expanded card
   const handleReadMoreClick = (index) => {
     if (expandedCardIndex === index) {
@@ -30,7 +34,6 @@ export default function WhoAreWe() {
     }
   };
 
-  const { t } = useTranslate();
   const CARDS = [
     {
       icon: MedicalHub,
@@ -94,7 +97,11 @@ export default function WhoAreWe() {
           <Typography
             component="div"
             variant="overline"
-            sx={{ color: 'text.disabled', textAlign: 'center' }}
+            sx={{
+              color: 'text.disabled',
+              textAlign: 'center',
+              display: curLangAr ? 'none' : 'inline',
+            }}
           >
             Hakeemna.com
           </Typography>
@@ -102,7 +109,14 @@ export default function WhoAreWe() {
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">{t('our mission')}</Typography>
-          <Image src={Orange} sx={{ position: 'absolute', top: 29, left: '53.3%' }} />
+          <Image
+            src={Orange}
+            sx={{
+              position: 'absolute',
+              top: curLangAr ? 14: 29,
+              left: curLangAr ? '41.5%' : '53.3%',
+            }}
+          />
         </m.div>
       </Stack>
 

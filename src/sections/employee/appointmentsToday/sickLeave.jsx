@@ -128,7 +128,7 @@ export default function SickLeave({ patient }) {
                 />
               )}
             />
-            <RHFTextField lang="en" name="description" label="description" />
+            <RHFTextField lang="en" name="description" multiline label="description" />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>
