@@ -468,7 +468,9 @@ const ChecklistEditPage = lazy(() => import('src/pages/super-admin/tables/checkl
 // PRODUCT CATEGORIES
 const ProductCatPage = lazy(() => import('src/pages/super-admin/tables/product_categories/table'));
 const ProductCatNewPage = lazy(() => import('src/pages/super-admin/tables/product_categories/new'));
-const ProductCatEditPage = lazy(() => import('src/pages/super-admin/tables/product_categories/edit'));
+const ProductCatEditPage = lazy(() =>
+  import('src/pages/super-admin/tables/product_categories/edit')
+);
 
 // ----------------------------------------------------------------------
 

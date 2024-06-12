@@ -100,7 +100,10 @@ export default function NewEditForm({ currentRow }) {
   const handleCreateAndSend = handleSubmit(async (data) => {
     try {
       if (currentRow) {
-        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), { ...data, general: true });
+        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), {
+          ...data,
+          general: true,
+        });
         enqueueSnackbar('updated successfuly');
       } else {
         await axiosInstance.post(endpoints.checklist.all, { ...data, general: true });

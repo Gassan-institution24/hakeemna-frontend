@@ -41,7 +41,6 @@ export default function CountriesTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>

@@ -17,6 +17,17 @@ const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit')
 const ProductsPage = lazy(() => import('src/pages/stakeholder/products/list'));
 const ProductsNewPage = lazy(() => import('src/pages/stakeholder/products/new'));
 const ProductsEditPage = lazy(() => import('src/pages/stakeholder/products/edit'));
+
+// PRODUCTS
+const OffersPage = lazy(() => import('src/pages/stakeholder/offers/list'));
+const OffersNewPage = lazy(() => import('src/pages/stakeholder/offers/new'));
+const OffersEditPage = lazy(() => import('src/pages/stakeholder/offers/edit'));
+
+// PROFILE
+const ProfilePage = lazy(() => import('src/pages/stakeholder/profile/home'));
+
+// ORDERS
+const OrdersPage = lazy(() => import('src/pages/stakeholder/orders/list'));
 // ----------------------------------------------------------------------
 
 export const stakeholderDashboardRoutes = [
@@ -39,10 +50,7 @@ export const stakeholderDashboardRoutes = [
       {
         path: 'myprofile',
         children: [
-          { element: <ChecklistPage />, index: true },
-          { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
+          { element: <ProfilePage />, index: true },
         ],
       },
       {
@@ -57,19 +65,19 @@ export const stakeholderDashboardRoutes = [
       {
         path: 'myoffers',
         children: [
-          { element: <ChecklistPage />, index: true },
-          { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
+          { element: <OffersPage />, index: true },
+          { path: 'list', element: <OffersPage /> },
+          { path: 'new', element: <OffersNewPage /> },
+          { path: ':id/edit', element: <OffersEditPage /> },
         ],
       },
       {
         path: 'myorders',
         children: [
-          { element: <ChecklistPage />, index: true },
-          { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
+          { element: <OrdersPage />, index: true },
+          // { path: 'list', element: <ChecklistPage /> },
+          // { path: 'new', element: <ChecklistNewPage /> },
+          // { path: ':id/edit', element: <ChecklistEditPage /> },
         ],
       },
       {
@@ -90,7 +98,12 @@ export const stakeholderDashboardRoutes = [
           { path: ':id/edit', element: <ChecklistEditPage /> },
         ],
       },
-
+      {
+        path: 'myorders',
+        children: [
+          { element: <ChecklistPage />, index: true },
+        ],
+      },
     ],
   },
 ];
