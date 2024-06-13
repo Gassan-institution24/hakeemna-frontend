@@ -110,7 +110,7 @@ export default function Doctorpage() {
         appointmentinfo: datacheeck,
         note: patientNote,
         info: defaultValues,
-        lang:curLangAr
+        lang: curLangAr,
       });
       await axios.post(endpoints.history.all, {
         patient: patientData,

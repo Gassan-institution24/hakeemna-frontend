@@ -2,14 +2,11 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import { Badge, Divider, Tooltip, MenuItem, Typography } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -21,7 +18,6 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import Doclogo from 'src/components/logo/doc.png';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -195,7 +191,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -306,17 +302,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
+            >
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box

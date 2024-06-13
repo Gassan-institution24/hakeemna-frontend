@@ -1,41 +1,42 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Container, FormControlLabel, Switch } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Switch, Container, FormControlLabel } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import FormProvider from 'src/components/hook-form';
-import { useTranslate } from 'src/locales';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+
+import FormProvider from 'src/components/hook-form';
 
 import InvoiceNewEditDetails from './invoice-new-edit-details';
 import InvoiceNewEditAddress from './invoice-new-edit-address';
 
 // ----------------------------------------------------------------------
 
-const cleanData = (data) => (
+const cleanData = (data) =>
   Object.fromEntries(
     Object.entries(data)
       .filter(([_, v]) => v != null)
       .map(([k, v]) => [k, v && typeof v === 'object' && !Array.isArray(v) ? cleanData(v) : v])
-  )
-);
+  );
 
 export default function InvoiceNewEditForm({ currentOffer }) {
   const router = useRouter();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const NewInvoiceSchema = Yup.object().shape({
     products: Yup.lazy(() =>
@@ -113,15 +114,15 @@ export default function InvoiceNewEditForm({ currentOffer }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch()
+  const values = watch();
 
   const handleSaveAsDraft = handleSubmit(async (data) => {
     try {
-      const cleanedData = cleanData(data)
+      const cleanedData = cleanData(data);
       if (currentOffer) {
-        await axiosInstance.patch(endpoints.offers.one(currentOffer._id), cleanedData)
+        await axiosInstance.patch(endpoints.offers.one(currentOffer._id), cleanedData);
       } else {
-        await axiosInstance.post(endpoints.offers.all, { ...cleanedData, status: 'draft' })
+        await axiosInstance.post(endpoints.offers.all, { ...cleanedData, status: 'draft' });
       }
       reset();
       router.push(paths.stakeholder.offers.root);
@@ -131,9 +132,9 @@ export default function InvoiceNewEditForm({ currentOffer }) {
   });
 
   const handleCreateAndSend = handleSubmit(async (data) => {
-    const cleanedData = cleanData(data)
+    const cleanedData = cleanData(data);
     try {
-      await axiosInstance.post(endpoints.offers.all, { ...cleanedData, status: 'published' })
+      await axiosInstance.post(endpoints.offers.all, { ...cleanedData, status: 'published' });
       reset();
       router.push(paths.stakeholder.offers.root);
     } catch (error) {
@@ -196,34 +197,40 @@ export default function InvoiceNewEditForm({ currentOffer }) {
             label="Publish"
             sx={{ flexGrow: 1, pl: 3 }}
           />
-          {!currentOffer && <LoadingButton
-            color="inherit"
-            size="large"
-            variant="outlined"
-            loading={isSubmitting}
-            onClick={handleSaveAsDraft}
-          >
-            Save as Draft
-          </LoadingButton>}
+          {!currentOffer && (
+            <LoadingButton
+              color="inherit"
+              size="large"
+              variant="outlined"
+              loading={isSubmitting}
+              onClick={handleSaveAsDraft}
+            >
+              Save as Draft
+            </LoadingButton>
+          )}
 
-          {currentOffer && <LoadingButton
-            color="inherit"
-            size="large"
-            variant="outlined"
-            loading={isSubmitting}
-            onClick={handleSaveAsDraft}
-          >
-            Save
-          </LoadingButton>}
+          {currentOffer && (
+            <LoadingButton
+              color="inherit"
+              size="large"
+              variant="outlined"
+              loading={isSubmitting}
+              onClick={handleSaveAsDraft}
+            >
+              Save
+            </LoadingButton>
+          )}
 
-          {!currentOffer && <LoadingButton
-            size="large"
-            variant="contained"
-            loading={isSubmitting}
-            onClick={handleCreateAndSend}
-          >
-            {currentOffer ? 'Update' : 'Create'} & Send
-          </LoadingButton>}
+          {!currentOffer && (
+            <LoadingButton
+              size="large"
+              variant="contained"
+              loading={isSubmitting}
+              onClick={handleCreateAndSend}
+            >
+              {currentOffer ? 'Update' : 'Create'} & Send
+            </LoadingButton>
+          )}
         </Stack>
       </FormProvider>
     </Container>

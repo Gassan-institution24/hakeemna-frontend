@@ -94,20 +94,20 @@ export default function Processing() {
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
   });
-  
+
   const defaultValues = {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
     service_unit: Entrance?.service_unit,
     Doctor_Comments: '',
   };
-  
+
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });
-  
+
   const {
     reset,
     handleSubmit,
@@ -116,7 +116,7 @@ export default function Processing() {
     setValue,
     formState: { isSubmitting },
   } = methods;
-  
+
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
@@ -128,8 +128,6 @@ export default function Processing() {
 
   const watchStartTime = watch('Start_time');
   const watchEndTime = watch('End_time');
-
- 
 
   useEffect(() => {
     if (watchStartTime && watchEndTime) {
@@ -387,7 +385,7 @@ export default function Processing() {
               sx={{ mb: 2 }}
             />
             <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
-  
+
             <Controller
               name="Start_time"
               control={control}
@@ -503,7 +501,7 @@ export default function Processing() {
         {item.key === 1 && renderHistory}
       </Typography>
     </Paper>
-);
+  );
 
   return isMobile ? (
     <div>
@@ -521,9 +519,7 @@ export default function Processing() {
             <TimelineDot color={item.color}>{item.icon}</TimelineDot>
             <TimelineConnector />
           </TimelineSeparator>
-          <TimelineContent>
-            {renderTimelineItems(item)}
-          </TimelineContent>
+          <TimelineContent>{renderTimelineItems(item)}</TimelineContent>
         </TimelineItem>
       ))}
     </Timeline>

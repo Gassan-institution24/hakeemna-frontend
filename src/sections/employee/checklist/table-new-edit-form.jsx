@@ -1,9 +1,10 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useFieldArray, useFormContext } from 'react-hook-form';
+import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -95,10 +96,11 @@ export default function NewEditForm({ currentRow }) {
 
   const values = watch();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'questions',
   });
+
   const handleAdd = () => {
     append({
       question: '',
@@ -107,8 +109,32 @@ export default function NewEditForm({ currentRow }) {
     });
   };
 
+  useEffect(() => {
+    reset({
+      title: currentRow?.title || '',
+      // speciality: currentRow?.speciality || null,
+      unit_service: currentRow?.unit_service || null,
+      department: currentRow?.department || null,
+      work_group: currentRow?.work_group || null,
+      general: currentRow?.general || false,
+      description: currentRow?.description || '',
+      questions: currentRow?.questions || [
+        {
+          question: '',
+          answer_way: 'Text',
+          options: [''],
+        },
+      ],
+    });
+  }, [currentRow, reset]);
+
   const handleRemove = (index) => {
     remove(index);
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+    move(result.source.index, result.destination.index);
   };
 
   const handleCreateAndSend = handleSubmit(async (data) => {
@@ -208,56 +234,76 @@ export default function NewEditForm({ currentRow }) {
           <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
             questions:
           </Typography>
-          <Stack spacing={4}>
-            {fields.map((item, index) => (
-              <Card sx={{ p: 3 }}>
-                <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-                  <Stack spacing={2} sx={{ width: 1 }}>
-                    <Stack
-                      direction={{ xs: 'column', md: 'row' }}
-                      justifyContent="space-between"
-                      spacing={2}
-                      sx={{ width: 1 }}
-                    >
-                      <RHFTextField
-                        size="small"
-                        name={`questions[${index}].question`}
-                        label="question"
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ width: 1 }}
-                      />
-                      <RHFSelect
-                        name={`questions[${index}].answer_way`}
-                        size="small"
-                        label="answer_way"
-                        InputLabelProps={{ shrink: true }}
-                        sx={{ width: { md: 0.5, xs: 1 } }}
-                      >
-                        {['Text', 'Yes No', 'Options'].map((one) => (
-                          <MenuItem key={one} value={one}>
-                            {one}
-                          </MenuItem>
-                        ))}
-                      </RHFSelect>
-                      <Button size="small" color="error" onClick={() => handleRemove(index)}>
-                        <Iconify icon="solar:trash-bin-trash-bold" />
-                      </Button>
-                    </Stack>
-                    {values.questions[index].answer_way === 'Options' && (
-                      <Stack
-                        justifyContent="flex-end"
-                        alignItems="start"
-                        spacing={1}
-                        sx={{ width: 0.8 }}
-                      >
-                        <QuestionOptions index={index} />
-                      </Stack>
-                    )}
-                  </Stack>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable-questions">
+              {(provided) => (
+                <Stack spacing={4} {...provided.droppableProps} ref={provided.innerRef}>
+                  {fields.map((item, index) => (
+                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                      {(providedd) => (
+                        <Card
+                          sx={{ p: 3 }}
+                          ref={providedd.innerRef}
+                          {...providedd.draggableProps}
+                          {...providedd.dragHandleProps}
+                        >
+                          <Stack alignItems="flex-end" spacing={1.5}>
+                            <Stack spacing={2} sx={{ width: 1 }}>
+                              <Stack
+                                direction={{ xs: 'column', md: 'row' }}
+                                justifyContent="space-between"
+                                spacing={2}
+                                sx={{ width: 1 }}
+                              >
+                                <RHFTextField
+                                  size="small"
+                                  name={`questions[${index}].question`}
+                                  label="question"
+                                  InputLabelProps={{ shrink: true }}
+                                  sx={{ width: 1 }}
+                                />
+                                <RHFSelect
+                                  name={`questions[${index}].answer_way`}
+                                  size="small"
+                                  label="answer_way"
+                                  InputLabelProps={{ shrink: true }}
+                                  sx={{ width: { md: 0.5, xs: 1 } }}
+                                >
+                                  {['Text', 'Yes No', 'Options'].map((one) => (
+                                    <MenuItem key={one} value={one}>
+                                      {one}
+                                    </MenuItem>
+                                  ))}
+                                </RHFSelect>
+                                <Button
+                                  size="small"
+                                  color="error"
+                                  onClick={() => handleRemove(index)}
+                                >
+                                  <Iconify icon="solar:trash-bin-trash-bold" />
+                                </Button>
+                              </Stack>
+                              {values.questions[index].answer_way === 'Options' && (
+                                <Stack
+                                  justifyContent="flex-end"
+                                  alignItems="start"
+                                  spacing={1}
+                                  sx={{ width: 0.8 }}
+                                >
+                                  <QuestionOptions index={index} />
+                                </Stack>
+                              )}
+                            </Stack>
+                          </Stack>
+                        </Card>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
                 </Stack>
-              </Card>
-            ))}
-          </Stack>
+              )}
+            </Droppable>
+          </DragDropContext>
 
           <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
 
@@ -311,7 +357,7 @@ function QuestionOptions({ index }) {
   return (
     <>
       {fields.map((item, idx) => (
-        <Stack direction="row" alignItems="center">
+        <Stack key={item.id} direction="row" alignItems="center">
           <Radio disabled />
           <RHFTextField
             size="small"

@@ -49,9 +49,7 @@ export const stakeholderDashboardRoutes = [
       // { path: '', element: < /> },
       {
         path: 'myprofile',
-        children: [
-          { element: <ProfilePage />, index: true },
-        ],
+        children: [{ element: <ProfilePage />, index: true }],
       },
       {
         path: 'myproducts',
@@ -100,9 +98,7 @@ export const stakeholderDashboardRoutes = [
       },
       {
         path: 'myorders',
-        children: [
-          { element: <ChecklistPage />, index: true },
-        ],
+        children: [{ element: <ChecklistPage />, index: true }],
       },
     ],
   },

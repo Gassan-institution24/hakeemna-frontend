@@ -1,15 +1,13 @@
 import orderBy from 'lodash/orderBy';
-import isEqual from 'lodash/isEqual';
+// import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+// import { useBoolean } from 'src/hooks/use-boolean';
 
 // import { countries } from 'src/assets/data';
 // import {
@@ -21,70 +19,67 @@ import { useBoolean } from 'src/hooks/use-boolean';
 //   JOB_EMPLOYMENT_TYPE_OPTIONS,
 // } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
+import { useGetStakeholders } from 'src/api';
+
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useGetStakeholders } from 'src/api';
 
 import JobList from '../job-list';
-import JobSort from '../job-sort';
 import JobSearch from '../job-search';
-import JobFilters from '../job-filters';
-import JobFiltersResult from '../job-filters-result';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
-  roles: [],
-  locations: [],
-  benefits: [],
-  experience: 'all',
-  employmentTypes: [],
-};
+// const defaultFilters = {
+//   roles: [],
+//   locations: [],
+//   benefits: [],
+//   experience: 'all',
+//   employmentTypes: [],
+// };
 
 // ----------------------------------------------------------------------
 
 export default function JobListView() {
   const settings = useSettingsContext();
 
-  const openFilters = useBoolean();
+  // const openFilters = useBoolean();
 
-  const [sortBy, setSortBy] = useState('latest');
+  // const [sortBy, setSortBy] = useState('latest');
 
   const [search, setSearch] = useState({
     query: '',
     results: [],
   });
 
-  const [filters, setFilters] = useState(defaultFilters);
+  // const [filters, setFilters] = useState(defaultFilters);
 
-  const { stakeholdersData } = useGetStakeholders()
+  const { stakeholdersData } = useGetStakeholders();
 
   const dataFiltered = applyFilter({
     inputData: stakeholdersData,
-    filters,
-    sortBy,
+    // filters,
+    // sortBy,
   });
 
-  const canReset = !isEqual(defaultFilters, filters);
+  // const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = !dataFiltered.length && canReset;
+  const notFound = !dataFiltered.length;
 
-  const handleFilters = useCallback((name, value) => {
-    setFilters((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }, []);
+  // const handleFilters = useCallback((name, value) => {
+  //   setFilters((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // }, []);
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
+  // const handleResetFilters = useCallback(() => {
+  //   setFilters(defaultFilters);
+  // }, []);
 
-  const handleSortBy = useCallback((newValue) => {
-    setSortBy(newValue);
-  }, []);
+  // const handleSortBy = useCallback((newValue) => {
+  //   setSortBy(newValue);
+  // }, []);
 
   const handleSearch = useCallback(
     (inputValue) => {
@@ -94,9 +89,15 @@ export default function JobListView() {
       }));
 
       if (inputValue) {
+        console.log('inputValue', inputValue);
         const results = stakeholdersData.filter(
-          (job) => job.title.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+          (one) =>
+            (one.name_english &&
+              one.name_english.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1) ||
+            (one.name_arabic &&
+              one.name_arabic.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1)
         );
+        console.log('inputValue', results);
 
         setSearch((prevState) => ({
           ...prevState,
@@ -104,7 +105,7 @@ export default function JobListView() {
         }));
       }
     },
-    [search.query, stakeholdersData]
+    [stakeholdersData]
   );
 
   const renderFilters = (
@@ -118,10 +119,10 @@ export default function JobListView() {
         query={search.query}
         results={search.results}
         onSearch={handleSearch}
-        hrefItem={(id) => paths.dashboard.job.details(id)}
+        hrefItem={(id) => paths.unitservice.products.stakeholder.one(id)}
       />
 
-      <Stack direction="row" spacing={1} flexShrink={0}>
+      {/* <Stack direction="row" spacing={1} flexShrink={0}>
         <JobFilters
           open={openFilters.value}
           onOpen={openFilters.onTrue}
@@ -140,31 +141,28 @@ export default function JobListView() {
         // employmentTypeOptions={JOB_EMPLOYMENT_TYPE_OPTIONS.map((option) => option.label)}
         />
 
-        {/* <JobSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} /> */}
-      </Stack>
+        <JobSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} />
+      </Stack> */}
     </Stack>
   );
 
-  const renderResults = (
-    <JobFiltersResult
-      filters={filters}
-      onResetFilters={handleResetFilters}
-      //
-      canReset={canReset}
-      onFilters={handleFilters}
-      //
-      results={dataFiltered.length}
-    />
-  );
+  // const renderResults = (
+  //   <JobFiltersResult
+  //     filters={filters}
+  //     onResetFilters={handleResetFilters}
+  //     //
+  //     canReset={canReset}
+  //     onFilters={handleFilters}
+  //     //
+  //     results={dataFiltered.length}
+  //   />
+  // );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
         heading="Stakeholders"
-        links={[
-          { name: 'Dashboard', href: paths.unitservice.root },
-          { name: 'List' },
-        ]}
+        // links={[{ name: 'Dashboard', href: paths.unitservice.root }, { name: 'List' }]}
         // action={
         //   <Button
         //     component={RouterLink}
@@ -188,7 +186,7 @@ export default function JobListView() {
       >
         {renderFilters}
 
-        {canReset && renderResults}
+        {/* {canReset && renderResults} */}
       </Stack>
 
       {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
@@ -201,7 +199,6 @@ export default function JobListView() {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy }) => {
-  const { employmentTypes, experience, roles, locations, benefits } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {
@@ -217,27 +214,27 @@ const applyFilter = ({ inputData, filters, sortBy }) => {
   }
 
   // FILTERS
-  if (employmentTypes.length) {
-    inputData = inputData.filter((job) =>
-      job.employmentTypes.some((item) => employmentTypes.includes(item))
-    );
-  }
+  // if (employmentTypes.length) {
+  //   inputData = inputData.filter((job) =>
+  //     job.employmentTypes.some((item) => employmentTypes.includes(item))
+  //   );
+  // }
 
-  if (experience !== 'all') {
-    inputData = inputData.filter((job) => job.experience === experience);
-  }
+  // if (experience !== 'all') {
+  //   inputData = inputData.filter((job) => job.experience === experience);
+  // }
 
-  if (roles.length) {
-    inputData = inputData.filter((job) => roles.includes(job.role));
-  }
+  // if (roles.length) {
+  //   inputData = inputData.filter((job) => roles.includes(job.role));
+  // }
 
-  if (locations.length) {
-    inputData = inputData.filter((job) => job.locations.some((item) => locations.includes(item)));
-  }
+  // if (locations.length) {
+  //   inputData = inputData.filter((job) => job.locations.some((item) => locations.includes(item)));
+  // }
 
-  if (benefits.length) {
-    inputData = inputData.filter((job) => job.benefits.some((item) => benefits.includes(item)));
-  }
+  // if (benefits.length) {
+  //   inputData = inputData.filter((job) => job.benefits.some((item) => benefits.includes(item)));
+  // }
 
   return inputData;
 };

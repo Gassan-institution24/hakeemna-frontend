@@ -63,12 +63,12 @@ export default function JobFilters({
     [onFilters]
   );
 
-  const handleFilterLocations = useCallback(
-    (newValue) => {
-      onFilters('locations', newValue);
-    },
-    [onFilters]
-  );
+  // const handleFilterLocations = useCallback(
+  //   (newValue) => {
+  //     onFilters('locations', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
   const handleFilterBenefits = useCallback(
     (newValue) => {
