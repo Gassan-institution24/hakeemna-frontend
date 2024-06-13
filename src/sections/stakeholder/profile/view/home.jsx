@@ -6,8 +6,8 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetStakeholder } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useGetStakeholder } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';

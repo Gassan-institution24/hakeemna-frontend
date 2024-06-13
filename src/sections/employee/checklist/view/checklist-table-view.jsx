@@ -38,7 +38,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
+  { id: 'sequence_number', label: 'sequence' },
   { id: 'title', label: 'title' },
   { id: 'speciality', label: 'speciality' },
   { id: 'description', label: 'description' },

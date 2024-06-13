@@ -113,7 +113,7 @@ export default function WhoAreWe() {
             src={Orange}
             sx={{
               position: 'absolute',
-              top: curLangAr ? 14: 29,
+              top: curLangAr ? 14 : 29,
               left: curLangAr ? '41.5%' : '53.3%',
             }}
           />

@@ -7,8 +7,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Logo from 'src/components/logo';
-
 import Video from './Video.mp4';
 import Language from '../common/language-home-page';
 
@@ -19,16 +17,16 @@ export default function AuthClassicLayout({ children, title }) {
   const mdUp = useResponsive('up', 'md');
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const renderLogo = (
-    // <Logo
-    //   sx={{
-    //     zIndex: 9,
-    //     position: 'absolute',
-    //     m: { xs: 2, md: 5 },
-    //   }}
-    // />
-    <Language />
-  );
+  // const renderLogo = (
+  //   // <Logo
+  //   //   sx={{
+  //   //     zIndex: 9,
+  //   //     position: 'absolute',
+  //   //     m: { xs: 2, md: 5 },
+  //   //   }}
+  //   // />
+  //   <Language />
+  // );
 
   const renderContent = (
     <Stack sx={{ width: { sm: '100vw', md: '100%', lg: '35%' } }}>
@@ -60,9 +58,8 @@ export default function AuthClassicLayout({ children, title }) {
       }}
     >
       {/* <span style={{border:'2px solid gray', padding:2, borderRadius:10}}> */}
-        <Language/>
+      <Language />
       {/* </span> */}
-    
 
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
         {t(title) || 'Hi, Welcome back'}

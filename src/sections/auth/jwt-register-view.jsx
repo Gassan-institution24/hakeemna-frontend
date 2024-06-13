@@ -32,7 +32,6 @@ import FormProvider, {
   RHFPhoneNumber,
 } from 'src/components/hook-form';
 
-import Form from './form.png';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {

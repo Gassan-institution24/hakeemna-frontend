@@ -1,39 +1,66 @@
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { fDate } from 'src/utils/format-time';
-import { fCurrency } from 'src/utils/format-number';
-
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useGetStakeholderOffers } from 'src/api';
+import { useGetStakeholderProducts } from 'src/api/product';
 
 // ----------------------------------------------------------------------
 
 export default function JobItem({ job, onView, onEdit, onDelete }) {
-  const popover = usePopover();
+  // const popover = usePopover();
+  const router = useRouter();
 
-  const { id, name_english, name_arabic, country, city, company_logo, email, phone, created_at, candidates, experience, employmentTypes, salary, role } =
-    job;
+  const {
+    _id,
+    name_english,
+    //  name_arabic,
+    country,
+    city,
+    company_logo,
+    email,
+    phone,
+    // created_at, candidates, experience, employmentTypes, salary, role
+  } = job;
+
+  const { length: offersLength } = useGetStakeholderOffers(_id, {
+    page: 0,
+    sortBy: 'created_at',
+    rowsPerPage: 1,
+    order: 'desc',
+    status: 'published',
+    to: 'to_unit_service',
+  });
+  const { length: productsLength } = useGetStakeholderProducts(_id, {
+    page: 0,
+    sortBy: 'created_at',
+    rowsPerPage: 1,
+    order: 'desc',
+    status: 'published',
+  });
+
+  if (!productsLength && !offersLength) {
+    return <></>;
+  }
 
   return (
     <>
-      <Card>
-        <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
+      <Card
+        sx={{ cursor: 'pointer' }}
+        onClick={() => router.push(paths.unitservice.products.stakeholder.one(_id))}
+      >
+        {/* <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
           <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        </IconButton> */}
 
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
@@ -46,7 +73,11 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
           <ListItemText
             sx={{ mb: 1 }}
             primary={
-              <Link component={RouterLink} href={paths.unitservice.products.info(id)} color="inherit">
+              <Link
+                component={RouterLink}
+                href={paths.unitservice.products.info(_id)}
+                color="inherit"
+              >
                 {name_english}
               </Link>
             }
@@ -66,15 +97,29 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
             // spacing={0.5}
             // direction="row"
             alignItems="start"
-            sx={{ color: 'primary.main', typography: 'caption' }}
+            sx={{ typography: 'caption' }}
           >
             {/* <Iconify width={16} icon="solar:users-group-rounded-bold" /> */}
-            {email && <Typography variant='caption'>email: {email}</Typography>}
-            {phone && <Typography variant='caption'>phone: {phone}</Typography>}
+            {email && <Typography variant="caption">email: {email}</Typography>}
+            {phone && <Typography variant="caption">phone: {phone}</Typography>}
+          </Stack>
+          <Stack
+            // spacing={0.5}
+            // direction="row"
+            alignItems="end"
+            sx={{ color: 'primary.main', typography: 'caption', mt: 2 }}
+          >
+            {/* <Iconify width={16} icon="solar:users-group-rounded-bold" /> */}
+            {productsLength && (
+              <Typography variant="caption">{productsLength} products available </Typography>
+            )}
+            {offersLength && (
+              <Typography variant="caption">{offersLength} offers available </Typography>
+            )}
           </Stack>
         </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {/* <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
           {[
@@ -109,10 +154,10 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
               </Typography>
             </Stack>
           ))}
-        </Box>
+        </Box> */}
       </Card>
 
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
@@ -148,7 +193,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }
