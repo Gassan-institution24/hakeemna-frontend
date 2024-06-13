@@ -140,10 +140,11 @@ const ReceiptsEditPage = lazy(() => import('src/pages/unit-service/accounting/re
 const ReceiptsNewPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/new'));
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
-// OFFERS
-const OffersHomePage = lazy(() => import('src/pages/unit-service/products/home'));
-const OffersInfoPage = lazy(() => import('src/pages/unit-service/products/info'));
-const OffersNewPage = lazy(() => import('src/pages/unit-service/products/new'));
+// PRODUCTS
+const ProductsHomePage = lazy(() => import('src/pages/unit-service/products/stakeholders'));
+const OfferInfoPage = lazy(() => import('src/pages/unit-service/products/offer-info'));
+const ProductInfoPage = lazy(() => import('src/pages/unit-service/products/info'));
+const ProductNewPage = lazy(() => import('src/pages/unit-service/products/new'));
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/unit-service/communication/home'));
 // QUALITY CONTROL
@@ -208,7 +209,12 @@ const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients
 const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 
 // PRODUCTS
-const ProductsPage = lazy(() => import('src/pages/unit-service/products/home'));
+const AllProductsPage = lazy(() => import('src/pages/unit-service/products/all-products'));
+const ProductsStakeholdersPage = lazy(() => import('src/pages/unit-service/products/stakeholders'));
+const StakeholderProductsPage = lazy(() =>
+  import('src/pages/unit-service/products/stakeholder-products')
+);
+const ProductCheckoutPage = lazy(() => import('src/pages/unit-service/products/checkout'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 
 // PERMISSIONS
@@ -511,9 +517,10 @@ export const unitServiceDashboardRoutes = [
       {
         path: 'offers',
         children: [
-          { element: <OffersHomePage />, index: true },
-          { path: ':id/info', element: <OffersInfoPage /> },
-          { path: 'new', element: <OffersNewPage /> },
+          { element: <ProductsHomePage />, index: true },
+          { path: 'offer/:id', element: <OfferInfoPage /> },
+          { path: ':id/info', element: <ProductInfoPage /> },
+          { path: 'new', element: <ProductNewPage /> },
         ],
       },
       {
@@ -550,8 +557,12 @@ export const unitServiceDashboardRoutes = [
       {
         path: 'products',
         children: [
-          { element: <ProductsPage />, index: true },
-          { path: 'new', element: <RoomsNewPage /> },
+          { element: <AllProductsPage />, index: true },
+          { path: 'all', element: <AllProductsPage /> },
+          { path: 'stakeholder', element: <ProductsStakeholdersPage /> },
+          { path: 'stakeholder/:shid', element: <StakeholderProductsPage /> },
+          { path: 'checkout', element: <ProductCheckoutPage /> },
+          { path: 'offer/:id', element: <OfferInfoPage /> },
           { path: ':id/edit', element: <RoomsEditPage /> },
         ],
       },

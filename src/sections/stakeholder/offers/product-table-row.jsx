@@ -12,8 +12,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fCurrency } from 'src/utils/format-number';
-
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -43,7 +41,7 @@ export default function AppointmentsTableRow({
     description_arabic,
     to_patients,
     to_unit_service,
-    currency,
+    // currency,
     image,
     status,
     created_at,
@@ -101,9 +99,11 @@ export default function AppointmentsTableRow({
           </Stack>
         </TableCell>
         <TableCell align="center">
-          {to_patients ? <Iconify icon='charm:tick' /> : <Iconify icon='mdi:remove-bold' />}
+          {to_patients ? <Iconify icon="charm:tick" /> : <Iconify icon="mdi:remove-bold" />}
         </TableCell>
-        <TableCell align="center">{to_unit_service ? <Iconify icon='charm:tick' /> : <Iconify icon='mdi:remove-bold' />}</TableCell>
+        <TableCell align="center">
+          {to_unit_service ? <Iconify icon="charm:tick" /> : <Iconify icon="mdi:remove-bold" />}
+        </TableCell>
         {/* <TableCell align="center">{fCurrency(price, currency?.symbol)}</TableCell> */}
         <TableCell align="center">
           <Label

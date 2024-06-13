@@ -3,13 +3,14 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetOffers() {
-  const URL = endpoints.offers.all;
+export function useGetOffers(query) {
+  const URL = [endpoints.offers.all, { params: query }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       offersData: data || [],
+      length: data?.length,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -50,7 +51,6 @@ export function useGetStakeholderOffers(id, query) {
 
   return { ...memoizedValue, refetch };
 }
-
 
 // export function useGetStakeholderOffers(id) {
 //   const URL = endpoints.offers.stakeholder.one(id);

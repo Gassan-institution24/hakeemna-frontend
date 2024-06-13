@@ -327,10 +327,22 @@ export function useNavData() {
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('products and offers'),
+        title: t('products and suppliers'),
         path: paths.unitservice.products.root,
         icon: <Iconify icon="fluent-mdl2:product" />,
         navItemId: 'USProductsNav',
+        children: [
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('all products'),
+            path: paths.unitservice.products.all,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('suppliers'),
+            path: paths.unitservice.products.stakeholder.root,
+          },
+        ],
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),

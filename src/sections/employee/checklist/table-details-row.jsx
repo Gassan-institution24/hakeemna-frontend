@@ -15,7 +15,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TableDetailsRow({ row, selected, onEditRow }) {
   const {
-    code,
+    sequence_number,
     title,
     speciality,
     description,
@@ -34,7 +34,7 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        <Box>{code}</Box>
+        <Box>{sequence_number}</Box>
       </TableCell>
 
       <TableCell align="center">{title}</TableCell>

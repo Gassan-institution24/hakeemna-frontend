@@ -1,5 +1,3 @@
-import sum from 'lodash/sum';
-import { useEffect, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -8,19 +6,14 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import { inputBaseClasses } from '@mui/material/InputBase';
-
-import { fCurrency } from 'src/utils/format-number';
 
 // import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveServiceTypes } from 'src/api';
+import { useGetStakeholderProducts } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useGetStakeholderProducts } from 'src/api/product';
 // import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
@@ -32,14 +25,14 @@ export default function InvoiceNewEditDetails() {
   const { user } = useAuthContext();
   const { productsData } = useGetStakeholderProducts(user?.stakeholder?._id);
 
-  const { control, setValue, watch } = useFormContext();
+  const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'products',
   });
 
-  const values = watch();
+  // const values = watch();
 
   const handleAdd = () => {
     append({
@@ -102,10 +95,7 @@ export default function InvoiceNewEditDetails() {
                 InputLabelProps={{ shrink: true }}
               >
                 {productsData?.map((one) => (
-                  <MenuItem
-                    key={one._id}
-                    value={one._id}
-                  >
+                  <MenuItem key={one._id} value={one._id}>
                     {one.name_english}
                   </MenuItem>
                 ))}
@@ -145,7 +135,6 @@ export default function InvoiceNewEditDetails() {
           Add Item
         </Button>
       </Stack>
-
     </Box>
   );
 }
