@@ -1,26 +1,22 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { useEffect, useCallback } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MenuItem } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
-import {
-  useGetCountries,
-  useGetCountryCities,
-} from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
@@ -42,10 +38,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const UpdateUserSchema = Yup.object().shape({
     email: Yup.string().required(t('required field')),
-    name_english: Yup.string()
-      .required(t('required field')),
-    name_arabic: Yup.string()
-      .required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
+    name_arabic: Yup.string().required(t('required field')),
     country: Yup.string().required(t('required field')),
     city: Yup.string().nullable(),
     identification_num: Yup.string()
@@ -88,7 +82,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     watch,
     setValue,
     handleSubmit,
-    control,
+    // control,
     formState: { isSubmitting, errors },
   } = methods;
 

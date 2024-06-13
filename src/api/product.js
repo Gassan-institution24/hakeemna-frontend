@@ -5,8 +5,8 @@ import { fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function useGetProducts() {
-  const URL = endpoints.products.all;
+export function useGetProducts(query) {
+  const URL = [endpoints.products.all, { params: query }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

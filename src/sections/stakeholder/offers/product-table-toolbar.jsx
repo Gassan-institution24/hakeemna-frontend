@@ -9,8 +9,8 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetProductCategories } from 'src/api/product';
+import { useTranslate } from 'src/locales';
+// import { useGetProductCategories } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -26,10 +26,10 @@ export default function AppointmentToolbar({
   options,
 }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
-  const { productCat } = useGetProductCategories();
+  // const { productCat } = useGetProductCategories();
 
   const popover = usePopover();
 
@@ -83,9 +83,15 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            <MenuItem lang="ar" value="">{t('all')}</MenuItem>
-            <MenuItem lang="ar" value='to_patients'>{t('to patients')}</MenuItem>
-            <MenuItem lang="ar" value='to_unit_service'>{t('to units of service')}</MenuItem>
+            <MenuItem lang="ar" value="">
+              {t('all')}
+            </MenuItem>
+            <MenuItem lang="ar" value="to_patients">
+              {t('to patients')}
+            </MenuItem>
+            <MenuItem lang="ar" value="to_unit_service">
+              {t('to units of service')}
+            </MenuItem>
           </Select>
         </FormControl>
         <FormControl

@@ -7,13 +7,13 @@ import { alpha } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 export default function ColorPreview({ colors, limit = 3, sx }) {
-  const renderColors = colors.slice(0, limit);
+  const renderColors = colors?.slice(0, limit);
 
-  const remainingColor = colors.length - limit;
+  const remainingColor = colors ? colors.length - limit : 0;
 
   return (
     <Stack component="span" direction="row" alignItems="center" justifyContent="flex-end" sx={sx}>
-      {renderColors.map((color, index, idx) => (
+      {renderColors?.map((color, index, idx) => (
         <Box
           key={idx}
           sx={{
@@ -28,7 +28,7 @@ export default function ColorPreview({ colors, limit = 3, sx }) {
         />
       ))}
 
-      {colors.length > limit && (
+      {colors?.length > limit && (
         <Box component="span" sx={{ typography: 'subtitle2' }}>{`+${remainingColor}`}</Box>
       )}
     </Stack>

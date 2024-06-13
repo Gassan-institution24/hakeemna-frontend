@@ -15,6 +15,7 @@ import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 import { LocalizationProvider } from 'src/locales';
 import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
+import { CheckoutProvider } from './sections/unit-service/checkout/context';
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -96,14 +97,16 @@ export default function App() {
           <ThemeProvider>
             <MotionLazy>
               <SnackbarProvider>
-                <SettingsDrawer />
-                <ProgressBar />
-                <div
-                  lang="ar"
-                  style={{ height: '100%', width: '100%', textTransform: 'capitalize' }}
-                >
-                  <Router />
-                </div>
+                <CheckoutProvider>
+                  <SettingsDrawer />
+                  <ProgressBar />
+                  <div
+                    lang="ar"
+                    style={{ height: '100%', width: '100%', textTransform: 'capitalize' }}
+                  >
+                    <Router />
+                  </div>
+                </CheckoutProvider>
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>
