@@ -36,11 +36,11 @@ export default function CheckoutCartProductList({
           <TableBody>
             {products.map((row) => (
               <CheckoutCartProduct
-                key={row.id}
+                key={row._id}
                 row={row}
-                onDelete={() => onDelete(row.id)}
-                onDecrease={() => onDecreaseQuantity(row.id)}
-                onIncrease={() => onIncreaseQuantity(row.id)}
+                onDelete={() => onDelete(row._id)}
+                onDecrease={() => onDecreaseQuantity(row._id)}
+                onIncrease={() => onIncreaseQuantity(row._id)}
               />
             ))}
           </TableBody>
