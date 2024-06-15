@@ -41,7 +41,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 import { fMonth } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -52,7 +52,7 @@ import {
   useGetPatientHistoryData,
   useGetOneEntranceManagement,
 } from 'src/api';
-
+ 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -60,12 +60,13 @@ import CheckList from './checkList';
 import SickLeave from './sickLeave';
 
 export default function Processing() {
+  const { user } = useAuthContext();
   const params = useParams();
   const { id } = params;
   const { medicinesData } = useGetMedicines();
-  const { user } = useAuthContext();
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
   const { data } = useGetPatient(Entrance?.patient?._id);
+  console.log(Entrance);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
@@ -142,6 +143,13 @@ export default function Processing() {
     try {
       submitdata.Doctor_Comments = DoctorComment; // Ensure Doctor_Comments is included in the submitdata
       if (medicalReportDialog.value) {
+        await axiosInstance.post(endpoints.history.all, {
+          patient: Entrance?.patient?._id,
+          name_english: 'an medical report has been added',
+          name_arabic: "تم ارفاق تقرير طبي",
+          sub_english: `Medical report from  ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `تقرير طبي من  ${Entrance?.service_unit?.name_arabic}`,
+        });
         await axiosInstance.post('/api/examination', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
           medical_report_status: true,
@@ -152,6 +160,13 @@ export default function Processing() {
         reset();
       }
       if (prescriptionDialog.value) {
+        await axiosInstance.post(endpoints.history.all, {
+          patient: Entrance?.patient?._id,
+          name_english: 'an prescription has been added',
+          name_arabic: 'تم ارفاق وصفة طبية',
+          sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
+        });
         await axiosInstance.post('/api/drugs', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
           Drugs_report_status: true,
@@ -303,7 +318,7 @@ export default function Processing() {
       title: (
         <>
           sick leave (optional) <br />
-          <SickLeave patient={data} />
+          <SickLeave patient={data} service_unit={Entrance?.service_unit?._id} />
         </>
       ),
       color: 'primary',

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Badge, Divider, Tooltip, MenuItem, Typography } from '@mui/material';
+import { Badge, Divider, Tooltip, MenuItem, Typography, IconButton } from '@mui/material';
 
 import { usePathname } from 'src/routes/hooks';
 
@@ -315,20 +315,39 @@ export default function NavVertical({ openNav, onCloseNav }) {
         )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: { md: -30, xs: 10 },
-            right: { md: -20, xs: -40 },
-            zIndex: 99,
-          }}
-        >
+     <Box
+     sx={{
+       position: 'fixed',
+       bottom: { md: 20, xs: 0 },
+       pb: { md: 0, xs: 2 },
+       right: { md: 20, xs: 'auto' }, 
+       left: { md: 'auto', xs: 20 },  
+       zIndex: 99,
+     }}
+   >
           <Badge
             badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
             color="error"
             onClick={() => setTicketDialog(true)}
           >
-            <Image src={Services} width="210px" />
+            <IconButton
+              sx={{
+                bgcolor: '#22C55E',
+                '&:hover': {
+                  bgcolor: '#22C55E',
+                  border: 'solid 2px #FFAB00',
+                },
+              }}
+            >
+              <Iconify
+                width={35}
+                sx={{
+                  m: 0.5,
+                  color: 'white',
+                }}
+                icon="streamline:chat-bubble-oval-smiley-2"
+              />
+            </IconButton>
           </Badge>
 
           <TicketPopover
