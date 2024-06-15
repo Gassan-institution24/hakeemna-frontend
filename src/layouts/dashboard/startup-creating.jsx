@@ -18,12 +18,15 @@ import {
 } from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { LoadingButton } from '@mui/lab';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 export default function StartupCreating({ open, onClose }) {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const checkAcl = useAclGuard();
+  const loading = useBoolean()
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -41,6 +44,7 @@ export default function StartupCreating({ open, onClose }) {
 
   const onAcceptCreating = async () => {
     try {
+      loading.onTrue()
       if (tables.includes('department')) {
         await axiosInstance.post(endpoints.departments.all, {
           unit_service: USData?._id,
@@ -110,9 +114,11 @@ export default function StartupCreating({ open, onClose }) {
           name_arabic: `تشخيص`,
         });
       }
+      loading.onFalse()
       onClose();
       window.location.reload();
     } catch (error) {
+      loading.onFalse()
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -241,9 +247,9 @@ export default function StartupCreating({ open, onClose }) {
         </Stack>
       }
       action={
-        <Button variant="contained" color="info" onClick={onAcceptCreating}>
+        <LoadingButton loading={loading.value} variant="contained" color="info" onClick={onAcceptCreating}>
           {t('create')}
-        </Button>
+        </LoadingButton>
       }
     />
   );

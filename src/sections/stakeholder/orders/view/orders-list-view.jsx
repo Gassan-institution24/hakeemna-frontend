@@ -47,8 +47,8 @@ export default function OrdersView() {
     { id: 'code', label: t('code') },
     { id: 'unit_service', label: t('unit of service') },
     { id: 'patient', label: t('patient') },
-    { id: 'completed_at', label: t('completed at') },
-    { id: 'canceled_at', label: t('canceled at') },
+    { id: 'products', label: t('products no.') },
+    { id: 'note', label: t('note') },
     { id: 'status', label: t('status') },
     { id: '' },
   ];
@@ -61,12 +61,12 @@ export default function OrdersView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { productsData, length, refetch } = useGetStakeholderOrders(user.stakeholder._id, {
+  const { ordersData, length, refetch } = useGetStakeholderOrders(user.stakeholder._id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 25,
     order: table.order || 'asc',
-    populate: 'category currency',
+    populate: 'unit_service patient',
     ...filters,
   });
 
@@ -75,7 +75,7 @@ export default function OrdersView() {
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
 
-  const dataFiltered = productsData;
+  const dataFiltered = ordersData;
 
   const denseHeight = table.dense ? 56 : 76;
 

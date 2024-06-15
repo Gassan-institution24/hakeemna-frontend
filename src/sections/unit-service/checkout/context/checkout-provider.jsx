@@ -85,7 +85,7 @@ export function CheckoutProvider({ children }) {
 
   const onDeleteCart = useCallback(
     (itemId) => {
-      const updatedItems = state.items.filter((item) => item.id !== itemId);
+      const updatedItems = state.items.filter((item) => item._id !== itemId);
 
       update('items', updatedItems);
     },
@@ -110,7 +110,7 @@ export function CheckoutProvider({ children }) {
   const onIncreaseQuantity = useCallback(
     (itemId) => {
       const updatedItems = state.items.map((item) => {
-        if (item.id === itemId) {
+        if (item._id === itemId) {
           return {
             ...item,
             quantity: item.quantity + 1,
@@ -127,7 +127,7 @@ export function CheckoutProvider({ children }) {
   const onDecreaseQuantity = useCallback(
     (itemId) => {
       const updatedItems = state.items.map((item) => {
-        if (item.id === itemId) {
+        if (item._id === itemId) {
           return {
             ...item,
             quantity: item.quantity - 1,
@@ -168,11 +168,11 @@ export function CheckoutProvider({ children }) {
 
   // Reset
   const onReset = useCallback(() => {
-    if (completed) {
-      reset();
-      router.replace(paths.product.root);
-    }
-  }, [completed, reset, router]);
+    // if (completed) {
+    reset();
+    router.replace(paths.unitservice.products.all);
+    // }
+  }, [reset, router]);
 
   const memoizedValue = useMemo(
     () => ({

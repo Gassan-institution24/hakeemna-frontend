@@ -123,6 +123,7 @@ export const paths = {
     },
     orders: {
       root: `${ROOTS.SUPERADMIN}/myorders`,
+      details: (id) => `${ROOTS.SUPERADMIN}/myorders/${id}/details`,
     },
     customers: {
       root: `${ROOTS.SUPERADMIN}/mycustomers`,
@@ -691,7 +692,7 @@ export const paths = {
     },
     products: {
       all: `${ROOTS.SUPERADMIN}/us/products/all`,
-      offer: (id)=> `${ROOTS.SUPERADMIN}/us/products/offer/${id}`,
+      offer: (id) => `${ROOTS.SUPERADMIN}/us/products/offer/${id}`,
       root: `${ROOTS.SUPERADMIN}/us/products`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/products/${id}/info`,
       checkout: `${ROOTS.SUPERADMIN}/us/products/checkout`,

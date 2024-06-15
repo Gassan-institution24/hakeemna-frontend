@@ -1,237 +1,43 @@
-import orderBy from 'lodash/orderBy';
-import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
-import Stack from '@mui/material/Stack';
+import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
-
-// import { useBoolean } from 'src/hooks/use-boolean';
-// import { useDebounce } from 'src/hooks/use-debounce';
-
-import { useGetProducts } from 'src/api/product';
-// import {
-//   PRODUCT_SORT_OPTIONS,
-//   PRODUCT_COLOR_OPTIONS,
-//   PRODUCT_GENDER_OPTIONS,
-//   PRODUCT_RATING_OPTIONS,
-//   PRODUCT_CATEGORY_OPTIONS,
-// } from 'src/_mock';
-
-import EmptyContent from 'src/components/empty-content';
-import { useSettingsContext } from 'src/components/settings';
-
-import ProductList from '../product-list';
-import CartIcon from '../common/cart-icon';
-import ProductSearch from '../product-search';
-import { useCheckoutContext } from '../../checkout/context';
-import ProductFiltersResult from '../product-filters-result';
+import AllOffers from '../all-offers';
+import AllProducts from '../all-products';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
-  gender: [],
-  colors: [],
-  rating: '',
-  name: '',
-  category: 'all',
-  priceRange: [0, 200],
-};
-
-// ----------------------------------------------------------------------
-
-export default function ProductShopView() {
-  const settings = useSettingsContext();
-
-  const checkout = useCheckoutContext();
-
-  // const openFilters = useBoolean();
-
-  // const [sortBy, setSortBy] = useState('featured');
-
-  // const [searchQuery, setSearchQuery] = useState('');
-
-  // const debouncedQuery = useDebounce(searchQuery);
-
-  const [filters, setFilters] = useState(defaultFilters);
-
-  const { products, productsLoading, productsEmpty } = useGetProducts();
-
-  // const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
-
-  const handleFilters = useCallback((name, value) => {
-    setFilters((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+export default function TableCreateView() {
+  const [currentTab, setCurrentTab] = useState('products');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
   }, []);
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  const dataFiltered = applyFilter({
-    inputData: products,
-    filters,
-    // sortBy,
-  });
-
-  const canReset = !isEqual(defaultFilters, filters);
-
-  const notFound = !dataFiltered.length && canReset;
-
-  // const handleSortBy = useCallback((newValue) => {
-  //   setSortBy(newValue);
-  // }, []);
-
-  const handleSearch = useCallback(
-    (e) => {
-      // setSearchQuery(e);
-      handleFilters('name', e.target.value);
+  const TABS = [
+    {
+      value: 'products',
+      label: 'products',
     },
-    [handleFilters]
-  );
-
-  const renderFilters = (
-    <Stack
-      spacing={3}
-      justifyContent="space-between"
-      alignItems={{ xs: 'flex-end', sm: 'center' }}
-      direction={{ xs: 'column', sm: 'row' }}
-    >
-      <ProductSearch
-        // query={debouncedQuery}
-        // results={searchResults}
-        filters={filters}
-        onSearch={handleSearch}
-        // loading={searchLoading}
-        hrefItem={(id) => paths.product.details(id)}
-      />
-      {/* 
-      <Stack direction="row" spacing={1} flexShrink={0}>
-        <ProductFilters
-          open={openFilters.value}
-          onOpen={openFilters.onTrue}
-          onClose={openFilters.onFalse}
-          //
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-          //
-          // colorOptions={PRODUCT_COLOR_OPTIONS}
-          // ratingOptions={PRODUCT_RATING_OPTIONS}
-          // genderOptions={PRODUCT_GENDER_OPTIONS}
-          // categoryOptions={['all', ...PRODUCT_CATEGORY_OPTIONS]}
-        />
-
-        <ProductSort sort={sortBy} onSort={handleSortBy} sortOptions={PRODUCT_SORT_OPTIONS} />
-      </Stack> */}
-    </Stack>
-  );
-
-  const renderResults = (
-    <ProductFiltersResult
-      filters={filters}
-      onFilters={handleFilters}
-      //
-      canReset={canReset}
-      onResetFilters={handleResetFilters}
-      //
-      results={dataFiltered.length}
-    />
-  );
-
-  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
-
+    {
+      value: 'offers',
+      label: 'offers',
+    },
+  ];
   return (
-    <Container
-      maxWidth={settings.themeStretch ? false : 'xl'}
-      sx={{
-        mb: 15,
-      }}
-    >
-      <CartIcon totalItems={checkout.totalItems} />
-
-      <Stack
-        spacing={2.5}
+    <Container maxWidth="xl">
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       >
-        {renderFilters}
-
-        {canReset && renderResults}
-      </Stack>
-
-      {(notFound || productsEmpty) && renderNotFound}
-
-      <ProductList products={dataFiltered} loading={productsLoading} />
+        {TABS.map((tab, idx) => (
+          <Tab key={idx} sx={{ fontSize: 16 }} label={tab.label} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'products' && <AllProducts />}
+      {currentTab === 'offers' && <AllOffers />}
     </Container>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, filters, sortBy }) {
-  const { gender, category, colors, priceRange, rating, name } = filters;
-
-  const min = priceRange[0];
-
-  const max = priceRange[1];
-
-  // SORT BY
-  if (sortBy === 'featured') {
-    inputData = orderBy(inputData, ['totalSold'], ['desc']);
-  }
-
-  if (sortBy === 'newest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
-  }
-
-  if (sortBy === 'priceDesc') {
-    inputData = orderBy(inputData, ['price'], ['desc']);
-  }
-
-  if (sortBy === 'priceAsc') {
-    inputData = orderBy(inputData, ['price'], ['asc']);
-  }
-
-  // FILTERS
-  if (gender.length) {
-    inputData = inputData.filter((product) => gender.includes(product.gender));
-  }
-
-  if (category !== 'all') {
-    inputData = inputData.filter((product) => product.category === category);
-  }
-
-  if (colors.length) {
-    inputData = inputData.filter((product) =>
-      product.colors.some((color) => colors.includes(color))
-    );
-  }
-
-  if (min !== 0 || max !== 200) {
-    inputData = inputData.filter((product) => product.price >= min && product.price <= max);
-  }
-  if (name !== '') {
-    inputData = inputData.filter((product) => product.name_english);
-  }
-
-  if (rating) {
-    inputData = inputData.filter((product) => {
-      const convertRating = (value) => {
-        if (value === 'up4Star') return 4;
-        if (value === 'up3Star') return 3;
-        if (value === 'up2Star') return 2;
-        return 1;
-      };
-      return product.totalRatings > convertRating(rating);
-    });
-  }
-
-  return inputData;
 }
