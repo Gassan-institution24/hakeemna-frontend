@@ -37,7 +37,11 @@ export default function AppointmentsTableRow({
   const {
     _id,
     code,
-    name_english,
+    sequence_number,
+    unit_service,
+    patient,
+    products,
+    note,
     name_arabic,
     description_english,
     description_arabic,
@@ -47,6 +51,8 @@ export default function AppointmentsTableRow({
     price,
     images,
     status,
+    completed_at,
+    canceled_at,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -69,49 +75,25 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{code}</TableCell>
+        <TableCell align="center">{sequence_number}</TableCell>
         <TableCell align="center">
-          <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }}>
-            <Avatar
-              alt={curLangAr ? name_arabic : name_english}
-              src={images[0]}
-              variant="rounded"
-              sx={{ width: 64, height: 64, mr: 2 }}
-            />
-
-            <ListItemText
-              disableTypography
-              primary={
-                <Link
-                  noWrap
-                  color="inherit"
-                  variant="subtitle2"
-                  onClick={() => router.push(paths.stakeholder.products.edit(_id))}
-                  sx={{ cursor: 'pointer' }}
-                >
-                  {curLangAr ? name_arabic : name_english}
-                </Link>
-              }
-              secondary={
-                <Box component="div" sx={{ typography: 'body2', color: 'text.disabled' }}>
-                  {curLangAr ? description_arabic : description_english}
-                </Box>
-              }
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            />
-          </Stack>
+          {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
         </TableCell>
         <TableCell align="center">
-          {curLangAr ? category?.name_arabic : category?.name_english}
+          {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
-        <TableCell align="center">{quantity}</TableCell>
-        <TableCell align="center">{fCurrency(price, currency?.symbol)}</TableCell>
+        <TableCell align="center">
+          {products?.length}
+        </TableCell>
+        <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'published' && 'success') ||
-              (status === 'draft' && 'warning') ||
+              (status === 'pending' && 'warning') ||
+              (status === 'processing' && 'info') ||
+              (status === 'completed' && 'success') ||
+              (status === 'cancelled' && 'error') ||
               'default'
             }
           >
@@ -135,12 +117,12 @@ export default function AppointmentsTableRow({
         <MenuItem
           lang="ar"
           onClick={() => {
-            router.push(paths.stakeholder.products.edit(_id));
+            router.push(paths.stakeholder.orders.details(_id));
             popover.onClose();
           }}
         >
-          <Iconify icon="fluent:edit-32-filled" />
-          {t('edit')}
+          <Iconify icon="solar:eye-bold" />
+          {t('show')}
         </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />

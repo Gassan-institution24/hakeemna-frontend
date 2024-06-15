@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -21,6 +21,7 @@ import { useGetProducts } from 'src/api/product';
 import { useAuthContext } from 'src/auth/hooks';
 
 import EmptyContent from 'src/components/empty-content';
+import { useParams } from 'src/routes/hooks';
 import { useSettingsContext } from 'src/components/settings';
 
 import ProductList from './product-list';
@@ -48,6 +49,8 @@ export default function ProductShopView() {
     const checkout = useCheckoutContext();
     const { user } = useAuthContext();
 
+    const { shid } = useParams()
+
     // const openFilters = useBoolean();
 
     // const [sortBy, setSortBy] = useState('featured');
@@ -58,7 +61,13 @@ export default function ProductShopView() {
 
     const [filters, setFilters] = useState(defaultFilters);
 
-    const { products, productsLoading, productsEmpty } = useGetProducts({ status: 'published', populate: 'category stakeholder' });
+    const queryOptions = useMemo(() => ({
+        status: 'published',
+        populate: 'category stakeholder',
+        ...(shid && { stakeholder: shid })
+    }), [shid]);
+
+    const { products, productsLoading, productsEmpty } = useGetProducts(queryOptions);
 
     // const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
 

@@ -57,7 +57,7 @@ export function useGetOrder(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      orderData: data,
+      orderData: data ,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -66,5 +66,10 @@ export function useGetOrder(id) {
     [data, error, isLoading, isValidating]
   );
 
-  return memoizedValue;
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
 }

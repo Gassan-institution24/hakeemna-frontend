@@ -109,13 +109,8 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
             alignItems="end"
             sx={{ color: 'primary.main', typography: 'caption', mt: 2 }}
           >
-            {/* <Iconify width={16} icon="solar:users-group-rounded-bold" /> */}
-            {productsLength && (
               <Typography variant="caption">{productsLength} products available </Typography>
-            )}
-            {offersLength && (
               <Typography variant="caption">{offersLength} offers available </Typography>
-            )}
           </Stack>
         </Stack>
 
