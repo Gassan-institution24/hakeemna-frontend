@@ -18,7 +18,3 @@
   font-style: normal;
   src: local('CircularStd'), url('CircularStd-Bold.otf') format('opentype');
 }
-
- body{
-  color:  rgba(176, 196, 222, 0.081);
- }
