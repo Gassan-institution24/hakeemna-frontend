@@ -12,7 +12,6 @@ import Doctorpage from '../appointments/doctorpage';
 // ----------------------------------------------------------------------
 
 export default function Doctorpageinfo() {
-  // const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth="xl">

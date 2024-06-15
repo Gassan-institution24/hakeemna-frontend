@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
+import Hidden from '@mui/material/Hidden';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -22,6 +23,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
+import Language from 'src/layouts/common/language-home-page';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -43,11 +45,6 @@ export default function JwtRegisterView() {
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-
-  // const [selectedCountry, setSelectedCountry] = useState('');
-
-  // const [cities, setCities] = useState([]);
-
   const { countriesData } = useGetCountries();
 
   const searchParams = useSearchParams();
@@ -58,7 +55,7 @@ export default function JwtRegisterView() {
 
   const RegisterSchema = Yup.object().shape({
     name_english: Yup.string()
-      .required('Englis name is required')
+      .required('English name is required')
       .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
@@ -160,7 +157,13 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">{t('Get started absolutely free')}</Typography>
+      <Hidden smUp>
+        <span>
+          <Language />
+        </span>
+      </Hidden>
+
+      <Typography variant="h4">{t('Get started absolutely free')} </Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> {t('Already have an account?')} </Typography>
@@ -313,11 +316,3 @@ export default function JwtRegisterView() {
     </>
   );
 }
-
-// {/* <Stack
-// sx={{
-//   backgroundImage: `url(${Form})`,
-//   backgroundSize: 'cover',
-//   backgroundPosition: 'center',
-// }}
-// > */}

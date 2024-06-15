@@ -39,6 +39,7 @@ const BMI = lazy(() => import('src/sections/user/bmi'));
 const Myhealth = lazy(() => import('src/sections/user/view/user-myHealth-view'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
+const SickLeave = lazy(() => import('src/sections/user/view/user-sickLeave-view'));
 
 // ----------------------------------------------------------------------
 
@@ -92,6 +93,7 @@ export const userRoutes = [
           { path: 'historyinfo/:id', element: <HistoryInfo /> },
           { path: 'financilmovment', element: <FinancilMovment /> },
           { path: 'family', element: <Family /> },
+          { path: 'sickLeave', element: <SickLeave /> },
         ],
       },
     ],

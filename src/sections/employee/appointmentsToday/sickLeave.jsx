@@ -26,23 +26,24 @@ import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function SickLeave({ patient }) {
+export default function SickLeave({ patient,service_unit }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const dialog = useBoolean();
   const { user } = useAuthContext();
-
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
     description: Yup.string(),
+    unit_services: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
   });
   const defaultValues = {
     employee: user?.employee?._id,
     patient: patient?._id,
+    unit_services: service_unit,
   };
 
   const methods = useForm({
@@ -62,8 +63,9 @@ export default function SickLeave({ patient }) {
     reset({
       employee: user?.employee?._id,
       patient: patient?._id,
+      unit_services: service_unit,
     });
-  }, [user, reset, patient]);
+  }, [user, reset, patient,service_unit]);
 
   const onSubmit = async (submitdata) => {
     try {
@@ -146,4 +148,5 @@ export default function SickLeave({ patient }) {
 }
 SickLeave.propTypes = {
   patient: PropTypes.object,
+  service_unit: PropTypes.string,
 };
