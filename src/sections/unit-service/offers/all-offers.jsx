@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -23,6 +23,7 @@ import {
     TableHeadCustom,
     TablePaginationCustom,
 } from 'src/components/table';
+import { useParams } from 'src/routes/hooks';
 
 import AppointmentsRow from './product-table-row';
 import PatientHistoryToolbar from './product-table-toolbar';
@@ -50,16 +51,20 @@ export default function OffersView({ employeeData }) {
 
     const { user } = useAuthContext();
 
+    const { shid } = useParams()
+
     const addModal = useBoolean();
 
     const [filters, setFilters] = useState(defaultFilters);
 
-    const { offersData, length, refetch } = useGetOffers({
+    const queryOptions = useMemo(() => ({
         status: 'published',
         to_unit_service: true,
-        populate: 'stakeholder products.product'
-    });
-    console.log('offersData', offersData)
+        populate: 'stakeholder products.product',
+        ...(shid && { stakeholder: shid })
+    }), [shid]);
+
+    const { offersData, length, refetch } = useGetOffers(queryOptions);
 
     const dateError =
         filters.startDate && filters.endDate

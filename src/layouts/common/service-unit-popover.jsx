@@ -18,6 +18,7 @@ import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -108,7 +109,14 @@ export default function ServiceUnitPopover() {
             </Typography>
           </IconButton>
         )}
-      <CustomPopover open={popover.open} onClose={popover.onClose}>
+      <CustomPopover
+        sx={{
+          maxHeight: '50vh',
+          overflow: user?.employee?.employee_engagements?.length > 2 ? 'scroll' : 'hidden'
+        }}
+        open={popover.open}
+        onClose={popover.onClose}
+      >
         {user?.employee?.employee_engagements?.map((option, index, idx) => (
           <MenuItem
             lang="ar"
