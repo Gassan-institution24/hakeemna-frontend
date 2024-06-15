@@ -15,7 +15,7 @@ import CheckoutBillingAddress from '../checkout-billing-address';
 
 // ----------------------------------------------------------------------
 
-const PRODUCT_CHECKOUT_STEPS = ['Cart', 'Billing & address', 'Payment'];
+// const PRODUCT_CHECKOUT_STEPS = ['Cart', 'Billing & address', 'Payment'];
 
 export default function CheckoutView() {
   const settings = useSettingsContext();
@@ -25,14 +25,14 @@ export default function CheckoutView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ mb: 10 }}>
       <Typography variant="h4" sx={{ my: { xs: 3, md: 5 } }}>
-        Checkout
+        Confirm order
       </Typography>
 
-      <Grid container justifyContent={checkout.completed ? 'center' : 'flex-start'}>
+      {/* <Grid container justifyContent={checkout.completed ? 'center' : 'flex-start'}>
         <Grid xs={12} md={8}>
           <CheckoutSteps activeStep={checkout.activeStep} steps={PRODUCT_CHECKOUT_STEPS} />
         </Grid>
-      </Grid>
+      </Grid> */}
 
       {checkout.completed ? (
         <CheckoutOrderComplete
@@ -42,11 +42,11 @@ export default function CheckoutView() {
         />
       ) : (
         <>
-          {checkout.activeStep === 0 && <CheckoutCart />}
+          <CheckoutCart />
 
-          {checkout.activeStep === 1 && <CheckoutBillingAddress />}
+          {/* {checkout.activeStep === 1 && <CheckoutBillingAddress />} */}
 
-          {checkout.activeStep === 2 && checkout.billing && <CheckoutPayment />}
+          {/* {checkout.activeStep === 2 && checkout.billing && <CheckoutPayment />} */}
         </>
       )}
     </Container>

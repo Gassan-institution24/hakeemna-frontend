@@ -28,9 +28,9 @@ export default function ProductItem({ product }) {
   const {
     _id,
     name_english,
-    name_arabic,
+    // name_arabic,
     description_english,
-    description_arabic,
+    // description_arabic,
     stakeholder,
     category,
     images,
@@ -46,15 +46,7 @@ export default function ProductItem({ product }) {
 
   const handleAddCart = async () => {
     const newProduct = {
-      _id,
-      name_english,
-      name_arabic,
-      description_english,
-      images,
-      // available,
-      price,
-      // colors: [colors[0]],
-      // size: sizes[0],
+      ...product,
       quantity: 1,
     };
     try {

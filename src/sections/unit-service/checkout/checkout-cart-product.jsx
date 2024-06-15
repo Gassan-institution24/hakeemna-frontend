@@ -20,16 +20,16 @@ import IncrementerButton from '../offers/common/incrementer-button';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
-  const { name, size, price, colors, coverUrl, quantity, available } = row;
+  const { name_english, size, price, description_english, currency, category, stakeholder, images, quantity, available } = row;
 
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar variant="rounded" alt={name} src={coverUrl} sx={{ width: 64, height: 64, mr: 2 }} />
+        <Avatar variant="rounded" alt={name_english} src={images?.[0]} sx={{ width: 64, height: 64, mr: 2 }} />
 
         <Stack spacing={0.5}>
           <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
-            {name}
+            {name_english}
           </Typography>
 
           <Stack
@@ -37,17 +37,17 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             alignItems="center"
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
-            size: <Label sx={{ ml: 0.5 }}> {size} </Label>
+            <Label sx={{ ml: 0.5 }}> {stakeholder?.name_english} </Label>
             <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
-            <ColorPreview colors={colors} />
+            <Label sx={{ ml: 0.5 }}> {category?.name_english} </Label>
           </Stack>
         </Stack>
       </TableCell>
 
-      <TableCell>{fCurrency(price)}</TableCell>
+      <TableCell align="center">{fCurrency(price, currency?.symbol)}</TableCell>
 
-      <TableCell>
-        <Box sx={{ width: 88, textAlign: 'right' }}>
+      <TableCell align="rigth" sx={{ p: 2, textAlign: 'right' }}>
+        <Stack direction='column' alignItems='center'>
           <IncrementerButton
             quantity={quantity}
             onDecrease={onDecrease}
@@ -55,11 +55,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             disabledDecrease={quantity <= 1}
             disabledIncrease={quantity >= available}
           />
-
-          <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
-            available: {available}
-          </Typography>
-        </Box>
+        </Stack>
       </TableCell>
 
       <TableCell align="right">{fCurrency(price * quantity)}</TableCell>

@@ -161,7 +161,7 @@ export default function JobListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading="Stakeholders"
+        heading="suppliers"
         // links={[{ name: 'Dashboard', href: paths.unitservice.root }, { name: 'List' }]}
         // action={
         //   <Button
