@@ -228,7 +228,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
         try {
           const formData = new FormData();
           formData.append(name, newFile);
-          console.log(formData);
           await axios.patch(
             endpoints.employees.one(employeeData._id),
             // ...data,

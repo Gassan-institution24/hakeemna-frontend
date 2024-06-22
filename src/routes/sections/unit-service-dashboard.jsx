@@ -204,6 +204,10 @@ const Test = lazy(() => import('src/sections/employee/appointmentsToday/testPage
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
 
+// ORDERS
+const OrdersPage = lazy(() => import('src/pages/unit-service/orders/list'));
+const OrdersDetailsPage = lazy(() => import('src/pages/unit-service/orders/details'));
+
 // PATIENTS
 const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
@@ -564,6 +568,13 @@ export const unitServiceDashboardRoutes = [
           { path: 'checkout', element: <ProductCheckoutPage /> },
           { path: 'offer/:id', element: <OfferInfoPage /> },
           { path: ':id/edit', element: <RoomsEditPage /> },
+        ],
+      },
+      {
+        path: 'orders',
+        children: [
+          { element: <OrdersPage />, index: true },
+          { path: ':id/details', element: <OrdersDetailsPage /> },
         ],
       },
       {

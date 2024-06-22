@@ -40,7 +40,6 @@ export default function TableNewEditForm() {
 
   const { data } = useGetWorkGroup(wgid);
 
-  console.log('dataaaa', data);
 
   const { user } = useAuthContext();
 
@@ -57,7 +56,6 @@ export default function TableNewEditForm() {
   });
 
   const currWGPermissions = data?.employees?.find((info) => info?.employee?._id === id)?.acl;
-  console.log('currWGPermissions', currWGPermissions);
   const defaultValues = useMemo(
     () => ({
       appointments: currWGPermissions?.appointments || [],

@@ -230,7 +230,6 @@ export default function AppointmentToolbar({
               user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
                 ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
             );
-            console.log('selectedTime', selectedTime);
             handleFilterStartTime(selectedTime);
           }}
           slotProps={{ textField: { fullWidth: true } }}

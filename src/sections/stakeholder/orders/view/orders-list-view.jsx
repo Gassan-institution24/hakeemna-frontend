@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -25,6 +25,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
+import { useSearchParams } from 'src/routes/hooks';
 
 import AppointmentsRow from '../orders-table-row';
 import PatientHistoryToolbar from '../orders-table-toolbar';
@@ -52,6 +53,10 @@ export default function OrdersView() {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get('name')
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -97,6 +102,12 @@ export default function OrdersView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  useEffect(() => {
+    if (search) {
+      setFilters((prev) => ({ ...prev, name: search }))
+    }
+  }, [search])
 
   return (
     <Container maxWidth="xl">

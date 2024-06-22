@@ -126,7 +126,6 @@ export default function NewEditManyForm() {
       });
       router.push(paths.superadmin.tables.countries.root); /// edit
     } catch (e) {
-      console.log('eeeee', e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };
