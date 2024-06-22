@@ -41,8 +41,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import { fMonth } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -66,7 +66,6 @@ export default function Processing() {
   const { medicinesData } = useGetMedicines();
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-  console.log(Entrance);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();

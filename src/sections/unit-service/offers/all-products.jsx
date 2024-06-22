@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -18,10 +18,11 @@ import { useGetProducts } from 'src/api/product';
 //   PRODUCT_CATEGORY_OPTIONS,
 // } from 'src/_mock';
 
+import { useParams } from 'src/routes/hooks';
+
 import { useAuthContext } from 'src/auth/hooks';
 
 import EmptyContent from 'src/components/empty-content';
-import { useParams } from 'src/routes/hooks';
 import { useSettingsContext } from 'src/components/settings';
 
 import ProductList from './product-list';
