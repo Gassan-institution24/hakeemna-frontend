@@ -99,7 +99,6 @@ export default function CountriesTableView() {
 
   const upload_record = searchParams.get('upload_record');
 
-  console.log('upload_record', upload_record);
 
   useEffect(() => {
     if (upload_record) {

@@ -23,7 +23,6 @@ export default function ViewPage() {
   const handleBackClick = () => {
     router.push(paths.employee.appointmentsToday);
   };
-  console.log(Entrance);
   return (
     <Stack
       component={Card}

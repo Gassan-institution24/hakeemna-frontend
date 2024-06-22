@@ -50,6 +50,7 @@ export default function NewEditForm({ currentRow }) {
       Yup.object({
         question: Yup.string(),
         answer_way: Yup.string(),
+        category: Yup.string(),
         options: Yup.array().nullable(),
       })
     ),
@@ -73,6 +74,7 @@ export default function NewEditForm({ currentRow }) {
         {
           question: '',
           answer_way: 'Text',
+          category: '',
           options: [''],
         },
       ],
@@ -122,6 +124,7 @@ export default function NewEditForm({ currentRow }) {
         {
           question: '',
           answer_way: 'Text',
+          category: '',
           options: [''],
         },
       ],
@@ -139,14 +142,13 @@ export default function NewEditForm({ currentRow }) {
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     try {
-      if (currentRow && (currentRow.user_creation === user._id || !currentRow.general)) {
+      if (currentRow && currentRow.user_creation === user._id) {
         await axiosInstance.patch(endpoints.checklist.one(currentRow._id), data);
         enqueueSnackbar('updated successfuly');
       } else {
-        await axiosInstance.post(endpoints.checklist.all, {
-          ...data,
-          employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-        });
+        delete data._id
+        const dataToCreate = { ...data, questions: data.questions.map((one) => ({ question: one?.question, answer_way: one?.answer_way, options: one?.options })), employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id }
+        await axiosInstance.post(endpoints.checklist.all, dataToCreate);
         enqueueSnackbar('created successfuly');
       }
       reset();
@@ -186,26 +188,26 @@ export default function NewEditForm({ currentRow }) {
                     values.unit_service
                       ? null
                       : user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                          ?.unit_service?._id
+                        ?.unit_service?._id
                   )
                 }
               />
               {user?.employee?.employee_engagements[user?.employee.selected_engagement]
                 ?.department && (
-                <RHFCheckbox
-                  name="department"
-                  label="department level"
-                  onChange={() =>
-                    setValue(
-                      'department',
-                      values.department
-                        ? null
-                        : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                  <RHFCheckbox
+                    name="department"
+                    label="department level"
+                    onChange={() =>
+                      setValue(
+                        'department',
+                        values.department
+                          ? null
+                          : user?.employee?.employee_engagements[user?.employee.selected_engagement]
                             ?.department?._id
-                    )
-                  }
-                />
-              )}
+                      )
+                    }
+                  />
+                )}
               <RHFCheckbox
                 name="general"
                 label="Is it general"
@@ -275,6 +277,13 @@ export default function NewEditForm({ currentRow }) {
                                     </MenuItem>
                                   ))}
                                 </RHFSelect>
+                                <RHFTextField
+                                  size="small"
+                                  name={`questions[${index}].category`}
+                                  label="category"
+                                  InputLabelProps={{ shrink: true }}
+                                  sx={{ width: { md: 0.5, xs: 1 } }}
+                                />
                                 <Button
                                   size="small"
                                   color="error"
@@ -326,7 +335,7 @@ export default function NewEditForm({ currentRow }) {
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>
           <LoadingButton variant="contained" loading={isSubmitting} onClick={handleCreateAndSend}>
-            {currentRow ? 'Update' : 'Create'}
+            {currentRow && currentRow.user_creation === user._id ? 'Update' : 'add'}
           </LoadingButton>
         </Stack>
       </FormProvider>

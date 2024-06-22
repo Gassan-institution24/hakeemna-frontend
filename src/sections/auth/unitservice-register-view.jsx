@@ -219,11 +219,6 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('dataaaaaaaaa', {
-        role: 'admin',
-        userName: data.em_name_english,
-        ...data,
-      })
       await register?.({
         role: 'admin',
         userName: data.em_name_english,
