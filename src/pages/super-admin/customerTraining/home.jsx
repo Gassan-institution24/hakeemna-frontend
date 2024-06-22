@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import CustomerTraining from 'src/sections/super-admin/customerTraining/home';
+import CustomerTraining from 'src/sections/super-admin/customerTraining/view/home';
 
 // ----------------------------------------------------------------------
 

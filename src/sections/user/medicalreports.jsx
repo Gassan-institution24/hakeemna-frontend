@@ -32,7 +32,6 @@ export default function Medicalreports() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-  // console.log(medicalreportsdata);
   // const styles = StyleSheet.create({
   //   icon: {
   //     color: 'blue',
