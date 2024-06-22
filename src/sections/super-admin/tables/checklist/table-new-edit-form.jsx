@@ -44,6 +44,7 @@ export default function NewEditForm({ currentRow }) {
       Yup.object({
         question: Yup.string(),
         answer_way: Yup.string(),
+        category: Yup.string(),
         options: Yup.array().nullable(),
       })
     ),
@@ -60,6 +61,7 @@ export default function NewEditForm({ currentRow }) {
         {
           question: '',
           answer_way: 'Text',
+          category: '',
           options: [''],
         },
       ],
@@ -104,6 +106,7 @@ export default function NewEditForm({ currentRow }) {
         {
           question: '',
           answer_way: 'Text',
+          category: '',
           options: [''],
         },
       ],
@@ -210,6 +213,13 @@ export default function NewEditForm({ currentRow }) {
                                     </MenuItem>
                                   ))}
                                 </RHFSelect>
+                                <RHFTextField
+                                  size="small"
+                                  name={`questions[${index}].category`}
+                                  label="category"
+                                  InputLabelProps={{ shrink: true }}
+                                  sx={{ width: { md: 0.5, xs: 1 } }}
+                                />
                                 <Button
                                   size="small"
                                   color="error"

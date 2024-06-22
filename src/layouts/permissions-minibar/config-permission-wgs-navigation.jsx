@@ -23,7 +23,6 @@ export function usePermissionWGNavData() {
 
   const { workGroupsData, loading } = useGetEmployeeWorkGroups(id);
 
-  console.log('workGroupsData', workGroupsData);
 
   const employeeItems = useMemo(() => {
     if (loading || !workGroupsData) {

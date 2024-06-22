@@ -35,7 +35,7 @@ export default function OrderDetailsInfo({ customer, note, payment, shippingAddr
 
             <Box sx={{ color: 'text.secondary' }}>{customer?.email}</Box>
             <Box sx={{ color: 'text.secondary' }}>{customer?.phone}</Box>
-            <Typography variant="subtitle2" sx={{ mt: 2 }}>note:</Typography>
+            {note && <Typography variant="subtitle2" sx={{ mt: 2 }}>note:</Typography>}
             <Box sx={{ color: 'text.secondary' }}>{note}</Box>
           </Stack>
         </Stack>
