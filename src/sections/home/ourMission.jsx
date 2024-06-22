@@ -115,6 +115,7 @@ export default function WhoAreWe() {
               position: 'absolute',
               top: curLangAr ? 14 : 29,
               left: curLangAr ? '41.5%' : '53.3%',
+              display: { md: 'inline', xs: 'none' },
             }}
           />
         </m.div>

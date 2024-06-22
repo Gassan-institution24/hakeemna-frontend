@@ -85,6 +85,7 @@ export const paths = {
       history: `${ROOTS.DASHBOARD}/user/history`,
       historyinfo: (id) => `${ROOTS.DASHBOARD}/user/historyinfo/${id}`,
       medicalreports: `${ROOTS.DASHBOARD}/user/medicalreports`,
+      sickLeave: `${ROOTS.DASHBOARD}/user/sickLeave`,
       cards: `${ROOTS.DASHBOARD}/user/appointments`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
       exist: `${ROOTS.DASHBOARD}/user/exist`,

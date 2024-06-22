@@ -97,6 +97,10 @@ export const endpoints = {
     all: '/api/examination/',
     one: (id) => `/api/examination/${id}`,
   },
+  sickleave: {
+    all: '/api/sickleave/',
+    one: (id) => `/api/sickleave/patient/${id}`,
+  },
   drugs: {
     all: '/api/drugs/',
     one: (id) => `/api/drugs/${id}`,

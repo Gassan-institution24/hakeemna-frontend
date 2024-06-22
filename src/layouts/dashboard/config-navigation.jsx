@@ -580,6 +580,11 @@ export function useNavData() {
             icon: <Iconify icon="tabler:report-medical" />,
           },
           {
+            title: t('sick Leave'),
+            path: paths.dashboard.user.sickLeave,
+            icon: <Iconify icon="covid:graph-document-infected-report" />,
+          },
+          {
             title: t('my prescriptions'),
             path: paths.dashboard.user.prescriptions,
             icon: <Iconify icon="material-symbols:prescriptions-outline" />,
