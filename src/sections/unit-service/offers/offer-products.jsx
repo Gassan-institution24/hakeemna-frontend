@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
@@ -19,11 +18,8 @@ import { paths } from 'src/routes/paths';
 //   PRODUCT_CATEGORY_OPTIONS,
 // } from 'src/_mock';
 
-import { useParams } from 'src/routes/hooks';
 
-import { useGetOffer } from 'src/api';
 
-import { Typography } from '@mui/material';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 

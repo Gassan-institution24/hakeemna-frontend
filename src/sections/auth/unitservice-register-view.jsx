@@ -36,6 +36,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
+import Language from 'src/layouts/common/language-home-page';
 import {
   useGetCountries,
   useGetSpecialties,
@@ -55,7 +56,6 @@ import FormProvider, {
   RHFAutocomplete,
   // RHFSelectCard,
 } from 'src/components/hook-form';
-import Language from 'src/layouts/common/language-home-page';
 
 // ----------------------------------------------------------------------
 
