@@ -194,20 +194,9 @@ export default function InvoiceNewEditForm({ currentOffer }) {
                 defaultChecked
               />
             }
-            label="Publish"
+            label={t("publish")}
             sx={{ flexGrow: 1, pl: 3 }}
           />
-          {!currentOffer && (
-            <LoadingButton
-              color="inherit"
-              size="large"
-              variant="outlined"
-              loading={isSubmitting}
-              onClick={handleSaveAsDraft}
-            >
-              Save as Draft
-            </LoadingButton>
-          )}
 
           {currentOffer && (
             <LoadingButton
@@ -217,7 +206,7 @@ export default function InvoiceNewEditForm({ currentOffer }) {
               loading={isSubmitting}
               onClick={handleSaveAsDraft}
             >
-              Save
+              {t('save')}
             </LoadingButton>
           )}
 
@@ -228,7 +217,7 @@ export default function InvoiceNewEditForm({ currentOffer }) {
               loading={isSubmitting}
               onClick={handleCreateAndSend}
             >
-              {currentOffer ? 'Update' : 'Create'} & Send
+              {currentOffer ? t('update') : t('create')}
             </LoadingButton>
           )}
         </Stack>

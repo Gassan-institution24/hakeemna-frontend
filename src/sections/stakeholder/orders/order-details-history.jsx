@@ -15,43 +15,16 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 
 import { fDateTime } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsHistory({ history }) {
-  // const renderSummary = (
-  //   <Stack
-  //     spacing={2}
-  //     component={Paper}
-  //     variant="outlined"
-  //     sx={{
-  //       p: 2.5,
-  //       minWidth: 260,
-  //       flexShrink: 0,
-  //       borderRadius: 2,
-  //       typography: 'body2',
-  //       borderStyle: 'dashed',
-  //     }}
-  //   >
-  //     <Stack spacing={0.5}>
-  //       <Box sx={{ color: 'text.disabled' }}>Order time</Box>
-  //       {fDateTime(history?.date)}
-  //     </Stack>
-  //     <Stack spacing={0.5}>
-  //       <Box sx={{ color: 'text.disabled' }}>Payment time</Box>
-  //       {fDateTime(history?.date)}
-  //     </Stack>
-  //     <Stack spacing={0.5}>
-  //       <Box sx={{ color: 'text.disabled' }}>Delivery time for the carrier</Box>
-  //       {fDateTime(history?.date)}
-  //     </Stack>
-  //     <Stack spacing={0.5}>
-  //       <Box sx={{ color: 'text.disabled' }}>Completion time</Box>
-  //       {fDateTime(history?.date)}
-  //     </Stack>
-  //   </Stack>
-  // );
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const renderTimeline = (
     <Timeline
@@ -77,7 +50,7 @@ export default function OrderDetailsHistory({ history }) {
             </TimelineSeparator>
 
             <TimelineContent>
-              <Typography variant="subtitle2">{item.note}</Typography>
+              <Typography variant="subtitle2">{curLangAr ? item.arabic_note || item.note  : item.note}</Typography>
               <Stack direction="row" gap={5}>
                 <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
                   {fDateTime(item.date)}
@@ -95,7 +68,7 @@ export default function OrderDetailsHistory({ history }) {
 
   return (
     <Card>
-      <CardHeader title="History" />
+      <CardHeader title={t("history")} />
       <Scrollbar
         spacing={3}
         alignItems={{ md: 'flex-start' }}
@@ -103,8 +76,6 @@ export default function OrderDetailsHistory({ history }) {
         sx={{ p: 3, mt: 2, height: '400px' }}
       >
         {renderTimeline}
-
-        {/* {renderSummary} */}
       </Scrollbar>
     </Card>
   );

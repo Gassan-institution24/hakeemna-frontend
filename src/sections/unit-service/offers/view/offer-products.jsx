@@ -4,6 +4,7 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetOffer } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -13,25 +14,18 @@ import OfferProducts from '../offer-products';
 export default function TableCreateView() {
     const { id } = useParams()
     const { offerData } = useGetOffer(id)
+
+    const { t } = useTranslate()
+
     return (
         <Container maxWidth="xl">
             <CustomBreadcrumbs
-                heading="offer products"
+                heading={t("offer products")}
                 links={[
-                    { name: 'Dashboard', href: paths.unitservice.root },
-                    { name: 'products and supplier', href: paths.unitservice.products.root },
-                    { name: 'offer products' }
+                    { name: t('dashboard'), href: paths.unitservice.root },
+                    { name: t('products and supplier'), href: paths.unitservice.products.root },
+                    { name: t('offer products') }
                 ]}
-                // action={
-                //   <Button
-                //     component={RouterLink}
-                //     href={paths.dashboard.job.new}
-                //     variant="contained"
-                //     startIcon={<Iconify icon="mingcute:add-line" />}
-                //   >
-                //     New Job
-                //   </Button>
-                // }
                 sx={{
                     mb: { xs: 3, md: 5 },
                 }}

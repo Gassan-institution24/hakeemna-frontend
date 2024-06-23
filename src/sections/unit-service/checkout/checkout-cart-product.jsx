@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
@@ -18,8 +20,10 @@ import IncrementerButton from '../offers/common/incrementer-button';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
-  const { name_english, size, price, description_english, currency, category, stakeholder, images, quantity, available } = row;
-
+  const { name_english, name_arabic, price, description_english, currency, category, stakeholder, images, quantity, available } = row;
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
@@ -27,7 +31,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
 
         <Stack spacing={0.5}>
           <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
-            {name_english}
+            {curLangAr ? name_arabic : name_english}
           </Typography>
 
           <Stack
@@ -35,9 +39,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             alignItems="center"
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
-            <Label sx={{ ml: 0.5 }}> {stakeholder?.name_english} </Label>
+            <Label sx={{ ml: 0.5 }}> {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english} </Label>
             <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
-            <Label sx={{ ml: 0.5 }}> {category?.name_english} </Label>
+            <Label sx={{ ml: 0.5 }}> {curLangAr ? category?.name_arabic : category?.name_english} </Label>
           </Stack>
         </Stack>
       </TableCell>

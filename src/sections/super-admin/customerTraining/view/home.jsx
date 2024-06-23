@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -8,17 +9,18 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
+import { useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useGetTrainings } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetTrainings } from 'src/api';
-import { useSnackbar } from 'notistack';
 
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import {
   useTable,
   emptyRows,
@@ -27,7 +29,6 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useSearchParams } from 'src/routes/hooks';
 
 import TrainingRow from '../training-row';
 import TrainingToolbar from '../training-toolbar';

@@ -7,12 +7,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetOrder } from 'src/api';
-// import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useSettingsContext } from 'src/components/settings';
+import { useGetOrder } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 import OrderDetailsInfo from '../order-details-info';
 import OrderDetailsItems from '../order-details-item';
@@ -21,18 +19,21 @@ import OrderDetailsHistory from '../order-details-history';
 
 // ----------------------------------------------------------------------
 
-const ORDER_STATUS_OPTIONS = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'processing', label: 'processing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
-]
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView() {
+  const { t } = useTranslate()
+
+  const ORDER_STATUS_OPTIONS = [
+    { value: 'pending', label: t('pending') },
+    { value: 'processing', label: t('processing') },
+    { value: 'completed', label: t('completed') },
+    { value: 'cancelled', label: t('cancelled') },
+  ]
+
+
   const { id } = useParams()
   const { orderData, refetch } = useGetOrder(id)
-  const settings = useSettingsContext();
 
   const handleChangeStatus = useCallback(async (newValue) => {
     await axiosInstance.patch(endpoints.orders.one(id), { status: newValue })
@@ -45,7 +46,7 @@ export default function OrderDetailsView() {
   }, [id, refetch, orderData]);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth='xl'>
       <OrderDetailsToolbar
         backLink={paths.stakeholder.orders.root}
         orderNumber={orderData?.sequence_number}
@@ -76,16 +77,9 @@ export default function OrderDetailsView() {
           <OrderDetailsInfo
             customer={orderData?.unit_service ? orderData?.unit_service : orderData?.patient}
             note={orderData?.note}
-          // delivery={orderData?.delivery}
-          // payment={orderData?.payment}
-          // shippingAddress={orderData?.shippingAddress}
           />
         </Grid>
       </Grid>
     </Container>
   );
 }
-
-// OrderDetailsView.propTypes = {
-//   orderData: PropTypes.object,
-// };

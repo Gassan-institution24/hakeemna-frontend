@@ -10,9 +10,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { Card, CardHeader, Container } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
+import { Card, Container, CardHeader } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 

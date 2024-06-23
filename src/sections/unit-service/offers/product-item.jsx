@@ -13,6 +13,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -27,9 +29,9 @@ export default function ProductItem({ product }) {
   const {
     _id,
     name_english,
-    // name_arabic,
+    name_arabic,
     description_english,
-    // description_arabic,
+    description_arabic,
     stakeholder,
     category,
     images,
@@ -40,6 +42,11 @@ export default function ProductItem({ product }) {
     newLabel,
     saleLabel,
   } = product;
+
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
 
   const linkTo = paths.unitservice.products.info(_id);
 
@@ -122,22 +129,21 @@ export default function ProductItem({ product }) {
       <Stack direction='row' justifyContent='space-between' sx={{ width: 1 }}>
         <Stack>
           <Link component={RouterLink} href={linkTo} color="inherit" variant="subtitle1" noWrap>
-            {name_english}
+            {curLangAr ? name_arabic : name_english}
           </Link>
           <Typography variant="caption" pt={0} >
-            {description_english}
+            {curLangAr ? description_arabic : description_english}
           </Typography>
         </Stack>
         {category?.name_english && <Typography variant="body2" pt={0} >
-          {category?.name_english}
+          {curLangAr ? category?.name_arabic : category?.name_english}
         </Typography>}
       </Stack>
       {stakeholder?.name_english && <Typography variant="body2" pt={0} >
-        {stakeholder?.name_english}
+        {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
       </Typography>}
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        {/* <ColorPreview colors={colors} /> */}
 
         <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
           {priceSale && (

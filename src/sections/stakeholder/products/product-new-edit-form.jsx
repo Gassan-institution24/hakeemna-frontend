@@ -25,6 +25,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCurrencies } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetProductCategories } from 'src/api/product';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,11 +37,13 @@ export default function ProductNewEditForm({ currentProduct }) {
   const router = useRouter();
   const { user } = useAuthContext();
 
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
-
-  // const [includeTaxes, setIncludeTaxes] = useState(false);
 
   const { currencies } = useGetCurrencies();
   const { productCat } = useGetProductCategories();
@@ -120,14 +123,6 @@ export default function ProductNewEditForm({ currentProduct }) {
   }, [currentProduct]);
   /* eslint-enable */
 
-  // useEffect(() => {
-  //   if (includeTaxes) {
-  //     setValue('taxes', 0);
-  //   } else {
-  //     setValue('taxes', currentProduct?.taxes || 0);
-  //   }
-  // }, [currentProduct?.taxes, includeTaxes, setValue]);
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       const formData = new FormData();
@@ -146,7 +141,7 @@ export default function ProductNewEditForm({ currentProduct }) {
         await axiosInstance.post(endpoints.products.all, formData);
       }
       reset();
-      enqueueSnackbar(currentProduct ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentProduct ? t('Update success!') : t('Create success!'));
       router.push(paths.stakeholder.products.root);
       console.info('DATA', data);
     } catch (error) {
@@ -181,41 +176,37 @@ export default function ProductNewEditForm({ currentProduct }) {
     setValue('images', []);
   }, [setValue]);
 
-  // const handleChangeIncludeTaxes = useCallback((event) => {
-  //   setIncludeTaxes(event.target.checked);
-  // }, []);
-
   const renderDetails = (
     <>
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            {t('details')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
+            {t('Title, short description, image...')}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Details" />}
+          {!mdUp && <CardHeader title={t("details")} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name_english" label="Product Name" />
-            <RHFTextField name="name_arabic" label="Product Name in arabic" />
+            <RHFTextField name="name_english" label={t("product Name")} />
+            <RHFTextField name="name_arabic" label={t("product Name in arabic")} />
 
             <RHFTextField
               name="description_english"
-              label="English description"
+              label={t("english description")}
               multiline
               rows={4}
             />
-            <RHFTextField name="description_arabic" label="Arabic description" multiline rows={4} />
+            <RHFTextField name="description_arabic" label={t("arabic description")} multiline rows={4} />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Images</Typography>
+              <Typography variant="subtitle2">{t('images')}</Typography>
               <RHFUpload
                 multiple
                 thumbnail
@@ -237,17 +228,17 @@ export default function ProductNewEditForm({ currentProduct }) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Properties
+            {t('properties')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Additional functions and attributes...
+            {t('Additional functions and attributes...')}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Properties" />}
+          {!mdUp && <CardHeader title={t("properties")} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Box
@@ -261,13 +252,13 @@ export default function ProductNewEditForm({ currentProduct }) {
             >
               <RHFTextField
                 name="quantity"
-                label="Quantity"
+                label={t("quantity")}
                 placeholder="0"
                 type="number"
                 InputLabelProps={{ shrink: true }}
               />
 
-              <RHFSelect name="category" label="Category" InputLabelProps={{ shrink: true }}>
+              <RHFSelect name="category" label={t("category")} InputLabelProps={{ shrink: true }}>
                 {productCat.map((category) => (
                   <MenuItem key={category._id} value={category._id}>
                     {category.name_english}
@@ -286,22 +277,22 @@ export default function ProductNewEditForm({ currentProduct }) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Pricing
+            {t('pricing')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Price related inputs
+            {t('price related inputs')}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Pricing" />}
+          {!mdUp && <CardHeader title={t("pricing")} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField
               name="price"
-              label="Regular Price"
+              label={t("price")}
               placeholder="0.00"
               type="number"
               InputLabelProps={{ shrink: true }}
@@ -315,37 +306,13 @@ export default function ProductNewEditForm({ currentProduct }) {
                 ),
               }}
             />
-            <RHFSelect name="currency" label="currency" InputLabelProps={{ shrink: true }}>
+            <RHFSelect name="currency" label={t("currency")} InputLabelProps={{ shrink: true }}>
               {currencies.map((one) => (
                 <MenuItem key={one._id} value={one._id}>
                   {one.symbol || one.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
-
-            {/* <FormControlLabel
-              control={<Switch checked={includeTaxes} onChange={handleChangeIncludeTaxes} />}
-              label="Price includes taxes"
-            />
-
-            {!includeTaxes && (
-              <RHFTextField
-                name="taxes"
-                label="Tax (%)"
-                placeholder="0.00"
-                type="number"
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Box component="span" sx={{ color: 'text.disabled' }}>
-                        %
-                      </Box>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )} */}
           </Stack>
         </Card>
       </Grid>
@@ -366,12 +333,12 @@ export default function ProductNewEditForm({ currentProduct }) {
               defaultChecked
             />
           }
-          label="Publish"
+          label={t("publish")}
           sx={{ flexGrow: 1, pl: 3 }}
         />
 
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-          {!currentProduct ? 'Create Product' : 'Save Changes'}
+          {!currentProduct ? t('create product') : t('save changes')}
         </LoadingButton>
       </Grid>
     </>

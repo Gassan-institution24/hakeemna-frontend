@@ -1,19 +1,11 @@
+import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
+import { Box, MenuItem } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-// import { useBoolean } from 'src/hooks/use-boolean';
-// import { useResponsive } from 'src/hooks/use-responsive';
-
-// import { _addressBooks } from 'src/_mock';
-
-import { useCallback } from 'react';
-
-import { Box, MenuItem } from '@mui/material';
-
-// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
@@ -32,15 +24,10 @@ export default function InvoiceNewEditAddress() {
   const {
     watch,
     setValue,
-    // formState: { errors },
   } = useFormContext();
-
-  // const { user } = useAuthContext();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  // const mdUp = useResponsive('up', 'md');
 
   const values = watch();
 
@@ -76,7 +63,6 @@ export default function InvoiceNewEditAddress() {
       <Stack
         spacing={{ xs: 3, md: 5 }}
         direction={{ xs: 'column', md: 'row' }}
-        // alignItems='center'
         sx={{ p: 3 }}
       >
         <Stack sx={{ width: 1 }}>
@@ -90,13 +76,13 @@ export default function InvoiceNewEditAddress() {
               multiline
               rows={2}
               name="description_english"
-              label={t('description in english')}
+              label={t('english description')}
             />
             <RHFTextField
               multiline
               rows={2}
               name="description_arabic"
-              label={t('description in arabic')}
+              label={t('arabic description')}
             />
             <RHFSelect name="currency" label={t('currency')}>
               {currencies.map((one) => (
