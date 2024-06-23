@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
