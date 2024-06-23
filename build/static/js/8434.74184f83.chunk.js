@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8434],{68434:(e,s,t)=>{t.r(s),t.d(s,{default:()=>c});var a=t(6907),i=t(73887),n=t(80184);function c(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsxs)(a.ql,{children:[(0,n.jsx)("title",{children:" Dashboard: checklist Table"}),(0,n.jsx)("meta",{name:"description",content:"meta"})]}),(0,n.jsx)(i.Cj,{})]})}}}]);
+//# sourceMappingURL=8434.74184f83.chunk.js.map

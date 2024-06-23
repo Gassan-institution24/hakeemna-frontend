@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[9398],{49398:(e,s,n)=>{n.r(s),n.d(s,{default:()=>r});var t=n(6907),a=n(73887),i=n(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(t.ql,{children:[(0,i.jsx)("title",{children:" Dashboard: insurance types"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(a.LL,{})]})}}}]);
+//# sourceMappingURL=9398.8db89c61.chunk.js.map

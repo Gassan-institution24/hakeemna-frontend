@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8487],{68487:(e,a,i)=>{i.r(a),i.d(a,{default:()=>r});var n=i(6907),s=i(73887),t=i(80184);function r(){return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsxs)(n.ql,{children:[(0,t.jsx)("title",{children:" Dashboard: family relation Table"}),(0,t.jsx)("meta",{name:"description",content:"meta"})]}),(0,t.jsx)(s.Tj,{})]})}}}]);
+//# sourceMappingURL=8487.7a2f46fd.chunk.js.map

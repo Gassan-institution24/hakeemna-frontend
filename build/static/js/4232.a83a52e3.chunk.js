@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4232],{74232:(e,s,t)=>{t.r(s),t.d(s,{default:()=>c});var n=t(6907),i=t(81164),r=t(68919),a=t(80184);function c(){const{t:e}=(0,i.qM)();return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(n.ql,{children:[(0,a.jsxs)("title",{children:[" ",e("Medical Reports")," "]}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(r.Xr,{})]})}}}]);
+//# sourceMappingURL=4232.a83a52e3.chunk.js.map
