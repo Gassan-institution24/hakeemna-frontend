@@ -7,21 +7,11 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-// import { useBoolean } from 'src/hooks/use-boolean';
-// import { useDebounce } from 'src/hooks/use-debounce';
-
-// import {
-//   PRODUCT_SORT_OPTIONS,
-//   PRODUCT_COLOR_OPTIONS,
-//   PRODUCT_GENDER_OPTIONS,
-//   PRODUCT_RATING_OPTIONS,
-//   PRODUCT_CATEGORY_OPTIONS,
-// } from 'src/_mock';
+import { useTranslate } from 'src/locales';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-// import { useAuthContext } from 'src/auth/hooks';
 import ProductList from './product-list';
 import CartIcon from './common/cart-icon';
 import ProductSearch from './product-search';
@@ -42,26 +32,13 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function ProductShopView({ offerData }) {
-    // const { id } = useParams()
-    // const { offerData } = useGetOffer(id)
     const settings = useSettingsContext();
 
     const checkout = useCheckoutContext();
-    // const { user } = useAuthContext();
 
-    // const openFilters = useBoolean();
-
-    // const [sortBy, setSortBy] = useState('featured');
-
-    // const [searchQuery, setSearchQuery] = useState('');
-
-    // const debouncedQuery = useDebounce(searchQuery);
+    const { t } = useTranslate()
 
     const [filters, setFilters] = useState(defaultFilters);
-
-    // const { products, productsLoading, productsEmpty } = useGetProducts({ status: 'published', populate: 'category stakeholder' });
-
-    // const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
 
     const handleFilters = useCallback((name, value) => {
         setFilters((prevState) => ({
@@ -77,20 +54,14 @@ export default function ProductShopView({ offerData }) {
     const dataFiltered = applyFilter({
         inputData: offerData?.products?.map((one) => ({ ...one.product, price: one.price })),
         filters,
-        // sortBy,
     });
 
     const canReset = !isEqual(defaultFilters, filters);
 
     const notFound = !dataFiltered?.length && canReset;
 
-    // const handleSortBy = useCallback((newValue) => {
-    //   setSortBy(newValue);
-    // }, []);
-
     const handleSearch = useCallback(
         (e) => {
-            // setSearchQuery(e);
             handleFilters('name', e.target.value);
         },
         [handleFilters]
@@ -103,34 +74,10 @@ export default function ProductShopView({ offerData }) {
             direction={{ xs: 'column', sm: 'row' }}
         >
             <ProductSearch
-                // query={debouncedQuery}
-                // results={searchResults}
                 filters={filters}
                 onSearch={handleSearch}
-                // loading={searchLoading}
                 hrefItem={(_id) => paths.product.details(_id)}
             />
-            {/* 
-      <Stack direction="row" spacing={1} flexShrink={0}>
-        <ProductFilters
-          open={openFilters.value}
-          onOpen={openFilters.onTrue}
-          onClose={openFilters.onFalse}
-          //
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-          //
-          // colorOptions={PRODUCT_COLOR_OPTIONS}
-          // ratingOptions={PRODUCT_RATING_OPTIONS}
-          // genderOptions={PRODUCT_GENDER_OPTIONS}
-          // categoryOptions={['all', ...PRODUCT_CATEGORY_OPTIONS]}
-        />
-
-        <ProductSort sort={sortBy} onSort={handleSortBy} sortOptions={PRODUCT_SORT_OPTIONS} />
-      </Stack> */}
         </Stack>
     );
 
@@ -138,15 +85,13 @@ export default function ProductShopView({ offerData }) {
         <ProductFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            //
             canReset={canReset}
             onResetFilters={handleResetFilters}
-            //
             results={dataFiltered?.length}
         />
     );
 
-    const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+    const renderNotFound = <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />;
 
     return (
         <Container
@@ -156,8 +101,6 @@ export default function ProductShopView({ offerData }) {
             }}
         >
             <CartIcon totalItems={checkout.totalItems} />
-            {/* <Typography variant='h6'>{offerData?.name_english}</Typography>
-            <Typography variant='body2'>{offerData?.description_english}</Typography> */}
             <Stack
                 spacing={2.5}
                 sx={{

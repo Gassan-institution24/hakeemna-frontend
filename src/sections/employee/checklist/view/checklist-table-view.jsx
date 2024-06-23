@@ -29,6 +29,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import TableDetailRow from '../table-details-row'; /// edit
@@ -37,13 +38,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'sequence_number', label: 'sequence' },
-  { id: 'title', label: 'title' },
-  { id: 'speciality', label: 'speciality' },
-  { id: 'description', label: 'description' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -56,7 +50,15 @@ export default function ChecklistTableView() {
 
   const componentRef = useRef();
 
-  // const settings = useSettingsContext();
+  const { t } = useTranslate()
+
+  const TABLE_HEAD = [
+    { id: 'sequence_number', label: t('sequence') },
+    { id: 'title', label: t('title') },
+    { id: 'speciality', label: t('speciality') },
+    { id: 'description', label: t('description') },
+    { id: '', width: 88 },
+  ];
 
   const router = useRouter();
 
@@ -139,13 +141,13 @@ export default function ChecklistTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="checklist" /// edit
+        heading={t("checklist")} /// edit
         links={[
           {
-            name: 'dashboard',
+            name: t('dashboard'),
             href: paths.employee.root,
           },
-          { name: 'checklist' },
+          { name: t('checklist') },
         ]}
         action={
           <Button
@@ -154,7 +156,7 @@ export default function ChecklistTableView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New checklist
+            {t('new checklist')}
           </Button>
         }
         sx={{

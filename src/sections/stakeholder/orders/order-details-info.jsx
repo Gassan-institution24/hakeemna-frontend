@@ -7,16 +7,19 @@ import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsInfo({ customer, note, payment, shippingAddress }) {
-
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <Card>
       <>
         <CardHeader
-          title="Customer Info"
+          title={t("customer info")}
         />
         <Stack direction="row" sx={{ p: 3 }}>
           <Avatar
@@ -26,11 +29,11 @@ export default function OrderDetailsInfo({ customer, note, payment, shippingAddr
           />
 
           <Stack spacing={0.5} alignItems="flex-start" sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2">{customer?.name_english}</Typography>
+            <Typography variant="subtitle2">{curLangAr ? customer?.name_arabic : customer?.name_english}</Typography>
 
             <Box sx={{ color: 'text.secondary' }}>{customer?.email}</Box>
             <Box sx={{ color: 'text.secondary' }}>{customer?.phone}</Box>
-            {note && <Typography variant="subtitle2" sx={{ mt: 2 }}>note:</Typography>}
+            {note && <Typography variant="subtitle2" sx={{ mt: 2 }}>{t('note')}:</Typography>}
             <Box sx={{ color: 'text.secondary' }}>{note}</Box>
           </Stack>
         </Stack>

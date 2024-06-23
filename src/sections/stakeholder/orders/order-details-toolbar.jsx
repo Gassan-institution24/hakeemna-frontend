@@ -10,6 +10,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { fDateTime } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -24,6 +26,9 @@ export default function OrderDetailsToolbar({
   statusOptions,
   onChangeStatus,
 }) {
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const popover = usePopover();
 
   return (
@@ -37,12 +42,12 @@ export default function OrderDetailsToolbar({
       >
         <Stack spacing={1} direction="row" alignItems="flex-start">
           <IconButton component={RouterLink} href={backLink}>
-            <Iconify icon="eva:arrow-ios-back-fill" />
+            <Iconify icon={curLangAr ? "eva:arrow-ios-forward-fill" : "eva:arrow-ios-back-fill"} />
           </IconButton>
 
           <Stack spacing={0.5}>
             <Stack spacing={1} direction="row" alignItems="center">
-              <Typography variant="h4"> Order {orderNumber} </Typography>
+              <Typography variant="h4"> {t('order')} {orderNumber} </Typography>
               <Label
                 variant="soft"
                 color={
@@ -53,7 +58,7 @@ export default function OrderDetailsToolbar({
                   'default'
                 }
               >
-                {status}
+                {t(status)}
               </Label>
             </Stack>
 
@@ -77,7 +82,7 @@ export default function OrderDetailsToolbar({
             onClick={popover.onOpen}
             sx={{ textTransform: 'capitalize' }}
           >
-            {status}
+            {t(status)}
           </Button>
 
           {/* <Button
@@ -109,7 +114,7 @@ export default function OrderDetailsToolbar({
               onChangeStatus(option.value);
             }}
           >
-            {option.label}
+            {t(option.label)}
           </MenuItem>
         ))}
       </CustomPopover>

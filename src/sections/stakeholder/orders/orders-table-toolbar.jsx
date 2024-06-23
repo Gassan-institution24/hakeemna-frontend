@@ -9,8 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetProductCategories } from 'src/api/product';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -106,19 +105,7 @@ export default function AppointmentToolbar({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </Stack>
-
-        {/* <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
-            <IconButton color="error" onClick={onAdd}>
-              <Iconify icon="zondicons:add-outline" />
-            </IconButton>
-          )}
-        </Stack> */}
       </Stack>
-      {/* </Stack> */}
 
       <CustomPopover
         open={popover.open}

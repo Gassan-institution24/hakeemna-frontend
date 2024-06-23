@@ -1,27 +1,16 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
-// import { useBoolean } from 'src/hooks/use-boolean';
-// import { useDebounce } from 'src/hooks/use-debounce';
-
+import { useTranslate } from 'src/locales';
 import { useGetProducts } from 'src/api/product';
-// import {
-//   PRODUCT_SORT_OPTIONS,
-//   PRODUCT_COLOR_OPTIONS,
-//   PRODUCT_GENDER_OPTIONS,
-//   PRODUCT_RATING_OPTIONS,
-//   PRODUCT_CATEGORY_OPTIONS,
-// } from 'src/_mock';
-
-import { useAuthContext } from 'src/auth/hooks';
 
 import EmptyContent from 'src/components/empty-content';
-import { useParams } from 'src/routes/hooks';
 import { useSettingsContext } from 'src/components/settings';
 
 import ProductList from './product-list';
@@ -47,17 +36,9 @@ export default function ProductShopView() {
     const settings = useSettingsContext();
 
     const checkout = useCheckoutContext();
-    const { user } = useAuthContext();
+    const { t } = useTranslate()
 
     const { shid } = useParams()
-
-    // const openFilters = useBoolean();
-
-    // const [sortBy, setSortBy] = useState('featured');
-
-    // const [searchQuery, setSearchQuery] = useState('');
-
-    // const debouncedQuery = useDebounce(searchQuery);
 
     const [filters, setFilters] = useState(defaultFilters);
 
@@ -68,8 +49,6 @@ export default function ProductShopView() {
     }), [shid]);
 
     const { products, productsLoading, productsEmpty } = useGetProducts(queryOptions);
-
-    // const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
 
     const handleFilters = useCallback((name, value) => {
         setFilters((prevState) => ({
@@ -85,20 +64,14 @@ export default function ProductShopView() {
     const dataFiltered = applyFilter({
         inputData: products,
         filters,
-        // sortBy,
     });
 
     const canReset = !isEqual(defaultFilters, filters);
 
     const notFound = !dataFiltered.length && canReset;
 
-    // const handleSortBy = useCallback((newValue) => {
-    //   setSortBy(newValue);
-    // }, []);
-
     const handleSearch = useCallback(
         (e) => {
-            // setSearchQuery(e);
             handleFilters('name', e.target.value);
         },
         [handleFilters]
@@ -111,34 +84,10 @@ export default function ProductShopView() {
             direction={{ xs: 'column', sm: 'row' }}
         >
             <ProductSearch
-                // query={debouncedQuery}
-                // results={searchResults}
                 filters={filters}
                 onSearch={handleSearch}
-                // loading={searchLoading}
                 hrefItem={(id) => paths.product.details(id)}
             />
-            {/* 
-      <Stack direction="row" spacing={1} flexShrink={0}>
-        <ProductFilters
-          open={openFilters.value}
-          onOpen={openFilters.onTrue}
-          onClose={openFilters.onFalse}
-          //
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-          //
-          // colorOptions={PRODUCT_COLOR_OPTIONS}
-          // ratingOptions={PRODUCT_RATING_OPTIONS}
-          // genderOptions={PRODUCT_GENDER_OPTIONS}
-          // categoryOptions={['all', ...PRODUCT_CATEGORY_OPTIONS]}
-        />
-
-        <ProductSort sort={sortBy} onSort={handleSortBy} sortOptions={PRODUCT_SORT_OPTIONS} />
-      </Stack> */}
         </Stack>
     );
 
@@ -154,7 +103,7 @@ export default function ProductShopView() {
         />
     );
 
-    const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+    const renderNotFound = <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />;
 
     return (
         <Container

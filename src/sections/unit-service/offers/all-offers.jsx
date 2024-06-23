@@ -14,7 +14,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetOffers } from 'src/api';
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
 import {
@@ -49,8 +48,6 @@ export default function OffersView({ employeeData }) {
     ];
 
     const table = useTable({ defaultOrderBy: 'code' });
-
-    const { user } = useAuthContext();
 
     const { shid } = useParams()
 
@@ -100,13 +97,6 @@ export default function OffersView({ employeeData }) {
 
     return (
         <Container maxWidth="xl">
-            {/* <CustomBreadcrumbs
-                heading={t('offers')}
-                links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('offers') }]}
-                sx={{
-                    mb: { xs: 3, md: 5 },
-                }}
-            /> */}
             <Card>
                 <PatientHistoryToolbar
                     filters={filters}

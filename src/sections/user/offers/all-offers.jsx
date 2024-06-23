@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -8,11 +8,12 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
+import { useParams } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetOffers } from 'src/api';
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
 import {
@@ -23,7 +24,6 @@ import {
     TableHeadCustom,
     TablePaginationCustom,
 } from 'src/components/table';
-import { useParams } from 'src/routes/hooks';
 
 import AppointmentsRow from './product-table-row';
 import PatientHistoryToolbar from './product-table-toolbar';
@@ -48,8 +48,6 @@ export default function OffersView({ employeeData }) {
     ];
 
     const table = useTable({ defaultOrderBy: 'code' });
-
-    const { user } = useAuthContext();
 
     const { shid } = useParams()
 
@@ -99,13 +97,6 @@ export default function OffersView({ employeeData }) {
 
     return (
         <Container maxWidth="xl">
-            {/* <CustomBreadcrumbs
-                heading={t('offers')}
-                links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('offers') }]}
-                sx={{
-                    mb: { xs: 3, md: 5 },
-                }}
-            /> */}
             <Card>
                 <PatientHistoryToolbar
                     filters={filters}

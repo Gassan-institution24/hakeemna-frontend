@@ -6,6 +6,8 @@ import { Divider } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 import NavList from './nav-list';
@@ -45,6 +47,7 @@ export default memo(NavSectionVertical);
 
 function Group({ subheader, walktourRun, items, slotProps }) {
   const [open, setOpen] = useState(true);
+  const { t } = useTranslate()
 
   const handleToggle = useCallback(() => {
     setOpen((prev) => !prev);
@@ -88,7 +91,7 @@ function Group({ subheader, walktourRun, items, slotProps }) {
               ...slotProps?.subheader,
             }}
           >
-            {subheader}
+            {t(subheader)}
             <Iconify
               sx={{ mx: 1 }}
               width={16}

@@ -5,21 +5,17 @@ import { useRef, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useGetCheckLists } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
     useTable,
     emptyRows,
@@ -30,18 +26,14 @@ import {
     TablePaginationCustom,
 } from 'src/components/table'; /// edit
 
+import { useTranslate } from 'src/locales';
+
 import TableDetailRow from './select-row'; /// edit
 import TableDetailToolbar from './table-details-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-    { id: 'code', label: 'Code' },
-    { id: 'title', label: 'title' },
-    { id: 'description', label: 'description' },
-    { id: '', width: 120 },
-];
 
 const defaultFilters = {
     name: '',
@@ -51,6 +43,15 @@ const defaultFilters = {
 
 export default function SelectChecklistTableView() {
     const table = useTable({ defaultOrderBy: 'code' });
+
+    const { t } = useTranslate()
+
+    const TABLE_HEAD = [
+        { id: 'code', label: t('code') },
+        { id: 'title', label: t('title') },
+        { id: 'description', label: t('description') },
+        { id: '', width: 120 },
+    ];
 
     const componentRef = useRef();
 

@@ -207,7 +207,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')} :`}
-                // value={values.identification_num}
+              // value={values.identification_num}
               />
               <TextField
                 // disabled
@@ -295,7 +295,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   />
                 )}
               /> */}
-              <RHFTextField name="web_page" label={t('web page')} />
+              <RHFTextField name="web_page" label={t('webpage')} />
             </Box>
             <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -8,6 +8,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
+import { useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -25,7 +26,6 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useSearchParams } from 'src/routes/hooks';
 
 import AppointmentsRow from '../orders-table-row';
 import PatientHistoryToolbar from '../orders-table-toolbar';
@@ -114,16 +114,6 @@ export default function OrdersView() {
       <CustomBreadcrumbs
         heading={t('orders')}
         links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('orders') }]}
-        // action={
-        //   <Button
-        //     component={RouterLink}
-        //     href={paths.stakeholder.products.new}
-        //     variant="contained"
-        //     startIcon={<Iconify icon="mingcute:add-line" />}
-        //   >
-        //     {t('new product')}
-        //   </Button>
-        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

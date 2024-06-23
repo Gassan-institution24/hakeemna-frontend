@@ -22,10 +22,6 @@ export default function AppointmentToolbar({
   options,
 }) {
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
-
-  // const { productCat } = useGetProductCategories();
 
   const popover = usePopover();
   
