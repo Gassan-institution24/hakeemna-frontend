@@ -93,6 +93,17 @@ export const paths = {
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
       health: `${ROOTS.DASHBOARD}/user/myhealth`,
+      products: {
+        all: `${ROOTS.DASHBOARD}/products/all`,
+        offer: (id) => `${ROOTS.DASHBOARD}/products/offer/${id}`,
+        root: `${ROOTS.DASHBOARD}/products`,
+        info: (id) => `${ROOTS.DASHBOARD}/products/${id}/info`,
+        checkout: `${ROOTS.DASHBOARD}/products/checkout`,
+        stakeholder: {
+          root: `${ROOTS.DASHBOARD}/products/stakeholder`,
+          one: (id) => `${ROOTS.DASHBOARD}/products/stakeholder/${id}`,
+        },
+      },
 
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
@@ -653,6 +664,10 @@ export const paths = {
     patients: {
       all: `${ROOTS.SUPERADMIN}/us/patients`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/patients/${id}`,
+    },
+    orders: {
+      root: `${ROOTS.SUPERADMIN}/us/orders`,
+      info: (id) => `${ROOTS.SUPERADMIN}/us/orders/${id}/details`,
     },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/us/appointments`,
