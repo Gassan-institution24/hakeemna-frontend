@@ -9,8 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { TextField, IconButton, InputAdornment } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetProductCategories } from 'src/api/product';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';

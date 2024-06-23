@@ -12,11 +12,10 @@ import { TextField, InputAdornment } from '@mui/material';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useState } from 'react';
-import { InputAdornment, TextField } from '@mui/material';
-import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 

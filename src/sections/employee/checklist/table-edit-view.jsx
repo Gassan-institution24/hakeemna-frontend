@@ -4,9 +4,9 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetCheckList } from 'src/api';
-
 // import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './table-new-edit-form';

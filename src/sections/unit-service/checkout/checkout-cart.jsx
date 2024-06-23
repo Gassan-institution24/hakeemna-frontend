@@ -12,9 +12,9 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useLocales, useTranslate } from 'src/locales';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';

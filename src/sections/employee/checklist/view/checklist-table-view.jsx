@@ -29,9 +29,9 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
-import { useTranslate } from 'src/locales';
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';

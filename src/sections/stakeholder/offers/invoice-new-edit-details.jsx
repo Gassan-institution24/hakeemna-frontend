@@ -7,12 +7,12 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetStakeholderProducts } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useTranslate } from 'src/locales';
 // import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------

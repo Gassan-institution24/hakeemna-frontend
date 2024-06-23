@@ -1,17 +1,17 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useGetProducts } from 'src/api/product';
 
 import EmptyContent from 'src/components/empty-content';
-import { useParams } from 'src/routes/hooks';
 import { useSettingsContext } from 'src/components/settings';
-import { useTranslate } from 'src/locales';
 
 import ProductList from './product-list';
 import CartIcon from './common/cart-icon';
