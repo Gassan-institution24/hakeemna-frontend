@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 
-import OfferNewView from 'src/sections/unit-service/offers/view/new';
+import OfferNewView from 'src/sections/user/offers/view/new';
 
 // ----------------------------------------------------------------------
 

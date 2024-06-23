@@ -6,11 +6,13 @@ import MenuItem from '@mui/material/MenuItem';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function JobSort({ sort, onSort, sortOptions }) {
   const popover = usePopover();
+  const { t } = useTranslate()
 
   return (
     <>
@@ -25,7 +27,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
         }
         sx={{ fontWeight: 'fontWeightSemiBold' }}
       >
-        Sort By:
+        {t('sort by')}:
         <Box
           component="span"
           sx={{

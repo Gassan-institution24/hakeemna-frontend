@@ -30,18 +30,13 @@ import {
     TablePaginationCustom,
 } from 'src/components/table'; /// edit
 
+import { useTranslate } from 'src/locales';
 import TableDetailRow from './select-row'; /// edit
 import TableDetailToolbar from './table-details-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-    { id: 'code', label: 'Code' },
-    { id: 'title', label: 'title' },
-    { id: 'description', label: 'description' },
-    { id: '', width: 120 },
-];
 
 const defaultFilters = {
     name: '',
@@ -51,6 +46,15 @@ const defaultFilters = {
 
 export default function SelectChecklistTableView() {
     const table = useTable({ defaultOrderBy: 'code' });
+
+    const { t } = useTranslate()
+
+    const TABLE_HEAD = [
+        { id: 'code', label: t('code') },
+        { id: 'title', label: t('title') },
+        { id: 'description', label: t('description') },
+        { id: '', width: 120 },
+    ];
 
     const componentRef = useRef();
 

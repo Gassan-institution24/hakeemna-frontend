@@ -9,26 +9,28 @@ import { useGetProduct } from 'src/api/product';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { useTranslate } from 'src/locales';
 import ProductNewEditForm from '../product-new-edit-form';
 
 // ----------------------------------------------------------------------
 
 export default function ProductEditView({ id }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate()
 
   const { product: currentProduct } = useGetProduct(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit Product"
+        heading={t("edit Product")}
         links={[
-          { name: 'Dashboard', href: paths.stakeholder.root },
+          { name: t('dashboard'), href: paths.stakeholder.root },
           {
-            name: 'Product',
+            name: t('products'),
             href: paths.stakeholder.products.root,
           },
-          { name: 'edit' },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

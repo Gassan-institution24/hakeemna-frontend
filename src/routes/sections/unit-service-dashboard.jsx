@@ -143,8 +143,6 @@ const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/ho
 // PRODUCTS
 const ProductsHomePage = lazy(() => import('src/pages/unit-service/products/stakeholders'));
 const OfferInfoPage = lazy(() => import('src/pages/unit-service/products/offer-info'));
-const ProductInfoPage = lazy(() => import('src/pages/unit-service/products/info'));
-const ProductNewPage = lazy(() => import('src/pages/unit-service/products/new'));
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/unit-service/communication/home'));
 // QUALITY CONTROL
@@ -523,8 +521,6 @@ export const unitServiceDashboardRoutes = [
         children: [
           { element: <ProductsHomePage />, index: true },
           { path: 'offer/:id', element: <OfferInfoPage /> },
-          { path: ':id/info', element: <ProductInfoPage /> },
-          { path: 'new', element: <ProductNewPage /> },
         ],
       },
       {

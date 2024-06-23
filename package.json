@@ -43,6 +43,7 @@
     "apexcharts": "^3.43.0",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.5.1",
+    "caniuse-lite": "^1.0.30001636",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "file-saver": "^2.0.5",

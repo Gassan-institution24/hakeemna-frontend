@@ -18,6 +18,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useTranslate } from 'src/locales';
 // import CountrySelect from 'src/components/country-select';
 
 // ----------------------------------------------------------------------
@@ -39,6 +40,8 @@ export default function JobFilters({
   experienceOptions,
   employmentTypeOptions,
 }) {
+  const { t } = useTranslate()
+
   const handleFilterEmploymentTypes = useCallback(
     (newValue) => {
       const checked = filters.employmentTypes.includes(newValue)
@@ -63,13 +66,6 @@ export default function JobFilters({
     [onFilters]
   );
 
-  // const handleFilterLocations = useCallback(
-  //   (newValue) => {
-  //     onFilters('locations', newValue);
-  //   },
-  //   [onFilters]
-  // );
-
   const handleFilterBenefits = useCallback(
     (newValue) => {
       const checked = filters.benefits.includes(newValue)
@@ -88,7 +84,7 @@ export default function JobFilters({
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Filters
+        {t('filters')}
       </Typography>
 
       <Tooltip title="Reset">
@@ -108,7 +104,7 @@ export default function JobFilters({
   const renderEmploymentTypes = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Employment Types
+        {t('employment types')}
       </Typography>
       {employmentTypeOptions?.map((option) => (
         <FormControlLabel
@@ -128,7 +124,7 @@ export default function JobFilters({
   const renderExperience = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Experience
+        {t('experience')}
       </Typography>
       {experienceOptions?.map((option) => (
         <FormControlLabel
@@ -153,7 +149,7 @@ export default function JobFilters({
   const renderRoles = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Roles
+        {t('roles')}
       </Typography>
       <Autocomplete
         multiple
@@ -186,25 +182,15 @@ export default function JobFilters({
   const renderLocations = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Locations
+        {t('locations')}
       </Typography>
-
-      {/* <CountrySelect
-        placeholder={filters.locations.length ? '+ Locations' : 'Select Locations'}
-        fullWidth
-        multiple
-        value={filters.locations}
-        onChange={(event, newValue) => handleFilterLocations(newValue)}
-        options={locationOptions}
-        getOptionLabel={(option) => option}
-      /> */}
     </Stack>
   );
 
   const renderBenefits = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Benefits
+        {t('benefits')}
       </Typography>
       {benefitOptions?.map((option) => (
         <FormControlLabel
@@ -233,7 +219,7 @@ export default function JobFilters({
         }
         onClick={onOpen}
       >
-        Filters
+        {t('filters')}
       </Button>
 
       <Drawer

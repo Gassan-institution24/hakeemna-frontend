@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useState } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
-import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +27,9 @@ export default function OrderDetailsItems({
   subTotal,
   totalAmount,
 }) {
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [quantities, setQuantities] = useState({})
 
@@ -45,7 +48,7 @@ export default function OrderDetailsItems({
       sx={{ my: 3, textAlign: 'right', typography: 'body2' }}
     >
       <Stack direction="row" sx={{ typography: 'subtitle1' }}>
-        <Box>Total</Box>
+        <Box>{t('total')}</Box>
         <Box sx={{ width: 160 }}>{fCurrency(total, items?.[0].currency?.symbol) || '-'}</Box>
       </Stack>
     </Stack>
@@ -54,7 +57,7 @@ export default function OrderDetailsItems({
   return (
     <Card>
       <CardHeader
-        title="Details"
+        title={t("details")}
       />
 
       <Stack
@@ -77,8 +80,8 @@ export default function OrderDetailsItems({
               <Avatar src={item?.product?.images?.[0]} variant="rounded" sx={{ width: 48, height: 48, mr: 2 }} />
 
               <ListItemText
-                primary={item?.product?.name_english}
-                secondary={item?.product?.category?.name_english}
+                primary={curLangAr ? item?.product?.name_arabic : item?.product?.name_english}
+                secondary={curLangAr ? item?.product?.category?.name_arabic : item?.product?.category?.name_english}
                 primaryTypographyProps={{
                   typography: 'body2',
                 }}

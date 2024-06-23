@@ -114,16 +114,6 @@ export default function OrdersView() {
       <CustomBreadcrumbs
         heading={t('orders')}
         links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('orders') }]}
-        // action={
-        //   <Button
-        //     component={RouterLink}
-        //     href={paths.stakeholder.products.new}
-        //     variant="contained"
-        //     startIcon={<Iconify icon="mingcute:add-line" />}
-        //   >
-        //     {t('new product')}
-        //   </Button>
-        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

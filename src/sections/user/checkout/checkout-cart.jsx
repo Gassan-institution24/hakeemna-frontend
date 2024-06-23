@@ -12,6 +12,7 @@ import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { Divider, Stack, TextField } from '@mui/material';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'notistack';
@@ -24,7 +25,12 @@ import CheckoutCartProductList from './checkout-cart-product-list';
 export default function CheckoutCart() {
   const checkout = useCheckoutContext();
   const { user } = useAuthContext()
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { enqueueSnackbar } = useSnackbar()
+
   const [note, setNote] = useState('')
 
   const empty = !checkout.items.length;
@@ -34,21 +40,20 @@ export default function CheckoutCart() {
       await axiosInstance.post(endpoints.orders.all, { products: checkout.items, unit_service: user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id, note })
       checkout.onReset()
       setNote('')
-      enqueueSnackbar('sent successfully')
+      enqueueSnackbar(t('sent successfully'))
     } catch (e) {
       enqueueSnackbar(e.message, { variant: 'error' })
     }
   }
   return (
     <Stack>
-      {/* <Grid xs={12} md={8}> */}
       <Card sx={{ mb: 3 }}>
         <CardHeader
           title={
             <Typography variant="h6">
-              Cart
+              {t('cart')}
               <Typography component="span" sx={{ color: 'text.secondary' }}>
-                &nbsp;({checkout.totalItems} item)
+                &nbsp;({checkout.totalItems} {t('item')})
               </Typography>
             </Typography>
           }
@@ -57,8 +62,8 @@ export default function CheckoutCart() {
 
         {empty ? (
           <EmptyContent
-            title="Cart is Empty!"
-            description="Look like you have no items in your shopping cart."
+            title={t("cart is empty!")}
+            description={t("Look like you have no items in your shopping cart.")}
             imgUrl="/assets/icons/empty/ic_cart.svg"
             sx={{ pt: 5, pb: 10 }}
           />
@@ -72,28 +77,19 @@ export default function CheckoutCart() {
         )}
         <Divider sx={{ my: 3 }} />
         <Stack sx={{ px: 3, mb: 3 }}>
-          <TextField fullWidth label='note' multiline rows={2} onChange={(e) => setNote(e.target.value)} />
+          <TextField fullWidth label={t('note')} multiline rows={2} onChange={(e) => setNote(e.target.value)} />
         </Stack>
       </Card>
       <Stack alignItems='start' p={2}>
         <Button
           component={RouterLink}
-          href={paths.unitservice.products.root}
+          href={paths.dashboard.user.products.root}
           color="inherit"
-          startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+          startIcon={<Iconify icon={curLangAr ? "eva:arrow-ios-forward-fill" : "eva:arrow-ios-back-fill"} />}
         >
-          Continue Shopping
+          {t('continue shopping')}
         </Button>
       </Stack>
-      {/* </Grid> */}
-
-      {/* <Grid xs={12} md={4}> */}
-      {/* <CheckoutSummary
-          total={checkout.total}
-          discount={checkout.discount}
-          subTotal={checkout.subTotal}
-          onApplyDiscount={checkout.onApplyDiscount}
-        /> */}
 
       <Button
         fullWidth
@@ -103,7 +99,7 @@ export default function CheckoutCart() {
         disabled={empty}
         onClick={handleConfirmOrder}
       >
-        Confirm
+        {t('confirm')}
       </Button>
       {/* </Grid> */}
     </Stack>

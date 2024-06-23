@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
+import { useTranslate } from 'src/locales';
 
 import AllOffers from '../all-offers';
 import AllProducts from '../all-products';
@@ -13,14 +14,16 @@ export default function TableCreateView() {
     const handleChangeTab = useCallback((event, newValue) => {
         setCurrentTab(newValue);
     }, []);
+    const { t } = useTranslate()
+
     const TABS = [
         {
             value: 'products',
-            label: 'products',
+            label: t('products'),
         },
         {
             value: 'offers',
-            label: 'offers',
+            label: t('offers'),
         },
     ];
     return (
@@ -33,7 +36,7 @@ export default function TableCreateView() {
                 }}
             >
                 {TABS.map((tab, idx) => (
-                    <Tab key={idx} sx={{fontSize:16}} label={tab.label} value={tab.value} />
+                    <Tab key={idx} sx={{ fontSize: 16 }} label={tab.label} value={tab.value} />
                 ))}
             </Tabs>
             {currentTab === 'products' && <AllProducts />}

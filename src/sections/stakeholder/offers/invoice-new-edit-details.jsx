@@ -7,18 +7,18 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
-// import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetStakeholderProducts } from 'src/api/product';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useTranslate } from 'src/locales';
 // import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditDetails() {
+  const { t } = useTranslate()
   // const { currentLang } = useLocales();
   // const curLangAr = currentLang.value === 'ar';
 
@@ -52,7 +52,7 @@ export default function InvoiceNewEditDetails() {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
-        products:
+        {t('products')}:
       </Typography>
 
       <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={2}>
@@ -64,33 +64,10 @@ export default function InvoiceNewEditDetails() {
               spacing={2}
               sx={{ width: 1 }}
             >
-              {/* <RHFAutocomplete
-                placeholder="type"
-                name={`items[${index}].service`}
-                label="Service"
-                sx={{ width: '300px' }}
-                size="small"
-                InputLabelProps={{ shrink: true }}
-                options={serviceTypesData.map((speciality) => speciality._id)}
-                getOptionLabel={(option) =>
-                  serviceTypesData?.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
-                  ]
-                }
-                renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
-                    {
-                      serviceTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
-                      ]
-                    }
-                  </li>
-                )}
-              /> */}
               <RHFSelect
                 name={`products[${index}].product`}
                 size="small"
-                label="product"
+                label={t("product")}
                 sx={{ maxWidth: '450px' }}
                 InputLabelProps={{ shrink: true }}
               >
@@ -105,7 +82,7 @@ export default function InvoiceNewEditDetails() {
                 size="small"
                 type="number"
                 name={`products[${index}].price`}
-                label="price"
+                label={t("price")}
                 placeholder="0"
                 InputLabelProps={{ shrink: true }}
                 sx={{ maxWidth: { md: 150 } }}
@@ -132,7 +109,7 @@ export default function InvoiceNewEditDetails() {
           onClick={handleAdd}
           sx={{ flexShrink: 0 }}
         >
-          Add Item
+          {t('add item')}
         </Button>
       </Stack>
     </Box>

@@ -170,7 +170,7 @@ export function CheckoutProvider({ children }) {
   const onReset = useCallback(() => {
     // if (completed) {
     reset();
-    router.replace(paths.unitservice.products.all);
+    router.replace(paths.dashboard.user.products.all);
     // }
   }, [reset, router]);
 
