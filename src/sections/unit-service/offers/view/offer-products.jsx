@@ -4,7 +4,6 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetOffer } from 'src/api';
-import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

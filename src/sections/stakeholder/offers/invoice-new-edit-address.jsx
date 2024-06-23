@@ -1,12 +1,10 @@
+import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-
-import { useCallback } from 'react';
-
 import { Box, MenuItem } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 import { useLocales, useTranslate } from 'src/locales';
 import {

@@ -15,8 +15,9 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import Scrollbar from 'src/components/scrollbar';
 import { useLocales, useTranslate } from 'src/locales';
+
+import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 

@@ -13,11 +13,12 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useCheckoutContext } from '../checkout/context';
 
 // ----------------------------------------------------------------------

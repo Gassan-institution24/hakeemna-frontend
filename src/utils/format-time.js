@@ -1,9 +1,9 @@
 import ar from 'date-fns/locale/ar-SA';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
+import { useLocales } from 'src/locales';
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line

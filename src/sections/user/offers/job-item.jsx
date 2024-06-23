@@ -12,8 +12,8 @@ import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetStakeholderOffers } from 'src/api';
-import { useGetStakeholderProducts } from 'src/api/product';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetStakeholderProducts } from 'src/api/product';
 
 // ----------------------------------------------------------------------
 

@@ -7,11 +7,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetOrder } from 'src/api';
-
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useGetOrder } from 'src/api';
 import { useTranslate } from 'src/locales';
+
 import OrderDetailsInfo from '../order-details-info';
 import OrderDetailsItems from '../order-details-item';
 import OrderDetailsToolbar from '../order-details-toolbar';

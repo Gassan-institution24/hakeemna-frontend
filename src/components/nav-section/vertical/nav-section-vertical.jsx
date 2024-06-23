@@ -7,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
 
 import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 import NavList from './nav-list';

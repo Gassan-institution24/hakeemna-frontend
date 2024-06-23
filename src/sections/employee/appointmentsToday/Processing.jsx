@@ -49,9 +49,9 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetPatient,
   useGetMedicines,
+  useGetMedRecord,
   useGetPatientHistoryData,
   useGetOneEntranceManagement,
-  useGetMedRecord,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';

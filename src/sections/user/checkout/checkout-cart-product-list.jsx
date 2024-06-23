@@ -4,9 +4,10 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
+import { useTranslate } from 'src/locales';
+
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
-import { useTranslate } from 'src/locales';
 
 import CheckoutCartProduct from './checkout-cart-product';
 

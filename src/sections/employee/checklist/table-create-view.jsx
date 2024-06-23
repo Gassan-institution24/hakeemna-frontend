@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
+
 import { useTranslate } from 'src/locales';
 
 import TableNewEditForm from './table-new-edit-form';

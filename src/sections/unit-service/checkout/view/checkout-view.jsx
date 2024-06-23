@@ -1,8 +1,9 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
+
+import { useSettingsContext } from 'src/components/settings';
 
 import CheckoutCart from '../checkout-cart';
 

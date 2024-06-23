@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
@@ -8,10 +7,11 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
+
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useTranslate } from 'src/locales';
 import ProductList from './product-list';
 import CartIcon from './common/cart-icon';
 import ProductSearch from './product-search';
