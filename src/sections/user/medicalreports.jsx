@@ -16,7 +16,6 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
@@ -34,7 +33,6 @@ export default function Medicalreports() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-  console.log(medicalreportsdata);
 
   const styles = StyleSheet.create({
     icon: {
