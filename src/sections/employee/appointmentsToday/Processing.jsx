@@ -41,7 +41,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fMonth } from 'src/utils/format-time';
+import { fMonth, fTimeText } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -51,8 +51,9 @@ import {
   useGetMedicines,
   useGetPatientHistoryData,
   useGetOneEntranceManagement,
+  useGetMedRecord,
 } from 'src/api';
- 
+
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -65,6 +66,7 @@ export default function Processing() {
   const { id } = params;
   const { medicinesData } = useGetMedicines();
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
+  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id,Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
@@ -101,7 +103,7 @@ export default function Processing() {
     service_unit: Entrance?.service_unit,
     Doctor_Comments: '',
   };
-
+  console.log(medRecord);
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -145,9 +147,10 @@ export default function Processing() {
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
           name_english: 'an medical report has been added',
-          name_arabic: "تم ارفاق تقرير طبي",
+          name_arabic: 'تم ارفاق تقرير طبي',
           sub_english: `Medical report from  ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `تقرير طبي من  ${Entrance?.service_unit?.name_arabic}`,
+          actual_date: Entrance?.created_at,
         });
         await axiosInstance.post('/api/examination', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
@@ -165,6 +168,7 @@ export default function Processing() {
           name_arabic: 'تم ارفاق وصفة طبية',
           sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
+          actual_date: Entrance?.created_at,
         });
         await axiosInstance.post('/api/drugs', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
@@ -210,6 +214,17 @@ export default function Processing() {
   });
   const TIMELINES = [
     {
+      key: 0,
+      title: `${Entrance?.patient?.name_english} medical record`,
+      color: 'info',
+      icon:
+        dataFiltered?.length > 0 ? (
+          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+        ) : (
+          <Iconify icon="healthicons:medical-records-outline" width={25} />
+        ),
+    },
+    {
       key: 1,
       title: (
         <>
@@ -224,11 +239,12 @@ export default function Processing() {
         </>
       ),
       color: 'primary',
-      icon: dataFiltered ? (
-        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-      ) : (
-        <Iconify icon="eva:folder-add-fill" width={24} />
-      ),
+      icon:
+        dataFiltered?.length > 0 ? (
+          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+        ) : (
+          <Iconify icon="eva:folder-add-fill" width={24} />
+        ),
     },
     {
       key: 2,
@@ -467,6 +483,7 @@ export default function Processing() {
               <TableCell>{t('Date')}</TableCell>
               <TableCell>{t('Name')}</TableCell>
               <TableCell>{t('Subject')}</TableCell>
+              <TableCell>&nbsp;</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -474,12 +491,15 @@ export default function Processing() {
               (historydata, i) =>
                 historydata?.status === 'active' && (
                   <TableRow key={i}>
-                    <TableCell>{fMonth(historydata?.created_at)}</TableCell>
+                    <TableCell>{fMonth(historydata?.actual_date)}</TableCell>
                     <TableCell>
                       {curLangAr ? historydata?.name_arabic : historydata?.name_english}
                     </TableCell>
                     <TableCell>
                       {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: 12, color: 'lightgray' }}>
+                      {fTimeText(historydata?.created_at)}
                     </TableCell>
                   </TableRow>
                 )

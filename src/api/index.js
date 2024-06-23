@@ -85,3 +85,4 @@ export * from './check_listQ';
 export * from './orders';
 export * from './customers';
 export * from './training';
+export * from './medRecord';
