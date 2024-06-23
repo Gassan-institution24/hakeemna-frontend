@@ -403,6 +403,10 @@ export const endpoints = {
     inwating: `/api/entrance/inwating`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
+  medRecord: {
+    all: '/api/entrance',
+    one: (id,id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
+  },
   oldpatient: {
     all: '/api/oldpatientsdata',
     details: '/api/oldpatientsdata/details',

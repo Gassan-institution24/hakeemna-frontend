@@ -103,7 +103,7 @@ export default function Specialities() {
           >
             {/* {data?.specialitiesimge && ( */}
             <Image
-              src="https://icon-library.com/images/specialty-icon/specialty-icon-12.jpg"
+              src={data?.speciality_image}
               sx={{ width: 70, height: 70, mb: 2 }}
             />
             {/* // )} */}

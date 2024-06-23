@@ -177,6 +177,7 @@ export default function OldMedicalReports() {
     if (ImgFiles) {
       ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
     }
+    console.log(data);
     try {
       await axios.post('/api/oldmedicalreports', formData);
       await axios.post(endpoints.history.all, {
@@ -185,7 +186,7 @@ export default function OldMedicalReports() {
         name_arabic: 'تم انشاء تقرير طبي',
         sub_english: `${spName} medical report`,
         sub_arabic: ` تقرير طبي لتخصص ال ${spName}`,
-        // file:formData
+        actual_date: data?.date,
       });
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();

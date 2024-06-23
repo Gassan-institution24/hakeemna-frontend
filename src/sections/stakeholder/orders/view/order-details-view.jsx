@@ -1,16 +1,14 @@
-import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { paths } from 'src/routes/paths';
-
 import { useParams } from 'src/routes/hooks';
+
 import { useGetOrder } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
@@ -36,7 +34,6 @@ export default function OrderDetailsView() {
 
   const { id } = useParams()
   const { orderData, refetch } = useGetOrder(id)
-  const settings = useSettingsContext();
 
   const handleChangeStatus = useCallback(async (newValue) => {
     await axiosInstance.patch(endpoints.orders.one(id), { status: newValue })
@@ -49,7 +46,7 @@ export default function OrderDetailsView() {
   }, [id, refetch, orderData]);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth='xl'>
       <OrderDetailsToolbar
         backLink={paths.stakeholder.orders.root}
         orderNumber={orderData?.sequence_number}
