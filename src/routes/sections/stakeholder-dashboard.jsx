@@ -29,6 +29,10 @@ const ProfilePage = lazy(() => import('src/pages/stakeholder/profile/home'));
 // ORDERS
 const OrdersPage = lazy(() => import('src/pages/stakeholder/orders/list'));
 const OrderDetailsPage = lazy(() => import('src/pages/stakeholder/orders/details'));
+
+// CUSTOMERS
+const CustomersPage = lazy(() => import('src/pages/stakeholder/customers/home'));
+const CustomerDetailsPage = lazy(() => import('src/pages/stakeholder/orders/details'));
 // ----------------------------------------------------------------------
 
 export const stakeholderDashboardRoutes = [
@@ -82,10 +86,8 @@ export const stakeholderDashboardRoutes = [
       {
         path: 'mycustomers',
         children: [
-          { element: <ChecklistPage />, index: true },
-          { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
+          { element: <CustomersPage />, index: true },
+          { path: ':id/details', element: <CustomerDetailsPage /> },
         ],
       },
       {

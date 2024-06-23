@@ -13,7 +13,6 @@ import OfferProducts from '../offer-products';
 export default function TableCreateView() {
     const { id } = useParams()
     const { offerData } = useGetOffer(id)
-    console.log('offerData', offerData)
     return (
         <Container maxWidth="xl">
             <CustomBreadcrumbs
@@ -21,7 +20,7 @@ export default function TableCreateView() {
                 links={[
                     { name: 'Dashboard', href: paths.unitservice.root },
                     { name: 'products and supplier', href: paths.unitservice.products.root },
-                    { name: 'List' }
+                    { name: 'offer products' }
                 ]}
                 // action={
                 //   <Button

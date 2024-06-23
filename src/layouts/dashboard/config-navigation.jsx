@@ -345,6 +345,13 @@ export function useNavData() {
         ],
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+        title: t('orders'),
+        path: paths.unitservice.orders.root,
+        icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+        navItemId: 'USInsuranceNav',
+      },
+      {
         show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
@@ -601,6 +608,11 @@ export function useNavData() {
             title: t('Financial movements'),
             path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="material-symbols:finance-rounded" />,
+          },
+          {
+            title: t('my offers'),
+            path: paths.dashboard.user.products.root,
+            icon: <Iconify icon="ic:round-contact-support" />,
           },
           {
             title: t('contact us'),

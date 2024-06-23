@@ -17,7 +17,6 @@ export default function TableEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetCheckList(id);
-  console.log('dataaa', data);
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs

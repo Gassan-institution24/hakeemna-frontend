@@ -18,8 +18,6 @@ import { paths } from 'src/routes/paths';
 //   PRODUCT_CATEGORY_OPTIONS,
 // } from 'src/_mock';
 
-
-
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 

@@ -355,6 +355,10 @@ export const endpoints = {
     all: '/api/keywords',
     arabic: '/api/keywords/ar',
   },
+  customers: {
+    all: '/api/customers',
+    stakeholder: (id) => `/api/customers/stakeholder/${id}`,
+  },
   patients: {
     all: '/api/patient',
     deleteFamilyMember: (id) => `/api/patient/deleteFamilyMember/${id}`,
@@ -521,6 +525,7 @@ export const endpoints = {
     all: '/api/orders',
     one: (id) => `/api/orders/${id}`,
     stakeholder: (id) => `/api/orders/stakeholder/${id}`,
+    unitservice: (id) => `/api/orders/unitservice/${id}`,
   },
   systemErrors: {
     all: '/api/systemerrors',
@@ -544,6 +549,10 @@ export const endpoints = {
     message: (id) => `/api/msg/${id}`,
     unreadMsg: (id) => `/api/msg/unread/user/${id}`,
     unreadMsgSA: (id) => `/api/msg/unread/sa/${id}`,
+  },
+  training: {
+    all: '/api/training',
+    one: (id) => `/api/training/${id}`,
   },
 
   tables: {

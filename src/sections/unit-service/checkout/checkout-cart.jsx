@@ -39,7 +39,6 @@ export default function CheckoutCart() {
       setNote('')
       enqueueSnackbar('sent successfully')
     } catch (e) {
-      console.log(e)
       enqueueSnackbar(e.message, { variant: 'error' })
     }
   }
