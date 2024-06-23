@@ -41,6 +41,20 @@ const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
 const SickLeave = lazy(() => import('src/sections/user/view/user-sickLeave-view'));
 
+// ORDERS
+const OrdersPage = lazy(() => import('src/pages/dashboard/user/orders/list'));
+const OrdersDetailsPage = lazy(() => import('src/pages/dashboard/user/orders/details'));
+
+
+// PRODUCTS
+const AllProductsPage = lazy(() => import('src/pages/dashboard/user/products/all-products'));
+const ProductsStakeholdersPage = lazy(() => import('src/pages/dashboard/user/products/stakeholders'));
+const StakeholderProductsPage = lazy(() =>
+  import('src/pages/dashboard/user/products/stakeholder-products')
+);
+const ProductCheckoutPage = lazy(() => import('src/pages/dashboard/user/products/checkout'));
+const OfferInfoPage = lazy(() => import('src/pages/dashboard/user/products/offer-info'));
+
 // ----------------------------------------------------------------------
 
 export const userRoutes = [
@@ -94,6 +108,24 @@ export const userRoutes = [
           { path: 'financilmovment', element: <FinancilMovment /> },
           { path: 'family', element: <Family /> },
           { path: 'sickLeave', element: <SickLeave /> },
+          {
+            path: 'products',
+            children: [
+              { element: <AllProductsPage />, index: true },
+              { path: 'all', element: <AllProductsPage /> },
+              { path: 'stakeholder', element: <ProductsStakeholdersPage /> },
+              { path: 'stakeholder/:shid', element: <StakeholderProductsPage /> },
+              { path: 'checkout', element: <ProductCheckoutPage /> },
+              { path: 'offer/:id', element: <OfferInfoPage /> },
+            ],
+          },
+          {
+            path: 'orders',
+            children: [
+              { element: <OrdersPage />, index: true },
+              { path: ':id/details', element: <OrdersDetailsPage /> },
+            ],
+          },
         ],
       },
     ],

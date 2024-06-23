@@ -9,9 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useLocales, useTranslate } from 'src/locales';
-
-import { usePopover } from 'src/components/custom-popover';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -35,149 +33,56 @@ export default function AppointmentsTableRow({
     description_english,
     description_arabic,
     stakeholder,
-    to_unit_service,
-    // currency,
     image,
     products,
-    created_at,
-    user_creation,
-    ip_address_user_creation,
-    updated_at,
-    user_modification,
-    ip_address_user_modification,
-    modifications_nums,
   } = row;
-
-  const { t } = useTranslate();
 
   const router = useRouter();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const popover = usePopover();
-  const DDL = usePopover();
-
   return (
-    <>
-      <TableRow hover selected={selected}>
-        <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">
-          <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }}>
-            <Avatar
-              alt={curLangAr ? name_arabic : name_english}
-              src={image}
-              variant="rounded"
-              sx={{ width: 64, height: 64, mr: 2 }}
-            />
-
-            <ListItemText
-              disableTypography
-              primary={
-                <Link
-                  noWrap
-                  color="inherit"
-                  variant="subtitle2"
-                  onClick={() => router.push(paths.unitservice.products.offer(_id))}
-                  sx={{ cursor: 'pointer' }}
-                >
-                  {curLangAr ? name_arabic : name_english}
-                </Link>
-              }
-              secondary={
-                <Box component="div" sx={{ typography: 'body2', color: 'text.disabled' }}>
-                  {curLangAr ? description_arabic : description_english}
-                </Box>
-              }
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            />
-          </Stack>
-        </TableCell>
-        <TableCell align="center">
-          {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
-        </TableCell>
-        <TableCell align="center">
-          {products.length}
-        </TableCell>
-
-        {/* <TableCell align="right" sx={{ px: 1 }}>
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell> */}
-      </TableRow>
-
-      {/* <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 155 }}
-      >
-        <MenuItem
-          lang="ar"
-          onClick={() => {
-            router.push(paths.stakeholder.offers.edit(_id));
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="fluent:edit-32-filled" />
-          {t('edit')}
-        </MenuItem>
-        <MenuItem lang="ar" onClick={DDL.onOpen}>
-          <Iconify icon="carbon:data-quality-definition" />
-          {t('DDL')}
-        </MenuItem>
-      </CustomPopover>
-
-      <CustomPopover
-        open={DDL.open}
-        onClose={DDL.onClose}
-        arrow="right-top"
-        sx={{
-          padding: 2,
-          fontSize: '14px',
-        }}
-      >
-        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
+    <TableRow hover selected={selected}>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">
+        <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }}>
+          <Avatar
+            alt={curLangAr ? name_arabic : name_english}
+            src={image}
+            variant="rounded"
+            sx={{ width: 64, height: 64, mr: 2 }}
           />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
+            disableTypography
+            primary={
+              <Link
+                noWrap
+                color="inherit"
+                variant="subtitle2"
+                onClick={() => router.push(paths.dashboard.user.products.offer(_id))}
+                sx={{ cursor: 'pointer' }}
+              >
+                {curLangAr ? name_arabic : name_english}
+              </Link>
+            }
+            secondary={
+              <Box component="div" sx={{ typography: 'body2', color: 'text.disabled' }}>
+                {curLangAr ? description_arabic : description_english}
+              </Box>
+            }
+            sx={{ display: 'flex', flexDirection: 'column' }}
           />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
-          {ip_address_user_modification}
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>
-          {t('modifications no')}: {modifications_nums}
-        </Box>
-      </CustomPopover> */}
-    </>
+        </Stack>
+      </TableCell>
+      <TableCell align="center">
+        {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
+      </TableCell>
+      <TableCell align="center">
+        {products.length}
+      </TableCell>
+    </TableRow>
   );
 }
 

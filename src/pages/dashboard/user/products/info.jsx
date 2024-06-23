@@ -5,7 +5,7 @@ import { useParams } from 'src/routes/hooks';
 import { useGetOffer } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
 
-import OffersInfoView from 'src/sections/unit-service/offers/view/info';
+import OffersInfoView from 'src/sections/user/offers/view/info';
 
 // ----------------------------------------------------------------------
 

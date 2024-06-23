@@ -94,15 +94,19 @@ export const paths = {
       share: `${ROOTS.DASHBOARD}/user/share`,
       health: `${ROOTS.DASHBOARD}/user/myhealth`,
       products: {
-        all: `${ROOTS.DASHBOARD}/products/all`,
-        offer: (id) => `${ROOTS.DASHBOARD}/products/offer/${id}`,
-        root: `${ROOTS.DASHBOARD}/products`,
-        info: (id) => `${ROOTS.DASHBOARD}/products/${id}/info`,
-        checkout: `${ROOTS.DASHBOARD}/products/checkout`,
+        all: `${ROOTS.DASHBOARD}/user/products/all`,
+        offer: (id) => `${ROOTS.DASHBOARD}/user/products/offer/${id}`,
+        root: `${ROOTS.DASHBOARD}/user/products`,
+        info: (id) => `${ROOTS.DASHBOARD}/user/products/${id}/info`,
+        checkout: `${ROOTS.DASHBOARD}/user/products/checkout`,
         stakeholder: {
-          root: `${ROOTS.DASHBOARD}/products/stakeholder`,
-          one: (id) => `${ROOTS.DASHBOARD}/products/stakeholder/${id}`,
+          root: `${ROOTS.DASHBOARD}/user/products/stakeholder`,
+          one: (id) => `${ROOTS.DASHBOARD}/user/products/stakeholder/${id}`,
         },
+      },
+      orders: {
+        root: `${ROOTS.SUPERADMIN}/user/orders`,
+        info: (id) => `${ROOTS.SUPERADMIN}/user/orders/${id}/details`,
       },
 
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,

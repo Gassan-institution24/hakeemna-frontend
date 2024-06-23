@@ -329,7 +329,7 @@ export function useNavData() {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
         title: t('products and suppliers'),
         path: paths.unitservice.products.root,
-        icon: <Iconify icon="fluent-mdl2:product" />,
+        icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
         navItemId: 'USProductsNav',
         children: [
           {
@@ -348,7 +348,7 @@ export function useNavData() {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
         title: t('orders'),
         path: paths.unitservice.orders.root,
-        icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+        icon: <Iconify icon="fluent-mdl2:product" />,
         navItemId: 'USInsuranceNav',
       },
       {
@@ -612,7 +612,12 @@ export function useNavData() {
           {
             title: t('my offers'),
             path: paths.dashboard.user.products.root,
-            icon: <Iconify icon="ic:round-contact-support" />,
+            icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+          },
+          {
+            title: t('my orders'),
+            path: paths.dashboard.user.orders.root,
+            icon: <Iconify icon="fluent-mdl2:product" />,
           },
           {
             title: t('contact us'),
@@ -653,7 +658,7 @@ export function useNavData() {
             icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
           },
           {
-            title: t('custumers'),
+            title: t('customers'),
             path: paths.stakeholder.customers.root,
             icon: <Iconify icon="streamline:information-desk-customer-solid" />,
           },

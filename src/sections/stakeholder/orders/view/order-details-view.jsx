@@ -9,11 +9,11 @@ import { paths } from 'src/routes/paths';
 
 import { useParams } from 'src/routes/hooks';
 import { useGetOrder } from 'src/api';
-// import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import OrderDetailsInfo from '../order-details-info';
 import OrderDetailsItems from '../order-details-item';
 import OrderDetailsToolbar from '../order-details-toolbar';
@@ -21,15 +21,19 @@ import OrderDetailsHistory from '../order-details-history';
 
 // ----------------------------------------------------------------------
 
-const ORDER_STATUS_OPTIONS = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'processing', label: 'processing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
-]
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView() {
+  const { t } = useTranslate()
+
+  const ORDER_STATUS_OPTIONS = [
+    { value: 'pending', label: t('pending') },
+    { value: 'processing', label: t('processing') },
+    { value: 'completed', label: t('completed') },
+    { value: 'cancelled', label: t('cancelled') },
+  ]
+
+
   const { id } = useParams()
   const { orderData, refetch } = useGetOrder(id)
   const settings = useSettingsContext();
@@ -76,16 +80,9 @@ export default function OrderDetailsView() {
           <OrderDetailsInfo
             customer={orderData?.unit_service ? orderData?.unit_service : orderData?.patient}
             note={orderData?.note}
-          // delivery={orderData?.delivery}
-          // payment={orderData?.payment}
-          // shippingAddress={orderData?.shippingAddress}
           />
         </Grid>
       </Grid>
     </Container>
   );
 }
-
-// OrderDetailsView.propTypes = {
-//   orderData: PropTypes.object,
-// };

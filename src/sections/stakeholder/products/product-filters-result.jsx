@@ -39,24 +39,24 @@ export default function ProductFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('results found')}
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.status !== '' && (
           <Block label={`${t('status')}:`}>
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>
         )}
         {filters.category !== '' && (
           <Block label={`${t('category')}:`}>
-            <Chip size="small" label={filters.category} onDelete={handleRemoveCategory} />
+            <Chip size="small" label={t(filters.category)} onDelete={handleRemoveCategory} />
           </Block>
         )}
         {filters.name !== '' && (
           <Block label={`${t('search')}:`}>
-            <Chip size="small" label="search" onDelete={handleRemoveName} />
+            <Chip size="small" label={t("search")} onDelete={handleRemoveName} />
           </Block>
         )}
 
@@ -66,7 +66,7 @@ export default function ProductFiltersResult({
             onClick={onResetFilters}
             startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
           >
-            Clear
+            {t('clear')}
           </Button>
         )}
       </Stack>

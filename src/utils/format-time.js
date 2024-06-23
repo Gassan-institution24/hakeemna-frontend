@@ -3,8 +3,12 @@ import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
+// eslint-disable-next-line
+const { currentLang } = useLocales();
+const curLangAr = currentLang.value === 'ar';
 
 export const useUnitTime = () => {
   // const { t } = useTranslate();
@@ -25,15 +29,15 @@ export const useUnitTime = () => {
     myunitTime,
   };
 };
-export function fDate(date, newFormat, arabic) {
+export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date && isValid(date) ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
+  return date && isValid(date) ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
-export function fMonth(date, newFormat, arabic) {
+export function fMonth(date, newFormat) {
   const fm = newFormat || 'MMM yyyy';
 
-  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
+  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 
 export function fDateTime(date, newFormat) {
@@ -47,10 +51,10 @@ export function fDateAndTime(date, newFormat) {
   return date ? format(new Date(date), fm) : '';
 }
 
-export function fTime(date, newFormat, arabic) {
+export function fTime(date, newFormat) {
   const fm = newFormat || 'p';
 
-  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
+  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 export function fDm(date, newFormat) {
   const fm = newFormat || 'dd MMM';
@@ -62,9 +66,9 @@ export function fTimestamp(date) {
   return date ? getTime(new Date(date)) : '';
 }
 
-export function fToNow(date, arabic) {
+export function fToNow(date) {
   const optionsObj = { addSuffix: true };
-  if (arabic) {
+  if (curLangAr) {
     optionsObj.locale = ar;
   }
   return date ? formatDistanceToNow(new Date(date), optionsObj) : '';
