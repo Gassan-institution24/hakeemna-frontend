@@ -34,7 +34,7 @@ export default function Pupage() {
               fontSize: 18,
             }}
           >
-            <h1 style={{ color: 'green' }}>{t('I am a health care provider')}</h1>
+            <h1 style={{ color: 'green' }}>{t('health care provider')}</h1>
             <Typography sx={{ mb: 3, width: '70%' }}>
               {t(
                 'This platform is designed so that all medical institutions can communicate directly and quickly with the aim of creating an integrated medical complex that enjoys good performance, high productivity and providing the best services to patients.'
@@ -71,7 +71,7 @@ export default function Pupage() {
               position: 'relative',
             }}
           >
-            <h1 style={{ color: 'green' }}> {t('I am a patient')} </h1>
+            <h1 style={{ color: 'green' }}> {t('beneficiary')} </h1>
             <Typography sx={{ mb: 2, width: '70%' }}>
               {t(
                 'Hurry to register your data and your family members on the platform, which allows you to use all the platform’s services.'
