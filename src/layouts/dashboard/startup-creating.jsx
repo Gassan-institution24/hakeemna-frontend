@@ -2,7 +2,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
-import { Stack, Button, Checkbox, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Stack, Checkbox, Typography } from '@mui/material';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -18,8 +21,6 @@ import {
 } from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { LoadingButton } from '@mui/lab';
-import { useBoolean } from 'src/hooks/use-boolean';
 
 export default function StartupCreating({ open, onClose }) {
   const { user } = useAuthContext();
