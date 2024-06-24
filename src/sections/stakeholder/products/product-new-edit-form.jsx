@@ -24,12 +24,12 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCurrencies } from 'src/api';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetProductCategories } from 'src/api/product';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFUpload, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -38,8 +38,6 @@ export default function ProductNewEditForm({ currentProduct }) {
   const { user } = useAuthContext();
 
   const { t } = useTranslate()
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const mdUp = useResponsive('up', 'md');
 
@@ -60,6 +58,8 @@ export default function ProductNewEditForm({ currentProduct }) {
     currency: Yup.string(0).required('required field'),
     taxes: Yup.number(),
     status: Yup.string(),
+    to_patients: Yup.bool(),
+    to_unit_service: Yup.bool(),
   });
 
   const defaultValues = useMemo(
@@ -77,6 +77,8 @@ export default function ProductNewEditForm({ currentProduct }) {
       currency: currentProduct?.currency?._id || null,
       taxes: currentProduct?.taxes || 0,
       status: currentProduct?.status || 'published',
+      to_patients: currentProduct?.to_patients || true,
+      to_unit_service: currentProduct?.to_unit_service || true,
     }),
     [currentProduct, user?.stakeholder]
   );
@@ -119,6 +121,8 @@ export default function ProductNewEditForm({ currentProduct }) {
       currency: currentProduct?.currency?._id || null,
       taxes: currentProduct?.taxes || 0,
       status: currentProduct?.status || 'published',
+      to_patients: currentProduct?.to_patients || true,
+      to_unit_service: currentProduct?.to_unit_service || true,
     });
   }, [currentProduct]);
   /* eslint-enable */
@@ -250,6 +254,16 @@ export default function ProductNewEditForm({ currentProduct }) {
                 md: 'repeat(2, 1fr)',
               }}
             >
+              <RHFCheckbox
+                name="to_patients"
+                label={t('to patients')}
+                onClick={() => setValue('to_patients', !values.to_patients)}
+              />
+              <RHFCheckbox
+                name="to_unit_service"
+                label={t('to units of service')}
+                onClick={() => setValue('to_unit_service', !values.to_unit_service)}
+              />
               <RHFTextField
                 name="quantity"
                 label={t("quantity")}

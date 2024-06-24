@@ -17,7 +17,6 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetTrainings } from 'src/api';
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
@@ -64,8 +63,6 @@ export default function TrainingsView() {
   const search = searchParams.get('name')
 
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { user } = useAuthContext();
 
   const addModal = useBoolean();
 

@@ -15,7 +15,6 @@ import { Card, Container, CardHeader } from '@mui/material';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetCities } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -24,7 +23,6 @@ import Scrollbar from 'src/components/scrollbar';
 
 export default function WatingRoom() {
   const { tableData } = useGetCities();
-  const { t } = useTranslate();
   return (
     <Container sx={{ my: 10 }}>
       <Card sx={{ width: 1 }}>

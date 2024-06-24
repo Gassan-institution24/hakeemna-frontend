@@ -180,7 +180,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         // },
       }}
     >
-      <Walktour
+      {isEmployee && <Walktour
         continuous
         showProgress
         showSkipButton
@@ -190,7 +190,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
       // scrollDuration={500}
-      />
+      />}
       {isEmployee && (
         <Box
           sx={{

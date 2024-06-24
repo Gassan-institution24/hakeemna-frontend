@@ -40,13 +40,13 @@ export function fMonth(date, newFormat) {
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 export function fTimeText(date, newFormat, arabic) {
-  const fm = newFormat || 'MMM yyyy';
+  // const fm = newFormat || 'MMM yyyy';
 
   if (!date) {
     return '';
   }
 
-  const formattedDate = format(new Date(date), fm, arabic ? { locale: ar } : null);
+  // const formattedDate = format(new Date(date), fm, arabic ? { locale: ar } : null);
   const relativeTime = formatDistanceToNow(new Date(date), { addSuffix: true, locale: arabic ? ar : undefined });
 
   return `${relativeTime}`;

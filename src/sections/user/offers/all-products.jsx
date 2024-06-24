@@ -13,10 +13,11 @@ import { useGetProducts } from 'src/api/product';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
+import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
+
 import ProductList from './product-list';
 import CartIcon from './common/cart-icon';
 import ProductSearch from './product-search';
-import { useCheckoutContext } from '../checkout/context';
 import ProductFiltersResult from './product-filters-result';
 
 // ----------------------------------------------------------------------
@@ -45,6 +46,7 @@ export default function ProductShopView() {
     const queryOptions = useMemo(() => ({
         status: 'published',
         populate: 'category stakeholder',
+        to_patients: true,
         ...(shid && { stakeholder: shid })
     }), [shid]);
 

@@ -12,10 +12,11 @@ import { useTranslate } from 'src/locales';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
+import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
+
 import ProductList from './product-list';
 import CartIcon from './common/cart-icon';
 import ProductSearch from './product-search';
-import { useCheckoutContext } from '../checkout/context';
 import ProductFiltersResult from './product-filters-result';
 
 // ----------------------------------------------------------------------

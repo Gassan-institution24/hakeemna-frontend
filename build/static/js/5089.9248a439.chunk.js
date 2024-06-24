@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5089],{15089:(e,s,t)=>{t.r(s),t.d(s,{default:()=>r});var a=t(6907),n=t(73887),i=t(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(a.ql,{children:[(0,i.jsx)("title",{children:" Dashboard: Payment Methods Table"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(n.df,{})]})}}}]);
-//# sourceMappingURL=5089.9248a439.chunk.js.map

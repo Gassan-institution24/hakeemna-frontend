@@ -11,6 +11,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetStakeholderOffers } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetStakeholderProducts } from 'src/api/product';
@@ -19,6 +20,7 @@ import { useGetStakeholderProducts } from 'src/api/product';
 
 export default function JobItem({ job, onView, onEdit, onDelete }) {
   const router = useRouter();
+  const { user } = useAuthContext()
 
   const {
     _id,
@@ -42,6 +44,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
     order: 'desc',
     status: 'published',
     to: 'to_unit_service',
+    unit_service: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
   });
   const { length: productsLength } = useGetStakeholderProducts(_id, {
     page: 0,
@@ -49,6 +52,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
     rowsPerPage: 1,
     order: 'desc',
     status: 'published',
+    to_unit_service: true
   });
 
   if (!productsLength && !offersLength) {

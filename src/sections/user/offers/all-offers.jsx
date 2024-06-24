@@ -14,6 +14,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetOffers } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
 import {
@@ -39,6 +40,7 @@ const defaultFilters = {
 
 export default function OffersView({ employeeData }) {
     const { t } = useTranslate();
+    const { user } = useAuthContext()
 
     const TABLE_HEAD = [
         { id: 'code', label: t('code') },
@@ -57,10 +59,11 @@ export default function OffersView({ employeeData }) {
 
     const queryOptions = useMemo(() => ({
         status: 'published',
-        to_unit_service: true,
+        // to_patients: true,
         populate: 'stakeholder products.product',
+        patient: user?.patient?._id,
         ...(shid && { stakeholder: shid })
-    }), [shid]);
+    }), [shid, user]);
 
     const { offersData, length, refetch } = useGetOffers(queryOptions);
 

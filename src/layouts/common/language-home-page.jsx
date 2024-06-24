@@ -32,25 +32,28 @@ export default function Language() {
 
   return (
     <>
-      <Button
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        onClick={popover.onOpen}
+      <Typography
+        // component={m.button}
+        // whileTap="tap"
+        // whileHover="hover"
+        // variants={varHover(1.05)}
+        lang='en'
+        onClick={() => handleChangeLang(currentLang.value === 'en' ? 'ar' : 'en')}
         sx={{
-          fontSize: 15,
+          fontSize: 16,
           position: 'relative',
-          top: -2,
-          fontWeight: 600,
+          p: 1,
+          cursor: 'pointer',
+          // top: -2,
+          fontWeight: 500,
           '&:hover': {
             backgroundColor: 'transparent',
           },
         }}
       >
         {' '}
-        {currentLang.label}
-      </Button>
+        {currentLang.value === 'en' ? 'عربي' : 'english'}
+      </Typography>
 
       <CustomPopover
         open={popover.open}

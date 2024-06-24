@@ -27,7 +27,7 @@ export default function SigupButton({ sx }) {
         },
       }}
     >
-      {t('sign up')}
+      {t('register')}
     </Button>
   );
 }
