@@ -120,7 +120,7 @@ export default function InvoiceNewEditForm({ currentOffer }) {
     try {
       const cleanedData = cleanData(data);
       if (currentOffer) {
-        await axiosInstance.patch(endpoints.offers.one(currentOffer._id), cleanedData);
+        await axiosInstance.patch(endpoints.offers.one(currentOffer._id), data);
       } else {
         await axiosInstance.post(endpoints.offers.all, { ...cleanedData, status: 'draft' });
       }
@@ -164,7 +164,7 @@ export default function InvoiceNewEditForm({ currentOffer }) {
       to_patients: currentOffer?.to_patients || false,
       to_unit_service: currentOffer?.to_unit_service || false,
 
-      products: currentOffer?.products || [
+      products: currentOffer?.products.map((one) => ({ product: one.product?._id, price: one.price })) || [
         {
           product: null,
           price: 0,

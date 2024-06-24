@@ -45,6 +45,7 @@ export default function ProductShopView() {
     const queryOptions = useMemo(() => ({
         status: 'published',
         populate: 'category stakeholder',
+        to_unit_service: true,
         ...(shid && { stakeholder: shid })
     }), [shid]);
 

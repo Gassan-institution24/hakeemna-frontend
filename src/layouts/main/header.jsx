@@ -20,6 +20,7 @@ import { bgBlur } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import { varFade } from 'src/components/animate';
 import { useSettingsContext } from 'src/components/settings';
+import { Divider } from '@mui/material';
 
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
@@ -91,48 +92,56 @@ export default function Header() {
   return (
     <AppBar>
       <Toolbar
-        disableGutters
+        // disableGutters
         sx={{
-          height: {
-            xs: HEADER.H_MOBILE,
-            md: HEADER.H_DESKTOP,
-          },
-          transition: theme.transitions.create(['height'], {
-            easing: theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.shorter,
-          }),
-          ...(offsetTop && {
-            ...bgBlur({
-              color: theme.palette.background.default,
-            }),
-            height: {
-              md: HEADER.H_DESKTOP_OFFSET,
-            },
-          }),
+          //   width: 1,
+          //   height: {
+          //     xs: HEADER.H_MOBILE,
+          //     md: HEADER.H_DESKTOP,
+          //   },
+          // transition: theme.transitions.create(['height'], {
+          //   easing: theme.transitions.easing.easeInOut,
+          //   duration: theme.transitions.duration.shorter,
+          // }),
+            // ...(offsetTop && {
+              ...bgBlur({
+                color: theme.palette.background.default,
+              }),
+              // height: {
+              //   md: HEADER.H_DESKTOP_OFFSET,
+              // },
+            // }),
         }}
       >
-        <Language />
-        <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
-          <Badge
-            sx={{
-              [`& .${badgeClasses.badge}`]: {
-                top: 8,
-                right: -16,
-              },
-              display: { md: 'flex', xs: 'none' },
-            }}
-          >
-            <Logo />
-          </Badge>
+        <Badge
+          sx={{
+            [`& .${badgeClasses.badge}`]: {
+              top: 0,
+              right: -16,
+            },
+            display: { md: 'flex', xs: 'none' },
+          }}
+        >
+          <Logo />
+        </Badge>
+        <Stack width={1}>
+          <Stack direction='row' width={1} flex={0.2} alignItems='center' justifyContent='flex-end' >
+            <Language />
+          </Stack >
+          <Divider />
+          <Stack direction='row' width={1} height={80} justifyContent='space-between' alignItems='center' >
+            <Container sx={{ width: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-          <Box sx={{ flexGrow: 1 }} />
 
-          {mdUp && <NavDesktop data={navConfig} />}
+              {mdUp && <NavDesktop data={navConfig} />}
+              <Box sx={{ flexGrow: 1 }} />
 
-          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            {mdUp && <LoginButton />}
-            {mdUp && <SigupButton />}
+              <Stack alignItems="center" direction={{ xs: 'row', md: 'row' }}>
 
+
+                {!mdUp && <NavMobile data={navConfig} />}
+              </Stack>
+            </Container>
             <m.div variants={varFade().inUp}>
               <FormControlLabel
                 control={
@@ -143,10 +152,10 @@ export default function Header() {
                 }
               />
             </m.div>
-
-            {!mdUp && <NavMobile data={navConfig} />}
+            {mdUp && <LoginButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2, mx: 1 }} />}
+            {mdUp && <SigupButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2 }} />}
           </Stack>
-        </Container>
+        </Stack>
       </Toolbar>
 
       {offsetTop && <HeaderShadow />}

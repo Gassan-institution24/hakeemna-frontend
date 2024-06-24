@@ -19,7 +19,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 
-import { useCheckoutContext } from './context';
+import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
+
 // import CheckoutSummary from './checkout-summary';
 import CheckoutCartProductList from './checkout-cart-product-list';
 
@@ -40,7 +41,7 @@ export default function CheckoutCart() {
 
   const handleConfirmOrder = async () => {
     try {
-      await axiosInstance.post(endpoints.orders.all, { products: checkout.items, unit_service: user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id, note })
+      await axiosInstance.post(endpoints.orders.all, { products: checkout.items, patient: user?.patient?._id, note })
       checkout.onReset()
       setNote('')
       enqueueSnackbar(t('sent successfully'))
