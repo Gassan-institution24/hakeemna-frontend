@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4180],{34180:(e,r,s)=>{s.r(r),s.d(r,{default:()=>n});var i=s(6907),a=s(59949),l=s(80184);function n(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(i.ql,{children:(0,l.jsx)("title",{children:" Dashboard: Order details"})}),(0,l.jsx)(a.H,{})]})}}}]);
-//# sourceMappingURL=4180.22af4a6d.chunk.js.map

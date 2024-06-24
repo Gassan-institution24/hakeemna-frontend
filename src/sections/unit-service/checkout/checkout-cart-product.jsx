@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -20,8 +20,7 @@ import IncrementerButton from '../offers/common/incrementer-button';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
-  const { name_english, name_arabic, price, description_english, currency, category, stakeholder, images, quantity, available } = row;
-  const { t } = useTranslate()
+  const { name_english, name_arabic, price, currency, category, stakeholder, images, quantity, available } = row;
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   return (

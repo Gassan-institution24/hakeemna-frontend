@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5751],{25751:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r});var n=a(6907),t=a(73887),i=a(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(n.ql,{children:[(0,i.jsx)("title",{children:" Dashboard: Uploads Table"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(t.fc,{})]})}}}]);
-//# sourceMappingURL=5751.f1a74aa7.chunk.js.map

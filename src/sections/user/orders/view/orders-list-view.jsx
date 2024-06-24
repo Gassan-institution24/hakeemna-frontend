@@ -12,8 +12,8 @@ import { useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetUSOrders } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useGetPatientOrders } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -65,7 +65,7 @@ export default function OrdersView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { ordersData, length, refetch } = useGetUSOrders(user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id, {
+  const { ordersData, length, refetch } = useGetPatientOrders(user?.patient?._id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 25,

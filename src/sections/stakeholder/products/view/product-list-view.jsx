@@ -53,7 +53,8 @@ export default function AppointmentsView({ employeeData }) {
     { id: 'category', label: t('category') },
     { id: 'quantity', label: t('quantity') },
     { id: 'price', label: t('price') },
-    // { id: 'currency', label: t('currency') },
+    { id: 'to_patients', label: t('to patients') },
+    { id: 'to_unit_service', label: t('to units of service') },
     { id: 'status', label: t('status') },
     { id: '' },
   ];

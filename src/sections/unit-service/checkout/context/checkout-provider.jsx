@@ -8,6 +8,8 @@ import { getStorage, useLocalStorage } from 'src/hooks/use-local-storage';
 
 // import { PRODUCT_CHECKOUT_STEPS } from 'src/_mock/_product';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import { CheckoutContext } from './checkout-context';
 
 // ----------------------------------------------------------------------
@@ -29,6 +31,7 @@ const initialState = {
 
 export function CheckoutProvider({ children }) {
   const router = useRouter();
+  const { user } = useAuthContext()
 
   const { state, update, reset } = useLocalStorage(STORAGE_KEY, initialState);
 
@@ -170,9 +173,13 @@ export function CheckoutProvider({ children }) {
   const onReset = useCallback(() => {
     // if (completed) {
     reset();
-    router.replace(paths.unitservice.products.all);
+    if (user.role === 'patient') {
+      router.replace(paths.dashboard.user.products.all);
+    } else {
+      router.replace(paths.unitservice.products.all);
+    }
     // }
-  }, [reset, router]);
+  }, [reset, router, user]);
 
   const memoizedValue = useMemo(
     () => ({

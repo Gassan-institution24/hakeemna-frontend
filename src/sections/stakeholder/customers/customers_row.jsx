@@ -8,15 +8,10 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDate } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
-
 // ----------------------------------------------------------------------
 
 export default function CustomersTableRow({ row, selected }) {
   const { sequence_number, unit_service, patient, created_at } = row;
-
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
 

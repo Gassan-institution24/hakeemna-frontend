@@ -14,7 +14,7 @@ export default function CartIcon({ totalItems }) {
   return (
     <Box
       component={RouterLink}
-      href={paths.unitservice.products.checkout}
+      href={paths.dashboard.user.products.checkout}
       sx={{
         right: 0,
         top: 112,

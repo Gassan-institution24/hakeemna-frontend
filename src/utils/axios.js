@@ -405,7 +405,7 @@ export const endpoints = {
   },
   medRecord: {
     all: '/api/entrance',
-    one: (id,id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
+    one: (id, id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
   },
   oldpatient: {
     all: '/api/oldpatientsdata',
@@ -530,6 +530,7 @@ export const endpoints = {
     one: (id) => `/api/orders/${id}`,
     stakeholder: (id) => `/api/orders/stakeholder/${id}`,
     unitservice: (id) => `/api/orders/unitservice/${id}`,
+    patient: (id) => `/api/orders/patient/${id}`,
   },
   systemErrors: {
     all: '/api/systemerrors',

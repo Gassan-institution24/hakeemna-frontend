@@ -13,7 +13,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 import Label from 'src/components/label';
 import Image from 'src/components/image';
@@ -43,7 +43,6 @@ export default function ProductItem({ product }) {
     saleLabel,
   } = product;
 
-  const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
