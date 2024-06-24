@@ -41,6 +41,8 @@ export default function AppointmentsTableRow({
     name_arabic,
     description_english,
     description_arabic,
+    to_patients,
+    to_unit_service,
     quantity,
     category,
     currency,
@@ -106,6 +108,12 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell align="center">{quantity}</TableCell>
         <TableCell align="center">{fCurrency(price, currency?.symbol)}</TableCell>
+        <TableCell align="center">
+          {to_patients ? <Iconify icon="charm:tick" /> : <Iconify icon="mdi:remove-bold" />}
+        </TableCell>
+        <TableCell align="center">
+          {to_unit_service ? <Iconify icon="charm:tick" /> : <Iconify icon="mdi:remove-bold" />}
+        </TableCell>
         <TableCell align="center">
           <Label
             variant="soft"

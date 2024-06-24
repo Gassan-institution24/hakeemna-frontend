@@ -19,7 +19,7 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
   const {
     sequence_number,
     title,
-    speciality,
+    // speciality,
     description,
     created_at,
     user_creation,

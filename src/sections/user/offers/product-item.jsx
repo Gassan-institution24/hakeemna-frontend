@@ -13,13 +13,14 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
-import { useCheckoutContext } from '../checkout/context';
+import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
+
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,6 @@ export default function ProductItem({ product }) {
     saleLabel,
   } = product;
 
-  const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -110,7 +110,7 @@ export default function ProductItem({ product }) {
       <Tooltip title={quantity <= 0 && 'Out of stock'} placement="bottom-end">
         <Image
           alt={name_english}
-          src={images[0]}
+          src={images?.[0]}
           ratio="1/1"
           sx={{
             borderRadius: 1.5,

@@ -75,6 +75,30 @@ export function useGetUSOrders(id, query) {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetPatientOrders(id, query) {
+  const URL = [endpoints.orders.patient(id), { params: query }];
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      ordersData: data?.orders || [],
+      length: data?.length || 0,
+      loading: isLoading,
+      error,
+      isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 export function useGetOrder(id) {
   const URL = endpoints.orders.one(id);
 

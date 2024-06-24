@@ -112,7 +112,7 @@ export default function Medicalreports() {
     },
   });
 
-  const PrescriptionPDF = ({ report }) => (
+  const PrescriptionPDF = React.useCallback(({ report }) => (
     <Document>
       <Page size="A4" style={styles.page}>
         <View>
@@ -136,7 +136,7 @@ export default function Medicalreports() {
         </View>
       </Page>
     </Document>
-  );
+  ), [styles]);
 
   PrescriptionPDF.propTypes = {
     report: PropTypes.object,
