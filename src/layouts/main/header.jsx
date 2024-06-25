@@ -92,25 +92,25 @@ export default function Header() {
   return (
     <AppBar>
       <Toolbar
-        // disableGutters
+        disableGutters
         sx={{
           //   width: 1,
-          //   height: {
-          //     xs: HEADER.H_MOBILE,
-          //     md: HEADER.H_DESKTOP,
-          //   },
+            height: {
+              xs: HEADER.H_MOBILE,
+              md: HEADER.H_DESKTOP,
+            },
           // transition: theme.transitions.create(['height'], {
           //   easing: theme.transitions.easing.easeInOut,
           //   duration: theme.transitions.duration.shorter,
           // }),
-            // ...(offsetTop && {
-              ...bgBlur({
-                color: theme.palette.background.default,
-              }),
-              // height: {
-              //   md: HEADER.H_DESKTOP_OFFSET,
-              // },
-            // }),
+          // ...(offsetTop && {
+          ...bgBlur({
+            color: theme.palette.background.default,
+          }),
+          // height: {
+          //   md: HEADER.H_DESKTOP_OFFSET,
+          // },
+          // }),
         }}
       >
         <Badge
@@ -124,38 +124,38 @@ export default function Header() {
         >
           <Logo />
         </Badge>
-        <Stack width={1}>
+        {/* <Stack width={1}>
           <Stack direction='row' width={1} flex={0.2} alignItems='center' justifyContent='flex-end' >
-            <Language />
           </Stack >
           <Divider />
-          <Stack direction='row' width={1} height={80} justifyContent='space-between' alignItems='center' >
-            <Container sx={{ width: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Stack direction='row' width={1} height={80} justifyContent='space-between' alignItems='center' > */}
+        <Container sx={{ width: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
 
-              {mdUp && <NavDesktop data={navConfig} />}
-              <Box sx={{ flexGrow: 1 }} />
+          {mdUp && <NavDesktop data={navConfig} />}
+          <Box sx={{ flexGrow: 1 }} />
 
-              <Stack alignItems="center" direction={{ xs: 'row', md: 'row' }}>
+          <Stack alignItems="center" direction={{ xs: 'row', md: 'row' }}>
 
 
-                {!mdUp && <NavMobile data={navConfig} />}
-              </Stack>
-            </Container>
-            <m.div variants={varFade().inUp}>
+            {!mdUp && <NavMobile data={navConfig} />}
+          </Stack>
+        </Container>
+        {/* <m.div variants={varFade().inUp}>
               <FormControlLabel
                 control={
                   <MaterialUISwitch sx={{ my: 1, ml: 1 }} checked={settings.themeMode === 'dark'} />
-                }
-                onClick={() =>
-                  settings.onUpdate('themeMode', settings.themeMode === 'light' ? 'dark' : 'light')
-                }
-              />
-            </m.div>
-            {mdUp && <LoginButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2, mx: 1 }} />}
-            {mdUp && <SigupButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2 }} />}
-          </Stack>
-        </Stack>
+                  }
+                  onClick={() =>
+                    settings.onUpdate('themeMode', settings.themeMode === 'light' ? 'dark' : 'light')
+                    }
+                    />
+                    </m.div> */}
+        <Language />
+        {mdUp && <LoginButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2, mx: 1, ml: 5 }} />}
+        {mdUp && <SigupButton sx={{ borderRadius: 0, textTransform: 'uppercase', fontSize: 13, px: 2 }} />}
+        {/* </Stack> */}
+        {/* </Stack> */}
       </Toolbar>
 
       {offsetTop && <HeaderShadow />}

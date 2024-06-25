@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 
 import { Box } from '@mui/system';
 import MenuItem from '@mui/material/MenuItem';
-import { Button, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 
 import { useTranslate, useLocalesHome } from 'src/locales';
 
@@ -38,11 +38,36 @@ export default function Language() {
         // whileHover="hover"
         // variants={varHover(1.05)}
         lang='en'
-        onClick={() => handleChangeLang(currentLang.value === 'en' ? 'ar' : 'en')}
+        onClick={() => handleChangeLang('en')}
         sx={{
-          fontSize: 16,
+          height: 20,
+          fontSize: 14,
           position: 'relative',
-          p: 1,
+          px: 1,
+          cursor: 'pointer',
+          // top: -2,
+          fontWeight: 500,
+          borderRight: '1px solid',
+          '&:hover': {
+            backgroundColor: 'transparent',
+          },
+        }}
+      >
+        english
+      </Typography>
+      {/* <Divider orientation='vertical' sx={{ backgroundColor: 'red' }} /> */}
+      <Typography
+        // component={m.button}
+        // whileTap="tap"
+        // whileHover="hover"
+        // variants={varHover(1.05)}
+        // lang='en'
+        onClick={() => handleChangeLang('ar')}
+        sx={{
+          height: 20,
+          fontSize: 14,
+          position: 'relative',
+          px: 1,
           cursor: 'pointer',
           // top: -2,
           fontWeight: 500,
@@ -51,8 +76,7 @@ export default function Language() {
           },
         }}
       >
-        {' '}
-        {currentLang.value === 'en' ? 'عربي' : 'english'}
+        عربي
       </Typography>
 
       <CustomPopover
