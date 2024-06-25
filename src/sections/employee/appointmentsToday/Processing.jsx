@@ -22,6 +22,8 @@ import {
   Paper,
   Button,
   Dialog,
+  Divider,
+  Tooltip,
   MenuItem,
   TableRow,
   TableCell,
@@ -41,8 +43,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fMonth, fTimeText } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { fMonth, fTimeText, fDateTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -50,7 +52,7 @@ import {
   useGetPatient,
   useGetMedicines,
   useGetMedRecord,
-  useGetPatientHistoryData,
+  useGetPatientHistoryDataInSu,
   useGetOneEntranceManagement,
 } from 'src/api';
 
@@ -66,9 +68,12 @@ export default function Processing() {
   const { id } = params;
   const { medicinesData } = useGetMedicines();
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id,Entrance?.patient?._id);
+  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-  const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
+  const { historyData } = useGetPatientHistoryDataInSu(
+    Entrance?.patient?._id,
+    Entrance?.service_unit?._id
+  );
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
@@ -103,7 +108,7 @@ export default function Processing() {
     service_unit: Entrance?.service_unit,
     Doctor_Comments: '',
   };
-  console.log(medRecord);
+  console.log(historyData);
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -151,6 +156,7 @@ export default function Processing() {
           sub_english: `Medical report from  ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `تقرير طبي من  ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
+          service_unit: Entrance?.service_unit?._id,
         });
         await axiosInstance.post('/api/examination', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
@@ -169,6 +175,7 @@ export default function Processing() {
           sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
+          service_unit: Entrance?.service_unit?._id,
         });
         await axiosInstance.post('/api/drugs', submitdata);
         await axiosInstance.patch(`/api/entrance/${id}`, {
@@ -201,6 +208,12 @@ export default function Processing() {
       await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
         finished_or_not: true,
       });
+      await axiosInstance.post(`/api/medrecord/`, {
+        appointmentId: entrance?.appointmentId,
+        Appointment_date: Entrance?.Appointment_date,
+        service_unit: Entrance?.service_unit?._id,
+        patient: Entrance?.patient?._id,
+      });
       enqueueSnackbar('appointment finished', { variant: 'success' });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
@@ -213,17 +226,6 @@ export default function Processing() {
     filterforspecialties,
   });
   const TIMELINES = [
-    {
-      key: 0,
-      title: `${Entrance?.patient?.name_english} medical record`,
-      color: 'info',
-      icon:
-        dataFiltered?.length > 0 ? (
-          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-        ) : (
-          <Iconify icon="healthicons:medical-records-outline" width={25} />
-        ),
-    },
     {
       key: 1,
       title: (
@@ -247,36 +249,15 @@ export default function Processing() {
         ),
     },
     {
-      key: 2,
-      title: (
-        <>
-          last activity <br />
-          Dr message:
-          <Typography>the patient need a surgery now</Typography>
-        </>
-      ),
-      color: 'info',
-      icon: <Iconify icon="bi:door-closed" width={23} />,
-    },
-    {
-      key: 3,
-      title: (
-        <>
-          <span
-            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
-          >
-            Doctor Check List
-          </span>
-          <CheckList />
-        </>
-      ),
-      color: 'primary',
-      icon: <Iconify icon="octicon:checklist-16" width={23} />,
-    },
-    {
       key: 4,
       title: (
         <>
+          <>
+            last activity <br />
+            Dr message:
+            <Typography>the patient need a surgery now</Typography>
+          </>
+          <Divider sx={{ height: 10, mb: 1 }} />
           Next activity <br />
           <Button
             onClick={() => alert('test')}
@@ -305,6 +286,65 @@ export default function Processing() {
       color: 'info',
       icon: <Iconify icon="cil:room" width={24} />,
     },
+    {
+      key: 3,
+      title: (
+        <>
+          <span
+            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+          >
+            Doctor Check List
+          </span>
+          <CheckList />
+        </>
+      ),
+      color: 'primary',
+      icon: <Iconify icon="octicon:checklist-16" width={23} />,
+    },
+    {
+      key: 0,
+      title: (
+        <>
+          <span
+            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+          >
+            Visits history
+          </span>
+
+          <br />
+          {medRecord?.map((test, i) => (
+            <>
+              <Tooltip
+                key={i}
+                title={
+                  <Button
+                    sx={{ bgcolor: 'success.main', m: 1 }}
+                    variant="contained"
+                    onClick={() => alert('comming soon')}
+                  >
+                    Details
+                  </Button>
+                }
+              >
+                <Button sx={{ width: '100%', m: 1 }}>
+                  {' '}
+                  {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
+                </Button>
+              </Tooltip>
+              <Divider />
+            </>
+          ))}
+        </>
+      ),
+      color: 'info',
+      icon:
+        dataFiltered?.length > 0 ? (
+          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+        ) : (
+          <Iconify icon="healthicons:medical-records-outline" width={25} />
+        ),
+    },
+
     {
       key: 5,
       title: 'medical report (optional)',

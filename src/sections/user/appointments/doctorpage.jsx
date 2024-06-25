@@ -118,7 +118,7 @@ export default function Doctorpage() {
         name_arabic: 'تم حجز موعد',
         sub_english: `appointment in ${datacheeck?.unit_service?.name_english}`,
         sub_arabic: `موعد في  ${datacheeck?.unit_service?.name_arabic}`,
-        actual_date:Data?.created_at
+        actual_date: new Date(),
       });
 
       refetch();
