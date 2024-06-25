@@ -376,7 +376,7 @@ export const endpoints = {
   },
   history: {
     all: '/api/history',
-    one: (id) => `/api/history/${id}`,
+    one: (id,SuId) => `/api/history/patient/${id}/unit/${SuId}`,
     patient: (id) => `/api/history/patient/${id}`,
   },
   generalCheckList: {
