@@ -31,6 +31,9 @@ export default function TableDetailsRow({
     name_arabic,
     country,
     city,
+    unit_service_type,
+    sector,
+    type_of_specialty_1,
     status,
     created_at,
     user_creation,
@@ -79,6 +82,10 @@ export default function TableDetailsRow({
       >
         {city?.name_english}
       </TableCell>
+      <TableCell align="center">{unit_service_type}</TableCell>
+      <TableCell align="center">{sector}</TableCell>
+      <TableCell align="center">{type_of_specialty_1}</TableCell>
+
       <TableCell align="center">
         <Label
           variant="soft"

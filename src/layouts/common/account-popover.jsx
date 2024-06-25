@@ -78,6 +78,12 @@ export default function AccountPopover() {
   };
 
   useEffect(() => {
+    socket.on('connect', () => {
+      socket.emit('sendUser', user);
+    })
+    socket.on('checkUsers', () => {
+      socket.emit('sendUser', user);
+    })
     socket.emit('sendUser', user);
     return () => {
       socket.emit('disconnected');
