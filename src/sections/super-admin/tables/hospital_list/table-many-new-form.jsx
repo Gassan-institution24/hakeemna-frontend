@@ -33,12 +33,15 @@ import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/t
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { label: 'country *', width: 'calc(100%/6)' },
-  { label: 'city *', width: 'calc(100%/6)' },
-  { label: 'name english *', width: 'calc(100%/6)' },
-  { label: 'name arabic *', width: 'calc(100%/6)' },
-  { label: 'description english', width: 'calc(100%/6)' },
-  { label: 'description arabic', width: 'calc(100%/6)' },
+  { label: 'country *', width: 'calc(100%/9)' },
+  { label: 'city *', width: 'calc(100%/9)' },
+  { label: 'name english *', width: 'calc(100%/9)' },
+  { label: 'name arabic *', width: 'calc(100%/9)' },
+  { label: 'description english', width: 'calc(100%/9)' },
+  { label: 'description arabic', width: 'calc(100%/9)' },
+  { label: 'unit_service_type', width: 'calc(100%/9)' },
+  { label: 'sector', width: 'calc(100%/9)' },
+  { label: 'type_of_specialty_1', width: 'calc(100%/9)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();
@@ -300,6 +303,33 @@ export default function NewEditManyForm() {
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={one.description_arabic}
                             name="description_arabic"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleArabicInputChange(index, e)}
+                            value={one.unit_service_type}
+                            name="unit_service_type"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleArabicInputChange(index, e)}
+                            value={one.sector}
+                            name="sector"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleArabicInputChange(index, e)}
+                            value={one.type_of_specialty_1}
+                            name="type_of_specialty_1"
                           />
                         </TableCell>
                       </TableRow>
