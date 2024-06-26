@@ -36,6 +36,8 @@ import {
   DialogContent,
   useMediaQuery,
   TableContainer,
+  Switch,
+  Box,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -52,8 +54,9 @@ import {
   useGetPatient,
   useGetMedicines,
   useGetMedRecord,
-  useGetPatientHistoryDataInSu,
+  useGetPatientHistoryData,
   useGetOneEntranceManagement,
+  useGetPatientHistoryDataInSu,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -74,12 +77,14 @@ export default function Processing() {
     Entrance?.patient?._id,
     Entrance?.service_unit?._id
   );
+  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [filterforspecialties, setFilterforspecialties] = useState();
+  const [switchh, setSwitch] = useState(false);
   const [DoctorComment, setDoctorComment] = useState();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -108,7 +113,7 @@ export default function Processing() {
     service_unit: Entrance?.service_unit,
     Doctor_Comments: '',
   };
-  console.log(historyData);
+
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -199,6 +204,9 @@ export default function Processing() {
     });
   }, [user, Entrance, reset]);
 
+  const handleBackClick = (idd) => {
+    router.push(paths.employee.recored(idd));
+  };
   const handleEndAppointment = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
@@ -222,9 +230,10 @@ export default function Processing() {
     }
   };
   const dataFiltered = applyFilter({
-    inputData: historyData,
+    inputData: switchh === true ? historyDataForPatient : historyData,
     filterforspecialties,
   });
+
   const TIMELINES = [
     {
       key: 1,
@@ -314,23 +323,10 @@ export default function Processing() {
           <br />
           {medRecord?.map((test, i) => (
             <>
-              <Tooltip
-                key={i}
-                title={
-                  <Button
-                    sx={{ bgcolor: 'success.main', m: 1 }}
-                    variant="contained"
-                    onClick={() => alert('comming soon')}
-                  >
-                    Details
-                  </Button>
-                }
-              >
-                <Button sx={{ width: '100%', m: 1 }}>
-                  {' '}
-                  {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
-                </Button>
-              </Tooltip>
+              <Button onClick={() => handleBackClick(test?._id)} sx={{ width: '100%', m: 1 }}>
+                {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
+              </Button>
+
               <Divider />
             </>
           ))}
@@ -523,7 +519,13 @@ export default function Processing() {
               <TableCell>{t('Date')}</TableCell>
               <TableCell>{t('Name')}</TableCell>
               <TableCell>{t('Subject')}</TableCell>
-              <TableCell>&nbsp;</TableCell>
+              <TableCell>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span>Private</span>{' '}
+                  <Switch value={switchh} onChange={() => setSwitch(!switchh)} />{' '}
+                  <span>Public</span>
+                </Box>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
