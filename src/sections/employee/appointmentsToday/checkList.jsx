@@ -20,19 +20,20 @@ import {
 import axiosInstance from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetOneEntranceManagement } from 'src/api';
-import { useGetlocalCheckListData, useGetAllentranceCheckList } from 'src/api/check_listQ';
+import { useGetOneEntranceManagement, useGetMyCheckLists } from 'src/api';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function TestPage() {
   const params = useParams();
   const { id } = params;
-  const localListData = useGetlocalCheckListData();
-  const { data, refetch } = useGetAllentranceCheckList(id);
+
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id);
-
+  const { CheckListData, refetch } = useGetMyCheckLists(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+  );
+  console.log(CheckListData);
   const onSubmit = async (answers) => {
     try {
       await axiosInstance.post('/api/answersandquestiones', answers);
@@ -81,7 +82,7 @@ export default function TestPage() {
 
   return (
     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2 }}>
+      {/* <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2 }}>
         {data?.map((answers, keyI) => (
           <Box key={keyI} sx={{ width: 'calc(33.33% - 16px)', m: 1 }}>
             <Typography>
@@ -89,11 +90,11 @@ export default function TestPage() {
             </Typography>
           </Box>
         ))}
-      </Box>
+      </Box> */}
 
       <Box sx={{ height: '400px', overflowY: 'auto' }}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          {localListData?.localListData?.map((info, i) => (
+          {CheckListData?.map((info, i) => (
             <Box key={i} sx={{ display: 'block' }}>
               {info?.answer_way === 'Text' && (
                 <Controller
@@ -162,9 +163,13 @@ export default function TestPage() {
               )}
             </Box>
           ))}
-          <Button type="submit" disabled={isSubmitting} variant="contained">
-            Save
-          </Button>
+          {CheckListData ? (
+            ""
+          ) : (
+            <Button type="submit" disabled={isSubmitting} variant="contained">
+              Save
+            </Button>
+          )}
         </FormProvider>
       </Box>
     </>
