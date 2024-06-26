@@ -177,7 +177,6 @@ export default function OldMedicalReports() {
     if (ImgFiles) {
       ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
     }
-    console.log(data);
     try {
       await axios.post('/api/oldmedicalreports', formData);
       await axios.post(endpoints.history.all, {

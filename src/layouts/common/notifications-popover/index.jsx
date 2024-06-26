@@ -84,6 +84,12 @@ export default function NotificationsPopover() {
   };
   /* eslint-disable */
   useEffect(() => {
+    socket.on('connect', () => {
+      socket.emit('sendUser', user);
+    })
+    socket.on('checkUsers', () => {
+      socket.emit('sendUser', user);
+    })
     socket.on('error', () => {
       setAllNotifications([]);
       setPage(1);
@@ -104,7 +110,10 @@ export default function NotificationsPopover() {
       setPage(1);
       refetch();
     });
-  }, []);
+    return () => {
+      socket.emit('disconnected');
+    };
+  }, [user]);
   /* eslint-enable */
 
   useEffect(() => {
@@ -159,10 +168,9 @@ export default function NotificationsPopover() {
         <Divider />
         <Scrollbar>
           <List disablePadding>
-            {!loading &&
-              allNotifications.map((notification, idx) => (
-                <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
-              ))}
+            {allNotifications.map((notification, idx) => (
+              <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
+            ))}
           </List>
 
           {hasMore && (
