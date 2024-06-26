@@ -105,9 +105,8 @@ export default function OverviewAppView() {
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
-            title={`${greeting} \n ${
-              curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english
-            }`}
+            title={`${greeting} \n ${curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english
+              }`}
             description={
               curLangAr
                 ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
@@ -145,8 +144,8 @@ export default function OverviewAppView() {
         </Grid>
       </Grid>
       {user?.patient?.identification_num === oldData &&
-      user?.patient?.is_onboarded === false &&
-      user?.role === 'patient' ? (
+        user?.patient?.is_onboarded === false &&
+        user?.role === 'patient' ? (
         <Dialog open={dialog.value} onClose={dialog.onTrue}>
           <DialogTitle>
             {curLangAr

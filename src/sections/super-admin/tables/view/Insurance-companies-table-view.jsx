@@ -65,6 +65,7 @@ const TABLE_HEAD = [
   { id: 'webpage', label: 'webpage' },
   { id: 'phone', label: 'phone' },
   { id: 'address', label: 'address' },
+  { id: 'tpa', label: 'tpa' },
   { id: 'status', label: 'Status' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },

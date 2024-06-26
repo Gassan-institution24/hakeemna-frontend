@@ -26,7 +26,7 @@ import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function SickLeave({ patient,service_unit }) {
+export default function SickLeave({ patient, service_unit }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -65,7 +65,7 @@ export default function SickLeave({ patient,service_unit }) {
       patient: patient?._id,
       unit_services: service_unit,
     });
-  }, [user, reset, patient,service_unit]);
+  }, [user, reset, patient, service_unit]);
 
   const onSubmit = async (submitdata) => {
     try {
