@@ -15,6 +15,7 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
 import AppointmentsHistory from '../appointment-history/appoint-history';
+import MedicalAnalysis from '../medical-analysis';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,10 @@ export default function PatientProfile() {
     {
       value: 'appointments',
       label: 'appointments',
+    },
+    {
+      value: 'medicalanalysis',
+      label: t('medical analysis'),
     },
   ];
 
@@ -458,6 +463,7 @@ export default function PatientProfile() {
         </Grid>
       )}
       {currentTab === 'appointments' && <AppointmentsHistory />}
+      {currentTab === 'medicalanalysis' && <MedicalAnalysis />}
     </Container>
   );
 }

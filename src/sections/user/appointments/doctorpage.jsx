@@ -483,9 +483,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-          data?.unit_service?.city?.name_english ||
-          data?.unit_service?.name_english ||
-          data?.employee?.description
+            data?.unit_service?.city?.name_english ||
+            data?.unit_service?.name_english ||
+            data?.employee?.description
             ? renderAbout
             : ''}
 

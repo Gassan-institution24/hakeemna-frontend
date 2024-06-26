@@ -135,7 +135,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                         newValue,
                         user?.employee?.employee_engagements[user?.employee.selected_engagement]
                           ?.unit_service?.country?.time_zone ||
-                          Intl.DateTimeFormat().resolvedOptions().timeZone
+                        Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}
