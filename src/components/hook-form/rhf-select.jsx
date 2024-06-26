@@ -135,7 +135,7 @@ export function RHFMultiSelect({
             label={label}
             renderValue={renderValues}
           >
-            {options.map((option, idx) => {
+            {options?.map((option, idx) => {
               const selected = field?.value?.includes(option._id);
 
               return (

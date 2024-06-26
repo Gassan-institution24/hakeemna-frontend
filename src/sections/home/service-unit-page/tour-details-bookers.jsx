@@ -33,8 +33,8 @@ export default function TourDetailsBookers({ bookers }) {
           <BookerItem
             key={booker._id}
             booker={booker}
-            // selected={approved.includes(booker._id)}
-            // onSelected={() => handleClick(booker._id)}
+          // selected={approved.includes(booker._id)}
+          // onSelected={() => handleClick(booker._id)}
           />
         ))}
     </Box>

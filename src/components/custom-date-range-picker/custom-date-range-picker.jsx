@@ -54,8 +54,8 @@ export default function CustomDateRangePicker({
         sx={{
           ...(isCalendarView &&
             mdUp && {
-              overflow: 'unset',
-            }),
+            overflow: 'unset',
+          }),
         }}
       >
         <Stack
