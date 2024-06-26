@@ -93,6 +93,11 @@ export const endpoints = {
     one: (id) => `/api/oldmedicalreports/${id}`,
     findReport: ({ name }) => `/api/oldmedicalreports/report?name=${name}`,
   },
+  patientMedicalAnalysis: {
+    all: '/api/patientanalysis/',
+    one: (id) => `/api/patientanalysis/${id}`,
+    patient: (id) => `/api/patientanalysis/patient/${id}`,
+  },
   medicalreports: {
     all: '/api/examination/',
     one: (id) => `/api/examination/${id}`,
@@ -376,7 +381,7 @@ export const endpoints = {
   },
   history: {
     all: '/api/history',
-    one: (id,SuId) => `/api/history/patient/${id}/unit/${SuId}`,
+    one: (id, SuId) => `/api/history/patient/${id}/unit/${SuId}`,
     patient: (id) => `/api/history/patient/${id}`,
   },
   generalCheckList: {

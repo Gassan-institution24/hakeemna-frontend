@@ -60,10 +60,9 @@ export default function ContactUs() {
         }, 2000);
       } else {
         enqueueSnackbar(
-          `${
-            curLangAr
-              ? 'حدث خطأ ما, الرجاء المحاولة لاحقا'
-              : 'Somthing went wront, please try again later'
+          `${curLangAr
+            ? 'حدث خطأ ما, الرجاء المحاولة لاحقا'
+            : 'Somthing went wront, please try again later'
           }`,
           { variant: 'error' }
         );

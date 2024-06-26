@@ -19,7 +19,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetCountries, useGetCountryCities, useGetInsuranceTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +40,8 @@ export default function TableNewEditForm({ currentTable }) {
     webpage: Yup.string().required('webpage is requires'),
     phone: Yup.string().required('phone number is required'),
     address: Yup.string().required('address is required'),
+    member_tpa: Yup.bool(),
+    tpa: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -52,6 +54,8 @@ export default function TableNewEditForm({ currentTable }) {
       webpage: currentTable?.webpage || '',
       phone: currentTable?.phone || '',
       address: currentTable?.address || '',
+      member_tpa: currentTable?.member_tpa || false,
+      tpa: currentTable?.tpa || '',
     }),
     [currentTable]
   );
@@ -83,6 +87,7 @@ export default function TableNewEditForm({ currentTable }) {
     reset,
     watch,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
@@ -121,6 +126,8 @@ export default function TableNewEditForm({ currentTable }) {
       webpage: currentTable?.webpage || '',
       phone: currentTable?.phone || '',
       address: currentTable?.address || '',
+      member_tpa: currentTable?.member_tpa || false,
+      tpa: currentTable?.tpa || '',
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -175,6 +182,8 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="webpage" label="web page link" />
               <RHFTextField name="phone" label="phone no" />
               <RHFTextField name="address" label="address" />
+              <RHFCheckbox name='member_tpa' label='member tpa' value={watch().member_tpa} onChange={() => setValue('member_tpa', !watch().member_tpa)} />
+              <RHFTextField name="tpa" label="tpa" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

@@ -33,6 +33,7 @@ export default function TableDetailsRow({
     city,
     type,
     webpage,
+    tpa,
     phone,
     address,
     status,
@@ -97,6 +98,7 @@ export default function TableDetailsRow({
       <TableCell align="center">{webpage}</TableCell>
       <TableCell align="center">{phone}</TableCell>
       <TableCell align="center">{address}</TableCell>
+      <TableCell align="center">{tpa}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

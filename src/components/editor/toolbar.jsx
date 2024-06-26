@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 
+import { Button } from '@mui/material';
 import { StyledEditorToolbar } from './styles';
 
 // ----------------------------------------------------------------------
@@ -48,10 +49,10 @@ export default function Toolbar({ id, simple, ...other }) {
         </div>
 
         <div className="ql-formats">
-          <button type="button" className="ql-bold" />
-          <button type="button" className="ql-italic" />
-          <button type="button" className="ql-underline" />
-          <button type="button" className="ql-strike" />
+          <Button type="button" className="ql-bold" />
+          <Button type="button" className="ql-italic" />
+          <Button type="button" className="ql-underline" />
+          <Button type="button" className="ql-strike" />
         </div>
 
         {!simple && (
@@ -62,40 +63,40 @@ export default function Toolbar({ id, simple, ...other }) {
         )}
 
         <div className="ql-formats">
-          <button type="button" className="ql-list" value="ordered" />
-          <button type="button" className="ql-list" value="bullet" />
-          {!simple && <button type="button" className="ql-indent" value="-1" />}
-          {!simple && <button type="button" className="ql-indent" value="+1" />}
+          <Button type="button" className="ql-list" value="ordered" />
+          <Button type="button" className="ql-list" value="bullet" />
+          {!simple && <Button type="button" className="ql-indent" value="-1" />}
+          {!simple && <Button type="button" className="ql-indent" value="+1" />}
         </div>
 
         {!simple && (
           <div className="ql-formats">
-            <button type="button" className="ql-script" value="super" />
-            <button type="button" className="ql-script" value="sub" />
+            <Button type="button" className="ql-script" value="super" />
+            <Button type="button" className="ql-script" value="sub" />
           </div>
         )}
 
         {!simple && (
           <div className="ql-formats">
-            <button type="button" className="ql-code-block" />
-            <button type="button" className="ql-blockquote" />
+            <Button type="button" className="ql-code-block" />
+            <Button type="button" className="ql-blockquote" />
           </div>
         )}
 
         <div className="ql-formats">
-          <button type="button" className="ql-direction" value="rtl" />
+          <Button type="button" className="ql-direction" value="rtl" />
           <select className="ql-align" />
         </div>
 
         <div className="ql-formats">
-          <button type="button" className="ql-link" />
-          <button type="button" className="ql-image" />
-          <button type="button" className="ql-video" />
+          <Button type="button" className="ql-link" />
+          <Button type="button" className="ql-image" />
+          <Button type="button" className="ql-video" />
         </div>
 
         <div className="ql-formats">
-          {!simple && <button type="button" className="ql-formula" />}
-          <button type="button" className="ql-clean" />
+          {!simple && <Button type="button" className="ql-formula" />}
+          <Button type="button" className="ql-clean" />
         </div>
       </div>
     </StyledEditorToolbar>
