@@ -410,7 +410,8 @@ export const endpoints = {
   },
   medRecord: {
     all: '/api/entrance',
-    one: (id, id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
+    one: (id) => `/api/medrecord/patient/${id}`,
+    two: (id, id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
   },
   oldpatient: {
     all: '/api/oldpatientsdata',
