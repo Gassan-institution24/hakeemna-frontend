@@ -113,7 +113,6 @@ export default function Processing() {
     service_unit: Entrance?.service_unit,
     Doctor_Comments: '',
   };
-
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),

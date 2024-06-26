@@ -36,6 +36,9 @@ export default function TableNewEditForm({ currentTable }) {
     name_english: Yup.string().required('Name is required'),
     country: Yup.string(),
     city: Yup.string().nullable(),
+    unit_service_type: Yup.string().nullable(),
+    sector: Yup.string().nullable(),
+    type_of_specialty_1: Yup.string().nullable(),
   });
 
   const defaultValues = useMemo(
@@ -44,6 +47,9 @@ export default function TableNewEditForm({ currentTable }) {
       name_english: currentTable?.name_english || '',
       country: currentTable?.country?._id || null,
       city: currentTable?.city?._id || null,
+      unit_service_type: currentTable?.unit_service_type || '',
+      sector: currentTable?.sector || '',
+      type_of_specialty_1: currentTable?.type_of_specialty_1 || '',
     }),
     [currentTable]
   );
@@ -114,6 +120,9 @@ export default function TableNewEditForm({ currentTable }) {
       name_english: currentTable?.name_english || '',
       country: currentTable?.country?._id || null,
       city: currentTable?.city?._id || null,
+      unit_service_type: currentTable?.unit_service_type || '',
+      sector: currentTable?.sector || '',
+      type_of_specialty_1: currentTable?.type_of_specialty_1 || '',
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -165,6 +174,18 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+              <RHFTextField
+                name="unit_service_type"
+                label="unit service type"
+              />
+              <RHFTextField
+                name="sector"
+                label="sector"
+              />
+              <RHFTextField
+                name="type_of_specialty_1"
+                label="specialty"
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
