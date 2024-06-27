@@ -47,7 +47,10 @@ export function fTimeText(date, newFormat, arabic) {
   }
 
   // const formattedDate = format(new Date(date), fm, arabic ? { locale: ar } : null);
-  const relativeTime = formatDistanceToNow(new Date(date), { addSuffix: true, locale: arabic ? ar : undefined });
+  const relativeTime = formatDistanceToNow(new Date(date), {
+    addSuffix: true,
+    locale: arabic ? ar : undefined,
+  });
 
   return `${relativeTime}`;
 }

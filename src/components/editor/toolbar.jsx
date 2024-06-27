@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { Button } from '@mui/material';
+
 import { StyledEditorToolbar } from './styles';
 
 // ----------------------------------------------------------------------

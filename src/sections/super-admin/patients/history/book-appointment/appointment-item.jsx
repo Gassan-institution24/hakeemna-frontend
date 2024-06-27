@@ -157,7 +157,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        { }
+        {}
         <MenuItem
           lang="ar"
           onClick={() => {

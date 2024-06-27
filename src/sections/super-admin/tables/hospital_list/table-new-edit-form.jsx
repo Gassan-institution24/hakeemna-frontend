@@ -174,18 +174,9 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFTextField
-                name="unit_service_type"
-                label="unit service type"
-              />
-              <RHFTextField
-                name="sector"
-                label="sector"
-              />
-              <RHFTextField
-                name="type_of_specialty_1"
-                label="specialty"
-              />
+              <RHFTextField name="unit_service_type" label="unit service type" />
+              <RHFTextField name="sector" label="sector" />
+              <RHFTextField name="type_of_specialty_1" label="specialty" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

@@ -20,13 +20,28 @@ import IncrementerButton from '../offers/common/incrementer-button';
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
-  const { name_english, name_arabic, price, currency, category, stakeholder, images, quantity, available } = row;
+  const {
+    name_english,
+    name_arabic,
+    price,
+    currency,
+    category,
+    stakeholder,
+    images,
+    quantity,
+    available,
+  } = row;
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar variant="rounded" alt={name_english} src={images?.[0]} sx={{ width: 64, height: 64, mr: 2 }} />
+        <Avatar
+          variant="rounded"
+          alt={name_english}
+          src={images?.[0]}
+          sx={{ width: 64, height: 64, mr: 2 }}
+        />
 
         <Stack spacing={0.5}>
           <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
@@ -38,9 +53,15 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             alignItems="center"
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
-            <Label sx={{ ml: 0.5 }}> {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english} </Label>
+            <Label sx={{ ml: 0.5 }}>
+              {' '}
+              {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}{' '}
+            </Label>
             <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
-            <Label sx={{ ml: 0.5 }}> {curLangAr ? category?.name_arabic : category?.name_english} </Label>
+            <Label sx={{ ml: 0.5 }}>
+              {' '}
+              {curLangAr ? category?.name_arabic : category?.name_english}{' '}
+            </Label>
           </Stack>
         </Stack>
       </TableCell>
@@ -48,7 +69,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
       <TableCell align="center">{fCurrency(price, currency?.symbol)}</TableCell>
 
       <TableCell align="rigth" sx={{ p: 2, textAlign: 'right' }}>
-        <Stack direction='column' alignItems='center'>
+        <Stack direction="column" alignItems="center">
           <IncrementerButton
             quantity={quantity}
             onDecrease={onDecrease}

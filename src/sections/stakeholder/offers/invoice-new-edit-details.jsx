@@ -18,7 +18,7 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditDetails() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   // const { currentLang } = useLocales();
   // const curLangAr = currentLang.value === 'ar';
 
@@ -67,7 +67,7 @@ export default function InvoiceNewEditDetails() {
               <RHFSelect
                 name={`products[${index}].product`}
                 size="small"
-                label={t("product")}
+                label={t('product')}
                 sx={{ maxWidth: '450px' }}
                 InputLabelProps={{ shrink: true }}
               >
@@ -82,7 +82,7 @@ export default function InvoiceNewEditDetails() {
                 size="small"
                 type="number"
                 name={`products[${index}].price`}
-                label={t("price")}
+                label={t('price')}
                 placeholder="0"
                 InputLabelProps={{ shrink: true }}
                 sx={{ maxWidth: { md: 150 } }}

@@ -83,9 +83,7 @@ const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
 const AppointmentsToday = lazy(() =>
   import('src/pages/employee/appointmentsToday/appintmentaToday')
 );
-const RecordPage = lazy(() =>
-  import('src/pages/employee/appointmentsToday/recordPage')
-);
+const RecordPage = lazy(() => import('src/pages/employee/appointmentsToday/recordPage'));
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));

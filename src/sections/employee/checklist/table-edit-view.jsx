@@ -19,12 +19,12 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetCheckList(id);
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t("update checklist")}
+        heading={t('update checklist')}
         links={[
           {
             name: t('dashboard'),

@@ -19,7 +19,7 @@ export default function CheckoutCartProductList({
   onIncreaseQuantity,
   onDecreaseQuantity,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'product', label: t('product') },
     { id: 'price', label: t('price') },

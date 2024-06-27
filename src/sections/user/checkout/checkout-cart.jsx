@@ -28,27 +28,31 @@ import CheckoutCartProductList from './checkout-cart-product-list';
 
 export default function CheckoutCart() {
   const checkout = useCheckoutContext();
-  const { user } = useAuthContext()
-  const { t } = useTranslate()
+  const { user } = useAuthContext();
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [note, setNote] = useState('')
+  const [note, setNote] = useState('');
 
   const empty = !checkout.items.length;
 
   const handleConfirmOrder = async () => {
     try {
-      await axiosInstance.post(endpoints.orders.all, { products: checkout.items, patient: user?.patient?._id, note })
-      checkout.onReset()
-      setNote('')
-      enqueueSnackbar(t('sent successfully'))
+      await axiosInstance.post(endpoints.orders.all, {
+        products: checkout.items,
+        patient: user?.patient?._id,
+        note,
+      });
+      checkout.onReset();
+      setNote('');
+      enqueueSnackbar(t('sent successfully'));
     } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' })
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
-  }
+  };
   return (
     <Stack>
       <Card sx={{ mb: 3 }}>
@@ -66,8 +70,8 @@ export default function CheckoutCart() {
 
         {empty ? (
           <EmptyContent
-            title={t("cart is empty!")}
-            description={t("Look like you have no items in your shopping cart.")}
+            title={t('cart is empty!')}
+            description={t('Look like you have no items in your shopping cart.')}
             imgUrl="/assets/icons/empty/ic_cart.svg"
             sx={{ pt: 5, pb: 10 }}
           />
@@ -81,15 +85,23 @@ export default function CheckoutCart() {
         )}
         <Divider sx={{ my: 3 }} />
         <Stack sx={{ px: 3, mb: 3 }}>
-          <TextField fullWidth label={t('note')} multiline rows={2} onChange={(e) => setNote(e.target.value)} />
+          <TextField
+            fullWidth
+            label={t('note')}
+            multiline
+            rows={2}
+            onChange={(e) => setNote(e.target.value)}
+          />
         </Stack>
       </Card>
-      <Stack alignItems='start' p={2}>
+      <Stack alignItems="start" p={2}>
         <Button
           component={RouterLink}
           href={paths.dashboard.user.products.root}
           color="inherit"
-          startIcon={<Iconify icon={curLangAr ? "eva:arrow-ios-forward-fill" : "eva:arrow-ios-back-fill"} />}
+          startIcon={
+            <Iconify icon={curLangAr ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-back-fill'} />
+          }
         >
           {t('continue shopping')}
         </Button>

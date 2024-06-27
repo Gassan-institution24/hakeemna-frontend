@@ -28,13 +28,13 @@ export default function OrderDetailsItems({
   subTotal,
   totalAmount,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [quantities, setQuantities] = useState({})
+  const [quantities, setQuantities] = useState({});
 
-  const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0)
+  const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -57,9 +57,7 @@ export default function OrderDetailsItems({
 
   return (
     <Card>
-      <CardHeader
-        title={t("details")}
-      />
+      <CardHeader title={t('details')} />
 
       <Stack
         sx={{
@@ -78,11 +76,19 @@ export default function OrderDetailsItems({
                 borderBottom: (theme) => `dashed 2px ${theme.palette.background.neutral}`,
               }}
             >
-              <Avatar src={item?.product?.images?.[0]} variant="rounded" sx={{ width: 48, height: 48, mr: 2 }} />
+              <Avatar
+                src={item?.product?.images?.[0]}
+                variant="rounded"
+                sx={{ width: 48, height: 48, mr: 2 }}
+              />
 
               <ListItemText
                 primary={curLangAr ? item?.product?.name_arabic : item?.product?.name_english}
-                secondary={curLangAr ? item?.product?.category?.name_arabic : item?.product?.category?.name_english}
+                secondary={
+                  curLangAr
+                    ? item?.product?.category?.name_arabic
+                    : item?.product?.category?.name_english
+                }
                 primaryTypographyProps={{
                   typography: 'body2',
                 }}
@@ -93,38 +99,44 @@ export default function OrderDetailsItems({
                 }}
               />
 
-              {!quantities[item._id] &&
-                <Box onClick={() => setQuantities({ [item._id]: item.real_delieverd_quantity })}
-                  sx={{ typography: 'body2' }}>x{item.real_delieverd_quantity}</Box>
-              }
-              {quantities[item._id] && <TextField
-                sx={{ width: 140 }}
-                type='number'
-                size='small'
-                autoFocus
-                value={quantities[item._id]}
-                onChange={(e) => setQuantities({ [item._id]: e.target.value })}
-                onKeyDown={handleKeyDown}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => {
-                        onChangeQuantity(quantities)
-                        setQuantities({})
-                      }} color='success' edge="end">
-                        <Iconify
-                          icon='ic:baseline-check'
-                        />
-                      </IconButton>
-                      <IconButton onClick={() => setQuantities([])} edge="end">
-                        <Iconify
-                          icon='ic:twotone-close'
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />}
+              {!quantities[item._id] && (
+                <Box
+                  onClick={() => setQuantities({ [item._id]: item.real_delieverd_quantity })}
+                  sx={{ typography: 'body2' }}
+                >
+                  x{item.real_delieverd_quantity}
+                </Box>
+              )}
+              {quantities[item._id] && (
+                <TextField
+                  sx={{ width: 140 }}
+                  type="number"
+                  size="small"
+                  autoFocus
+                  value={quantities[item._id]}
+                  onChange={(e) => setQuantities({ [item._id]: e.target.value })}
+                  onKeyDown={handleKeyDown}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            onChangeQuantity(quantities);
+                            setQuantities({});
+                          }}
+                          color="success"
+                          edge="end"
+                        >
+                          <Iconify icon="ic:baseline-check" />
+                        </IconButton>
+                        <IconButton onClick={() => setQuantities([])} edge="end">
+                          <Iconify icon="ic:twotone-close" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
 
               <Box sx={{ width: 110, textAlign: 'right', typography: 'subtitle2' }}>
                 {fCurrency(item.price, item.currency?.symbol)}
@@ -134,8 +146,8 @@ export default function OrderDetailsItems({
         </Scrollbar>
 
         {renderTotal}
-      </Stack >
-    </Card >
+      </Stack>
+    </Card>
   );
 }
 

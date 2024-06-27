@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import { Select, MenuItem, TableRow, TableCell } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -21,7 +22,6 @@ import Scrollbar from 'src/components/scrollbar';
 // import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { MenuItem, Select, TableCell, TableRow } from '@mui/material';
 import {
   useTable,
   emptyRows,
@@ -235,7 +235,7 @@ export default function CompaniesTableView() {
 
         <TableContainer>
           <Scrollbar sx={{ height: '60vh', position: 'relative' }}>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'} >
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
@@ -249,41 +249,81 @@ export default function CompaniesTableView() {
               <TableBody sx={{ position: 'relative' }}>
                 <TableRow sx={{ position: 'sticky', top: 57, backgroundColor: 'white' }}>
                   <TableCell />
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.USType} onChange={(e) => handleFilters('USType', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueUnitServiceTypes.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.USType}
+                      onChange={(e) => handleFilters('USType', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueUnitServiceTypes.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
                   <TableCell />
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.city} onChange={(e) => handleFilters('city', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueCities.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.city}
+                      onChange={(e) => handleFilters('city', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueCities.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
                   <TableCell />
                   <TableCell />
                   <TableCell />
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.sector} onChange={(e) => handleFilters('sector', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueSectors.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.sector}
+                      onChange={(e) => handleFilters('sector', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueSectors.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
                   <TableCell />
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.province} onChange={(e) => handleFilters('province', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueProvince.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.province}
+                      onChange={(e) => handleFilters('province', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueProvince.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
                   <TableCell />
@@ -291,20 +331,40 @@ export default function CompaniesTableView() {
                   <TableCell />
                   <TableCell />
                   <TableCell />
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.speciality1} onChange={(e) => handleFilters('speciality1', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueSpecialities1.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.speciality1}
+                      onChange={(e) => handleFilters('speciality1', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueSpecialities1.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
-                  <TableCell >
-                    <Select fullWidth size='small' value={filters.speciality2} onChange={(e) => handleFilters('speciality2', e.target.value)}>
-                      <MenuItem value=''>all</MenuItem>
-                      {uniqueSpecialities2.map((one, index) => (
-                        one && <MenuItem key={index} value={one}>{one}</MenuItem>
-                      ))}
+                  <TableCell>
+                    <Select
+                      fullWidth
+                      size="small"
+                      value={filters.speciality2}
+                      onChange={(e) => handleFilters('speciality2', e.target.value)}
+                    >
+                      <MenuItem value="">all</MenuItem>
+                      {uniqueSpecialities2.map(
+                        (one, index) =>
+                          one && (
+                            <MenuItem key={index} value={one}>
+                              {one}
+                            </MenuItem>
+                          )
+                      )}
                     </Select>
                   </TableCell>
                 </TableRow>
@@ -395,27 +455,33 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
   if (USType) {
     inputData = inputData.filter(
-      (data) => data.USType?.toLowerCase().indexOf(USType.toLowerCase()) !== -1)
+      (data) => data.USType?.toLowerCase().indexOf(USType.toLowerCase()) !== -1
+    );
   }
   if (city) {
     inputData = inputData.filter(
-      (data) => data.city?.toLowerCase().indexOf(city.toLowerCase()) !== -1)
+      (data) => data.city?.toLowerCase().indexOf(city.toLowerCase()) !== -1
+    );
   }
   if (sector) {
     inputData = inputData.filter(
-      (data) => data.sector?.toLowerCase().indexOf(sector.toLowerCase()) !== -1)
+      (data) => data.sector?.toLowerCase().indexOf(sector.toLowerCase()) !== -1
+    );
   }
   if (province) {
     inputData = inputData.filter(
-      (data) => data.province?.toLowerCase().indexOf(province.toLowerCase()) !== -1)
+      (data) => data.province?.toLowerCase().indexOf(province.toLowerCase()) !== -1
+    );
   }
   if (speciality1) {
     inputData = inputData.filter(
-      (data) => data.type_of_specialty_1?.toLowerCase().indexOf(speciality1.toLowerCase()) !== -1)
+      (data) => data.type_of_specialty_1?.toLowerCase().indexOf(speciality1.toLowerCase()) !== -1
+    );
   }
   if (speciality2) {
     inputData = inputData.filter(
-      (data) => data.type_of_specialty_2?.toLowerCase().indexOf(speciality2.toLowerCase()) !== -1)
+      (data) => data.type_of_specialty_2?.toLowerCase().indexOf(speciality2.toLowerCase()) !== -1
+    );
   }
 
   // if (status !== 'all') {

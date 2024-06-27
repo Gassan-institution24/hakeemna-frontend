@@ -26,7 +26,7 @@ export default function OrderDetailsToolbar({
   statusOptions,
   onChangeStatus,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const popover = usePopover();
@@ -42,12 +42,15 @@ export default function OrderDetailsToolbar({
       >
         <Stack spacing={1} direction="row" alignItems="flex-start">
           <IconButton component={RouterLink} href={backLink}>
-            <Iconify icon={curLangAr ? "eva:arrow-ios-forward-fill" : "eva:arrow-ios-back-fill"} />
+            <Iconify icon={curLangAr ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-back-fill'} />
           </IconButton>
 
           <Stack spacing={0.5}>
             <Stack spacing={1} direction="row" alignItems="center">
-              <Typography variant="h4"> {t('order')} {orderNumber} </Typography>
+              <Typography variant="h4">
+                {' '}
+                {t('order')} {orderNumber}{' '}
+              </Typography>
               <Label
                 variant="soft"
                 color={

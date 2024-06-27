@@ -39,7 +39,7 @@ export default function NewEditForm({ currentRow }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -151,8 +151,16 @@ export default function NewEditForm({ currentRow }) {
         await axiosInstance.patch(endpoints.checklist.one(currentRow._id), data);
         enqueueSnackbar(t('updated successfuly'));
       } else {
-        delete data._id
-        const dataToCreate = { ...data, questions: data.questions.map((one) => ({ question: one?.question, answer_way: one?.answer_way, options: one?.options })), employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id }
+        delete data._id;
+        const dataToCreate = {
+          ...data,
+          questions: data.questions.map((one) => ({
+            question: one?.question,
+            answer_way: one?.answer_way,
+            options: one?.options,
+          })),
+          employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+        };
         await axiosInstance.post(endpoints.checklist.all, dataToCreate);
         enqueueSnackbar(t('created successfuly'));
       }
@@ -175,56 +183,61 @@ export default function NewEditForm({ currentRow }) {
             alignItems="center"
           >
             <Stack spacing={2} sx={{ width: 1 }} alignItems="center" justifyContent="flex-start">
-              <RHFTextField name="title" label={t("title")} sx={{ width: { md: 0.8, xs: 1 } }} />
+              <RHFTextField name="title" label={t('title')} sx={{ width: { md: 0.8, xs: 1 } }} />
               <RHFTextField
                 size="small"
                 name="description"
-                label={t("description")}
+                label={t('description')}
                 sx={{ width: { md: 0.7, xs: 1 } }}
               />
             </Stack>
 
-            <Stack sx={{ width: { md: 0.5, xs: 1 }, border: '0.5px dotted black', padding: 2 }} justifyContent="flex-end">
-              <Typography variant='caption' mb={2}>{t('availability and privacy')}:</Typography>
+            <Stack
+              sx={{ width: { md: 0.5, xs: 1 }, border: '0.5px dotted black', padding: 2 }}
+              justifyContent="flex-end"
+            >
+              <Typography variant="caption" mb={2}>
+                {t('availability and privacy')}:
+              </Typography>
               <RHFCheckbox
                 name="general"
-                label={t("available for all hakeemna community")}
+                label={t('available for all hakeemna community')}
                 onChange={() => setValue('general', !values.general)}
               />
               <RHFCheckbox
                 name="unit_service"
-                label={t("available for your unit of service employees")}
+                label={t('available for your unit of service employees')}
                 onChange={() =>
                   setValue(
                     'unit_service',
                     values.unit_service
                       ? null
                       : user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                        ?.unit_service?._id
+                          ?.unit_service?._id
                   )
                 }
               />
               {user?.employee?.employee_engagements[user?.employee.selected_engagement]
                 ?.department && (
-                  <RHFCheckbox
-                    name="department"
-                    label={t("available for your department employees")}
-                    onChange={() =>
-                      setValue(
-                        'department',
-                        values.department
-                          ? null
-                          : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                <RHFCheckbox
+                  name="department"
+                  label={t('available for your department employees')}
+                  onChange={() =>
+                    setValue(
+                      'department',
+                      values.department
+                        ? null
+                        : user?.employee?.employee_engagements[user?.employee.selected_engagement]
                             ?.department?._id
-                      )
-                    }
-                  />
-                )}
+                    )
+                  }
+                />
+              )}
 
               <RHFSelect
                 size="small"
                 name="work_group"
-                label={t("available for work group")}
+                label={t('available for work group')}
                 sx={{ width: { md: 1, xs: 1 }, mt: 2 }}
               >
                 <MenuItem sx={{ textTransform: 'capitalize' }} value={null}>
@@ -268,14 +281,14 @@ export default function NewEditForm({ currentRow }) {
                                 <RHFTextField
                                   size="small"
                                   name={`questions[${index}].question`}
-                                  label={t("question")}
+                                  label={t('question')}
                                   InputLabelProps={{ shrink: true }}
                                   sx={{ width: 1 }}
                                 />
                                 <RHFSelect
                                   name={`questions[${index}].answer_way`}
                                   size="small"
-                                  label={t("answer way")}
+                                  label={t('answer way')}
                                   InputLabelProps={{ shrink: true }}
                                   sx={{ width: { md: 0.5, xs: 1 } }}
                                 >
@@ -288,7 +301,7 @@ export default function NewEditForm({ currentRow }) {
                                 <RHFTextField
                                   size="small"
                                   name={`questions[${index}].category`}
-                                  label={t("category")}
+                                  label={t('category')}
                                   InputLabelProps={{ shrink: true }}
                                   sx={{ width: { md: 0.5, xs: 1 } }}
                                 />
@@ -357,7 +370,7 @@ NewEditForm.propTypes = {
 
 function QuestionOptions({ index }) {
   const { control } = useFormContext();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const { fields, append, remove } = useFieldArray({
     control,

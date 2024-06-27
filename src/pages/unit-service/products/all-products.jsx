@@ -8,18 +8,18 @@ import OffersHomeView from 'src/sections/unit-service/offers/view/all-products';
 // ----------------------------------------------------------------------
 
 export default function OffersHomePage() {
-    const { user } = useAuthContext();
-    const serviceUnitName =
-        user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-            ?.name_english;
-    return (
-        <ACLGuard category="unit_service" subcategory="offers" acl="read">
-            <Helmet>
-                <title>{serviceUnitName || 'unit of service'} : Products </title>
-                <meta name="description" content="meta" />
-            </Helmet>
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
+  return (
+    <ACLGuard category="unit_service" subcategory="offers" acl="read">
+      <Helmet>
+        <title>{serviceUnitName || 'unit of service'} : Products </title>
+        <meta name="description" content="meta" />
+      </Helmet>
 
-            <OffersHomeView />
-        </ACLGuard>
-    );
+      <OffersHomeView />
+    </ACLGuard>
+  );
 }

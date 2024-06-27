@@ -75,6 +75,7 @@ export default function ServicesTableView() {
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'name', label: t('name') },
+    { id: 'description', label: t('description') },
     { id: 'work_shift', label: t('work shift') },
     { id: 'Measurement_type', label: t('measurment type') },
     { id: 'Price_per_unit', label: t('price per unit') },

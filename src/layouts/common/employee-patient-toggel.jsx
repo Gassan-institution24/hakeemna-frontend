@@ -56,7 +56,7 @@ export default function EmployeePatientToggel() {
       whileHover="hover"
       loadingIndicator="Loading…"
       variants={varHover(1.05)}
-    onClick={handleChangeRole}
+      onClick={handleChangeRole}
       sx={{
         p: 0,
         m: 2,

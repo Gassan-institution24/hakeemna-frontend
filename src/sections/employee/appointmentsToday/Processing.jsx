@@ -18,12 +18,13 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import {
+  Box,
   Card,
   Paper,
   Button,
   Dialog,
+  Switch,
   Divider,
-  Tooltip,
   MenuItem,
   TableRow,
   TableCell,
@@ -36,8 +37,6 @@ import {
   DialogContent,
   useMediaQuery,
   TableContainer,
-  Switch,
-  Box,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';

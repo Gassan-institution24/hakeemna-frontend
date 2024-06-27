@@ -164,7 +164,10 @@ export default function InvoiceNewEditForm({ currentOffer }) {
       to_patients: currentOffer?.to_patients || false,
       to_unit_service: currentOffer?.to_unit_service || false,
 
-      products: currentOffer?.products.map((one) => ({ product: one.product?._id, price: one.price })) || [
+      products: currentOffer?.products.map((one) => ({
+        product: one.product?._id,
+        price: one.price,
+      })) || [
         {
           product: null,
           price: 0,
@@ -194,7 +197,7 @@ export default function InvoiceNewEditForm({ currentOffer }) {
                 defaultChecked
               />
             }
-            label={t("publish")}
+            label={t('publish')}
             sx={{ flexGrow: 1, pl: 3 }}
           />
 

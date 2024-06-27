@@ -24,7 +24,7 @@ export default function AppointmentToolbar({
   const { t } = useTranslate();
 
   const popover = usePopover();
-  
+
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);

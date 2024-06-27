@@ -22,7 +22,7 @@ import Scrollbar from 'src/components/scrollbar';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsHistory({ history }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -50,7 +50,9 @@ export default function OrderDetailsHistory({ history }) {
             </TimelineSeparator>
 
             <TimelineContent>
-              <Typography variant="subtitle2">{curLangAr ? item.arabic_note || item.note  : item.note}</Typography>
+              <Typography variant="subtitle2">
+                {curLangAr ? item.arabic_note || item.note : item.note}
+              </Typography>
               <Stack direction="row" gap={5}>
                 <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
                   {fDateTime(item.date)}
@@ -68,7 +70,7 @@ export default function OrderDetailsHistory({ history }) {
 
   return (
     <Card>
-      <CardHeader title={t("history")} />
+      <CardHeader title={t('history')} />
       <Scrollbar
         spacing={3}
         alignItems={{ md: 'flex-start' }}

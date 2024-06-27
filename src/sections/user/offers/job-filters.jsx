@@ -41,7 +41,7 @@ export default function JobFilters({
   experienceOptions,
   employmentTypeOptions,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const handleFilterEmploymentTypes = useCallback(
     (newValue) => {
