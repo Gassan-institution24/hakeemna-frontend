@@ -86,12 +86,10 @@ export default function TestPage() {
         {CheckListData?.map((info, keyI) => (
           <Box key={keyI} sx={{ mb: 2 }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2, mb: 2 }}>
-             
-                <Typography>{info?.title}</Typography>
-                <Typography sx={{ p: 1, bgcolor: 'lightgray', color: 'white', width: '100%',mt:2 }}>
-                  {info?.description}
-                </Typography>
-       
+              <Typography>{info?.title}</Typography>
+              <Typography sx={{ p: 1, bgcolor: 'lightgray', color: 'white', width: '100%', mt: 2 }}>
+                {info?.description}
+              </Typography>
             </Box>
             {info?.questions?.map((questions, ii) => (
               <Box key={ii} sx={{ display: 'block' }}>

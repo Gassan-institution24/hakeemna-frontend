@@ -20,7 +20,6 @@ import {
   Paper,
   Button,
   Dialog,
-  Switch,
   Divider,
   MenuItem,
   Typography,
