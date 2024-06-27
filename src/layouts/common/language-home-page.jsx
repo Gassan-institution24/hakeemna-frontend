@@ -1,14 +1,12 @@
-import { m } from 'framer-motion';
 import { useCallback } from 'react';
 
 import { Box } from '@mui/system';
+import { Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { Button, Divider, Typography } from '@mui/material';
 
 import { useTranslate, useLocalesHome } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -37,7 +35,7 @@ export default function Language() {
         // whileTap="tap"
         // whileHover="hover"
         // variants={varHover(1.05)}
-        lang='en'
+        lang="en"
         onClick={() => handleChangeLang('en')}
         sx={{
           height: 20,

@@ -55,7 +55,7 @@ export default function OrdersView() {
 
   const searchParams = useSearchParams();
 
-  const search = searchParams.get('name')
+  const search = searchParams.get('name');
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -104,9 +104,9 @@ export default function OrdersView() {
 
   useEffect(() => {
     if (search) {
-      setFilters((prev) => ({ ...prev, name: search }))
+      setFilters((prev) => ({ ...prev, name: search }));
     }
-  }, [search])
+  }, [search]);
 
   return (
     <Container maxWidth="xl">

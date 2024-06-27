@@ -37,6 +37,7 @@ export const paths = {
     login: `/login`,
     register: `/register`,
     registersu: `/register/serviceunit`,
+    stakeholderRegister: `/register/stakeholder`,
     verify: (email) => `/verify?email=${email}`,
     newPassword: `/new-password`,
     forgotPassword: `/forgot-password`,
@@ -667,6 +668,7 @@ export const paths = {
     },
     patients: {
       all: `${ROOTS.SUPERADMIN}/us/patients`,
+      new: `${ROOTS.SUPERADMIN}/us/patients/new`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/patients/${id}`,
     },
     orders: {

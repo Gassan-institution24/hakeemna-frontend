@@ -40,7 +40,6 @@ export default function TableNewEditForm() {
 
   const { data } = useGetWorkGroup(wgid);
 
-
   const { user } = useAuthContext();
 
   const mdUp = useResponsive('up', 'md');

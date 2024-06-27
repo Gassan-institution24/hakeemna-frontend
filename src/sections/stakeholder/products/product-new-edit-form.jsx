@@ -29,7 +29,12 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetProductCategories } from 'src/api/product';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFUpload, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
+import FormProvider, {
+  RHFSelect,
+  RHFUpload,
+  RHFCheckbox,
+  RHFTextField,
+} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +42,7 @@ export default function ProductNewEditForm({ currentProduct }) {
   const router = useRouter();
   const { user } = useAuthContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -195,19 +200,24 @@ export default function ProductNewEditForm({ currentProduct }) {
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title={t("details")} />}
+          {!mdUp && <CardHeader title={t('details')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField name="name_english" label={t("product Name")} />
-            <RHFTextField name="name_arabic" label={t("product Name in arabic")} />
+            <RHFTextField name="name_english" label={t('product Name')} />
+            <RHFTextField name="name_arabic" label={t('product Name in arabic')} />
 
             <RHFTextField
               name="description_english"
-              label={t("english description")}
+              label={t('english description')}
               multiline
               rows={4}
             />
-            <RHFTextField name="description_arabic" label={t("arabic description")} multiline rows={4} />
+            <RHFTextField
+              name="description_arabic"
+              label={t('arabic description')}
+              multiline
+              rows={4}
+            />
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">{t('images')}</Typography>
@@ -242,7 +252,7 @@ export default function ProductNewEditForm({ currentProduct }) {
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title={t("properties")} />}
+          {!mdUp && <CardHeader title={t('properties')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Box
@@ -266,13 +276,13 @@ export default function ProductNewEditForm({ currentProduct }) {
               />
               <RHFTextField
                 name="quantity"
-                label={t("quantity")}
+                label={t('quantity')}
                 placeholder="0"
                 type="number"
                 InputLabelProps={{ shrink: true }}
               />
 
-              <RHFSelect name="category" label={t("category")} InputLabelProps={{ shrink: true }}>
+              <RHFSelect name="category" label={t('category')} InputLabelProps={{ shrink: true }}>
                 {productCat.map((category) => (
                   <MenuItem key={category._id} value={category._id}>
                     {category.name_english}
@@ -301,12 +311,12 @@ export default function ProductNewEditForm({ currentProduct }) {
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title={t("pricing")} />}
+          {!mdUp && <CardHeader title={t('pricing')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField
               name="price"
-              label={t("price")}
+              label={t('price')}
               placeholder="0.00"
               type="number"
               InputLabelProps={{ shrink: true }}
@@ -320,7 +330,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                 ),
               }}
             />
-            <RHFSelect name="currency" label={t("currency")} InputLabelProps={{ shrink: true }}>
+            <RHFSelect name="currency" label={t('currency')} InputLabelProps={{ shrink: true }}>
               {currencies.map((one) => (
                 <MenuItem key={one._id} value={one._id}>
                   {one.symbol || one.name_english}
@@ -347,7 +357,7 @@ export default function ProductNewEditForm({ currentProduct }) {
               defaultChecked
             />
           }
-          label={t("publish")}
+          label={t('publish')}
           sx={{ flexGrow: 1, pl: 3 }}
         />
 

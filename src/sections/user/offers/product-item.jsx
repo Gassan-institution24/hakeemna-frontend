@@ -21,7 +21,6 @@ import Iconify from 'src/components/iconify';
 
 import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
 
-
 // ----------------------------------------------------------------------
 
 export default function ProductItem({ product }) {
@@ -46,7 +45,6 @@ export default function ProductItem({ product }) {
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
 
   const linkTo = paths.dashboard.user.products.info(_id);
 
@@ -126,25 +124,28 @@ export default function ProductItem({ product }) {
 
   const renderContent = (
     <Stack spacing={2.5} sx={{ p: 3, pt: 2 }}>
-      <Stack direction='row' justifyContent='space-between' sx={{ width: 1 }}>
+      <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
         <Stack>
           <Link component={RouterLink} href={linkTo} color="inherit" variant="subtitle1" noWrap>
             {curLangAr ? name_arabic : name_english}
           </Link>
-          <Typography variant="caption" pt={0} >
+          <Typography variant="caption" pt={0}>
             {curLangAr ? description_arabic : description_english}
           </Typography>
         </Stack>
-        {category?.name_english && <Typography variant="body2" pt={0} >
-          {curLangAr ? category?.name_arabic : category?.name_english}
-        </Typography>}
+        {category?.name_english && (
+          <Typography variant="body2" pt={0}>
+            {curLangAr ? category?.name_arabic : category?.name_english}
+          </Typography>
+        )}
       </Stack>
-      {stakeholder?.name_english && <Typography variant="body2" pt={0} >
-        {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
-      </Typography>}
+      {stakeholder?.name_english && (
+        <Typography variant="body2" pt={0}>
+          {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
+        </Typography>
+      )}
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-
         <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
           {priceSale && (
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>

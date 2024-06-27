@@ -56,12 +56,13 @@ export default function NotificationItem({ notification, handleClick }) {
         >
           <Box
             component="img"
-            src={`/assets/icons/notification/${(notification.type === 'error' && 'error') ||
+            src={`/assets/icons/notification/${
+              (notification.type === 'error' && 'error') ||
               (notification.type === 'created' && 'created') ||
               (notification.type === 'updated' && 'updated') ||
               (notification.type === 'request' && 'request') ||
               (notification.type === 'delivery' && 'ic_delivery')
-              }.svg`}
+            }.svg`}
             sx={{ width: 24, height: 24 }}
           />
         </Stack>

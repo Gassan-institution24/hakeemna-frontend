@@ -68,9 +68,7 @@ export default function AppointmentsTableRow({
         <TableCell align="center">
           {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
-        <TableCell align="center">
-          {products?.length}
-        </TableCell>
+        <TableCell align="center">{products?.length}</TableCell>
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
           <Label

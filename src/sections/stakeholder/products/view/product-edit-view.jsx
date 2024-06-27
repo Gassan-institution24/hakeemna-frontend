@@ -16,14 +16,14 @@ import ProductNewEditForm from '../product-new-edit-form';
 
 export default function ProductEditView({ id }) {
   const settings = useSettingsContext();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const { product: currentProduct } = useGetProduct(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("edit Product")}
+        heading={t('edit Product')}
         links={[
           { name: t('dashboard'), href: paths.stakeholder.root },
           {

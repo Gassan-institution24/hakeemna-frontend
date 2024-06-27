@@ -45,10 +45,11 @@ const SickLeave = lazy(() => import('src/sections/user/view/user-sickLeave-view'
 const OrdersPage = lazy(() => import('src/pages/dashboard/user/orders/list'));
 const OrdersDetailsPage = lazy(() => import('src/pages/dashboard/user/orders/details'));
 
-
 // PRODUCTS
 const AllProductsPage = lazy(() => import('src/pages/dashboard/user/products/all-products'));
-const ProductsStakeholdersPage = lazy(() => import('src/pages/dashboard/user/products/stakeholders'));
+const ProductsStakeholdersPage = lazy(() =>
+  import('src/pages/dashboard/user/products/stakeholders')
+);
 const StakeholderProductsPage = lazy(() =>
   import('src/pages/dashboard/user/products/stakeholder-products')
 );

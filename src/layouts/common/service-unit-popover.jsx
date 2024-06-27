@@ -111,7 +111,7 @@ export default function ServiceUnitPopover() {
       <CustomPopover
         sx={{
           maxHeight: '50vh',
-          overflow: user?.employee?.employee_engagements?.length > 2 ? 'scroll' : 'hidden'
+          overflow: user?.employee?.employee_engagements?.length > 2 ? 'scroll' : 'hidden',
         }}
         open={popover.open}
         onClose={popover.onClose}

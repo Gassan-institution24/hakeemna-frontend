@@ -32,6 +32,8 @@ export default function TableDetailsRow({
     code,
     name_english,
     name_arabic,
+    description_english,
+    description_arabic,
     work_shift,
     Price_per_unit,
     currency,
@@ -67,6 +69,7 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell align="center">{curLangAr ? description_arabic : description_english}</TableCell>
       <TableCell align="center">
         {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
       </TableCell>

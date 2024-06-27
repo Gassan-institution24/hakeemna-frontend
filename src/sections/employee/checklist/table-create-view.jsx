@@ -16,7 +16,7 @@ export default function TableCreateView() {
     setCurrentTab(newValue);
   }, []);
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const TABS = [
     {
@@ -30,7 +30,6 @@ export default function TableCreateView() {
   ];
   return (
     <Container maxWidth="xl">
-
       <Tabs
         value={currentTab}
         onChange={handleChangeTab}
@@ -44,7 +43,6 @@ export default function TableCreateView() {
       </Tabs>
       {currentTab === 'select' && <SelectChecklistTableView />}
       {currentTab === 'create' && <TableNewEditForm />}
-
     </Container>
   );
 }

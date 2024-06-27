@@ -4,12 +4,12 @@ import {
   Box,
   Card,
   Paper,
+  Table,
   Button,
   Switch,
   TableRow,
   TableCell,
   TableBody,
-  Table,
   TableHead,
   TextField,
   TableContainer,
@@ -17,13 +17,14 @@ import {
 
 import { useParams } from 'src/routes/hooks';
 
+import { fMonth, fTimeText } from 'src/utils/format-time';
+
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetPatientHistoryData,
   useGetOneEntranceManagement,
   useGetPatientHistoryDataInSu,
 } from 'src/api';
-import { fMonth, fTimeText } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 

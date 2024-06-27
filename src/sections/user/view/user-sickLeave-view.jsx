@@ -10,9 +10,8 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import SickLeaves from '../sickLeave';
 // ----------------------------------------------------------------------
 
-
 export default function SickLeave() {
-  const { user } = useAuthContext(); 
+  const { user } = useAuthContext();
   const { t } = useTranslate();
 
   return (

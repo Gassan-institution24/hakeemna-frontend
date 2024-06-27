@@ -102,10 +102,7 @@ export default function Specialities() {
             onClick={() => handleViewRow(data?._id)}
           >
             {/* {data?.specialitiesimge && ( */}
-            <Image
-              src={data?.speciality_image}
-              sx={{ width: 70, height: 70, mb: 2 }}
-            />
+            <Image src={data?.speciality_image} sx={{ width: 70, height: 70, mb: 2 }} />
             {/* // )} */}
             <Typography sx={{ fontWeight: 600 }}>
               {curLangAr ? data?.name_arabic : data?.name_english}

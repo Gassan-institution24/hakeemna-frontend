@@ -71,11 +71,11 @@ export default function NewEditManyForm() {
     // const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
 
     // if (englishRegex.test(event.target.value)) {
-      setData((prev) => {
-        const updated = [...prev];
-        updated[index] = { ...updated[index], [event.target.name]: event.target.value };
-        return updated;
-      });
+    setData((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [event.target.name]: event.target.value };
+      return updated;
+    });
     // }
   };
 
@@ -316,9 +316,11 @@ export default function NewEditManyForm() {
                         </TableCell>
                         <TableCell align="center">
                           <TableCell padding="checkbox">
-                            <Checkbox onChange={(e) => handleEnglishInputChange(index, e)}
+                            <Checkbox
+                              onChange={(e) => handleEnglishInputChange(index, e)}
                               value={one.member_tpa}
-                              name="member_tpa" />
+                              name="member_tpa"
+                            />
                           </TableCell>
                           {/* <Check
                             size="small"

@@ -22,31 +22,42 @@ import OrderDetailsHistory from '../order-details-history';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const ORDER_STATUS_OPTIONS = [
     { value: 'pending', label: t('pending') },
     { value: 'processing', label: t('processing') },
     { value: 'completed', label: t('completed') },
     { value: 'cancelled', label: t('cancelled') },
-  ]
+  ];
 
+  const { id } = useParams();
+  const { orderData, refetch } = useGetOrder(id);
 
-  const { id } = useParams()
-  const { orderData, refetch } = useGetOrder(id)
+  const handleChangeStatus = useCallback(
+    async (newValue) => {
+      await axiosInstance.patch(endpoints.orders.one(id), { status: newValue });
+      refetch();
+    },
+    [id, refetch]
+  );
 
-  const handleChangeStatus = useCallback(async (newValue) => {
-    await axiosInstance.patch(endpoints.orders.one(id), { status: newValue })
-    refetch()
-  }, [id, refetch]);
-
-  const handleChangeQuantity = useCallback(async (newValue) => {
-    await axiosInstance.patch(endpoints.orders.one(id), { products: orderData.products.map((one) => Object.keys(newValue).includes(one._id) ? ({ ...one, real_delieverd_quantity: newValue[one._id] }) : one) })
-    refetch()
-  }, [id, refetch, orderData]);
+  const handleChangeQuantity = useCallback(
+    async (newValue) => {
+      await axiosInstance.patch(endpoints.orders.one(id), {
+        products: orderData.products.map((one) =>
+          Object.keys(newValue).includes(one._id)
+            ? { ...one, real_delieverd_quantity: newValue[one._id] }
+            : one
+        ),
+      });
+      refetch();
+    },
+    [id, refetch, orderData]
+  );
 
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth="xl">
       <OrderDetailsToolbar
         backLink={paths.stakeholder.orders.root}
         orderNumber={orderData?.sequence_number}

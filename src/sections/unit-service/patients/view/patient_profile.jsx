@@ -14,8 +14,8 @@ import { useGetPatient, useGetPatientInsurance } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-import AppointmentsHistory from '../appointment-history/appoint-history';
 import MedicalAnalysis from '../medical-analysis';
+import AppointmentsHistory from '../appointment-history/appoint-history';
 
 // ----------------------------------------------------------------------
 

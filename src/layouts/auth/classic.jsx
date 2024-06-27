@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
-import {Hidden,Typography} from '@mui/material/';
+import { Hidden, Typography } from '@mui/material/';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
