@@ -24,8 +24,8 @@ export function useGetMedRecordById(id) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetMedRecord(id,id2) {
-  const URL = endpoints.medRecord.two(id,id2);
+export function useGetMedRecord(id, id2) {
+  const URL = endpoints.medRecord.two(id, id2);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

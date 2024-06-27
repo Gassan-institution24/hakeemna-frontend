@@ -333,12 +333,20 @@ export function useNavData() {
         navItemId: 'USProductsNav',
         children: [
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'read',
+            }),
             title: t('all products'),
             path: paths.unitservice.products.all,
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'read',
+            }),
             title: t('suppliers'),
             path: paths.unitservice.products.stakeholder.root,
           },

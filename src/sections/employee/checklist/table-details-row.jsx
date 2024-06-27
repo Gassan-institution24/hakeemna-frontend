@@ -33,7 +33,7 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
   const popover = usePopover();
   const DDL = usePopover();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -44,7 +44,9 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
       </TableCell>
 
       <TableCell align="center">{title}</TableCell>
-      <TableCell align="center">{curLangAr ? speciality?.name_arabic : speciality?.name_english}</TableCell>
+      <TableCell align="center">
+        {curLangAr ? speciality?.name_arabic : speciality?.name_english}
+      </TableCell>
       <TableCell align="center">{description}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

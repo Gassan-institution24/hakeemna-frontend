@@ -209,6 +209,7 @@ const OrdersDetailsPage = lazy(() => import('src/pages/unit-service/orders/detai
 // PATIENTS
 const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
+const PatientNewPage = lazy(() => import('src/pages/unit-service/patients/new-patient'));
 
 // PRODUCTS
 const AllProductsPage = lazy(() => import('src/pages/unit-service/products/all-products'));
@@ -477,6 +478,7 @@ export const unitServiceDashboardRoutes = [
         path: 'patients',
         children: [
           { element: <PatientsPage />, index: true },
+          { path: 'new', element: <PatientNewPage /> },
           { path: ':id', element: <PatientInfoPage /> },
         ],
       },

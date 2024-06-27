@@ -155,11 +155,11 @@ export default function PricingCard({ card, sx, ...other }) {
         </Box>
         <Link variant="body2" color="inherit" underline="always">
           {package_appointment &&
-            package_accounting &&
-            package_docotor_report &&
-            package_final_reporting &&
-            package_old_files_Management &&
-            package_TAX_Income_reporting
+          package_accounting &&
+          package_docotor_report &&
+          package_final_reporting &&
+          package_old_files_Management &&
+          package_TAX_Income_reporting
             ? 'All'
             : ''}
         </Link>

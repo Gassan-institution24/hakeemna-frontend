@@ -27,7 +27,7 @@ export default function StartupCreating({ open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const checkAcl = useAclGuard();
-  const loading = useBoolean()
+  const loading = useBoolean();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -45,7 +45,7 @@ export default function StartupCreating({ open, onClose }) {
 
   const onAcceptCreating = async () => {
     try {
-      loading.onTrue()
+      loading.onTrue();
       if (tables.includes('department')) {
         await axiosInstance.post(endpoints.departments.all, {
           unit_service: USData?._id,
@@ -115,11 +115,11 @@ export default function StartupCreating({ open, onClose }) {
           name_arabic: `تشخيص`,
         });
       }
-      loading.onFalse()
+      loading.onFalse();
       onClose();
       window.location.reload();
     } catch (error) {
-      loading.onFalse()
+      loading.onFalse();
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -248,7 +248,12 @@ export default function StartupCreating({ open, onClose }) {
         </Stack>
       }
       action={
-        <LoadingButton loading={loading.value} variant="contained" color="info" onClick={onAcceptCreating}>
+        <LoadingButton
+          loading={loading.value}
+          variant="contained"
+          color="info"
+          onClick={onAcceptCreating}
+        >
           {t('create')}
         </LoadingButton>
       }

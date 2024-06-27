@@ -56,9 +56,7 @@ export default function CustomersTableView() {
 
   const { user } = useAuthContext();
 
-  const { customersData, loading } = useGetStakeholderCustomers(
-    user?.stakeholder?._id
-  );
+  const { customersData, loading } = useGetStakeholderCustomers(user?.stakeholder?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -86,10 +86,10 @@ export default function NotificationsPopover() {
   useEffect(() => {
     socket.on('connect', () => {
       socket.emit('sendUser', user);
-    })
+    });
     socket.on('checkUsers', () => {
       socket.emit('sendUser', user);
-    })
+    });
     socket.on('error', () => {
       setAllNotifications([]);
       setPage(1);

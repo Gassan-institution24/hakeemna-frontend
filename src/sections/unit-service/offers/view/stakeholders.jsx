@@ -21,7 +21,7 @@ import JobSearch from '../job-search';
 export default function JobListView() {
   const settings = useSettingsContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const [search, setSearch] = useState({
     query: '',
@@ -74,14 +74,13 @@ export default function JobListView() {
         onSearch={handleSearch}
         hrefItem={(id) => paths.unitservice.products.stakeholder.one(id)}
       />
-
     </Stack>
   );
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading={t("suppliers")}
+        heading={t('suppliers')}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -96,7 +95,7 @@ export default function JobListView() {
         {renderFilters}
       </Stack>
 
-      {notFound && <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />}
+      {notFound && <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />}
 
       <JobList jobs={dataFiltered} />
     </Container>
@@ -106,7 +105,6 @@ export default function JobListView() {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy }) => {
-
   // SORT BY
   if (sortBy === 'latest') {
     inputData = orderBy(inputData, ['createdAt'], ['desc']);

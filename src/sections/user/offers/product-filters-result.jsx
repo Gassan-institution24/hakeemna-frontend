@@ -40,7 +40,7 @@ export default function ProductFiltersResult({
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.name !== '' && (
           <Block label={`${t('search')}:`}>
-            <Chip size="small" label={t("search")} onDelete={handleRemoveName} />
+            <Chip size="small" label={t('search')} onDelete={handleRemoveName} />
           </Block>
         )}
 

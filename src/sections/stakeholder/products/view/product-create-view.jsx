@@ -13,12 +13,12 @@ import ProductNewEditForm from '../product-new-edit-form';
 
 export default function ProductCreateView() {
   const settings = useSettingsContext();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("create a new product")}
+        heading={t('create a new product')}
         links={[
           {
             name: t('dashboard'),

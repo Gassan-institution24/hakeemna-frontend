@@ -25,23 +25,35 @@ const ORDER_STATUS_OPTIONS = [
   // { value: 'processing', label: 'processing' },
   { value: 'completed', label: 'Completed' },
   { value: 'cancelled', label: 'Cancelled' },
-]
+];
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView() {
-  const { id } = useParams()
-  const { orderData, refetch } = useGetOrder(id)
+  const { id } = useParams();
+  const { orderData, refetch } = useGetOrder(id);
   const settings = useSettingsContext();
 
-  const handleChangeStatus = useCallback(async (newValue) => {
-    await axiosInstance.patch(endpoints.orders.one(id), { status: newValue })
-    refetch()
-  }, [id, refetch]);
+  const handleChangeStatus = useCallback(
+    async (newValue) => {
+      await axiosInstance.patch(endpoints.orders.one(id), { status: newValue });
+      refetch();
+    },
+    [id, refetch]
+  );
 
-  const handleChangeQuantity = useCallback(async (newValue) => {
-    await axiosInstance.patch(endpoints.orders.one(id), { products: orderData.products.map((one) => Object.keys(newValue).includes(one._id) ? ({ ...one, real_delieverd_quantity: newValue[one._id] }) : one) })
-    refetch()
-  }, [id, refetch, orderData]);
+  const handleChangeQuantity = useCallback(
+    async (newValue) => {
+      await axiosInstance.patch(endpoints.orders.one(id), {
+        products: orderData.products.map((one) =>
+          Object.keys(newValue).includes(one._id)
+            ? { ...one, real_delieverd_quantity: newValue[one._id] }
+            : one
+        ),
+      });
+      refetch();
+    },
+    [id, refetch, orderData]
+  );
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -75,9 +87,9 @@ export default function OrderDetailsView() {
           <OrderDetailsInfo
             customer={orderData?.stakeholder}
             note={orderData?.note}
-          // delivery={orderData?.delivery}
-          // payment={orderData?.payment}
-          // shippingAddress={orderData?.shippingAddress}
+            // delivery={orderData?.delivery}
+            // payment={orderData?.payment}
+            // shippingAddress={orderData?.shippingAddress}
           />
         </Grid>
       </Grid>

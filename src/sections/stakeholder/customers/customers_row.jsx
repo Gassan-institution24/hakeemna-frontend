@@ -17,15 +17,15 @@ export default function CustomersTableRow({ row, selected }) {
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell align="center">
-        {sequence_number}
-      </TableCell>
+      <TableCell align="center">{sequence_number}</TableCell>
       <TableCell
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
         }}
-        onClick={() => router.push(`${paths.stakeholder.orders.root}?name=${unit_service.name_english}`)}
+        onClick={() =>
+          router.push(`${paths.stakeholder.orders.root}?name=${unit_service.name_english}`)
+        }
         align="center"
       >
         {unit_service?.name_english}
@@ -40,9 +40,7 @@ export default function CustomersTableRow({ row, selected }) {
       >
         {patient?.name_english}
       </TableCell>
-      <TableCell align="center">
-        {fDate(new Date(created_at))}
-      </TableCell>
+      <TableCell align="center">{fDate(new Date(created_at))}</TableCell>
     </TableRow>
   );
 

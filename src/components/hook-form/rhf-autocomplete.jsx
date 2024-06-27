@@ -12,6 +12,7 @@ export default function RHFAutocomplete({
   placeholder,
   helperText,
   variant,
+  onInputChange,
   ...other
 }) {
   const { control, setValue } = useFormContext();
@@ -26,8 +27,10 @@ export default function RHFAutocomplete({
           onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
           renderInput={(params) => (
             <TextField
+              name={name}
               label={label}
               variant={variant}
+              onBlur={onInputChange}
               placeholder={placeholder}
               error={!!error}
               helperText={error ? error?.message : helperText}
@@ -48,4 +51,5 @@ RHFAutocomplete.propTypes = {
   name: PropTypes.string,
   variant: PropTypes.string,
   placeholder: PropTypes.string,
+  onInputChange: PropTypes.func,
 };

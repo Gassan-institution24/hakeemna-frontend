@@ -7,17 +7,13 @@ import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
-
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsInfo({ customer, note, payment, shippingAddress }) {
-
   return (
     <Card>
       <>
-        <CardHeader
-          title="stakeholder"
-        />
+        <CardHeader title="stakeholder" />
         <Stack direction="row" sx={{ p: 3 }}>
           <Avatar
             alt={customer?.name_english}
@@ -30,7 +26,11 @@ export default function OrderDetailsInfo({ customer, note, payment, shippingAddr
 
             <Box sx={{ color: 'text.secondary' }}>{customer?.email}</Box>
             <Box sx={{ color: 'text.secondary' }}>{customer?.phone}</Box>
-            {note && <Typography variant="subtitle2" sx={{ mt: 2 }}>note:</Typography>}
+            {note && (
+              <Typography variant="subtitle2" sx={{ mt: 2 }}>
+                note:
+              </Typography>
+            )}
             <Box sx={{ color: 'text.secondary' }}>{note}</Box>
           </Stack>
         </Stack>

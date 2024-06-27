@@ -47,7 +47,7 @@ export default memo(NavSectionVertical);
 
 function Group({ subheader, walktourRun, items, slotProps }) {
   const [open, setOpen] = useState(true);
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const handleToggle = useCallback(() => {
     setOpen((prev) => !prev);

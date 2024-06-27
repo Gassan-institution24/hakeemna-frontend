@@ -99,7 +99,6 @@ export default function CountriesTableView() {
 
   const upload_record = searchParams.get('upload_record');
 
-
   useEffect(() => {
     if (upload_record) {
       setFilters((prev) => ({ ...prev, name: upload_record }));

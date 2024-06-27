@@ -7,16 +7,16 @@ import OffersHomeView from 'src/sections/user/offers/view/all-products';
 // ----------------------------------------------------------------------
 
 export default function OffersHomePage() {
-    const { user } = useAuthContext();
-    const patientName = user?.patient.name_english;
-    return (
-        <>
-            <Helmet>
-                <title>{patientName || 'patient'} : Products </title>
-                <meta name="description" content="meta" />
-            </Helmet>
+  const { user } = useAuthContext();
+  const patientName = user?.patient.name_english;
+  return (
+    <>
+      <Helmet>
+        <title>{patientName || 'patient'} : Products </title>
+        <meta name="description" content="meta" />
+      </Helmet>
 
-            <OffersHomeView />
-        </>
-    );
+      <OffersHomeView />
+    </>
+  );
 }

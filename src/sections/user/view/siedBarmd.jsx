@@ -21,7 +21,7 @@ export default function Sidebar() {
 
   const router = useRouter();
 
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(true);
 
   const gotoHome = () => {
     router.push(paths.dashboard.root);
@@ -48,7 +48,7 @@ export default function Sidebar() {
     ...(curLangAr ? { left: 0 } : { right: 0 }),
     ...(curLangAr ? { borderRadius: '0px 15px 15px 0px' } : { borderRadius: '15px 0px 0px 15px' }),
   };
-  const hideStyle = { position: 'fixed', ...(curLangAr ? { left: -100 } : { right: -100 }), }
+  const hideStyle = { position: 'fixed', ...(curLangAr ? { left: -100 } : { right: -100 }) };
   const insidestickySidebar = {
     transform: 'translate(2%, 2%)',
   };
@@ -134,9 +134,22 @@ export default function Sidebar() {
           <Typography sx={{ fontSize: 10.5 }}>{t('Settings')}</Typography>
         </Button>
       </Box>
-      <IconButton sx={{ position: 'absolute', left: hide ? -45 : -28, bottom: 10, borderRadius: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)', boxShadow: '-2px 4px 6px rgba(0, 0, 0, 0.4)', p: 0.5 }} onClick={() => setHide((prev) => !prev)}>
-        <Iconify icon={hide || curLangAr ? 'ic:baseline-arrow-back-ios' : 'ic:baseline-arrow-forward-ios'} />
+      <IconButton
+        sx={{
+          position: 'absolute',
+          left: hide ? -45 : -28,
+          bottom: 10,
+          borderRadius: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          boxShadow: '-2px 4px 6px rgba(0, 0, 0, 0.4)',
+          p: 0.5,
+        }}
+        onClick={() => setHide((prev) => !prev)}
+      >
+        <Iconify
+          icon={hide || curLangAr ? 'ic:baseline-arrow-back-ios' : 'ic:baseline-arrow-forward-ios'}
+        />
       </IconButton>
-    </Box >
+    </Box>
   );
 }

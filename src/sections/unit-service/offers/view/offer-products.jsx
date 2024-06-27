@@ -12,25 +12,25 @@ import OfferProducts from '../offer-products';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-    const { id } = useParams()
-    const { offerData } = useGetOffer(id)
+  const { id } = useParams();
+  const { offerData } = useGetOffer(id);
 
-    const { t } = useTranslate()
+  const { t } = useTranslate();
 
-    return (
-        <Container maxWidth="xl">
-            <CustomBreadcrumbs
-                heading={t("offer products")}
-                links={[
-                    { name: t('dashboard'), href: paths.unitservice.root },
-                    { name: t('products and supplier'), href: paths.unitservice.products.root },
-                    { name: t('offer products') }
-                ]}
-                sx={{
-                    mb: { xs: 3, md: 5 },
-                }}
-            />
-            {offerData && <OfferProducts offerData={offerData} />}
-        </Container>
-    );
+  return (
+    <Container maxWidth="xl">
+      <CustomBreadcrumbs
+        heading={t('offer products')}
+        links={[
+          { name: t('dashboard'), href: paths.unitservice.root },
+          { name: t('products and supplier'), href: paths.unitservice.products.root },
+          { name: t('offer products') },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+      {offerData && <OfferProducts offerData={offerData} />}
+    </Container>
+  );
 }

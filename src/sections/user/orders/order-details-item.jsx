@@ -22,8 +22,7 @@ export default function OrderDetailsItems({
   subTotal,
   totalAmount,
 }) {
-
-  const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0)
+  const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0);
 
   const renderTotal = (
     <Stack
@@ -40,9 +39,7 @@ export default function OrderDetailsItems({
 
   return (
     <Card>
-      <CardHeader
-        title="Details"
-      />
+      <CardHeader title="Details" />
 
       <Stack
         sx={{
@@ -61,7 +58,11 @@ export default function OrderDetailsItems({
                 borderBottom: (theme) => `dashed 2px ${theme.palette.background.neutral}`,
               }}
             >
-              <Avatar src={item?.product?.images?.[0]} variant="rounded" sx={{ width: 48, height: 48, mr: 2 }} />
+              <Avatar
+                src={item?.product?.images?.[0]}
+                variant="rounded"
+                sx={{ width: 48, height: 48, mr: 2 }}
+              />
 
               <ListItemText
                 primary={item?.product?.name_english}
@@ -75,7 +76,7 @@ export default function OrderDetailsItems({
                   mt: 0.5,
                 }}
               />
-                <Box sx={{ typography: 'body2' }}>x{item.real_delieverd_quantity}</Box>
+              <Box sx={{ typography: 'body2' }}>x{item.real_delieverd_quantity}</Box>
 
               <Box sx={{ width: 110, textAlign: 'right', typography: 'subtitle2' }}>
                 {fCurrency(item.price, item.currency?.symbol)}
@@ -85,8 +86,8 @@ export default function OrderDetailsItems({
         </Scrollbar>
 
         {renderTotal}
-      </Stack >
-    </Card >
+      </Stack>
+    </Card>
   );
 }
 

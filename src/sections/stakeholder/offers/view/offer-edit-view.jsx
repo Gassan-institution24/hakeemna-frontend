@@ -16,14 +16,14 @@ import OfferNewEditForm from '../product-new-edit-form';
 
 export default function ProductEditView({ id }) {
   const settings = useSettingsContext();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const { offerData } = useGetOffer(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("edit offer")}
+        heading={t('edit offer')}
         links={[
           { name: t('dashboard'), href: paths.stakeholder.root },
           {
