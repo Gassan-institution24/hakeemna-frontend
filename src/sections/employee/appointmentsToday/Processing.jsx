@@ -6,7 +6,6 @@ import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
-import Table from '@mui/material/Table';
 import { alpha } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
@@ -18,25 +17,17 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import {
-  Box,
-  Card,
   Paper,
   Button,
   Dialog,
   Switch,
   Divider,
   MenuItem,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableHead,
-  TextField,
   Typography,
   DialogTitle,
   DialogActions,
   DialogContent,
   useMediaQuery,
-  TableContainer,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -44,8 +35,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { fDateTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { fMonth, fTimeText, fDateTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -53,14 +44,14 @@ import {
   useGetPatient,
   useGetMedicines,
   useGetMedRecord,
-  useGetPatientHistoryData,
   useGetOneEntranceManagement,
-  useGetPatientHistoryDataInSu,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFUpload, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+import Rooms from './rooms';
+import History from './history';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
 
@@ -72,22 +63,18 @@ export default function Processing() {
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-  const { historyData } = useGetPatientHistoryDataInSu(
-    Entrance?.patient?._id,
-    Entrance?.service_unit?._id
-  );
-  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
+
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [filterforspecialties, setFilterforspecialties] = useState();
-  const [switchh, setSwitch] = useState(false);
+
+  const [ImgFiles, setImgFiles] = useState([]);
+
   const [DoctorComment, setDoctorComment] = useState();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [itemsToShow, setItemsToShow] = useState(2);
   const router = useRouter();
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
@@ -96,6 +83,7 @@ export default function Processing() {
     medicines: Yup.string(),
     Start_time: Yup.date(),
     End_time: Yup.date(),
+    file: Yup.array(),
     Frequency_per_day: Yup.string(),
     Doctor_Comments: Yup.string(),
     description: Yup.string(),
@@ -126,7 +114,7 @@ export default function Processing() {
     setValue,
     formState: { isSubmitting },
   } = methods;
-
+  const values = watch();
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
@@ -147,25 +135,87 @@ export default function Processing() {
       setValue('Num_days', difference > 0 ? difference : 0);
     }
   }, [watchStartTime, watchEndTime, setValue]);
+  const fuser = () => {
+    const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
+
+    const isValidFile = (fileName) => {
+      const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+      return allowedExtensions.includes(fileExtension);
+    };
+
+    const isValidSize = (fileSize) => fileSize <= 3145728;
+
+    return {
+      validateFile: isValidFile,
+      validateSize: isValidSize,
+    };
+  };
+
+  const handleDrop = (acceptedFiles) => {
+    const fileValidator = fuser();
+
+    const isValidFiles = acceptedFiles.every(
+      (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+    );
+
+    if (isValidFiles) {
+      const newFiles = acceptedFiles;
+      setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
+      setValue('file', [...values.file, ...newFiles]);
+    } else {
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
+    }
+  };
 
   const onSubmit = async (submitdata) => {
     try {
-      submitdata.Doctor_Comments = DoctorComment; // Ensure Doctor_Comments is included in the submitdata
+      // Ensure Doctor_Comments is included in submitdata
+      submitdata.Doctor_Comments = DoctorComment;
+
       if (medicalReportDialog.value) {
+        const formData = new FormData();
+
+        // Append all form fields
+        Object.keys(submitdata).forEach((key) => {
+          if (Array.isArray(submitdata[key])) {
+            submitdata[key].forEach((item, index) => {
+              formData.append(`${key}[${index}]`, item);
+            });
+          } else {
+            formData.append(key, submitdata[key]);
+          }
+        });
+
+        // Append image files
+        if (ImgFiles) {
+          ImgFiles.forEach((file, index) => {
+            formData.append(`file[${index}]`, file);
+          });
+        }
+
+        // First API call
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
-          name_english: 'an medical report has been added',
+          name_english: 'A medical report has been added',
           name_arabic: 'تم ارفاق تقرير طبي',
-          sub_english: `Medical report from  ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `تقرير طبي من  ${Entrance?.service_unit?.name_arabic}`,
+          sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
           service_unit: Entrance?.service_unit?._id,
         });
-        await axiosInstance.post('/api/examination', submitdata);
+
+        // Second API call
+        await axiosInstance.post('/api/examination', formData);
+
+        // Third API call
         await axiosInstance.patch(`/api/entrance/${id}`, {
           medical_report_status: true,
         });
+
+        // Show success message
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+
+        // Refetch data and reset the form
         refetch();
         medicalReportDialog.onFalse();
         reset();
@@ -205,109 +255,8 @@ export default function Processing() {
   const handleBackClick = (idd) => {
     router.push(paths.employee.recored(idd));
   };
-  const handleEndAppointment = async (entrance) => {
-    try {
-      await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
-        Patient_attended: true,
-        wating: false,
-      });
-      await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
-        finished_or_not: true,
-      });
-      await axiosInstance.post(`/api/medrecord/`, {
-        appointmentId: entrance?.appointmentId,
-        Appointment_date: Entrance?.Appointment_date,
-        service_unit: Entrance?.service_unit?._id,
-        patient: Entrance?.patient?._id,
-      });
-      enqueueSnackbar('appointment finished', { variant: 'success' });
-      router.push(paths.employee.appointmentsToday);
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar('no', { variant: 'error' });
-    }
-  };
-  const dataFiltered = applyFilter({
-    inputData: switchh === true ? historyDataForPatient : historyData,
-    filterforspecialties,
-  });
 
   const TIMELINES = [
-    {
-      key: 1,
-      title: (
-        <>
-          {`${Entrance?.patient?.name_english} medical history`}
-          <TextField
-            onChange={(e) => setFilterforspecialties(e.target.value)}
-            variant="outlined"
-            size="small"
-            placeholder="Search details"
-            sx={{ ml: 2, mb: 2 }}
-          />
-        </>
-      ),
-      color: 'primary',
-      icon:
-        dataFiltered?.length > 0 ? (
-          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-        ) : (
-          <Iconify icon="eva:folder-add-fill" width={24} />
-        ),
-    },
-    {
-      key: 4,
-      title: (
-        <>
-          <>
-            last activity <br />
-            Dr message:
-            <Typography>the patient need a surgery now</Typography>
-          </>
-          <Divider sx={{ height: 10, mb: 1 }} />
-          Next activity <br />
-          <Button
-            onClick={() => alert('test')}
-            variant="contained"
-            sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
-          >
-            wating
-          </Button>
-          <Button
-            onClick={() => alert('test')}
-            variant="contained"
-            disabled
-            sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
-          >
-            surgery
-          </Button>
-          <Button
-            onClick={() => handleEndAppointment(Entrance)}
-            variant="contained"
-            sx={{ bgcolor: 'error.main', mt: 1 }}
-          >
-            end appointment
-          </Button>
-        </>
-      ),
-      color: 'info',
-      icon: <Iconify icon="cil:room" width={24} />,
-    },
-    {
-      key: 3,
-      title: (
-        <>
-          <span
-            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
-          >
-            Doctor Check List
-          </span>
-          <CheckList />
-        </>
-      ),
-      color: 'primary',
-      icon: <Iconify icon="octicon:checklist-16" width={23} />,
-    },
     {
       key: 0,
       title: (
@@ -331,12 +280,34 @@ export default function Processing() {
         </>
       ),
       color: 'info',
-      icon:
-        dataFiltered?.length > 0 ? (
-          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-        ) : (
-          <Iconify icon="healthicons:medical-records-outline" width={25} />
-        ),
+      icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
+    },
+    {
+      key: 1,
+      title: <History />,
+      color: 'primary',
+      icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    },
+    {
+      key: 4,
+      title: <Rooms />,
+      color: 'info',
+      icon: <Iconify icon="cil:room" width={24} />,
+    },
+    {
+      key: 3,
+      title: (
+        <>
+          <span
+            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+          >
+            Doctor Check List
+          </span>
+          <CheckList />
+        </>
+      ),
+      color: 'primary',
+      icon: <Iconify icon="octicon:checklist-16" width={23} />,
     },
 
     {
@@ -398,6 +369,16 @@ export default function Processing() {
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
             <RHFTextField lang="en" multiline name="description" label={t('description')} />
+            <RHFUpload
+              autoFocus
+              fullWidth
+              name="file"
+              margin="dense"
+              sx={{ mb: 2 }}
+              variant="outlined"
+              onDrop={handleDrop}
+              multiple
+            />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
@@ -508,57 +489,6 @@ export default function Processing() {
       </Dialog>
     </>
   );
-  const renderHistory = (
-    <Card>
-      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('Date')}</TableCell>
-              <TableCell>{t('Name')}</TableCell>
-              <TableCell>{t('Subject')}</TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span>Private</span>{' '}
-                  <Switch value={switchh} onChange={() => setSwitch(!switchh)} />{' '}
-                  <span>Public</span>
-                </Box>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataFiltered?.slice(0, itemsToShow).map(
-              (historydata, i) =>
-                historydata?.status === 'active' && (
-                  <TableRow key={i}>
-                    <TableCell>{fMonth(historydata?.actual_date)}</TableCell>
-                    <TableCell>
-                      {curLangAr ? historydata?.name_arabic : historydata?.name_english}
-                    </TableCell>
-                    <TableCell>
-                      {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: 12, color: 'lightgray' }}>
-                      {fTimeText(historydata?.created_at)}
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-        {dataFiltered?.length > itemsToShow && (
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => setItemsToShow(itemsToShow + itemsToShow)}
-            sx={{ m: 2 }}
-          >
-            {t('Load More')}
-          </Button>
-        )}
-      </TableContainer>
-    </Card>
-  );
 
   const renderTimelineItems = (item) => (
     <Paper
@@ -572,7 +502,6 @@ export default function Processing() {
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {item.title === 'medical report (optional)' && renderMedicalReport}
         {item.title === 'prescription (optional)' && renderPrescription}
-        {item.key === 1 && renderHistory}
       </Typography>
     </Paper>
   );
@@ -586,7 +515,16 @@ export default function Processing() {
       ))}
     </div>
   ) : (
-    <Timeline position="alternate">
+    <Timeline
+      position="alternate-reverse"
+      sx={{
+        backgroundImage:
+          'url("https://cdni.iconscout.com/illustration/premium/thumb/consult-with-doctor-online-for-prescription-5588761-4655030.png?f=webp")',
+        backgroundSize: '200px',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'top right',
+      }}
+    >
       {TIMELINES.map((item) => (
         <TimelineItem key={item.key}>
           <TimelineSeparator>
@@ -598,34 +536,4 @@ export default function Processing() {
       ))}
     </Timeline>
   );
-}
-function normalizeArabicText(text) {
-  // Normalize Arabic text by replacing 'أ' with 'ا'
-  return text.replace(/أ/g, 'ا');
-}
-
-function applyFilter({ inputData, filterforspecialties }) {
-  if (!filterforspecialties) {
-    return inputData;
-  }
-
-  // Normalize the search term for comparison
-  const normalizedSearchTerm = normalizeArabicText(filterforspecialties.toLowerCase());
-
-  inputData = inputData?.filter((data) => {
-    const normalizedDataNameEnglish = normalizeArabicText(data?.name_english.toLowerCase());
-    const normalizedDataNameArabic = normalizeArabicText(data?.name_arabic.toLowerCase());
-    const normalizedDataSubArabic = normalizeArabicText(data?.sub_english.toLowerCase());
-    const normalizedDataSubEnglish = normalizeArabicText(data?.sub_arabic.toLowerCase());
-    return (
-      normalizedDataNameEnglish.includes(normalizedSearchTerm) ||
-      normalizedDataNameArabic.includes(normalizedSearchTerm) ||
-      normalizedDataSubArabic.includes(normalizedSearchTerm) ||
-      normalizedDataSubEnglish.includes(normalizedSearchTerm) ||
-      data?._id === filterforspecialties ||
-      JSON.stringify(data.code) === filterforspecialties
-    );
-  });
-
-  return inputData;
 }
