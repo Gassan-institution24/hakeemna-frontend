@@ -146,7 +146,7 @@ export default function BookManually({
                       const selectedTime = zonedTimeToUtc(
                         newValue,
                         unitServiceData?.country?.time_zone ||
-                        Intl.DateTimeFormat().resolvedOptions().timeZone
+                          Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

@@ -12,7 +12,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function ProductSearch({ query, filters, results, onSearch, hrefItem, loading }) {
-
   const { t } = useTranslate();
 
   return (

@@ -56,11 +56,11 @@ export default function TrainingsView() {
     { id: '' },
   ];
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const searchParams = useSearchParams();
 
-  const search = searchParams.get('name')
+  const search = searchParams.get('name');
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -105,21 +105,24 @@ export default function TrainingsView() {
     setFilters(defaultFilters);
   }, []);
 
-  const handleChangeStatus = useCallback(async (id, status) => {
-    try {
-      await axiosInstance.patch(endpoints.training.one(id), { status })
-      enqueueSnackbar('changed successfully')
-      refetch()
-    } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' })
-    }
-  }, [enqueueSnackbar, refetch]);
+  const handleChangeStatus = useCallback(
+    async (id, status) => {
+      try {
+        await axiosInstance.patch(endpoints.training.one(id), { status });
+        enqueueSnackbar('changed successfully');
+        refetch();
+      } catch (e) {
+        enqueueSnackbar(e.message, { variant: 'error' });
+      }
+    },
+    [enqueueSnackbar, refetch]
+  );
 
   useEffect(() => {
     if (search) {
-      setFilters((prev) => ({ ...prev, name: search }))
+      setFilters((prev) => ({ ...prev, name: search }));
     }
-  }, [search])
+  }, [search]);
 
   return (
     <Container maxWidth="xl">

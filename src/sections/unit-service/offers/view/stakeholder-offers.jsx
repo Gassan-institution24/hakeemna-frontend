@@ -15,8 +15,8 @@ export default function TableCreateView() {
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
-  const {t} = useTranslate()
-  
+  const { t } = useTranslate();
+
   const TABS = [
     {
       value: 'products',

@@ -13,12 +13,12 @@ import OfferNewEditForm from '../product-new-edit-form';
 
 export default function OfferCreateView() {
   const settings = useSettingsContext();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("create a new offer")}
+        heading={t('create a new offer')}
         links={[
           {
             name: t('dashboard'),

@@ -26,7 +26,14 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 
+import { Button } from '@mui/material';
+
+import { RouterLink } from 'src/routes/components';
+
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+
+import Iconify from 'src/components/iconify';
 
 import TableDetailRow from '../patients_row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -52,6 +59,8 @@ export default function PatientTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
 
   const componentRef = useRef();
 
@@ -115,6 +124,22 @@ export default function PatientTableView() {
           },
           { name: t('institution patients') }, /// edit
         ]}
+        action={
+          checkAcl({
+            category: 'unit_service',
+            subcategory: 'unit_service_info',
+            acl: 'create',
+          }) && (
+            <Button
+              component={RouterLink}
+              href={paths.unitservice.patients.new}
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              {t('new patient')}
+            </Button>
+          ) /// edit
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

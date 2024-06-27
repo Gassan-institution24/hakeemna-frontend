@@ -21,10 +21,7 @@ import { RHFSelect, RHFUpload, RHFCheckbox, RHFTextField } from 'src/components/
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditAddress() {
-  const {
-    watch,
-    setValue,
-  } = useFormContext();
+  const { watch, setValue } = useFormContext();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -60,11 +57,7 @@ export default function InvoiceNewEditAddress() {
       <Typography variant="h6" color="text.disabled" sx={{ pt: 3, pl: 3 }}>
         {t('details')}:
       </Typography>
-      <Stack
-        spacing={{ xs: 3, md: 5 }}
-        direction={{ xs: 'column', md: 'row' }}
-        sx={{ p: 3 }}
-      >
+      <Stack spacing={{ xs: 3, md: 5 }} direction={{ xs: 'column', md: 'row' }} sx={{ p: 3 }}>
         <Stack sx={{ width: 1 }}>
           <RHFUpload onDrop={handleDrop} sx={{ width: 1, height: 1 }} name="image" label="image" />
         </Stack>

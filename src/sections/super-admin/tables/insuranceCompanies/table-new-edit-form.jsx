@@ -19,7 +19,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetCountries, useGetCountryCities, useGetInsuranceTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -182,7 +182,12 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="webpage" label="web page link" />
               <RHFTextField name="phone" label="phone no" />
               <RHFTextField name="address" label="address" />
-              <RHFCheckbox name='member_tpa' label='member tpa' value={watch().member_tpa} onChange={() => setValue('member_tpa', !watch().member_tpa)} />
+              <RHFCheckbox
+                name="member_tpa"
+                label="member tpa"
+                value={watch().member_tpa}
+                onChange={() => setValue('member_tpa', !watch().member_tpa)}
+              />
               <RHFTextField name="tpa" label="tpa" />
             </Box>
 

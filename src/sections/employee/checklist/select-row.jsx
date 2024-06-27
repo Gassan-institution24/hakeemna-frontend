@@ -33,7 +33,7 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
   const popover = usePopover();
   const DDL = usePopover();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

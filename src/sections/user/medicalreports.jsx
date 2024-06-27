@@ -112,31 +112,34 @@ export default function Medicalreports() {
     },
   });
 
-  const PrescriptionPDF = React.useCallback(({ report }) => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View>
-          <View style={styles.gridContainer}>
-            <PdfImage src={Doclogo} style={styles.image} />
-            <Text style={styles.text3}>{report.department?.name_english}</Text>
-            <Text style={styles.text4}>Al Waha_cercle at0349</Text>
-            <Text style={styles.text4}>+962776088372</Text>
+  const PrescriptionPDF = React.useCallback(
+    ({ report }) => (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View>
+            <View style={styles.gridContainer}>
+              <PdfImage src={Doclogo} style={styles.image} />
+              <Text style={styles.text3}>{report.department?.name_english}</Text>
+              <Text style={styles.text4}>Al Waha_cercle at0349</Text>
+              <Text style={styles.text4}>+962776088372</Text>
+            </View>
+            <View style={styles.gridBody}>
+              <Text style={styles.text}>Medical Report</Text>
+              {/* <Text style={styles.text2}>Name: {patient?.name_english}</Text> */}
+              {/* <Text style={styles.text2}>Age: {fDateAndTime(patient?.birth_date)}</Text> */}
+              {/* <Text style={styles.text2}>ID no: {patient?.identification_num}</Text> */}
+            </View>
+            <View style={styles.gridFooter}>
+              <Text>{report?.description}</Text>
+              <PdfImage src={Doclogo} style={styles.department} />
+              <PdfImage src={Doclogo} style={styles.doctor} />
+            </View>
           </View>
-          <View style={styles.gridBody}>
-            <Text style={styles.text}>Medical Report</Text>
-            {/* <Text style={styles.text2}>Name: {patient?.name_english}</Text> */}
-            {/* <Text style={styles.text2}>Age: {fDateAndTime(patient?.birth_date)}</Text> */}
-            {/* <Text style={styles.text2}>ID no: {patient?.identification_num}</Text> */}
-          </View>
-          <View style={styles.gridFooter}>
-            <Text>{report?.description}</Text>
-            <PdfImage src={Doclogo} style={styles.department} />
-            <PdfImage src={Doclogo} style={styles.doctor} />
-          </View>
-        </View>
-      </Page>
-    </Document>
-  ), [styles]);
+        </Page>
+      </Document>
+    ),
+    [styles]
+  );
 
   PrescriptionPDF.propTypes = {
     report: PropTypes.object,

@@ -2,21 +2,21 @@ import { Helmet } from 'react-helmet-async';
 
 import { useTranslate } from 'src/locales';
 
-import CustomersView from 'src/sections/stakeholder/customers/view/customers';
+import PatientNewView from 'src/sections/unit-service/patients/view/new-patient';
 
 // ----------------------------------------------------------------------
 
-export default function CustomersPage() {
+export default function PatientNewPage() {
   const { t } = useTranslate();
 
   return (
     <>
       <Helmet>
-        <title> {t('customers')} </title>
+        <title> {t('new Patient')} </title>
         <meta name="description" content="meta" />
       </Helmet>
 
-      <CustomersView />
+      <PatientNewView />
     </>
   );
 }

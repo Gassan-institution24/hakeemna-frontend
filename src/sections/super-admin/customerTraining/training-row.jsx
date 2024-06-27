@@ -16,12 +16,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TrainingsTableRow({
-  row,
-  selected,
-  onChangeStatus,
-
-}) {
+export default function TrainingsTableRow({ row, selected, onChangeStatus }) {
   const {
     _id,
     code,
@@ -54,7 +49,7 @@ export default function TrainingsTableRow({
         <TableCell align="center">{mobile_num1}</TableCell>
         <TableCell align="center">
           <Select
-            size='small'
+            size="small"
             value={status}
             onChange={(e) => onChangeStatus(_id, e.target.value)}
             MenuProps={{
@@ -76,7 +71,7 @@ export default function TrainingsTableRow({
                 (status === 'processing' && 'secondary.dark') ||
                 (status === 'finished' && 'success.dark') ||
                 (status === 'rejected' && 'error.dark') ||
-                'default'
+                'default',
             }}
           >
             <MenuItem lang="ar" sx={{ color: 'warning.dark' }} value="underreview">

@@ -34,7 +34,7 @@ export const navConfig = [
   {
     title: 'suppliers',
     icon: <Iconify icon="iconoir:community" />,
-    path: paths.comingSoon,
+    path: paths.auth.stakeholderRegister,
     sectionId: 'home',
   },
   {

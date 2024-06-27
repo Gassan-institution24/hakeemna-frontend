@@ -31,7 +31,7 @@ const initialState = {
 
 export function CheckoutProvider({ children }) {
   const router = useRouter();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const { state, update, reset } = useLocalStorage(STORAGE_KEY, initialState);
 

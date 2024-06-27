@@ -55,7 +55,7 @@ export default function OrdersView() {
 
   const searchParams = useSearchParams();
 
-  const search = searchParams.get('name')
+  const search = searchParams.get('name');
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -65,14 +65,17 @@ export default function OrdersView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { ordersData, length, refetch } = useGetUSOrders(user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id, {
-    page: table.page || 0,
-    sortBy: table.orderBy || 'code',
-    rowsPerPage: table.rowsPerPage || 25,
-    order: table.order || 'asc',
-    populate: 'stakeholder',
-    ...filters,
-  });
+  const { ordersData, length, refetch } = useGetUSOrders(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    {
+      page: table.page || 0,
+      sortBy: table.orderBy || 'code',
+      rowsPerPage: table.rowsPerPage || 25,
+      order: table.order || 'asc',
+      populate: 'stakeholder',
+      ...filters,
+    }
+  );
 
   const dateError =
     filters.startDate && filters.endDate
@@ -104,9 +107,9 @@ export default function OrdersView() {
 
   useEffect(() => {
     if (search) {
-      setFilters((prev) => ({ ...prev, name: search }))
+      setFilters((prev) => ({ ...prev, name: search }));
     }
-  }, [search])
+  }, [search]);
 
   return (
     <Container maxWidth="xl">

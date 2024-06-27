@@ -22,6 +22,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetTaxes,
+  useGetAnalyses,
   useGetDeductions,
   useGetUSActiveWorkShifts,
   useGetActiveMeasurmentTypes,
@@ -29,7 +30,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { handleAddNew } = useNewScreen();
 
+  const { analysesData } = useGetAnalyses();
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -59,6 +62,8 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
+    description_arabic: Yup.string(),
+    description_english: Yup.string(),
     work_shift: Yup.string().nullable(),
     Measurement_type: Yup.string().required(t('required field')),
     Price_per_unit: Yup.string().required(t('required field')),
@@ -71,6 +76,8 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
+      description_arabic: currentTable?.description_arabic || '',
+      description_english: currentTable?.description_english || '',
       unit_service:
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       work_shift: currentTable?.work_shift?._id || null,
@@ -108,8 +115,10 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
+  console.log('watchhhhhhhhhhhhhhhh', watch());
 
   useEffect(() => {
     if (Object.keys(errors).length) {
@@ -140,6 +149,8 @@ export default function TableNewEditForm({ currentTable }) {
     reset({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
+      description_arabic: currentTable?.description_arabic || '',
+      description_english: currentTable?.description_english || '',
       unit_service:
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       work_shift: currentTable?.work_shift?._id || null,
@@ -165,6 +176,26 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
+              <RHFAutocomplete
+                freeSolo
+                name="name_english"
+                label="name english"
+                // onChange={handleChange}
+                onInputChange={handleEnglishInputChange}
+                placeholder="Choose a name english"
+                options={analysesData.map((option) => option.name_english)}
+                getOptionLabel={(option) => option}
+              />
+              <RHFAutocomplete
+                freeSolo
+                name="name_arabic"
+                label="name arabic"
+                // onChange={handleChange}
+                onInputChange={handleArabicInputChange}
+                placeholder="Choose a name arabic"
+                options={analysesData.map((option) => option.name_arabic)}
+                getOptionLabel={(option) => option}
+              />
               <RHFTextField
                 lang="en"
                 onChange={handleEnglishInputChange}
@@ -220,6 +251,21 @@ export default function TableNewEditForm({ currentTable }) {
                   {t('online')}
                 </MenuItem>
               </RHFSelect>
+              <RHFTextField
+                multiline
+                rows={2}
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="description_english"
+                label={t('description english')}
+              />
+              <RHFTextField
+                multiline
+                rows={2}
+                onChange={handleArabicInputChange}
+                name="description_arabic"
+                label={t('description arabic')}
+              />
               <FormControlLabel
                 sx={{ ml: 2 }}
                 control={<Checkbox onChange={() => setShowTax((prev) => !prev)} />}

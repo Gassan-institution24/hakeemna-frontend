@@ -48,7 +48,7 @@ export default function ProductFiltersResult({
         )}
         {filters.name !== '' && (
           <Block label={`${t('search')}:`}>
-            <Chip size="small" label={t("search")} onDelete={handleRemoveName} />
+            <Chip size="small" label={t('search')} onDelete={handleRemoveName} />
           </Block>
         )}
 

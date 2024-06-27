@@ -43,46 +43,44 @@ export default function AppointmentsTableRow({
   const curLangAr = currentLang.value === 'ar';
 
   return (
-      <TableRow hover selected={selected}>
-        <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">
-          <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }}>
-            <Avatar
-              alt={curLangAr ? name_arabic : name_english}
-              src={image}
-              variant="rounded"
-              sx={{ width: 64, height: 64, mr: 2 }}
-            />
+    <TableRow hover selected={selected}>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">
+        <Stack direction="row" alignItems="center" sx={{ py: 2, width: 1 }}>
+          <Avatar
+            alt={curLangAr ? name_arabic : name_english}
+            src={image}
+            variant="rounded"
+            sx={{ width: 64, height: 64, mr: 2 }}
+          />
 
-            <ListItemText
-              disableTypography
-              primary={
-                <Link
-                  noWrap
-                  color="inherit"
-                  variant="subtitle2"
-                  onClick={() => router.push(paths.unitservice.products.offer(_id))}
-                  sx={{ cursor: 'pointer' }}
-                >
-                  {curLangAr ? name_arabic : name_english}
-                </Link>
-              }
-              secondary={
-                <Box component="div" sx={{ typography: 'body2', color: 'text.disabled' }}>
-                  {curLangAr ? description_arabic : description_english}
-                </Box>
-              }
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            />
-          </Stack>
-        </TableCell>
-        <TableCell align="center">
-          {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
-        </TableCell>
-        <TableCell align="center">
-          {products.length}
-        </TableCell>
-      </TableRow>
+          <ListItemText
+            disableTypography
+            primary={
+              <Link
+                noWrap
+                color="inherit"
+                variant="subtitle2"
+                onClick={() => router.push(paths.unitservice.products.offer(_id))}
+                sx={{ cursor: 'pointer' }}
+              >
+                {curLangAr ? name_arabic : name_english}
+              </Link>
+            }
+            secondary={
+              <Box component="div" sx={{ typography: 'body2', color: 'text.disabled' }}>
+                {curLangAr ? description_arabic : description_english}
+              </Box>
+            }
+            sx={{ display: 'flex', flexDirection: 'column' }}
+          />
+        </Stack>
+      </TableCell>
+      <TableCell align="center">
+        {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
+      </TableCell>
+      <TableCell align="center">{products.length}</TableCell>
+    </TableRow>
   );
 }
 

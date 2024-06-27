@@ -38,7 +38,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-
 const defaultFilters = {
   name: '',
 };
@@ -50,7 +49,7 @@ export default function ChecklistTableView() {
 
   const componentRef = useRef();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
@@ -141,7 +140,7 @@ export default function ChecklistTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t("checklist")} /// edit
+        heading={t('checklist')} /// edit
         links={[
           {
             name: t('dashboard'),

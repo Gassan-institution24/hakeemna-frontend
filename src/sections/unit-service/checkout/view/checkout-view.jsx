@@ -12,7 +12,7 @@ import CheckoutCart from '../checkout-cart';
 export default function CheckoutView() {
   const settings = useSettingsContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ mb: 10 }}>

@@ -20,20 +20,11 @@ import { useGetStakeholderProducts } from 'src/api/product';
 
 export default function JobItem({ job, onView, onEdit, onDelete }) {
   const router = useRouter();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
-  const {
-    _id,
-    name_english,
-    name_arabic,
-    country,
-    city,
-    company_logo,
-    email,
-    phone,
-  } = job;
+  const { _id, name_english, name_arabic, country, city, company_logo, email, phone } = job;
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -83,7 +74,9 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
               {curLangAr ? name_arabic : name_english}
             </Link>
           }
-          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${curLangAr ? country?.name_arabic : country?.name_english}`}
+          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${
+            curLangAr ? country?.name_arabic : country?.name_english
+          }`}
           primaryTypographyProps={{
             typography: 'subtitle1',
           }}
@@ -94,19 +87,25 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
           }}
         />
 
-        <Stack
-          alignItems="start"
-          sx={{ typography: 'caption' }}
-        >
-          {email && <Typography variant="caption">{t('email')}: {email}</Typography>}
-          {phone && <Typography variant="caption">{t('phone')}: {phone}</Typography>}
+        <Stack alignItems="start" sx={{ typography: 'caption' }}>
+          {email && (
+            <Typography variant="caption">
+              {t('email')}: {email}
+            </Typography>
+          )}
+          {phone && (
+            <Typography variant="caption">
+              {t('phone')}: {phone}
+            </Typography>
+          )}
         </Stack>
-        <Stack
-          alignItems="end"
-          sx={{ color: 'primary.main', typography: 'caption', mt: 2 }}
-        >
-          <Typography variant="caption">{productsLength} {t('products available')} </Typography>
-          <Typography variant="caption">{offersLength} {t('offers available')} </Typography>
+        <Stack alignItems="end" sx={{ color: 'primary.main', typography: 'caption', mt: 2 }}>
+          <Typography variant="caption">
+            {productsLength} {t('products available')}{' '}
+          </Typography>
+          <Typography variant="caption">
+            {offersLength} {t('offers available')}{' '}
+          </Typography>
         </Stack>
       </Stack>
     </Card>

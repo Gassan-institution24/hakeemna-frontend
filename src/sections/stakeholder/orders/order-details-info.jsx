@@ -12,15 +12,13 @@ import { useLocales, useTranslate } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsInfo({ customer, note, payment, shippingAddress }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   return (
     <Card>
       <>
-        <CardHeader
-          title={t("customer info")}
-        />
+        <CardHeader title={t('customer info')} />
         <Stack direction="row" sx={{ p: 3 }}>
           <Avatar
             alt={customer?.name_english}
@@ -29,11 +27,17 @@ export default function OrderDetailsInfo({ customer, note, payment, shippingAddr
           />
 
           <Stack spacing={0.5} alignItems="flex-start" sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2">{curLangAr ? customer?.name_arabic : customer?.name_english}</Typography>
+            <Typography variant="subtitle2">
+              {curLangAr ? customer?.name_arabic : customer?.name_english}
+            </Typography>
 
             <Box sx={{ color: 'text.secondary' }}>{customer?.email}</Box>
             <Box sx={{ color: 'text.secondary' }}>{customer?.phone}</Box>
-            {note && <Typography variant="subtitle2" sx={{ mt: 2 }}>{t('note')}:</Typography>}
+            {note && (
+              <Typography variant="subtitle2" sx={{ mt: 2 }}>
+                {t('note')}:
+              </Typography>
+            )}
             <Box sx={{ color: 'text.secondary' }}>{note}</Box>
           </Stack>
         </Stack>

@@ -20,7 +20,7 @@ import SearchNotFound from 'src/components/search-not-found';
 export default function JobSearch({ query, results, onSearch, hrefItem }) {
   const router = useRouter();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const handleClick = (id) => {
     router.push(hrefItem(id));
@@ -48,7 +48,7 @@ export default function JobSearch({ query, results, onSearch, hrefItem }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={t("search...")}
+          placeholder={t('search...')}
           onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,

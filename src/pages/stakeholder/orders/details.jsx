@@ -15,7 +15,7 @@ export default function OrdersListPage() {
         <title> Dashboard: Order details</title>
       </Helmet>
 
-      <OrderDetailsView  />
+      <OrderDetailsView />
     </>
   );
 }
