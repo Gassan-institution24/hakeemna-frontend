@@ -96,7 +96,7 @@ export default function TableCreateView() {
     mobile_num2: Yup.string(),
     gender: Yup.string(),
     note: Yup.string(),
-    // work_shift: Yup.string().required(t('required field')),
+    work_shift: Yup.string().required(t('required field')),
     work_group: Yup.string().required(t('required field')),
     service_types: Yup.array(),
     appointment_type: Yup.string().required(t('required field')),
@@ -125,10 +125,35 @@ export default function TableCreateView() {
       appointment_type: appointmenttypesData?.[0]?._id,
       start_time: new Date(),
       work_group: workGroupsData?.[0]?._id,
-      work_shift: null,
+      work_shift: workShiftsData.filter((one) => {
+        const currentDate = new Date();
+
+        const startTime = new Date(currentDate);
+        startTime.setHours(
+          new Date(one.start_time).getHours(),
+          new Date(one.start_time).getMinutes(),
+          0,
+          0
+        );
+
+        const endTime = new Date(currentDate);
+        endTime.setHours(
+          new Date(one.end_time).getHours(),
+          new Date(one.end_time).getMinutes(),
+          0,
+          0
+        );
+
+        if (startTime <= endTime) {
+          return currentDate >= startTime && currentDate < endTime;
+        }
+        // If the shift crosses midnight
+        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+        return currentDate >= startTime || currentDate < endTimeNextDay;
+      })?.[0]?._id,
       service_types: [],
     }),
-    [workGroupsData, appointmenttypesData, user?.employee]
+    [workGroupsData, appointmenttypesData, user?.employee, workShiftsData]
   );
 
   const methods = useForm({
@@ -170,38 +195,13 @@ export default function TableCreateView() {
       appointment_type: values.appointment_type,
       start_time: new Date(),
       work_group: values.work_group,
-      work_shift: workShiftsData.filter((one) => {
-        const currentDate = new Date();
-
-        const startTime = new Date(currentDate);
-        startTime.setHours(
-          new Date(one.start_time).getHours(),
-          new Date(one.start_time).getMinutes(),
-          0,
-          0
-        );
-
-        const endTime = new Date(currentDate);
-        endTime.setHours(
-          new Date(one.end_time).getHours(),
-          new Date(one.end_time).getMinutes(),
-          0,
-          0
-        );
-
-        if (startTime <= endTime) {
-          return currentDate >= startTime && currentDate < endTime;
-        }
-        // If the shift crosses midnight
-        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
-        return currentDate >= startTime || currentDate < endTimeNextDay;
-      })?.[0],
+      work_shift: values.work_shift,
       service_types: values.service_types,
       emergency: true,
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
       department: workGroupsData.filter((item) => item._id === values.work_group)?.[0]?.department
-        ._id,
+        ?._id,
     });
     return appoint;
   };
@@ -211,7 +211,7 @@ export default function TableCreateView() {
       const { data: appointmentData } = await createAppointment();
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(appointmentData?._id),
-        data
+        { ...data, lang: curLangAr }
       );
       await addToCalendar(appointmentData);
       enqueueSnackbar(t('created successfully!'));
@@ -291,19 +291,44 @@ export default function TableCreateView() {
       appointment_type: appointmenttypesData?.[0]?._id,
       start_time: new Date(),
       work_group: workGroupsData?.[0]?._id,
-      work_shift: null,
+      work_shift: workShiftsData.filter((one) => {
+        const currentDate = new Date();
+
+        const startTime = new Date(currentDate);
+        startTime.setHours(
+          new Date(one.start_time).getHours(),
+          new Date(one.start_time).getMinutes(),
+          0,
+          0
+        );
+
+        const endTime = new Date(currentDate);
+        endTime.setHours(
+          new Date(one.end_time).getHours(),
+          new Date(one.end_time).getMinutes(),
+          0,
+          0
+        );
+
+        if (startTime <= endTime) {
+          return currentDate >= startTime && currentDate < endTime;
+        }
+        // If the shift crosses midnight
+        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+        return currentDate >= startTime || currentDate < endTimeNextDay;
+      })?.[0]?._id,
       service_types: [],
     });
     // eslint-disable-next-line
-  }, [workGroupsData, appointmenttypesData, user?.employee, typesLoading, wgLoading]);
+  }, [workGroupsData, appointmenttypesData, user?.employee, typesLoading, wgLoading, workShiftsData]);
 
-  if (!values.appointment_type || !values.work_group) {
+  if ((!values.appointment_type || !values.work_group) && appointmenttypesData.length && workGroupsData.length) {
     return <LoadingScreen />;
   }
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('Add patient')}
+        heading={t('new patient')}
         links={[
           {
             name: t('dashboard'),
@@ -328,7 +353,7 @@ export default function TableCreateView() {
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
+                sm: 'repeat(3, 1fr)',
               }}
             >
               <RHFSelect name="appointment_type" label={t('appointment type')}>
@@ -338,35 +363,35 @@ export default function TableCreateView() {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              {/* <RHFSelect
-                                    name="work_shift"
-                                    label={t('work shift')}
-                                    PaperPropsSx={{ textTransform: 'capitalize' }}
-                                >
-                                    {workShiftsData &&
-                                        workShiftsData.map((option, index, idx) => (
-                                            <MenuItem lang="ar" key={idx} value={option._id}>
-                                                {curLangAr ? option?.name_arabic : option?.name_english}
-                                            </MenuItem>
-                                        ))}
-                                    <Divider />
-                                    <MenuItem
-                                        lang="ar"
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'flex-end',
-                                            gap: 1,
-                                            fontWeight: 600,
-                                            // color: 'error.main',
-                                        }}
-                                        onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
-                                    >
-                                        <Typography variant="body2" sx={{ color: 'info.main' }}>
-                                            {t('Add new')}
-                                        </Typography>
-                                        <Iconify icon="material-symbols:new-window-sharp" />
-                                    </MenuItem>
-                                </RHFSelect> */}
+              <RHFSelect
+                name="work_shift"
+                label={t('work shift')}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {workShiftsData &&
+                  workShiftsData.map((option, index, idx) => (
+                    <MenuItem lang="ar" key={idx} value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                <Divider />
+                <MenuItem
+                  lang="ar"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
+                >
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
+              </RHFSelect>
               <RHFSelect name="work_group" label={t('work group')}>
                 {workGroupsData.map((option, index, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>

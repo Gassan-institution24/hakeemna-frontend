@@ -8,6 +8,7 @@ import { useTranslate } from 'src/locales';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -25,6 +26,7 @@ export function useNavData() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
+  const { isMedLab } = useUSTypeGuard()
   const { messages, refetch } = useGetUnreadMsgs(user._id);
 
   useEffect(() => {
@@ -212,7 +214,7 @@ export function useNavData() {
       {
         show:
           checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
-          employees_number > 3,
+          employees_number > 3 && !isMedLab && false,
         title: t('departments'),
         path: paths.unitservice.departments.root,
         // icon: <Iconify icon="uis:web-section-alt" />,
@@ -252,7 +254,7 @@ export function useNavData() {
           category: 'unit_service',
           subcategory: 'management_tables',
           acl: 'read',
-        }),
+        }) && !isMedLab,
         title: t('rooms'),
         path: paths.unitservice.tables.rooms.root,
         navItemId: 'USRoomsNav',
@@ -262,7 +264,7 @@ export function useNavData() {
           category: 'unit_service',
           subcategory: 'management_tables',
           acl: 'read',
-        }),
+        }) && !isMedLab,
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
@@ -272,8 +274,8 @@ export function useNavData() {
     const unitServiceItems = [
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
-          employees_number > 3,
+          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) && false &&
+          employees_number > 3 && !isMedLab,
         title: t('departments'),
         path: paths.unitservice.departments.root,
         icon: <Iconify icon="uis:web-section-alt" />,
@@ -295,7 +297,7 @@ export function useNavData() {
         navItemId: 'USEmployeesNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }),
+        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) && !isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         icon: <Iconify icon="mdi:account-secure" />,
@@ -307,11 +309,30 @@ export function useNavData() {
         ],
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) && isMedLab,
+        title: t('permissions'),
+        path: paths.unitservice.acl.root,
+        icon: <Iconify icon="mdi:account-secure" />,
+        children: [
+          { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
+          // { title: t('departments level'), path: paths.unitservice.acl.department },
+          { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
+          { title: t('employee permission'), path: paths.unitservice.acl.employees },
+        ],
+      },
+      {
         show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
         path: paths.unitservice.appointments.root,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
         navItemId: 'USAppointmentsNav',
+      },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) && isMedLab,
+        title: t('appointment configuration'),
+        path: paths.employee.appointmentconfiguration.root,
+        icon: <Iconify icon="fluent:content-settings-16-regular" />,
+        navItemId: 'EMAppointConfigNav',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }),
@@ -360,7 +381,7 @@ export function useNavData() {
         navItemId: 'USInsuranceNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -425,7 +446,7 @@ export function useNavData() {
         navItemId: 'USInfoNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         icon: <Iconify icon="entypo:upload" />,
@@ -446,7 +467,7 @@ export function useNavData() {
             category: 'work_group',
             subcategory: 'entrance_management',
             acl: 'read',
-          }),
+          }) && !isMedLab,
         title: t('entrance management'),
         path: paths.employee.entrancemanagement.root,
         icon: <Iconify icon="oi:timer" />,
@@ -460,7 +481,7 @@ export function useNavData() {
         navItemId: 'EMAppointmentsNav',
       },
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }),
+        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && !isMedLab,
         title: t('book appointments'),
         path: paths.employee.appointments.book,
         icon: <Iconify icon="material-symbols:add-ad" />,
@@ -480,7 +501,7 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) && !isMedLab,
         title: t('my checklist'),
         path: paths.employee.checklist.root,
         icon: <Iconify icon="solar:checklist-outline" />,
@@ -494,7 +515,7 @@ export function useNavData() {
         navItemId: 'EMWorkGroupsNav',
       },
       {
-        show: true,
+        show: false,
         title: t('my accounting'),
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -529,7 +550,7 @@ export function useNavData() {
         navItemId: 'EMCalenderNav',
       },
       {
-        show: true,
+        show: !isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
@@ -690,17 +711,23 @@ export function useNavData() {
     if (user?.role === 'superadmin') {
       return superAdminItems;
     }
-    if (user?.role === 'admin') {
+    if (user?.role === 'admin' && !isMedLab) {
       return [...employeeDashboard, ...unitServicesDashboars];
     }
-    if (user?.role === 'employee') {
+    if (user?.role === 'employee' && !isMedLab) {
       return [...employeeDashboard, ...unitServicesDashboars];
+    }
+    if (user?.role === 'admin') {
+      return [...unitServicesDashboars];
+    }
+    if (user?.role === 'employee') {
+      return [...unitServicesDashboars];
     }
     if (user?.role === 'stakeholder') {
       return stakeholderItems;
     }
     return [...userItems];
-  }, [t, user, router, checkAcl, employees_number, messages]);
+  }, [t, user, router, checkAcl, employees_number, messages, isMedLab]);
 
   return data;
 }

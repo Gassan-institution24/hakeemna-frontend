@@ -36,7 +36,7 @@ export function useNavData() {
         icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }) && false,
         title: t('accounting'),
         path: paths.unitservice.departments.accounting(id),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -72,7 +72,7 @@ export function useNavData() {
         icon: <Iconify icon="fa6-solid:people-group" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }) && false,
         title: t('permissions'),
         path: paths.unitservice.departments.permissions.root(id),
         icon: <Iconify icon="mdi:account-secure" />,

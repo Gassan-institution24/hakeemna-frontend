@@ -29,6 +29,7 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
 
 import Label from 'src/components/label';
@@ -72,12 +73,15 @@ export default function AppointmentsView({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { isMedLab } = useUSTypeGuard()
+
   const TABLE_HEAD = [
     { id: 'start_time', label: t('start time') },
     { id: 'appoint_number', label: t('number') },
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'patient', label: t('patient') },
     { id: 'note', label: t('note') },
+    (isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') }),
     { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
@@ -150,7 +154,7 @@ export default function AppointmentsView({ employeeData }) {
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'processing',
-      label: t('upcoming'),
+      label: t('current'),
       color: 'info',
       count: processing,
     },
@@ -452,7 +456,7 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('appointments') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && !isMedLab && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}
