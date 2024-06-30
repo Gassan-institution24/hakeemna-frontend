@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Unstable_Grid2';
-import CardHeader from '@mui/material/CardHeader';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Button, Select, MenuItem, Typography } from '@mui/material';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {
+  Box,
+  Link,
+  Card,
+  Grid,
+  Stack,
+  Button,
+  Select,
+  Avatar,
+  Dialog,
+  Divider,
+  MenuItem,
+  Typography,
+  CardHeader,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
@@ -118,6 +123,7 @@ export default function Doctorpage() {
         name_arabic: 'تم حجز موعد',
         sub_english: `appointment in ${datacheeck?.unit_service?.name_english}`,
         sub_arabic: `موعد في  ${datacheeck?.unit_service?.name_arabic}`,
+        title: 'appointment',
         actual_date: new Date(),
       });
 

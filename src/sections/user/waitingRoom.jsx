@@ -26,19 +26,16 @@ export default function WatingRoom() {
   return (
     <Container sx={{ my: 10 }}>
       <Card sx={{ width: 1 }}>
-        <CardHeader title="Collapsible Table" />
+        <CardHeader title="Waiting management system" />
 
         <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
           <Scrollbar>
             <Table sx={{ minWidth: 800 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell />
-                  <TableCell>Date</TableCell>
-                  <TableCell align="right">Calories</TableCell>
-                  <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                  <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                  <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>In wating</TableCell>
+                  <TableCell>Appointment time</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -61,33 +58,25 @@ function CollapsibleTableRow({ row }) {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <TableCell>test</TableCell>
+        <TableCell>test</TableCell>
+        <TableCell>test</TableCell>
+      </TableRow>
+
+      <TableRow>
+        <TableCell sx={{ py: 2 }} colSpan={6}>
           <IconButton
             size="small"
             color={collapsible.value ? 'inherit' : 'default'}
             onClick={collapsible.onToggle}
+            sx={{borderRadius:0}}
           >
+            Blogs{' '}
             <Iconify
               icon={collapsible.value ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
             />
           </IconButton>
-        </TableCell>
 
-        <TableCell component="th" scope="row">
-          {row?.name}
-        </TableCell>
-
-        <TableCell align="right">{row?.calories}</TableCell>
-
-        <TableCell align="right">{row?.fat}</TableCell>
-
-        <TableCell align="right">{row?.carbs}</TableCell>
-
-        <TableCell align="right">{row?.protein}</TableCell>
-      </TableRow>
-
-      <TableRow>
-        <TableCell sx={{ py: 0 }} colSpan={6}>
           <Collapse in={collapsible.value} unmountOnExit>
             <Paper
               variant="outlined"
