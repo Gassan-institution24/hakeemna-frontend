@@ -28,6 +28,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import { useGetAppointmentTypes, useGetEmployeeAppointments } from 'src/api';
 
 import Label from 'src/components/label';
@@ -74,13 +75,15 @@ export default function AppointmentsView({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { isMedLab } = useUSTypeGuard()
+
   const TABLE_HEAD = [
     { id: 'start_time', label: t('start time') },
     { id: 'appoint_number', label: t('number') },
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'patient', label: t('patient') },
     { id: 'note', label: t('note') },
-    { id: 'coming', label: t('is coming') },
+    { id: isMedLab ? 'medicalAnalysis' : 'coming', label: isMedLab ? t('medical analysis') : t('is coming') },
     { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
@@ -536,9 +539,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

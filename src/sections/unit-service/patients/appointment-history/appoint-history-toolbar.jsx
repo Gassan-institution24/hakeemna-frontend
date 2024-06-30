@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -18,6 +20,7 @@ export default function InvoiceTableToolbar({
   dateError,
   serviceOptions,
 }) {
+  const { t } = useTranslate()
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
@@ -54,7 +57,7 @@ export default function InvoiceTableToolbar({
         }}
       >
         <DatePicker
-          label="Start date"
+          label={t("start date")}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -64,7 +67,7 @@ export default function InvoiceTableToolbar({
         />
 
         <DatePicker
-          label="End date"
+          label={t("end date")}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -83,7 +86,7 @@ export default function InvoiceTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder={t("Search...")}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

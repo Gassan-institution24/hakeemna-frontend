@@ -41,12 +41,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'name_arabic', label: 'Name in arabic' },
-  // { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -59,6 +53,12 @@ export default function PatientTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name in english') },
+    { id: 'name_arabic', label: t('name in arabic') },
+    { id: '', width: 140 },
+  ];
 
   const checkAcl = useAclGuard();
 
@@ -116,10 +116,10 @@ export default function PatientTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Patients" /// edit
+        heading={t("patients")} /// edit
         links={[
           {
-            name: 'dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           { name: t('institution patients') }, /// edit
@@ -136,7 +136,7 @@ export default function PatientTableView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              {t('new patient')}
+              {t('add')}
             </Button>
           ) /// edit
         }

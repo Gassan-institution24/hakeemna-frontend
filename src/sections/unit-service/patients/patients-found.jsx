@@ -66,10 +66,11 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
       const { data } = await createAppointment();
       console.log('appointment', data);
       await axiosInstance.patch(endpoints.appointments.book(data?._id), {
-        patient: row._id,
+        patient: row?._id,
         note,
+        lang: curLangAr
       });
-      await addToCalendar(SelectedAppointment);
+      await addToCalendar(data);
       enqueueSnackbar(t('booked successfully!'));
       // router.back();
     } catch (error) {

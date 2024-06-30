@@ -172,7 +172,7 @@ export default function TableCreateView() {
     try {
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(selected),
-        data
+        { ...data, lang: curLangAr }
       );
       const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
       await addToCalendar(SelectedAppointment);
