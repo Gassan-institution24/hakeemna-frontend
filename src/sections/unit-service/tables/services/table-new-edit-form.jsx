@@ -20,6 +20,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import {
   useGetTaxes,
   useGetAnalyses,
@@ -53,6 +54,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { handleAddNew } = useNewScreen();
 
+  const { isMedLab } = useUSTypeGuard()
+
   const { analysesData } = useGetAnalyses();
 
   const { t } = useTranslate();
@@ -68,8 +71,8 @@ export default function TableNewEditForm({ currentTable }) {
     Measurement_type: Yup.string().required(t('required field')),
     Price_per_unit: Yup.string().required(t('required field')),
     place_of_service: Yup.string(),
-    tax: Yup.string(),
-    deduction: Yup.string(),
+    tax: Yup.string().nullable(),
+    deduction: Yup.string().nullable(),
   });
 
   const defaultValues = useMemo(
@@ -83,8 +86,8 @@ export default function TableNewEditForm({ currentTable }) {
       work_shift: currentTable?.work_shift?._id || null,
       Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
-      tax: currentTable?.tax || '',
-      deduction: currentTable?.deduction || '',
+      tax: currentTable?.tax || null,
+      deduction: currentTable?.deduction || null,
     }),
     [currentTable, user]
   );
@@ -115,10 +118,8 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
-    watch,
     formState: { isSubmitting, errors },
   } = methods;
-  console.log('watchhhhhhhhhhhhhhhh', watch());
 
   useEffect(() => {
     if (Object.keys(errors).length) {
@@ -156,8 +157,8 @@ export default function TableNewEditForm({ currentTable }) {
       work_shift: currentTable?.work_shift?._id || null,
       Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
-      tax: currentTable?.tax || '',
-      deduction: currentTable?.deduction || '',
+      tax: currentTable?.tax || null,
+      deduction: currentTable?.deduction || null,
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -176,7 +177,7 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFAutocomplete
+              {isMedLab && <RHFAutocomplete
                 freeSolo
                 name="name_english"
                 label="name english"
@@ -185,8 +186,8 @@ export default function TableNewEditForm({ currentTable }) {
                 placeholder="Choose a name english"
                 options={analysesData.map((option) => option.name_english)}
                 getOptionLabel={(option) => option}
-              />
-              <RHFAutocomplete
+              />}
+              {isMedLab && <RHFAutocomplete
                 freeSolo
                 name="name_arabic"
                 label="name arabic"
@@ -195,18 +196,18 @@ export default function TableNewEditForm({ currentTable }) {
                 placeholder="Choose a name arabic"
                 options={analysesData.map((option) => option.name_arabic)}
                 getOptionLabel={(option) => option}
-              />
-              <RHFTextField
+              />}
+              {!isMedLab && <RHFTextField
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={t('name english')}
-              />
-              <RHFTextField
+              />}
+              {!isMedLab && <RHFTextField
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label={t('name arabic')}
-              />
+              />}
 
               <RHFSelect name="work_shift" label={t('work shift')}>
                 {workShiftsData.map((work_shift, idx) => (

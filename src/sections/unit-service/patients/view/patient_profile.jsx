@@ -36,11 +36,11 @@ export default function PatientProfile() {
   const TABS = [
     {
       value: 'home',
-      label: 'home',
+      label: t('profile'),
     },
     {
       value: 'appointments',
-      label: 'appointments',
+      label: t('appointments'),
     },
     {
       value: 'medicalanalysis',
