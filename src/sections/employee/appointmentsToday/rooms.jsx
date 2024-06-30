@@ -36,6 +36,8 @@ export default function Rooms() {
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
+      unit_service: Entrance?.unit_service?._id,
+      appointment: Entrance?.appointmentId,
     });
   }, [user, Entrance, reset]);
   const handleEndAppointment = async (entrance) => {
@@ -66,6 +68,7 @@ export default function Rooms() {
       enqueueSnackbar('no', { variant: 'error' });
     }
   };
+
   return (
     <>
       {showAlert && (
