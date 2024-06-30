@@ -21,6 +21,7 @@ import {
   Button,
   Dialog,
   Divider,
+  Checkbox,
   MenuItem,
   Typography,
   DialogTitle,
@@ -62,7 +63,6 @@ export default function Processing() {
   const { Entrance, refetch } = useGetOneEntranceManagement(id);
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
@@ -70,8 +70,8 @@ export default function Processing() {
   const curLangAr = currentLang.value === 'ar';
 
   const [ImgFiles, setImgFiles] = useState([]);
-
   const [DoctorComment, setDoctorComment] = useState();
+  const [chronic, setChronic] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -87,6 +87,7 @@ export default function Processing() {
     Doctor_Comments: Yup.string(),
     description: Yup.string(),
     department: Yup.string(),
+    chronic: Yup.boolean(),
     Drugs_report: Yup.string(),
     medical_report: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
@@ -97,8 +98,10 @@ export default function Processing() {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
     service_unit: Entrance?.service_unit,
+    chronic: '',
     Doctor_Comments: '',
   };
+  console.log(chronic);
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -119,7 +122,6 @@ export default function Processing() {
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
-      Doctor_Comments: '',
     });
   }, [user, Entrance, reset]);
 
@@ -168,13 +170,12 @@ export default function Processing() {
 
   const onSubmit = async (submitdata) => {
     try {
-      // Ensure Doctor_Comments is included in submitdata
       submitdata.Doctor_Comments = DoctorComment;
+      submitdata.chronic = chronic;
 
       if (medicalReportDialog.value) {
         const formData = new FormData();
 
-        // Append all form fields
         Object.keys(submitdata).forEach((key) => {
           if (Array.isArray(submitdata[key])) {
             submitdata[key].forEach((item, index) => {
@@ -185,14 +186,12 @@ export default function Processing() {
           }
         });
 
-        // Append image files
         if (ImgFiles) {
           ImgFiles.forEach((file, index) => {
             formData.append(`file[${index}]`, file);
           });
         }
 
-        // First API call
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
           name_english: 'A medical report has been added',
@@ -200,21 +199,18 @@ export default function Processing() {
           sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
+          title: 'medical report',
           service_unit: Entrance?.service_unit?._id,
         });
 
-        // Second API call
         await axiosInstance.post('/api/examination', formData);
 
-        // Third API call
         await axiosInstance.patch(`/api/entrance/${id}`, {
           medical_report_status: true,
         });
 
-        // Show success message
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
 
-        // Refetch data and reset the form
         refetch();
         medicalReportDialog.onFalse();
         reset();
@@ -227,6 +223,7 @@ export default function Processing() {
           sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
           sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
+          title: 'prescription',
           service_unit: Entrance?.service_unit?._id,
         });
         await axiosInstance.post('/api/drugs', submitdata);
@@ -243,6 +240,7 @@ export default function Processing() {
       enqueueSnackbar('Error uploading data', { variant: 'error' });
     }
   };
+
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
@@ -254,22 +252,29 @@ export default function Processing() {
   const handleBackClick = (idd) => {
     router.push(paths.employee.recored(idd));
   };
-
+  const firstSequenceNumber =
+    medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
   const TIMELINES = [
     {
       key: 0,
       title: (
         <>
-          <span
-            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
-          >
-            Visits history
-          </span>
+          {firstSequenceNumber && (
+            <span
+              style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+            >
+              Visits history {firstSequenceNumber}
+            </span>
+          )}
 
           <br />
           {medRecord?.map((test, i) => (
             <>
-              <Button onClick={() => handleBackClick(test?._id)} sx={{ width: '100%', m: 1 }}>
+              <Button
+                key={i}
+                onClick={() => handleBackClick(test?._id)}
+                sx={{ width: '100%', m: 1 }}
+              >
                 {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
               </Button>
 
@@ -476,6 +481,27 @@ export default function Processing() {
               onChange={(e) => setDoctorComment(e.target.value)}
             />
           </DialogContent>
+          <Checkbox
+            size="small"
+            name="chronic"
+            color="success"
+            sx={{ position: 'relative', top: 5, left: 25 }}
+            onChange={() => {
+              setChronic(!chronic);
+            }}
+          />
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              mt: { md: -3, xs: -2.3 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
+              typography: 'caption',
+
+              fontSize: { md: 15, xs: 10 },
+            }}
+          >
+            chronic
+          </Typography>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}

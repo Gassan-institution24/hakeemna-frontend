@@ -7,17 +7,19 @@ import {
   Table,
   Button,
   Switch,
+  Select,
   TableRow,
+  MenuItem,
   TableCell,
   TableBody,
   TableHead,
-  TextField,
+  Typography,
   TableContainer,
 } from '@mui/material';
 
 import { useParams } from 'src/routes/hooks';
 
-import { fMonth, fTimeText } from 'src/utils/format-time';
+import { fDateTime, fTimeText } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 import {
@@ -39,31 +41,42 @@ export default function History() {
     Entrance?.patient?._id,
     Entrance?.service_unit?._id
   );
-  const [filterforspecialties, setFilterforspecialties] = useState();
+  const Title = ['appointment', 'medical report', 'prescription'];
   const [switchh, setSwitch] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(2);
+  const [selectedTitle, setSelectedTitle] = useState('');
 
   const dataFiltered = applyFilter({
     inputData: switchh === true ? historyDataForPatient : historyData,
-    filterforspecialties,
+    filterforspecialties: selectedTitle,
   });
+
   return (
     <>
-      <>
-        {`${Entrance?.patient?.name_english} medical history`}
-        <br />
-        <Box>
-          <TextField
-            onChange={(e) => setFilterforspecialties(e.target.value)}
-            variant="outlined"
-            size="small"
-            placeholder="Search details"
-            sx={{ ml: 2, mb: 2 }}
-          />
-        </Box>
-      </>
+      <div style={{ marginBottom: 10 }}>{`${Entrance?.patient?.name_english} medical history`}</div>
 
       <Card>
+        <Box sx={{ m: 2 }}>
+          <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
+            {t('TYPE')}{' '}
+          </Typography>
+          <Select
+            sx={{
+              width: 150,
+              height: 35,
+            }}
+            value={selectedTitle}
+            onChange={(e) => setSelectedTitle(e.target.value)}
+          >
+            <MenuItem value="">{t('All')}</MenuItem>
+            {Title.map((type, index) => (
+              <MenuItem key={index} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+
         <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
           <Table stickyHeader>
             <TableHead>
@@ -85,9 +98,10 @@ export default function History() {
                 (historydata, i) =>
                   historydata?.status === 'active' && (
                     <TableRow key={i}>
-                      <TableCell>{fMonth(historydata?.actual_date)}</TableCell>
+                      <TableCell>{fDateTime(historydata?.actual_date)}</TableCell>
                       <TableCell>
-                        {curLangAr ? historydata?.name_arabic : historydata?.name_english}
+                        {/* {curLangAr ? historydata?.name_arabic : historydata?.name_english} */}
+                        {historydata?.title}
                       </TableCell>
                       <TableCell>
                         {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
@@ -115,33 +129,10 @@ export default function History() {
     </>
   );
 }
-function normalizeArabicText(text) {
-  // Normalize Arabic text by replacing 'أ' with 'ا'
-  return text.replace(/أ/g, 'ا');
-}
 
 function applyFilter({ inputData, filterforspecialties }) {
   if (!filterforspecialties) {
     return inputData;
   }
-
-  // Normalize the search term for comparison
-  const normalizedSearchTerm = normalizeArabicText(filterforspecialties.toLowerCase());
-
-  inputData = inputData?.filter((data) => {
-    const normalizedDataNameEnglish = normalizeArabicText(data?.name_english.toLowerCase());
-    const normalizedDataNameArabic = normalizeArabicText(data?.name_arabic.toLowerCase());
-    const normalizedDataSubArabic = normalizeArabicText(data?.sub_english.toLowerCase());
-    const normalizedDataSubEnglish = normalizeArabicText(data?.sub_arabic.toLowerCase());
-    return (
-      normalizedDataNameEnglish.includes(normalizedSearchTerm) ||
-      normalizedDataNameArabic.includes(normalizedSearchTerm) ||
-      normalizedDataSubArabic.includes(normalizedSearchTerm) ||
-      normalizedDataSubEnglish.includes(normalizedSearchTerm) ||
-      data?._id === filterforspecialties ||
-      JSON.stringify(data.code) === filterforspecialties
-    );
-  });
-
-  return inputData;
+  return inputData.filter((item) => item.title === filterforspecialties);
 }
