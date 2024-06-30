@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,31 +21,32 @@ import axios from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatientOneAppointments } from 'src/api';
+import { useGetPatientFeedbacks } from 'src/api';
 
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider from 'src/components/hook-form/form-provider';
 // ----------------------------------------------------------------------
 
-export default function WatingRoomDialog({ employeesData }) {
+export default function RatingRoomDialog() {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const UpdateUserSchema = Yup.object().shape({
+    Rate: Yup.number(),
     Body: Yup.string(),
     Selection: Yup.string().nullable(),
   });
   const [rating, setRating] = useState();
 
   const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
+  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
   const skipfunction = async () => {
     try {
-      await axios.patch(`api/appointments/${appointmentsData._id}`, {
-        hasFeedback: true,
+      await axios.patch(`api/feedback/${feedbackData?._id}`, {
+        skip: true,
       });
       dialog.onFalse();
     } catch (error) {
@@ -57,9 +57,12 @@ export default function WatingRoomDialog({ employeesData }) {
   const handleRatingClick = (e) => {
     setRating(parseFloat(e.target.value));
   };
+  const [selectedValue, setSelectedValue] = React.useState(undefined);
+
   const defaultValues = {
     Body: '',
-    Selection: null,
+    Selection: selectedValue,
+    Rate: rating,
   };
 
   const methods = useForm({
@@ -73,8 +76,6 @@ export default function WatingRoomDialog({ employeesData }) {
     formState: { isSubmitting },
   } = methods;
   const dialog = useBoolean(true);
-
-  const [selectedValue, setSelectedValue] = React.useState(undefined);
 
   const RATEELEMENTS = ['Neglectful treatment', 'Employee Behavior', 'Cleanliness', 'Price'];
   const controlProps = (item) => ({
@@ -93,17 +94,10 @@ export default function WatingRoomDialog({ employeesData }) {
   const { maxWidth } = useState('xs');
   const onSubmit = async (dataSubmit) => {
     try {
-      const newData = {
-        ...dataSubmit,
+      await axios.patch(`api/feedback/${feedbackData?._id}`, {
         Selection: selectedValue,
         Rate: rating,
-        patient: user?.patient._id,
-        appointment: appointmentsData._id,
-        department: appointmentsData.department?._id,
-        employee: employeesData?.employee?.employee?._id,
-      };
-      await axios.post('api/feedback', newData); // Assuming this endpoint is for creating feedback
-      await axios.patch(`api/appointments/feedback/${appointmentsData._id}`);
+      });
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
 
@@ -138,16 +132,15 @@ export default function WatingRoomDialog({ employeesData }) {
           <DialogContent>
             {t(`How was your experience with `)}{' '}
             {curLangAr
-              ? `${appointmentsData?.unit_service?.name_arabic}`
-              : `${appointmentsData?.unit_service?.name_english}`}
+              ? `${feedbackData?.unit_service?.name_arabic}`
+              : `${feedbackData?.unit_service?.name_english}`}
+            <br />
+            <span style={{ textAlign: 'center' }}>{`dr. ${feedbackData?.employee?.name_english}`}</span>
           </DialogContent>
           <Image
-            src={appointmentsData?.unit_service?.company_logo}
+            src={feedbackData?.unit_service?.company_logo}
             sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
           />
-          {/* <Typography sx={{ color: 'black' }}>
-              
-            </Typography> */}
           <Rating
             size="large"
             precision={1}
@@ -214,6 +207,3 @@ export default function WatingRoomDialog({ employeesData }) {
     </Dialog>
   );
 }
-WatingRoomDialog.propTypes = {
-  employeesData: PropTypes.object,
-};
