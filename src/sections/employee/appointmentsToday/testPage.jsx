@@ -1,231 +1,544 @@
 // import * as Yup from 'yup';
-// import { useForm } from 'react-hook-form';
+// import { useParams } from 'react-router';
+// import { useTheme } from '@emotion/react';
+// import { useState, useEffect } from 'react';
 // import { enqueueSnackbar } from 'notistack';
 // import { yupResolver } from '@hookform/resolvers/yup';
+// import { useForm, Controller } from 'react-hook-form';
 
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import { Button, Dialog, Checkbox, DialogActions, DialogContent } from '@mui/material';
+// import { alpha } from '@mui/material/styles';
+// import { DatePicker } from '@mui/x-date-pickers';
+// import {
+//   Timeline,
+//   TimelineDot,
+//   TimelineItem,
+//   TimelineContent,
+//   TimelineConnector,
+//   TimelineSeparator,
+// } from '@mui/lab';
+// import {
+//   Paper,
+//   Button,
+//   Dialog,
+//   Divider,
+//   MenuItem,
+//   Typography,
+//   DialogTitle,
+//   DialogActions,
+//   DialogContent,
+//   useMediaQuery,
+// } from '@mui/material';
+
+// import { paths } from 'src/routes/paths';
+// import { useRouter } from 'src/routes/hooks';
 
 // import { useBoolean } from 'src/hooks/use-boolean';
 
-// import axiosInstance from 'src/utils/axios';
+// import { fDateTime } from 'src/utils/format-time';
+// import axiosInstance, { endpoints } from 'src/utils/axios';
+
+// import { useAuthContext } from 'src/auth/hooks';
+// import { useLocales, useTranslate } from 'src/locales';
+// import {
+//   useGetPatient,
+//   useGetMedicines,
+//   useGetMedRecord,
+//   useGetOneEntranceManagement,
+// } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
-// import { RHFTextField } from 'src/components/hook-form';
-// import FormProvider from 'src/components/hook-form/form-provider';
+// import FormProvider, { RHFUpload, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-// questions in super admin
-// export default function TestPage() {
-//   const onSubmit = async (submitdata) => {
-//     try {
-//       await axiosInstance.post('/api/generlaCL', submitdata);
-//       enqueueSnackbar('new question created successfully', { variant: 'success' });
-//       dialog.onFalse();
-//       reset();
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   };
-//   const questionSchema = Yup.object().shape({
-//     question_arabic: Yup.string(),
-//     question: Yup.string(),
+// import Rooms from './rooms';
+// import History from './history';
+// import CheckList from './checkList';
+// import SickLeave from './sickLeave';
+
+// export default function Processing() {
+//   const { user } = useAuthContext();
+//   const params = useParams();
+//   const { id } = params;
+//   const { medicinesData } = useGetMedicines();
+//   const { Entrance, refetch } = useGetOneEntranceManagement(id);
+//   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
+//   const { data } = useGetPatient(Entrance?.patient?._id);
+//   const medicalReportDialog = useBoolean();
+//   const prescriptionDialog = useBoolean();
+//   const { t } = useTranslate();
+//   const { currentLang } = useLocales();
+//   const curLangAr = currentLang.value === 'ar';
+
+//   const [ImgFiles, setImgFiles] = useState([]);
+// console.log(medRecord);
+//   const [DoctorComment, setDoctorComment] = useState();
+//   const theme = useTheme();
+//   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+//   const router = useRouter();
+//   const PrescriptionsSchema = Yup.object().shape({
+//     employee: Yup.string(),
+//     patient: Yup.string(),
+//     Num_days: Yup.number(),
+//     medicines: Yup.string(),
+//     Start_time: Yup.date(),
+//     End_time: Yup.date(),
+//     file: Yup.array(),
+//     Frequency_per_day: Yup.string(),
+//     Doctor_Comments: Yup.string(),
+//     description: Yup.string(),
+//     department: Yup.string(),
+//     Drugs_report: Yup.string(),
+//     medical_report: Yup.string(),
+//     Medical_sick_leave_start: Yup.date(),
+//     Medical_sick_leave_end: Yup.date(),
 //   });
-//   const defaultValues = {
-//     question_arabic: '',
-//     question: '',
-//   };
 
-//   const dialog = useBoolean();
+//   const defaultValues = {
+//     employee: user?.employee?._id,
+//     patient: Entrance?.patient?._id,
+//     service_unit: Entrance?.service_unit,
+//     Doctor_Comments: '',
+//   };
 //   const methods = useForm({
 //     mode: 'onTouched',
-//     resolver: yupResolver(questionSchema),
+//     resolver: yupResolver(PrescriptionsSchema),
 //     defaultValues,
 //   });
 
 //   const {
 //     reset,
 //     handleSubmit,
+//     control,
+//     watch,
+//     setValue,
 //     formState: { isSubmitting },
 //   } = methods;
-//   return (
-//     <>
-//       <FormControlLabel label="Diabetes" control={<Checkbox size="small" />} />
-//       <br />
-//       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ mt: 1 }}>
-//         Edit Check list
-//         <Iconify icon="ic:outline-edit-note" sx={{ ml: 0.5 }} />
-//       </Button>
+//   const values = watch();
+//   useEffect(() => {
+//     reset({
+//       employee: user?.employee?._id,
+//       patient: Entrance?.patient?._id,
+//       service_unit: Entrance?.service_unit,
+//       Doctor_Comments: '',
+//     });
+//   }, [user, Entrance, reset]);
 
-//       <Dialog open={dialog.value} onClose={dialog.onFalse}>
+//   const watchStartTime = watch('Start_time');
+//   const watchEndTime = watch('End_time');
+
+//   useEffect(() => {
+//     if (watchStartTime && watchEndTime) {
+//       const start = new Date(watchStartTime);
+//       const end = new Date(watchEndTime);
+//       const difference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+//       setValue('Num_days', difference > 0 ? difference : 0);
+//     }
+//   }, [watchStartTime, watchEndTime, setValue]);
+//   const fuser = () => {
+//     const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
+
+//     const isValidFile = (fileName) => {
+//       const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+//       return allowedExtensions.includes(fileExtension);
+//     };
+
+//     const isValidSize = (fileSize) => fileSize <= 3145728;
+
+//     return {
+//       validateFile: isValidFile,
+//       validateSize: isValidSize,
+//     };
+//   };
+
+//   const handleDrop = (acceptedFiles) => {
+//     const fileValidator = fuser();
+
+//     const isValidFiles = acceptedFiles.every(
+//       (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+//     );
+
+//     if (isValidFiles) {
+//       const newFiles = acceptedFiles;
+//       setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
+//       setValue('file', [...values.file, ...newFiles]);
+//     } else {
+//       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
+//     }
+//   };
+
+//   const onSubmit = async (submitdata) => {
+//     try {
+//       // Ensure Doctor_Comments is included in submitdata
+//       submitdata.Doctor_Comments = DoctorComment;
+
+//       if (medicalReportDialog.value) {
+//         const formData = new FormData();
+
+//         // Append all form fields
+//         Object.keys(submitdata).forEach((key) => {
+//           if (Array.isArray(submitdata[key])) {
+//             submitdata[key].forEach((item, index) => {
+//               formData.append(`${key}[${index}]`, item);
+//             });
+//           } else {
+//             formData.append(key, submitdata[key]);
+//           }
+//         });
+
+//         // Append image files
+//         if (ImgFiles) {
+//           ImgFiles.forEach((file, index) => {
+//             formData.append(`file[${index}]`, file);
+//           });
+//         }
+
+//         // First API call
+//         await axiosInstance.post(endpoints.history.all, {
+//           patient: Entrance?.patient?._id,
+//           name_english: 'A medical report has been added',
+//           name_arabic: 'تم ارفاق تقرير طبي',
+//           sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
+//           sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
+//           actual_date: Entrance?.created_at,
+//           service_unit: Entrance?.service_unit?._id,
+//         });
+
+//         // Second API call
+//         await axiosInstance.post('/api/examination', formData);
+
+//         // Third API call
+//         await axiosInstance.patch(`/api/entrance/${id}`, {
+//           medical_report_status: true,
+//         });
+
+//         // Show success message
+//         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+
+//         // Refetch data and reset the form
+//         refetch();
+//         medicalReportDialog.onFalse();
+//         reset();
+//       }
+//       if (prescriptionDialog.value) {
+//         await axiosInstance.post(endpoints.history.all, {
+//           patient: Entrance?.patient?._id,
+//           name_english: 'an prescription has been added',
+//           name_arabic: 'تم ارفاق وصفة طبية',
+//           sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
+//           sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
+//           actual_date: Entrance?.created_at,
+//           service_unit: Entrance?.service_unit?._id,
+//         });
+//         await axiosInstance.post('/api/drugs', submitdata);
+//         await axiosInstance.patch(`/api/entrance/${id}`, {
+//           Drugs_report_status: true,
+//         });
+//         enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
+//         refetch();
+//         prescriptionDialog.onFalse();
+//         reset();
+//       }
+//     } catch (error) {
+//       console.error(error.message);
+//       enqueueSnackbar('Error uploading data', { variant: 'error' });
+//     }
+//   };
+//   useEffect(() => {
+//     reset({
+//       employee: user?.employee?._id,
+//       patient: Entrance?.patient?._id,
+//       service_unit: Entrance?.service_unit,
+//     });
+//   }, [user, Entrance, reset]);
+
+//   const handleBackClick = (idd) => {
+//     router.push(paths.employee.recored(idd));
+//   };
+//   const firstSequenceNumber = medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
+//   const TIMELINES = [
+//     {
+//       key: 0,
+//       title: (
+//         <>
+//         {firstSequenceNumber && (
+//         <span
+//           style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+//         >
+//           Visits history {firstSequenceNumber}
+//         </span>
+//       )}
+
+//           <br />
+//           {medRecord?.map((test, i) => (
+//             <>
+//               <Button
+//                 key={i}
+//                 onClick={() => handleBackClick(test?._id)}
+//                 sx={{ width: '100%', m: 1 }}
+//               >
+//                 {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
+//               </Button>
+
+//               <Divider />
+//             </>
+//           ))}
+//         </>
+//       ),
+//       color: 'info',
+//       icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
+//     },
+//     {
+//       key: 1,
+//       title: <History />,
+//       color: 'primary',
+//       icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+//     },
+//     {
+//       key: 4,
+//       title: <Rooms />,
+//       color: 'info',
+//       icon: <Iconify icon="cil:room" width={24} />,
+//     },
+//     {
+//       key: 3,
+//       title: (
+//         <>
+//           <span
+//             style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+//           >
+//             Doctor Check List
+//           </span>
+//           <CheckList />
+//         </>
+//       ),
+//       color: 'primary',
+//       icon: <Iconify icon="octicon:checklist-16" width={23} />,
+//     },
+
+//     {
+//       key: 5,
+//       title: 'medical report (optional)',
+//       color: 'primary',
+
+//       icon:
+//         Entrance?.medical_report_status === true ? (
+//           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+//         ) : (
+//           <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />
+//         ),
+//     },
+//     {
+//       key: 6,
+//       title: 'prescription (optional)',
+//       color: 'info',
+//       icon:
+//         Entrance?.Drugs_report_status === true ? (
+//           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+//         ) : (
+//           <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
+//         ),
+//     },
+//     {
+//       key: 7,
+//       title: (
+//         <>
+//           sick leave (optional) <br />
+//           <SickLeave patient={data} service_unit={Entrance?.service_unit?._id} />
+//         </>
+//       ),
+//       color: 'primary',
+//       icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
+//     },
+//   ];
+
+//   const renderMedicalReport = (
+//     <>
+//       <Button
+//         variant="outlined"
+//         color="success"
+//         onClick={medicalReportDialog.onTrue}
+//         sx={{ mt: 1 }}
+//       >
+//         {t('Add medical report')}
+//         <Iconify icon="mingcute:add-line" />
+//       </Button>
+//       <Dialog open={medicalReportDialog.value} onClose={medicalReportDialog.onFalse}>
 //         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+//           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
+//             {t('IMPORTANT')}
+//           </DialogTitle>
 //           <DialogContent>
-//             <br />
-//             <br />
-//             <RHFTextField lang="ar" name="question_arabic" label="question_arabic" />
-//             <br />
-//             <br />
-//             <RHFTextField lang="en" name="question" label="question" />
+//             <Typography sx={{ mb: 5, fontSize: 14 }}>
+//               {curLangAr
+//                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
+//                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
+//             </Typography>
+//             <RHFTextField lang="en" multiline name="description" label={t('description')} />
+//             <RHFUpload
+//               autoFocus
+//               fullWidth
+//               name="file"
+//               margin="dense"
+//               sx={{ mb: 2 }}
+//               variant="outlined"
+//               onDrop={handleDrop}
+//               multiple
+//             />
 //           </DialogContent>
 //           <DialogActions>
-//             <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>
-//               {/* {t('Cancel')} */}Cancel
+//             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
+//               {t('Cancel')}
 //             </Button>
-
-//             <Button type="submit" variant="contained" loading={isSubmitting}>
-//               {/* {t('Upload')} */}Upload
+//             <Button type="submit" loading={isSubmitting} variant="contained">
+//               {t('Upload')}
 //             </Button>
 //           </DialogActions>
 //         </FormProvider>
 //       </Dialog>
 //     </>
 //   );
+
+//   const renderPrescription = (
+//     <>
+//       <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ mt: 1 }}>
+//         {t('Add prescription')}
+//         <Iconify icon="mingcute:add-line" />
+//       </Button>
+//       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
+//         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+//           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
+//             {t('IMPORTANT')}
+//           </DialogTitle>
+//           <DialogContent>
+//             <Typography sx={{ mb: 5, fontSize: 14 }}>
+//               {curLangAr
+//                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
+//                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
+//             </Typography>
+//             <RHFSelect
+//               label={t('medicine*')}
+//               fullWidth
+//               name="medicines"
+//               PaperPropsSx={{ textTransform: 'capitalize' }}
+//               sx={{ mb: 2 }}
+//             >
+//               {medicinesData?.map((test, idx) => (
+//                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
+//                   {test?.trade_name}
+//                 </MenuItem>
+//               ))}
+//             </RHFSelect>
+//             <RHFTextField
+//               lang="en"
+//               name="Frequency_per_day"
+//               label={t('Frequency pe day')}
+//               sx={{ mb: 2 }}
+//             />
+//             <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
+
+//             <Controller
+//               name="Start_time"
+//               control={control}
+//               render={({ field, fieldState: { error } }) => (
+//                 <DatePicker
+//                   {...field}
+//                   label={t('Start time*')}
+//                   sx={{ mb: 2 }}
+//                   slotProps={{
+//                     textField: {
+//                       fullWidth: true,
+//                       error: !!error,
+//                       helperText: error?.message,
+//                     },
+//                   }}
+//                 />
+//               )}
+//             />
+//             <Controller
+//               name="End_time"
+//               control={control}
+//               render={({ field, fieldState: { error } }) => (
+//                 <DatePicker
+//                   {...field}
+//                   label={t('End time*')}
+//                   sx={{ mb: 2 }}
+//                   slotProps={{
+//                     textField: {
+//                       fullWidth: true,
+//                       error: !!error,
+//                       helperText: error?.message,
+//                     },
+//                   }}
+//                 />
+//               )}
+//             />
+//             <RHFTextField
+//               lang="en"
+//               name="Doctor_Comments"
+//               label={t('Doctor Comments')}
+//               multiline
+//               // rows={4}
+//               sx={{ mb: 2 }}
+//               onChange={(e) => setDoctorComment(e.target.value)}
+//             />
+//           </DialogContent>
+//           <DialogActions>
+//             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
+//               {t('Cancel')}
+//             </Button>
+//             <Button type="submit" loading={isSubmitting} variant="contained">
+//               {t('Upload')}
+//             </Button>
+//           </DialogActions>
+//         </FormProvider>
+//       </Dialog>
+//     </>
+//   );
+
+//   const renderTimelineItems = (item) => (
+//     <Paper
+//       sx={{
+//         p: 3,
+//         bgcolor: (themee) => alpha(themee.palette.grey[500], 0.12),
+//         width: '100%',
+//       }}
+//     >
+//       <Typography variant="subtitle2">{item.title}</Typography>
+//       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+//         {item.title === 'medical report (optional)' && renderMedicalReport}
+//         {item.title === 'prescription (optional)' && renderPrescription}
+//       </Typography>
+//     </Paper>
+//   );
+
+//   return isMobile ? (
+//     <div>
+//       {TIMELINES.map((item) => (
+//         <div key={item.key} style={{ marginBottom: '16px' }}>
+//           {renderTimelineItems(item)}
+//         </div>
+//       ))}
+//     </div>
+//   ) : (
+//     <Timeline
+//       position="alternate-reverse"
+//       sx={{
+//         backgroundImage:
+//           'url("https://cdni.iconscout.com/illustration/premium/thumb/consult-with-doctor-online-for-prescription-5588761-4655030.png?f=webp")',
+//         backgroundSize: '200px',
+//         backgroundRepeat: 'no-repeat',
+//         backgroundPosition: 'top right',
+//       }}
+//     >
+//       {TIMELINES.map((item) => (
+//         <TimelineItem key={item.key}>
+//           <TimelineSeparator>
+//             <TimelineDot color={item.color}>{item.icon}</TimelineDot>
+//             <TimelineConnector />
+//           </TimelineSeparator>
+//           <TimelineContent>{renderTimelineItems(item)}</TimelineContent>
+//         </TimelineItem>
+//       ))}
+//     </Timeline>
+//   );
 // }
 
-// // questions in service unit
-import * as Yup from 'yup';
-import { enqueueSnackbar } from 'notistack';
-import { useState, useEffect } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, useFieldArray } from 'react-hook-form';
-
-import {
-  Button,
-  Dialog,
-  MenuItem,
-  Typography,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-} from '@mui/material';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import axiosInstance from 'src/utils/axios';
-
-import { useGetGeneralCheckListData } from 'src/api/check_listQ';
-
-import Iconify from 'src/components/iconify';
-import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-// defaultChecked
-export default function TestPage() {
-  const dialog = useBoolean();
-  const CheckListData = useGetGeneralCheckListData();
-  const [way, setWay] = useState('');
-  const onSubmit = async (submitdata) => {
-    try {
-      await axiosInstance.post('/api/localCL', submitdata);
-      enqueueSnackbar('new question created successfully', { variant: 'success' });
-      dialog.onFalse();
-      setWay('');
-      reset();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-  const questionSchema = Yup.object().shape({
-    // question: Yup.string(),
-    question: Yup.string(),
-    answer_way: Yup.string().required('Answer way is required'),
-    options: Yup.array().of(Yup.mixed()),
-  });
-
-  const defaultValues = {
-    // question: '',
-    question: '',
-    answer_way: '',
-    options: [],
-  };
-
-  const methods = useForm({
-    mode: 'onTouched',
-    resolver: yupResolver(questionSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    handleSubmit,
-    setValue,
-    formState: { isSubmitting },
-    control,
-  } = methods;
-  const { fields, append } = useFieldArray({ control, name: 'options' });
-
-  useEffect(() => {
-    setValue('answer_way', way);
-  }, [way, setValue]);
-
-  return (
-    <>
-      <Button
-        variant="outlined"
-        color="success"
-        onClick={dialog.onTrue}
-        sx={{ mt: 1, display: 'block' }}
-      >
-        Edit Check list
-        <Iconify icon="ic:outline-edit-note" sx={{ ml: 0.5 }} />
-      </Button>
-
-      <Dialog open={dialog.value} onClose={dialog.onFalse}>
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogContent>
-            <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>NOTE</DialogTitle>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              A field to add questions that can be asked to the patient while managing the
-              appointment
-            </Typography>
-            <RHFTextField lang="en" name="question" label="Question English" sx={{ mb: 2 }} />
-            <RHFSelect
-              label="Answer Way"
-              name="answer_way"
-              sx={{ mb: 2 }}
-              onChange={(e) => setWay(e.target.value)}
-              value={way}
-            >
-              <MenuItem value="Check List">Check List</MenuItem>
-              <MenuItem value="Yes No">Yes No</MenuItem>
-              <MenuItem value="Text">Text</MenuItem>
-            </RHFSelect>
-            {way === 'Check List' && (
-              <>
-                {fields.map((field, index) => (
-                  <RHFTextField
-                    key={field.id}
-                    name={`options[${index}]`}
-                    label={`Option ${index + 1}`}
-                    sx={{ mb: 2 }}
-                  />
-                ))}
-                <Button
-                  onClick={() => append('')}
-                  variant="outlined"
-                  startIcon={<Iconify icon="eva:plus-fill" />}
-                >
-                  Add Option
-                </Button>
-              </>
-            )}
-            <RHFSelect label="Choose a question to add" name="question" sx={{ mb: 2 }}>
-              {CheckListData?.CheckListData?.map((test, idx) => (
-                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.question}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="contained" loading={isSubmitting}>
-              Upload
-            </Button>
-          </DialogActions>
-        </FormProvider>
-      </Dialog>
-    </>
-  );
-}

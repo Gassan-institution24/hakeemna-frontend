@@ -23,10 +23,11 @@ import { useLocales, useTranslate } from 'src/locales';
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
 import { useSettingsContext } from 'src/components/settings';
+import { useGetPatientFeedbacks } from 'src/api';
 
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
-
+import RatingRoomDialog from '../../ratingDialog';
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -40,7 +41,7 @@ export default function OverviewAppView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-
+  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
@@ -71,7 +72,7 @@ export default function OverviewAppView() {
     }
     dialog.onFalse();
   };
-
+console.log('feedbackData',feedbackData)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -101,7 +102,10 @@ export default function OverviewAppView() {
     }
   }, [oldpatientsdata, Us]);
   return (
+
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+      {feedbackData ? <RatingRoomDialog/> : ''} 
+     
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
