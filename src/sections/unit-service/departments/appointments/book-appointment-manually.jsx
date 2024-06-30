@@ -108,6 +108,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       if (data._id) {
         await axios.patch(endpoints.appointments.book(appointment._id), {
           patient: data._id,
+          lang: curLangAr
         });
         socket.emit('updated', {
           user,
@@ -117,7 +118,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       } else {
         await axios.patch(
           endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id),
-          data
+          { ...data, lang: curLangAr }
         );
         socket.emit('updated', {
           user,

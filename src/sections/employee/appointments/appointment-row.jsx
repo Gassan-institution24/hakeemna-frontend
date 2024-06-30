@@ -20,6 +20,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -46,6 +47,7 @@ export default function AppointmentsTableRow({
     unit_service,
     work_group,
     coming,
+    medicalAnalysis,
     // work_shift,
     appointment_type,
     note,
@@ -66,6 +68,7 @@ export default function AppointmentsTableRow({
   const router = useRouter();
 
   const checkAcl = useAclGuard();
+  const { isMedLab } = useUSTypeGuard()
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -125,7 +128,8 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
-          <Iconify icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
+          {!isMedLab && < Iconify icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />}
+          {isMedLab && < Iconify icon={medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />}
         </TableCell>
         <TableCell align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}

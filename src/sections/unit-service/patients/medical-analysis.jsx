@@ -137,7 +137,7 @@ export default function MedicalAnalysis() {
         onClick={dialog.onTrue}
         sx={{ gap: 1, mb: 5, display: { md: 'inline-flex', xs: 'none' } }}
       >
-        {t('Upload medical analysis')}
+        {t('upload medical analysis')}
         <Iconify icon="mingcute:add-line" />
       </Button>
       <Button

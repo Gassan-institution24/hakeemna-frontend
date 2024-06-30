@@ -15,14 +15,12 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -80,7 +78,7 @@ export default function EmployeesTableView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const checkAcl = useAclGuard();
+  // const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
   /// edit
@@ -89,8 +87,6 @@ export default function EmployeesTableView() {
   const componentRef = useRef();
 
   const { user } = useAuthContext();
-
-  // // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -383,18 +379,18 @@ export default function EmployeesTableView() {
             },
             { name: t('employees') }, /// edit
           ]}
-          action={
-            checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
-              <Button
-                component={RouterLink}
-                href={paths.unitservice.employees.new} /// edit
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
-                {t('new employee')}
-              </Button>
-            ) /// edit
-          }
+          // action={
+          //   checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+          //     <Button
+          //       component={RouterLink}
+          //       href={paths.unitservice.employees.new} /// edit
+          //       variant="contained"
+          //       startIcon={<Iconify icon="mingcute:add-line" />}
+          //     >
+          //       {t('new employee')}
+          //     </Button>
+          //   ) /// edit
+          // }
           sx={{
             mb: { xs: 3, md: 5 },
             mt: { xs: 3, md: 5 },
@@ -636,7 +632,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.country?.name_english &&
           data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.country?.name_arabic &&
           data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.city?.name_english &&
@@ -645,10 +641,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.nationality?.name_english &&
           data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.nationality?.name_arabic &&
           data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.email &&
           data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
