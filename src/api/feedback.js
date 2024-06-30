@@ -141,7 +141,7 @@ export function useGetPatientFeedbacks(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      feedbackData: data || [],
+      feedbackData: data ,
       loading: isLoading,
       error,
       validating: isValidating,
