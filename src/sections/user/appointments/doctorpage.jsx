@@ -27,7 +27,6 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fNumber } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
 import { fTime, fDateAndTime } from 'src/utils/format-time';
 
@@ -46,6 +45,26 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
 import FormProvider from 'src/components/hook-form/form-provider';
+
+// Calculate the average rating from the feedback data
+function calculateAverageRating(feedbackData) {
+  if (!Array.isArray(feedbackData) || feedbackData.length === 0) {
+    return 0; // Return 0 if the input is not a valid array or is empty
+  }
+
+  // Calculate the sum of all ratings
+  const totalRating = feedbackData.reduce((sum, feedback) => {
+    if (typeof feedback.Rate === 'number') {
+      return sum + feedback.Rate;
+    }
+    return sum;
+  }, 0);
+
+  // Calculate the average rating
+  const averageRating = totalRating / feedbackData.length;
+
+  return averageRating.toFixed(1); // Round to one decimal place
+}
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +105,9 @@ export default function Doctorpage() {
   };
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient?._id));
   const numberOfUsers = uniqueUserIds.size;
+
+  // Calculate the average rating
+  const averageRating = calculateAverageRating(feedbackData);
   const defaultValues = {
     patient: patientData,
     title: `An appointment has been booked for ${patientinfo?.name_english}`,
@@ -163,10 +185,32 @@ export default function Doctorpage() {
   const renderFollows = (
     <Card sx={{ py: 3, textAlign: 'center' }}>
       <Typography typography="h6">
-        ( {fNumber(data?.employee?.rate)}{' '}
-        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
-        {numberOfUsers > 0 ? `From ${numberOfUsers} visitors` : `No rate yet`}
+        ( {averageRating}{' '}
+        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
+        {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
       </Typography>
+      {feedbackData?.map((rating, i) => (
+        <Box
+          key={i}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            m: 2,
+            display: 'flex',
+            bgcolor: '#F9FAFB',
+          }}
+        >
+          <Image
+            sx={{ width: 40, height: 40, borderRadius: 20, m: 1 }}
+            src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
+          />
+          <Box sx={{ m: 1 }}>
+            <Typography>{rating?.patient?.name_english}</Typography>
+
+            <Typography>{rating?.Body}</Typography>
+          </Box>
+        </Box>
+      ))}
     </Card>
   );
 
@@ -482,7 +526,7 @@ export default function Doctorpage() {
   );
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={3} sx={{ gap: 2 }}>
       <Grid xs={12} md={4}>
         <Stack spacing={3}>
           {renderHead}
@@ -499,7 +543,7 @@ export default function Doctorpage() {
         </Stack>
       </Grid>
 
-      <Grid xs={12} md={8}>
+      <Grid xs={12} md={7}>
         <Stack spacing={3} mb={1}>
           {renderPostInput}
         </Stack>

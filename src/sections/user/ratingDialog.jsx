@@ -20,8 +20,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatientFeedbacks } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
@@ -40,6 +40,7 @@ export default function RatingRoomDialog() {
     Selection: Yup.string().nullable(),
   });
   const [rating, setRating] = useState();
+  const [bodyState, setBodyState] = useState();
 
   const { user } = useAuthContext();
   const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
@@ -97,6 +98,7 @@ export default function RatingRoomDialog() {
       await axios.patch(`api/feedback/${feedbackData?._id}`, {
         Selection: selectedValue,
         Rate: rating,
+        Body: bodyState,
       });
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
@@ -135,7 +137,9 @@ export default function RatingRoomDialog() {
               ? `${feedbackData?.unit_service?.name_arabic}`
               : `${feedbackData?.unit_service?.name_english}`}
             <br />
-            <span style={{ textAlign: 'center' }}>{`dr. ${feedbackData?.employee?.name_english}`}</span>
+            <span
+              style={{ textAlign: 'center' }}
+            >{`dr. ${feedbackData?.employee?.name_english}`}</span>
           </DialogContent>
           <Image
             src={feedbackData?.unit_service?.company_logo}
@@ -171,7 +175,7 @@ export default function RatingRoomDialog() {
               </div>
               <FormControl sx={{ my: 5, minWidth: '100%' }}>
                 <InputLabel htmlFor="max-width">Other</InputLabel>
-                <Input id="max-width" {...register('Body')} />
+                <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>
           </DialogContent>
@@ -183,7 +187,7 @@ export default function RatingRoomDialog() {
             <Box component="form" noValidate>
               <FormControl sx={{ my: 3, minWidth: '100%' }}>
                 <InputLabel htmlFor="max-width">Other</InputLabel>
-                <Input id="max-width" {...register('Body')} />
+                <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>
           </DialogContent>
