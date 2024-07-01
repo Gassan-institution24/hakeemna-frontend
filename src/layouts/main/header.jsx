@@ -95,14 +95,17 @@ export default function Header() {
             xs: HEADER.H_MOBILE,
             md: HEADER.H_DESKTOP,
           },
+          // color: 'white',
           // transition: theme.transitions.create(['height'], {
           //   easing: theme.transitions.easing.easeInOut,
           //   duration: theme.transitions.duration.shorter,
           // }),
           // ...(offsetTop && {
-          ...bgBlur({
-            color: theme.palette.background.default,
-          }),
+          // color: 'black',
+          // ...bgBlur({
+          //   color: theme.palette.background.default,
+          // }),
+          backgroundColor: '#f5f5f5'
           // height: {
           //   md: HEADER.H_DESKTOP_OFFSET,
           // },

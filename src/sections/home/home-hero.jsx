@@ -19,6 +19,7 @@ import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import Tall from './images/Tall.png';
 import Tall2 from './images/Tall2.png';
@@ -28,12 +29,13 @@ import Preview2 from './images/Preview2.png';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   ...bgGradient({
-    color: alpha(theme.palette.background.default, theme.palette.mode === 'light' ? 0.9 : 0.94),
-    imgUrl: '/assets/background/overlay_3.jpg',
+    color: alpha('#000', theme.palette.mode === 'light' ? 0.1 : 0.94),
+    imgUrl: '/assets/background/bgHakeemna.jpg',
   }),
   width: '100%',
   height: '100vh',
   position: 'relative',
+  color: 'white',
   [theme.breakpoints.up('md')]: {
     top: 0,
     left: 0,
@@ -44,28 +46,27 @@ const StyledWrapper = styled('div')(({ theme }) => ({
   height: '100%',
   overflow: 'hidden',
   position: 'relative',
-  [theme.breakpoints.up('md')]: {
-    marginTop: HEADER.H_DESKTOP_OFFSET,
-  },
+
 }));
 
 const StyledTextGradient = styled(m.h1)(({ theme, curLangAr }) => ({
-  ...textGradient(
-    `300deg, ${theme.palette.info.main} 0%, ${theme.palette.success.main} 25%, ${theme.palette.warning.main} 50%, ${theme.palette.success.main} 75%, ${theme.palette.info.main} 100%`
-    // `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
-  ),
+  // ...textGradient(
+  // `300deg, ${theme.palette.info.main} 0%, ${theme.palette.success.main} 25%, ${theme.palette.warning.main} 50%, ${theme.palette.success.main} 75%, ${theme.palette.info.main} 100%`
+  // `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
+  // ),
   padding: 0,
-  marginTop: 8,
+  marginTop: 2,
   lineHeight: 1,
-  fontWeight: 900,
+  fontWeight: 800,
   marginBottom: 24,
-  letterSpacing: curLangAr ? 0 : 8,
-  textAlign: 'center',
-  backgroundSize: '400%',
-  fontSize: `${65 / 18}rem`,
+  letterSpacing: curLangAr ? 0 : 4,
+  // textAlign: 'center',
+  // backgroundSize: '400%',
+  fontSize: `50px`,
+  textTransform: 'uppercase',
   fontFamily: theme.typography.fontSecondaryFamily,
   [theme.breakpoints.up('md')]: {
-    fontSize: `${96 / 16}rem`,
+    fontSize: `50px`,
   },
 }));
 
@@ -133,6 +134,7 @@ export default function HomeHero() {
   const { scrollY } = useScroll();
 
   const [percent, setPercent] = useState(0);
+  const switchToPatient = useBoolean()
 
   const lightMode = theme.palette.mode === 'light';
 
@@ -174,9 +176,9 @@ export default function HomeHero() {
         mx: 'auto',
         maxWidth: 480,
         opacity: opacity > 0 ? opacity : 0,
-        mt: {
-          md: `-${HEADER.H_DESKTOP + percent * 2.5}px`,
-        },
+        // mt: {
+        //   md: `-${HEADER.H_DESKTOP + percent * 2.5}px`,
+        // },
       }}
     >
       <m.div variants={varFade().in}>
@@ -184,39 +186,45 @@ export default function HomeHero() {
           variant="h3"
           sx={{
             textAlign: 'center',
+            fontFamily: theme.typography.fontSecondaryFamily,
+            fontWeight: 700,
+            fontSize: 60,
+            textShadow: '5px 5px 5px black',
+            mb: 3
           }}
           id="#"
+          lang='en'
         >
           {t('It is time for digital transformation')}
         </Typography>
       </m.div>
 
-      <m.div variants={varFade().in}>
-        <StyledTextGradient
-          animate={{ backgroundPosition: '200% center' }}
-          curLangAr={curLangAr}
-          transition={{
-            repeatType: 'reverse',
-            ease: 'linear',
-            duration: 20,
-            repeat: Infinity,
-          }}
-        >
-          {t('Hakeemna')}
-        </StyledTextGradient>
-      </m.div>
+      {/* <m.div variants={varFade().in}> */}
+      {/* <StyledTextGradient
+        // animate={{ backgroundPosition: '200% center' }}
+        curLangAr={curLangAr}
+      // transition={{
+      //   repeatType: 'reverse',
+      //   ease: 'linear',
+      //   duration: 20,
+      //   repeat: Infinity,
+      // }}
+      >
+        {t('Hakeemna Medical Platform')}
+      </StyledTextGradient> */}
+      {/* </m.div> */}
 
       <m.div variants={varFade().in}>
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
+        <Typography variant="subtitle1" sx={{ textAlign: 'center', textShadow: '5px 5px 5px black', }}>
           {t(
-            'A platform that provides an integrated electronic system for personal medical and health records, organizing work between medical service providers and users in the private sector. This organization allows improving the quality and efficiency of medical services and enhances communication and cooperation between them, contributing to achieving sustainable development in the field of health care.'
+            'An integrated electronic platform for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping individuals’ personal medical records (PHR), and integrated management of medical institutions.'
           )}
         </Typography>
       </m.div>
 
       <br />
 
-      <m.div variants={varFade().in}>
+      {/* <m.div variants={varFade().in}>
         <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ mb: 5 }}>
           <Button
             color="inherit"
@@ -230,9 +238,9 @@ export default function HomeHero() {
             {t('Get Started')}
           </Button>
         </Stack>
-      </m.div>
+      </m.div> */}
 
-      <Stack spacing={3} sx={{ textAlign: 'center' }}>
+      {/* <Stack spacing={3} sx={{ textAlign: 'center' }}>
         <m.div variants={varFade().in}>
           <Iconify icon="noto:hospital" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />
@@ -240,7 +248,7 @@ export default function HomeHero() {
           <Iconify icon="pajamas:status-health" color="red" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} />
         </m.div>
-      </Stack>
+      </Stack> */}
     </Stack>
   );
   const renderSlides = (
@@ -328,30 +336,57 @@ export default function HomeHero() {
     <>
       <StyledRoot
         ref={heroRef}
-        sx={{
-          ...(hide && {
-            opacity: 0,
-          }),
-        }}
+      // sx={{
+      //   ...(hide && {
+      //     opacity: 0,
+      //   }),
+      // }}
       >
         <StyledWrapper>
-          <Container component={MotionContainer} sx={{ height: 1 }}>
-            <Grid container columnSpacing={{ md: 10 }} sx={{ height: 1 }}>
-              <Grid xs={12} md={6}>
-                {renderDescription}
-              </Grid>
+          {/* <Container component={MotionContainer} sx={{ height: 1 }}> */}
+          <Stack direction='row' sx={{ height: 1, width: '180vw', transition: 'all 2s ease', ...(switchToPatient.value ? { transform: curLangAr ? 'translate3d(80vw, 0, 0)' : 'translate3d(-80vw, 0, 0)' } : '') }} >
+            <Box sx={{
+              width: '80vw', overflow: 'hidden',
+              backgroundImage: `url(/assets/background/bgHakeemna.jpg)`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundColor: 'rgba(0, 0, 0, 0.300)',
+              backgroundBlendMode: 'darken',
+            }} >
+              {renderDescription}
+            </Box>
 
-              {mdUp && <Grid md={6}>{renderSlides}</Grid>}
-            </Grid>
-          </Container>
+            {mdUp && <Box sx={{ width: '20vw', overflow: 'hidden', transition: 'all 2s ease' }} onClick={switchToPatient.onToggle}>
+              <Stack justifyContent='center' alignItems='center' sx={{ backgroundColor: '#ceaba8', height: '100vh' }} >
+                <Typography variant='h6'>
+                  Normal user
+                </Typography>
 
-          {renderEllipses}
+              </Stack>
+            </Box>}
+            <Box sx={{
+              width: '80vw',
+              overflow: 'hidden',
+              backgroundImage: `url(/assets/background/bgHakeemna.jpg)`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundColor: 'rgba(0, 0, 0, 0.300)',
+              backgroundBlendMode: 'darken',
+            }} >
+              {renderDescription}
+
+            </Box>
+          </Stack>
+          {/* </Container> */}
+
+          {/* {renderEllipses} */}
         </StyledWrapper>
-      </StyledRoot>
+      </StyledRoot >
 
-      {mdUp && renderPolygons}
+      {/* {mdUp && renderPolygons} */}
 
-      <Box sx={{ height: { md: '100vh' } }} />
+      < Box sx={{ height: { md: '100vh' } }
+      } />
     </>
   );
 }

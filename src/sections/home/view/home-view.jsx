@@ -30,24 +30,23 @@ export default function HomeView() {
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
       <HomeHero id="home" />
-
-      <Box
+      {/* <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
           background: 'linear-gradient(rgba(173, 216, 230, 0.115), #ffffdc44)',
           boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.115)',
-        }}
-      >
+          }}
+          > */}
+          <Box
+            sx={{
+              overflow: 'hidden',
+              position: 'relative',
+              bgcolor: 'background.default',
+            }}
+          >
         <OurMission />
-      </Box>
-      <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          bgcolor: 'background.default',
-        }}
-      >
+      {/* </Box> */}
         <Whydoc />
       </Box>
       <Box
