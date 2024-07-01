@@ -23,7 +23,7 @@ export function responsiveFontSizes({ sm, md, lg }) {
 }
 
 export const primaryFont = 'Public Sans, sans-serif';
-export const secondaryFont = 'Barlow, sans-serif';
+export const secondaryFont = 'Playwrite England SemiJoined, Barlow, sans-serif';
 
 // ----------------------------------------------------------------------
 
