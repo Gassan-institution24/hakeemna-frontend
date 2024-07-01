@@ -213,7 +213,6 @@
   "Analysis Types": "انواع التحاليل الطبية",
   "upload medical analysis": "رفع ملف الفحص الطبي",
   "new appointment": "موعد جديد",
-  
 
   "suppliers offers": "عروض المنشاّت",
   "communication": "التواصل",
@@ -852,6 +851,7 @@
   "After studying the needs of medical institutions and users ( patients and others ) in the Arab world, a working team was formed to develop this platform.": "وبعد دراسة احتياجات المؤسسات الطبية والمستخدمين (المرضى وغيرهم) في الوطن العربي، تم تشكيل فريق عمل لتطوير هذه المنصة.",
   "The Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency in work and production that is compatible with the goals of sustainability and environmental preservation.": "منصة حكيمنا هي ثمرة التعاون المشترك بين القطاع الصحي ومتخصصون في تطوير أداء المؤسسات التي تسعى إلى تحقيق الكفاءة في العمل والإنتاج بما يتوافق مع أهداف الاستدامة والحفاظ على البيئة.",
   "A platform that brings together providers and providers of medical and health care services (institutions, doctors, and others) with users of those services at one conglomeration point, with the goal being for everyone to benefit from this alliance in the new and distinctive Arab world.": "منصة تجمع مزودي ومقدمي الخدمات الطبية والرعاية الصحية (مؤسسات و أطباء وغيرهم) مع المستخدمين لتلك الخدمات في نقطة تكتل واحدة مع الهدف أن يستفيد الجميع من هذا التحالف في العالم العربي الجديد و المميز. ",
+  "An integrated electronic platform for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping individuals’ personal medical records (PHR), and integrated management of medical institutions.": "منصة إلكترونية متكاملة لتنظيم العمل بين مقدمي الخدمات الطبية (مثل الأطباء، المختبرات، مركز طبي متخصص، مركز أشعة، وغيرهم) و جميع أفراد المجتمع، كذلك تقدم خدمات مختلفة مثل حفظ السجلات الطبية الشخصية للأفراد (PHR)، والإدارة المتكاملة للمؤسسات الطبية.",
 
   "list": "قائمة",
   "my History": "سجلي",
