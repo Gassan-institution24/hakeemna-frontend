@@ -29,14 +29,14 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'onTouched',
   });
-
+console.log(Entrance);
   const { reset } = methods;
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
-      unit_service: Entrance?.unit_service?._id,
+      unit_service: Entrance?.service_unit?._id,
       appointment: Entrance?.appointmentId,
     });
   }, [user, Entrance, reset]);
@@ -50,7 +50,7 @@ export default function Rooms() {
         finished_or_not: true,
       });
       await axiosInstance.post('/api/feedback', {
-        unit_service: Entrance?.unit_service?._id,
+        unit_service: Entrance?.service_unit?._id,
         appointment: Entrance?.appointmentId,
         employee: user?.employee?._id,
         patient: Entrance?.patient?._id,
