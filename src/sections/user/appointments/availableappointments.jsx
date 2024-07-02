@@ -171,25 +171,6 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
       <Container>
-        {/* <Tabs
-          value={currentTab}
-          onChange={handleChangeTab}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        >
-          {TABS.map((tab, idx)  => (
-            <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
-          ))}
-        </Tabs>
-        {/* {currentTab === 'online' && (
-          <OnlineAppointmentList
-            patientData={user?.patient?._id}
-            refetch={refetch}
-            dataFiltered={dataFiltered}
-          />
-        // )} */}
-        {/* {currentTab === 'inclinic' && <ClinicAppointmentList />} */}
         <ClinicAppointmentList doc={dataFiltered} />
       </Container>
     </Container>
