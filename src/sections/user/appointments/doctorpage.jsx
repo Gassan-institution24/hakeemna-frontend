@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
@@ -98,14 +98,15 @@ export default function Doctorpage() {
     appointmentType: selectedAppointmentType, // Type selected by the user
   });
 
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState(null);
+
   const handleTimeClick = (timeId) => {
     setTimeData(timeId);
     setSelectedTime(timeId);
   };
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient?._id));
   const numberOfUsers = uniqueUserIds.size;
-
   // Calculate the average rating
   const averageRating = calculateAverageRating(feedbackData);
   const defaultValues = {
@@ -128,6 +129,14 @@ export default function Doctorpage() {
     setSelectedAppointmentType(event.target.value);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % feedbackData.length);
+    }, 3000); // Change the rating every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, [feedbackData.length]);
+  const currentRating = feedbackData[currentIndex];
   const handleBook = async (Data) => {
     try {
       await axios.patch(`${endpoints.appointments.one(Data)}/bookappointment`, {
@@ -184,34 +193,45 @@ export default function Doctorpage() {
 
   const renderFollows = (
     <Card sx={{ py: 3, textAlign: 'center' }}>
-      <Typography typography="h6">
-        ( {averageRating}{' '}
-        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
-        {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
-      </Typography>
-      {feedbackData?.map((rating, i) => (
-        <Box
-          key={i}
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            m: 2,
-            display: 'flex',
-            bgcolor: '#F9FAFB',
-          }}
-        >
-          <Image
-            sx={{ width: 40, height: 40, borderRadius: 20, m: 1 }}
-            src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
-          />
-          <Box sx={{ m: 1 }}>
-            <Typography>{rating?.patient?.name_english}</Typography>
-
-            <Typography>{rating?.Body}</Typography>
-          </Box>
+    <Typography typography="h6">
+      ( {averageRating}{' '}
+      <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
+      {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
+    </Typography>
+    {currentRating && (
+      <Box
+        key={currentIndex}
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          m: 2,
+          display: 'flex',
+          bgcolor: '#F9FAFB',
+          borderRadius:2
+        }}
+      >
+        <Image
+          sx={{ width: 40, height: 40, borderRadius: 20, m: 1 }}
+          src={user?.patient?.profile_picture}
+        />
+        <Box sx={{ m: 1 }}>
+          <Typography sx={{float:'left'}}>{currentRating?.patient?.name_english}</Typography>
+          <br/>
+          <Typography  sx={{float:'left'}}>
+          {currentRating?.Body}  &nbsp;
+            {Array.from({ length: currentRating?.Rate }).map((_, index) => (
+              <Iconify
+                key={index}
+                icon="emojione:star"
+                width={18}
+                sx={{ position: 'relative', top: 2 }}
+              />
+            ))}
+          </Typography>
         </Box>
-      ))}
-    </Card>
+      </Box>
+    )}
+  </Card>
   );
 
   const renderAbout = (
