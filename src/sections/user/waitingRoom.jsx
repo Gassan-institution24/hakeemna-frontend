@@ -69,7 +69,7 @@ function CollapsibleTableRow({ row }) {
             size="small"
             color={collapsible.value ? 'inherit' : 'default'}
             onClick={collapsible.onToggle}
-            sx={{borderRadius:0}}
+            sx={{ borderRadius: 0 }}
           >
             Blogs{' '}
             <Iconify

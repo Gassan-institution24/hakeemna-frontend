@@ -22,7 +22,7 @@ export default function InvoiceTableFiltersResult({
   results,
   ...other
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveStatus = () => {
@@ -45,13 +45,13 @@ export default function InvoiceTableFiltersResult({
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {filters.status !== 'active' && (
-          <Block label={t("status:")}>
+          <Block label={t('status:')}>
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
         {filters.startDate && filters.endDate && (
-          <Block label={t("date:")}>
+          <Block label={t('date:')}>
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
         )}

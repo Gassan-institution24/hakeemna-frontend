@@ -26,7 +26,7 @@ export function useNavData() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
-  const { isMedLab } = useUSTypeGuard()
+  const { isMedLab } = useUSTypeGuard();
   const { messages, refetch } = useGetUnreadMsgs(user._id);
 
   useEffect(() => {
@@ -214,7 +214,9 @@ export function useNavData() {
       {
         show:
           checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
-          employees_number > 3 && !isMedLab && false,
+          employees_number > 3 &&
+          !isMedLab &&
+          false,
         title: t('departments'),
         path: paths.unitservice.departments.root,
         // icon: <Iconify icon="uis:web-section-alt" />,
@@ -250,21 +252,23 @@ export function useNavData() {
         navItemId: 'USServicesNav',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }) && !isMedLab,
+        show:
+          checkAcl({
+            category: 'unit_service',
+            subcategory: 'management_tables',
+            acl: 'read',
+          }) && !isMedLab,
         title: t('rooms'),
         path: paths.unitservice.tables.rooms.root,
         navItemId: 'USRoomsNav',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }) && !isMedLab,
+        show:
+          checkAcl({
+            category: 'unit_service',
+            subcategory: 'management_tables',
+            acl: 'read',
+          }) && !isMedLab,
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
@@ -274,8 +278,10 @@ export function useNavData() {
     const unitServiceItems = [
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) && false &&
-          employees_number > 3 && !isMedLab,
+          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
+          false &&
+          employees_number > 3 &&
+          !isMedLab,
         title: t('departments'),
         path: paths.unitservice.departments.root,
         icon: <Iconify icon="uis:web-section-alt" />,
@@ -297,7 +303,9 @@ export function useNavData() {
         navItemId: 'USEmployeesNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) && !isMedLab,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) &&
+          !isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         icon: <Iconify icon="mdi:account-secure" />,
@@ -309,7 +317,9 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) && isMedLab,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) &&
+          isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         icon: <Iconify icon="mdi:account-secure" />,
@@ -328,7 +338,9 @@ export function useNavData() {
         navItemId: 'USAppointmentsNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) && isMedLab,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) &&
+          isMedLab,
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
@@ -381,7 +393,8 @@ export function useNavData() {
         navItemId: 'USInsuranceNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -446,7 +459,8 @@ export function useNavData() {
         navItemId: 'USInfoNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         icon: <Iconify icon="entypo:upload" />,
@@ -481,7 +495,9 @@ export function useNavData() {
         navItemId: 'EMAppointmentsNav',
       },
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && !isMedLab,
+        show:
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+          !isMedLab,
         title: t('book appointments'),
         path: paths.employee.appointments.book,
         icon: <Iconify icon="material-symbols:add-ad" />,
@@ -501,7 +517,9 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) && !isMedLab,
+        show:
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) &&
+          !isMedLab,
         title: t('my checklist'),
         path: paths.employee.checklist.root,
         icon: <Iconify icon="solar:checklist-outline" />,

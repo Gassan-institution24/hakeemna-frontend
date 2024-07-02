@@ -44,7 +44,8 @@ export function useNavData() {
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
         title: t('accounting'),
         path: paths.unitservice.employees.accounting(id),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -56,7 +57,9 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }) && false,
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }) &&
+          false,
         title: t('attendance'),
         path: paths.unitservice.employees.attendence(id),
         icon: <Iconify icon="fluent-mdl2:time-entry" />,
