@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
@@ -193,45 +193,45 @@ export default function Doctorpage() {
 
   const renderFollows = (
     <Card sx={{ py: 3, textAlign: 'center' }}>
-    <Typography typography="h6">
-      ( {averageRating}{' '}
-      <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
-      {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
-    </Typography>
-    {currentRating && (
-      <Box
-        key={currentIndex}
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          m: 2,
-          display: 'flex',
-          bgcolor: '#F9FAFB',
-          borderRadius:2
-        }}
-      >
-        <Image
-          sx={{ width: 40, height: 40, borderRadius: 20, m: 1 }}
-          src={user?.patient?.profile_picture}
-        />
-        <Box sx={{ m: 1 }}>
-          <Typography sx={{float:'left'}}>{currentRating?.patient?.name_english}</Typography>
-          <br/>
-          <Typography  sx={{float:'left'}}>
-          {currentRating?.Body}  &nbsp;
-            {Array.from({ length: currentRating?.Rate }).map((_, index) => (
-              <Iconify
-                key={index}
-                icon="emojione:star"
-                width={18}
-                sx={{ position: 'relative', top: 2 }}
-              />
-            ))}
-          </Typography>
+      <Typography typography="h6">
+        ( {averageRating}{' '}
+        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
+        {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
+      </Typography>
+      {currentRating && (
+        <Box
+          key={currentIndex}
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            m: 2,
+            display: 'flex',
+            bgcolor: '#F9FAFB',
+            borderRadius: 2,
+          }}
+        >
+          <Image
+            sx={{ width: 40, height: 40, borderRadius: 20, m: 1 }}
+            src={user?.patient?.profile_picture}
+          />
+          <Box sx={{ m: 1 }}>
+            <Typography sx={{ float: 'left' }}>{currentRating?.patient?.name_english}</Typography>
+            <br />
+            <Typography sx={{ float: 'left' }}>
+              {currentRating?.Body} &nbsp;
+              {Array.from({ length: currentRating?.Rate }).map((_, index) => (
+                <Iconify
+                  key={index}
+                  icon="emojione:star"
+                  width={18}
+                  sx={{ position: 'relative', top: 2 }}
+                />
+              ))}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-    )}
-  </Card>
+      )}
+    </Card>
   );
 
   const renderAbout = (

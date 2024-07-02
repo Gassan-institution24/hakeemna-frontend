@@ -56,7 +56,6 @@ import History from './history';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
 
-
 export default function Processing() {
   const { user } = useAuthContext();
   const params = useParams();
@@ -270,7 +269,7 @@ export default function Processing() {
             </span>
           )}
           <br />
-          <Box sx={{ maxHeight: 400, overflowY:'auto',overflowX:'hidden' }}>
+          <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
             {medRecord?.slice(0, itemsToShow).map((test, i) => (
               <Box key={i}>
                 <Button onClick={() => handleBackClick(test?._id)} sx={{ width: '100%', m: 1 }}>

@@ -26,12 +26,12 @@ import Scrollbar from 'src/components/scrollbar';
 
 export default function WatingRoom() {
   const { entranceData } = useGetEntranceManagement();
-  const {t} = useTranslate()
+  const { t } = useTranslate();
   console.log(entranceData);
   return (
     <Container sx={{ my: 10 }}>
       <Card sx={{ width: 1 }}>
-        <CardHeader title={t("Waiting management system")} />
+        <CardHeader title={t('Waiting management system')} />
 
         <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
           <Scrollbar>
@@ -62,7 +62,7 @@ function CollapsibleTableRow({ row }) {
 
   return (
     <>
-      <TableRow> 
+      <TableRow>
         <TableCell>{fTime(row?.Appointment_date)}</TableCell>
         <TableCell>{fTime(row?.start_time)}</TableCell>
         <TableCell>test</TableCell>
