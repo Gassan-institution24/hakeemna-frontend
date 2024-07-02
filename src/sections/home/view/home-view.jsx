@@ -1,4 +1,4 @@
-import { m, useScroll } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
@@ -7,7 +7,6 @@ import { Stack, Container } from '@mui/system';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 import Pupage from '../pupage';
@@ -20,14 +19,13 @@ import ServicesWeprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { scrollYProgress } = useScroll();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
   return (
     <>
-      <ScrollProgress scrollYProgress={scrollYProgress} />
+      {/* <ScrollProgress scrollYProgress={scrollYProgress} /> */}
 
       <HomeHero id="home" />
       {/* <Box
@@ -38,15 +36,15 @@ export default function HomeView() {
           boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.115)',
           }}
           > */}
-          <Box
-            sx={{
-              overflow: 'hidden',
-              position: 'relative',
-              bgcolor: 'background.default',
-            }}
-          >
+      <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
         <OurMission />
-      {/* </Box> */}
+        {/* </Box> */}
         <Whydoc />
       </Box>
       <Box

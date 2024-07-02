@@ -108,18 +108,19 @@ export default function DoctorCard({ info }) {
         </Box>
       ) : (
         <Box>
-        <Typography sx={{ fontSize: 14, mb: 1 }}>Not available to book <br/> an appointment online</Typography>
-        <Button
-          sx={{ mt: 3, display: 'block' }}
-          variant="contained"
-          color="success"
-          // onClick={() => handleViewRow(info?._id)}
-        >
-         {info?.unit_service?.phone}
-        </Button>
-      </Box>
+          <Typography sx={{ fontSize: 14, mb: 1 }}>
+            Not available to book <br /> an appointment online
+          </Typography>
+          <Button
+            sx={{ mt: 3, display: 'block' }}
+            variant="contained"
+            color="success"
+            // onClick={() => handleViewRow(info?._id)}
+          >
+            {info?.unit_service?.phone}
+          </Button>
+        </Box>
       )}
-
     </Box>
   );
 }

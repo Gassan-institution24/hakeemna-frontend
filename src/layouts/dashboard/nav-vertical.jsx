@@ -158,7 +158,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
   });
 
   useEffect(() => {
-    const createdAtValid = user.created_at && new Date(user.created_at).getTime() + (2 * 24 * 60 * 60 * 1000) >= new Date().getTime();
+    const createdAtValid =
+      user.created_at &&
+      new Date(user.created_at).getTime() + 2 * 24 * 60 * 60 * 1000 >= new Date().getTime();
     const shouldShowDialog = !loading && createdAtValid && !user.last_online;
     setDialog(shouldShowDialog);
   }, [user, loading]);
@@ -191,7 +193,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           run={walktour.run}
           callback={walktour.onCallback}
           getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+          // scrollDuration={500}
         />
       )}
       {isEmployee && (
@@ -303,17 +305,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
+            >
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box

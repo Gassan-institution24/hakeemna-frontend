@@ -48,10 +48,10 @@ export default function InvoiceTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { isMedLab } = useUSTypeGuard()
+  const { isMedLab } = useUSTypeGuard();
 
   const popover = usePopover();
   const DDL = usePopover();
@@ -73,12 +73,21 @@ export default function InvoiceTableRow({
           />
         </TableCell>
         <TableCell align="center">{sequence_number}</TableCell>
-        <TableCell align="center">{curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{curLangAr ? work_group?.name_arabic : work_group?.name_english}</TableCell>
+        <TableCell align="center">
+          {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
+        </TableCell>
+        <TableCell align="center">
+          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+        </TableCell>
         <TableCell align="center">{note}</TableCell>
-        {isMedLab && <TableCell align="center">
-          < Iconify icon={medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
-        </TableCell>}
+        {isMedLab && (
+          <TableCell align="center">
+            <Iconify
+              icon={medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'}
+              width={16}
+            />
+          </TableCell>
+        )}
 
         <TableCell align="center">
           <Label
@@ -106,7 +115,7 @@ export default function InvoiceTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-      // sx={{ width: 140 }}
+        // sx={{ width: 140 }}
       >
         {status === 'available' && (
           <MenuItem
@@ -125,10 +134,12 @@ export default function InvoiceTableRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {isMedLab && !medicalAnalysis && <MenuItem lang="ar" onClick={uploadAnalysis.onTrue}>
-          <Iconify icon="octicon:upload-16" />
-          {t('upload analysis')}
-        </MenuItem>}
+        {isMedLab && !medicalAnalysis && (
+          <MenuItem lang="ar" onClick={uploadAnalysis.onTrue}>
+            <Iconify icon="octicon:upload-16" />
+            {t('upload analysis')}
+          </MenuItem>
+        )}
       </CustomPopover>
 
       <CustomPopover
@@ -179,7 +190,12 @@ export default function InvoiceTableRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
-      <UploadAnalysis open={uploadAnalysis.value} onClose={uploadAnalysis.onFalse} analysisData={{ patient: patient._id || patient, appointment: _id }} refetch={refetch} />
+      <UploadAnalysis
+        open={uploadAnalysis.value}
+        onClose={uploadAnalysis.onFalse}
+        analysisData={{ patient: patient._id || patient, appointment: _id }}
+        refetch={refetch}
+      />
     </>
   );
 }

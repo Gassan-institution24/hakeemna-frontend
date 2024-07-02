@@ -73,7 +73,7 @@ export default function AppointmentsView({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { isMedLab } = useUSTypeGuard()
+  const { isMedLab } = useUSTypeGuard();
 
   const TABLE_HEAD = [
     { id: 'start_time', label: t('start time') },
@@ -81,7 +81,7 @@ export default function AppointmentsView({ employeeData }) {
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'patient', label: t('patient') },
     { id: 'note', label: t('note') },
-    (isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') }),
+    isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') },
     { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
@@ -456,7 +456,8 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('appointments') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && !isMedLab && (
+            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) &&
+            !isMedLab && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}

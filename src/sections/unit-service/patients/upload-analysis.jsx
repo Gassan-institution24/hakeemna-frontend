@@ -33,7 +33,7 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
     name: Yup.string().required('File name is required'),
     note: Yup.string().nullable(),
     analysis: Yup.array(),
-    appointment: Yup.string().nullable()
+    appointment: Yup.string().nullable(),
   });
 
   const defaultValues = {
@@ -80,7 +80,7 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
     try {
       await axios.post(endpoints.patientMedicalAnalysis.all, formData);
       enqueueSnackbar('uploaded sucessfully');
-      onClose()
+      onClose();
       reset();
       refetch();
     } catch (error) {
