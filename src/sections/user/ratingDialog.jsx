@@ -72,7 +72,7 @@ export default function RatingRoomDialog() {
     defaultValues,
   });
   const {
-    register,
+    // register,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;

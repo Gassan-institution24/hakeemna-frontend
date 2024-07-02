@@ -41,7 +41,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-
 const defaultFilters = {
   name: '',
   status: 'active',
@@ -116,7 +115,7 @@ export default function PatientTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t("patients")} /// edit
+        heading={t('patients')} /// edit
         links={[
           {
             name: t('dashboard'),

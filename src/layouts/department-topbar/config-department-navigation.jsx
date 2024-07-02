@@ -72,7 +72,8 @@ export function useNavData() {
         icon: <Iconify icon="fa6-solid:people-group" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }) && false,
+        show:
+          checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }) && false,
         title: t('permissions'),
         path: paths.unitservice.departments.permissions.root(id),
         icon: <Iconify icon="mdi:account-secure" />,
