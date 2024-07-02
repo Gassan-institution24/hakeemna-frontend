@@ -54,7 +54,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { handleAddNew } = useNewScreen();
 
-  const { isMedLab } = useUSTypeGuard()
+  const { isMedLab } = useUSTypeGuard();
 
   const { analysesData } = useGetAnalyses();
 
@@ -177,37 +177,45 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              {isMedLab && <RHFAutocomplete
-                freeSolo
-                name="name_english"
-                label="name english"
-                // onChange={handleChange}
-                onInputChange={handleEnglishInputChange}
-                placeholder="Choose a name english"
-                options={analysesData.map((option) => option.name_english)}
-                getOptionLabel={(option) => option}
-              />}
-              {isMedLab && <RHFAutocomplete
-                freeSolo
-                name="name_arabic"
-                label="name arabic"
-                // onChange={handleChange}
-                onInputChange={handleArabicInputChange}
-                placeholder="Choose a name arabic"
-                options={analysesData.map((option) => option.name_arabic)}
-                getOptionLabel={(option) => option}
-              />}
-              {!isMedLab && <RHFTextField
-                lang="en"
-                onChange={handleEnglishInputChange}
-                name="name_english"
-                label={t('name english')}
-              />}
-              {!isMedLab && <RHFTextField
-                onChange={handleArabicInputChange}
-                name="name_arabic"
-                label={t('name arabic')}
-              />}
+              {isMedLab && (
+                <RHFAutocomplete
+                  freeSolo
+                  name="name_english"
+                  label="name english"
+                  // onChange={handleChange}
+                  onInputChange={handleEnglishInputChange}
+                  placeholder="Choose a name english"
+                  options={analysesData.map((option) => option.name_english)}
+                  getOptionLabel={(option) => option}
+                />
+              )}
+              {isMedLab && (
+                <RHFAutocomplete
+                  freeSolo
+                  name="name_arabic"
+                  label="name arabic"
+                  // onChange={handleChange}
+                  onInputChange={handleArabicInputChange}
+                  placeholder="Choose a name arabic"
+                  options={analysesData.map((option) => option.name_arabic)}
+                  getOptionLabel={(option) => option}
+                />
+              )}
+              {!isMedLab && (
+                <RHFTextField
+                  lang="en"
+                  onChange={handleEnglishInputChange}
+                  name="name_english"
+                  label={t('name english')}
+                />
+              )}
+              {!isMedLab && (
+                <RHFTextField
+                  onChange={handleArabicInputChange}
+                  name="name_arabic"
+                  label={t('name arabic')}
+                />
+              )}
 
               <RHFSelect name="work_shift" label={t('work shift')}>
                 {workShiftsData.map((work_shift, idx) => (

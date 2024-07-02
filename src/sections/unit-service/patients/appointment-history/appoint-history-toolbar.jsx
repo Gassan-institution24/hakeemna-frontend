@@ -20,7 +20,7 @@ export default function InvoiceTableToolbar({
   dateError,
   serviceOptions,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
@@ -57,7 +57,7 @@ export default function InvoiceTableToolbar({
         }}
       >
         <DatePicker
-          label={t("start date")}
+          label={t('start date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -67,7 +67,7 @@ export default function InvoiceTableToolbar({
         />
 
         <DatePicker
-          label={t("end date")}
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -86,7 +86,7 @@ export default function InvoiceTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder={t("Search...")}
+            placeholder={t('Search...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

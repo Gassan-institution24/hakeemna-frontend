@@ -29,7 +29,7 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'onTouched',
   });
-console.log(Entrance);
+  console.log(Entrance);
   const { reset } = methods;
   useEffect(() => {
     reset({

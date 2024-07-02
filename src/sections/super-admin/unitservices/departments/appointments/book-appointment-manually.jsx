@@ -94,7 +94,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       if (data._id) {
         await axios.patch(endpoints.appointments.book(appointment._id), {
           patient: data._id,
-          lang: curLangAr
+          lang: curLangAr,
         });
       } else {
         await axios.patch(

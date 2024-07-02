@@ -14,13 +14,7 @@ import {
 // import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
 // import ListItemAvatar from '@mui/material/ListItemAvatar';
-import { Grid,
-  List,
-Avatar,
-ListItem ,
- ListItemText,
- ListItemAvatar,
- } from '@mui/material';
+import { Grid, List, Avatar, ListItem, ListItemText, ListItemAvatar } from '@mui/material';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
@@ -207,57 +201,56 @@ export default function Prescriptions() {
 
   return drugs?.map((med, idx) => (
     <List key={idx} sx={{ bgcolor: 'aliceblue', mb: 2 }}>
-  <ListItem sx={{ mb: 1 }}>
-    <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
-      <Avatar>
-        <Iconify icon="streamline-emojis:pill" />
-      </Avatar>
-    </ListItemAvatar>
+      <ListItem sx={{ mb: 1 }}>
+        <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
+          <Avatar>
+            <Iconify icon="streamline-emojis:pill" />
+          </Avatar>
+        </ListItemAvatar>
 
-    {/* Left section for Name and Frequently */}
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <ListItemText primary={t('Name')} secondary={med.medicines?.trade_name} />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <ListItemText primary={t('Frequently')} secondary={med?.Frequency_per_day} />
-      </Grid>
-    </Grid>
+        {/* Left section for Name and Frequently */}
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <ListItemText primary={t('Name')} secondary={med.medicines?.trade_name} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ListItemText primary={t('Frequently')} secondary={med?.Frequency_per_day} />
+          </Grid>
+        </Grid>
 
-    {/* Right section for Start Date and End Date */}
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <ListItemText primary={t('Start Date')} secondary={fDateAndTime(med?.Start_time)} />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <ListItemText primary={t('End Date')} secondary={fDateAndTime(med?.End_time)} />
-      </Grid>
-    </Grid>
+        {/* Right section for Start Date and End Date */}
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <ListItemText primary={t('Start Date')} secondary={fDateAndTime(med?.Start_time)} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ListItemText primary={t('End Date')} secondary={fDateAndTime(med?.End_time)} />
+          </Grid>
+        </Grid>
 
-    {/* PDF Download Link */}
-    <PDFDownloadLink
-      document={<PrescriptionPDF medicines={[med]} />}
-      fileName={`${user?.patient?.name_english} prescription.pdf`}
-    >
-      {({ loading }) =>
-        loading ? (
-          t('Loading document...')
-        ) : (
-          <Iconify
-            icon="teenyicons:pdf-outline"
-            sx={{
-              color: { xs: 'green', md: 'blue' },
-              height: { xs: '25px', md: '25px' },
-              width: { xs: '25px', md: '25px' },
-              position: { md: 'relative' },
-              top: { md: '6px' },
-            }}
-          />
-        )
-      }
-    </PDFDownloadLink>
-  </ListItem>
-</List>
-
+        {/* PDF Download Link */}
+        <PDFDownloadLink
+          document={<PrescriptionPDF medicines={[med]} />}
+          fileName={`${user?.patient?.name_english} prescription.pdf`}
+        >
+          {({ loading }) =>
+            loading ? (
+              t('Loading document...')
+            ) : (
+              <Iconify
+                icon="teenyicons:pdf-outline"
+                sx={{
+                  color: { xs: 'green', md: 'blue' },
+                  height: { xs: '25px', md: '25px' },
+                  width: { xs: '25px', md: '25px' },
+                  position: { md: 'relative' },
+                  top: { md: '6px' },
+                }}
+              />
+            )
+          }
+        </PDFDownloadLink>
+      </ListItem>
+    </List>
   ));
 }

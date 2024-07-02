@@ -320,9 +320,20 @@ export default function TableCreateView() {
       service_types: [],
     });
     // eslint-disable-next-line
-  }, [workGroupsData, appointmenttypesData, user?.employee, typesLoading, wgLoading, workShiftsData]);
+  }, [
+    workGroupsData,
+    appointmenttypesData,
+    user?.employee,
+    typesLoading,
+    wgLoading,
+    workShiftsData,
+  ]);
 
-  if ((!values.appointment_type || !values.work_group) && appointmenttypesData.length && workGroupsData.length) {
+  if (
+    (!values.appointment_type || !values.work_group) &&
+    appointmenttypesData.length &&
+    workGroupsData.length
+  ) {
     return <LoadingScreen />;
   }
   return (

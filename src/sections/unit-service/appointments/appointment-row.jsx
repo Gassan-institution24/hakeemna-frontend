@@ -68,7 +68,7 @@ export default function AppointmentsTableRow({
   const { t } = useTranslate();
 
   const checkAcl = useAclGuard();
-  const { isMedLab } = useUSTypeGuard()
+  const { isMedLab } = useUSTypeGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -129,9 +129,14 @@ export default function AppointmentsTableRow({
           {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
         <TableCell align="center">{note}</TableCell>
-        {isMedLab && <TableCell align="center">
-          < Iconify icon={medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
-        </TableCell>}
+        {isMedLab && (
+          <TableCell align="center">
+            <Iconify
+              icon={medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'}
+              width={16}
+            />
+          </TableCell>
+        )}
         <TableCell align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
@@ -235,10 +240,12 @@ export default function AppointmentsTableRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {isMedLab && !medicalAnalysis && <MenuItem lang="ar" onClick={uploadAnalysis.onTrue}>
-          <Iconify icon="octicon:upload-16" />
-          {t('upload analysis')}
-        </MenuItem>}
+        {isMedLab && !medicalAnalysis && (
+          <MenuItem lang="ar" onClick={uploadAnalysis.onTrue}>
+            <Iconify icon="octicon:upload-16" />
+            {t('upload analysis')}
+          </MenuItem>
+        )}
       </CustomPopover>
 
       <CustomPopover
@@ -344,7 +351,12 @@ export default function AppointmentsTableRow({
           </Button>
         }
       />
-      <UploadAnalysis open={uploadAnalysis.value} onClose={uploadAnalysis.onFalse} analysisData={{ patient: patient._id || patient, appointment: _id }} refetch={refetch} />
+      <UploadAnalysis
+        open={uploadAnalysis.value}
+        onClose={uploadAnalysis.onFalse}
+        analysisData={{ patient: patient._id || patient, appointment: _id }}
+        refetch={refetch}
+      />
     </>
   );
 }

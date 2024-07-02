@@ -68,7 +68,7 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
       await axiosInstance.patch(endpoints.appointments.book(data?._id), {
         patient: row?._id,
         note,
-        lang: curLangAr
+        lang: curLangAr,
       });
       await addToCalendar(data);
       enqueueSnackbar(t('booked successfully!'));

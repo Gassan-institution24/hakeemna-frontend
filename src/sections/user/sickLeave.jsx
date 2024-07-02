@@ -114,10 +114,10 @@ export default function SickLeaves() {
           sx={{ p: 3, justifyContent: 'space-between' }}
         >
           {[
-           {
-            label: getPatientLabel(curLangAr, user),
-            icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
-          },
+            {
+              label: getPatientLabel(curLangAr, user),
+              icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+            },
             {
               label: curLangAr
                 ? info?.unit_services?.name_arabic
