@@ -17,6 +17,7 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import {
+  Box,
   Paper,
   Button,
   Dialog,
@@ -54,6 +55,7 @@ import Rooms from './rooms';
 import History from './history';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
+
 
 export default function Processing() {
   const { user } = useAuthContext();
@@ -101,7 +103,8 @@ export default function Processing() {
     chronic: '',
     Doctor_Comments: '',
   };
-  console.log(chronic);
+  const [itemsToShow, setItemsToShow] = useState(2);
+
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -266,21 +269,27 @@ export default function Processing() {
               Visits history {firstSequenceNumber}
             </span>
           )}
-
           <br />
-          {medRecord?.map((test, i) => (
-            <>
-              <Button
-                key={i}
-                onClick={() => handleBackClick(test?._id)}
-                sx={{ width: '100%', m: 1 }}
-              >
-                {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
-              </Button>
-
-              <Divider />
-            </>
-          ))}
+          <Box sx={{ maxHeight: 400, overflowY:'auto',overflowX:'hidden' }}>
+            {medRecord?.slice(0, itemsToShow).map((test, i) => (
+              <Box key={i}>
+                <Button onClick={() => handleBackClick(test?._id)} sx={{ width: '100%', m: 1 }}>
+                  {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
+                </Button>
+                <Divider />
+              </Box>
+            ))}
+          </Box>
+          {medRecord?.length > itemsToShow && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => setItemsToShow(itemsToShow + 2)}
+              sx={{ m: 2 }}
+            >
+              {t('Load More')}
+            </Button>
+          )}
         </>
       ),
       color: 'info',

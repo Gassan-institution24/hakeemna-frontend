@@ -1,13 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  PDFDownloadLink,
-  // Image as PdfImage,
-} from '@react-pdf/renderer';
+import { Page, Text, View, Document, PDFDownloadLink } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -16,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { fDm, fDateAndTime } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -33,13 +26,25 @@ export default function SickLeaves() {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { data } = useGetPatintSickLeaves(user?.patient?._id);
+  function getPatientLabel() {
+    if (curLangAr) {
+      if (user?.patient?.gender === 'female') {
+        return `السيدة ${user?.patient?.name_arabic}`;
+      }
+      return `السيد ${user?.patient?.name_arabic}`;
+    }
+    if (user?.patient?.gender === 'male') {
+      return `mr. ${user?.patient?.name_english}`;
+    }
+    return `ms. ${user?.patient?.name_english}`;
+  }
   const PrescriptionPDF = React.useCallback(
     ({ report }) => (
       <Document>
         <Page size="A4">
           <View>
             <Text>
-              from {fDm(report?.Medical_sick_leave_start)} to{' '}
+              from {fDateAndTime(report?.Medical_sick_leave_start)} to{' '}
               {fDateAndTime(report?.Medical_sick_leave_end)}
             </Text>
             <Text>{curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}</Text>
@@ -80,7 +85,7 @@ export default function SickLeaves() {
           />
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {t('From')} {fDm(info?.Medical_sick_leave_start)} {t('To')}
+            {t('From')} {fDateAndTime(info?.Medical_sick_leave_start)} {t('To')}
             {fDateAndTime(info?.Medical_sick_leave_end)}
           </Stack>
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
@@ -109,10 +114,10 @@ export default function SickLeaves() {
           sx={{ p: 3, justifyContent: 'space-between' }}
         >
           {[
-            {
-              label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
-              icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
-            },
+           {
+            label: getPatientLabel(curLangAr, user),
+            icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+          },
             {
               label: curLangAr
                 ? info?.unit_services?.name_arabic
@@ -120,7 +125,9 @@ export default function SickLeaves() {
               icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
+              label: curLangAr
+                ? `${info?.employee?.name_arabic} (${info?.employee?.speciality?.name_arabic}) `
+                : `${info?.employee?.name_english} (${info?.employee?.speciality?.name_english})`,
               icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
             },
           ].map((item, idx) => (

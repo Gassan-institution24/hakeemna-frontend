@@ -8,39 +8,44 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { Card, Container, CardHeader } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetCities } from 'src/api';
+import { fTime } from 'src/utils/format-time';
 
-import Iconify from 'src/components/iconify';
+import { useTranslate } from 'src/locales';
+import { useGetEntranceManagement } from 'src/api';
+
+// import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {
-  const { tableData } = useGetCities();
+  const { entranceData } = useGetEntranceManagement();
+  const {t} = useTranslate()
+  console.log(entranceData);
   return (
     <Container sx={{ my: 10 }}>
       <Card sx={{ width: 1 }}>
-        <CardHeader title="Waiting management system" />
+        <CardHeader title={t("Waiting management system")} />
 
         <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
           <Scrollbar>
             <Table sx={{ minWidth: 800 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Time</TableCell>
-                  <TableCell>In wating</TableCell>
-                  <TableCell>Appointment time</TableCell>
+                  <TableCell>{t('Appointment time')}</TableCell>
+                  <TableCell>{t('Arrivel Time')}</TableCell>
+                  <TableCell>{t('In wating')}</TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {tableData?.map((row) => (
+                {entranceData?.map((row) => (
                   <CollapsibleTableRow key={row.name} row={row} />
                 ))}
               </TableBody>
@@ -57,15 +62,15 @@ function CollapsibleTableRow({ row }) {
 
   return (
     <>
-      <TableRow>
-        <TableCell>test</TableCell>
-        <TableCell>test</TableCell>
+      <TableRow> 
+        <TableCell>{fTime(row?.Appointment_date)}</TableCell>
+        <TableCell>{fTime(row?.start_time)}</TableCell>
         <TableCell>test</TableCell>
       </TableRow>
 
       <TableRow>
         <TableCell sx={{ py: 2 }} colSpan={6}>
-          <IconButton
+          {/* <IconButton
             size="small"
             color={collapsible.value ? 'inherit' : 'default'}
             onClick={collapsible.onToggle}
@@ -75,7 +80,7 @@ function CollapsibleTableRow({ row }) {
             <Iconify
               icon={collapsible.value ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
             />
-          </IconButton>
+          </IconButton> */}
 
           <Collapse in={collapsible.value} unmountOnExit>
             <Paper

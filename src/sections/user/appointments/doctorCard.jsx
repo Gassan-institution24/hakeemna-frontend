@@ -21,7 +21,7 @@ export default function DoctorCard({ info }) {
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
   };
-
+  console.log(info, 'info');
   return (
     <Box
       sx={{
@@ -78,36 +78,48 @@ export default function DoctorCard({ info }) {
           </Typography>
         </Box>
       </Box>
+      {info?.visibility_online_appointment === true ? (
+        <Box>
+          <Typography sx={{ fontSize: 14, mb: 1 }}>Nearst appointments: </Typography>
+          {nearstappointment ? (
+            <Button
+              sx={{ bgcolor: 'rgb(231, 231, 231)', borderRadius: 0 }}
+              onClick={() => handleViewRow(info?._id)}
+            >
+              <Typography sx={{ fontSize: 14 }}>{`${fDm(nearstappointment?.start_time)} - ${fTime(
+                nearstappointment?.start_time
+              )}`}</Typography>
+            </Button>
+          ) : (
+            <Button disabled sx={{ fontSize: 13 }}>
+              -- / --
+            </Button>
+          )}
 
-      <Box>
-        <Typography sx={{ fontSize: 14, mb: 1 }}>Nearst appointments: </Typography>
-        {nearstappointment ? (
           <Button
-            sx={{ bgcolor: 'rgb(231, 231, 231)', borderRadius: 0 }}
+            // sx={{ fontSize: 13 }}
+            sx={{ mt: 3, display: 'block' }}
+            variant="contained"
+            color="success"
             onClick={() => handleViewRow(info?._id)}
           >
-            <Typography sx={{ fontSize: 14 }}>{`${fDm(nearstappointment?.start_time)} - ${fTime(
-              nearstappointment?.start_time
-            )}`}</Typography>
+            View all
           </Button>
-        ) : (
-          <Button disabled sx={{ fontSize: 13 }}>
-            -- / --
-          </Button>
-        )}
-
+        </Box>
+      ) : (
+        <Box>
+        <Typography sx={{ fontSize: 14, mb: 1 }}>Not available to book <br/> an appointment online</Typography>
         <Button
-          // sx={{ fontSize: 13 }}
           sx={{ mt: 3, display: 'block' }}
           variant="contained"
           color="success"
-          onClick={() => handleViewRow(info?._id)}
+          // onClick={() => handleViewRow(info?._id)}
         >
-          View all
+         {info?.unit_service?.phone}
         </Button>
       </Box>
+      )}
 
-      {/*  */}
     </Box>
   );
 }
