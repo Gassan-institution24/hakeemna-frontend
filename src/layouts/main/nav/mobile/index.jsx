@@ -36,7 +36,7 @@ export default function NavMobile({ data }) {
 
   return (
     <>
-      <IconButton onClick={handleOpenMenu} sx={{ ml: 1 }}>
+      <IconButton onClick={handleOpenMenu} sx={{ mx: 1 }}>
         <SvgColor src="/assets/icons/navbar/ic_menu_item.svg" />
       </IconButton>
 
@@ -52,7 +52,7 @@ export default function NavMobile({ data }) {
         }}
       >
         <Scrollbar>
-          <Logo sx={{ mx: 2.5, my: 3 }} />
+          <Logo sx={{ width: 120, height: 60, m: 3 }} />
 
           {data.map((list, idx) => (
             <NavList key={idx} data={list} />

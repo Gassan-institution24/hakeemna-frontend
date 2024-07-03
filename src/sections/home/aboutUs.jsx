@@ -9,11 +9,9 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 
 import { useLocales, useTranslate } from 'src/locales';
-
 import Image from 'src/components/image';
-import { varFade, MotionViewport } from 'src/components/animate';
 
-// import Cercle from './images/cercle.png';
+import { varFade, MotionViewport } from 'src/components/animate';
 import Knowleg from './images/knowlegmap.png';
 import knowlegmapAR from './images/knowlegmapAR.png';
 
@@ -24,58 +22,30 @@ export default function Whydoc() {
   const renderDescription = (
     <Stack spacing={3} sx={{ textAlign: 'center', mb: 5 }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2" sx={{ position: 'relative', display: 'inline-block' }}>
-          {t('more about ')}
-          <span
-            style={{
-              color: '#00C4CC',
-              // position: 'relative',
-              // display: 'inline-block',
-            }}
-          >
-            {t('hakeemna')}
-          </span>
+        <Typography sx={{ position: 'relative', fontSize: 45, fontWeight: 600, fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive' }}>
+          {t('about us')}
         </Typography>
       </m.div>
     </Stack>
   );
 
   const renderContent = (
-    <Box sx={{ position: 'relative', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ position: 'relative', paddingBottom: '10%' }}>
+    <Box sx={{ position: 'relative', justifyContent: 'center', alignItems: 'center', maxWidth: { xs: '90%', md: '70%' } }}>
+      <div style={{ position: 'relative' }}>
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
           {' '}
           {t(
-            'The Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency in work and production that is compatible with the goals of sustainability and environmental preservation.'
+            'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.After studying the needs of medical institutions and users(patients and others) in the Arab world,\n a working team was formed to develop this platform.This team has full belief in the importance of developing electronic health services, especially the private sector in our Arab world, by raising the level of medical services and improving the efficiency of daily practices.For medical service providers, facilitating procedures for patients and keeping their medical information and documents securely and in one place.\nThe platform is characterized by being comprehensive for all individuals and institutions, whether the user (medical service provider or patient) subscribes to the services of insurance companies or not, as you can benefit from the services provided to you independently and without association with any insurance or insurance management groups.'
           )}
         </Typography>
-
-        <Box
-          sx={{
-            textAlign: 'center',
-            marginTop: 10,
-            display: {
-              md: 'block',
-              xs: 'none',
-            },
-          }}
-        >
-          <Image
-            sx={{
-              width: '55%',
-              height: '55%',
-            }}
-            src={curLangAr ? knowlegmapAR : Knowleg}
-          />
-        </Box>
       </div>
       <Typography sx={{ textAlign: 'center' }}>
         <Button
           size="large"
           href={paths.pages.About}
-          variant="contained"
+          variant="outlined"
           id="About"
-          sx={{ textAlign: 'center', backgroundColor: 'success.main', mb: 4 }}
+          sx={{ textAlign: 'center', borderRadius: 0, mt: 4 }}
         >
           {t('Read more')}
         </Button>
@@ -84,16 +54,49 @@ export default function Whydoc() {
   );
 
   return (
-    <Container
-      component={MotionViewport}
+    <Stack
+      direction={{ xs: 'column', md: 'row' }}
       sx={{
         position: 'relative',
-        py: { xs: 0, md: 8 },
-        maxWidth: '100%',
+        my: { xs: 5, md: 10 },
+        gap: 5
       }}
     >
-      {renderDescription}
-      {renderContent}
-    </Container>
+      <Stack sx={{
+        flex: 1, justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        {renderDescription}
+        {renderContent}
+      </Stack>
+      {/* <Box sx={{ position: 'relative', justifyContent: 'center', alignItems: 'center' }}> */}
+      {/* <div style={{ position: 'relative', paddingBottom: '10%' }}>
+            <Box
+              sx={{
+                textAlign: 'center',
+                marginTop: 10,
+                display: {
+                  md: 'block',
+                  xs: 'none',
+                },
+              }}
+            > */}
+      <Stack sx={{
+        width: '100%',
+        height: '100%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+
+        <Image
+          sx={{ width: { sx: '100%', md: '70%' } }}
+          src={curLangAr ? knowlegmapAR : Knowleg}
+        />
+      </Stack>
+      {/* </Box>
+          </div>
+        </Box> */}
+    </Stack>
   );
 }
