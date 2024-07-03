@@ -14,6 +14,12 @@ import {
   TableBody,
   IconButton,
   TableContainer,
+  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
+  OutlinedInput,
+  InputBase,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -22,8 +28,10 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
+  useGetUSActivities,
   useGetEntranceManagement,
   useGetUsAppointmentsToday,
   useGetfinishedAppointments,
@@ -37,17 +45,20 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 export default function AppointmentsToday() {
   const { user } = useAuthContext();
+  const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-
+  const { activitiesData } = useGetUSActivities(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
   const { comingPatientData, refetch: refetchComingPatients } = useGetUsAppointmentsComingpatients(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
-  const { entranceData, refetch: refetchEntrance } = useGetEntranceManagement();
+  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
   const TABS = [
@@ -69,8 +80,8 @@ export default function AppointmentsToday() {
       value: 'three',
       label: 'Waiting',
       color: 'warning',
-      count: entranceData?.length,
-      data: entranceData,
+      count: entrance?.length,
+      data: entrance,
     },
     {
       value: 'four',
@@ -218,6 +229,28 @@ export default function AppointmentsToday() {
         links={[{ name: user.userName }]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
+      
+        <Select
+          native
+          sx={{width:'30%',mb:4, float:'right'}}
+          // value={status}
+          // onChange={handleChangeStatus}
+          inputProps={{
+            sx: { textTransform: 'capitalize' },
+          }}
+        >
+          {activitiesData.map((option) => (
+           <>
+            <option>
+             All
+            </option>
+            <option key={option} value={option}>
+              {option?.name_english}
+            </option>
+           </>
+          ))}
+        </Select>
+      
       <Tabs
         value={currentTab}
         onChange={handleChangeTab}
