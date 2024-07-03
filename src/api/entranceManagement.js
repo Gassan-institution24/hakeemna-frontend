@@ -9,7 +9,27 @@ export function useGetEntranceManagement() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      entranceData: data || [],
+      entrance: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+export function useGetWatingPatient(id) {
+  const URL = endpoints.entranceManagement.wating(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      entranceData: data,
       loading: isLoading,
       error,
       validating: isValidating,
