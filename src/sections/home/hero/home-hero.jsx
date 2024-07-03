@@ -1,0 +1,251 @@
+import { useEffect, useState } from 'react';
+import { m } from 'framer-motion';
+
+import Stack from '@mui/material/Stack';
+import { Button } from '@mui/material';
+import Typography from '@mui/material/Typography';
+
+import { useResponsive } from 'src/hooks/use-responsive';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import { varFade } from 'src/components/animate';
+import PatientsHero from './patients-hero';
+import UnitServiceHero from './unit-service-hero';
+
+// ----------------------------------------------------------------------
+
+export default function HomeHero() {
+  const mdUp = useResponsive('up', 'md');
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const [currentPage, setCurrentPage] = useState('home');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (currentPage === 'home') setCurrentPage('users');
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage]);
+
+  const renderDescription = (
+    <>
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          height: 1,
+          maxWidth: 480,
+          zIndex: 2,
+          px: 3,
+        }}
+      >
+        <m.div variants={varFade().in}>
+          <Typography
+            variant="h3"
+            sx={{
+              textAlign: 'center',
+              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+              fontWeight: 700,
+              fontSize: { xs: 35, md: 50 },
+              // textShadow: '5px 5px 5px black',
+              mb: 3,
+            }}
+            id="#"
+          >
+            {t('It is time for digital transformation')}
+          </Typography>
+        </m.div>
+
+        <m.div variants={varFade().in}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              textAlign: 'center',
+              //  textShadow: '5px 5px 5px black'
+            }}
+          >
+            {t(
+              'An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
+            )}
+          </Typography>
+        </m.div>
+
+        <br />
+      </Stack>
+      {
+        !mdUp && (
+          <Stack direction='row' width={1} >
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
+              onClick={() => setCurrentPage('users')}
+            >
+              {t('beneficiary')}
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
+              onClick={() => setCurrentPage('doctors')}
+            >
+              {t('unit of Serivce')}
+            </Button>
+          </Stack>
+        )
+      }
+    </>
+  );
+
+  return (
+    <Stack
+      sx={{
+        overflowX: 'hidden',
+        height: '100vh',
+      }}
+    >
+      {currentPage === 'home' && (
+        <Stack justifyContent="center" alignItems="center" width={1} height={1}>
+          {renderDescription}
+        </Stack>
+      )}
+      <PatientsHero currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <UnitServiceHero currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {mdUp && (
+        <>
+          <div
+            onClick={() =>
+              currentPage === 'users' ? setCurrentPage('home') : setCurrentPage('users')
+            }
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                setCurrentPage('users');
+              }
+            }}
+            style={{
+              position: 'absolute',
+              right: 10,
+              bottom: 10,
+              padding: 3,
+              cursor: 'pointer',
+              zIndex: 2,
+            }}
+          >
+            <Iconify
+              sx={{
+                position: 'absolute',
+                bottom: 300,
+                right: curLangAr ? -40 : 300,
+                rotate: '-45deg',
+                animation: 'moveUpRight 1s infinite alternate',
+                '@keyframes moveUpRight': {
+                  '0%': {
+                    transform: 'translate(0, 0)',
+                  },
+                  '100%': {
+                    transform: 'translate(0px, 5px)',
+                  },
+                },
+              }}
+              icon="solar:double-alt-arrow-up-line-duotone"
+              width={40}
+            />
+            <img src="/assets/images/home/hero/users.png" width={300} alt="users" />
+            <div style={{ position: 'absolute', top: -200, right: curLangAr ? 50 : 70 }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+                }}
+              >
+                {t('beneficiary')}
+              </Typography>
+              <img
+                src="/assets/images/home/hero/arrow.png"
+                style={{ rotate: '10deg' }}
+                width={100}
+                alt="arrow"
+              />
+            </div>
+          </div>
+
+          <div
+            onClick={() =>
+              currentPage === 'doctors' ? setCurrentPage('home') : setCurrentPage('doctors')
+            }
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                setCurrentPage('doctors');
+              }
+            }}
+            style={{
+              position: 'absolute',
+              cursor: 'pointer',
+              left: 10,
+              bottom: 10,
+              padding: 3,
+              zIndex: 2,
+            }}
+          >
+            <img src="/assets/images/home/hero/doctors.png" width={350} alt="doctors" />
+            <Iconify
+              sx={{
+                position: 'absolute',
+                bottom: 260,
+                left: curLangAr ? 0 : 350,
+                rotate: '45deg',
+                animation: 'moveUpRight 1s infinite alternate',
+                '@keyframes moveUpRight': {
+                  '0%': {
+                    transform: 'translate(0, 0)',
+                  },
+                  '100%': {
+                    transform: 'translate(0px, 5px)',
+                  },
+                },
+              }}
+              icon="solar:double-alt-arrow-up-line-duotone"
+              width={40}
+            />
+            <div style={{ position: 'absolute', top: -100, right: 80 }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  position: 'absolute',
+                  top: -80,
+                  right: curLangAr ? 90 : -60,
+                  fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+                }}
+              >
+                {t('unit of service')}
+              </Typography>
+              <img
+                src="/assets/images/home/hero/arrow2.png"
+                style={{ rotate: '-50deg' }}
+                width={200}
+                alt="arrow"
+              />
+            </div>
+          </div>
+          <img
+            src="/assets/images/home/hero/stethoscope.png"
+            style={{ position: 'absolute', top: 90, right: '20%', rotate: '240deg', zIndex: 2 }}
+            width={200}
+            alt="stethoscope"
+          />
+        </>
+      )}
+    </Stack>
+  );
+}

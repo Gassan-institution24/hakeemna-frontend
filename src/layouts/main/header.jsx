@@ -38,10 +38,10 @@ export default function Header() {
       <Toolbar
         disableGutters
         sx={{
-          height: {
-            xs: HEADER.H_MOBILE,
-            md: HEADER.H_DESKTOP,
-          },
+          // height: {
+          //   xs: HEADER.H_MOBILE,
+          //   md: HEADER.H_DESKTOP,
+          // },
           backgroundColor: 'white',
           // borderBottom: '1px solid #adb5bd'
         }}
@@ -50,7 +50,7 @@ export default function Header() {
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         > */}
 
-        <Logo sx={{ width: 250 }} />
+        <Logo sx={{ width: { xs: 120, md: 200 }, height: { xs: 50, md: 100 } }} />
         {/* </Container> */}
         {mdUp && (
           <Stack width={1}>
@@ -60,7 +60,7 @@ export default function Header() {
                   width: 1,
                   fontSize: 13,
                   fontWeight: 500,
-                  mb: 0.5,
+                  my: 0.5,
                   letterSpacing: -0.5,
                   color: 'black',
                   display: 'flex',
