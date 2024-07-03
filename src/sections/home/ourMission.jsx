@@ -93,7 +93,7 @@ export default function WhoAreWe() {
           mb: { xs: 5, md: -1 },
         }}
       >
-        <m.div variants={varFade().inUp}>
+        {/* <m.div variants={varFade().inUp}>
           <Typography
             component="div"
             variant="overline"
@@ -105,10 +105,10 @@ export default function WhoAreWe() {
           >
             Hakeemna.com
           </Typography>
-        </m.div>
+        </m.div> */}
 
         <m.div variants={varFade().inDown}>
-          <Typography variant="h2">{t('our mission')}</Typography>
+          <Typography sx={{ fontSize: 45, fontWeight: 600, fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive' }}>{t('our goals')}</Typography>
           <Image
             src={Orange}
             sx={{
@@ -147,7 +147,7 @@ export default function WhoAreWe() {
               />
               <Box
                 alt={card.title}
-                // sx={{ mx: 'auto', width: 48, height: 48 }}
+              // sx={{ mx: 'auto', width: 48, height: 48 }}
               />
 
               <Typography variant="h6" sx={{ mt: 8, mb: 2 }}>
