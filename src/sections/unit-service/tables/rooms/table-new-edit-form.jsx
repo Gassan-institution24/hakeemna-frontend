@@ -20,7 +20,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveDepartments } from 'src/api';
+import { useGetUSActiveDepartments,useGetUSActivities } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -40,6 +40,9 @@ export default function TableNewEditForm({ currentTable }) {
   const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  const { activitiesData } = useGetUSActivities(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -48,8 +51,10 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
+    activities: Yup.string().required(t('required field')),
     department: Yup.string().nullable(),
     general_info: Yup.string(),
+    
   });
 
   const defaultValues = useMemo(
@@ -60,6 +65,7 @@ export default function TableNewEditForm({ currentTable }) {
       name_english: currentTable?.name_english || '',
       department: currentTable?.department?._id || null,
       general_info: currentTable?.general_info || '',
+      activities: currentTable?.activities || '',
     }),
     [currentTable, user?.employee]
   );
@@ -204,6 +210,31 @@ export default function TableNewEditForm({ currentTable }) {
                   <Iconify icon="material-symbols:new-window-sharp" />
                 </MenuItem>
               </RHFSelect>
+              <RHFSelect name="activities" label={t('activities')}>
+                {activitiesData.map((activities, idx) => (
+                  <MenuItem lang="ar" key={idx} value={activities._id}>
+                    {curLangAr ? activities.name_arabic : activities.name_english}
+                  </MenuItem>
+                ))}
+                <Divider />
+                <MenuItem
+                  lang="ar"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.activitiess.new)}
+                >
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
+              </RHFSelect>
+             
               <RHFTextField
                 onChange={handleEnglishInputChange}
                 name="general_info"
