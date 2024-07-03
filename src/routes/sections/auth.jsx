@@ -7,6 +7,7 @@ import AuthClassicLayout from 'src/layouts/auth/classic';
 // import AuthModernCompLayout from 'src/layouts/auth/modern-compact';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import MainLayout from 'src/layouts/main';
 
 // ----------------------------------------------------------------------
 
@@ -28,41 +29,51 @@ export const authRoutes = [
     path: 'login',
     element: (
       <Suspense fallback={<LoadingScreen />}>
-        <AuthClassicLayout>
-          <JwtLoginPage />
-        </AuthClassicLayout>
+        <MainLayout>
+          <AuthClassicLayout>
+            <JwtLoginPage />
+          </AuthClassicLayout>
+        </MainLayout>
       </Suspense>
     ),
   },
   {
     path: 'register',
     element: (
-      <AuthClassicLayout title="your health medical record">
-        <JwtRegisterPage />
-      </AuthClassicLayout>
+      <MainLayout>
+        <AuthClassicLayout title="your health medical record">
+          <JwtRegisterPage />
+        </AuthClassicLayout>
+      </MainLayout>
     ),
   },
   {
     path: 'register/serviceunit',
     element: (
-      <AuthClassicLayout title="Manage the job more effectively with Minimal">
-        <JwtUSRegisterPage />
-      </AuthClassicLayout>
+      <MainLayout>
+        <AuthClassicLayout title="Manage the job more effectively with Minimal">
+          <JwtUSRegisterPage />
+        </AuthClassicLayout>
+      </MainLayout>
     ),
   },
   {
     path: 'register/stakeholder',
     element: (
-      <AuthClassicLayout title="Manage the job more effectively with Minimal">
-        <JwtStakeholderRegisterPage />
-      </AuthClassicLayout>
+      <MainLayout>
+        <AuthClassicLayout title="Manage the job more effectively with Minimal">
+          <JwtStakeholderRegisterPage />
+        </AuthClassicLayout>
+      </MainLayout>
     ),
   },
   {
     element: (
-      <CompactLayout>
-        <Outlet />
-      </CompactLayout>
+      <MainLayout>
+        <CompactLayout>
+          <Outlet />
+        </CompactLayout>
+      </MainLayout>
     ),
     children: [
       { path: 'verify', element: <VerifyPage /> },

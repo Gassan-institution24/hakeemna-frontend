@@ -8,14 +8,16 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
+// import ScrollProgress from 'src/components/scroll-progress';
 
 import Pupage from '../pupage';
 import Whydoc from '../aboutUs';
-import HomeHero from '../home-hero';
 import OurMission from '../ourMission';
 import Arrow from '../images/arrow.png';
+import HomeHero from '../hero/home-hero';
 import ArrowAr from '../images/arrowAr.png';
-import ServicesWeprovide from '../servicesweprovide';
+import Training from '../training';
+// import ServicesWeprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -40,14 +42,23 @@ export default function HomeView() {
         sx={{
           overflow: 'hidden',
           position: 'relative',
-          bgcolor: 'background.default',
+          bgcolor: 'background.paper',
         }}
       >
-        <OurMission />
-        {/* </Box> */}
         <Whydoc />
       </Box>
-      <Box
+      <OurMission />
+      {/* <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          bgcolor: 'background.paper',
+        }}
+      >
+        <Training />
+      </Box> */}
+
+      {/* <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
@@ -57,12 +68,12 @@ export default function HomeView() {
         id="services"
       >
         <ServicesWeprovide />
-      </Box>
-      <Box
+      </Box> */}
+      {/* <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
-          bgcolor: 'background.default',
+          bgcolor: 'background.paper',
           p: 5,
         }}
       >
@@ -104,9 +115,8 @@ export default function HomeView() {
             </m.div>
           </Stack>
         </Container>
-
         <Pupage />
-      </Box>
+      </Box> */}
     </>
   );
 }
