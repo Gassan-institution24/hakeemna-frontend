@@ -2,12 +2,12 @@ import * as React from 'react';
 import { m } from 'framer-motion';
 
 import { Box } from '@mui/system';
-import { Container, Divider, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useLocales, useTranslate } from 'src/locales';
-import { MotionViewport, varFade } from 'src/components/animate';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function PatientsServices() {
   const { t } = useTranslate();
@@ -18,11 +18,15 @@ export default function PatientsServices() {
     <>
       <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 10 } }}>
         <m.div variants={varFade().inUp}>
-          <Typography sx={{
-            fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-            fontWeight: 700,
-            fontSize: { xs: 35, md: 50 },
-          }}>{t('WHAT WE DO')}</Typography>
+          <Typography
+            sx={{
+              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+              fontWeight: 700,
+              fontSize: { xs: 35, md: 50 },
+            }}
+          >
+            {t('WHAT WE DO')}
+          </Typography>
         </m.div>
       </Container>
       <Box

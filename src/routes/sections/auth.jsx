@@ -3,11 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import CompactLayout from 'src/layouts/compact';
 import AuthClassicLayout from 'src/layouts/auth/classic';
-// import AuthModernLayout from 'src/layouts/auth/modern';
-// import AuthModernCompLayout from 'src/layouts/auth/modern-compact';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import MainLayout from 'src/layouts/main';
 
 // ----------------------------------------------------------------------
 
@@ -29,51 +26,41 @@ export const authRoutes = [
     path: 'login',
     element: (
       <Suspense fallback={<LoadingScreen />}>
-        <MainLayout>
-          <AuthClassicLayout>
-            <JwtLoginPage />
-          </AuthClassicLayout>
-        </MainLayout>
+        <AuthClassicLayout>
+          <JwtLoginPage />
+        </AuthClassicLayout>
       </Suspense>
     ),
   },
   {
     path: 'register',
     element: (
-      <MainLayout>
-        <AuthClassicLayout title="your health medical record">
-          <JwtRegisterPage />
-        </AuthClassicLayout>
-      </MainLayout>
+      <AuthClassicLayout title="your health medical record">
+        <JwtRegisterPage />
+      </AuthClassicLayout>
     ),
   },
   {
     path: 'register/serviceunit',
     element: (
-      <MainLayout>
-        <AuthClassicLayout title="Manage the job more effectively with Minimal">
-          <JwtUSRegisterPage />
-        </AuthClassicLayout>
-      </MainLayout>
+      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+        <JwtUSRegisterPage />
+      </AuthClassicLayout>
     ),
   },
   {
     path: 'register/stakeholder',
     element: (
-      <MainLayout>
-        <AuthClassicLayout title="Manage the job more effectively with Minimal">
-          <JwtStakeholderRegisterPage />
-        </AuthClassicLayout>
-      </MainLayout>
+      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+        <JwtStakeholderRegisterPage />
+      </AuthClassicLayout>
     ),
   },
   {
     element: (
-      <MainLayout>
-        <CompactLayout>
-          <Outlet />
-        </CompactLayout>
-      </MainLayout>
+      <CompactLayout>
+        <Outlet />
+      </CompactLayout>
     ),
     children: [
       { path: 'verify', element: <VerifyPage /> },

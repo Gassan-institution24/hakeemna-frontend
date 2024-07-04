@@ -126,7 +126,7 @@ export default function Processing() {
       service_unit: Entrance?.service_unit,
     });
   }, [user, Entrance, reset]);
-console.log(Entrance);
+  console.log(Entrance);
   const watchStartTime = watch('Start_time');
   const watchEndTime = watch('End_time');
 
