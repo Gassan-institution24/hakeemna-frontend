@@ -29,7 +29,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
                 justifyContent="center"
                 sx={{
                     height: 1,
-                    maxWidth: 480,
+                    maxWidth: 600,
                     zIndex: 2,
                     px: 3,
                 }}
@@ -84,7 +84,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
                 <br />
             </Stack>
             {
-                !mdUp && (
+                !mdUp && setCurrentPage && (
                     <Stack direction='row' width={1} >
                         <Button
                             variant="contained"
