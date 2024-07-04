@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import { m } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
-import Stack from '@mui/material/Stack';
 import { Button } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -11,6 +11,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
+
 import PatientsHero from './patients-hero';
 import UnitServiceHero from './unit-service-hero';
 
@@ -79,28 +80,26 @@ export default function HomeHero() {
 
         <br />
       </Stack>
-      {
-        !mdUp && (
-          <Stack direction='row' width={1} >
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
-              onClick={() => setCurrentPage('users')}
-            >
-              {t('beneficiary')}
-            </Button>
-            <Button
-              variant="contained"
-              color="info"
-              sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
-              onClick={() => setCurrentPage('doctors')}
-            >
-              {t('unit of Serivce')}
-            </Button>
-          </Stack>
-        )
-      }
+      {!mdUp && (
+        <Stack direction="row" width={1}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
+            onClick={() => setCurrentPage('users')}
+          >
+            {t('beneficiary')}
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
+            onClick={() => setCurrentPage('doctors')}
+          >
+            {t('unit of Serivce')}
+          </Button>
+        </Stack>
+      )}
     </>
   );
 

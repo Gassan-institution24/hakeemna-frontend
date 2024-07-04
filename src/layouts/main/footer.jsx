@@ -5,36 +5,41 @@ import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import { alpha, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import Logo from 'src/components/logo';
-import { IconButton, alpha } from '@mui/material';
-import Iconify from 'src/components/iconify';
 import { useResponsive } from 'src/hooks/use-responsive';
+
+import { useTranslate } from 'src/locales';
+
+import Logo from 'src/components/logo';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 const LINKS = [
   {
-    headline: 'Doctorna',
+    headline: 'hakeemna',
     children: [
-      { name: 'About us', href: paths.about },
-      { name: 'Contact us', href: paths.contact },
-      { name: 'FAQs', href: paths.faqs },
+      { name: 'home', href: '/' },
+      { name: 'about us', href: paths.pages.About },
+      { name: 'beneficiaries', href: paths.pages.patients },
+      { name: 'units of service', href: paths.pages.unit },
+      { name: 'Training', href: paths.pages.Training },
     ],
   },
   {
-    headline: 'Legal',
+    headline: 'legal',
     children: [
-      { name: 'Terms and Condition', href: '#' },
+      { name: 'terms and condition', href: '#' },
       { name: 'Privacy Policy', href: '#' },
     ],
   },
   {
-    headline: 'Contact',
+    headline: 'contact',
     children: [{ name: 'doctorna2023@gmail.com', href: '#' }],
   },
 ];
@@ -78,28 +83,30 @@ export default function Footer() {
   const homePage = pathname === '/';
   const mdUp = useResponsive('up', 'md');
 
-  const simpleFooter = (
-    <Box
-      component="footer"
-      sx={{
-        py: 3,
-        textAlign: 'center',
-        position: 'relative',
-        bgcolor: 'primary.lighter',
-        // color: 'white',
-      }}
-    >
-      <Stack direction="row" justifyContent="center" alignItems="center">
-        {mdUp && <Logo sx={{ width: 150, height: 75, position: 'absolute', left: 10 }} />}
+  const { t } = useTranslate();
 
-        <Typography variant="caption" component="div">
-          © All rights reserved
-          <br /> made by
-          <Link href="/"> Doctorna.online </Link>
-        </Typography>
-      </Stack>
-    </Box>
-  );
+  // const simpleFooter = (
+  //   <Box
+  //     component="footer"
+  //     sx={{
+  //       py: 3,
+  //       textAlign: 'center',
+  //       position: 'relative',
+  //       bgcolor: 'primary.lighter',
+  //       // color: 'white',
+  //     }}
+  //   >
+  //     <Stack direction="row" justifyContent="center" alignItems="center">
+  //       {mdUp && <Logo sx={{ width: 150, height: 75, position: 'absolute', left: 10 }} />}
+
+  //       <Typography variant="caption" component="div">
+  //         © All rights reserved
+  //         <br /> made by
+  //         <Link href="/"> Doctorna.online </Link>
+  //       </Typography>
+  //     </Stack>
+  //   </Box>
+  // );
 
   const mainFooter = (
     <Box
@@ -135,7 +142,7 @@ export default function Footer() {
                 mx: { xs: 'auto', md: 'unset' },
               }}
             >
-              Manage all your data with doctorna
+              {t('It is time for digital transformation')}
             </Typography>
 
             <Stack
@@ -170,8 +177,8 @@ export default function Footer() {
                   alignItems={{ xs: 'center', md: 'flex-start' }}
                   sx={{ width: 1 }}
                 >
-                  <Typography component="div" variant="overline">
-                    {list.headline}
+                  <Typography component="div" variant="h6">
+                    {t(list.headline)}
                   </Typography>
 
                   {list.children.map((link, idx) => (
@@ -180,9 +187,9 @@ export default function Footer() {
                       component={RouterLink}
                       href={link.href}
                       color="inherit"
-                      variant="body2"
+                      variant="subtitle2"
                     >
-                      {link.name}
+                      {t(link.name)}
                     </Link>
                   ))}
                 </Stack>
@@ -192,11 +199,11 @@ export default function Footer() {
         </Grid>
 
         <Typography variant="body2" sx={{ mt: 2, textAlign: 'end' }}>
-          © 2023. All rights reserved
+          {t('© 2023. All rights reserved')}
         </Typography>
       </Container>
     </Box>
   );
 
-  return homePage ? mainFooter : simpleFooter;
+  return homePage ? mainFooter : mainFooter;
 }
