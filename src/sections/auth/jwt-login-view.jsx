@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box } from '@mui/material';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -170,9 +169,10 @@ export default function JwtLoginView() {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      {renderHead}
-      <Box height="5vh" />
-      {renderForm}
+      <Stack justifyContent="center" width={1} height="70vh">
+        {renderHead}
+        {renderForm}
+      </Stack>
     </FormProvider>
   );
 }
