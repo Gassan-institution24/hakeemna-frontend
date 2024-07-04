@@ -1,21 +1,30 @@
 import * as React from 'react';
+import { m } from 'framer-motion';
 
 import { Box } from '@mui/system';
-import { Divider, Typography } from '@mui/material';
+import { Container, Divider, Typography } from '@mui/material';
 
-// import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { useLocales, useTranslate } from 'src/locales';
+import { MotionViewport, varFade } from 'src/components/animate';
 
-export default function VerticalDividerText() {
-  // const { t } = useTranslate();
+export default function PatientsServices() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   return (
     <>
-      <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
-        <h1> WHAT WE DO</h1>
-        {/* <h5 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h5> */}
-      </Divider>
+      <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 10 } }}>
+        <m.div variants={varFade().inUp}>
+          <Typography sx={{
+            fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+            fontWeight: 700,
+            fontSize: { xs: 35, md: 50 },
+          }}>{t('WHAT WE DO')}</Typography>
+        </m.div>
+      </Container>
       <Box
         sx={{
           display: 'grid',

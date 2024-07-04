@@ -35,7 +35,7 @@ export default function Whydoc() {
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
           {' '}
           {t(
-            'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.After studying the needs of medical institutions and users(patients and others) in the Arab world,\n a working team was formed to develop this platform.This team has full belief in the importance of developing electronic health services, especially the private sector in our Arab world, by raising the level of medical services and improving the efficiency of daily practices.For medical service providers, facilitating procedures for patients and keeping their medical information and documents securely and in one place.\nThe platform is characterized by being comprehensive for all individuals and institutions, whether the user (medical service provider or patient) subscribes to the services of insurance companies or not, as you can benefit from the services provided to you independently and without association with any insurance or insurance management groups.'
+            'Hakimna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.'
           )}
         </Typography>
       </div>

@@ -29,7 +29,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
                 justifyContent="center"
                 sx={{
                     height: 1,
-                    maxWidth: 480,
+                    maxWidth: 600,
                     zIndex: 2,
                     px: 3,
                 }}

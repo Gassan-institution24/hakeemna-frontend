@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import Unitservices from 'src/sections/home/view/usservices';
+import Patients from 'src/sections/home/view/patients';
 // ----------------------------------------------------------------------
 
-export default function HomePage() {
+export default function patients() {
   return (
     <>
       <Helmet>
-        <title>Unitservices</title>
+        <title>Beneficiaries</title>
         <meta name="description" content="meta" />
       </Helmet>
 
-      <Unitservices />
+      <Patients />
     </>
   );
 }
