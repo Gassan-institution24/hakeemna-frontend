@@ -8,7 +8,7 @@ import { SplashScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
-export const HomePage = lazy(() => import('src/pages/home'));
+export const HomePage = lazy(() => import('src/pages/home/home'));
 // const Page500 = lazy(() => import('src/pages/500'));
 // const Page403 = lazy(() => import('src/pages/403'));
 // const Page404 = lazy(() => import('src/pages/errors/404'));
@@ -28,8 +28,8 @@ const AboutUs = lazy(() => import('src/sections/home/moreInfoAboutUs'));
 // // BLOG
 // const PostListPage = lazy(() => import('src/pages/post/list'));
 // const PostDetailsPage = lazy(() => import('src/pages/post/details'));
-const Patientsservices = lazy(() => import('src/pages/services/patients'));
-const Unitservices = lazy(() => import('src/pages/services/unit'));
+const Patientsservices = lazy(() => import('src/pages/home/patients'));
+const Unitservices = lazy(() => import('src/pages/home/unit'));
 const ServiceUnitPage = lazy(() => import('src/pages/service-unit-page/details'));
 const Training = lazy(() => import('src/sections/home/training'));
 
@@ -46,7 +46,7 @@ export const mainRoutes = [
     ),
     children: [
       { path: 'patients', element: <Patientsservices /> },
-      { path: 'unit', element: <Unitservices /> },
+      { path: 'units', element: <Unitservices /> },
       { path: 'UsPricing', element: <UsPricing /> },
       { path: 'about', element: <AboutUs /> },
       { path: 'about', element: <AboutUs /> },

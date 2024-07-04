@@ -50,7 +50,7 @@ export const paths = {
   pages: {
     root: ROOTS.PAGES,
     patients: `/patients`,
-    unit: `/unit`,
+    unit: `/units`,
     UsPricing: `/UsPricing`,
     About: `/about`,
     Training: `/training`,

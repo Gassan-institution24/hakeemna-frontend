@@ -11,19 +11,21 @@ export const navConfig = [
     title: 'Home',
     icon: <Iconify icon="solar:home-2-bold-duotone" />,
     path: '/',
-    sectionId: 'home',
   },
   {
-    title: 'About',
+    title: 'About us',
     icon: <Iconify icon="mdi:about" />,
-    path: '#',
-    sectionId: 'About',
+    path: paths.pages.About,
   },
   {
-    title: 'Services',
+    title: 'beneficiaries',
     icon: <Iconify icon="medical-icon:social-services" />,
-    path: '#',
-    sectionId: 'services',
+    path: paths.pages.patients,
+  },
+  {
+    title: 'units of service',
+    icon: <Iconify icon="medical-icon:social-services" />,
+    path: paths.pages.unit,
   },
   // {
   //   title: 'R&D',
