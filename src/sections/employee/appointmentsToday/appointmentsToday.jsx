@@ -8,13 +8,13 @@ import {
   Tabs,
   Table,
   Button,
+  Select,
   TableRow,
   TableHead,
   TableCell,
   TableBody,
   IconButton,
   TableContainer,
-  Select,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -94,7 +94,7 @@ export default function AppointmentsToday() {
     setSelectedValue(event.target.value);
   };
 
-  console.log(selectedValue,"kjljlhiytfdyefuiyf");
+  console.log(selectedValue, 'kjljlhiytfdyefuiyf');
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
