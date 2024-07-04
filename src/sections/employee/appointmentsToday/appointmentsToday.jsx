@@ -14,12 +14,7 @@ import {
   TableBody,
   IconButton,
   TableContainer,
-  Typography,
   Select,
-  MenuItem,
-  InputLabel,
-  OutlinedInput,
-  InputBase,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -53,10 +48,10 @@ export default function AppointmentsToday() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
-    user?.employee?.employee_engagements?.[0]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   const { comingPatientData, refetch: refetchComingPatients } = useGetUsAppointmentsComingpatients(
-    user?.employee?.employee_engagements?.[0]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   const { entrance, refetch: refetchEntrance } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
@@ -93,7 +88,13 @@ export default function AppointmentsToday() {
   ];
 
   const [currentTab, setCurrentTab] = useState('one');
+  const [selectedValue, setSelectedValue] = useState('');
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  console.log(selectedValue,"kjljlhiytfdyefuiyf");
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
@@ -138,6 +139,7 @@ export default function AppointmentsToday() {
         service_unit: data?.unit_service?._id,
         appointmentId: data?._id,
         work_group: data?.work_group?._id,
+        Last_activity_atended: selectedValue,
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
@@ -229,28 +231,24 @@ export default function AppointmentsToday() {
         links={[{ name: user.userName }]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
-      
-        <Select
-          native
-          sx={{width:'30%',mb:4, float:'right'}}
-          // value={status}
-          // onChange={handleChangeStatus}
-          inputProps={{
-            sx: { textTransform: 'capitalize' },
-          }}
-        >
-          {activitiesData.map((option) => (
-           <>
-            <option>
-             All
-            </option>
-            <option key={option} value={option}>
-              {option?.name_english}
-            </option>
-           </>
-          ))}
-        </Select>
-      
+
+      <Select
+        native
+        sx={{ width: '30%', mb: 4, float: 'right' }}
+        value={selectedValue}
+        onChange={handleChange}
+        inputProps={{
+          sx: { textTransform: 'capitalize' },
+        }}
+      >
+        <option>All</option>
+        {activitiesData.map((option) => (
+          <option key={option._id} value={option._id}>
+            {option?.name_english}
+          </option>
+        ))}
+      </Select>
+
       <Tabs
         value={currentTab}
         onChange={handleChangeTab}
