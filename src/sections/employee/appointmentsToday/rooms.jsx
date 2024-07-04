@@ -29,7 +29,7 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'onTouched',
   });
-  console.log(Entrance);
+  console.log(Entrance?.Last_activity_atended);
   const { reset } = methods;
   useEffect(() => {
     reset({
@@ -115,6 +115,7 @@ export default function Rooms() {
       )}
       <>
         last activity <br />
+        {Entrance?.Last_activity_atended?.name_english} <br />
         Dr message:
         <Typography>the patient need a surgery now</Typography>
       </>
