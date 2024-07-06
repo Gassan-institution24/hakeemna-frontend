@@ -25,8 +25,8 @@ export function useGetCities() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetCountryCities(id) {
-  const URL = endpoints.cities.country(id);
+export function useGetCountryCities(id, params) {
+  const URL = [endpoints.cities.country(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

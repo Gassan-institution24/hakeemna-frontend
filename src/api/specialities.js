@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetSpecialties() {
-  const URL = endpoints.specialities.all;
+export function useGetSpecialties(params) {
+  const URL = [endpoints.specialities.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
