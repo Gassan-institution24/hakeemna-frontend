@@ -1,0 +1,149 @@
+import { useState } from 'react';
+
+import {
+  Box,
+  Card,
+  Paper,
+  Table,
+  Button,
+  Switch,
+  Select,
+  TableRow,
+  MenuItem,
+  TableCell,
+  TableBody,
+  TableHead,
+  Typography,
+  TableContainer,
+} from '@mui/material';
+
+import { useParams } from 'src/routes/hooks';
+
+import { fDateTime, fTimeText } from 'src/utils/format-time';
+
+import { useLocales, useTranslate } from 'src/locales';
+import {
+  useGetPatientHistoryData,
+  useGetOneEntranceManagement,
+  useGetPatientHistoryDataInSu,
+  useGetUSActivities,
+  useGetUSRooms
+} from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+
+// ----------------------------------------------------------------------
+
+export default function WaitingRoom() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const {user} = useAuthContext()
+  const { id } = useParams();
+  const { Entrance } = useGetOneEntranceManagement(id);
+  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
+  const { historyData } = useGetPatientHistoryDataInSu(
+    Entrance?.patient?._id,
+    Entrance?.service_unit?._id
+  );
+  const { activitiesData } = useGetUSActivities(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+  const { roomsData } = useGetUSRooms(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+
+
+  console.log(roomsData);
+
+
+
+  const [switchh, setSwitch] = useState(false);
+  const [itemsToShow, setItemsToShow] = useState(2);
+  const [selectedTitle, setSelectedTitle] = useState('');
+
+  const dataFiltered = applyFilter({
+    inputData: switchh === true ? historyDataForPatient : historyData,
+    filterforspecialties: selectedTitle,
+  });
+
+  return (
+    <Card sx={{mt:3}}>
+      <Box sx={{ m: 2 }}>
+        <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
+          {t('Select Room')}{' '}
+        </Typography>
+        <Select
+          sx={{
+            width: 150,
+            height: 35,
+          }}
+          value={selectedTitle}
+          onChange={(e) => setSelectedTitle(e.target.value)}
+        >
+          <MenuItem value="">{t('All')}</MenuItem>
+          {roomsData.map((type, index) => (
+            <MenuItem key={index} value={type}>
+              {type?.name_english}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('Date')}</TableCell>
+              <TableCell>{t('Name')}</TableCell>
+              <TableCell>{t('Subject')}</TableCell>
+              <TableCell>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span>Private</span>{' '}
+                  <Switch value={switchh} onChange={() => setSwitch(!switchh)} />{' '}
+                  <span>Public</span>
+                </Box>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {dataFiltered?.slice(0, itemsToShow).map(
+              (historydata, i) =>
+                historydata?.status === 'active' && (
+                  <TableRow key={i}>
+                    <TableCell>{fDateTime(historydata?.actual_date)}</TableCell>
+                    <TableCell>
+                      {/* {curLangAr ? historydata?.name_arabic : historydata?.name_english} */}
+                      {historydata?.title}
+                    </TableCell>
+                    <TableCell>
+                      {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: 12, color: 'lightgray' }}>
+                      {fTimeText(historydata?.created_at)}
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
+          </TableBody>
+        </Table>
+        {dataFiltered?.length > itemsToShow && (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setItemsToShow(itemsToShow + itemsToShow)}
+            sx={{ m: 2 }}
+          >
+            {t('Load More')}
+          </Button>
+        )}
+      </TableContainer>
+    </Card>
+  );
+}
+
+function applyFilter({ inputData, filterforspecialties }) {
+  if (!filterforspecialties) {
+    return inputData;
+  }
+  return inputData.filter((item) => item.title === filterforspecialties);
+}
