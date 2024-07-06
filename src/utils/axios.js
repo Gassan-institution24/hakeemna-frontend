@@ -406,7 +406,7 @@ export const endpoints = {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
     inwating: `/api/entrance/inwating`,
-    wating:(id)=> `/api/entrance/wating/${id}`,
+    wating: (id) => `/api/entrance/wating/${id}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
   medRecord: {
