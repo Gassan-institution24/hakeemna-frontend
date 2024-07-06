@@ -20,8 +20,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveDepartments,useGetUSActivities } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSActivities, useGetUSActiveDepartments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -54,7 +54,6 @@ export default function TableNewEditForm({ currentTable }) {
     activities: Yup.string().required(t('required field')),
     department: Yup.string().nullable(),
     general_info: Yup.string(),
-    
   });
 
   const defaultValues = useMemo(
@@ -234,7 +233,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <Iconify icon="material-symbols:new-window-sharp" />
                 </MenuItem>
               </RHFSelect>
-             
+
               <RHFTextField
                 onChange={handleEnglishInputChange}
                 name="general_info"
