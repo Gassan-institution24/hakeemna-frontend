@@ -13,7 +13,7 @@ import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 import Orange from './images/orange.png';
-import Autonomy from './images/autonomy.png';
+import Autonomy from './images/Autonomy.png';
 import GreenManagement from './images/green.png';
 import Friendly from './images/userFriendly.png';
 import MedicalHub from './images/medicalHub.png';
