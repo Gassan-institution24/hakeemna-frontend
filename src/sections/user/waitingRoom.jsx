@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import TableRow from '@mui/material/TableRow';
@@ -17,11 +15,11 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetWatingPatient, useGetEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 

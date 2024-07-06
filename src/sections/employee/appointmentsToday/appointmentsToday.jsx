@@ -8,13 +8,13 @@ import {
   Tabs,
   Table,
   Button,
+  Select,
   TableRow,
   TableHead,
   TableCell,
   TableBody,
   IconButton,
   TableContainer,
-  Select,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';

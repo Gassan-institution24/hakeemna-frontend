@@ -1,22 +1,12 @@
-import { m } from 'framer-motion';
-
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { Stack, Container } from '@mui/system';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Image from 'src/components/image';
-import { varFade, MotionViewport } from 'src/components/animate';
 // import ScrollProgress from 'src/components/scroll-progress';
 
-import Pupage from '../pupage';
 import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
-import Arrow from '../images/arrow.png';
 import HomeHero from '../hero/home-hero';
-import ArrowAr from '../images/arrowAr.png';
-import Training from '../training';
 // import ServicesWeprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
