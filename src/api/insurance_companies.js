@@ -25,8 +25,8 @@ export function useGetInsuranceCos() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetActiveInsuranceCos() {
-  const URL = endpoints.insurance_companies.active;
+export function useGetActiveInsuranceCos(params) {
+  const URL = [endpoints.insurance_companies.active, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

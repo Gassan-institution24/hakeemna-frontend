@@ -113,7 +113,7 @@ export default function Footer() {
       component="footer"
       sx={{
         position: 'relative',
-        bgcolor: 'primary.lighter',
+        bgcolor: 'white',
         // color: 'white',
       }}
     >
@@ -121,7 +121,7 @@ export default function Footer() {
 
       <Container
         sx={{
-          pt: 10,
+          pt: 5,
           pb: 5,
           textAlign: { xs: 'center', md: 'unset' },
         }}

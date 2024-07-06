@@ -70,6 +70,14 @@ export const error = {
   darker: '#7A0916',
   contrastText: '#FFFFFF',
 };
+export const clear = {
+  lighter: '#FFFFFF',
+  light: '#FFFFFF',
+  main: '#FFFFFF',
+  dark: '#FFFFFF',
+  darker: '#FFFFFF',
+  contrastText: '#FFFFFF',
+};
 
 export const common = {
   black: '#000000',
@@ -89,6 +97,7 @@ export const action = {
 const base = {
   primary,
   secondary,
+  clear,
   info,
   success,
   warning,
