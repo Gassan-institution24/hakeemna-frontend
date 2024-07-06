@@ -33,8 +33,9 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
         justifyContent="center"
         sx={{
           height: 1,
-          maxWidth: 600,
+          maxWidth: homePage ? 600 : 1400,
           zIndex: 2,
+          pt: { md: 15 },
           px: 3,
         }}
       >
@@ -46,7 +47,6 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
               fontSize: { xs: 35, md: 50 },
-              // textShadow: '5px 5px 5px black',
               mb: 3,
             }}
           >
@@ -55,7 +55,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
         </m.div>
 
         <m.div variants={varFade().in}>
-          <Typography
+          {homePage && <Typography
             variant="subtitle1"
             sx={{
               textAlign: 'center',
@@ -65,7 +65,18 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
             {t(
               'It enables medical service providers to deal with patient records electronically and manage their institutions effectively and easily with the aim of raising productivity and improving performance, which leads to enriching the patient experience and paves the way for focusing on the most important matters in your work to raise the degree of excellence and increase competitiveness.'
             )}
-          </Typography>
+          </Typography>}
+          {!homePage && <Typography
+            variant="subtitle1"
+            sx={{
+              textAlign: 'center',
+              //  textShadow: '5px 5px 5px black'
+            }}
+          >
+            {t(
+              'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.\nDigital intelligence requires that it cover all aspects of work in different institutions, and the obstacles that prevent the success of this important transition are varied.Therefore, with the help of God Almighty, the Hakimna platform was designed to take into account those obstacles (financial, tax, training, workability and compatibility with) (systems Different applications and market) to overcome those limitations in the diet of the diet community in one digital platform to provide modern and intelligent care to patients everywhere.'
+            )}
+          </Typography>}
         </m.div>
         <br />
         <Stack direction={{ sx: 'column', md: 'row' }} gap={1}>
