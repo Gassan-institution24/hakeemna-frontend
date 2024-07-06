@@ -25,8 +25,8 @@ export function useGetUSTypes() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetActiveUSTypes() {
-  const URL = endpoints.unit_service_types.active;
+export function useGetActiveUSTypes(params) {
+  const URL = [endpoints.unit_service_types.active, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
