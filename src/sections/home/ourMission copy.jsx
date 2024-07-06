@@ -108,7 +108,15 @@ export default function WhoAreWe() {
         </m.div> */}
 
         <m.div variants={varFade().inDown}>
-          <Typography sx={{ fontSize: 45, fontWeight: 600, fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive' }}>{t('our goals')}</Typography>
+          <Typography
+            sx={{
+              fontSize: 45,
+              fontWeight: 600,
+              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+            }}
+          >
+            {t('our goals')}
+          </Typography>
           <Image
             src={Orange}
             sx={{
@@ -147,7 +155,7 @@ export default function WhoAreWe() {
               />
               <Box
                 alt={card.title}
-              // sx={{ mx: 'auto', width: 48, height: 48 }}
+                // sx={{ mx: 'auto', width: 48, height: 48 }}
               />
 
               <Typography variant="h6" sx={{ mt: 8, mb: 2 }}>
