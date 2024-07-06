@@ -34,7 +34,6 @@ export default function WatingRoom() {
   const collapsible = useBoolean();
   const entranceCount = entrance.length - 1;
 
-  console.log(entranceData);
   return entranceData  ? (
     <Container sx={{ my: 10 }}>
       <Card sx={{ width: 1 }}>
