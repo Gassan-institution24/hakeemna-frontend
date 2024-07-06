@@ -14,7 +14,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetOneEntranceManagement } from 'src/api';
+import { useGetOneEntranceManagement, useGetUSActivities } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +31,9 @@ export default function Rooms() {
   });
   console.log(Entrance?.Last_activity_atended);
   const { reset } = methods;
+  const { activitiesData } = useGetUSActivities(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
@@ -44,7 +47,6 @@ export default function Rooms() {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
         Patient_attended: true,
-        wating: false,
       });
       await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
         finished_or_not: true,
@@ -121,21 +123,17 @@ export default function Rooms() {
       </>
       <Divider sx={{ height: 10, mb: 1 }} />
       Next activity <br />
-      <Button
-        onClick={() => alert('test')}
-        variant="contained"
-        sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
-      >
-        wating
-      </Button>
-      <Button
-        onClick={() => alert('test')}
-        variant="contained"
-        disabled
-        sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
-      >
-        surgery
-      </Button>
+      {activitiesData?.map((activities) => (
+        <Button
+          onClick={() => alert('test')}
+          variant="contained"
+          // disabled
+          sx={{ bgcolor: 'success.main', m:1 }}
+        >
+         go to {activities?.name_english} room
+        </Button>
+      ))}
+      <Divider/>
       <Button
         onClick={() => setShowAlert(true)}
         variant="contained"
