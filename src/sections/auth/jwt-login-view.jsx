@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,21 +19,24 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export default function JwtLoginView() {
+export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, setPatientId }) {
   const { login } = useAuthContext();
 
   const router = useRouter();
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState('');
@@ -68,9 +73,19 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login?.(data.email, data.password);
-
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      const userData = await login?.(data.email, data.password);
+      console.log('userData', userData)
+      if (onSignin) {
+        setPatientId(userData.patient)
+        await axiosInstance.patch(endpoints.appointments.book(selected), {
+          patient: userData?.user?.patient,
+          lang: curLangAr,
+        })
+        onSignin()
+        refetch()
+      } else {
+        router.push(returnTo || PATH_AFTER_LOGIN);
+      }
     } catch (error) {
       console.error(error);
       // reset();
@@ -93,7 +108,8 @@ export default function JwtLoginView() {
         <Link
           sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
           component={RouterLink}
-          href={paths.auth.register}
+          onClick={() => onSignUp ? onSignUp() : router.push(paths.auth.register)}
+          // href={paths.auth.register}
           variant="subtitle2"
           underline="always"
         >
@@ -134,7 +150,7 @@ export default function JwtLoginView() {
         }}
       />
 
-      <Link
+      {!onSignin && <Link
         variant="body2"
         component={RouterLink}
         href={paths.auth.forgotPassword}
@@ -143,7 +159,7 @@ export default function JwtLoginView() {
         sx={{ alignSelf: 'flex-end', mt: 5 }}
       >
         {t('Forgot password?')}
-      </Link>
+      </Link>}
 
       <LoadingButton
         fullWidth
@@ -155,7 +171,7 @@ export default function JwtLoginView() {
       >
         {t('Login')}
       </LoadingButton>
-      <Link
+      {!onSignin && <Link
         sx={{ alignSelf: 'center' }}
         component={RouterLink}
         href="https://doctorna.online/"
@@ -163,7 +179,7 @@ export default function JwtLoginView() {
         underline="always"
       >
         {t('web page')}
-      </Link>
+      </Link>}
     </Stack>
   );
 
@@ -176,3 +192,10 @@ export default function JwtLoginView() {
     </FormProvider>
   );
 }
+JwtLoginView.propTypes = {
+  onSignin: PropTypes.func,
+  selected: PropTypes.string,
+  refetch: PropTypes.func,
+  onSignUp: PropTypes.func,
+  setPatientId: PropTypes.func,
+};

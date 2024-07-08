@@ -124,13 +124,14 @@ export function AuthProvider({ children }) {
         });
         initialize();
       } else throw new Error(message);
+      return response.data
     },
     [initialize]
   );
 
   // REGISTER
   const register = useCallback(async (data) => {
-    await axios.post(endpoints.auth.register, {
+    const { data: userData } = await axios.post(endpoints.auth.register, {
       ...data,
       email: data.email.toLowerCase(),
     });
@@ -148,6 +149,7 @@ export function AuthProvider({ children }) {
     //     },
     //   },
     // });
+    return userData
   }, []);
 
   // FORGOT PASSWORD

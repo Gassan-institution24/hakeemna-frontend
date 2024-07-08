@@ -20,14 +20,14 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
   // ({ name, list, helperText, onChange, ...other }) => (
   return (
     <>
-      <Typography
+      {/* <Typography
         sx={{ py: 2, fontWeight: 700 }}
         variant="caption"
         color="text.secondary"
         textTransform="uppercase"
       >
         {t('select time')}
-      </Typography>
+      </Typography> */}
       {/* <Scrollbar
         sx={{
           py: 8,
@@ -36,14 +36,28 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
       > */}
       <Stack
         sx={{
-          py: 8,
-          height: '100%',
+          my: 3,
+          maxHeight: 300,
+          overflow: 'auto',
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
           alignItems: 'center',
           // backgroundColor: 'red',
           justifyContent: 'flex-start',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'none',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#888',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#555',
+          },
         }}
       >
         {list.map((time) => (

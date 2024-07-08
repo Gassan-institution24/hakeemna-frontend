@@ -129,7 +129,8 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.({ role: 'stakeholder', userName: data.name_english, ...data });
+      const patient = await register?.({ role: 'stakeholder', userName: data.name_english, ...data });
+      console.log('patient', patient)
 
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
@@ -152,7 +153,7 @@ export default function JwtRegisterView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
 
-        <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+        <Link onClick={() => router.push(paths.auth.login)} component={RouterLink} variant="subtitle2">
           login
         </Link>
       </Stack>
