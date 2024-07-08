@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
@@ -25,7 +26,7 @@ import FormProvider, { RHFCode } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function ClassicVerifyView() {
+export default function ClassicVerifyView({ onVerify, patientId, selected, refetch }) {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
   const router = useRouter();
@@ -62,7 +63,16 @@ export default function ClassicVerifyView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await axios.post(endpoints.auth.activate, { email, code: data.code });
-      router.push(paths.dashboard.root);
+      if (onVerify) {
+        await axios.patch(endpoints.appointments.book(selected), {
+          patient: patientId,
+          lang: curLangAr,
+        })
+        onVerify()
+        refetch()
+      } else {
+        router.push(paths.dashboard.root);
+      }
     } catch (error) {
       console.error(error);
       enqueueSnackbar(
@@ -127,7 +137,7 @@ export default function ClassicVerifyView() {
         </Link>
       </Typography>
 
-      <Link
+      {!patientId && <Link
         component={RouterLink}
         href={paths.auth.login}
         color="inherit"
@@ -139,7 +149,7 @@ export default function ClassicVerifyView() {
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
         {t('return to login')}
-      </Link>
+      </Link>}
     </Stack>
   );
 
@@ -167,3 +177,9 @@ export default function ClassicVerifyView() {
     </FormProvider>
   );
 }
+ClassicVerifyView.propTypes = {
+  refetch: PropTypes.func,
+  onVerify: PropTypes.func,
+  patientId: PropTypes.string,
+  selected: PropTypes.string,
+};

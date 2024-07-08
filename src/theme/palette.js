@@ -123,6 +123,7 @@ export function palette(mode) {
       paper: '#FFFFFF',
       default: grey[100],
       neutral: grey[200],
+      lightgray: grey[300],
     },
     action: {
       ...base.action,
