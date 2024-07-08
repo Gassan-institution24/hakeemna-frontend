@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { matchIsValidTel } from 'mui-tel-input';
@@ -36,7 +38,7 @@ import FormProvider, {
 
 // ----------------------------------------------------------------------
 
-export default function JwtRegisterView() {
+export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId }) {
   const { register } = useAuthContext();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -146,8 +148,14 @@ export default function JwtRegisterView() {
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
-      router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
+      const patient = await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
+      console.log('userData', patient)
+      if (afterSignUp) {
+        setPatientId(patient?.patient?._id)
+        afterSignUp()
+      } else {
+        router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
+      }
     } catch (error) {
       console.error(error);
       // reset();
@@ -168,12 +176,12 @@ export default function JwtRegisterView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
-        <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+        <Link onClick={() => onSignIn ? onSignIn() : router.push(paths.auth.login)} component={RouterLink} variant="subtitle2">
           {t('login')}
         </Link>
       </Stack>
 
-      <Stack direction="row" spacing={0.5}>
+      {!onSignIn && <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">
           {' '}
           {t('I am a ')}{' '}
@@ -181,7 +189,7 @@ export default function JwtRegisterView() {
             {t('services provider')}
           </Link>
         </Typography>
-      </Stack>
+      </Stack>}
     </Stack>
   );
 
@@ -316,3 +324,8 @@ export default function JwtRegisterView() {
     </>
   );
 }
+JwtRegisterView.propTypes = {
+  afterSignUp: PropTypes.func,
+  onSignIn: PropTypes.func,
+  setPatientId: PropTypes.func,
+};

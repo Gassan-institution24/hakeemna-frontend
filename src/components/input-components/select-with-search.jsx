@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { InputAdornment } from '@mui/material';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useState } from 'react';
 
 import Iconify from '../iconify';
@@ -19,8 +19,10 @@ export function SelectWithSearch({
   options,
   placeholder,
   PaperPropsSx,
+  filters,
   ...other
 }) {
+  const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -42,6 +44,9 @@ export function SelectWithSearch({
       }}
       {...other}
     >
+      {filters[name] !== '' && <MenuItem sx={{ textAlign: 'end' }} value=''>
+        {t('reset')}
+      </MenuItem>}
       <MenuItem>
         <TextField
           size='small'
@@ -78,6 +83,7 @@ SelectWithSearch.propTypes = {
   PaperPropsSx: PropTypes.object,
   options: PropTypes.node,
   helperText: PropTypes.object,
+  filters: PropTypes.object,
   maxHeight: PropTypes.number,
   placeholder: PropTypes.string,
   name: PropTypes.string,
