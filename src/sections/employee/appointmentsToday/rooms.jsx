@@ -29,7 +29,7 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'onTouched',
   });
-  console.log(Entrance?.Last_activity_atended);
+
   const { reset } = methods;
   const { activitiesData } = useGetUSActivities(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -68,6 +68,19 @@ export default function Rooms() {
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('no', { variant: 'error' });
+    }
+  };
+
+  const goToProcessingPage = async (activity) => {
+    try {
+      await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
+        Last_activity_atended: Entrance?.Next_activity,
+        Next_activity: activity,
+      });
+      router.push(paths.employee.appointmentsToday);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
 
@@ -125,15 +138,15 @@ export default function Rooms() {
       Next activity <br />
       {activitiesData?.map((activities) => (
         <Button
-          onClick={() => alert('test')}
+          onClick={() => goToProcessingPage(activities?._id)}
           variant="contained"
           // disabled
-          sx={{ bgcolor: 'success.main', m:1 }}
+          sx={{ bgcolor: 'success.main', m: 1 }}
         >
-         go to {activities?.name_english} room
+          go to {activities?.name_english} room
         </Button>
       ))}
-      <Divider/>
+      <Divider />
       <Button
         onClick={() => setShowAlert(true)}
         variant="contained"
