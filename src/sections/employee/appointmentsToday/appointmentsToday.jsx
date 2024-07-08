@@ -8,7 +8,6 @@ import {
   Tabs,
   Table,
   Button,
-  Select,
   TableRow,
   TableHead,
   TableCell,
@@ -30,7 +29,6 @@ import {
   useGetEntranceManagement,
   useGetUsAppointmentsToday,
   useGetfinishedAppointments,
-  useGetUsAppointmentsComingpatients,
 } from 'src/api';
 
 import Label from 'src/components/label';
@@ -52,9 +50,6 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { comingPatientData, refetch: refetchComingPatients } = useGetUsAppointmentsComingpatients(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
   const { entrance, refetch: refetchEntrance } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
@@ -66,13 +61,6 @@ export default function AppointmentsToday() {
       count: appointmentsData?.length,
       data: appointmentsData,
     },
-    // {
-    //   value: 'two',
-    //   label: 'Coming',
-    //   color: 'success',
-    //   count: comingPatientData?.length,
-    //   data: comingPatientData,
-    // },
     {
       value: 'three',
       label: 'Rooms',
@@ -90,31 +78,17 @@ export default function AppointmentsToday() {
   ];
 
   const [currentTab, setCurrentTab] = useState('one');
-  const [selectedValue, setSelectedValue] = useState('');
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
 
-  console.log(selectedValue, 'kjljlhiytfdyefuiyf');
-
+  const waitingActivity = activitiesData.find((activity) => activity.name_english === 'waiting');
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
   const refetchAll = () => {
     refetchAppointments();
-    refetchComingPatients();
     refetchEntrance();
     refetchFinishedAppointments();
   };
 
-  const goToProcessingPage = async (id) => {
-    try {
-      router.push(`${paths.unitservice.departments.processingPage}/${id}`);
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar('Error updating status', { variant: 'error' });
-    }
-  };
 
   const updateStatus = async (id, status, type) => {
     try {
@@ -140,7 +114,7 @@ export default function AppointmentsToday() {
         service_unit: data?.unit_service?._id,
         appointmentId: data?._id,
         work_group: data?.work_group?._id,
-        Last_activity_atended: selectedValue,
+        Next_activity: waitingActivity?._id,
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
@@ -219,7 +193,7 @@ export default function AppointmentsToday() {
         links={[{ name: user.userName }]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
-         <Tabs
+      <Tabs
         value={currentTab}
         onChange={handleChangeTab}
         sx={{ px: 2.5, boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}` }}
@@ -245,7 +219,7 @@ export default function AppointmentsToday() {
                   <TableCell>Time</TableCell>
                   <TableCell>Patient</TableCell>
                   <TableCell>Patient Note</TableCell>
-                  {currentTab !== 'four' &&  (
+                  {currentTab !== 'four' && (
                     <>
                       <TableCell>Coming</TableCell>
                       <TableCell>Arrived</TableCell>
@@ -260,7 +234,7 @@ export default function AppointmentsToday() {
                     <TableCell>{fTime(info?.start_time)}</TableCell>
                     <TableCell>{info?.patient?.name_english}</TableCell>
                     <TableCell>{currentTab === 'four' ? info?.patient_note : info?.note}</TableCell>
-                    {currentTab !== 'four' &&  (
+                    {currentTab !== 'four' && (
                       <>
                         <TableCell>
                           {info?.coming ? (
@@ -312,8 +286,6 @@ export default function AppointmentsToday() {
           </Scrollbar>
         </TableContainer>
       )}
-
-   
     </Container>
   );
 }

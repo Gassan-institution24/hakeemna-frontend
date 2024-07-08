@@ -1,73 +1,51 @@
 import { useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
-import {
-  Box,
-  Card,
-  Paper,
-  Table,
-  Button,
-  Switch,
-  Select,
-  TableRow,
-  MenuItem,
-  TableCell,
-  TableBody,
-  TableHead,
-  Typography,
-  TableContainer,
-} from '@mui/material';
+import { Box, Card, Button, Select, MenuItem, Typography } from '@mui/material';
 
-import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useParams, useRouter } from 'src/routes/hooks';
 
-import { fDateTime, fTimeText } from 'src/utils/format-time';
+import axiosInstance from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
-import {
-  useGetPatientHistoryData,
-  useGetOneEntranceManagement,
-  useGetPatientHistoryDataInSu,
-  useGetUSActivities,
-  useGetUSRooms
-} from 'src/api';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSRooms, useGetUSActivities, useGetEntranceManagementByActivity } from 'src/api';
 
 // ----------------------------------------------------------------------
 
 export default function WaitingRoom() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const {user} = useAuthContext()
+  const router = useRouter();
+
+  const { user } = useAuthContext();
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id);
-  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
-  const { historyData } = useGetPatientHistoryDataInSu(
-    Entrance?.patient?._id,
-    Entrance?.service_unit?._id
-  );
   const { activitiesData } = useGetUSActivities(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  const waitingActivity = activitiesData.find((activity) => activity.name_english === 'waiting');
+  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?._id);
+  const { EntranceByActivity } = useGetEntranceManagementByActivity(selectedTitle);
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
 
-  console.log(roomsData);
-
-
-
-  const [switchh, setSwitch] = useState(false);
-  const [itemsToShow, setItemsToShow] = useState(2);
-  const [selectedTitle, setSelectedTitle] = useState('');
-
-  const dataFiltered = applyFilter({
-    inputData: switchh === true ? historyDataForPatient : historyData,
-    filterforspecialties: selectedTitle,
-  });
+  const goToProcessingPage = async (entrance) => {
+    try {
+      await axiosInstance.patch(`/api/entrance/${entrance}`, {
+        Last_activity_atended: waitingActivity?._id,
+        Next_activity:null
+      });
+      router.push(`${paths.unitservice.departments.processingPage}/${entrance}`);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Error updating status', { variant: 'error' });
+    }
+  };
 
   return (
-    <Card sx={{mt:3}}>
+    <Card sx={{ mt: 3 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
           {t('Select Room')}{' '}
@@ -80,70 +58,18 @@ export default function WaitingRoom() {
           value={selectedTitle}
           onChange={(e) => setSelectedTitle(e.target.value)}
         >
-          <MenuItem value="">{t('All')}</MenuItem>
           {roomsData.map((type, index) => (
-            <MenuItem key={index} value={type}>
+            <MenuItem key={index} value={type?.activities}>
               {type?.name_english}
             </MenuItem>
           ))}
         </Select>
+        <Box>
+          {EntranceByActivity?.map((info) => (
+            <Button onClick={() => goToProcessingPage(info?._id)}>Next</Button>
+          ))}
+        </Box>
       </Box>
-
-      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('Date')}</TableCell>
-              <TableCell>{t('Name')}</TableCell>
-              <TableCell>{t('Subject')}</TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span>Private</span>{' '}
-                  <Switch value={switchh} onChange={() => setSwitch(!switchh)} />{' '}
-                  <span>Public</span>
-                </Box>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataFiltered?.slice(0, itemsToShow).map(
-              (historydata, i) =>
-                historydata?.status === 'active' && (
-                  <TableRow key={i}>
-                    <TableCell>{fDateTime(historydata?.actual_date)}</TableCell>
-                    <TableCell>
-                      {/* {curLangAr ? historydata?.name_arabic : historydata?.name_english} */}
-                      {historydata?.title}
-                    </TableCell>
-                    <TableCell>
-                      {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: 12, color: 'lightgray' }}>
-                      {fTimeText(historydata?.created_at)}
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-        {dataFiltered?.length > itemsToShow && (
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => setItemsToShow(itemsToShow + itemsToShow)}
-            sx={{ m: 2 }}
-          >
-            {t('Load More')}
-          </Button>
-        )}
-      </TableContainer>
     </Card>
   );
-}
-
-function applyFilter({ inputData, filterforspecialties }) {
-  if (!filterforspecialties) {
-    return inputData;
-  }
-  return inputData.filter((item) => item.title === filterforspecialties);
 }
