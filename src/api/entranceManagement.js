@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetEntranceManagement() {
-  const URL = endpoints.entranceManagement.inwating;
+export function useGetEntranceManagement(id) { 
+  const URL = endpoints.entranceManagement.inwating(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -105,8 +105,8 @@ export function useGetOneEntranceManagement(id) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetEntranceManagementByActivity(id) {
-  const URL = endpoints.entranceManagement.byactivity(id);
+export function useGetEntranceManagementByActivity(id,usId) {
+  const URL = endpoints.entranceManagement.byactivity(id,usId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
