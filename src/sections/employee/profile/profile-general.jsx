@@ -183,12 +183,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
     certifications: employeeData?.certifications.length
       ? employeeData?.certifications
       : [
-          {
-            name: '',
-            institution: '',
-            year: null,
-          },
-        ],
+        {
+          name: '',
+          institution: '',
+          year: null,
+        },
+      ],
   };
   const methods = useForm({
     mode: 'onTouched',
@@ -365,7 +365,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-                // value={values.profrssion_practice_num}
+              // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -477,14 +477,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -510,14 +510,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -573,7 +573,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))
               }
             />
-            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
+            {/* <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} /> */}
             <RHFTextField
               multiline
               sx={{ mt: 3 }}
