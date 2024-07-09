@@ -50,7 +50,7 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement();
+  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement( user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id);
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
   const TABS = [
@@ -233,7 +233,7 @@ export default function AppointmentsToday() {
                   <TableRow key={index}>
                     <TableCell>{fTime(info?.start_time)}</TableCell>
                     <TableCell>{info?.patient?.name_english}</TableCell>
-                    <TableCell>{currentTab === 'four' ? info?.patient_note : info?.note}</TableCell>
+                    <TableCell>{currentTab === 'four' ? info?.note : "" }</TableCell>
                     {currentTab !== 'four' && (
                       <>
                         <TableCell>
