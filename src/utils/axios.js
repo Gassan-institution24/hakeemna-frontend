@@ -405,9 +405,9 @@ export const endpoints = {
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
-    inwating: `/api/entrance/inwating`,
+    inwating:  (id) => `/api/entrance/inwating/${id}`,
     wating: (id) => `/api/entrance/wating/${id}`,
-    byactivity: (id) => `/api/entrance/activity/${id}`,
+    byactivity: (id,usId) => `/api/entrance/activity/${id}/us/${usId}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
   medRecord: {

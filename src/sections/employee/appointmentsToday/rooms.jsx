@@ -2,10 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import Grow from '@mui/material/Grow';
-import Alert from '@mui/material/Alert';
-import { alpha } from '@mui/material/styles';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Card, Typography, Box, TextField } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
@@ -20,8 +17,8 @@ import { useGetOneEntranceManagement, useGetUSActivities } from 'src/api';
 
 export default function Rooms() {
   const { t } = useTranslate();
-  const [showAlert, setShowAlert] = useState(false);
-
+  const [noteContent, setNoteContent] = useState();
+  console.log(noteContent);
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id);
   const { user } = useAuthContext();
@@ -43,39 +40,13 @@ export default function Rooms() {
       appointment: Entrance?.appointmentId,
     });
   }, [user, Entrance, reset]);
-  const handleEndAppointment = async (entrance) => {
-    try {
-      await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
-        Patient_attended: true,
-      });
-      await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
-        finished_or_not: true,
-      });
-      await axiosInstance.post('/api/feedback', {
-        unit_service: Entrance?.service_unit?._id,
-        appointment: Entrance?.appointmentId,
-        employee: user?.employee?._id,
-        patient: Entrance?.patient?._id,
-      });
-      await axiosInstance.post(`/api/medrecord/`, {
-        appointmentId: entrance?.appointmentId,
-        Appointment_date: Entrance?.Appointment_date,
-        service_unit: Entrance?.service_unit?._id,
-        patient: Entrance?.patient?._id,
-      });
-      enqueueSnackbar('appointment finished', { variant: 'success' });
-      router.push(paths.employee.appointmentsToday);
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar('no', { variant: 'error' });
-    }
-  };
-
-  const goToProcessingPage = async (activity) => {
+ 
+  const processingPage = async (activity) => {
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
         Last_activity_atended: Entrance?.Next_activity,
         Next_activity: activity,
+        note: noteContent,
       });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
@@ -85,75 +56,33 @@ export default function Rooms() {
   };
 
   return (
-    <>
-      {showAlert && (
-        <Grow in={showAlert} timeout={600}>
-          <Alert
-            severity="info"
-            variant="filled"
-            sx={{ width: '100%', mb: 2 }}
-            action={
-              <>
-                <Button
-                  color="inherit"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    mr: 1,
-                    border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-                  }}
-                  onClick={() => setShowAlert(false)}
-                >
-                  {t('Cancel')}
-                </Button>
+    
+    
 
-                <Button
-                  size="small"
-                  color="info"
-                  variant="contained"
-                  sx={{
-                    bgcolor: 'info.dark',
-                  }}
-                  onClick={() => {
-                    setShowAlert(false);
-                    handleEndAppointment(Entrance);
-                  }}
-                >
-                  {t('Confirm')}
-                </Button>
-              </>
-            }
-          >
-            {t('Please confirm the delettion of ')}
-          </Alert>
-        </Grow>
-      )}
-      <>
-        last activity <br />
-        {Entrance?.Last_activity_atended?.name_english} <br />
-        Dr message:
-        <Typography>the patient need a surgery now</Typography>
-      </>
-      <Divider sx={{ height: 10, mb: 1 }} />
-      Next activity <br />
-      {activitiesData?.map((activities) => (
-        <Button
-          onClick={() => goToProcessingPage(activities?._id)}
-          variant="contained"
-          // disabled
-          sx={{ bgcolor: 'success.main', m: 1 }}
-        >
-          go to {activities?.name_english} room
-        </Button>
-      ))}
-      <Divider />
-      <Button
-        onClick={() => setShowAlert(true)}
-        variant="contained"
-        sx={{ bgcolor: 'error.main', mt: 1 }}
-      >
-        end appointment
-      </Button>
-    </>
+      <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <Box sx={{ m: 2 }}>
+          last activity <br />
+          {Entrance?.Last_activity_atended?.name_english} <br />
+          Dr message:
+          <Typography>{Entrance?.note}</Typography>
+        </Box>
+
+        <Box sx={{ m: 2 }}>
+          Next activity <br />
+          {activitiesData?.map((activities) => (
+            <Button
+              onClick={() => processingPage(activities?._id)}
+              variant="contained"
+              // disabled
+              sx={{ bgcolor: 'success.main', m: 1 }}
+            >
+              go to {activities?.name_english} room
+            </Button>
+          ))}
+          <TextField onChange={(e) => setNoteContent(e.target.value)} placeholder='Add commint' />
+          
+        </Box>
+      </Card>
+
   );
 }
