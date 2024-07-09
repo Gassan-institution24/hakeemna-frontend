@@ -217,6 +217,13 @@
   "join as unit of service": "التسجيل كوحدة خدمة",
   "join as supplier": "التسجيل كموزع",
   "join as user": "التسجيل كمستخدم",
+  "select a unit of service type": "اختر نوع وحدة خدمة",
+  "select a speciality": "اختر تخصص",
+  "select a country": "اختر دولة",
+  "select a city": "اختر مدينة",
+  "select a insurance": "اختر شركة تأمين",
+  "select a doctor": "اختر طبيب",
+  "no appointment found": "لا يوجد مواعيد",
 
   "suppliers offers": "عروض المنشاّت",
   "communication": "التواصل",

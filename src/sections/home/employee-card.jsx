@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import { Avatar, Dialog, Stack, Typography } from '@mui/material'
+import { Avatar, Dialog, Rating, Stack, Typography } from '@mui/material'
 
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 import { useGetEmployeeAppointments } from 'src/api';
 import React, { useState } from 'react'
 import { useLocales, useTranslate } from 'src/locales';
@@ -15,6 +17,8 @@ export default function EmployeeCard({ employee }) {
     const { t } = useTranslate()
     const { currentLang } = useLocales();
     const curLangAr = currentLang.value === 'ar';
+
+    const router = useRouter()
 
     const [page, setPage] = useState(1);
     const [signupDialog, setSignupDialog] = useState(false);
@@ -36,33 +40,47 @@ export default function EmployeeCard({ employee }) {
 
     return (
         <>
-            <Stack direction={{ md: 'row' }} justifyContent='space-between' padding={3} sx={{ backgroundColor: 'white', borderRadius: 1 }}>
-                <Stack direction={{ md: 'row' }} gap={10}>
-                    <Image sx={{ width: 150, height: 150 }} src={employee.employee?.picture} />
-                    <Stack sx={{ gap: 1, width: { md: 300 } }}>
+            <Stack direction={{ lg: 'row' }} gap={3} justifyContent='space-between' padding={3} sx={{ backgroundColor: 'white', borderRadius: 1 }}>
+                <Stack direction={{ md: 'row' }} gap={{ md: 10 }}>
+                    <Image onClick={() => router.push(paths.pages.doctor(employee._id))} sx={{ width: 150, height: 150, cursor: 'pointer' }} src={employee.employee?.picture} />
+                    <Stack sx={{ gap: 1 }}>
                         <Stack mb={3}>
-                            <Typography variant='h6'>{curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}</Typography>
-                            <Typography variant='caption'>
+                            <Stack direction='row' alignItems='flex-end'>
+                                <Typography onClick={() => router.push(paths.pages.doctor(employee._id))} variant='h6' mr={5} sx={{ cursor: 'pointer' }} >{curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}</Typography>
+                                <Rating size="small" readOnly value={employee.employee?.rate} precision={0.1} max={5} />
+                                <Typography variant='caption' textTransform='lowercase'>({employee.employee?.rated_times}) {t('people rate')}</Typography>
+                            </Stack>
+                            <Typography variant='body2'>
                                 {curLangAr ? employee?.employee?.speciality?.name_arabic : employee?.employee?.speciality?.name_english}
                             </Typography>
+                            <Typography variant='body2'>
+                                {curLangAr ? employee?.unit_service?.name_arabic : employee?.unit_service?.name_english}
+                            </Typography>
                         </Stack>
-                        {employee?.employee?.address && <Stack direction='row' >
-                            <Iconify width={16} icon='mdi:address-marker-outline' />
-                            <Typography variant='caption'>{employee?.employee?.address}</Typography>
+                        {employee?.unit_service?.address && <Stack direction='row' gap={1} >
+                            <Typography variant='body2'>{t('address')}:</Typography>
+                            <Typography variant='body2'>{employee?.unit_service?.address}</Typography>
                         </Stack>}
-                        {employee?.employee?.phone && <Stack direction='row'>
-                            <Iconify width={16} icon='solar:phone-bold' />
-                            <Typography variant='caption'>{employee?.employee?.phone}</Typography>
+                        {employee?.employee?.phone && <Stack direction='row' gap={1}>
+                            {/* <Iconify width={16} icon='solar:phone-bold' /> */}
+                            <Typography variant='body2'>{t('phone number')}:</Typography>
+                            <Typography variant='body2'>{employee?.employee?.phone}</Typography>
                         </Stack>}
-                        {employee?.employee?.email && <Stack direction='row'>
-                            <Iconify width={16} icon='ic:outline-alternate-email' />
-                            <Typography variant='caption'>{employee?.employee?.email}</Typography>
+                        {employee?.employee?.email && <Stack direction='row' gap={1}>
+                            {/* <Iconify width={16} icon='ic:outline-alternate-email' /> */}
+                            <Typography variant='body2'>{t('email')}:</Typography>
+                            <Typography variant='body2'>{employee?.employee?.email}</Typography>
                         </Stack>}
-                        <Stack direction='row' gap={1} alignItems='center'>
-                            <Typography variant='caption'>{t('insurance')}:</Typography>
-                            {employee?.unit_service?.insurance?.map((one) => (
-                                <Typography variant='caption'>{curLangAr ? one.name_arabic : one.name_english}</Typography>
-                            ))}
+                        <Stack direction='row' gap={1}>
+                            <Typography variant='body2'>{t('insurance')}:</Typography>
+                            <Stack>
+                                {employee?.unit_service?.insurance?.length > 5 ? employee?.unit_service?.insurance?.filter((one, index) => index <= 5).map((one) => (
+                                    <Typography variant='body2'>{curLangAr ? one.name_arabic : one.name_english}</Typography>
+                                )) : employee?.unit_service?.insurance?.map((one) => (
+                                    <Typography variant='body2'>{curLangAr ? one.name_arabic : one.name_english}</Typography>
+                                ))}
+                                {employee?.unit_service?.insurance?.length > 5 && `+${employee.unit_service.insurance.length - 5}`}
+                            </Stack>
                         </Stack>
                     </Stack>
                 </Stack>
@@ -81,7 +99,7 @@ export default function EmployeeCard({ employee }) {
                     }
                 </Stack>
             </Stack>
-            <Dialog open={signupDialog} onClose={() => setSignupDialog(false)} sx={{ minWidth: '60vw' }} >
+            <Dialog fullWidth open={signupDialog} minWidth='lg' onClose={() => setSignupDialog(false)} >
                 <Stack sx={{ p: 4 }}>
                     {page === 1 && <JwtRegisterView afterSignUp={() => setPage(2)} onSignIn={() => setPage(3)} setPatientId={setPatientId} />}
                     {page === 2 && <ClassicVerifyView onVerify={() => setSignupDialog(false)} patientId={patientId} selected={selected} refetch={refetch} />}

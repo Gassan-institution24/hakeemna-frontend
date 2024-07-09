@@ -176,9 +176,11 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
-        <Link onClick={() => onSignIn ? onSignIn() : router.push(paths.auth.login)} component={RouterLink} variant="subtitle2">
+        {onSignIn ? <Link onClick={() => onSignIn()} component={RouterLink} variant="subtitle2">
           {t('login')}
-        </Link>
+        </Link> : <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+          {t('login')}
+        </Link>}
       </Stack>
 
       {!onSignIn && <Stack direction="row" spacing={0.5}>

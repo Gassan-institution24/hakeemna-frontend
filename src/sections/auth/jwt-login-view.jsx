@@ -105,16 +105,25 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
           {t('new user?')}
         </Typography>
 
-        <Link
+        {onSignUp ? <Link
           sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
           component={RouterLink}
-          onClick={() => onSignUp ? onSignUp() : router.push(paths.auth.register)}
+          onClick={() => onSignUp()}
           // href={paths.auth.register}
           variant="subtitle2"
           underline="always"
         >
           {t('create an account')}
         </Link>
+          : <Link
+            sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
+            component={RouterLink}
+            href={paths.auth.register}
+            variant="subtitle2"
+            underline="always"
+          >
+            {t('create an account')}
+          </Link>}
       </Stack>
     </Stack>
   );

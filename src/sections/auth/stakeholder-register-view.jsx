@@ -153,7 +153,7 @@ export default function JwtRegisterView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
 
-        <Link onClick={() => router.push(paths.auth.login)} component={RouterLink} variant="subtitle2">
+        <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
           login
         </Link>
       </Stack>
