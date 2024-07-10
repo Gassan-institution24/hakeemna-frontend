@@ -67,18 +67,20 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
   };
 
   const onSubmit = async (data) => {
+    const dataToSubmit = { ...data, type: 'analysis', description: data.note }
     const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      if (Array.isArray(data[key])) {
-        data[key].forEach((item) => {
+    Object.keys(dataToSubmit).forEach((key) => {
+      if (Array.isArray(dataToSubmit[key])) {
+        dataToSubmit[key].forEach((item) => {
           formData.append(key, item);
         });
       } else {
-        formData.append(key, data[key]);
+        formData.append(key, dataToSubmit[key]);
       }
     });
     try {
-      await axios.post(endpoints.patientMedicalAnalysis.all, formData);
+      // await axios.post(endpoints.patientMedicalAnalysis.all, formData);
+      await axios.post(endpoints.medicalreports.all, formData);
       enqueueSnackbar('uploaded sucessfully');
       onClose();
       reset();
@@ -101,14 +103,14 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
           <Box sx={{ p: 2 }}>
             <RHFTextField lang="en" name="name" label={t('File name')} sx={{ mb: 2 }} />
 
-            <RHFMultiSelect
+            {/* <RHFMultiSelect
               label={t('analyses types')}
               fullWidth
               name="analysis"
               options={analysesData}
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 2 }}
-            />
+            /> */}
 
             <RHFUpload
               multiple

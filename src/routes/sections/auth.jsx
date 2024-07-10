@@ -43,7 +43,7 @@ export const authRoutes = [
   {
     path: 'register/serviceunit',
     element: (
-      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+      <AuthClassicLayout >
         <JwtUSRegisterPage />
       </AuthClassicLayout>
     ),
@@ -51,7 +51,7 @@ export const authRoutes = [
   {
     path: 'register/stakeholder',
     element: (
-      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+      <AuthClassicLayout >
         <JwtStakeholderRegisterPage />
       </AuthClassicLayout>
     ),

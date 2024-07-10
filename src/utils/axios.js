@@ -302,7 +302,7 @@ export const endpoints = {
     all: '/api/notifications',
     readOne: (id) => `/api/notifications/${id}/read`,
     readMany: '/api/notifications/read',
-    my: (id, emid, page) => `/api/notifications/user/${id}/employee/${emid}?page=${page}`,
+    my: `/api/notifications/my`,
     pateint: (id) => `/api/notifications/patient/${id}`,
   },
   appointment_types: {

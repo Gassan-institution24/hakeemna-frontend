@@ -22,10 +22,10 @@ export function useGetNotifications() {
     await mutate(URL);
   };
 
-  return { ...memoizedValue, refetch };
+  return { ...memoizedValue, refetch }
 }
-export function useGetMyNotifications(id, emid, page) {
-  const URL = endpoints.notifications.my(id, emid, page);
+export function useGetMyNotifications(params) {
+  const URL = [endpoints.notifications.my, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

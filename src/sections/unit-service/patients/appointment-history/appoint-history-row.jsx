@@ -105,6 +105,11 @@ export default function InvoiceTableRow({
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
+          {isMedLab && !medicalAnalysis && (
+            <IconButton lang="ar" onClick={uploadAnalysis.onTrue}>
+              <Iconify icon="octicon:upload-16" />
+            </IconButton>
+          )}
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -115,7 +120,7 @@ export default function InvoiceTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        // sx={{ width: 140 }}
+      // sx={{ width: 140 }}
       >
         {status === 'available' && (
           <MenuItem

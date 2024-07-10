@@ -65,7 +65,7 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <Searchbar />
-      {(user.role === 'admin' || user.role === 'employee' || (user.employee && user.patient)) && (
+      {(user?.role === 'admin' || user?.role === 'employee' || (user?.employee && user?.patient)) && (
         <EmployeePatientToggle />
       )}
 

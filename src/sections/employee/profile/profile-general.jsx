@@ -11,18 +11,19 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Chip, MenuItem, Typography } from '@mui/material';
+import { Chip, InputAdornment, MenuItem, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-// import { useAuthContext } from 'src/auth/hooks';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetKeywrds,
   useGetCountries,
   useGetSpecialties,
   useGetActiveEmployeeTypes,
+  useGetCurrencies,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -95,11 +96,12 @@ const languages = [
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
 
-  // const { user } = useAuthContext();
+  const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
   const { specialtiesData } = useGetSpecialties();
   const { employeeTypesData } = useGetActiveEmployeeTypes();
+  const { currencies } = useGetCurrencies();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -149,6 +151,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
     memberships: Yup.array(),
     keywords: Yup.array(),
     arabic_keywords: Yup.array(),
+    fees: Yup.number().required(t('required field')),
+    currency: Yup.string().required(t('required field')),
+
   });
 
   const defaultValues = {
@@ -189,6 +194,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
           year: null,
         },
       ],
+    fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement].fees || 0,
+    currency: user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency || currencies?.[0]?._id,
   };
   const methods = useForm({
     mode: 'onTouched',
@@ -259,6 +266,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       delete dataToSubmit.signature;
       delete dataToSubmit.stamp;
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
+      await axios.patch(endpoints.employee_engagements.one(user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id), { fees: data.fees, currency: data.currency });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {
@@ -455,6 +463,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   {values.stamp && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
               </Box>
+              <RHFTextField type='number' name='fees' label={t('fees')} InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <RHFSelect sx={{ minWidth: 60 }} variant='standard' name='currency'>
+                      {currencies.map((one) => (
+                        <MenuItem value={one._id}>{one.symbol}</MenuItem>
+                      ))}
+                    </RHFSelect>
+                  </InputAdornment>
+                ),
+              }} />
             </Box>
           </Card>
         </Grid>

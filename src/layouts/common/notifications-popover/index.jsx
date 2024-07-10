@@ -48,11 +48,12 @@ export default function NotificationsPopover() {
   const [page, setPage] = useState(1);
   const [allNotifications, setAllNotifications] = useState([]);
 
-  const { notifications, hasMore, unread, refetch, loading } = useGetMyNotifications(
-    user?._id,
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id,
-    page
-  );
+  const { notifications, hasMore, unread, refetch, loading } = useGetMyNotifications({
+    id: user?._id,
+    emid: user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id,
+    shid: user?.stakeholder?._id,
+    page,
+  });
   const handleClick = async (id, link) => {
     drawer.onFalse();
     router.push(link);

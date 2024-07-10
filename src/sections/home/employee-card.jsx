@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Avatar, Dialog, Rating, Stack, Typography } from '@mui/material'
+import { fCurrency } from 'src/utils/format-number';
 
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
@@ -28,7 +29,7 @@ export default function EmployeeCard({ employee }) {
 
     const { appointmentsData, AppointDates, loading, refetch } = useGetEmployeeAppointments({
         id: employee._id,
-        filters: { status: 'available', startDate: selectedDate },
+        filters: { status: 'available', startDate: selectedDate, online_available: true },
     });
 
     const timeListChangeHandler = (newValue) => {
@@ -57,6 +58,10 @@ export default function EmployeeCard({ employee }) {
                                 {curLangAr ? employee?.unit_service?.name_arabic : employee?.unit_service?.name_english}
                             </Typography>
                         </Stack>
+                        {employee?.fees && <Stack direction='row' gap={1} mb={2} >
+                            <Typography variant='body2'>{t('fees')}:</Typography>
+                            <Typography variant='body2'>{fCurrency(employee?.fees, employee.currency?.symbol)}</Typography>
+                        </Stack>}
                         {employee?.unit_service?.address && <Stack direction='row' gap={1} >
                             <Typography variant='body2'>{t('address')}:</Typography>
                             <Typography variant='body2'>{employee?.unit_service?.address}</Typography>

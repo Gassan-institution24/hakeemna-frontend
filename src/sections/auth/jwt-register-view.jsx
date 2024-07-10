@@ -183,7 +183,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         </Link>}
       </Stack>
 
-      {!onSignIn && <Stack direction="row" spacing={0.5}>
+      {/* {!onSignIn && <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">
           {' '}
           {t('I am a ')}{' '}
@@ -191,7 +191,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
             {t('services provider')}
           </Link>
         </Typography>
-      </Stack>}
+      </Stack>} */}
     </Stack>
   );
 
@@ -205,7 +205,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         textAlign: 'center',
       }}
     >
-      {'By signing up, I agree to '}
+      {t('By signing up, I agree to ')}
       <Link underline="always" color="success.main">
         {t('Terms of Service ')}
       </Link>
