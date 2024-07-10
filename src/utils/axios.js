@@ -148,6 +148,7 @@ export const endpoints = {
     unit_service: {
       all: (id) => `/api/rooms/unitservice/${id}`,
       active: (id) => `/api/rooms/unitservice/${id}/active`,
+      byactivity: (id, acId) => `/api/rooms/unitservice/${id}/activity/${acId}`,
     },
     department: {
       all: (id) => `/api/rooms/department/${id}`,
