@@ -52,7 +52,7 @@ export default function AuthClassicLayout({ children, title }) {
         </span>
       </Hidden>
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {t(title) || 'Hi, Welcome back'}
+        {t(title) || t('Welcome back')}
       </Typography>
       {title === undefined ? (
         <video style={{ width: '70%', height: '60%' }} loop autoPlay muted>

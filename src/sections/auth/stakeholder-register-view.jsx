@@ -18,7 +18,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import {
@@ -39,6 +39,8 @@ export default function JwtRegisterView() {
   const router = useRouter();
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -148,13 +150,13 @@ export default function JwtRegisterView() {
   // }, [tableData, selectedCountry]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">{t('Get started absolutely free')}</Typography>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> Already have an account? </Typography>
+        <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          login
+          {t('login')}
         </Link>
       </Stack>
     </Stack>
@@ -170,13 +172,13 @@ export default function JwtRegisterView() {
         textAlign: 'center',
       }}
     >
-      {'By signing up, I agree to '}
+      {t('By signing up, I agree to ')}
       <Link underline="always" color="text.primary">
-        Terms of Service
+        {t('Terms of Service')}
       </Link>
-      {' and '}
+      {t('and ')}
       <Link underline="always" color="text.primary">
-        Privacy Policy
+        {t('Privacy Policy')}
       </Link>
       .
     </Typography>
@@ -189,32 +191,31 @@ export default function JwtRegisterView() {
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField
-            lang="en"
             onChange={handleEnglishInputChange}
             name="name_english"
-            label="Name in english"
+            label={t("name in english")}
           />
           <RHFTextField
             onChange={handleArabicInputChange}
             name="name_arabic"
-            label="Name in arabic"
+            label={t("Name in arabic")}
           />
         </Stack>
 
-        <RHFTextField name="email" label="Email address" />
-        <RHFTextField name="identification_num" label="Identification number" />
+        <RHFTextField name="email" label={t("Email address")} />
+        <RHFTextField name="identification_num" label={t("Identification number")} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData.map((country, idx) => (
               <MenuItem lang="ar" key={idx} value={country._id}>
-                {country.name_english}
+                {curLangAr ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect name="city" label="City">
+          <RHFSelect name="city" label={t("City")}>
             {tableData.map((city, idx) => (
               <MenuItem lang="ar" key={idx} value={city._id}>
-                {city.name_english}
+                {curLangAr ? city.name_arabic : city.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
@@ -251,7 +252,7 @@ export default function JwtRegisterView() {
 
         <RHFTextField
           name="password"
-          label="Password"
+          label={t("Password")}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -265,7 +266,7 @@ export default function JwtRegisterView() {
         />
         <RHFTextField
           name="confirmPassword"
-          label="Confirm Password"
+          label={t("Confirm Password")}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -286,7 +287,7 @@ export default function JwtRegisterView() {
           variant="contained"
           loading={isSubmitting}
         >
-          Create account
+          {t('create account')}
         </LoadingButton>
       </Stack>
     </FormProvider>

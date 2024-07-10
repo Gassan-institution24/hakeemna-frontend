@@ -21,7 +21,7 @@ export default function HomeView() {
       <Stack
         sx={{
           overflowX: 'hidden',
-          height: '91vh',
+          height: '90vh',
         }}
       >
         <UnitServiceHero currentPage="doctors" />

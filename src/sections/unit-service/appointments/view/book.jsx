@@ -44,7 +44,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber, RHFRadioGroup } from 'src/components/hook-form';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -65,6 +65,15 @@ export default function TableCreateView() {
   const { countriesData } = useGetCountries();
 
   const { myunitTime } = useUnitTime();
+
+  const [search, setSearch] = useState({
+    name_english: '',
+    name_arabic: '',
+    email: '',
+    identification_num: '',
+    mobile_num1: '',
+    mobile_num2: '',
+  });
 
   // const router = useRouter();
 
@@ -112,6 +121,7 @@ export default function TableCreateView() {
     mobile_num2: Yup.string(),
     gender: Yup.string(),
     note: Yup.string(),
+    patientExist: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -130,6 +140,7 @@ export default function TableCreateView() {
       mobile_num2: '',
       gender: '',
       note: '',
+      patientExist: 'exist',
     }),
     []
   );
@@ -159,13 +170,13 @@ export default function TableCreateView() {
   const { tableData } = useGetCountryCities(values.country);
 
   const { existPatients } = useFindPatient({
-    sequence_number: values.sequence_number,
-    name_english: values.name_english,
-    name_arabic: values.name_arabic,
-    email: values.email.toLowerCase(),
-    identification_num: values.identification_num,
-    mobile_num1: values.mobile_num1,
-    mobile_num2: values.mobile_num2,
+    sequence_number: search.sequence_number,
+    name_english: search.name_english,
+    name_arabic: search.name_arabic,
+    email: search.email.toLowerCase(),
+    identification_num: search.identification_num,
+    mobile_num1: search.mobile_num1,
+    mobile_num2: search.mobile_num2,
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -200,6 +211,10 @@ export default function TableCreateView() {
       setValue(event.target.name, event.target.value);
     }
   };
+
+  const handleBlur = (event) => {
+    setSearch((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  }
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -257,10 +272,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+          // gridTemplateColumns={{
+          //   xs: 'repeat(1, 1fr)',
+          //   sm: 'repeat(3, 1fr)',
+          // }}
           >
             <FormControl
               sx={{
@@ -274,14 +289,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
+              // renderValue={(selected) =>
+              //   selected
+              // }
+              // MenuProps={{
+              //   PaperProps: {
+              //     sx: { maxHeight: 240 },
+              //   },
+              // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -353,121 +368,172 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-              // sx={{ mt: SPACING }}
+            // sx={{ mt: SPACING }}
             />
           )}
-          <Typography
-            sx={{ py: 2, fontWeight: 700 }}
-            variant="caption"
-            color="text.secondary"
-            textTransform="uppercase"
-          >
-            {t('patient information')}
-          </Typography>
-          <br />
-          <br />
-          <RHFTextField
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ style: { textAlign: 'center' } }}
-            sx={{ width: '200px', mb: 3, textAlign: 'center' }}
-            size="small"
-            name="sequence_number"
-            onChange={sequenceChangeHandler}
-            placeholder="001-22"
-            label={t('patient-code')}
-          />
-          <Box
-            sx={{ mb: 3 }}
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-          >
-            <RHFTextField
-              onChange={handleEnglishInputChange}
-              name="name_english"
-              label={t('patient name in english')}
+          {selected && <>
+            <Typography
+              sx={{ py: 2, fontWeight: 700 }}
+              variant="caption"
+              color="text.secondary"
+              textTransform="uppercase"
+            >
+              {t('patient information')}
+            </Typography>
+            <br />
+            <br />
+            <RHFRadioGroup
+              row
+              name="patientExist"
+              options={[
+                { label: 'exist patient', value: 'exist' },
+                { label: 'new patient', value: 'new' },
+              ]}
             />
-            <RHFTextField
-              onChange={handleArabicInputChange}
-              name="name_arabic"
-              label={t('patient name in arabic')}
-            />
-            <RHFTextField type="email" name="email" label={t('email address')} />
-            <RHFTextField
-              onChange={handleEnglishInputChange}
-              name="identification_num"
-              label={t('ID number')}
-            />
-            <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
-            <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
-            <RHFDatePicker name="birth_date" label={t('birth date')} />
-            <RHFSelect name="nationality" label={t('nationality')}>
-              {countriesData.map((option, idx) => (
-                <MenuItem lang="ar" key={idx} value={option._id}>
-                  {curLangAr ? option?.name_arabic : option?.name_english}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-            <RHFSelect name="country" label={t('country of residence')}>
-              {countriesData.map((option, idx) => (
-                <MenuItem lang="ar" key={idx} value={option._id}>
-                  {curLangAr ? option?.name_arabic : option?.name_english}
-                </MenuItem>
-              ))}
-            </RHFSelect>
+            <br />
+            <br />
+            {values.patientExist === 'exist' ? <>
+              <RHFTextField
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ style: { textAlign: 'center' } }}
+                sx={{ width: '200px', mb: 3, textAlign: 'center' }}
+                size="small"
+                name="sequence_number"
+                onChange={sequenceChangeHandler}
+                onBlur={handleBlur}
+                placeholder="001-22"
+                label={t('patient-code')}
+              />
+              <Box
+                sx={{ mb: 3 }}
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                }}
+              >
+                <RHFTextField
+                  onChange={handleEnglishInputChange}
+                  onBlur={handleBlur}
+                  name="name_english"
+                  label={t('patient name in english')}
+                />
+                <RHFTextField
+                  onChange={handleArabicInputChange}
+                  onBlur={handleBlur}
+                  name="name_arabic"
+                  label={t('patient name in arabic')}
+                />
+                <RHFTextField type="email" name="email" label={t('email address')} />
+                <RHFTextField
+                  onChange={handleEnglishInputChange}
+                  onBlur={handleBlur}
+                  name="identification_num"
+                  label={t('ID number')}
+                />
+                <RHFPhoneNumber name="mobile_num1" onBlur={handleBlur} label={t('mobile number')} />
+                <RHFPhoneNumber name="mobile_num2" onBlur={handleBlur} label={t('alternative mobile number')} />
+              </Box>
+            </> : <>
+              <Box
+                sx={{ mb: 3 }}
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                }}
+              >
+                <RHFTextField
+                  onChange={handleEnglishInputChange}
+                  onBlur={handleBlur}
+                  name="name_english"
+                  label={t('patient name in english')}
+                />
+                <RHFTextField
+                  onChange={handleArabicInputChange}
+                  onBlur={handleBlur}
+                  name="name_arabic"
+                  label={t('patient name in arabic')}
+                />
+                <RHFTextField type="email" name="email" label={t('email address')} />
+                <RHFTextField
+                  onChange={handleEnglishInputChange}
+                  onBlur={handleBlur}
+                  name="identification_num"
+                  label={t('ID number')}
+                />
+                <RHFPhoneNumber name="mobile_num1" onBlur={handleBlur} label={t('mobile number')} />
+                <RHFPhoneNumber name="mobile_num2" onBlur={handleBlur} label={t('alternative mobile number')} />
+                <RHFDatePicker name="birth_date" label={t('birth date')} />
+                <RHFSelect name="nationality" label={t('nationality')}>
+                  {countriesData.map((option, idx) => (
+                    <MenuItem lang="ar" key={idx} value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <RHFSelect name="country" label={t('country of residence')}>
+                  {countriesData.map((option, idx) => (
+                    <MenuItem lang="ar" key={idx} value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
 
-            <RHFSelect name="city" label={t('city of residence')}>
-              {tableData.map((option, idx) => (
-                <MenuItem lang="ar" key={idx} value={option._id}>
-                  {curLangAr ? option?.name_arabic : option?.name_english}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-            <RHFSelect name="marital_status" label={t('marital status')}>
-              <MenuItem lang="ar" value="single">
-                {t('single')}
-              </MenuItem>
-              <MenuItem lang="ar" value="married">
-                {t('married')}
-              </MenuItem>
-              <MenuItem lang="ar" value="widowed">
-                {t('widowed')}
-              </MenuItem>
-              <MenuItem lang="ar" value="separated">
-                {t('separated')}
-              </MenuItem>
-              <MenuItem lang="ar" value="divorced">
-                {t('divorced')}
-              </MenuItem>
-            </RHFSelect>
-            <RHFSelect name="gender" label={t('gender')}>
-              <MenuItem lang="ar" value="male">
-                {t('male')}
-              </MenuItem>
-              <MenuItem lang="ar" value="female">
-                {t('female')}
-              </MenuItem>
-            </RHFSelect>
-          </Box>
-          <RHFTextField multiline rows={2} name="note" label={t('note')} />
+                <RHFSelect name="city" label={t('city of residence')}>
+                  {tableData.map((option, idx) => (
+                    <MenuItem lang="ar" key={idx} value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <RHFSelect name="marital_status" label={t('marital status')}>
+                  <MenuItem lang="ar" value="single">
+                    {t('single')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="married">
+                    {t('married')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="widowed">
+                    {t('widowed')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="separated">
+                    {t('separated')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="divorced">
+                    {t('divorced')}
+                  </MenuItem>
+                </RHFSelect>
+                <RHFSelect name="gender" label={t('gender')}>
+                  <MenuItem lang="ar" value="male">
+                    {t('male')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="female">
+                    {t('female')}
+                  </MenuItem>
+                </RHFSelect>
+              </Box>
+              <RHFTextField multiline rows={2} name="note" label={t('note')} />
 
-          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-              {t('create new patient and book')}
-            </LoadingButton>
-          </Stack>
-          {existPatients.length > 0 && (
-            <PatientsFound
-              SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
-              selected={selected}
-              reset={reset}
-              oldPatients={existPatients}
-            />
-          )}
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton disabled={!selected} type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+                  {t('create new patient and book')}
+                </LoadingButton>
+              </Stack>
+            </>}
+            {existPatients.length > 0 && values.patientExist === 'exist' && (
+              <PatientsFound
+                SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+                selected={selected}
+                reset={reset}
+                oldPatients={existPatients}
+              />
+            )}
+          </>}
         </Card>
       </FormProvider>
     </Container>

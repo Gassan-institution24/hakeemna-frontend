@@ -162,6 +162,11 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
+          {isMedLab && !medicalAnalysis && (
+            <IconButton lang="ar" onClick={uploadAnalysis.onTrue}>
+              <Iconify icon="octicon:upload-16" />
+            </IconButton>
+          )}
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
