@@ -297,6 +297,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         }
       } else {
         updating.onTrue();
+        console.log(data, JSON.stringify(data))
         await axios.post(endpoints.appointment_configs.all, data);
         socket.emit('created', {
           data,
@@ -396,7 +397,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

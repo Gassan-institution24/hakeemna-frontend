@@ -96,7 +96,7 @@ export default function HomeHero() {
             sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
             onClick={() => setCurrentPage('doctors')}
           >
-            {t('unit of Serivce')}
+            {t('unit of serivce')}
           </Button>
         </Stack>
       )}

@@ -1,3 +1,4 @@
+import Iconify from 'src/components/iconify'
 import { Button, Stack, Typography } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { useGetEmployeeEngs } from 'src/api'
@@ -23,6 +24,7 @@ export default function BookAppointment() {
         rowsPerPage: 15,
         sortBy: '',
         order: '',
+        visibility_online_appointment: true
     })
 
 
@@ -68,6 +70,8 @@ export default function BookAppointment() {
                 ))}
             </Stack>
             {!loading && employeesData.length > 0 && hasMore && <div ref={loadMoreRef} />}
+            {loading && <Stack direction='row' justifyContent='center' py={3} ><Iconify width={50} icon='eos-icons:bubble-loading' sx={{ color: 'primary.main' }} /></Stack>}
+
             {/* {hasMore && <Button onClick={() => setPage((prev) => prev + 1)}>load more</Button>} */}
         </Stack>
     )

@@ -150,7 +150,33 @@ export default function AppointmentsView({ employeeData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const TABS = [
+  const TABS = isMedLab?[
+    // { value: 'all', label: t('all'), color: 'default', count: all },
+    {
+      value: 'pending',
+      label: t('pending'),
+      color: 'warning',
+      count: pending,
+    },
+    {
+      value: 'finished',
+      label: t('finished'),
+      color: 'success',
+      count: finished,
+    },
+    {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
+    },
+    {
+      value: 'canceled',
+      label: t('canceled'),
+      color: 'error',
+      count: canceled,
+    },
+  ] : [
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'processing',

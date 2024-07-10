@@ -301,7 +301,7 @@ export const endpoints = {
     all: '/api/notifications',
     readOne: (id) => `/api/notifications/${id}/read`,
     readMany: '/api/notifications/read',
-    my: (id, emid, page) => `/api/notifications/user/${id}/employee/${emid}?page=${page}`,
+    my: `/api/notifications/my`,
     pateint: (id) => `/api/notifications/patient/${id}`,
   },
   appointment_types: {
@@ -405,9 +405,9 @@ export const endpoints = {
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
-    inwating:  (id) => `/api/entrance/inwating/${id}`,
+    inwating: (id) => `/api/entrance/inwating/${id}`,
     wating: (id) => `/api/entrance/wating/${id}`,
-    byactivity: (id,usId) => `/api/entrance/activity/${id}/us/${usId}`,
+    byactivity: (id, usId) => `/api/entrance/activity/${id}/us/${usId}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
   medRecord: {
