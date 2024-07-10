@@ -118,7 +118,9 @@ export default function Doctorpage() {
     category: 'patientbooking',
     type: 'patientbooking',
   };
-
+console.log(
+  datacheeck
+);
   const handleDateChange = (date) => {
     setTimeData();
     setSelectedTime();
