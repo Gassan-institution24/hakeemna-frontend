@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
@@ -11,14 +12,13 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetOneEntranceManagement, useGetUSActivities } from 'src/api';
+import { useGetOneEntranceManagement, useGetUSActivities, useGetUSRooms } from 'src/api';
 
 // ----------------------------------------------------------------------
 
-export default function Rooms() {
+export default function Rooms({ data }) {
   const { t } = useTranslate();
   const [noteContent, setNoteContent] = useState();
-  console.log(noteContent);
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id);
   const { user } = useAuthContext();
@@ -26,11 +26,13 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'onTouched',
   });
-
-  const { reset } = methods;
-  const { activitiesData } = useGetUSActivities(
+  const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log(roomsData);
+
+  const { reset } = methods;
+
   useEffect(() => {
     reset({
       employee: user?.employee?._id,
@@ -40,13 +42,19 @@ export default function Rooms() {
       appointment: Entrance?.appointmentId,
     });
   }, [user, Entrance, reset]);
- 
+
   const processingPage = async (activity) => {
+    // has the rooms data 
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
         Last_activity_atended: Entrance?.Next_activity,
-        Next_activity: activity,
+        Next_activity: activity?.activities?._id,
         note: noteContent,
+        rooms:activity?._id
+      });
+      await axiosInstance.patch(`/api/rooms/${activity?._id}`, {
+        patient: null,
+        entranceMangament: Entrance,
       });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
@@ -54,35 +62,34 @@ export default function Rooms() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-
+  console.log(roomsData);
   return (
-    
-    
+    <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      <Box sx={{ m: 2 }}>
+        last activity <br />
+        {Entrance?.Last_activity_atended?.name_english} <br />
+        Dr message:
+        <Typography>{Entrance?.note}</Typography>
+      </Box>
 
-      <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-        <Box sx={{ m: 2 }}>
-          last activity <br />
-          {Entrance?.Last_activity_atended?.name_english} <br />
-          Dr message:
-          <Typography>{Entrance?.note}</Typography>
-        </Box>
-
-        <Box sx={{ m: 2 }}>
-          Next activity <br />
-          {activitiesData?.map((activities) => (
-            <Button
-              onClick={() => processingPage(activities?._id)}
-              variant="contained"
-              // disabled
-              sx={{ bgcolor: 'success.main', m: 1 }}
-            >
-              go to {activities?.name_english} room
-            </Button>
-          ))}
-          <TextField onChange={(e) => setNoteContent(e.target.value)} placeholder='Add commint' />
-          
-        </Box>
-      </Card>
-
+      <Box sx={{ m: 2 }}>
+        Next activity <br />
+        {roomsData?.map((activities) => (
+          <Button
+            onClick={() => processingPage(activities)}
+            variant="contained"
+            // disabled
+            sx={{ bgcolor: 'success.main', m: 1 }}
+          >
+            go to {activities?.activities?.name_english} room
+          </Button>
+        ))}
+        <TextField onChange={(e) => setNoteContent(e.target.value)} placeholder="Add commint" />
+      </Box>
+    </Card>
   );
 }
+
+Rooms.propTypes = {
+  data: PropTypes.array,
+};

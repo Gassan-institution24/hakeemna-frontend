@@ -148,6 +148,7 @@ export const endpoints = {
     unit_service: {
       all: (id) => `/api/rooms/unitservice/${id}`,
       active: (id) => `/api/rooms/unitservice/${id}/active`,
+      byactivity: (id, acId) => `/api/rooms/unitservice/${id}/activity/${acId}`,
     },
     department: {
       all: (id) => `/api/rooms/department/${id}`,
@@ -405,9 +406,9 @@ export const endpoints = {
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
-    inwating:  (id) => `/api/entrance/inwating/${id}`,
+    inwating: (id) => `/api/entrance/inwating/${id}`,
     wating: (id) => `/api/entrance/wating/${id}`,
-    byactivity: (id,usId) => `/api/entrance/activity/${id}/us/${usId}`,
+    byactivity: (id, usId) => `/api/entrance/activity/${id}/us/${usId}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
   medRecord: {
