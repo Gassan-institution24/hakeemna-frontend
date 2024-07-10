@@ -233,7 +233,7 @@ export default function AppointmentsToday() {
                   <TableRow key={index}>
                     <TableCell>{fTime(info?.start_time)}</TableCell>
                     <TableCell>{info?.patient?.name_english}</TableCell>
-                    <TableCell>{currentTab === 'four' ? info?.note : "" }</TableCell>
+                    <TableCell>{currentTab === 'four' ? info?.note : info?.note }</TableCell>
                     {currentTab !== 'four' && (
                       <>
                         <TableCell>
