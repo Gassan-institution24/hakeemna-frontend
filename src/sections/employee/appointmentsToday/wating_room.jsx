@@ -37,22 +37,35 @@ export default function WaitingRoom() {
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
 
-
   const { user } = useAuthContext();
-  const { activitiesData } = useGetUSActivities(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
-  const waitingActivity = activitiesData.find((activity) => activity.name_english === 'waiting');
-  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?._id);
-  const { EntranceByActivity } = useGetEntranceManagementByActivity(
-    selectedTitle,
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
+
+
+
+
+
+  
+  const waitingActivity = roomsData.find((activity) => activity?.activities?.name_english === "waiting");
+  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?._id);
+
+
+
+
+
+
+
+
+  const { EntranceByActivity } = useGetEntranceManagementByActivity(
+    selectedTitle,
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+console.log(EntranceByActivity);
+
   const goToProcessingPage = async (entrance) => {
+
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
         Last_activity_atended: entrance?.Next_activity?._id,
@@ -62,28 +75,36 @@ export default function WaitingRoom() {
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
-    }
+    } 
+    await axiosInstance.patch(`/api/rooms/${entrance?.rooms}`, {
+      patient: entrance?.patient?._id,
+      entranceMangament: entrance?._id,
+    });
   };
 
-  const handleEndAppointment = async () => {
+  const handleEndAppointment = async (entrance) => {
     try {
-      // await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
-      //   Patient_attended: true,
-      // });
-      // await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
-      //   finished_or_not: true,
-      // });
-      // await axiosInstance.post('/api/feedback', {
-        // unit_service: Entrance?.service_unit?._id,
-        // appointment: Entrance?.appointmentId,
-        // employee: user?.employee?._id,
-        // patient: Entrance?.patient?._id,
-      // });
-      // await axiosInstance.post(`/api/medrecord/`, {
-        // appointmentId: entrance?.appointmentId,
-        // Appointment_date: Entrance?.Appointment_date,
-        // service_unit: Entrance?.service_unit?._id,
-        // patient: Entrance?.patient?._id,
+      await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
+        Patient_attended: true,
+      });
+      await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
+        finished_or_not: true,
+      });
+      await axiosInstance.post('/api/feedback', {
+      unit_service: entrance?.service_unit?._id,
+      appointment: entrance?.appointmentId,
+      employee: user?.employee?._id,
+      patient: entrance?.patient?._id,
+      });
+      await axiosInstance.post(`/api/medrecord/`, {
+      appointmentId: entrance?.appointmentId,
+      Appointment_date: entrance?.Appointment_date,
+      service_unit: entrance?.service_unit,
+      patient: entrance?.patient?._id,
+      });
+      // await axiosInstance.patch(`/api/rooms/${entrance?.rooms}`, {
+      //   patient: null,
+      //   entranceMangament: null,
       // });
       enqueueSnackbar('appointment finished', { variant: 'success' });
       router.push(paths.employee.appointmentsToday);
@@ -100,7 +121,7 @@ export default function WaitingRoom() {
           <Alert
             severity="info"
             variant="filled"
-            sx={{ width: '70%', mb:3, mt:3 }}
+            sx={{ width: '70%', mb: 3, mt: 3 }}
             action={
               <>
                 <Button
@@ -151,13 +172,13 @@ export default function WaitingRoom() {
             value={selectedTitle}
             onChange={(e) => setSelectedTitle(e.target.value)}
           >
-            {roomsData.map((type, index) => (
-              <MenuItem key={index} value={type?.activities}>
-                {type?.name_english}
+            {roomsData.map((activitiy, index) => (
+              <MenuItem key={index} value={activitiy?.activities?._id}>
+                {activitiy?.activities?.name_english}
               </MenuItem>
             ))}
           </Select>
-          <Box>
+          <Box> 
             {EntranceByActivity?.map((entranceData, i) => (
               <TableContainer key={i} sx={{ mt: 3, mb: 2 }}>
                 <Scrollbar>
@@ -176,7 +197,7 @@ export default function WaitingRoom() {
                     <TableBody>
                       <TableRow>
                         {entranceData?.Last_activity_atended && (
-                          <TableCell>{entranceData?.Last_activity_atended}</TableCell>
+                          <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
                         )}
 
                         <TableCell>{entranceData?.patient?.name_english}</TableCell>
@@ -188,9 +209,9 @@ export default function WaitingRoom() {
                             </Button>
                           ))}
                           <Button
-                            onClick={() => setShowAlert(true)}
+                            onClick={() => handleEndAppointment(entranceData)}
                             variant="contained"
-                            sx={{ bgcolor: 'error.main',ml:2}}
+                            sx={{ bgcolor: 'error.main', ml: 2 }}
                           >
                             end appointment
                           </Button>
