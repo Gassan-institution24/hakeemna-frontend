@@ -65,7 +65,7 @@ export default function FeedbackSection({ employee }) {
                     </Box>
                 ))}
             </Box>
-            {feedbackData.length && <Stack direction='row' justifyContent='center'>
+            {feedbackData.length > 0 && <Stack direction='row' justifyContent='center'>
                 <IconButton onClick={() => setShowIndex((prev) => feedbackData.length > prev + 4 ? prev + 4 : 0)}>
                     <Iconify icon='iconamoon:arrow-down-2-bold' />
                 </IconButton>

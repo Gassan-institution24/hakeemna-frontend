@@ -27,7 +27,7 @@ export function useNavData() {
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
   const { isMedLab } = useUSTypeGuard();
-  const { messages, refetch } = useGetUnreadMsgs(user._id);
+  const { messages, refetch } = useGetUnreadMsgs(user?._id);
 
   useEffect(() => {
     socket.on('message', (id) => {
@@ -457,6 +457,13 @@ export function useNavData() {
         path: paths.unitservice.profile.root,
         icon: <Iconify icon="fa-solid:clinic-medical" />,
         navItemId: 'USInfoNav',
+      },
+      {
+        show: isMedLab,
+        title: t('my profile'),
+        path: paths.employee.profile.root,
+        icon: <Iconify icon="iconamoon:profile-bold" />,
+        navItemId: 'EMProfileNav',
       },
       {
         show:

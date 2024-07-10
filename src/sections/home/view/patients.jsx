@@ -21,7 +21,9 @@ export default function HomeView() {
       <Stack
         sx={{
           overflowX: 'hidden',
-          height: '91vh',
+          minHeight: '90vh',
+          backgroundColor: { md: '#d5f7e6' },
+          pt: 5
         }}
       >
         <PatientsHero currentPage="users" />
@@ -36,6 +38,7 @@ export default function HomeView() {
       </Stack>
       <Box
         sx={{
+          p: 2,
           overflow: 'hidden',
           position: 'relative',
           bgcolor: 'background.paper',

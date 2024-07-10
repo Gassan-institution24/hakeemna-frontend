@@ -183,11 +183,11 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
       {!onSignin && <Link
         sx={{ alignSelf: 'center' }}
         component={RouterLink}
-        href="https://doctorna.online/"
+        href="/"
         variant="subtitle2"
         underline="always"
       >
-        {t('web page')}
+        {t('home page')}
       </Link>}
     </Stack>
   );

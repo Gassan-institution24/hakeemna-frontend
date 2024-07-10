@@ -131,7 +131,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
             sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
             onClick={() => setCurrentPage('doctors')}
           >
-            {t('unit of Serivce')}
+            {t('unit of serivce')}
           </Button>
         </Stack>
       )}
@@ -145,7 +145,8 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
       width={1}
       height={1}
       sx={{
-        position: 'absolute',
+        // minHeight: '90vh',
+        position: { md: 'absolute' },
         bottom: 0,
         ...(curLangAr ? { left: 0 } : { right: 0 }),
         borderRadius: currentPage === 'users' ? 0 : '50% 0 0 0',

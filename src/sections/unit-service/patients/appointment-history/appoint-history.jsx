@@ -131,7 +131,33 @@ export default function AppointHistoryView({ patientData }) {
 
   // const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
 
-  const TABS = [
+  const TABS = isMedLab ?[
+    // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    {
+      value: 'pending',
+      label: t('pending'),
+      color: 'secondary',
+      count: getAppointLength('pending'),
+    },
+    // {
+    //   value: 'processing',
+    //   label: t('processing'),
+    //   color: 'info',
+    //   count: getAppointLength('processing'),
+    // },
+    {
+      value: 'finished',
+      label: t('finished'),
+      color: 'success',
+      count: getAppointLength('finished'),
+    },
+    {
+      value: 'canceled',
+      label: t('canceled'),
+      color: 'error',
+      count: getAppointLength('canceled'),
+    },
+  ] : [
     // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
     {
       value: 'pending',
@@ -296,12 +322,12 @@ export default function AppointHistoryView({ patientData }) {
                   rowCount={appointmentsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row, idx) => row._id)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row, idx) => row._id)
+                //   )
+                // }
                 />
 
                 <TableBody>
@@ -393,10 +419,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (appointment) =>
         (appointment?.unit_service?.name_english &&
           appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.unit_service?.name_arabic &&
           appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.name_english &&
           appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.name_arabic &&

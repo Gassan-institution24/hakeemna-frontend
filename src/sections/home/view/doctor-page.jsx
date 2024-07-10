@@ -1,3 +1,4 @@
+import { fCurrency } from 'src/utils/format-number';
 import PropTypes from 'prop-types';
 import { Avatar, Dialog, Rating, Stack, Typography } from '@mui/material'
 
@@ -54,6 +55,10 @@ export default function DoctorPage({ employeeData }) {
                                 <Rating size="small" readOnly value={employeeData.employee?.rate} precision={0.1} max={5} />
                                 <Typography variant='caption' textTransform='lowercase'>({employeeData.employee?.rated_times}) {t('people rate')}</Typography>
                             </Stack>
+                            {employeeData?.fees && <Stack direction='row' gap={1} mt={2} >
+                                <Typography variant='body2'>{t('fees')}:</Typography>
+                                <Typography variant='body2'>{fCurrency(employeeData?.fees, employeeData.currency?.symbol)}</Typography>
+                            </Stack>}
                         </Stack>
                     </Stack>
                     <Stack direction={{ md: 'row' }} alignItems='center' justifyContent='center' gap={{ md: 10 }}>

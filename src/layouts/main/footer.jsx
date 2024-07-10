@@ -198,7 +198,7 @@ export default function Footer() {
           </Grid>
         </Grid>
 
-        <Typography variant="body2" sx={{ mt: 2, textAlign: 'end' }}>
+        <Typography variant="body2" sx={{ mt: 2, textAlign: { md: 'end', xs: 'center' } }}>
           {t('© 2023. All rights reserved')}
         </Typography>
       </Container>

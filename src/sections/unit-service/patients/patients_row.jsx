@@ -94,10 +94,10 @@ export default function CountriesTableRow({ row, selected }) {
       </TableCell>
       <TableCell align="center">
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={newVisit.onTrue}
           color="secondary"
-          sx={{ fontSize: 13, borderRadius: 0, p: 0.2 }}
+          sx={{ fontSize: 12, p: 1 }}
         >
           {t('new appointment')}
         </Button>
