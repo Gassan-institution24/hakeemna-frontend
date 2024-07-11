@@ -26,7 +26,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSRooms, useGetUSActivities, useGetEntranceManagementByActivity } from 'src/api';
+import { useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -42,30 +42,20 @@ export default function WaitingRoom() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
+  const waitingActivity = roomsData.find(
+    (activity) => activity?.activities?.name_english === 'waiting'
+  );
+  console.log(waitingActivity, 'waitingActivity?.activities');
 
-
-
-
-
-  
-  const waitingActivity = roomsData.find((activity) => activity?.activities?.name_english === "waiting");
-  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?._id);
-
-
-
-
-
-
-
+  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?.activities?._id);
 
   const { EntranceByActivity } = useGetEntranceManagementByActivity(
     selectedTitle,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-console.log(EntranceByActivity);
+  console.log(EntranceByActivity);
 
   const goToProcessingPage = async (entrance) => {
-
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
         Last_activity_atended: entrance?.Next_activity?._id,
@@ -75,8 +65,8 @@ console.log(EntranceByActivity);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
-    } 
-    await axiosInstance.patch(`/api/rooms/${entrance?.rooms}`, {
+    }
+    await axiosInstance.patch(`/api/rooms/${waitingActivity?._id}`, {
       patient: entrance?.patient?._id,
       entranceMangament: entrance?._id,
     });
@@ -91,26 +81,26 @@ console.log(EntranceByActivity);
         finished_or_not: true,
       });
       await axiosInstance.post('/api/feedback', {
-      unit_service: entrance?.service_unit?._id,
-      appointment: entrance?.appointmentId,
-      employee: user?.employee?._id,
-      patient: entrance?.patient?._id,
+        unit_service: entrance?.service_unit?._id,
+        appointment: entrance?.appointmentId,
+        employee: user?.employee?._id,
+        patient: entrance?.patient?._id,
       });
       await axiosInstance.post(`/api/medrecord/`, {
-      appointmentId: entrance?.appointmentId,
-      Appointment_date: entrance?.Appointment_date,
-      service_unit: entrance?.service_unit,
-      patient: entrance?.patient?._id,
+        appointmentId: entrance?.appointmentId,
+        Appointment_date: entrance?.Appointment_date,
+        service_unit: entrance?.service_unit,
+        patient: entrance?.patient?._id,
       });
-      // await axiosInstance.patch(`/api/rooms/${entrance?.rooms}`, {
-      //   patient: null,
-      //   entranceMangament: null,
-      // });
+      await axiosInstance.patch(`/api/rooms/${waitingActivity?._id}`, {
+        patient: null,
+        entranceMangament: null,
+      });
       enqueueSnackbar('appointment finished', { variant: 'success' });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('no', { variant: 'error' });
+      enqueueSnackbar('something went wrong', { variant: 'error' });
     }
   };
 
@@ -146,7 +136,7 @@ console.log(EntranceByActivity);
                   }}
                   onClick={() => {
                     setShowAlert(false);
-                    handleEndAppointment();
+                    // handleEndAppointment();
                   }}
                 >
                   {t('Confirm')}
@@ -178,36 +168,32 @@ console.log(EntranceByActivity);
               </MenuItem>
             ))}
           </Select>
-          <Box> 
-            {EntranceByActivity?.map((entranceData, i) => (
-              <TableContainer key={i} sx={{ mt: 3, mb: 2 }}>
-                <Scrollbar>
-                  <Table sx={{ minWidth: 400 }}>
-                    <TableHead>
-                      <TableRow>
-                        {entranceData?.Last_activity_atended && (
-                          <TableCell>Last activity</TableCell>
-                        )}
-
-                        <TableCell>Patient</TableCell>
-                        <TableCell>Patient Note</TableCell>
-                        <TableCell>Options</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow>
-                        {entranceData?.Last_activity_atended && (
-                          <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
-                        )}
+          <Box>
+            <TableContainer sx={{ mt: 3, mb: 2 }}>
+              <Scrollbar>
+                <Table sx={{ minWidth: 400 }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Last activity</TableCell>
+                      <TableCell>Patient</TableCell>
+                      <TableCell>Patient Note</TableCell>
+                      <TableCell>Options</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {EntranceByActivity?.map((entranceData, i) => (
+                      <TableRow key={i}>
+                        <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
 
                         <TableCell>{entranceData?.patient?.name_english}</TableCell>
                         <TableCell>{entranceData?.patient_note}</TableCell>
                         <TableCell>
-                          {EntranceByActivity?.map((info) => (
-                            <Button variant="outlined" onClick={() => goToProcessingPage(info)}>
-                              Next
-                            </Button>
-                          ))}
+                          <Button
+                            variant="outlined"
+                            onClick={() => goToProcessingPage(entranceData)}
+                          >
+                            Next
+                          </Button>
                           <Button
                             onClick={() => handleEndAppointment(entranceData)}
                             variant="contained"
@@ -217,11 +203,11 @@ console.log(EntranceByActivity);
                           </Button>
                         </TableCell>
                       </TableRow>
-                    </TableBody>
-                  </Table>
-                </Scrollbar>
-              </TableContainer>
-            ))}
+                    ))}
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
           </Box>
         </Box>
       </Card>
