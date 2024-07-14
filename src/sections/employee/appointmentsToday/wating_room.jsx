@@ -32,7 +32,7 @@ import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function WaitingRoom() {
+export default function WaitingRoom() { 
   const { t } = useTranslate();
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
@@ -42,19 +42,16 @@ export default function WaitingRoom() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
-  const waitingActivity = roomsData.find(
-    (activity) => activity?.activities?.name_english === 'waiting'
+  const receptionActivity = roomsData.find(
+    (activity) => activity?.activities?.name_english === 'reception'
   );
-  console.log(waitingActivity, 'waitingActivity?.activities');
 
-  const [selectedTitle, setSelectedTitle] = useState(waitingActivity?.activities?._id);
+  const [selectedTitle, setSelectedTitle] = useState(receptionActivity?.activities?._id);
 
-  const { EntranceByActivity } = useGetEntranceManagementByActivity(
+  const { EntranceByActivity,refetch } = useGetEntranceManagementByActivity(
     selectedTitle,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log(EntranceByActivity);
-
   const goToProcessingPage = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
@@ -66,7 +63,7 @@ export default function WaitingRoom() {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
-    await axiosInstance.patch(`/api/rooms/${waitingActivity?._id}`, {
+    await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
       patient: entrance?.patient?._id,
       entranceMangament: entrance?._id,
     });
@@ -92,12 +89,13 @@ export default function WaitingRoom() {
         service_unit: entrance?.service_unit,
         patient: entrance?.patient?._id,
       });
-      await axiosInstance.patch(`/api/rooms/${waitingActivity?._id}`, {
+      await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
         patient: null,
         entranceMangament: null,
       });
       enqueueSnackbar('appointment finished', { variant: 'success' });
-      router.push(paths.employee.appointmentsToday);
+      refetch()
+
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('something went wrong', { variant: 'error' });
@@ -176,7 +174,7 @@ export default function WaitingRoom() {
                     <TableRow>
                       <TableCell>Last activity</TableCell>
                       <TableCell>Patient</TableCell>
-                      <TableCell>Patient Note</TableCell>
+                      <TableCell>Doctor Note</TableCell>
                       <TableCell>Options</TableCell>
                     </TableRow>
                   </TableHead>
@@ -186,7 +184,7 @@ export default function WaitingRoom() {
                         <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
 
                         <TableCell>{entranceData?.patient?.name_english}</TableCell>
-                        <TableCell>{entranceData?.patient_note}</TableCell>
+                        <TableCell>{entranceData?.note}</TableCell>
                         <TableCell>
                           <Button
                             variant="outlined"

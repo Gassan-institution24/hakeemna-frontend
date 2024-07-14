@@ -406,7 +406,7 @@ export const endpoints = {
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
-    inwating: (id) => `/api/entrance/inwating/${id}`,
+    inrooms: (id) => `/api/entrance/inrooms/${id}`,
     wating: (id) => `/api/entrance/wating/${id}`,
     byactivity: (id, usId) => `/api/entrance/activity/${id}/us/${usId}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
