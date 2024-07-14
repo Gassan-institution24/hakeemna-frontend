@@ -50,4 +50,4 @@ setInterval(() => {
             console.log(e)
         }
     })
-}, 100000)
+}, 2000)
