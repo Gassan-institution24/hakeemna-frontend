@@ -39,6 +39,8 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 import WaitingRoom from 'src/sections/employee/appointmentsToday/wating_room';
 
 export default function AppointmentsToday() {
+  const [currentTab, setCurrentTab] = useState('one');
+
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
@@ -77,7 +79,6 @@ export default function AppointmentsToday() {
     },
   ];
 
-  const [currentTab, setCurrentTab] = useState('one');
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const waitingActivity = activitiesData.find((activity) => activity.name_english === 'waiting');
