@@ -43,18 +43,18 @@ export default function Rooms({ data }) {
     });
   }, [user, Entrance, reset]);
 
-  const processingPage = async (activity) => {
-    // has the rooms data 
+  const processingPage = async (rooms) => {
+    // has the rooms data
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
         Last_activity_atended: Entrance?.Next_activity,
-        Next_activity: activity?.activities?._id,
+        Next_activity: rooms?.activities?._id,
         note: noteContent,
-        rooms:activity?._id
+        rooms: rooms?._id,
       });
-      await axiosInstance.patch(`/api/rooms/${activity?._id}`, {
+      await axiosInstance.patch(`/api/rooms/${rooms?._id}`, {
         patient: null,
-        entranceMangament: Entrance,
+        entranceMangament: Entrance?._id
       });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
@@ -62,7 +62,7 @@ export default function Rooms({ data }) {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-  console.log(roomsData);
+
   return (
     <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
       <Box sx={{ m: 2 }}>
@@ -74,14 +74,14 @@ export default function Rooms({ data }) {
 
       <Box sx={{ m: 2 }}>
         Next activity <br />
-        {roomsData?.map((activities) => (
+        {roomsData?.map((rooms) => (
           <Button
-            onClick={() => processingPage(activities)}
+            onClick={() => processingPage(rooms)}
             variant="contained"
             // disabled
             sx={{ bgcolor: 'success.main', m: 1 }}
           >
-            go to {activities?.activities?.name_english} room
+            go to {rooms?.activities?.name_english} room
           </Button>
         ))}
         <TextField onChange={(e) => setNoteContent(e.target.value)} placeholder="Add commint" />
