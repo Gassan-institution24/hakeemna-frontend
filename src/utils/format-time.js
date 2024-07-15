@@ -58,12 +58,12 @@ export function fTimeText(date, newFormat, arabic) {
 export function fDateTime(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy p';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 export function fDateAndTime(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 
 export function fTime(date, newFormat) {
