@@ -128,14 +128,17 @@ export default function AppointmentsView({ employeeData }) {
     finished,
     pending,
     loading,
-  } = useGetEmployeeAppointments({
-    id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-    page: table.page || 0,
-    sortBy: table.orderBy || 'code',
-    rowsPerPage: table.rowsPerPage || 25,
-    order: table.order || 'asc',
-    filters: filters || null,
-  });
+  } = useGetEmployeeAppointments(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+    {
+      page: table.page || 0,
+      sortBy: table.orderBy || 'code',
+      rowsPerPage: table.rowsPerPage || 25,
+      order: table.order || 'asc',
+      populate: 'all',
+      ...filters,
+    }
+  );
 
   const dateError =
     filters.startDate && filters.endDate

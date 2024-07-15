@@ -22,7 +22,6 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetUSActivities,
@@ -42,7 +41,6 @@ export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
-  const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
@@ -52,7 +50,9 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement( user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id);
+  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
   const TABS = [
@@ -89,7 +89,6 @@ export default function AppointmentsToday() {
     refetchEntrance();
     refetchFinishedAppointments();
   };
-
 
   const updateStatus = async (id, status, type) => {
     try {
@@ -234,7 +233,7 @@ export default function AppointmentsToday() {
                   <TableRow key={index}>
                     <TableCell>{fTime(info?.start_time)}</TableCell>
                     <TableCell>{info?.patient?.name_english}</TableCell>
-                    <TableCell>{currentTab === 'four' ? info?.note : info?.note }</TableCell>
+                    <TableCell>{currentTab === 'four' ? info?.note : info?.note}</TableCell>
                     {currentTab !== 'four' && (
                       <>
                         <TableCell>

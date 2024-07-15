@@ -12,10 +12,16 @@ import ListItemText from '@mui/material/ListItemText';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
-export default function TourDetailsBookers({ bookers }) {
+export default function UnitServiceEmployees({ employees }) {
+  const router = useRouter()
+  const handleClick = (id) => {
+    router.push(paths.pages.doctor(id))
+  }
   return (
     <Box
       gap={3}
@@ -27,33 +33,33 @@ export default function TourDetailsBookers({ bookers }) {
         md: 'repeat(3, 1fr)',
       }}
     >
-      {bookers
+      {employees
         .filter((employee) => employee.visibility_US_page)
-        .map((booker) => (
-          <BookerItem
-            key={booker._id}
-            booker={booker}
-            // selected={approved.includes(booker._id)}
-            // onSelected={() => handleClick(booker._id)}
+        .map((employee) => (
+          <EmployeeCard
+            key={employee._id}
+            employee={employee}
+            // selected={approved.includes(employee._id)}
+            onSelected={() => handleClick(employee._id)}
           />
         ))}
     </Box>
   );
 }
 
-TourDetailsBookers.propTypes = {
-  bookers: PropTypes.array,
+UnitServiceEmployees.propTypes = {
+  employees: PropTypes.array,
 };
 
 // ----------------------------------------------------------------------
 
-function BookerItem({ booker, selected, onSelected }) {
+function EmployeeCard({ employee, selected, onSelected }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const phoneNumber = booker?.employee?.phone;
-  const senderEmail = booker?.employee?.email;
+  const phoneNumber = employee?.employee?.phone;
+  const senderEmail = employee?.employee?.email;
 
   const makePhoneCall = () => {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -77,22 +83,22 @@ function BookerItem({ booker, selected, onSelected }) {
   };
 
   return (
-    <Stack component={Card} direction="row" spacing={2} key={booker.id} sx={{ p: 3 }}>
+    <Stack component={Card} direction="row" spacing={2} key={employee.id} sx={{ p: 3 }}>
       <Avatar
-        alt={booker?.employee?.name_english}
-        src={booker?.employee?.picture}
+        alt={employee?.employee?.name_english}
+        src={employee?.employee?.picture}
         sx={{ width: 48, height: 48 }}
       />
 
       <Stack spacing={2} flexGrow={1}>
         <ListItemText
-          primary={curLangAr ? booker?.employee?.name_arabic : booker?.employee?.name_english}
+          primary={curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
           secondary={
             <Stack direction="row" alignItems="center" spacing={0.5}>
               <Iconify icon="solar:users-group-rounded-bold" width={16} />
               {curLangAr
-                ? booker.employee?.speciality?.name_arabic
-                : booker?.employee?.speciality?.name_english}
+                ? employee.employee?.speciality?.name_arabic
+                : employee?.employee?.speciality?.name_english}
             </Stack>
           }
           secondaryTypographyProps={{
@@ -161,8 +167,8 @@ function BookerItem({ booker, selected, onSelected }) {
   );
 }
 
-BookerItem.propTypes = {
-  booker: PropTypes.object,
+EmployeeCard.propTypes = {
+  employee: PropTypes.object,
   onSelected: PropTypes.func,
   selected: PropTypes.bool,
 };

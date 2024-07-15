@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 
 import { Stack, Button } from '@mui/material';
-import Typography from '@mui/material/Typography';
 
 import { fTime } from 'src/utils/format-time';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function TimeList({ name, list, helperText, value, onChange, ...other }) {
-  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 

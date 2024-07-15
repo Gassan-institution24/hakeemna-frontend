@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -67,9 +67,9 @@ export default function ClassicVerifyView({ onVerify, patientId, selected, refet
         await axios.patch(endpoints.appointments.book(selected), {
           patient: patientId,
           lang: curLangAr,
-        })
-        onVerify()
-        refetch()
+        });
+        onVerify();
+        refetch();
       } else {
         router.push(paths.dashboard.root);
       }
@@ -137,19 +137,21 @@ export default function ClassicVerifyView({ onVerify, patientId, selected, refet
         </Link>
       </Typography>
 
-      {!patientId && <Link
-        component={RouterLink}
-        href={paths.auth.login}
-        color="inherit"
-        variant="subtitle2"
-        sx={{
-          alignItems: 'center',
-          display: 'inline-flex',
-        }}
-      >
-        <Iconify icon="eva:arrow-ios-back-fill" width={16} />
-        {t('return to login')}
-      </Link>}
+      {!patientId && (
+        <Link
+          component={RouterLink}
+          href={paths.auth.login}
+          color="inherit"
+          variant="subtitle2"
+          sx={{
+            alignItems: 'center',
+            display: 'inline-flex',
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-back-fill" width={16} />
+          {t('return to login')}
+        </Link>
+      )}
     </Stack>
   );
 

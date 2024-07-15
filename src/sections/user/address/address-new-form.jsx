@@ -49,7 +49,7 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
     country: '',
   };
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   const methods = useForm({
     resolver: yupResolver(NewAddressSchema),

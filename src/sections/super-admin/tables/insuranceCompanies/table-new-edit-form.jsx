@@ -26,7 +26,7 @@ import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/componen
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
   const { insuranseTypesData } = useGetInsuranceTypes();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -91,7 +91,7 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country);
+  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english' });
 
   const onSubmit = handleSubmit(async (data) => {
     try {

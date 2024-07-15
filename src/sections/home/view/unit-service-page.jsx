@@ -24,11 +24,11 @@ import Markdown from 'src/components/markdown';
 import { varTranHover } from 'src/components/animate';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
 
-import TourDetailsBookers from './tour-details-bookers';
+import UnitServiceEmployees from '../unit-service-employee';
 
 // ----------------------------------------------------------------------
 
-export default function TourDetailsContent({ tour }) {
+export default function UnitServicePage({ USData }) {
   const {
     name_english,
     name_arabic,
@@ -49,7 +49,7 @@ export default function TourDetailsContent({ tour }) {
     email,
     insurance,
     location_gps,
-  } = tour;
+  } = USData;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -63,9 +63,6 @@ export default function TourDetailsContent({ tour }) {
   };
 
   const slides = [{ src: company_logo }];
-  // const slides = company_logo?.map((slide) => ({
-  //   src: slide,
-  // }));
   const {
     selected: selectedImage,
     open: openLightbox,
@@ -104,10 +101,10 @@ export default function TourDetailsContent({ tour }) {
             work_start_time === work_end_time
               ? t('24 hours')
               : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                  work_end_time,
-                  'p',
-                  curLangAr
-                )}`,
+                work_end_time,
+                'p',
+                curLangAr
+              )}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
@@ -154,17 +151,6 @@ export default function TourDetailsContent({ tour }) {
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
           {curLangAr ? name_arabic : name_english}
         </Typography>
-
-        {/* <IconButton>
-          <Iconify icon="solar:share-bold" />
-        </IconButton> */}
-
-        {/* <Checkbox
-          defaultChecked
-          color="error"
-          icon={<Iconify icon="solar:heart-outline" />}
-          checkedIcon={<Iconify icon="solar:heart-bold" />}
-        /> */}
       </Stack>
 
       <Stack spacing={3} direction="row" flexWrap="wrap" alignItems="center">
@@ -193,14 +179,6 @@ export default function TourDetailsContent({ tour }) {
           {curLangAr ? country?.name_arabic : country?.name_english},{' '}
           {curLangAr ? city?.name_arabic : city?.name_english}
         </Stack>
-
-        {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'subtitle2' }}>
-          <Iconify icon="solar:flag-bold" sx={{ color: 'info.main' }} />
-          <Box component="span" sx={{ typography: 'body2', color: 'text.secondary' }}>
-            Guide by
-          </Box>
-          {tourGuides?.map((tourGuide) => tourGuide.name).join(', ')}
-        </Stack> */}
       </Stack>
       <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
       {renderOverview}
@@ -239,26 +217,6 @@ export default function TourDetailsContent({ tour }) {
           />
         </m.div>
         {renderHead}
-        {/* <Box gap={1} display="grid" gridTemplateColumns="repeat(2, 1fr)">
-          {slides.slice(1, 5)?.map((slide) => (
-            <m.div
-              key={slide.src}
-              whileHover="hover"
-              variants={{
-                hover: { opacity: 0.8 },
-              }}
-              transition={varTranHover()}
-            >
-              <Image
-                alt={slide.src}
-                src={slide.src}
-                ratio="1/1"
-                onClick={() => handleOpenLightbox(slide.src)}
-                sx={{ borderRadius: 2, cursor: 'pointer' }}
-              />
-            </m.div>
-          ))}
-        </Box> */}
       </Box>
 
       <Lightbox
@@ -272,11 +230,6 @@ export default function TourDetailsContent({ tour }) {
 
   const renderContent = (
     <Stack sx={{ mb: 5, mx: 2 }}>
-      {/* {introduction_letter && (
-        <Typography sx={{ mb: 1 }} variant="h6">
-          {t('introduction letter')}
-        </Typography>
-      )} */}
       <Markdown
         sx={{ px: 5, textTransform: 'none' }}
         children={curLangAr ? arabic_introduction_letter : introduction_letter}
@@ -335,30 +288,22 @@ export default function TourDetailsContent({ tour }) {
       <Typography sx={{ mt: 2 }} variant="h6">
         {t('Employees')}
       </Typography>
-      <TourDetailsBookers bookers={employeesData} />
+      <UnitServiceEmployees employees={employeesData} />
       {/* </Stack> */}
     </Stack>
   );
 
   return (
-    <>
+    <Stack sx={{ m: { md: 10 } }}>
       {renderGallery}
 
-      {/* <Stack sx={{ maxWidth: 720, mx: 'auto' }}> */}
-      {/* {renderHead} */}
-
-      {/* <Divider sx={{ borderStyle: 'dashed', my: 5 }} /> */}
-
-      {/* {renderOverview} */}
-
-      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+      < Divider sx={{ borderStyle: 'dashed', my: 5 }} />
 
       {renderContent}
-      {/* </Stack> */}
-    </>
+    </Stack >
   );
 }
 
-TourDetailsContent.propTypes = {
-  tour: PropTypes.object,
+UnitServicePage.propTypes = {
+  USData: PropTypes.object,
 };

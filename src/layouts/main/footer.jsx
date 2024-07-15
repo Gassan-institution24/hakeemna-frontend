@@ -11,8 +11,6 @@ import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useResponsive } from 'src/hooks/use-responsive';
-
 import { useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
@@ -81,7 +79,6 @@ export default function Footer() {
   const pathname = usePathname();
 
   const homePage = pathname === '/';
-  const mdUp = useResponsive('up', 'md');
 
   const { t } = useTranslate();
 
@@ -113,7 +110,7 @@ export default function Footer() {
       component="footer"
       sx={{
         position: 'relative',
-        bgcolor: 'white',
+        bgcolor: 'background.neutral',
         // color: 'white',
       }}
     >

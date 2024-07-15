@@ -44,7 +44,7 @@ export default function CitiesNewEditForm() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
 
   const { enqueueSnackbar } = useSnackbar();
 

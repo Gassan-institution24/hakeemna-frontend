@@ -31,7 +31,7 @@ import FormProvider, {
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -86,7 +86,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country);
+  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english name_arabic' });
   useEffect(() => {
     if (Object.keys(errors).length) {
       Object.keys(errors).forEach((key, idx) =>

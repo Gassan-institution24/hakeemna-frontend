@@ -31,7 +31,7 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
             clearButton: <Iconify icon="mingcute:close-line" />,
             actionBar: 'cancel',
           }}
-          minutesStep="5"
+          minutesStep={5}
           format="hh:mm a"
           value={myunitTime(field.value)}
           InputLabelProps={{ shrink: true }}
