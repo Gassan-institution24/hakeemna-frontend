@@ -63,7 +63,7 @@ export default function OldMedicalReports() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
   const [spName, setspName] = useState();
   const handleHover = (id) => {

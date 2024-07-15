@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import { InputAdornment } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useState } from 'react';
 
 import Iconify from '../iconify';
 
@@ -22,11 +22,11 @@ export function SelectWithSearch({
   filters,
   ...other
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
 
   return (
     <TextField
@@ -44,12 +44,14 @@ export function SelectWithSearch({
       }}
       {...other}
     >
-      {filters[name] !== '' && <MenuItem sx={{ textAlign: 'end' }} value=''>
-        {t('reset')}
-      </MenuItem>}
+      {filters[name] !== '' && (
+        <MenuItem sx={{ textAlign: 'end' }} value="">
+          {t('reset')}
+        </MenuItem>
+      )}
       <MenuItem>
         <TextField
-          size='small'
+          size="small"
           sx={{ mx: 1 }}
           fullWidth
           value={search}
@@ -66,9 +68,10 @@ export function SelectWithSearch({
         />
       </MenuItem>
       {options
-        ?.filter((one) =>
-          one.name_arabic?.toLowerCase().includes(search?.toLowerCase()) ||
-          one.name_english?.toLowerCase().includes(search?.toLowerCase())
+        ?.filter(
+          (one) =>
+            one.name_arabic?.toLowerCase().includes(search?.toLowerCase()) ||
+            one.name_english?.toLowerCase().includes(search?.toLowerCase())
         )
         ?.map((one, index) => (
           <MenuItem key={index} value={one?._id}>

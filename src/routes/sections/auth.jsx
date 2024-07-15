@@ -43,7 +43,7 @@ export const authRoutes = [
   {
     path: 'register/serviceunit',
     element: (
-      <AuthClassicLayout >
+      <AuthClassicLayout>
         <JwtUSRegisterPage />
       </AuthClassicLayout>
     ),
@@ -51,7 +51,7 @@ export const authRoutes = [
   {
     path: 'register/stakeholder',
     element: (
-      <AuthClassicLayout >
+      <AuthClassicLayout>
         <JwtStakeholderRegisterPage />
       </AuthClassicLayout>
     ),

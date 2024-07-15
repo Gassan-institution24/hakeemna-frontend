@@ -273,15 +273,8 @@ export function useGetDepartmentAppointments({ id, page, sortBy, rowsPerPage, or
   return { ...memoizedValue, refetch };
 }
 
-export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
-  const URL = endpoints.appointments.employee.one({
-    id,
-    page,
-    sortBy,
-    rowsPerPage,
-    order,
-    filters,
-  });
+export function useGetEmployeeAppointments(id, params) {
+  const URL = [endpoints.appointments.employee.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

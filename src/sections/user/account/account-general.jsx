@@ -27,7 +27,7 @@ export default function AccountGeneral({ data, refetch }) {
   const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
@@ -110,7 +110,7 @@ export default function AccountGeneral({ data, refetch }) {
     formState: { isSubmitting },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country);
+  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english name_arabic' });
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];

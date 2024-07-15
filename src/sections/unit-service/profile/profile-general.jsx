@@ -65,7 +65,7 @@ export default function AccountGeneral({ unitServiceData }) {
   const { data, refetch } = useGetUnitservice(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
   // const { specialtiesData } = useGetSpecialties();
 
@@ -158,7 +158,7 @@ export default function AccountGeneral({ unitServiceData }) {
   }, [errors, enqueueSnackbar]);
 
   const values = watch();
-  const { tableData } = useGetCountryCities(watch().country);
+  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english name_arabic' });
 
   const handleDrop = useCallback(
     (acceptedFiles) => {

@@ -213,7 +213,7 @@ export default function BookDetails({
 
 BookDetails.propTypes = {
   selected: PropTypes.string,
-  selectedDate: PropTypes.string,
+  selectedDate: PropTypes.any,
   AppointDates: PropTypes.array,
   list: PropTypes.array,
   loading: PropTypes.bool,

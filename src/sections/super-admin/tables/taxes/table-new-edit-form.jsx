@@ -26,7 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -82,7 +82,7 @@ export default function CitiesNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
   const values = watch();
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const onSubmit = handleSubmit(async (data) => {
     try {

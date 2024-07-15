@@ -56,7 +56,7 @@ export default function MedicalReports() {
   const [ImgFiles, setImgFiles] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(id);
   const [spName, setspName] = useState();
 

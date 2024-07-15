@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,7 +9,6 @@ import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
-import Hidden from '@mui/material/Hidden';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -25,7 +23,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
-import Language from 'src/layouts/common/language-home-page';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -47,7 +44,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   const searchParams = useSearchParams();
 
@@ -121,7 +118,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const values = watch();
 
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -148,11 +145,14 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const patient = await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
-      console.log('userData', patient)
+      const patient = await register?.({
+        userName: `${data.name_english} ${data.name_arabic}`,
+        ...data,
+      });
+      console.log('userData', patient);
       if (afterSignUp) {
-        setPatientId(patient?.patient?._id)
-        afterSignUp()
+        setPatientId(patient?.patient?._id);
+        afterSignUp();
       } else {
         router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
       }
@@ -165,22 +165,26 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Hidden smUp>
+      {/* <Hidden smUp>
         <span>
           <Language />
         </span>
-      </Hidden>
+      </Hidden> */}
 
       <Typography variant="h4">{t('Get started absolutely free')} </Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
-        {onSignIn ? <Link onClick={() => onSignIn()} component={RouterLink} variant="subtitle2">
-          {t('login')}
-        </Link> : <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          {t('login')}
-        </Link>}
+        {onSignIn ? (
+          <Link onClick={() => onSignIn()} component={RouterLink} variant="subtitle2">
+            {t('login')}
+          </Link>
+        ) : (
+          <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+            {t('login')}
+          </Link>
+        )}
       </Stack>
 
       {/* {!onSignIn && <Stack direction="row" spacing={0.5}>

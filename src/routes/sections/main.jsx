@@ -9,28 +9,14 @@ import { SplashScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home/home'));
-// const Page500 = lazy(() => import('src/pages/500'));
-// const Page403 = lazy(() => import('src/pages/403'));
-// const Page404 = lazy(() => import('src/pages/errors/404'));
-// const FaqsPage = lazy(() => import('src/pages/faqs'));
-// const AboutPage = lazy(() => import('src/pages/about-us'));
-// const ContactPage = lazy(() => import('src/pages/contact-us'));
-// const PricingPage = lazy(() => import('src/pages/pricing'));
-// const PaymentPage = lazy(() => import('src/pages/payment'));
-// const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));
+
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
 const UsPricing = lazy(() => import('src/sections/home/view/usPricing'));
 const AboutUs = lazy(() => import('src/sections/home/moreInfoAboutUs'));
-// // PRODUCT
-// const ProductListPage = lazy(() => import('src/pages/product/list'));
-// const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
-// const ProductCheckoutPage = lazy(() => import('src/pages/product/checkout'));
-// // BLOG
-// const PostListPage = lazy(() => import('src/pages/post/list'));
-// const PostDetailsPage = lazy(() => import('src/pages/post/details'));
+
 const Patientsservices = lazy(() => import('src/pages/home/patients'));
 const Unitservices = lazy(() => import('src/pages/home/unit'));
-const ServiceUnitPage = lazy(() => import('src/pages/service-unit-page/details'));
+const ServiceUnitPage = lazy(() => import('src/pages/home/service-unit'));
 const Training = lazy(() => import('src/sections/home/training'));
 const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
@@ -68,10 +54,6 @@ export const mainRoutes = [
     ),
     children: [
       { path: 'maintenance', element: <MaintenancePage /> },
-      //     // { path: 'coming-soon', element: <ComingSoonPage /> },
-      //     // { path: '500', element: <Page500 /> },
-      //     { path: '*', element: <Page404 /> },
-      //     // { path: '403', element: <Page403 /> },
     ],
   },
 ];
