@@ -1,9 +1,8 @@
-
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import {  Box,Card,Button,TextField,  Typography,  } from '@mui/material';
+import { Box, Card, Button, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
@@ -12,13 +11,13 @@ import axiosInstance from 'src/utils/axios';
 
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSRooms,useGetOneEntranceManagement,  } from 'src/api';
+import { useGetUSRooms, useGetOneEntranceManagement } from 'src/api';
 
 // ----------------------------------------------------------------------
 
 export default function Rooms() {
   // const { t } = useTranslate();
-  const [noteContent, setNoteContent] = useState();
+  const [noteContent, setNoteContent] = useState('');
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id);
   const { user } = useAuthContext();
@@ -53,7 +52,7 @@ export default function Rooms() {
       });
       await axiosInstance.patch(`/api/rooms/${rooms?._id}`, {
         patient: null,
-        entranceMangament: Entrance?._id,
+        entranceMangament: null,
       });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
@@ -61,29 +60,46 @@ export default function Rooms() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-
+  console.log(Entrance);
   return (
-    <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+    <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, p: 2 }}>
       <Box sx={{ m: 2 }}>
-        last activity <br />
-        {Entrance?.Last_activity_atended?.name_english} <br />
-        Dr message:
+        <Typography variant="h6">Last Activity</Typography>
+        <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Doctor Message
+        </Typography>
         <Typography>{Entrance?.note}</Typography>
       </Box>
 
       <Box sx={{ m: 2 }}>
-        Next activity <br />
-        {roomsData?.map((rooms) => (
-          <Button
-            onClick={() => processingPage(rooms)}
-            variant="contained"
-            // disabled
-            sx={{ bgcolor: 'success.main', m: 1 }}
-          >
-            go to {rooms?.activities?.name_english} room
-          </Button>
-        ))}
-        <TextField onChange={(e) => setNoteContent(e.target.value)} placeholder="Add commint" />
+        <Typography variant="h6">Next Activity</Typography>
+        {roomsData?.map((rooms, index) => {
+          const isSameActivity =
+            Entrance?.Current_activity?.name_english === rooms?.activities?.name_english;
+          return (
+            <Button
+              key={index}
+              onClick={() => !isSameActivity && processingPage(rooms)}
+              variant="contained"
+              sx={{ bgcolor: isSameActivity ? 'green' : 'success.main', m: 1 }}
+              disabled={isSameActivity}
+              // disabled={isSameActivity || rooms?.patient === null}
+            >
+              {isSameActivity
+                ? `${rooms?.activities?.name_english} (Current)`
+                : `Go to ${rooms?.activities?.name_english} Room`}
+            </Button>
+          );
+        })}
+        <TextField
+          onChange={(e) => setNoteContent(e.target.value)}
+          placeholder="Add comment"
+          fullWidth
+          multiline
+          rows={4}
+          sx={{ mt: 2 }}
+        />
       </Box>
     </Card>
   );
