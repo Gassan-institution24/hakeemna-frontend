@@ -408,7 +408,8 @@ export const endpoints = {
     one: (id) => !id ? null : `/api/entrance/${id}`,
     inwating: (id) => !id ? null : `/api/entrance/inwating/${id}`,
     wating: (id) => !id ? null : `/api/entrance/wating/${id}`,
-    byactivity: (id, usId) => `/api/entrance/activity/${id}/us/${usId}`,
+    inrooms: (id) => !id ? null : `/api/entrance/inrooms/${id}`,
+    byactivity: (id, usId) => !id ? null : `/api/entrance/activity/${id}/us/${usId}`,
     finishedAppointments: `/api/entrance/finishedAppointments`,
   },
   medRecord: {

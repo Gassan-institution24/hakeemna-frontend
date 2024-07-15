@@ -8,6 +8,8 @@ import {
   Tabs,
   Table,
   Button,
+  Select,
+  MenuItem,
   TableRow,
   TableHead,
   TableCell,
@@ -22,9 +24,10 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+// import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
-  useGetUSActivities,
+  useGetUSRooms,
   useGetEntranceManagement,
   useGetUsAppointmentsToday,
   useGetfinishedAppointments,
@@ -41,20 +44,21 @@ export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
+  // const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  const { activitiesData } = useGetUSActivities(
+  const [selectedTitle, setSelectedTitle] = useState('');
+
+  const { appointmentsData, refetch } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
+  const { entrance,refetch2 } = useGetEntranceManagement(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { entrance, refetch: refetchEntrance } = useGetEntranceManagement(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
-  const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
-    useGetfinishedAppointments();
+  const { finishedAppointmentsData } = useGetfinishedAppointments();
+
+
   const TABS = [
     {
       value: 'one',
@@ -64,14 +68,14 @@ export default function AppointmentsToday() {
       data: appointmentsData,
     },
     {
-      value: 'three',
+      value: 'two',
       label: 'Rooms',
       color: 'warning',
       count: entrance?.length,
       data: entrance,
     },
     {
-      value: 'four',
+      value: 'three',
       label: 'Finished',
       color: 'error',
       count: finishedAppointmentsData?.length,
@@ -81,20 +85,18 @@ export default function AppointmentsToday() {
 
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
-  const waitingActivity = activitiesData.find((activity) => activity.name_english === 'waiting');
-  const currentTabData = TABS.find((tab) => tab.value === currentTab);
+  const { roomsData } = useGetUSRooms(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
 
-  const refetchAll = () => {
-    refetchAppointments();
-    refetchEntrance();
-    refetchFinishedAppointments();
-  };
+  const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
   const updateStatus = async (id, status, type) => {
     try {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
-      refetchAll();
+      refetch();
+  
       enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
         variant: 'success',
       });
@@ -104,7 +106,7 @@ export default function AppointmentsToday() {
     }
   };
 
-  const startAppointment = async (data) => {
+  const startAppointment = async (data, activityId) => {
     try {
       await axiosInstance.post(endpoints.entranceManagement.all, {
         patient: data?.patient?._id,
@@ -114,13 +116,14 @@ export default function AppointmentsToday() {
         service_unit: data?.unit_service?._id,
         appointmentId: data?._id,
         work_group: data?.work_group?._id,
-        Next_activity: waitingActivity?._id,
+        Next_activity: activityId,
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
       });
-      refetchAll();
-      setCurrentTab('three');
+      refetch();
+      refetch2();
+      setCurrentTab('two');
       enqueueSnackbar('Appointment started', { variant: 'success' });
     } catch (error) {
       console.error(error.message);
@@ -143,8 +146,15 @@ export default function AppointmentsToday() {
     }
   };
 
+  const handleButtonClick = (activityId, info) => {
+    setSelectedTitle(activityId);
+    if (info.arrived) {
+      startAppointment(info, activityId);
+    }
+  };
+
   const renderOptions = (info) => {
-    if (currentTab === 'four') {
+    if (currentTab === 'three') {
       return (
         <IconButton
           sx={{ p: 2 }}
@@ -162,18 +172,32 @@ export default function AppointmentsToday() {
 
     return (
       <>
-        <IconButton
-          sx={{ p: 2 }}
-          onClick={() => info.arrived && startAppointment(info)}
-          disabled={info?.started || !info.arrived}
+        <Select
+          sx={{
+            width: 150,
+            height: 35,
+          }}
+          value={selectedTitle}
+          displayEmpty
         >
-          <Iconify
-            width={20}
-            sx={{ cursor: 'pointer', mr: 1, color: '#2788EF' }}
-            icon="teenyicons:next-solid"
-          />
-          <span style={{ fontSize: 16 }}>Start</span>
-        </IconButton>
+          <MenuItem value="" disabled sx={{ display: 'none' }}>
+            Next activity
+          </MenuItem>
+          {roomsData.map((activity, index) => (
+            <Button
+              onClick={() => handleButtonClick(activity?.activities?._id, info)}
+              disabled={info?.started || !info.arrived}
+              key={index}
+              value={activity?.activities?._id}
+              sx={{
+                display: 'block',
+                width: '100%',
+              }}
+            >
+              {activity?.activities?.name_english}
+            </Button>
+          ))}
+        </Select>
         <IconButton sx={{ p: 2 }} onClick={() => callPatient(info?.patient?.mobile_num1)}>
           <Iconify
             width={20}
@@ -208,7 +232,7 @@ export default function AppointmentsToday() {
           />
         ))}
       </Tabs>
-      {currentTab === 'three' ? (
+      {currentTab === 'two' ? (
         <WaitingRoom />
       ) : (
         <TableContainer sx={{ mt: 3, mb: 2 }}>
@@ -219,7 +243,7 @@ export default function AppointmentsToday() {
                   <TableCell>Time</TableCell>
                   <TableCell>Patient</TableCell>
                   <TableCell>Patient Note</TableCell>
-                  {currentTab !== 'four' && (
+                  {currentTab !== 'three' && (
                     <>
                       <TableCell>Coming</TableCell>
                       <TableCell>Arrived</TableCell>
@@ -233,8 +257,8 @@ export default function AppointmentsToday() {
                   <TableRow key={index}>
                     <TableCell>{fTime(info?.start_time)}</TableCell>
                     <TableCell>{info?.patient?.name_english}</TableCell>
-                    <TableCell>{currentTab === 'four' ? info?.note : info?.note}</TableCell>
-                    {currentTab !== 'four' && (
+                    <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
+                    {currentTab !== 'three' && (
                       <>
                         <TableCell>
                           {info?.coming ? (

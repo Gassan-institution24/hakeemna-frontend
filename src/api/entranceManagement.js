@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetEntranceManagement(id) {
-  const URL = endpoints.entranceManagement.inwating(id);
+export function useGetEntranceManagement(id) { 
+  const URL = endpoints.entranceManagement.inrooms(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -17,11 +17,11 @@ export function useGetEntranceManagement(id) {
     }),
     [data, error, isLoading, isValidating]
   );
-  const refetch = async () => {
+  const refetch2 = async () => {
     await mutate(URL);
   };
 
-  return { ...memoizedValue, refetch };
+  return { ...memoizedValue, refetch2 };
 }
 export function useGetWatingPatient(id) {
   const URL = endpoints.entranceManagement.wating(id);
@@ -58,6 +58,7 @@ export function useGetfinishedAppointments() {
     [data, error, isLoading, isValidating]
   );
   const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
     await mutate(URL);
   };
 

@@ -1,21 +1,23 @@
-import PropTypes from 'prop-types';
+
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { Box, Card, Button, TextField, Typography } from '@mui/material';
+import {  Box,Card,Button,TextField,  Typography,  } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
 import axiosInstance from 'src/utils/axios';
 
+// import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSRooms, useGetOneEntranceManagement } from 'src/api';
+import { useGetUSRooms,useGetOneEntranceManagement,  } from 'src/api';
 
 // ----------------------------------------------------------------------
 
-export default function Rooms({ data }) {
+export default function Rooms() {
+  // const { t } = useTranslate();
   const [noteContent, setNoteContent] = useState();
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id);
@@ -27,7 +29,6 @@ export default function Rooms({ data }) {
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log(roomsData);
 
   const { reset } = methods;
 
@@ -87,7 +88,3 @@ export default function Rooms({ data }) {
     </Card>
   );
 }
-
-Rooms.propTypes = {
-  data: PropTypes.array,
-};
