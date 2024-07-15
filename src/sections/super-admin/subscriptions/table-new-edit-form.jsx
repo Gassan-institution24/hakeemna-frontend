@@ -34,7 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { t } = useTranslate();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
   const { unitservicesData } = useGetUnitservices();
 
@@ -83,7 +83,7 @@ export default function TableNewEditForm({ currentTable }) {
     defaultValues,
   });
 
-  const { tableData } = useGetCountryCities(methods.watch().country);
+  const { tableData } = useGetCountryCities(methods.watch().country, { select: 'name_english' });
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules

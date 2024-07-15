@@ -32,9 +32,9 @@ import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/comp
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -97,7 +97,7 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country);
+  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english' });
 
   const onSubmit = handleSubmit(async (data) => {
     try {

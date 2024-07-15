@@ -51,7 +51,7 @@ export default function NewEditManyForm() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { countriesData } = useGetCountries(); /// edit
+  const { countriesData } = useGetCountries({ select: 'name_english' }); /// edit
   const { families } = useGetMedFamilies(); /// edit
   const { tableData } = useGetSymptoms(); /// edit
 

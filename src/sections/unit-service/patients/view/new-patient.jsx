@@ -57,7 +57,7 @@ export default function TableCreateView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   // const { myunitTime } = useUnitTime();
   const { handleAddNew } = useNewScreen();
@@ -178,7 +178,7 @@ export default function TableCreateView() {
   }, [errors, enqueueSnackbar]);
 
   const values = watch();
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const { existPatients } = useFindPatient({
     sequence_number: values.sequence_number,

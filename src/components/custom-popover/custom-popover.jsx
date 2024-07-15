@@ -51,7 +51,7 @@ export default function CustomPopover({
 
 CustomPopover.propTypes = {
   sx: PropTypes.object,
-  open: PropTypes.object,
+  open: PropTypes.bool,
   children: PropTypes.node,
   hiddenArrow: PropTypes.bool,
   disabledArrow: PropTypes.bool,
@@ -68,5 +68,6 @@ CustomPopover.propTypes = {
     'right-top',
     'right-center',
     'right-bottom',
+    '',
   ]),
 };

@@ -50,7 +50,7 @@ export default function NewEditForm({ currentRow }) {
     ),
   });
 
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english' });
 
   const defaultValues = useMemo(
     () => ({

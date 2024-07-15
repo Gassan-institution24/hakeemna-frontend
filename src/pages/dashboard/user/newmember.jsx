@@ -26,7 +26,7 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 export default function Create() {
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({select:'name_english name_arabic'});
   const { register } = useAuthContext();
   const { t } = useTranslate();
   const router = useRouter();
@@ -80,7 +80,7 @@ export default function Create() {
 
   const values = watch();
 
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules

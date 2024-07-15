@@ -221,7 +221,7 @@ export default function AppointmentToolbar({
             // toolbar:false,
             actionBar: 'cancel',
           }}
-          minutesStep="5"
+          minutesStep={5}
           label={t('from time')}
           value={myunitTime(filters.startTime)}
           onChange={(newValue) => {
@@ -245,7 +245,7 @@ export default function AppointmentToolbar({
             // toolbar:false,
             actionBar: 'cancel',
           }}
-          minutesStep="5"
+          minutesStep={5}
           label={t('to time')}
           value={myunitTime(filters.endTime)}
           onChange={(newValue) => {
