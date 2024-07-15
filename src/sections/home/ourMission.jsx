@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
@@ -21,15 +20,6 @@ export default function WhoAreWe() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-
-  const [expandedCardIndex, setExpandedCardIndex] = useState(null); // Store the index of the expanded card
-  const handleReadMoreClick = (index) => {
-    if (expandedCardIndex === index) {
-      setExpandedCardIndex(null); // Collapse the description if it's already expanded
-    } else {
-      setExpandedCardIndex(index); // Expand the description of the clicked card
-    }
-  };
 
   const CARDS = [
     {

@@ -38,7 +38,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
@@ -81,7 +81,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const { reset, setValue, watch, handleSubmit } = methods;
   const values = watch();
 
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const { existPatients } = useFindPatient({
     email: values.email,

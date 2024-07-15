@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -47,7 +46,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   const searchParams = useSearchParams();
 
@@ -121,7 +120,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const values = watch();
 
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -148,11 +147,14 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const patient = await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
-      console.log('userData', patient)
+      const patient = await register?.({
+        userName: `${data.name_english} ${data.name_arabic}`,
+        ...data,
+      });
+      console.log('userData', patient);
       if (afterSignUp) {
-        setPatientId(patient?.patient?._id)
-        afterSignUp()
+        setPatientId(patient?.patient?._id);
+        afterSignUp();
       } else {
         router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
       }
@@ -176,11 +178,15 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
-        {onSignIn ? <Link onClick={() => onSignIn()} component={RouterLink} variant="subtitle2">
-          {t('login')}
-        </Link> : <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          {t('login')}
-        </Link>}
+        {onSignIn ? (
+          <Link onClick={() => onSignIn()} component={RouterLink} variant="subtitle2">
+            {t('login')}
+          </Link>
+        ) : (
+          <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+            {t('login')}
+          </Link>
+        )}
       </Stack>
 
       {/* {!onSignIn && <Stack direction="row" spacing={0.5}>

@@ -16,7 +16,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-// import { useGetActiveUnitservices } from 'src/api';
 
 import { useGetActiveUSTypes } from 'src/api';
 
@@ -28,7 +27,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  // const { unitservicesData } = useGetActiveUnitservices();
   const { unitserviceTypesData } = useGetActiveUSTypes();
 
   const { enqueueSnackbar } = useSnackbar();

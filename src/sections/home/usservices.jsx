@@ -62,7 +62,10 @@ export default function USServices() {
         ))}
       </Box>
 
-      <Container component={MotionViewport} sx={{ textAlign: 'center', mb: { xs: 4, md: 15 }, mt: { xs: 8, md: 15 } }}>
+      <Container
+        component={MotionViewport}
+        sx={{ textAlign: 'center', mb: { xs: 4, md: 15 }, mt: { xs: 8, md: 15 } }}
+      >
         <m.div variants={varFade().inUp}>
           <Typography variant="h2" sx={{ my: 3 }}>
             {t('Join us and Get the right offer for your unit of service')}

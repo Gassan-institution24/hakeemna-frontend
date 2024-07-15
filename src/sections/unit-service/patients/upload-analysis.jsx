@@ -12,12 +12,11 @@ import DialogContent from '@mui/material/DialogContent';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useGetAnalyses } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFUpload, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 export default function UploadAnalysis({ open, onClose, refetch, analysisData }) {
   const { user } = useAuthContext();
@@ -25,8 +24,6 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
-
-  const { analysesData } = useGetAnalyses();
 
   const oldMedicalReportsSchema = Yup.object().shape({
     file: Yup.mixed(),
@@ -67,7 +64,7 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
   };
 
   const onSubmit = async (data) => {
-    const dataToSubmit = { ...data, type: 'analysis', description: data.note }
+    const dataToSubmit = { ...data, type: 'analysis', description: data.note };
     const formData = new FormData();
     Object.keys(dataToSubmit).forEach((key) => {
       if (Array.isArray(dataToSubmit[key])) {

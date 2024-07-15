@@ -44,7 +44,7 @@ export default function NewEditManyForm() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { specialtiesData } = useGetSpecialties(); /// edit
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english' }); /// edit
 
   const { enqueueSnackbar } = useSnackbar();
 
