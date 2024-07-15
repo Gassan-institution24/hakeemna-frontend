@@ -547,16 +547,7 @@ export default function Processing() {
       ))}
     </div>
   ) : (
-    <Timeline
-      position="alternate-reverse"
-      sx={{
-        backgroundImage:
-          'url("https://cdni.iconscout.com/illustration/premium/thumb/consult-with-doctor-online-for-prescription-5588761-4655030.png?f=webp")',
-        backgroundSize: '200px',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top right',
-      }}
-    >
+    <Timeline position="alternate-reverse">
       {TIMELINES.map((item) => (
         <TimelineItem key={item.key}>
           <TimelineSeparator>
