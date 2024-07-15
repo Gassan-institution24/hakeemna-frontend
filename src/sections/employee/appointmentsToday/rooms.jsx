@@ -53,7 +53,7 @@ export default function Rooms() {
       });
       await axiosInstance.patch(`/api/rooms/${rooms?._id}`, {
         patient: null,
-        entranceMangament: Entrance?._id
+        entranceMangament: Entrance?._id,
       });
       router.push(paths.employee.appointmentsToday);
     } catch (error) {

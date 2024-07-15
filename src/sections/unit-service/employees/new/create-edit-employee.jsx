@@ -53,10 +53,10 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { employeeTypesData } = useGetActiveEmployeeTypes();
 
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );

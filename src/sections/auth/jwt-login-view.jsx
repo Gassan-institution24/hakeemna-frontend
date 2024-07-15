@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
-
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -19,13 +18,14 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useLocales, useTranslate } from 'src/locales';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -74,15 +74,15 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   const onSubmit = handleSubmit(async (data) => {
     try {
       const userData = await login?.(data.email, data.password);
-      console.log('userData', userData)
+      console.log('userData', userData);
       if (onSignin) {
-        setPatientId(userData.patient)
+        setPatientId(userData.patient);
         await axiosInstance.patch(endpoints.appointments.book(selected), {
           patient: userData?.user?.patient,
           lang: curLangAr,
-        })
-        onSignin()
-        refetch()
+        });
+        onSignin();
+        refetch();
       } else {
         router.push(returnTo || PATH_AFTER_LOGIN);
       }
@@ -105,17 +105,19 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
           {t('new user?')}
         </Typography>
 
-        {onSignUp ? <Link
-          sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
-          component={RouterLink}
-          onClick={() => onSignUp()}
-          // href={paths.auth.register}
-          variant="subtitle2"
-          underline="always"
-        >
-          {t('create an account')}
-        </Link>
-          : <Link
+        {onSignUp ? (
+          <Link
+            sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
+            component={RouterLink}
+            onClick={() => onSignUp()}
+            // href={paths.auth.register}
+            variant="subtitle2"
+            underline="always"
+          >
+            {t('create an account')}
+          </Link>
+        ) : (
+          <Link
             sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
             component={RouterLink}
             href={paths.auth.register}
@@ -123,7 +125,8 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
             underline="always"
           >
             {t('create an account')}
-          </Link>}
+          </Link>
+        )}
       </Stack>
     </Stack>
   );
@@ -159,16 +162,18 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         }}
       />
 
-      {!onSignin && <Link
-        variant="body2"
-        component={RouterLink}
-        href={paths.auth.forgotPassword}
-        color="inherit"
-        underline="always"
-        sx={{ alignSelf: 'flex-end', mt: 5 }}
-      >
-        {t('Forgot password?')}
-      </Link>}
+      {!onSignin && (
+        <Link
+          variant="body2"
+          component={RouterLink}
+          href={paths.auth.forgotPassword}
+          color="inherit"
+          underline="always"
+          sx={{ alignSelf: 'flex-end', mt: 5 }}
+        >
+          {t('Forgot password?')}
+        </Link>
+      )}
 
       <LoadingButton
         fullWidth
@@ -180,15 +185,17 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
       >
         {t('Login')}
       </LoadingButton>
-      {!onSignin && <Link
-        sx={{ alignSelf: 'center' }}
-        component={RouterLink}
-        href="/"
-        variant="subtitle2"
-        underline="always"
-      >
-        {t('home page')}
-      </Link>}
+      {!onSignin && (
+        <Link
+          sx={{ alignSelf: 'center' }}
+          component={RouterLink}
+          href="/"
+          variant="subtitle2"
+          underline="always"
+        >
+          {t('home page')}
+        </Link>
+      )}
     </Stack>
   );
 

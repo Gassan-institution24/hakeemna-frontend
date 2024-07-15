@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import { StaticDatePicker } from '@mui/x-date-pickers';
@@ -19,7 +18,6 @@ export default function BookDetails({
   list,
   loading,
 }) {
-
   // const [timeListItem, setTimeListItem] = useState();
   const mdUp = useResponsive('up', 'md');
 
@@ -42,8 +40,6 @@ export default function BookDetails({
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [list, loading.value]);
-
-
 
   return (
     <>
@@ -81,7 +77,7 @@ export default function BookDetails({
 
 BookDetails.propTypes = {
   selected: PropTypes.string,
-  selectedDate: PropTypes.string,
+  selectedDate: PropTypes.any,
   AppointDates: PropTypes.array,
   list: PropTypes.array,
   loading: PropTypes.bool,

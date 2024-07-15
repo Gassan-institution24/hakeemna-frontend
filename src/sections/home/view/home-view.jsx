@@ -1,33 +1,19 @@
 import Box from '@mui/material/Box';
 
-import { useLocales, useTranslate } from 'src/locales';
-
-// import ScrollProgress from 'src/components/scroll-progress';
+import { useGetActiveUnitservices } from 'src/api';
 
 import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
 import HomeHero from '../hero/home-hero';
-// import ServicesWeprovide from '../servicesweprovide';
+import OurPartners from '../our-partners';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const { t } = useTranslate();
-
+  const { unitservicesData } = useGetActiveUnitservices({ select: 'name_english name_arabic company_logo' })
   return (
     <>
-      {/* <ScrollProgress scrollYProgress={scrollYProgress} /> */}
 
       <HomeHero id="home" />
-      {/* <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          background: 'linear-gradient(rgba(173, 216, 230, 0.115), #ffffdc44)',
-          boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.115)',
-          }}
-          > */}
       <Box
         sx={{
           overflow: 'hidden',
@@ -38,75 +24,15 @@ export default function HomeView() {
         <Whydoc />
       </Box>
       <OurMission />
-      {/* <Box
+      <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
           bgcolor: 'background.paper',
         }}
       >
-        <Training />
-      </Box> */}
-
-      {/* <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          background: 'linear-gradient(rgba(173, 216, 230, 0.115), #fdfdc644)',
-          boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.1)',
-        }}
-        id="services"
-      >
-        <ServicesWeprovide />
-      </Box> */}
-      {/* <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          bgcolor: 'background.paper',
-          p: 5,
-        }}
-      >
-        <Container component={MotionViewport} sx={{ justifyContent: 'center' }}>
-          <Stack spacing={3}>
-            <m.div variants={varFade().inDown}>
-              <Typography sx={{ textAlign: 'center', mb: 8 }} variant="h2">
-                <span>
-                  {t('Start Now')}
-                  {curLangAr ? (
-                    <Image
-                      sx={{
-                        height: '200px',
-                        width: '200px',
-                        transform: 'rotate(45deg)',
-                        position: 'relative',
-                        top: 60,
-                        left: -60,
-                        display: { md: 'inline-flex', xs: 'none' },
-                      }}
-                      src={ArrowAr}
-                    />
-                  ) : (
-                    <Image
-                      sx={{
-                        height: '110px',
-                        width: '100px',
-                        transform: 'rotate(-45deg)',
-                        position: 'relative',
-                        top: 20,
-                        left: -15,
-                        display: { md: 'inline-flex', xs: 'none' },
-                      }}
-                      src={Arrow}
-                    />
-                  )}
-                </span>
-              </Typography>
-            </m.div>
-          </Stack>
-        </Container>
-        <Pupage />
-      </Box> */}
+        <OurPartners data={unitservicesData} />
+      </Box>
     </>
   );
 }

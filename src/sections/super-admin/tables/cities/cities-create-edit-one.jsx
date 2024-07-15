@@ -26,7 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
 
   const { enqueueSnackbar } = useSnackbar();
 

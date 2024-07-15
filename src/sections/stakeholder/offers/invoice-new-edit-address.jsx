@@ -31,11 +31,11 @@ export default function InvoiceNewEditAddress() {
   const { t } = useTranslate();
 
   const { currencies } = useGetCurrencies();
-  const { countriesData } = useGetCountries();
-  const { tableData } = useGetCountryCities(values.country);
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  const { specialtiesData } = useGetSpecialties();
-  const { unitservicesData } = useGetActiveUnitservices();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
+  const { unitservicesData } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
 
   const handleDrop = useCallback(
     (acceptedFiles) => {

@@ -165,7 +165,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}
-                    minutesStep="5"
+                    minutesStep={5}
                     slotProps={{
                       textField: {
                         fullWidth: true,

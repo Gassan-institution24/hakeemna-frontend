@@ -42,12 +42,34 @@ const linkesEvery13sec = ['http://localhost:3000/api/wgroups/employee/engagement
     'http://localhost:3000/api/checklist/employee/65b4df08d7485916d0098e58',
     'http://localhost:3000/api/wgroups/employee/65b4df08d7485916d0098e58']
 
-setInterval(() => {
-    linkesEvery13sec.map(async (one) => {
-        try {
-            await axios.get(one)
-        } catch (e) {
-            console.log(e)
-        }
-    })
-}, 100000)
+let numberOfSec = 0;
+let numberOfCreated = 0;
+let totalRequests = 0;
+let successfulRequests = 0;
+
+// setInterval(async () => {
+//     numberOfSec += 1;
+//     console.log('numberOfSec', numberOfSec);
+
+//     const fetchPromises = linkesEvery13sec.map(async (one) => {
+//         totalRequests += 1;
+//         const startTime = Date.now();
+//         try {
+//             const { data } = await axios.get(one);
+//             console.log(data);
+//             successfulRequests += 1;
+//             const endTime = Date.now();
+//             console.log(`Request to ${one} took ${endTime - startTime} ms`);
+//         } catch (e) {
+//             const endTime = Date.now();
+//             console.log(`Request to ${one} failed and took ${endTime - startTime} ms`);
+//         }
+//     });
+
+//     await Promise.all(fetchPromises);
+
+//     numberOfCreated += 1;
+//     console.log('numberOfCreated', numberOfCreated);
+//     console.log('Total requests:', totalRequests);
+//     console.log('Successful requests:', successfulRequests);
+// }, 1000);

@@ -25,8 +25,8 @@ export function useGetUnitservices() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetActiveUnitservices() {
-  const URL = endpoints.unit_services.active;
+export function useGetActiveUnitservices(params) {
+  const URL = [endpoints.unit_services.active, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
