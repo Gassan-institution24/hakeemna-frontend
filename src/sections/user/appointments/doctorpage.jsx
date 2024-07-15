@@ -38,6 +38,7 @@ import {
   useGetEmployeeEngagement,
   useGetEmployeeFeedbackes,
   useGetEmployeeSelectedAppointments,
+  useGetUSRooms,
 } from 'src/api';
 
 import Image from 'src/components/image';
@@ -98,6 +99,16 @@ export default function Doctorpage() {
     appointmentType: selectedAppointmentType, // Type selected by the user
   });
 
+  const { roomsData } = useGetUSRooms(
+    data?.unit_service?._id
+  );
+  const receptionActivity = roomsData.find(
+    (activity) => activity?.activities?.name_english === 'reception'
+  );
+
+  console.log(receptionActivity?.activities?._id);
+
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -118,9 +129,7 @@ export default function Doctorpage() {
     category: 'patientbooking',
     type: 'patientbooking',
   };
-console.log(
-  datacheeck
-);
+
   const handleDateChange = (date) => {
     setTimeData();
     setSelectedTime();
@@ -149,6 +158,7 @@ console.log(
         note: patientNote,
         info: defaultValues,
         lang: curLangAr,
+        Last_activity_atended : receptionActivity?.activities?._id
       });
       await axios.post(endpoints.history.all, {
         patient: patientData,

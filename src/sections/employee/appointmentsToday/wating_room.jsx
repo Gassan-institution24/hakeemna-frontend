@@ -42,6 +42,7 @@ export default function WaitingRoom() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
+
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'reception'
   );
@@ -55,8 +56,7 @@ export default function WaitingRoom() {
   const goToProcessingPage = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
-        Last_activity_atended: entrance?.Next_activity?._id,
-        Next_activity: null,
+        Current_activity: entrance?.Next_activity?._id,
       });
       router.push(`${paths.unitservice.departments.processingPage}/${entrance?._id}`);
     } catch (error) {
@@ -68,7 +68,6 @@ export default function WaitingRoom() {
       entranceMangament: entrance?._id,
     });
   };
-
   const handleEndAppointment = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {

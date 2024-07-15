@@ -116,6 +116,7 @@ export default function AppointmentsToday() {
         service_unit: data?.unit_service?._id,
         appointmentId: data?._id,
         work_group: data?.work_group?._id,
+        Last_activity_atended: data?.Last_activity_atended,
         Next_activity: activityId,
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
