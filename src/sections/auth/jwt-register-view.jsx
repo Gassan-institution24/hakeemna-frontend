@@ -9,7 +9,6 @@ import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
-import Hidden from '@mui/material/Hidden';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -24,7 +23,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
-import Language from 'src/layouts/common/language-home-page';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -167,11 +165,11 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Hidden smUp>
+      {/* <Hidden smUp>
         <span>
           <Language />
         </span>
-      </Hidden>
+      </Hidden> */}
 
       <Typography variant="h4">{t('Get started absolutely free')} </Typography>
 
