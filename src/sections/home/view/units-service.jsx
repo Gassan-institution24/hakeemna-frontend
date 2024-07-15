@@ -3,17 +3,11 @@ import { Stack } from '@mui/system';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useLocales, useTranslate } from 'src/locales';
-
 import USServices from '../usservices';
 import UnitServiceHero from '../hero/unit-service-hero';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const { t } = useTranslate();
-
   const mdUp = useResponsive('up', 'md');
 
   return (

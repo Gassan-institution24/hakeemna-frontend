@@ -19,12 +19,12 @@ export const navConfig = [
   },
   {
     title: 'beneficiaries',
-    icon: <Iconify icon="medical-icon:social-services" />,
+    icon: <Iconify icon="ph:users" />,
     path: paths.pages.patients,
   },
   {
     title: 'units of service',
-    icon: <Iconify icon="medical-icon:social-services" />,
+    icon: <Iconify icon="la:hospital-solid" />,
     path: paths.pages.unit,
   },
   // {
@@ -44,6 +44,11 @@ export const navConfig = [
     icon: <Iconify icon="oui:training" />,
     path: paths.pages.Training,
     sectionId: 'home',
+  },
+  {
+    button: 'book an appointment',
+    icon: <Iconify icon="streamline:waiting-appointments-calendar" />,
+    path: paths?.pages.book,
   },
   {
     button: 'Login',

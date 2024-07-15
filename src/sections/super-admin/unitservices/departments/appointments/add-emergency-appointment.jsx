@@ -150,7 +150,7 @@ export default function BookManually({
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}
-                    minutesStep="5"
+                    minutesStep={5}
                     slotProps={{
                       textField: {
                         fullWidth: true,

@@ -18,9 +18,9 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
   // useGetSpecialties,
@@ -48,7 +48,7 @@ export default function JwtRegisterView() {
 
   // const [cities, setCities] = useState([]);
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   // const { unitserviceTypesData } = useGetActiveUSTypes();
 
@@ -102,7 +102,7 @@ export default function JwtRegisterView() {
   } = methods;
   const values = watch();
 
-  const { tableData } = useGetCountryCities(values.country);
+  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -131,8 +131,12 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const patient = await register?.({ role: 'stakeholder', userName: data.name_english, ...data });
-      console.log('patient', patient)
+      const patient = await register?.({
+        role: 'stakeholder',
+        userName: data.name_english,
+        ...data,
+      });
+      console.log('patient', patient);
 
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
@@ -193,17 +197,17 @@ export default function JwtRegisterView() {
           <RHFTextField
             onChange={handleEnglishInputChange}
             name="name_english"
-            label={t("name in english")}
+            label={t('name in english')}
           />
           <RHFTextField
             onChange={handleArabicInputChange}
             name="name_arabic"
-            label={t("Name in arabic")}
+            label={t('Name in arabic')}
           />
         </Stack>
 
-        <RHFTextField name="email" label={t("Email address")} />
-        <RHFTextField name="identification_num" label={t("Identification number")} />
+        <RHFTextField name="email" label={t('Email address')} />
+        <RHFTextField name="identification_num" label={t('Identification number')} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData.map((country, idx) => (
@@ -212,7 +216,7 @@ export default function JwtRegisterView() {
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect name="city" label={t("City")}>
+          <RHFSelect name="city" label={t('City')}>
             {tableData.map((city, idx) => (
               <MenuItem lang="ar" key={idx} value={city._id}>
                 {curLangAr ? city.name_arabic : city.name_english}
@@ -252,7 +256,7 @@ export default function JwtRegisterView() {
 
         <RHFTextField
           name="password"
-          label={t("Password")}
+          label={t('Password')}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -266,7 +270,7 @@ export default function JwtRegisterView() {
         />
         <RHFTextField
           name="confirmPassword"
-          label={t("Confirm Password")}
+          label={t('Confirm Password')}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (

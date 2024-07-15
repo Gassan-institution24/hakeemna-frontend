@@ -7,16 +7,16 @@ import AppBar from '@mui/material/AppBar';
 // import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import { Link, Divider, Typography, Button } from '@mui/material';
+import { Link, Button, Divider, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useTranslate } from 'src/locales';
 
-import { useRouter } from 'src/routes/hooks';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
@@ -33,7 +33,7 @@ export default function Header() {
   const { t } = useTranslate();
 
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <AppBar>
@@ -143,8 +143,8 @@ export default function Header() {
                 <NavDesktop data={navConfig} />
                 <Box sx={{ flexGrow: 1 }} />
                 <Button
-                  variant='outlined'
-                  color='primary'
+                  variant="outlined"
+                  color="primary"
                   sx={{ borderRadius: 0 }}
                   onClick={() => router.push(paths.pages.book)}
                 >

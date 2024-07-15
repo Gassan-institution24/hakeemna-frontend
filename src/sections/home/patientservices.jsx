@@ -17,7 +17,10 @@ export default function PatientsServices() {
 
   return (
     <>
-      <Container component={MotionViewport} sx={{ textAlign: 'center', mb: { xs: 4, md: 8 }, mt: { xs: 8, md: 15 } }}>
+      <Container
+        component={MotionViewport}
+        sx={{ textAlign: 'center', mb: { xs: 4, md: 8 }, mt: { xs: 8, md: 15 } }}
+      >
         <m.div variants={varFade().inUp}>
           <Typography
             sx={{
@@ -55,7 +58,7 @@ export default function PatientsServices() {
             </Stack>
           </Stack>
         ))}
-      </Box >
+      </Box>
     </>
   );
 }

@@ -124,7 +124,7 @@ export function AuthProvider({ children }) {
         });
         initialize();
       } else throw new Error(message);
-      return response.data
+      return response.data;
     },
     [initialize]
   );
@@ -149,7 +149,7 @@ export function AuthProvider({ children }) {
     //     },
     //   },
     // });
-    return userData
+    return userData;
   }, []);
 
   // FORGOT PASSWORD

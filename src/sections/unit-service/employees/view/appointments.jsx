@@ -120,13 +120,13 @@ export default function AppointmentsView({ employeeData }) {
     finished,
     pending,
     // loading,
-  } = useGetEmployeeAppointments({
-    id,
+  } = useGetEmployeeAppointments(id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 5,
     order: table.order || 'asc',
-    filters: filters || null,
+    populate: 'all',
+    ...filters,
   });
 
   const dateError =

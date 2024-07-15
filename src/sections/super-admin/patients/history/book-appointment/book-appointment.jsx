@@ -61,9 +61,9 @@ export default function AppointmentListView({ patientData }) {
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
 
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { tableData } = useGetCities();
-  const { unitservicesData } = useGetActiveUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetActivePaymentMethods();
 

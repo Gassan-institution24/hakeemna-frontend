@@ -3,17 +3,11 @@ import { Stack } from '@mui/system';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useLocales, useTranslate } from 'src/locales';
-
 import PatientsHero from '../hero/patients-hero';
 import PatientsServices from '../patientservices';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const { t } = useTranslate();
-
   const mdUp = useResponsive('up', 'md');
 
   return (
@@ -23,7 +17,7 @@ export default function HomeView() {
           overflowX: 'hidden',
           minHeight: '90vh',
           backgroundColor: { md: '#d5f7e6' },
-          pt: 5
+          pt: 5,
         }}
       >
         <PatientsHero currentPage="users" />

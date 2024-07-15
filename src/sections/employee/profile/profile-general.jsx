@@ -11,8 +11,8 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Chip, InputAdornment, MenuItem, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Chip, MenuItem, Typography, InputAdornment } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -21,9 +21,9 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetKeywrds,
   useGetCountries,
+  useGetCurrencies,
   useGetSpecialties,
   useGetActiveEmployeeTypes,
-  useGetCurrencies,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -98,8 +98,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { user } = useAuthContext();
 
-  const { countriesData } = useGetCountries();
-  const { specialtiesData } = useGetSpecialties();
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { employeeTypesData } = useGetActiveEmployeeTypes();
   const { currencies } = useGetCurrencies();
   const { t } = useTranslate();
@@ -153,7 +153,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
     arabic_keywords: Yup.array(),
     fees: Yup.number().required(t('required field')),
     currency: Yup.string().required(t('required field')),
-
   });
 
   const defaultValues = {
@@ -188,14 +187,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
     certifications: employeeData?.certifications.length
       ? employeeData?.certifications
       : [
-        {
-          name: '',
-          institution: '',
-          year: null,
-        },
-      ],
+          {
+            name: '',
+            institution: '',
+            year: null,
+          },
+        ],
     fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement].fees || 0,
-    currency: user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency || currencies?.[0]?._id,
+    currency:
+      user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency ||
+      currencies?.[0]?._id,
   };
   const methods = useForm({
     mode: 'onTouched',
@@ -266,7 +267,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
       delete dataToSubmit.signature;
       delete dataToSubmit.stamp;
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
-      await axios.patch(endpoints.employee_engagements.one(user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id), { fees: data.fees, currency: data.currency });
+      await axios.patch(
+        endpoints.employee_engagements.one(
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+        ),
+        { fees: data.fees, currency: data.currency }
+      );
       enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {
@@ -373,7 +379,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-              // value={values.profrssion_practice_num}
+                // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -463,17 +469,22 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   {values.stamp && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
               </Box>
-              <RHFTextField type='number' name='fees' label={t('fees')} InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <RHFSelect sx={{ minWidth: 60 }} variant='standard' name='currency'>
-                      {currencies.map((one) => (
-                        <MenuItem value={one._id}>{one.symbol}</MenuItem>
-                      ))}
-                    </RHFSelect>
-                  </InputAdornment>
-                ),
-              }} />
+              <RHFTextField
+                type="number"
+                name="fees"
+                label={t('fees')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <RHFSelect sx={{ minWidth: 60 }} variant="standard" name="currency">
+                        {currencies.map((one) => (
+                          <MenuItem value={one._id}>{one.symbol}</MenuItem>
+                        ))}
+                      </RHFSelect>
+                    </InputAdornment>
+                  ),
+                }}
+              />
             </Box>
           </Card>
         </Grid>
@@ -496,14 +507,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -529,14 +540,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

@@ -63,7 +63,7 @@ export default function AppointmentBooking() {
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
-  const { unitservicesData } = useGetActiveUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);

@@ -35,7 +35,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
   const { tableData } = useGetSymptoms();
-  const { countriesData } = useGetCountries();
+  const { countriesData } = useGetCountries({ select: 'name_english' });
   const { families } = useGetMedFamilies();
 
   const sideEffectsMultiSelect = tableData?.reduce((acc, data) => {

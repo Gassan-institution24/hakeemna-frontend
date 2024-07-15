@@ -20,6 +20,7 @@ import { useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { width } from '@mui/system';
 // import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
@@ -47,7 +48,7 @@ export default function InvoiceNewEditDetails() {
 
   const subTotal = sum(subtotalOnRow);
 
-  const totalAmount = sum(totalOnRow);
+  const totalAmount = sum(totalOnRow) - Number(values.discount);
 
   useEffect(() => {
     setValue('totalAmount', totalAmount);
@@ -63,13 +64,14 @@ export default function InvoiceNewEditDetails() {
     );
     setValue('deduction', deductiontotal);
 
-    const newTotal = values.items?.reduce((acc, one) => {
-      const selected = serviceTypesData?.find((service) => service._id === one.service);
-      return one.price !== Number(selected?.Price_per_unit) && selected
-        ? acc + (Number(selected.Price_per_unit) - one.price) * one.quantity
-        : acc;
-    }, 0);
-    setValue('discount', newTotal);
+    // Set discount when reduce amount 
+    // const newTotal = values.items?.reduce((acc, one) => {
+    //   const selected = serviceTypesData?.find((service) => service._id === one.service);
+    //   return one.price !== Number(selected?.Price_per_unit) && selected
+    //     ? acc + (Number(selected.Price_per_unit) - one.price) * one.quantity
+    //     : acc;
+    // }, 0);
+    // setValue('discount', newTotal);
   }, [totalAmount, setValue, values.items, serviceTypesData]);
 
   const handleAdd = () => {
@@ -86,17 +88,6 @@ export default function InvoiceNewEditDetails() {
   const handleRemove = (index) => {
     remove(index);
   };
-
-  // const handleClearService = useCallback(
-  //   (index) => {
-  //     resetField(`items[${index}].quantity`);
-  //     resetField(`items[${index}].price`);
-  //     resetField(`items[${index}].subtotal`);
-  //     resetField(`items[${index}].tax`);
-  //     resetField(`items[${index}].total`);
-  //   },
-  //   [resetField]
-  // );
 
   const handleSelectService = useCallback(
     (index, option) => {
@@ -155,12 +146,45 @@ export default function InvoiceNewEditDetails() {
     [setValue, values.items]
   );
 
+  const handleChangeTax = useCallback(
+    (event, index) => {
+      setValue(`items[${index}].tax`, Number(event.target.value));
+      setValue(
+        `items[${index}].total`,
+        values.items.map(
+          (item) =>
+            item.subtotal * ((100 + item.tax) / 100) + item.subtotal * (item.deduction / 100)
+        )[index]
+      );
+    },
+    [setValue, values.items]
+  );
+
+  const handleChangeDeduction = useCallback(
+    (event, index) => {
+      setValue(`items[${index}].deduction`, Number(event.target.value));
+      setValue(
+        `items[${index}].total`,
+        values.items.map(
+          (item) =>
+            item.subtotal * ((100 + item.tax) / 100) + item.subtotal * (item.deduction / 100)
+        )[index]
+      );
+    },
+    [setValue, values.items]
+  );
+
   const renderTotal = (
     <Stack
       spacing={2}
       alignItems="flex-end"
       sx={{ mt: 3, textAlign: 'right', typography: 'body2' }}
     >
+      <Stack direction="row">
+        <Box sx={{ color: 'text.secondary' }}>Subtotal</Box>
+        <Box sx={{ width: 160, typography: 'subtitle2' }}>{fCurrency(subTotal) || '-'}</Box>
+      </Stack>
+
       <Stack direction="row">
         <Box sx={{ color: 'text.secondary' }}>Discount</Box>
         <Box
@@ -169,13 +193,9 @@ export default function InvoiceNewEditDetails() {
             ...(values.discount && { color: 'error.main' }),
           }}
         >
-          {values.discount ? `- ${fCurrency(values.discount)}` : '-'}
+          {/* {values.discount ? `- ${fCurrency(values.discount)}` : '-'} */}
+          <RHFTextField type='number' name='discount' size='small' sx={{ width: 100 }} />
         </Box>
-      </Stack>
-
-      <Stack direction="row">
-        <Box sx={{ color: 'text.secondary' }}>Subtotal</Box>
-        <Box sx={{ width: 160, typography: 'subtitle2' }}>{fCurrency(subTotal) || '-'}</Box>
       </Stack>
 
       <Stack direction="row">
@@ -304,14 +324,13 @@ export default function InvoiceNewEditDetails() {
                 }}
               />
               <RHFTextField
-                disabled
+                // disabled
                 size="small"
                 type="number"
                 name={`items[${index}].tax`}
                 label="tax"
                 placeholder="00"
-                // value={values.items[index].total === 0 ? '' : values.items[index].total.toFixed(2)}
-                // onChange={(event) => handleChangePrice(event, index)}
+                onChange={(event) => handleChangeTax(event, index)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -327,14 +346,13 @@ export default function InvoiceNewEditDetails() {
                 }}
               />
               <RHFTextField
-                disabled
+                // disabled
                 size="small"
                 type="number"
                 name={`items[${index}].deduction`}
                 label="deduction"
                 placeholder="00"
-                // value={values.items[index].total === 0 ? '' : values.items[index].total.toFixed(2)}
-                // onChange={(event) => handleChangePrice(event, index)}
+                onChange={(event) => handleChangeDeduction(event, index)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -357,7 +375,6 @@ export default function InvoiceNewEditDetails() {
                 label="Total"
                 placeholder="0.00"
                 value={values.items[index].total === 0 ? '' : values.items[index].total.toFixed(2)}
-                // onChange={(event) => handleChangePrice(event, index)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
