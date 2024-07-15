@@ -2,24 +2,22 @@ import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { alpha, useTheme } from '@mui/material/styles';
 
-import { bgGradient } from 'src/theme/css';
-
-import Image from 'src/components/image';
-import { varFade, MotionContainer } from 'src/components/animate';
-import Carousel, { useCarousel, CarouselArrowIndex, CarouselArrows } from 'src/components/carousel';
-import TextMaxLine from 'src/components/text-max-line';
-import Iconify from 'src/components/iconify';
-import { Link, Stack } from '@mui/material';
-import { useLocales, useTranslate } from 'src/locales';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import { bgGradient } from 'src/theme/css';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Image from 'src/components/image';
+import { varFade } from 'src/components/animate';
+import TextMaxLine from 'src/components/text-max-line';
+import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 

@@ -16,7 +16,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-
 import { useGetActiveUSTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';

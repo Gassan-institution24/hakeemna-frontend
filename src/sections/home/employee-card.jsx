@@ -1,17 +1,25 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
-import { Stack, Dialog, Rating, Typography } from '@mui/material';
+import { Card, Stack, Dialog, Rating, Button, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fCurrency } from 'src/utils/format-number';
+import { useBoolean } from 'src/hooks/use-boolean';
 
+import { fDateTime } from 'src/utils/format-time';
+import { addToCalendar } from 'src/utils/calender';
+import { fCurrency } from 'src/utils/format-number';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import { JwtLoginView } from '../auth';
 import BookDetails from './book-details';
@@ -24,7 +32,12 @@ export default function EmployeeCard({ employee }) {
   const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
+  const confirm = useBoolean();
+  const { enqueueSnackbar } = useSnackbar()
 
+  const { authenticated, user } = useAuthContext()
+
+  const [note, setNote] = useState('');
   const [page, setPage] = useState(1);
   const [signupDialog, setSignupDialog] = useState(false);
   const [patientId, setPatientId] = useState();
@@ -40,12 +53,41 @@ export default function EmployeeCard({ employee }) {
       online_available: true,
     }
   );
-  console.log('appointmentsData', appointmentsData);
 
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
-    setSignupDialog(true);
+    if (authenticated) {
+      confirm.onTrue()
+    } else {
+      setSignupDialog(true);
+    }
     // setTimeListItem(newValue);
+  };
+
+  const handleEmployment = async () => {
+    try {
+      await axiosInstance.patch(endpoints.appointments.book(selected), {
+        patient: user.patient?._id,
+        note,
+        lang: curLangAr,
+      });
+      await addToCalendar(appointmentsData.filter((one) => one._id === selected)?.[0]);
+      enqueueSnackbar(t('booked successfully!'));
+      confirm.onFalse()
+      setNote('')
+      refetch()
+    } catch (error) {
+      // error emitted in backend
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
+      confirm.onFalse()
+      setNote('')
+      console.error(error);
+    }
   };
 
   return (
@@ -129,17 +171,17 @@ export default function EmployeeCard({ employee }) {
               <Stack>
                 {employee?.unit_service?.insurance?.length > 5
                   ? employee?.unit_service?.insurance
-                      ?.filter((one, index) => index <= 5)
-                      .map((one) => (
-                        <Typography variant="body2">
-                          {curLangAr ? one.name_arabic : one.name_english}
-                        </Typography>
-                      ))
-                  : employee?.unit_service?.insurance?.map((one) => (
+                    ?.filter((one, index) => index <= 5)
+                    .map((one) => (
                       <Typography variant="body2">
                         {curLangAr ? one.name_arabic : one.name_english}
                       </Typography>
-                    ))}
+                    ))
+                  : employee?.unit_service?.insurance?.map((one) => (
+                    <Typography variant="body2">
+                      {curLangAr ? one.name_arabic : one.name_english}
+                    </Typography>
+                  ))}
                 {employee?.unit_service?.insurance?.length > 5 &&
                   `+${employee.unit_service.insurance.length - 5}`}
               </Stack>
@@ -189,6 +231,40 @@ export default function EmployeeCard({ employee }) {
           )}
         </Stack>
       </Dialog>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title={t('confirm booking appointment')}
+        content={
+          <>
+            <Card sx={{ p: 2, m: 2 }}>
+              <Typography>
+                {t('patient')} : {curLangAr ? user.patient?.name_arabic : user.patient?.name_english}
+              </Typography>
+              <Typography>
+                {t('doctor')} : {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
+              </Typography>
+              <Typography>
+                {t('appointment')} : {fDateTime(appointmentsData.filter((one) => one._id === selected)?.[0]?.start_time)}
+              </Typography>
+            </Card>
+            <TextField
+              multiline
+              fullWidth
+              label={t('note')}
+              rows={2}
+              sx={{ my: 2 }}
+              onChange={(e) => setNote(e.target.value)}
+              value={note}
+            />
+          </>
+        }
+        action={
+          <Button variant="contained" color="info" onClick={handleEmployment}>
+            {t('confirm')}
+          </Button>
+        }
+      />
     </>
   );
 }
