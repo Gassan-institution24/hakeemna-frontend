@@ -67,7 +67,7 @@ export default function EmployeeCard({ employee }) {
   const handleEmployment = async () => {
     try {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
-        patient: user.patient?._id,
+        patient: user?.patient?._id,
         note,
         lang: curLangAr,
       });
@@ -239,7 +239,7 @@ export default function EmployeeCard({ employee }) {
           <>
             <Card sx={{ p: 2, m: 2 }}>
               <Typography>
-                {t('patient')} : {curLangAr ? user.patient?.name_arabic : user.patient?.name_english}
+                {t('patient')} : {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
               </Typography>
               <Typography>
                 {t('doctor')} : {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
