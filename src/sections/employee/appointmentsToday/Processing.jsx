@@ -379,7 +379,7 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" multiline name="description" label={t('description')} />
+            <RHFTextField multiline name="description" label={t('description')} />
             <RHFUpload
               autoFocus
               fullWidth
@@ -435,12 +435,12 @@ export default function Processing() {
               ))}
             </RHFSelect>
             <RHFTextField
-              lang="en"
+
               name="Frequency_per_day"
               label={t('Frequency pe day')}
               sx={{ mb: 2 }}
             />
-            <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
+            <RHFTextField name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
 
             <Controller
               name="Start_time"
@@ -479,7 +479,7 @@ export default function Processing() {
               )}
             />
             <RHFTextField
-              lang="en"
+
               name="Doctor_Comments"
               label={t('Doctor Comments')}
               multiline

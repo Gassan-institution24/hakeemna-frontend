@@ -6,7 +6,7 @@ export function fNumber(number) {
   return numeral(number).format();
 }
 
-export function fCurrency(number, symbol = '$') {
+export function fCurrency(number, symbol = 'JOD') {
   if (!number && number !== 0) return '';
 
   const formattedNumber = numeral(number).format('0,0.00');

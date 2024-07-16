@@ -5,13 +5,16 @@ import MenuItem from '@mui/material/MenuItem';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { RHFSelect } from 'src/components/hook-form';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditStatusDate() {
   const { control } = useFormContext();
 
-  // const values = watch();
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   return (
     <Stack
@@ -29,13 +32,13 @@ export default function InvoiceNewEditStatusDate() {
       <RHFSelect
         fullWidth
         name="status"
-        label="Status"
+        label={t("status")}
         InputLabelProps={{ shrink: true }}
         PaperPropsSx={{ textTransform: 'capitalize' }}
       >
         {['paid', 'pending', 'overdue', 'draft'].map((option) => (
           <MenuItem key={option} value={option}>
-            {option}
+            {t(option)}
           </MenuItem>
         ))}
       </RHFSelect>
@@ -45,7 +48,7 @@ export default function InvoiceNewEditStatusDate() {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label="Date create"
+            label={t("create date")}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);
@@ -66,7 +69,7 @@ export default function InvoiceNewEditStatusDate() {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label="Due date"
+            label={t("due date")}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);

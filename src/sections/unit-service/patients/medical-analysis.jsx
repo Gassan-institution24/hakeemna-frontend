@@ -161,7 +161,7 @@ export default function MedicalAnalysis() {
           <DialogTitle sx={{ mb: 2 }}>{t('upload medical analysis')}</DialogTitle>
           <DialogContent>
             <Box sx={{ p: 2 }}>
-              <RHFTextField lang="en" name="name" label={t('File name')} sx={{ mb: 2 }} />
+              <RHFTextField name="name" label={t('File name')} sx={{ mb: 2 }} />
 
               <RHFMultiSelect
                 label={t('analyses types')}
@@ -181,7 +181,7 @@ export default function MedicalAnalysis() {
                 onDrop={handleDrop}
               />
 
-              <RHFTextField lang="en" name="note" label={t('More information')} />
+              <RHFTextField name="note" label={t('More information')} />
             </Box>
           </DialogContent>
           <DialogActions>

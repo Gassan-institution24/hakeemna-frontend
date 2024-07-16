@@ -21,6 +21,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Image from 'src/components/image';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
+import { LoadingButton } from '@mui/lab';
+
 import { JwtLoginView } from '../auth';
 import BookDetails from './book-details';
 import ClassicVerifyView from '../auth/verify-email';
@@ -43,6 +45,7 @@ export default function EmployeeCard({ employee }) {
   const [patientId, setPatientId] = useState();
   const [selected, setSelected] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [submitting, setSubmitting] = useState(false);
 
   const { appointmentsData, AppointDates, loading, refetch } = useGetEmployeeAppointments(
     employee._id,
@@ -65,6 +68,7 @@ export default function EmployeeCard({ employee }) {
   };
 
   const handleEmployment = async () => {
+    setSubmitting(true)
     try {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: user?.patient?._id,
@@ -73,6 +77,7 @@ export default function EmployeeCard({ employee }) {
       });
       await addToCalendar(appointmentsData.filter((one) => one._id === selected)?.[0]);
       enqueueSnackbar(t('booked successfully!'));
+      setSubmitting(false)
       confirm.onFalse()
       setNote('')
       refetch()
@@ -84,6 +89,7 @@ export default function EmployeeCard({ employee }) {
           variant: 'error',
         }
       );
+      setSubmitting(false)
       confirm.onFalse()
       setNote('')
       console.error(error);
@@ -99,7 +105,7 @@ export default function EmployeeCard({ employee }) {
         padding={3}
         sx={{ backgroundColor: 'white', borderRadius: 1 }}
       >
-        <Stack direction={{ md: 'row' }} gap={{ md: 10 }}>
+        <Stack direction={{ md: 'row' }} alignItems={{ sm: 'center', md: 'start' }} gap={{ md: 10 }}>
           <Image
             onClick={() => router.push(paths.pages.doctor(employee._id))}
             sx={{ width: 150, height: 150, cursor: 'pointer' }}
@@ -260,9 +266,9 @@ export default function EmployeeCard({ employee }) {
           </>
         }
         action={
-          <Button variant="contained" color="info" onClick={handleEmployment}>
+          <LoadingButton variant="contained" color="info" loading={submitting} onClick={handleEmployment}>
             {t('confirm')}
-          </Button>
+          </LoadingButton>
         }
       />
     </>
