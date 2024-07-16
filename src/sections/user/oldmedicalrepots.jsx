@@ -408,6 +408,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 2 }}
               variant="outlined"
               onDrop={handleDrop}
+              multiple
               // onRemove={(inputFile) => {
               //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
               //     shouldValidate: true,
@@ -419,7 +420,6 @@ export default function OldMedicalReports() {
               //   setUploadedFiles([]);
               // }}
               // onUpload={onSubmit}
-              multiple
             />
 
             <RHFTextField name="note" label={t('More information')} />

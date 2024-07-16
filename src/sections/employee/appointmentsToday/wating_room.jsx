@@ -32,7 +32,7 @@ import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function WaitingRoom() { 
+export default function WaitingRoom() {
   const { t } = useTranslate();
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
@@ -42,14 +42,13 @@ export default function WaitingRoom() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
-
   const receptionActivity = roomsData.find(
-    (activity) => activity?.activities?.name_english === 'reception'
+    (activity) => activity?.activities?.name_english === 'Reception'
   );
 
   const [selectedTitle, setSelectedTitle] = useState(receptionActivity?.activities?._id);
 
-  const { EntranceByActivity,refetch } = useGetEntranceManagementByActivity(
+  const { EntranceByActivity, refetch } = useGetEntranceManagementByActivity(
     selectedTitle,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
@@ -93,8 +92,7 @@ export default function WaitingRoom() {
         entranceMangament: null,
       });
       enqueueSnackbar('appointment finished', { variant: 'success' });
-      refetch()
-
+      refetch();
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('something went wrong', { variant: 'error' });
