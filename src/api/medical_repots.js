@@ -45,6 +45,27 @@ export function useGetPatintmedicalreports(id) {
 
   return { ...memoizedValue, refetch };
 }
+export function useGetEntranceExaminationReports(id) {
+  const URL = endpoints.medicalreports.entrance(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      medicalreportsdata: data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch2 = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch2 };
+}
 
 export function useGetOnemedicalreports(id) {
   const URL = endpoints.medicalreports.one(id);

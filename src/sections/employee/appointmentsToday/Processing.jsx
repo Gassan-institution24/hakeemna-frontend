@@ -29,6 +29,7 @@ import {
   DialogActions,
   DialogContent,
   useMediaQuery,
+  Card,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -45,7 +46,9 @@ import {
   useGetPatient,
   useGetMedicines,
   useGetMedRecord,
+  useGeEntrancePrescription,
   useGetOneEntranceManagement,
+  useGetEntranceExaminationReports,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -61,7 +64,9 @@ export default function Processing() {
   const params = useParams();
   const { id } = params;
   const { medicinesData } = useGetMedicines();
-  const { Entrance, refetch } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id);
+  const { prescriptionData, refetch } = useGeEntrancePrescription(id);
+  const { medicalreportsdata, refetch2 } = useGetEntranceExaminationReports(id);
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
@@ -72,6 +77,7 @@ export default function Processing() {
 
   const [ImgFiles, setImgFiles] = useState([]);
   const [DoctorComment, setDoctorComment] = useState();
+  const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [chronic, setChronic] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -86,6 +92,7 @@ export default function Processing() {
     file: Yup.array(),
     Frequency_per_day: Yup.string(),
     Doctor_Comments: Yup.string(),
+    entrance_mangament: Yup.string(),
     description: Yup.string(),
     department: Yup.string(),
     chronic: Yup.boolean(),
@@ -98,6 +105,7 @@ export default function Processing() {
   const defaultValues = {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
+    entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit,
     chronic: '',
     Doctor_Comments: '',
@@ -124,6 +132,7 @@ export default function Processing() {
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
+      entrance_mangament: Entrance?._id,
     });
   }, [user, Entrance, reset]);
   const watchStartTime = watch('Start_time');
@@ -137,12 +146,15 @@ export default function Processing() {
       setValue('Num_days', difference > 0 ? difference : 0);
     }
   }, [watchStartTime, watchEndTime, setValue]);
-  const fuser = () => {
+
+  
+  const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
 
     const isValidFile = (fileName) => {
       const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
-      return allowedExtensions.includes(fileExtension);
+      const isExtensionAllowed = allowedExtensions.includes(fileExtension);
+      return isExtensionAllowed;
     };
 
     const isValidSize = (fileSize) => fileSize <= 3145728;
@@ -154,7 +166,7 @@ export default function Processing() {
   };
 
   const handleDrop = (acceptedFiles) => {
-    const fileValidator = fuser();
+    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
     const isValidFiles = acceptedFiles.every(
       (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
@@ -169,6 +181,24 @@ export default function Processing() {
     }
   };
 
+  const removePrescription = async (IdToremove) => {
+    await axiosInstance.patch(endpoints.prescription.one(IdToremove), {
+      Activation: false,
+    });
+
+    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    refetch();
+    reset();
+  };
+  const removemedicalrepoort = async (IdToremove2) => {
+    await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
+      Activation: false,
+    });
+
+    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    refetch2();
+    reset();
+  };
   const onSubmit = async (submitdata) => {
     try {
       submitdata.Doctor_Comments = DoctorComment;
@@ -211,8 +241,7 @@ export default function Processing() {
         });
 
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
-
-        refetch();
+        refetch2();
         medicalReportDialog.onFalse();
         reset();
       }
@@ -232,8 +261,8 @@ export default function Processing() {
           Drugs_report_status: true,
         });
         enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
-        refetch();
         prescriptionDialog.onFalse();
+        refetch();
         reset();
       }
     } catch (error) {
@@ -241,15 +270,12 @@ export default function Processing() {
       enqueueSnackbar('Error uploading data', { variant: 'error' });
     }
   };
-
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
-    });
-  }, [user, Entrance, reset]);
-
+  const handleHover = (hoverdId) => {
+    setHoveredButtonId(hoverdId);
+  };
+  const handleMouseOut = () => {
+    setHoveredButtonId(null);
+  };
   const handleBackClick = (idd) => {
     router.push(paths.employee.recored(idd));
   };
@@ -301,7 +327,7 @@ export default function Processing() {
     },
     {
       key: 4,
-      title: <Rooms data={Entrance} />,
+      title: <Rooms />,
       color: 'info',
       icon: <Iconify icon="cil:room" width={24} />,
     },
@@ -358,16 +384,42 @@ export default function Processing() {
   ];
 
   const renderMedicalReport = (
-    <>
-      <Button
-        variant="outlined"
-        color="success"
-        onClick={medicalReportDialog.onTrue}
-        sx={{ mt: 1 }}
-      >
+    <Card sx={{ mt: 1 }}>
+      <Button variant="outlined" color="success" onClick={medicalReportDialog.onTrue} sx={{ m: 2 }}>
         {t('Add medical report')}
         <Iconify icon="mingcute:add-line" />
       </Button>
+      {medicalreportsdata?.map((info, i) => (
+        <Typography
+          key={i}
+          variant="h6"
+          sx={{
+            bgcolor: '#fff',
+            m: 2,
+            border: 2,
+            borderRadius: 2,
+            borderColor: '#EDEFF2',
+            p: 2,
+          }}
+        >
+          {`${info?.employee?.name_english} has add ${info?.description} medical report`}
+          <br />
+          <Button onClick={() => removemedicalrepoort(info?._id)}>
+            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+          </Button>
+          <Button>
+            Update &nbsp; <Iconify icon="icon-park:edit-two" />
+          </Button>
+          <Button
+            onMouseOver={() => handleHover(info?._id)}
+            onMouseOut={handleMouseOut}
+            sx={{ m: 1 }}
+          >
+            View &nbsp;{' '}
+            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+          </Button>
+        </Typography>
+      ))}
       <Dialog open={medicalReportDialog.value} onClose={medicalReportDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
@@ -379,7 +431,13 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" multiline name="description" label={t('description')} />
+            <RHFTextField
+              lang="en"
+              multiline
+              name="description"
+              label={t('description')}
+              sx={{ mb: 2 }}
+            />
             <RHFUpload
               autoFocus
               fullWidth
@@ -388,7 +446,7 @@ export default function Processing() {
               sx={{ mb: 2 }}
               variant="outlined"
               onDrop={handleDrop}
-              multiple
+              // multiple
             />
           </DialogContent>
           <DialogActions>
@@ -401,15 +459,46 @@ export default function Processing() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-    </>
+    </Card>
   );
 
   const renderPrescription = (
-    <>
-      <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ mt: 1 }}>
+    <Card sx={{ mt: 1 }}>
+      <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ m: 2 }}>
         {t('Add prescription')}
         <Iconify icon="mingcute:add-line" />
       </Button>
+      {prescriptionData?.map((info, i) => (
+        <Typography
+          variant="h6"
+          sx={{
+            bgcolor: '#fff',
+            m: 2,
+            border: 2,
+            borderRadius: 2,
+            borderColor: '#EDEFF2',
+            p: 2,
+          }}
+          key={i}
+        >
+          {info?.medicines?.trade_name}
+          <br />
+          <Button
+            onMouseOver={() => handleHover(info?._id)}
+            onMouseOut={handleMouseOut}
+            sx={{ m: 1 }}
+          >
+            View &nbsp;{' '}
+            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+          </Button>
+          <Button>
+            Update &nbsp; <Iconify icon="icon-park:edit-two" />
+          </Button>
+          <Button onClick={() => removePrescription(info?._id)}>
+            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+          </Button>
+        </Typography>
+      ))}
       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
@@ -519,7 +608,7 @@ export default function Processing() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-    </>
+    </Card>
   );
 
   const renderTimelineItems = (item) => (
