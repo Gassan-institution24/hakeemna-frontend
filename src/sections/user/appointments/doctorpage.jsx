@@ -103,7 +103,7 @@ export default function Doctorpage() {
     data?.unit_service?._id
   );
   const receptionActivity = roomsData.find(
-    (activity) => activity?.activities?.name_english === 'reception'
+    (activity) => activity?.activities?.name_english === 'Reception'
   );
 
   console.log(receptionActivity?.activities?._id);
