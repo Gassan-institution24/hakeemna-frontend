@@ -29,7 +29,7 @@ import Language from '../common/language-home-page';
 // ----------------------------------------------------------------------
 
 export default function Header() {
-  const mdUp = useResponsive('up', 'md');
+  const mdUp = useResponsive('up', 'lg');
   const { t } = useTranslate();
 
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);

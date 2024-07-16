@@ -117,7 +117,7 @@ export default function CitiesNewEditForm({ currentCity }) {
               }}
             >
               <RHFTextField
-                lang="en"
+
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

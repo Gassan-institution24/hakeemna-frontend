@@ -524,12 +524,12 @@ export default function Processing() {
               ))}
             </RHFSelect>
             <RHFTextField
-              lang="en"
+
               name="Frequency_per_day"
               label={t('Frequency pe day')}
               sx={{ mb: 2 }}
             />
-            <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
+            <RHFTextField name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
 
             <Controller
               name="Start_time"
@@ -568,7 +568,7 @@ export default function Processing() {
               )}
             />
             <RHFTextField
-              lang="en"
+
               name="Doctor_Comments"
               label={t('Doctor Comments')}
               multiline

@@ -58,11 +58,13 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [note, setNote] = useState();
+  const [submitting, setSubmitting] = useState(false);
 
   const theme = useTheme();
 
   const handleEmployment = async (row) => {
     try {
+      setSubmitting(true)
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: row._id,
         note,
@@ -70,6 +72,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       });
       await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
+      setSubmitting(false)
       reset();
       // router.back();
     } catch (error) {
@@ -80,6 +83,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
           variant: 'error',
         }
       );
+      setSubmitting(false)
       window.location.reload();
       console.error(error);
     }
@@ -138,6 +142,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
                 row={row}
                 note={note}
                 setNote={setNote}
+                submitting={submitting}
                 SelectedAppointment={SelectedAppointment}
                 onEmploymentRow={() => handleEmployment(row)}
               />

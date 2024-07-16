@@ -81,13 +81,13 @@ export default function Exist() {
           />
 
           <TextField
-            lang="en"
+
             onChange={handleEnglishInputChange}
             name="name_english"
             label={t('Name in english')}
           />
           <TextField
-            lang="en"
+
             onChange={handleArabicInputChange}
             name="name_arabic"
             label={t('name in Arabic')}
