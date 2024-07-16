@@ -113,7 +113,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-                lang="en"
+
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"
@@ -130,7 +130,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 options={timezones.map((option) => option.tzCode)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {option}
                   </li>
                 )}

@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Tab, Tabs, Container } from '@mui/material';
 
 import { useLocales, useTranslate } from 'src/locales';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import { useGetPatient, useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -22,6 +23,8 @@ import AppointmentsHistory from '../appointment-history/appoint-history';
 export default function PatientProfile() {
   const { id } = useParams();
   const { data } = useGetPatient(id);
+
+  const { isMedLab } = useUSTypeGuard();
 
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(data?._id);
@@ -42,11 +45,11 @@ export default function PatientProfile() {
       value: 'appointments',
       label: t('appointments'),
     },
-    {
+    isMedLab && {
       value: 'medicalanalysis',
       label: t('medical analysis'),
-    },
-  ];
+    }
+  ].filter(Boolean);
 
   function calculateAge(birthDate) {
     if (birthDate) {

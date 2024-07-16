@@ -326,7 +326,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                // onChange={handleCountryChange}
+              // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
@@ -428,7 +428,7 @@ export default function AccountGeneral({ unitServiceData }) {
               )}
               getOptionLabel={(option) => option}
               renderOption={(props, option, idx) => (
-                <li {...props} key={idx} value={option}>
+                <li lang='ar' {...props} key={idx} value={option}>
                   {option}
                 </li>
               )}

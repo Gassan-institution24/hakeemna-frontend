@@ -190,7 +190,7 @@
 //                 options={_roles.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={idx}>
+//                   <li lang='ar' {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
@@ -207,7 +207,7 @@
 //                 options={JOB_SKILL_OPTIONS.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={idx}>
+//                   <li lang='ar' {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
@@ -236,7 +236,7 @@
 //                 options={JOB_WORKING_SCHEDULE_OPTIONS.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={idx}>
+//                   <li lang='ar' {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
@@ -274,7 +274,7 @@
 //                   }
 
 //                   return (
-//                     <li {...props} key={idx}>
+//                     <li lang='ar' {...props} key={idx}>
 //                       <Iconify
 //                         key={idx}
 //                         icon={`circle-flags:${code.toLowerCase()}`}

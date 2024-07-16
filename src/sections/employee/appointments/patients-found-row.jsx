@@ -64,7 +64,7 @@ export default function PatientFoundRow({
       <TableCell align="center">{birth_date}</TableCell>
 
       <TableCell align="center" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton disabled={!selected} onClick={confirm.onToggle}>
+        <IconButton onClick={confirm.onToggle}>
           <Iconify width="27px" color="info.main" icon="mdi:book-add" />
         </IconButton>
       </TableCell>

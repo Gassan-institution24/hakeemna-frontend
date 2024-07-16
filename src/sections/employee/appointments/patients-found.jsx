@@ -71,6 +71,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
+      window.location.reload();
       // router.back();
     } catch (error) {
       // error emitted in backend

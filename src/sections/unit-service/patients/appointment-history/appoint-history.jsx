@@ -75,7 +75,7 @@ export default function AppointHistoryView({ patientData }) {
     isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') },
     { id: 'status', label: t('status') },
     { id: '' },
-  ];
+  ].filter(Boolean);
 
   const router = useRouter();
 
