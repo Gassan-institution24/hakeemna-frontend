@@ -60,7 +60,6 @@ export default function Rooms() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-  console.log(Entrance);
   return (
     <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, p: 2 }}>
       <Box sx={{ m: 2 }}>

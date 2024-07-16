@@ -101,6 +101,7 @@ export const endpoints = {
   medicalreports: {
     all: '/api/examination/',
     one: (id) => !id ? null : `/api/examination/${id}`,
+    entrance: (id) => !id ? null : `/api/examination/entranceExamination/${id}`,
   },
   sickleave: {
     all: '/api/sickleave/',
@@ -119,6 +120,12 @@ export const endpoints = {
     all: '/api/medicines/',
     many: '/api/medicines/many',
     one: (id) => !id ? null : `/api/medicines/${id}`,
+  },
+  prescription: {
+    all: '/api/drugs/',
+    many: '/api/drugs/many',
+    one: (id) => !id ? null : `/api/drugs/${id}`,
+    entrance: (id) => !id ? null : `/api/drugs/entranceprescription/${id}`,
   },
   specialities: {
     all: '/api/specialities',
