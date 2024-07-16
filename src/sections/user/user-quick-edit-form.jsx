@@ -152,7 +152,7 @@
 //                 }
 
 //                 return (
-//                   <li {...props} key={idx}>
+//                   <li lang='ar' {...props} key={idx}>
 //                     <Iconify
 //                       key={idx}
 //                       icon={`circle-flags:${code.toLowerCase()}`}

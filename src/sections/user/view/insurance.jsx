@@ -144,7 +144,7 @@ export default function Insuranceinfo() {
               )}
             />
             <RHFTextField
-              lang="en"
+
               name="insurance_client_num"
               label={t('Card number*')}
               sx={{ mb: 1.5 }}

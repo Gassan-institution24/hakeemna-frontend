@@ -1,7 +1,8 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
+import { SplashScreen } from 'src/components/loading-screen';
 
 import { authRoutes } from './auth';
 import { userRoutes } from './user';
@@ -21,9 +22,11 @@ export default function Router() {
     {
       path: '/',
       element: (
-        <MainLayout>
-          <HomePage />
-        </MainLayout>
+        <Suspense fallback={<SplashScreen />}>
+          <MainLayout>
+            <HomePage />
+          </MainLayout>
+        </Suspense>
       ),
     },
 

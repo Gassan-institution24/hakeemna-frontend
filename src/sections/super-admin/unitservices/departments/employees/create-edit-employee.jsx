@@ -210,14 +210,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -229,14 +229,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
