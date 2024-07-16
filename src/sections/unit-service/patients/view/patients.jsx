@@ -32,6 +32,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Iconify from 'src/components/iconify';
 
@@ -58,6 +59,7 @@ export default function PatientTableView() {
     { id: 'name_arabic', label: t('name in arabic') },
     { id: '' },
   ];
+  const { isMedLab } = useUSTypeGuard();
 
   const checkAcl = useAclGuard();
 
@@ -121,7 +123,7 @@ export default function PatientTableView() {
             name: t('dashboard'),
             href: paths.superadmin.root,
           },
-          { name: t('institution patients') }, /// edit
+          { name: t("institution's patients") }, /// edit
         ]}
         action={
           checkAcl({

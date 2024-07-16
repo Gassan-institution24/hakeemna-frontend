@@ -146,7 +146,7 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-                lang="en"
+
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"
@@ -186,7 +186,7 @@ export default function TableNewEditForm({ currentTable }) {
                   specialtiesData.find((one) => one._id === option)?.name_english
                 }
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {specialtiesData.find((one) => one._id === option)?.name_english}
                   </li>
                 )}

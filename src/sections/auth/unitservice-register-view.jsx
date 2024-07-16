@@ -527,7 +527,7 @@ export default function JwtRegisterView() {
             ]
           }
           renderOption={(props, option, idx) => (
-            <li {...props} key={idx} value={option}>
+            <li lang='ar' {...props} key={idx} value={option}>
               {
                 employeeTypesData.find((one) => one._id === option)?.[
                 curLangAr ? 'name_arabic' : 'name_english'
@@ -550,7 +550,7 @@ export default function JwtRegisterView() {
                 ]
               }
               renderOption={(props, option, idx) => (
-                <li {...props} key={idx} value={option}>
+                <li lang='ar' {...props} key={idx} value={option}>
                   {
                     specialtiesData.find((one) => one._id === option)?.[
                     curLangAr ? 'name_arabic' : 'name_english'

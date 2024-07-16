@@ -358,7 +358,7 @@ export default function OldMedicalReports() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} />
+            <RHFTextField name="name" label={t('File name*')} sx={{ mb: 2 }} />
 
             <RHFSelect
               label={t('Specialty*')}
@@ -422,7 +422,7 @@ export default function OldMedicalReports() {
               // onUpload={onSubmit}
             />
 
-            <RHFTextField lang="en" name="note" label={t('More information')} />
+            <RHFTextField name="note" label={t('More information')} />
           </DialogContent>
           <Checkbox
             size="small"

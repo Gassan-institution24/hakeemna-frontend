@@ -161,7 +161,7 @@ function EmployeeCard({ employee, selected, onSelected }) {
         </Stack>
       </Stack>
 
-      <Button lang="en" size="small" variant="outlined" color="inherit" onClick={onSelected}>
+      <Button size="small" variant="outlined" color="inherit" onClick={onSelected}>
         {t('visit profile')}
       </Button>
     </Stack>

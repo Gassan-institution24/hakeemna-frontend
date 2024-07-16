@@ -14,38 +14,44 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
+
 // import { _addressBooks } from 'src/_mock';
 
-import FormProvider from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox } from 'src/components/hook-form';
 
-import InvoiceNewEditDetails from '../invoice-new-edit-details';
 import InvoiceNewEditAddress from '../invoice-new-edit-address';
 import InvoiceNewEditStatusDate from '../invoice-new-edit-status-date';
+import InvoiceNewEditDetails from '../invoice-new-edit-details';
+import InvoiceNewEditTaxDetails from '../invoice-new-edit-tax-details';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditForm({ currentInvoice }) {
   const router = useRouter();
+  const { t } = useTranslate()
 
   const loadingSave = useBoolean();
 
   const loadingSend = useBoolean();
 
   const NewInvoiceSchema = Yup.object().shape({
-    invoiceTo: Yup.mixed().nullable().required('Invoice to is required'),
+    invoiceNumber: Yup.string(),
     createDate: Yup.mixed().nullable().required('Create date is required'),
-    dueDate: Yup.mixed()
-      .required('Due date is required')
-      .test(
-        'date-min',
-        'Due date must be later than create date',
-        (value, { parent }) => value.getTime() > parent.createDate.getTime()
-      ),
+    invoiceTo: Yup.mixed().nullable().required('Invoice to is required'),
+    invoiceFrom: Yup.mixed(),
+    dueDate: Yup.mixed(),
+    detailedTaxes: Yup.bool(),
     items: Yup.lazy(() =>
       Yup.array().of(
         Yup.object({
-          title: Yup.string().required('Title is required'),
           service: Yup.string().required('Service is required'),
+          activity: Yup.string(),
+          deduction: Yup.number(),
+          discount: Yup.number(),
+          subtotal: Yup.number(),
+          tax: Yup.number(),
+          total: Yup.number(),
           quantity: Yup.number()
             .required('Quantity is required')
             .min(1, 'Quantity must be more than 0'),
@@ -58,36 +64,38 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     status: Yup.string(),
     discount: Yup.number(),
     shipping: Yup.number(),
-    invoiceFrom: Yup.mixed(),
+    subtotal: Yup.number(),
     totalAmount: Yup.number(),
-    invoiceNumber: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
       invoiceNumber: currentInvoice?.invoiceNumber || 'INV-1990',
       createDate: currentInvoice?.createDate || new Date(),
+      invoiceFrom: currentInvoice?.invoiceFrom || '',
+      invoiceTo: currentInvoice?.invoiceTo || null,
       dueDate: currentInvoice?.dueDate || null,
+      detailedTaxes: currentInvoice?.detailedTaxes || false,
       taxes: currentInvoice?.taxes || 0,
       deduction: currentInvoice?.deduction || 0,
       shipping: currentInvoice?.shipping || 0,
       status: currentInvoice?.status || 'draft',
       discount: currentInvoice?.discount || 0,
-      invoiceFrom: currentInvoice?.invoiceFrom || '',
-      invoiceTo: currentInvoice?.invoiceTo || null,
+      subtotal: currentInvoice?.subtotal || 0,
+      totalAmount: currentInvoice?.totalAmount || 0,
       items: currentInvoice?.items || [
         {
-          //   title: '',
-          //   description: '',
           service: null,
+          activity: '',
           quantity: 1,
           price: 0,
           subtotal: 0,
+          discount: 0,
+          deduction: 0,
           tax: 0,
           total: 0,
         },
       ],
-      totalAmount: currentInvoice?.totalAmount || 0,
     }),
     [currentInvoice]
   );
@@ -98,7 +106,9 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   });
 
   const {
+    watch,
     reset,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -140,8 +150,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           <InvoiceNewEditAddress />
 
           <InvoiceNewEditStatusDate />
+          <Stack direction='row' justifyContent='flex-end' px={5} pt={3} pb={0}>
+            <RHFCheckbox
+              name='detailedTaxes'
+              label={t('detailed taxes and deductions')}
+              onChange={() => setValue('detailedTaxes', !watch().detailedTaxes)}
+            />
+          </Stack>
+          {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
 
-          <InvoiceNewEditDetails />
         </Card>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
@@ -152,7 +169,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             loading={loadingSave.value && isSubmitting}
             onClick={handleSaveAsDraft}
           >
-            Save as Draft
+            {t('save as draft')}
           </LoadingButton>
 
           <LoadingButton
@@ -161,7 +178,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             loading={loadingSend.value && isSubmitting}
             onClick={handleCreateAndSend}
           >
-            {currentInvoice ? 'Update' : 'Create'} & Send
+            {currentInvoice ? t('update') : t('create')} & {t('send')}
           </LoadingButton>
         </Stack>
       </FormProvider>

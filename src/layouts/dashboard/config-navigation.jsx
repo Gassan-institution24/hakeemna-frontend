@@ -354,7 +354,7 @@ export function useNavData() {
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
-        title: t('institution patients'),
+        title: t("institution's patients"),
         path: paths.unitservice.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },

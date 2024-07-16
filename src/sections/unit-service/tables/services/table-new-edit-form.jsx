@@ -203,7 +203,7 @@ export default function TableNewEditForm({ currentTable }) {
               )}
               {!isMedLab && (
                 <RHFTextField
-                  lang="en"
+
                   onChange={handleEnglishInputChange}
                   name="name_english"
                   label={t('name english')}
@@ -263,17 +263,16 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField
                 multiline
                 rows={2}
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="description_english"
-                label={t('description english')}
+                label={t('english description')}
               />
               <RHFTextField
                 multiline
                 rows={2}
                 onChange={handleArabicInputChange}
                 name="description_arabic"
-                label={t('description arabic')}
+                label={t('arabic description')}
               />
               <FormControlLabel
                 sx={{ ml: 2 }}
