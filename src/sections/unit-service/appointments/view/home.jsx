@@ -85,7 +85,7 @@ export default function AppointmentsView({ employeeData }) {
     { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
-  ];
+  ].filter(Boolean);
 
   const theme = useTheme();
 

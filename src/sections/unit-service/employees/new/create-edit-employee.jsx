@@ -229,15 +229,15 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFSelect
                 name="department"
                 label={t('department')}
-                // InputProps={{
-                //   endAdornment: (
-                //     <InputAdornment position="start">
-                //       <IconButton onClick={handleAddNew} edge="start">
-                //         <Iconify icon="mdi:add-bold" />
-                //       </IconButton>
-                //     </InputAdornment>
-                //   ),
-                // }}
+              // InputProps={{
+              //   endAdornment: (
+              //     <InputAdornment position="start">
+              //       <IconButton onClick={handleAddNew} edge="start">
+              //         <Iconify icon="mdi:add-bold" />
+              //       </IconButton>
+              //     </InputAdornment>
+              //   ),
+              // }}
               >
                 {departmentsData.map((department, idx) => (
                   <MenuItem lang="ar" key={idx} value={department._id}>
@@ -268,14 +268,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -287,14 +287,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li {...props} key={idx} value={option}>
+                  <li lang='ar' {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

@@ -13,6 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ export default function PatientFoundRow({
   note,
   setNote,
   selected,
+  submitting,
   onEmploymentRow,
   SelectedAppointment,
 }) {
@@ -106,13 +108,13 @@ export default function PatientFoundRow({
           </>
         }
         action={
-          <Button variant="contained" color="info" onClick={() => {
+          <LoadingButton variant="contained" color="info" loading={submitting} onClick={() => {
             onEmploymentRow()
             confirm.onFalse()
             setNote('')
           }}>
             {t('confirm')}
-          </Button>
+          </LoadingButton>
         }
       />
     </>
@@ -122,6 +124,7 @@ export default function PatientFoundRow({
 PatientFoundRow.propTypes = {
   onEmploymentRow: PropTypes.func,
   row: PropTypes.object,
+  submitting: PropTypes.bool,
   selected: PropTypes.bool,
   note: PropTypes.string,
   setNote: PropTypes.func,
