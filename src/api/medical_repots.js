@@ -59,12 +59,12 @@ export function useGetEntranceExaminationReports(id) {
     }),
     [data, error, isLoading, isValidating]
   );
-  const refetch2 = async () => {
+  const refetch = async () => {
     // Use the mutate function to re-fetch the data for the specified key (URL)
     await mutate(URL);
   };
 
-  return { ...memoizedValue, refetch2 };
+  return { ...memoizedValue, refetch };
 }
 
 export function useGetOnemedicalreports(id) {
