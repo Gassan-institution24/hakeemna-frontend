@@ -85,6 +85,7 @@ const AppointmentsToday = lazy(() =>
 );
 const RecordPage = lazy(() => import('src/pages/employee/appointmentsToday/recordPage'));
 const PrescriotionPage = lazy(() => import('src/pages/employee/appointmentsToday/prescriotionPage'));
+const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
@@ -238,6 +239,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'prescription/:id',
         element: <PrescriotionPage />,
+      },
+      {
+        path: 'examination/:id',
+        element: <MedicalreportPage />,
       },
     ],
   },
