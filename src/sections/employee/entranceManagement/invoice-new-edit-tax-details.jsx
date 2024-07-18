@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -16,7 +16,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
+import { useGetUSActivities, useGetUSActiveServiceTypes, useGetTaxes, useGetDeductions } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -46,12 +46,74 @@ export default function InvoiceNewEditDetails() {
 
   const values = watch();
 
+  const [taxSums, setTaxSums] = useState({});
+  const [deductionSums, setDeductionSums] = useState({});
+
+  useEffect(() => {
+    const newTaxSums = {};
+    const newDeductionSums = {};
+
+    serviceTypesData.forEach((service) => {
+      const matchingItems = values.items.filter((item) => item.service === service._id);
+      if (matchingItems.length) {
+        matchingItems.forEach((item) => {
+          const taxId = service.tax._id;
+          const taxAmount = (service.tax.percentage / 100) * (item.price_per_unit - item.discount_amount) * item.quantity;
+
+          if (!newTaxSums[taxId]) {
+            newTaxSums[taxId] = {
+              name: curLangAr ? service.tax.name_arabic : service.tax.name_english,
+              value: 0
+            };
+          }
+
+          newTaxSums[taxId].value += taxAmount;
+
+          if (service.deduction) {
+            const deductionId = service.deduction._id;
+            const deductionAmount = (service.deduction.percentage / 100) * (item.price_per_unit - item.discount_amount) * item.quantity;
+
+            if (!newDeductionSums[deductionId]) {
+              newDeductionSums[deductionId] = {
+                name: curLangAr ? service.deduction.name_arabic : service.deduction.name_english,
+                value: 0
+              };
+            }
+
+            newDeductionSums[deductionId].value += deductionAmount;
+          }
+        });
+      }
+    });
+
+    setTaxSums(newTaxSums);
+    setDeductionSums(newDeductionSums);
+
+  }, [values, serviceTypesData, curLangAr]);
+
+  const summedTaxes = useMemo(() => (
+    Object.keys(taxSums).map((taxId) => ({
+      name: taxSums[taxId].name,
+      value: taxSums[taxId].value
+    }))
+  ), [taxSums]);
+
+  const summedDeductions = useMemo(() => (
+    Object.keys(deductionSums).map((deductionId) => ({
+      name: deductionSums[deductionId].name,
+      value: deductionSums[deductionId].value
+    }))
+  ), [deductionSums]);
+
+  useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
+  useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
+
   // when add item from address component - from activities -
   useEffect(() => { update() }, [values.items.length, update])
 
   const taxesTotal = values.items?.reduce((acc, one) => acc + (one.tax / 100) * one.subtotal, 0);
   const deductiontotal = values.items?.reduce((acc, one) => acc + (one.deduction / 100) * one.subtotal, 0);
-  const discountTotal = values.items?.reduce((acc, one) => acc + one.discount, 0);
+  const discountTotal = values.items?.reduce((acc, one) => acc + one.discount_amount, 0);
   const subTotal = values.items?.reduce((acc, one) => acc + one.subtotal, 0);
   const totalAmount = values.items?.reduce((acc, one) => acc + one.total, 0);
 
@@ -65,12 +127,12 @@ export default function InvoiceNewEditDetails() {
 
   const handleAdd = () => {
     append({
-      service: null,
+      service_type: null,
       activity: '',
       quantity: 1,
-      price: 0,
+      price_per_unit: 0,
       subtotal: 0,
-      discount: 0,
+      discount_amount: 0,
       deduction: 0,
       tax: 0,
       total: 0,
@@ -84,13 +146,13 @@ export default function InvoiceNewEditDetails() {
   const handleSelectService = useCallback(
     (index, option) => {
       const selected = serviceTypesData?.find((service) => service._id === option);
-      setValue(`items[${index}].price`, selected?.Price_per_unit);
+      setValue(`items[${index}].price_per_unit`, selected?.Price_per_unit);
       setValue(
-        `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price
+        `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price_per_unit
       );
       setValue(`items[${index}].tax`, selected?.tax?.percentage || 0);
       setValue(`items[${index}].deduction`, selected?.deduction?.percentage || 0);
-      const amountAfterDiscount = values.items[index].subtotal - values.items[index].discount
+      const amountAfterDiscount = values.items[index].subtotal - values.items[index].discount_amount
       const tax = amountAfterDiscount * (values.items[index].tax / 100)
       const deduction = amountAfterDiscount * (values.items[index].deduction / 100)
       const total = amountAfterDiscount + tax + deduction
@@ -103,9 +165,9 @@ export default function InvoiceNewEditDetails() {
     (event, index) => {
       setValue(event.target.name, Number(event.target.value));
       setValue(
-        `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price
+        `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price_per_unit
       );
-      const amountAfterDiscount = values.items[index].subtotal - values.items[index].discount
+      const amountAfterDiscount = values.items[index].subtotal - values.items[index].discount_amount
       const tax = amountAfterDiscount * (values.items[index].tax / 100)
       const deduction = amountAfterDiscount * (values.items[index].deduction / 100)
       const total = amountAfterDiscount + tax + deduction
@@ -121,13 +183,15 @@ export default function InvoiceNewEditDetails() {
       sx={{ mt: 3, textAlign: 'right', typography: 'body2' }}
     >
       {[{ name: 'subtotal', value: values.subtotal },
-      { name: 'discount', value: values.discount },
-      { name: 'taxes', value: values.taxes },
-      { name: 'deduction', value: values.deduction },
-      { name: 'total', value: values.totalAmount }].map((one) => (
+      { name: 'discount', value: -values.discount, color: 'red' },
+      ...summedTaxes,
+      ...summedDeductions,
+      // { name: 'taxes', value: values.taxes },
+      // { name: 'deduction', value: values.deduction },
+      { name: 'total', value: values.totalAmount, textColor: 'text.primary', typography: 'subtitle1' }].map((one) => (
         <Stack direction="row">
-          <Box sx={{ color: one.name === 'total' ? "" : 'text.secondary', typography: one.name === 'total' ? 'subtitle1' : '' }}>{t(one.name)}</Box>
-          <Box sx={{ width: 160, typography: 'subtitle2' }}>{one.value ? fCurrency(one.value) : '-'}</Box>
+          <Box sx={{ color: one.textColor || 'text.secondary', typography: one.typography }}>{t(one.name)}</Box>
+          <Box sx={{ width: 160, typography: 'subtitle2', color: one.color }}>{one.value ? fCurrency(one.value) : '-'}</Box>
         </Stack>
       ))}
     </Stack>
@@ -172,7 +236,7 @@ export default function InvoiceNewEditDetails() {
                 )}
               /> */}
               <RHFSelect
-                name={`items[${index}].service`}
+                name={`items[${index}].service_type`}
                 size="small"
                 label={t("service")}
                 sx={{ maxWidth: { md: 400 } }}
@@ -223,12 +287,13 @@ export default function InvoiceNewEditDetails() {
               />
 
               <RHFTextField
+                disabled
                 size="small"
                 type="number"
-                name={`items[${index}].price`}
+                name={`items[${index}].price_per_unit`}
                 label={t("price")}
                 placeholder="0.00"
-                onChange={(event) => handleChange(event, index)}
+                // onChange={(event) => handleChange(event, index)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -278,7 +343,7 @@ export default function InvoiceNewEditDetails() {
               <RHFTextField
                 size="small"
                 type="number"
-                name={`items[${index}].discount`}
+                name={`items[${index}].discount_amount`}
                 label={t("discount")}
                 onChange={(event) => handleChange(event, index)}
                 InputProps={{
@@ -296,6 +361,7 @@ export default function InvoiceNewEditDetails() {
                 }}
               />
               <RHFTextField
+                disabled
                 size="small"
                 type="number"
                 name={`items[${index}].tax`}
@@ -317,6 +383,7 @@ export default function InvoiceNewEditDetails() {
                 }}
               />
               <RHFTextField
+                disabled
                 size="small"
                 type="number"
                 name={`items[${index}].deduction`}
