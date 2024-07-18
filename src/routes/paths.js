@@ -851,6 +851,7 @@ export const paths = {
     appointmentsToday: `${ROOTS.SUPERADMIN}/appointmentsToday`,
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,
+    Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,
     profile: {
       root: `${ROOTS.SUPERADMIN}/profile`,
       edit: `${ROOTS.SUPERADMIN}/edit`,

@@ -1,11 +1,10 @@
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router';
-import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { enqueueSnackbar } from 'notistack';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
 
-import { Box, Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
   Card,
@@ -19,31 +18,43 @@ import {
   DialogContent,
 } from '@mui/material';
 
-import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance from 'src/utils/axios';
-import { fDateTime, fDateAndTime } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicines, useGePrescription } from 'src/api';
+import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
 
-import Iconify from 'src/components/iconify/iconify';
+import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-export default function PrescriptionPage() {
+export default function Prescription({ Entrance }) {
+  const { user } = useAuthContext();
+  const [DoctorComment, setDoctorComment] = useState();
+  const router = useRouter();
+  const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
+  const prescriptionDialog = useBoolean();
+  const { medicinesData } = useGetMedicines();
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { id } = useParams();
-  const { prescriptionData, refetch } = useGePrescription(id);
-  const { medicinesData } = useGetMedicines();
-  const [DoctorComment, setDoctorComment] = useState('');
-  const prescriptionDialog = useBoolean();
+  const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [chronic, setChronic] = useState(false);
-  const navigate = useNavigate();
 
+  const handleHover = (hoverdId) => {
+    setHoveredButtonId(hoverdId);
+  };
+  const handleMouseOut = () => {
+    setHoveredButtonId(null);
+  };
+  const handleViewClick = (idd) => {
+    router.push(paths.employee.prescription(idd));
+  };
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
@@ -61,15 +72,11 @@ export default function PrescriptionPage() {
   });
 
   const defaultValues = {
-    medicines: '',
-    Frequency_per_day: '',
-    Num_days: '',
-    Start_time: null,
-    End_time: null,
-    Doctor_Comments: '',
-    chronic: false,
+    employee: user?.employee?._id,
+    patient: Entrance?.patient?._id,
+    entrance_mangament: Entrance?._id,
+    service_unit: Entrance?.service_unit,
   };
-
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -84,21 +91,15 @@ export default function PrescriptionPage() {
     setValue,
     formState: { isSubmitting },
   } = methods;
-  useEffect(() => {
-    if (prescriptionData) {
-      setChronic(prescriptionData.chronic);
-      setDoctorComment(prescriptionData.Doctor_Comments || '');
-      reset({
-        medicines: prescriptionData.medicines?._id || '',
-        Frequency_per_day: prescriptionData.Frequency_per_day || '',
-        Num_days: prescriptionData.Num_days || '',
-        Start_time: prescriptionData.Start_time ? new Date(prescriptionData.Start_time) : null,
-        End_time: prescriptionData.End_time ? new Date(prescriptionData.End_time) : null,
-        Doctor_Comments: prescriptionData.Doctor_Comments || '',
-        chronic: prescriptionData.chronic,
-      });
-    }
-  }, [prescriptionData, reset]);
+  const removePrescription = async (IdToremove) => {
+    await axiosInstance.patch(endpoints.prescription.one(IdToremove), {
+      Activation: false,
+    });
+
+    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    refetch();
+    reset();
+  };
   const watchStartTime = watch('Start_time');
   const watchEndTime = watch('End_time');
 
@@ -110,17 +111,39 @@ export default function PrescriptionPage() {
       setValue('Num_days', difference > 0 ? difference : 0);
     }
   }, [watchStartTime, watchEndTime, setValue]);
+  useEffect(() => {
+    reset({
+      employee: user?.employee?._id,
+      patient: Entrance?.patient?._id,
+      service_unit: Entrance?.service_unit,
+      entrance_mangament: Entrance?._id,
+    });
+  }, [user, Entrance, reset]);
+
   const onSubmit = async (submitdata) => {
     try {
       submitdata.chronic = chronic;
       submitdata.Doctor_Comments = DoctorComment;
-      await axiosInstance.patch(`/api/drugs/${id}`, submitdata);
-
-      enqueueSnackbar('Prescription updated successfully', { variant: 'success' });
-      navigate(-1);
-
-      refetch();
-      reset();
+      if (prescriptionDialog.value) {
+        await axiosInstance.post(endpoints.history.all, {
+          patient: Entrance?.patient?._id,
+          name_english: 'an prescription has been added',
+          name_arabic: 'تم ارفاق وصفة طبية',
+          sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
+          actual_date: Entrance?.created_at,
+          title: 'prescription',
+          service_unit: Entrance?.service_unit?._id,
+        });
+        await axiosInstance.post('/api/drugs', submitdata);
+        await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
+          Drugs_report_status: true,
+        });
+        enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
+        prescriptionDialog.onFalse();
+        refetch();
+        reset();
+      }
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error uploading data', { variant: 'error' });
@@ -128,90 +151,40 @@ export default function PrescriptionPage() {
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Stack
-          component={Card}
+    <Card sx={{ mt: 1 }}>
+      <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ m: 2 }}>
+        {t('Add prescription')}
+        <Iconify icon="mingcute:add-line" />
+      </Button>
+      {prescriptionData?.map((info, i) => (
+        <Typography
+          variant="h6"
           sx={{
-            p: 3,
-            width: '80%',
-            display: 'grid',
-            gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
+            bgcolor: '#fff',
+            m: 2,
+            border: 2,
+            borderRadius: 2,
+            borderColor: '#EDEFF2',
+            p: 2,
           }}
+          key={i}
         >
-          <Box>
-            <Typography variant="h3">{prescriptionData?.patient?.name_english}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Date')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(prescriptionData?.created_at)}
-              </span>
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Dr.')}&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.employee?.name_english}
-              </span>{' '}
-              &nbsp; added a new prescription
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('note')}:&nbsp;&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.Doctor_Comments}
-              </span>{' '}
-            </Typography>
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
-              <Iconify icon="icon-park:back" />
-              &nbsp; {t('Back')}
-            </Button>
-          </Box>
-          <Box>
-            <Typography variant="h3">{prescriptionData?.medicines?.trade_name}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Date')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(prescriptionData?.created_at)}
-              </span>
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Frequency')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.Frequency_per_day}
-              </span>
-            </Typography>
-            {prescriptionData?.chronic ? (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>{t('Chronic: Yes')}</Typography>
-            ) : (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>
-                {t('Duration')}:&nbsp;&nbsp;
-                {prescriptionData?.Start_time && prescriptionData?.End_time ? (
-                  <>
-                    From {fDateAndTime(prescriptionData?.Start_time)} To{' '}
-                    {fDateAndTime(prescriptionData?.End_time)}
-                    <span style={{ color: '#2F88FF', fontWeight: 500 }}>
-                      &nbsp;{prescriptionData?.Num_days} day/s
-                    </span>
-                  </>
-                ) : (
-                  `${prescriptionData?.Num_days} day/s`
-                )}
-              </Typography>
-            )}
+          {info?.medicines?.trade_name}
+          <Button
+            onMouseOver={() => handleHover(info?._id)}
+            onMouseOut={handleMouseOut}
+            onClick={() => handleViewClick(info?._id)}
+            sx={{ m: 1 }}
+          >
+            View &nbsp;{' '}
+            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+          </Button>
 
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={prescriptionDialog.onTrue}>
-              <Iconify icon="icon-park:edit-two" />
-              &nbsp; {t('Update')}
-            </Button>
-          </Box>
-        </Stack>
-      </Box>
-
+          <Button onClick={() => removePrescription(info?._id)}>
+            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+          </Button>
+        </Typography>
+      ))}
       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
@@ -279,7 +252,7 @@ export default function PrescriptionPage() {
               name="Doctor_Comments"
               label={t('Doctor Comments')}
               multiline
-              value={DoctorComment}
+              // rows={4}
               sx={{ mb: 2 }}
               onChange={(e) => setDoctorComment(e.target.value)}
             />
@@ -288,9 +261,10 @@ export default function PrescriptionPage() {
             size="small"
             name="chronic"
             color="success"
-            checked={chronic}
             sx={{ position: 'relative', top: 5, left: 25 }}
-            onChange={() => setChronic(!chronic)}
+            onChange={() => {
+              setChronic(!chronic);
+            }}
           />
           <Typography
             sx={{
@@ -298,6 +272,7 @@ export default function PrescriptionPage() {
               mt: { md: -3, xs: -2.3 },
               ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
               typography: 'caption',
+
               fontSize: { md: 15, xs: 10 },
             }}
           >
@@ -313,6 +288,12 @@ export default function PrescriptionPage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-    </>
+    </Card>
   );
+
+  //   )
 }
+
+Prescription.propTypes = {
+  Entrance: PropTypes.object,
+};
