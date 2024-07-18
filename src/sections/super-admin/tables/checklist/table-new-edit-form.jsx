@@ -98,20 +98,8 @@ export default function NewEditForm({ currentRow }) {
   };
 
   useEffect(() => {
-    reset({
-      title: currentRow?.title || '',
-      speciality: currentRow?.speciality || null,
-      description: currentRow?.description || '',
-      questions: currentRow?.questions || [
-        {
-          question: '',
-          answer_way: 'Text',
-          category: '',
-          options: [''],
-        },
-      ],
-    });
-  }, [currentRow, reset]);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const handleRemove = (index) => {
     remove(index);

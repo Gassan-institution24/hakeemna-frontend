@@ -115,22 +115,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      country: currentTable?.country?._id || null,
-      city: currentTable?.city?._id || null,
-      type: currentTable?.type?._id || null,
-      webpage: currentTable?.webpage || '',
-      phone: currentTable?.phone || '',
-      address: currentTable?.address || '',
-      member_tpa: currentTable?.member_tpa || false,
-      tpa: currentTable?.tpa || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

@@ -68,7 +68,7 @@ export default function WorkGroupsTableView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'name', label: t('name') },
     { id: 'employees', label: t('employees') },
     { id: 'status', label: t('status') },

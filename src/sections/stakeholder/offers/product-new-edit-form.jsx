@@ -141,41 +141,9 @@ export default function InvoiceNewEditForm({ currentOffer }) {
       console.error('errrrrrrrrrrrrrrrr', error);
     }
   });
-
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      stakeholder: currentOffer?.stakeholder || user?.stakeholder?._id,
-      country: currentOffer?.country || null,
-      city: currentOffer?.city || null,
-      unit_service_type: currentOffer?.unit_service_type || null,
-      speciality: currentOffer?.speciality || null,
-      unit_service: currentOffer?.unit_service || null,
-      age: currentOffer?.age || null,
-      gender: currentOffer?.gender || null,
-      name_english: currentOffer?.name_english || '',
-      name_arabic: currentOffer?.name_arabic || '',
-      description_english: currentOffer?.description_english || '',
-      description_arabic: currentOffer?.description_arabic || '',
-      currency: currentOffer?.currency || null,
-      image: currentOffer?.image || null,
-      status: currentOffer?.status || 'published',
-
-      to_patients: currentOffer?.to_patients || false,
-      to_unit_service: currentOffer?.to_unit_service || false,
-
-      products: currentOffer?.products.map((one) => ({
-        product: one.product?._id,
-        price: one.price,
-      })) || [
-        {
-          product: null,
-          price: 0,
-        },
-      ],
-    });
-  }, [currentOffer]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Container maxWidth="xl">

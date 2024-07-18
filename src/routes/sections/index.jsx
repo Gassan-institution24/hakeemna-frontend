@@ -1,7 +1,8 @@
-import React, { lazy, Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
 
 import MainLayout from 'src/layouts/main';
+
 import { SplashScreen } from 'src/components/loading-screen';
 
 import { authRoutes } from './auth';

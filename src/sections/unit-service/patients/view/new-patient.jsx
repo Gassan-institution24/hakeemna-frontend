@@ -262,72 +262,10 @@ export default function TableCreateView() {
     }
   };
 
-  // const handleResetFilters = useCallback(() => {
-  //     setFilters(defaultFilters);
-  // }, []);
 
-  // if (loading) {
-  //     return <LoadingScreen />;
-  // }
   useEffect(() => {
-    reset({
-      sequence_number: '',
-      name_english: '',
-      name_arabic: '',
-      email: '',
-      identification_num: '',
-      birth_date: null,
-      marital_status: '',
-      nationality: null,
-      country:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          .country._id,
-      city: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-        .city._id,
-      mobile_num1: '',
-      mobile_num2: '',
-      gender: '',
-      note: '',
-      appointment_type: appointmenttypesData?.[0]?._id,
-      start_time: new Date(),
-      work_group: workGroupsData?.[0]?._id,
-      work_shift: workShiftsData.filter((one) => {
-        const currentDate = new Date();
-
-        const startTime = new Date(currentDate);
-        startTime.setHours(
-          new Date(one.start_time).getHours(),
-          new Date(one.start_time).getMinutes(),
-          0,
-          0
-        );
-
-        const endTime = new Date(currentDate);
-        endTime.setHours(
-          new Date(one.end_time).getHours(),
-          new Date(one.end_time).getMinutes(),
-          0,
-          0
-        );
-
-        if (startTime <= endTime) {
-          return currentDate >= startTime && currentDate < endTime;
-        }
-        // If the shift crosses midnight
-        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
-        return currentDate >= startTime || currentDate < endTimeNextDay;
-      })?.[0]?._id,
-      service_types: [],
-    });
-    // eslint-disable-next-line
-  }, [
-    workGroupsData,
-    appointmenttypesData,
-    user?.employee,
-    typesLoading,
-    wgLoading,
-    workShiftsData,
-  ]);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   if (
     (!values.appointment_type || !values.work_group) &&

@@ -85,7 +85,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                     newValue,
                     user?.employee?.employee_engagements[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    Intl.DateTimeFormat().resolvedOptions().timeZone
                   );
                   field.onChange(selectedTime);
                 }}
@@ -113,7 +113,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                     newValue,
                     user?.employee?.employee_engagements[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    Intl.DateTimeFormat().resolvedOptions().timeZone
                   );
                   field.onChange(selectedTime);
                 }}
@@ -204,8 +204,8 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             label={t('appointment duration time')}
             type="number"
             onBlur={(event) => {
-              setAppointTime(event.target.value);
               trigger('appointment_time');
+              setAppointTime(event.target.value);
             }}
             size="small"
             InputLabelProps={{ shrink: true }}

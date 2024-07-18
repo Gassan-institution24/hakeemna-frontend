@@ -30,7 +30,7 @@ export default function TableDetailsRow({
   setFilters,
 }) {
   const {
-    code,
+    sequence_number,
     name_english,
     name_arabic,
     employees,
@@ -69,7 +69,7 @@ export default function TableDetailsRow({
         onClick={onView}
         align="center"
       >
-        <Box>{code}</Box>
+        <Box>{sequence_number}</Box>
       </TableCell>
 
       <TableCell

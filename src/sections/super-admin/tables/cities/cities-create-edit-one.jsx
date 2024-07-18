@@ -90,17 +90,10 @@ export default function CitiesNewEditForm({ currentCity }) {
       console.error(error);
     }
   });
-
-  /* eslint-disable */
+  
   useEffect(() => {
-    reset({
-      name_arabic: currentCity?.name_arabic || '',
-      name_english: currentCity?.name_english || '',
-      country: currentCity?.country?._id || '',
-      state: currentCity?.state || '',
-    });
-  }, [currentCity]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

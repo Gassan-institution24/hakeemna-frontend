@@ -73,7 +73,7 @@ export default function ServicesTableView() {
   const checkAcl = useAclGuard();
 
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'name', label: t('name') },
     { id: 'description', label: t('description') },
     { id: 'work_shift', label: t('work shift') },

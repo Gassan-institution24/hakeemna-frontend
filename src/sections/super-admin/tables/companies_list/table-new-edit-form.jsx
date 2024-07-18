@@ -111,32 +111,9 @@ export default function TableNewEditForm({ currentSelected }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      unit_service_type: currentSelected?.unit_service_type || '',
-      country: currentSelected?.country || '',
-      city: currentSelected?.city || '',
-      sector: currentSelected?.sector || '',
-      commercial_name: currentSelected?.commercial_name || '',
-      province: currentSelected?.province || '',
-      address: currentSelected?.address || '',
-      phone_number_1: currentSelected?.phone_number_1 || '',
-      Phone_number_2: currentSelected?.Phone_number_2 || '',
-      work_shift: currentSelected?.work_shift || '',
-      constitution_objective: currentSelected?.constitution_objective || '',
-      type_of_specialty_1: currentSelected?.type_of_specialty_1 || '',
-      type_of_specialty_2: currentSelected?.type_of_specialty_2 || '',
-      info: currentSelected?.info || '',
-      email: currentSelected?.email || '',
-      insurance: currentSelected?.insurance || '',
-      subscribe_to: currentSelected?.subscribe_to || '',
-      social_network: currentSelected?.social_network || '',
-      notes: currentSelected?.notes || '',
-      communication: currentSelected?.communication || '',
-    });
-  }, [currentSelected]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

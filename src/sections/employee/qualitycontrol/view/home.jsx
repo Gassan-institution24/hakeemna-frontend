@@ -52,7 +52,7 @@ export default function DepartmentFeedbackView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     /// to edit
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'appointments', label: t('appointments') },
     { id: 'title', label: t('title') },
     { id: 'status', label: t('status') },
