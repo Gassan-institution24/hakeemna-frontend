@@ -88,14 +88,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

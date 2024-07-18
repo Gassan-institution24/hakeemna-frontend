@@ -145,23 +145,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      description_arabic: currentTable?.description_arabic || '',
-      description_english: currentTable?.description_english || '',
-      unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      work_shift: currentTable?.work_shift?._id || null,
-      Measurement_type: currentTable?.Measurement_type?._id || null,
-      Price_per_unit: currentTable?.Price_per_unit || '',
-      tax: currentTable?.tax || null,
-      deduction: currentTable?.deduction || null,
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

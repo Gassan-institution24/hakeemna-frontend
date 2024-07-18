@@ -73,7 +73,7 @@ export default function RoomsTableView() {
   const checkAcl = useAclGuard();
 
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'name', label: t('name') },
     { id: 'general_info', label: t('general info') },
     { id: 'status', label: t('status') },

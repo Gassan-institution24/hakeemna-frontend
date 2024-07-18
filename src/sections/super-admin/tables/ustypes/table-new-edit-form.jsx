@@ -84,14 +84,9 @@ export default function TableNewEditForm({ currentSelected }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentSelected?.name_arabic || '',
-      name_english: currentSelected?.name_english || '',
-    });
-  }, [currentSelected]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

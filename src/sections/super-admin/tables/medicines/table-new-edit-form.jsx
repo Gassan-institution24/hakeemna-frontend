@@ -109,24 +109,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      country: currentSelected?.country?._id || '',
-      trade_name: currentSelected?.trade_name || '',
-      concentrations: currentSelected?.concentrations || [],
-      agent: currentSelected?.agent || '',
-      price_1: currentSelected?.price_1 || '',
-      price_2: currentSelected?.price_2 || '',
-      ATCCODE: currentSelected?.ATCCODE || '',
-      packaging: currentSelected?.packaging || '',
-      scientific_name: currentSelected?.scientific_name || '',
-      barcode: currentSelected?.barcode || '',
-      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease._id) || [],
-      family: currentSelected?.family?._id || '',
-    });
-  }, [currentSelected]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

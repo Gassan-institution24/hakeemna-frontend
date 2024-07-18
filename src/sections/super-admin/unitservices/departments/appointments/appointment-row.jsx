@@ -119,7 +119,7 @@ export default function AppointmentsTableRow({
             cursor: 'pointer',
             color: '#3F54EB',
           }}
-          onClick={() => router.push(paths.employee.patients.info(patient._id))}
+          onClick={() => router.push(paths.employee.patients.info(patient?._id))}
         >
           {patient?.name_english}
         </TableCell>

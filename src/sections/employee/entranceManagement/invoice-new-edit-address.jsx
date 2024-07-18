@@ -4,10 +4,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { RHFAutocomplete, RHFSelect } from 'src/components/hook-form';
-import { Box, Link, MenuItem } from '@mui/material';
-import { useGetOneEntranceManagement, useGetPatient, useGetUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatient, useGetUSPatient, useGetOneEntranceManagement, useGetUnitservice } from 'src/api';
+
+import { RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -25,33 +25,30 @@ export default function InvoiceNewEditAddress() {
 
   const handleInvoicing = (activity) => {
     append({
-      service: null,
+      service_type: null,
       activity: activity || '',
       quantity: 1,
-      price: 0,
+      price_per_unit: 0,
       subtotal: 0,
-      discount: 0,
+      discount_amount: 0,
       deduction: 0,
       tax: 0,
       total: 0,
     });
   }
 
-  const { user } = useAuthContext();
   const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const myUS =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
-
-  const { patientsData } = useGetUSPatient(myUS?._id);
-
   const values = watch();
 
-  const { invoiceTo } = values;
-  const { data } = useGetPatient(invoiceTo)
+  const { unit_service, patient } = values;
+  const { data } = useGetPatient(patient)
+  const { data: USData } = useGetUnitservice(unit_service)
   const { Entrance } = useGetOneEntranceManagement('669614f30abf2815208c985d')
+  const { patientsData } = useGetUSPatient(USData?._id);
+
   return (
     <Stack direction={{ md: 'row' }} >
 
@@ -62,9 +59,9 @@ export default function InvoiceNewEditAddress() {
       >
         <Stack sx={{ width: 1 }}>
           <Stack spacing={1}>
-            <Typography variant="h4">{curLangAr ? myUS.name_arabic : myUS.name_english}</Typography>
-            <Typography variant="body2">{curLangAr ? `${myUS.city.name_arabic}, ${myUS.country.name_arabic}` : `${myUS.city.name_english}, ${myUS.country.name_english}`}</Typography>
-            <Typography variant="body2"> {myUS.phone}</Typography>
+            <Typography variant="h4">{curLangAr ? USData?.name_arabic : USData?.name_english}</Typography>
+            <Typography variant="body2">{curLangAr ? `${USData?.city?.name_arabic}, ${USData?.country?.name_arabic}` : `${USData?.city?.name_english}, ${USData?.country?.name_english}`}</Typography>
+            <Typography variant="body2"> {USData?.phone}</Typography>
           </Stack>
         </Stack>
 
@@ -74,15 +71,15 @@ export default function InvoiceNewEditAddress() {
               {t('to')}:
             </Typography>
           </Stack>
-          {invoiceTo ? <Stack spacing={1}>
+          {patient ? <Stack spacing={1}>
             <Typography variant="subtitle2">{curLangAr ? data?.name_arabic : data?.name_english}</Typography>
-            <Typography variant="body2">{curLangAr ? `${data?.city.name_arabic}, ${data?.country.name_arabic}` : `${data?.city?.name_english}, ${data?.country?.name_english}`}</Typography>
+            <Typography variant="body2">{curLangAr ? `${data?.city?.name_arabic}, ${data?.country?.name_arabic}` : `${data?.city?.name_english}, ${data?.country?.name_english}`}</Typography>
             <Typography variant="body2"> {data?.phone}</Typography>
           </Stack> : <Stack direction='row' justifyContent='flex-start'>
             <RHFAutocomplete
               lang='ar'
               sx={{ minWidth: 200 }}
-              name="invoiceTo"
+              name="patient"
               options={patientsData.map((speciality) => speciality._id)}
               getOptionLabel={(option) =>
                 patientsData.find((one) => one._id === option)?.[

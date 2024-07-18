@@ -162,21 +162,21 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         ).getTime();
         let break_start = currentDay.break_start_time
           ? new Date(
-              now.getFullYear(),
-              now.getMonth(),
-              now.getDate(),
-              new Date(currentDay.break_start_time).getHours(),
-              new Date(currentDay.break_start_time).getMinutes()
-            ).getTime()
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            new Date(currentDay.break_start_time).getHours(),
+            new Date(currentDay.break_start_time).getMinutes()
+          ).getTime()
           : null;
         let break_end = currentDay.break_end_time
           ? new Date(
-              now.getFullYear(),
-              now.getMonth(),
-              now.getDate(),
-              new Date(currentDay.break_end_time).getHours(),
-              new Date(currentDay.break_end_time).getMinutes()
-            ).getTime()
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            new Date(currentDay.break_end_time).getHours(),
+            new Date(currentDay.break_end_time).getMinutes()
+          ).getTime()
           : null;
 
         if (work_start >= work_end) {
@@ -530,14 +530,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     </IconButton>
                   </Stack>
                 </Stack>
-                <NewEditDayAppointmentsDetails
+                {showAppointments[index] && <NewEditDayAppointmentsDetails
                   setAppointmentsNum={setAppointmentsNum}
                   serviceTypesData={serviceTypesData}
                   appointmenttypesData={appointmenttypesData}
                   open={showAppointments[index]}
                   ParentIndex={index}
                   unmountOnExit
-                />
+                />}
               </Stack>
             ))}
           </Stack>
@@ -555,7 +555,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
               startIcon={<Iconify icon="tdesign:plus" />}
               sx={{ padding: 1 }}
               onClick={handleAdd}
-              // sx={{ flexShrink: 0 }}
+            // sx={{ flexShrink: 0 }}
             >
               {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
             </Button>

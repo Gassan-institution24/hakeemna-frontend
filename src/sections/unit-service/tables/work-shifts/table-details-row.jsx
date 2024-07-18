@@ -29,7 +29,7 @@ export default function TableDetailsRow({
   filters,
 }) {
   const {
-    code,
+    sequence_number,
     name_english,
     name_arabic,
     start_time,
@@ -63,7 +63,7 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell align="center">
-        <Box>{code}</Box>
+        <Box>{sequence_number}</Box>
       </TableCell>
       <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
       <TableCell align="center">

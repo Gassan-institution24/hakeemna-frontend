@@ -150,7 +150,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });
-  const {
+  const { reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -162,21 +162,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
-      // socket.emit('updated', {
-      //   user,
-      //   link: paths.unitservice.employees.appointmentconfig.root(id),
-      //   msg: `updated an appointment configuration <strong>[ ${
-      //     appointmentConfigData.code || ''
-      //   } ]</strong>`,
-      // });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (error) {
-      // error emitted in backend
-      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
       confirm.onFalse();
       enqueueSnackbar(
@@ -195,22 +185,12 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: true,
       });
-      // socket.emit('updated', {
-      //   user,
-      //   link: paths.unitservice.employees.appointmentconfig.root(id),
-      //   msg: `updated an appointment configuration <strong>[ ${
-      //     appointmentConfigData.code || ''
-      //   } ]</strong>`,
-      // });
+
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t('updated successfully!'));
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
-      // await refetch();
     } catch (error) {
-      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-      // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(
@@ -243,34 +223,18 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             `${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`,
             data
           );
-          // socket.emit('updated', {
-          //   data,
-          //   user,
-          //   link: paths.unitservice.employees.appointmentconfig.root(id),
-          //   msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
-          // });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
       } else {
         updating.onTrue();
         await axios.post(endpoints.appointment_configs.all, data);
-        // socket.emit('created', {
-        //   data,
-        //   user,
-        //   link: paths.unitservice.employees.appointmentconfig.root(id),
-        //   msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
-        // });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
         router.push(paths.unitservice.employees.appointmentconfig.root(id));
       }
-      // reset();
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-      // error emitted in backend
       updating.onFalse();
       loadingSend.onFalse();
       enqueueSnackbar(
@@ -291,51 +255,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     }
   }, [errors, enqueueSnackbar]);
 
-  /* eslint-disable */
   useEffect(() => {
-    if (appointmentConfigData) {
-      methods.reset({
-        unit_service:
-          appointmentConfigData?.unit_service ||
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-            ._id,
-        department:
-          employeeInfo?.department?._id ||
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.department?._id,
-        start_date: appointmentConfigData?.start_date || null,
-        end_date: appointmentConfigData?.end_date || null,
-        weekend: appointmentConfigData?.weekend || [],
-        appointment_time: appointmentConfigData?.appointment_time || null,
-        config_frequency: appointmentConfigData?.config_frequency || null,
-        holidays: appointmentConfigData?.holidays || [
-          {
-            description: '',
-            date: null,
-          },
-        ],
-        long_holidays: appointmentConfigData?.long_holidays || [
-          {
-            description: '',
-            start_date: null,
-            end_date: null,
-          },
-        ],
-        work_group: appointmentConfigData.work_group?._id || null,
-        work_shift: appointmentConfigData.work_shift?._id || null,
-        days_details: appointmentConfigData.days_details || [
-          {
-            day: '',
-            work_start_time: null,
-            work_end_time: null,
-            break_start_time: null,
-            break_end_time: null,
-            appointments: [],
-          },
-        ],
-      });
-    }
-  }, [appointmentConfigData, user, employeeInfo?.department]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
   return (
     <>
       <Container maxWidth="lg">

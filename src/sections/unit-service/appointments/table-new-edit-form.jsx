@@ -101,16 +101,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      appointment_type: currentTable?.appointment_type?._id || null,
-      start_time: currentTable?.start_time || null,
-      online_available: currentTable?.online_available || true,
-      service_types: currentTable?.service_types?.map((one) => one?._id) || [],
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

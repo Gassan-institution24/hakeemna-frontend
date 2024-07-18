@@ -104,20 +104,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      country: currentTable?.country?._id || null,
-      city: currentTable?.city?._id || null,
-      type: currentTable?.type || '',
-      percentage: currentTable?.percentage || 0,
-      amount: currentTable?.amount || 0,
-      Comment: currentTable?.Comment || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
