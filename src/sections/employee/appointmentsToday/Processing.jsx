@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -51,9 +51,10 @@ import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form'
 
 import Rooms from './rooms';
 import History from './history';
-import TestPage from './testPage';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
+import TestPage from './prescription';
+import Adjustabledocument from './adjustabledocument';
 
 export default function Processing() {
   const { user } = useAuthContext();
@@ -91,6 +92,7 @@ export default function Processing() {
     patient: Entrance?.patient?._id,
     entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit,
+    file: [],
   };
   const [itemsToShow, setItemsToShow] = useState(2);
 
@@ -114,6 +116,7 @@ export default function Processing() {
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
       entrance_mangament: Entrance?._id,
+      file: [],
     });
   }, [user, Entrance, reset]);
 
@@ -149,6 +152,18 @@ export default function Processing() {
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
+  const handleRemoveFile = useCallback(
+    (inputFile) => {
+      const filtered = values.file.filter((file) => file !== inputFile);
+      setValue('file', filtered);
+      setImgFiles(filtered);
+    },
+    [setValue, values.file]
+  );
+
+  const handleRemoveAllFiles = useCallback(() => {
+    setValue('file', []);
+  }, [setValue]);
 
   const removemedicalrepoort = async (IdToremove2) => {
     await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
@@ -158,6 +173,10 @@ export default function Processing() {
     enqueueSnackbar('Feild removed successfully', { variant: 'success' });
     refetch();
     reset();
+  };
+
+  const handleViewClick = (idd) => {
+    router.push(paths.employee.Mediaclreport(idd));
   };
   const onSubmit = async (submitdata) => {
     try {
@@ -316,6 +335,17 @@ export default function Processing() {
       color: 'primary',
       icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
     },
+    {
+      key: 8,
+      title: (
+        <>
+          Adjustable document (optional) <br />
+          <Adjustabledocument patient={data}/>
+        </>
+      ),
+      color: 'primary',
+      icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
+    },
   ];
 
   const renderPrescritption = <TestPage Entrance={Entrance} />;
@@ -346,6 +376,7 @@ export default function Processing() {
           <Button
             onMouseOver={() => handleHover(info?._id)}
             onMouseOut={handleMouseOut}
+            onClick={() => handleViewClick(info?._id)}
             sx={{ m: 1 }}
           >
             View &nbsp;{' '}
@@ -372,6 +403,7 @@ export default function Processing() {
               sx={{ mb: 2 }}
             />
             <RHFUpload
+              multiple
               autoFocus
               fullWidth
               name="file"
@@ -379,7 +411,8 @@ export default function Processing() {
               sx={{ mb: 2 }}
               variant="outlined"
               onDrop={handleDrop}
-              multiple
+              onRemove={handleRemoveFile}
+              onRemoveAll={handleRemoveAllFiles}
             />
           </DialogContent>
           <DialogActions>

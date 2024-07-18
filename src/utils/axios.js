@@ -111,6 +111,10 @@ export const endpoints = {
     all: '/api/drugs/',
     one: (id) => !id ? null : `/api/drugs/${id}`,
   },
+  adjustabledocument: {
+    all: '/api/adjustabledocument/',
+    one: (id) => !id ? null : `/api/adjustabledocument/employee/${id}`,
+  },
   medfamilies: {
     all: '/api/drugfamilies/',
     many: '/api/drugfamilies/many',
@@ -412,6 +416,7 @@ export const endpoints = {
   },
   entranceManagement: {
     all: '/api/entrance',
+    inwatingnow: '/api/entrance/inwatingnow',
     one: (id) => !id ? null : `/api/entrance/${id}`,
     inwating: (id) => !id ? null : `/api/entrance/inwating/${id}`,
     wating: (id) => !id ? null : `/api/entrance/wating/${id}`,

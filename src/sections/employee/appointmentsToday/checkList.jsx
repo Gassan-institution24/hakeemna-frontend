@@ -24,7 +24,7 @@ import { useGetMyCheckLists, useGetOneEntranceManagement } from 'src/api';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function TestPage() {
+export default function CheckList() {
   const params = useParams();
   const { id } = params;
 
