@@ -197,7 +197,7 @@ const ServicesNewPage = lazy(() => import('src/pages/unit-service/tables/service
 const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/services/edit'));
 const Processing = lazy(() => import('src/sections/employee/appointmentsToday/Processing'));
 const Viewgpage = lazy(() => import('src/sections/employee/appointmentsToday/viewgpage'));
-const Test = lazy(() => import('src/sections/employee/appointmentsToday/testPage'));
+const Test = lazy(() => import('src/sections/employee/appointmentsToday/prescription'));
 
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));

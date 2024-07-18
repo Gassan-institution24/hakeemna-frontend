@@ -31,7 +31,7 @@ export function useGetWatingPatient(id) {
     () => ({
       entranceData: data,
       loading: isLoading,
-      error,
+      error, 
       validating: isValidating,
       empty: !isLoading && !data?.length,
     }),
@@ -71,6 +71,26 @@ export function useGetAllEntranceManagement() {
   const memoizedValue = useMemo(
     () => ({
       entranceData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+export function useGetAllinWatingNow() {
+  const URL = endpoints.entranceManagement.inwatingnow;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      entrance: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
