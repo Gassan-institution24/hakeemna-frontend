@@ -1,13 +1,12 @@
 import * as Yup from 'yup';
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
+import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
 
 import { alpha } from '@mui/material/styles';
-import { DatePicker } from '@mui/x-date-pickers';
 import {
   Timeline,
   TimelineDot,
@@ -23,8 +22,6 @@ import {
   Button,
   Dialog,
   Divider,
-  Checkbox,
-  MenuItem,
   Typography,
   DialogTitle,
   DialogActions,
@@ -44,18 +41,17 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetPatient,
-  useGetMedicines,
   useGetMedRecord,
-  useGeEntrancePrescription,
   useGetOneEntranceManagement,
   useGetEntranceExaminationReports,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFUpload, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 import Rooms from './rooms';
 import History from './history';
+import TestPage from './testPage';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
 
@@ -63,39 +59,27 @@ export default function Processing() {
   const { user } = useAuthContext();
   const params = useParams();
   const { id } = params;
-  const { medicinesData } = useGetMedicines();
   const { Entrance } = useGetOneEntranceManagement(id);
-  const { prescriptionData, refetch } = useGeEntrancePrescription(id);
-  const { medicalreportsdata, refetch2 } = useGetEntranceExaminationReports(id);
+  const { medicalreportsdata, refetch } = useGetEntranceExaminationReports(id);
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
-  const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const [ImgFiles, setImgFiles] = useState([]);
-  const [DoctorComment, setDoctorComment] = useState();
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const [chronic, setChronic] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
-    Num_days: Yup.number(),
-    medicines: Yup.string(),
-    Start_time: Yup.date(),
-    End_time: Yup.date(),
     file: Yup.array(),
-    Frequency_per_day: Yup.string(),
-    Doctor_Comments: Yup.string(),
     entrance_mangament: Yup.string(),
     description: Yup.string(),
     department: Yup.string(),
-    chronic: Yup.boolean(),
     Drugs_report: Yup.string(),
     medical_report: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
@@ -107,8 +91,6 @@ export default function Processing() {
     patient: Entrance?.patient?._id,
     entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit,
-    chronic: '',
-    Doctor_Comments: '',
   };
   const [itemsToShow, setItemsToShow] = useState(2);
 
@@ -121,7 +103,6 @@ export default function Processing() {
   const {
     reset,
     handleSubmit,
-    control,
     watch,
     setValue,
     formState: { isSubmitting },
@@ -135,19 +116,7 @@ export default function Processing() {
       entrance_mangament: Entrance?._id,
     });
   }, [user, Entrance, reset]);
-  const watchStartTime = watch('Start_time');
-  const watchEndTime = watch('End_time');
 
-  useEffect(() => {
-    if (watchStartTime && watchEndTime) {
-      const start = new Date(watchStartTime);
-      const end = new Date(watchEndTime);
-      const difference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-      setValue('Num_days', difference > 0 ? difference : 0);
-    }
-  }, [watchStartTime, watchEndTime, setValue]);
-
-  
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
 
@@ -181,8 +150,8 @@ export default function Processing() {
     }
   };
 
-  const removePrescription = async (IdToremove) => {
-    await axiosInstance.patch(endpoints.prescription.one(IdToremove), {
+  const removemedicalrepoort = async (IdToremove2) => {
+    await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
       Activation: false,
     });
 
@@ -190,38 +159,24 @@ export default function Processing() {
     refetch();
     reset();
   };
-  const removemedicalrepoort = async (IdToremove2) => {
-    await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
-      Activation: false,
-    });
-
-    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
-    refetch2();
-    reset();
-  };
   const onSubmit = async (submitdata) => {
     try {
-      submitdata.Doctor_Comments = DoctorComment;
-      submitdata.chronic = chronic;
+      const formData = new FormData();
 
-      if (medicalReportDialog.value) {
-        const formData = new FormData();
-
-        Object.keys(submitdata).forEach((key) => {
-          if (Array.isArray(submitdata[key])) {
-            submitdata[key].forEach((item, index) => {
-              formData.append(`${key}[${index}]`, item);
-            });
-          } else {
-            formData.append(key, submitdata[key]);
-          }
-        });
-
-        if (ImgFiles) {
-          ImgFiles.forEach((file, index) => {
-            formData.append(`file[${index}]`, file);
+      Object.keys(submitdata).forEach((key) => {
+        if (Array.isArray(submitdata[key])) {
+          submitdata[key].forEach((item, index) => {
+            formData.append(`${key}[${index}]`, item);
           });
+        } else {
+          formData.append(key, submitdata[key]);
         }
+      });
+
+      if (ImgFiles) {
+        ImgFiles.forEach((file, index) => {
+          formData.append(`file[${index}]`, file);
+        });
 
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
@@ -241,28 +196,8 @@ export default function Processing() {
         });
 
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
-        refetch2();
-        medicalReportDialog.onFalse();
-        reset();
-      }
-      if (prescriptionDialog.value) {
-        await axiosInstance.post(endpoints.history.all, {
-          patient: Entrance?.patient?._id,
-          name_english: 'an prescription has been added',
-          name_arabic: 'تم ارفاق وصفة طبية',
-          sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
-          actual_date: Entrance?.created_at,
-          title: 'prescription',
-          service_unit: Entrance?.service_unit?._id,
-        });
-        await axiosInstance.post('/api/drugs', submitdata);
-        await axiosInstance.patch(`/api/entrance/${id}`, {
-          Drugs_report_status: true,
-        });
-        enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
-        prescriptionDialog.onFalse();
         refetch();
+        medicalReportDialog.onFalse();
         reset();
       }
     } catch (error) {
@@ -383,6 +318,8 @@ export default function Processing() {
     },
   ];
 
+  const renderPrescritption = <TestPage Entrance={Entrance} />;
+
   const renderMedicalReport = (
     <Card sx={{ mt: 1 }}>
       <Button variant="outlined" color="success" onClick={medicalReportDialog.onTrue} sx={{ m: 2 }}>
@@ -403,12 +340,8 @@ export default function Processing() {
           }}
         >
           {`${info?.employee?.name_english} has add ${info?.description} medical report`}
-          <br />
           <Button onClick={() => removemedicalrepoort(info?._id)}>
             Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-          </Button>
-          <Button>
-            Update &nbsp; <Iconify icon="icon-park:edit-two" />
           </Button>
           <Button
             onMouseOver={() => handleHover(info?._id)}
@@ -446,160 +379,11 @@ export default function Processing() {
               sx={{ mb: 2 }}
               variant="outlined"
               onDrop={handleDrop}
-              // multiple
+              multiple
             />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
-              {t('Cancel')}
-            </Button>
-            <Button type="submit" loading={isSubmitting} variant="contained">
-              {t('Upload')}
-            </Button>
-          </DialogActions>
-        </FormProvider>
-      </Dialog>
-    </Card>
-  );
-
-  const renderPrescription = (
-    <Card sx={{ mt: 1 }}>
-      <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ m: 2 }}>
-        {t('Add prescription')}
-        <Iconify icon="mingcute:add-line" />
-      </Button>
-      {prescriptionData?.map((info, i) => (
-        <Typography
-          variant="h6"
-          sx={{
-            bgcolor: '#fff',
-            m: 2,
-            border: 2,
-            borderRadius: 2,
-            borderColor: '#EDEFF2',
-            p: 2,
-          }}
-          key={i}
-        >
-          {info?.medicines?.trade_name}
-          <br />
-          <Button
-            onMouseOver={() => handleHover(info?._id)}
-            onMouseOut={handleMouseOut}
-            sx={{ m: 1 }}
-          >
-            View &nbsp;{' '}
-            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
-          </Button>
-          <Button>
-            Update &nbsp; <Iconify icon="icon-park:edit-two" />
-          </Button>
-          <Button onClick={() => removePrescription(info?._id)}>
-            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-          </Button>
-        </Typography>
-      ))}
-      <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            {t('IMPORTANT')}
-          </DialogTitle>
-          <DialogContent>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              {curLangAr
-                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
-                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
-            </Typography>
-            <RHFSelect
-              label={t('medicine*')}
-              fullWidth
-              name="medicines"
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 2 }}
-            >
-              {medicinesData?.map((test, idx) => (
-                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.trade_name}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-            <RHFTextField
-
-              name="Frequency_per_day"
-              label={t('Frequency pe day')}
-              sx={{ mb: 2 }}
-            />
-            <RHFTextField name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
-
-            <Controller
-              name="Start_time"
-              control={control}
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('Start time*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
-                  }}
-                />
-              )}
-            />
-            <Controller
-              name="End_time"
-              control={control}
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('End time*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
-                  }}
-                />
-              )}
-            />
-            <RHFTextField
-
-              name="Doctor_Comments"
-              label={t('Doctor Comments')}
-              multiline
-              // rows={4}
-              sx={{ mb: 2 }}
-              onChange={(e) => setDoctorComment(e.target.value)}
-            />
-          </DialogContent>
-          <Checkbox
-            size="small"
-            name="chronic"
-            color="success"
-            sx={{ position: 'relative', top: 5, left: 25 }}
-            onChange={() => {
-              setChronic(!chronic);
-            }}
-          />
-          <Typography
-            sx={{
-              color: 'text.secondary',
-              mt: { md: -3, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
-              typography: 'caption',
-
-              fontSize: { md: 15, xs: 10 },
-            }}
-          >
-            chronic
-          </Typography>
-          <DialogActions>
-            <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}
             </Button>
             <Button type="submit" loading={isSubmitting} variant="contained">
@@ -622,7 +406,7 @@ export default function Processing() {
       <Typography variant="subtitle2">{item.title}</Typography>
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {item.title === 'medical report (optional)' && renderMedicalReport}
-        {item.title === 'prescription (optional)' && renderPrescription}
+        {item.title === 'prescription (optional)' && renderPrescritption}
       </Typography>
     </Paper>
   );
