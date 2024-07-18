@@ -114,22 +114,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      country: currentTable?.country?._id || null,
-      city: currentTable?.city?._id || null,
-      US_type: currentTable?.US_type?._id || null,
-      speciality: currentTable?.speciality?._id || null,
-      offer_date: currentTable?.offer_date || null,
-      period_in_months: currentTable?.period_in_months || 0,
-      concept: currentTable?.concept || '',
-      general: currentTable?.general || false,
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

@@ -4,10 +4,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { RHFAutocomplete, RHFSelect } from 'src/components/hook-form';
-import { Box, Link, MenuItem } from '@mui/material';
-import { useGetOneEntranceManagement, useGetPatient, useGetUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatient, useGetUSPatient, useGetOneEntranceManagement } from 'src/api';
+
+import { RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ export default function InvoiceNewEditAddress() {
           </Stack>
           {invoiceTo ? <Stack spacing={1}>
             <Typography variant="subtitle2">{curLangAr ? data?.name_arabic : data?.name_english}</Typography>
-            <Typography variant="body2">{curLangAr ? `${data?.city.name_arabic}, ${data?.country.name_arabic}` : `${data?.city?.name_english}, ${data?.country?.name_english}`}</Typography>
+            <Typography variant="body2">{curLangAr ? `${data?.city?.name_arabic}, ${data?.country?.name_arabic}` : `${data?.city?.name_english}, ${data?.country?.name_english}`}</Typography>
             <Typography variant="body2"> {data?.phone}</Typography>
           </Stack> : <Stack direction='row' justifyContent='flex-start'>
             <RHFAutocomplete

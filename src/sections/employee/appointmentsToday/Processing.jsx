@@ -18,6 +18,7 @@ import {
 } from '@mui/lab';
 import {
   Box,
+  Card,
   Paper,
   Button,
   Dialog,
@@ -29,7 +30,6 @@ import {
   DialogActions,
   DialogContent,
   useMediaQuery,
-  Card,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';

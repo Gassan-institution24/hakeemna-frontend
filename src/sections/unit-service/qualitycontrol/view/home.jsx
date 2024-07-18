@@ -51,7 +51,7 @@ export default function UnitServicesFeedbackView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     /// to edit
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'department', label: t('department') },
     { id: 'appointments', label: t('appointments') },
     { id: 'employees', label: t('employees') },

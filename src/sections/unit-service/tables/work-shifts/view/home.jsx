@@ -68,7 +68,7 @@ export default function WorkGroupsTableView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'name', label: t('name') },
     { id: 'start_time', label: t('start time') },
     { id: 'end_time', label: t('end time') },
@@ -448,9 +448,9 @@ export default function WorkGroupsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

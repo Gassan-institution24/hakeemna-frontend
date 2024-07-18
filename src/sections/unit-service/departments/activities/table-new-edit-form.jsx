@@ -125,18 +125,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      department: departmentData._id,
-      unit_service: departmentData.unit_service._id,
-      name_english: currentTable?.name_english || '',
-      name_arabic: currentTable?.name_arabic || '',
-      details: currentTable?.details || '',
-      details_arabic: currentTable?.details_arabic || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

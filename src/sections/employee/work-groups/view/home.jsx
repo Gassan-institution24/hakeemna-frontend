@@ -46,7 +46,7 @@ const defaultFilters = {
 export default function WorkGroupsTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('sequence') },
     { id: 'name', label: t('name') },
     { id: 'employees', label: t('employees') },
     // { id: 'status', label: t('status') },

@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import TableRow from '@mui/material/TableRow';
@@ -104,6 +104,7 @@ export default function CountriesTableRow({ row, selected }) {
       </TableCell>
     </TableRow>
   );
+  
   const NewUserSchema = Yup.object().shape({
     note: Yup.string(),
     work_shift: Yup.string().required(t('required field')),
@@ -112,7 +113,8 @@ export default function CountriesTableRow({ row, selected }) {
     appointment_type: Yup.string().required(t('required field')),
     start_time: Yup.date().required(t('required field')),
   });
-  const defaultValues = {
+
+  const defaultValues = useMemo(()=>({
     note: '',
     appointment_type: appointmenttypesData?.[0]?._id,
     start_time: new Date(),
@@ -148,7 +150,8 @@ export default function CountriesTableRow({ row, selected }) {
       );
     })?.[0]?._id,
     service_types: [],
-  };
+  }), [workGroupsData, workShiftsData, appointmenttypesData]);
+
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
@@ -195,46 +198,8 @@ export default function CountriesTableRow({ row, selected }) {
   });
 
   useEffect(() => {
-    reset({
-      note: '',
-      appointment_type: appointmenttypesData?.[0]?._id,
-      start_time: new Date(),
-      work_group: workGroupsData?.[0]?._id,
-      work_shift: workShiftsData.filter((one) => {
-        const currentDate = new Date();
-
-        const startTime = new Date(currentDate);
-        startTime.setHours(
-          new Date(one.start_time).getHours(),
-          new Date(one.start_time).getMinutes(),
-          0,
-          0
-        );
-
-        const endTime = new Date(currentDate);
-        endTime.setHours(
-          new Date(one.end_time).getHours(),
-          new Date(one.end_time).getMinutes(),
-          0,
-          0
-        );
-        if (startTime.getTime() <= endTime.getTime()) {
-          return (
-            currentDate.getTime() >= startTime.getTime() &&
-            currentDate.getTime() < endTime.getTime()
-          );
-        }
-        // If the shift crosses midnight
-        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
-        return (
-          currentDate.getTime() >= startTime.getTime() ||
-          currentDate.getTime() < endTimeNextDay.getTime()
-        );
-      })?.[0]?._id,
-      service_types: [],
-    });
-    // eslint-disable-next-line
-  }, [workGroupsData, appointmenttypesData, user?.employee, workShiftsData]);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <>

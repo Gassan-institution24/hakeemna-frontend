@@ -12,11 +12,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { inputBaseClasses } from '@mui/material/InputBase';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveServiceTypes, useGetUSActivities } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -81,12 +81,12 @@ export default function InvoiceNewEditDetails() {
 
   const handleChangeItemDetails = useCallback(
     (event, index) => {
-      if (Number.isInteger(event.target.value)) {
-        setValue(event.target.name, Number(event.target.value));
-      } else {
+      if (event.target.name === `items[${index}].service`) {
         setValue(event.target.name, event.target.value);
         const selected = serviceTypesData?.find((service) => service._id === event.target.value);
         setValue(`items[${index}].price`, selected?.Price_per_unit);
+      } else {
+        setValue(event.target.name, Number(event.target.value));
       }
       setValue(
         `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price

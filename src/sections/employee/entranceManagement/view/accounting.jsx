@@ -21,8 +21,8 @@ import { useTranslate } from 'src/locales';
 import FormProvider, { RHFCheckbox } from 'src/components/hook-form';
 
 import InvoiceNewEditAddress from '../invoice-new-edit-address';
-import InvoiceNewEditStatusDate from '../invoice-new-edit-status-date';
 import InvoiceNewEditDetails from '../invoice-new-edit-details';
+import InvoiceNewEditStatusDate from '../invoice-new-edit-status-date';
 import InvoiceNewEditTaxDetails from '../invoice-new-edit-tax-details';
 
 // ----------------------------------------------------------------------

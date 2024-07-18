@@ -41,7 +41,7 @@ export default function Oldpatientsdata() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user?.patient?.identification_num]);
 
   useEffect(() => {
     if (oldpatientsdata?.length > 0) {

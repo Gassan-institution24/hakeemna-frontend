@@ -137,18 +137,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      department: departmentData._id,
-      general_info: currentTable?.general_info || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

@@ -122,18 +122,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      start_time: currentTable?.start_time || null,
-      end_time: currentTable?.end_time || null,
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

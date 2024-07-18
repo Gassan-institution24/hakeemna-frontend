@@ -138,13 +138,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       Yup.object().shape({
         start_date: Yup.date().nullable(),
         end_date: Yup.date().nullable(),
-        // .when(
-        //   'start_date',
-        //   (startDate, schema) =>
-        //     startDate
-        //       ? schema.min(startDate, 'End date must be after start date')
-        //       : schema // If start_date doesn't exist, leave end_date validation as is
-        // ),
         description: Yup.string().nullable(),
       })
     ),
@@ -215,6 +208,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   const {
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -232,9 +226,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.employee.appointmentconfiguration.root);
     } catch (error) {
       console.error(error);
-      // setErrorMsg(typeof error === 'string' ? error : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-      // error emitted in backend
       saving.onFalse();
       confirm.onFalse();
       enqueueSnackbar(
@@ -256,12 +247,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       confirm.onFalse();
       enqueueSnackbar(t('updated successfully!'));
       router.push(paths.employee.appointmentconfiguration.root);
-      // await refetch();
     } catch (error) {
       console.error(error);
-      // setErrorMsg(typeof error === 'string' ? error : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-      // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(
@@ -339,52 +326,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       });
     }
   }, [errors, enqueueSnackbar]);
-
-  /* eslint-disable */
   useEffect(() => {
-    if (appointmentConfigData) {
-      methods.reset({
-        unit_service:
-          appointmentConfigData?.unit_service ||
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-            ._id,
-        department:
-          employeeInfo?.department?._id ||
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.department?._id,
-        start_date: appointmentConfigData?.start_date || null,
-        end_date: appointmentConfigData?.end_date || null,
-        weekend: appointmentConfigData?.weekend || [],
-        appointment_time: appointmentConfigData?.appointment_time || null,
-        config_frequency: appointmentConfigData?.config_frequency || null,
-        holidays: appointmentConfigData?.holidays || [
-          {
-            description: '',
-            date: null,
-          },
-        ],
-        long_holidays: appointmentConfigData?.long_holidays || [
-          {
-            description: '',
-            start_date: null,
-            end_date: null,
-          },
-        ],
-        work_group: appointmentConfigData.work_group?._id || null,
-        work_shift: appointmentConfigData.work_shift?._id || null,
-        days_details: appointmentConfigData.days_details || [
-          {
-            day: '',
-            work_start_time: null,
-            work_end_time: null,
-            break_start_time: null,
-            break_end_time: null,
-            appointments: [],
-          },
-        ],
-      });
-    }
-  }, [appointmentConfigData, user, employeeInfo?.department]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <>
@@ -397,7 +341,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs
