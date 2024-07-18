@@ -1,4 +1,3 @@
-import sum from 'lodash/sum';
 import { useEffect, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -16,11 +15,11 @@ import { fCurrency } from 'src/utils/format-number';
 // import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveServiceTypes, useGetUSActivities } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useLocales, useTranslate } from 'src/locales';
+import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

@@ -105,32 +105,8 @@ export default function ProductNewEditForm({ currentProduct }) {
   const values = watch();
 
   useEffect(() => {
-    if (currentProduct) {
-      reset(defaultValues);
-    }
-  }, [currentProduct, defaultValues, reset]);
-
-  /* eslint-disable */
-  useEffect(() => {
-    reset({
-      stakeholder: currentProduct?.stakeholder || user?.stakeholder?._id,
-      name_english: currentProduct?.name_english || '',
-      name_arabic: currentProduct?.name_arabic || '',
-      description_english: currentProduct?.description_english || '',
-      description_arabic: currentProduct?.description_arabic || '',
-      category: currentProduct?.category?._id || null,
-      images: currentProduct?.images || [],
-      //
-      price: currentProduct?.price || 0,
-      quantity: currentProduct?.quantity || 0,
-      currency: currentProduct?.currency?._id || null,
-      taxes: currentProduct?.taxes || 0,
-      status: currentProduct?.status || 'published',
-      to_patients: currentProduct?.to_patients || true,
-      to_unit_service: currentProduct?.to_unit_service || true,
-    });
-  }, [currentProduct]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {

@@ -65,7 +65,7 @@ export default function SickLeave({ patient, service_unit }) {
       patient: patient?._id,
       unit_services: service_unit,
     });
-  }, [user, reset, patient, service_unit]);
+  }, [user?.employee?._id, reset, patient?._id, service_unit]);
 
   const onSubmit = async (submitdata) => {
     try {

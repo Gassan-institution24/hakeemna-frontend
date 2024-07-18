@@ -96,23 +96,9 @@ export default function TableNewEditForm() {
     }
   }, [errors, enqueueSnackbar]);
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      departments: data?.acl?.unit_service?.departments || [],
-      employees: data?.acl?.unit_service?.employees || [],
-      management_tables: data?.acl?.unit_service?.management_tables || [],
-      appointments: data?.acl?.unit_service?.appointments || [],
-      appointment_configs: data?.acl?.unit_service?.appointment_configs || [],
-      accounting: data?.acl?.unit_service?.accounting || [],
-      offers: data?.acl?.unit_service?.offers || [],
-      quality_control: data?.acl?.unit_service?.quality_control || [],
-      unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
-      old_patient: data?.acl?.unit_service?.old_patient || [],
-      permissions: data?.acl?.unit_service?.old_patient || [],
-    });
-  }, [id, data]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (submittedData) => {
     try {

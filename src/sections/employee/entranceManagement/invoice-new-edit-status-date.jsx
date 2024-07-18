@@ -4,8 +4,9 @@ import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { RHFSelect } from 'src/components/hook-form';
 import { useLocales, useTranslate } from 'src/locales';
+
+import { RHFSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

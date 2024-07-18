@@ -113,19 +113,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      country: currentTable?.country?._id || null,
-      city: currentTable?.city?._id || null,
-      unit_service_type: currentTable?.unit_service_type || '',
-      sector: currentTable?.sector || '',
-      type_of_specialty_1: currentTable?.type_of_specialty_1 || '',
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   useEffect(() => {
     setCities(

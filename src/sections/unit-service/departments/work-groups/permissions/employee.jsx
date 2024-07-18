@@ -87,19 +87,9 @@ export default function TableNewEditForm() {
     }
   }, [errors, enqueueSnackbar]);
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      appointments: data?.employees?.find((info) => info._id === emid)?.acl?.appointments || [],
-      appointment_configs:
-        data?.employees?.find((info) => info._id === emid)?.acl?.appointment_configs || [],
-      accounting: data?.employees?.find((info) => info._id === emid)?.acl?.accounting || [],
-      entrance_management:
-        data?.employees?.find((info) => info._id === emid)?.acl?.entrance_management || [],
-      permissions: data?.employees?.find((info) => info._id === emid)?.acl?.permissions || [],
-    });
-  }, [emid, data]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (submitData) => {
     try {

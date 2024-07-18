@@ -10,7 +10,7 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 // ----------------------------------------------------------------------
 
 export default function TableDetailsRow({ row, selected, onView }) {
-  const { code, name_english, name_arabic, employees } = row;
+  const { sequence_number, name_english, name_arabic, employees } = row;
 
   const checkAcl = useAclGuard();
 
@@ -41,7 +41,7 @@ export default function TableDetailsRow({ row, selected, onView }) {
         }
         align="center"
       >
-        <Box>{code}</Box>
+        <Box>{sequence_number}</Box>
       </TableCell>
 
       <TableCell

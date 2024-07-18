@@ -124,7 +124,7 @@ export default function AppointmentsTableRow({
             cursor: 'pointer',
             color: '#3F54EB',
           }}
-          onClick={() => router.push(paths.employee.patients.info(patient._id))}
+          onClick={() => router.push(paths.employee.patients.info(patient?._id))}
         >
           {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
@@ -359,7 +359,7 @@ export default function AppointmentsTableRow({
       <UploadAnalysis
         open={uploadAnalysis.value}
         onClose={uploadAnalysis.onFalse}
-        analysisData={{ patient: patient._id || patient, appointment: _id }}
+        analysisData={{ patient: patient?._id || patient, appointment: _id }}
         refetch={refetch}
       />
     </>

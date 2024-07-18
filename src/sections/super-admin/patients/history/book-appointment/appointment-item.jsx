@@ -31,7 +31,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
       const names = unit_service.insurance.map((test, idx) => test.name_english);
       setInsuranceNames(names);
     }
-  }, [unit_service]);
+  }, [unit_service.insurance]);
   return (
     <>
       <Card>
@@ -157,7 +157,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {}
+        { }
         <MenuItem
           lang="ar"
           onClick={() => {

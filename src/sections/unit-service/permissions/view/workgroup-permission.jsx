@@ -86,17 +86,9 @@ export default function TableNewEditForm() {
     }
   }, [errors, enqueueSnackbar]);
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      appointments: currWGPermissions?.appointments || [],
-      appointment_configs: currWGPermissions?.appointment_configs || [],
-      accounting: currWGPermissions?.accounting || [],
-      entrance_management: currWGPermissions?.entrance_management || [],
-      permissions: currWGPermissions?.permissions || [],
-    });
-  }, [id, data]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (submitData) => {
     try {

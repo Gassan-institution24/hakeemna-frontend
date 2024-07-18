@@ -99,17 +99,9 @@ export default function CitiesNewEditForm({ currentTable }) {
     }
   });
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      name_arabic: currentTable?.name_arabic || '',
-      name_english: currentTable?.name_english || '',
-      percentage: currentTable?.percentage || 0,
-      country: currentTable?.country?._id || '',
-      city: currentTable?.city?._id || null,
-    });
-  }, [currentTable]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

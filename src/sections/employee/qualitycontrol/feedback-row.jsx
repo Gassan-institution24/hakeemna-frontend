@@ -17,7 +17,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
   const {
-    code,
+    sequence_number,
     appointment,
     employee,
     status,
@@ -40,7 +40,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{sequence_number}</TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: appointment?.name_english })}

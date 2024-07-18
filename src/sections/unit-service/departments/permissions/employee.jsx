@@ -89,19 +89,9 @@ export default function TableNewEditForm() {
     }
   }, [errors, enqueueSnackbar]);
 
-  /* eslint-disable */
   useEffect(() => {
-    reset({
-      employees: data?.acl?.department?.employees || [],
-      management_tables: data?.acl?.department?.management_tables || [],
-      appointments: data?.acl?.department?.appointments || [],
-      appointment_configs: data?.acl?.department?.appointment_configs || [],
-      accounting: data?.acl?.department?.accounting || [],
-      quality_control: data?.acl?.department?.quality_control || [],
-      permissions: data?.acl?.department?.permissions || [],
-    });
-  }, [emid, data]);
-  /* eslint-enable */
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (submitedData) => {
     try {
