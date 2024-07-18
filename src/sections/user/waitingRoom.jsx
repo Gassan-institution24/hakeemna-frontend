@@ -16,7 +16,7 @@ import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetWatingPatient, useGetEntranceManagement } from 'src/api';
+import { useGetWatingPatient, useGetAllinWatingNow } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -26,11 +26,11 @@ import Scrollbar from 'src/components/scrollbar';
 export default function WatingRoom() {
   const { user } = useAuthContext();
   const { entranceData } = useGetWatingPatient(user?.patient?._id);
-  const { entrance } = useGetEntranceManagement();
+  const { entrance } = useGetAllinWatingNow();
   const { t } = useTranslate();
-
+  console.log(entranceData);
   const collapsible = useBoolean();
-  const entranceCount = entrance.length - 1;
+  const entranceCount = entrance.length <= 0 ? 0 : entrance.length - 1;
 
   return entranceData ? (
     <Container sx={{ my: 10 }}>
@@ -54,7 +54,7 @@ export default function WatingRoom() {
                   <TableCell>{fTime(entranceData?.Appointment_date)}</TableCell>
                   <TableCell>{fTime(entranceData?.start_time)}</TableCell>
                   <TableCell>{entranceCount}</TableCell>
-                  <TableCell>Room 2</TableCell>
+                  <TableCell>Go to {entranceData?.Next_activity?.name_english} Room </TableCell>
                 </TableRow>
 
                 <TableRow>
