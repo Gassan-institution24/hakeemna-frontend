@@ -12,7 +12,6 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
 
-import TestPage from './testPage';
 
 export default function Adjustabledocument({ patient }) {
   const { t } = useTranslate();
@@ -20,30 +19,39 @@ export default function Adjustabledocument({ patient }) {
   const { user } = useAuthContext();
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const [adjustabledocumentId, setadjustabledocumentId] = useState();
-  console.log(adjustabledocumentId);
+  const [clickedButtonId, setClickedButtonId] = useState(null);
 
   const onSubmit = async () => {
     try {
       await axiosInstance.patch(`/api/patient/${patient?._id}`, { 
         adjustabledocument: adjustabledocumentId,
       });
-      enqueueSnackbar('sick leave created successfully', { variant: 'success' });
+      enqueueSnackbar('adjustable document sent successfully', { variant: 'success' });
       dialog.onFalse();
     } catch (error) {
       console.error(error.message);
     }
   };
 
+  const handleButtonClick = (id) => {
+    setClickedButtonId(id);
+    setadjustabledocumentId(id);
+  };
+
   return (
-    <Card>
+    <Card sx={{ mt: 2 }}>
       <Box>
         <Typography sx={{ m: 2 }}>
           Choose an Adjustable document And send it to the patients
         </Typography>
         {adjustabledocument?.map((adjustabledocumentdata, i) => (
           <Button
-            onClick={() => setadjustabledocumentId(adjustabledocumentdata?._id)}
-            sx={{ m: 1 }}
+            onClick={() => handleButtonClick(adjustabledocumentdata?._id)}
+            sx={{
+              m: 1,
+              backgroundColor: clickedButtonId === adjustabledocumentdata?._id ? 'info.main' : 'initial',
+              color: clickedButtonId === adjustabledocumentdata?._id ? 'white' : 'initial',
+            }}
             key={i}
           >
             - {adjustabledocumentdata?.title}
@@ -55,11 +63,11 @@ export default function Adjustabledocument({ patient }) {
         {t('Upload')}
       </Button>
      
-        <TestPage/>
    
     </Card>
   );
 }
+
 Adjustabledocument.propTypes = {
   patient: PropTypes.object,
 };

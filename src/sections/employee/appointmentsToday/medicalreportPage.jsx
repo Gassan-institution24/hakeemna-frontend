@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { enqueueSnackbar } from 'notistack';
-import { useState, useCallback, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Box, Stack } from '@mui/system';
 import {
@@ -48,7 +48,6 @@ export default function MdicalreportPage() {
     department: Yup.string(),
     medical_report: Yup.string(),
   });
-
   const defaultValues = {
     file: [],
     description: '',
@@ -185,7 +184,7 @@ export default function MdicalreportPage() {
               <span style={{ color: 'gray', fontWeight: 400 }}>
                 {medicalreports?.employee?.name_english}
               </span>{' '}
-              &nbsp; added a new prescription
+              &nbsp; added medical report
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('description')}:&nbsp;&nbsp;

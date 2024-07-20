@@ -25,7 +25,7 @@ export function useGetmedicalreports() {
   return { ...memoizedValue, refetch };
 }
 export function useGetPatintmedicalreports(id) {
-  const URL = endpoints.medicalreports.one(id);
+  const URL = endpoints.medicalreports.patiet(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
