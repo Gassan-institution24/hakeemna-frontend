@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { enqueueSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Box,
+  Card,
   Radio,
   Button,
   Checkbox,
@@ -20,19 +21,21 @@ import {
 import axiosInstance from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetMyCheckLists, useGetOneEntranceManagement } from 'src/api';
+import { useGetCheckList, useGetMyCheckLists, useGetOneEntranceManagement } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function CheckList() {
   const params = useParams();
   const { id } = params;
-
+  const [thId, setTheId] = useState(null);
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id);
-  const { CheckListData, refetch } = useGetMyCheckLists(
+  const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
+  const { data, refetch } = useGetCheckList(thId);
 
   const onSubmit = async (answers) => {
     try {
@@ -81,17 +84,29 @@ export default function CheckList() {
   }, [user, Entrance, reset]);
 
   return (
-    <Box sx={{ height: '400px', overflowY: 'auto' }}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        {CheckListData?.map((info, keyI) => (
-          <Box key={keyI} sx={{ mb: 2 }}>
+    <Card sx={{ mt: 3 }}>
+      <Box sx={{ height: '400px', overflowY: 'auto' }}>
+        <Box sx={{ display: 'flex' }}>
+          {CheckListData?.map((info) => (
+            <Button sx={{ mt: 2, ml: 2 }} onClick={() => setTheId(info?._id)}>
+              {info?.title} <Iconify icon="lets-icons:arhive-import" sx={{ml:2}} width={21} />
+            </Button>
+          ))}
+        </Box>
+
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={{ mb: 2 }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2, mb: 2 }}>
-              <Typography>{info?.title}</Typography>
-              <Typography sx={{ p: 1, bgcolor: 'lightgray', color: 'white', width: '100%', mt: 2 }}>
-                {info?.description}
-              </Typography>
+              <Typography>{data?.title}</Typography>
+              {data && (
+                <Typography
+                  sx={{ p: 1, bgcolor: 'lightgray', color: 'white', width: '100%', mt: 2 }}
+                >
+                  {data?.description}
+                </Typography>
+              )}
             </Box>
-            {info?.questions?.map((questions, ii) => (
+            {data?.questions?.map((questions, ii) => (
               <Box key={ii} sx={{ display: 'block' }}>
                 {questions?.answer_way === 'Text' && (
                   <Controller
@@ -157,13 +172,14 @@ export default function CheckList() {
               </Box>
             ))}
           </Box>
-        ))}
-        {CheckListData?.length > 0 && (
-          <Button type="submit" disabled={isSubmitting} variant="contained">
-            Save
-          </Button>
-        )}
-      </FormProvider>
-    </Box>
+
+          {data?.length > 0 && (
+            <Button type="submit" disabled={isSubmitting} variant="contained">
+              Save
+            </Button>
+          )}
+        </FormProvider>
+      </Box>
+    </Card>
   );
 }
