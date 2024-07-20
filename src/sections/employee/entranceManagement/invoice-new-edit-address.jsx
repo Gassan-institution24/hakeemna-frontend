@@ -26,7 +26,7 @@ export default function InvoiceNewEditAddress() {
   const handleInvoicing = (activity) => {
     append({
       service_type: null,
-      activity: activity || '',
+      activity: activity || null,
       quantity: 1,
       price_per_unit: 0,
       subtotal: 0,
