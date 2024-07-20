@@ -170,6 +170,7 @@ export default function Prescription({ Entrance }) {
           key={i}
         >
           {info?.medicines?.trade_name}
+          <br/>
           <Button
             onMouseOver={() => handleHover(info?._id)}
             onMouseOut={handleMouseOut}
