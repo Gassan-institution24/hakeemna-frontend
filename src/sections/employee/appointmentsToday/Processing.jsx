@@ -2,9 +2,9 @@ import * as Yup from 'yup';
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect, useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect, useCallback } from 'react';
 
 import { alpha } from '@mui/material/styles';
 import {
@@ -22,6 +22,7 @@ import {
   Button,
   Dialog,
   Divider,
+  Checkbox,
   Typography,
   DialogTitle,
   DialogActions,
@@ -54,6 +55,7 @@ import History from './history';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
 import TestPage from './prescription';
+import ServicesProvided from './servicesProvided';
 import Adjustabledocument from './adjustabledocument';
 
 export default function Processing() {
@@ -70,6 +72,7 @@ export default function Processing() {
   const curLangAr = currentLang.value === 'ar';
 
   const [ImgFiles, setImgFiles] = useState([]);
+  const [privatSt, setprivate] = useState(false);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -83,8 +86,7 @@ export default function Processing() {
     department: Yup.string(),
     Drugs_report: Yup.string(),
     medical_report: Yup.string(),
-    Medical_sick_leave_start: Yup.date(),
-    Medical_sick_leave_end: Yup.date(),
+    private: Yup.boolean(),
   });
 
   const defaultValues = {
@@ -93,6 +95,7 @@ export default function Processing() {
     entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit,
     file: [],
+    private: privatSt,
   };
   const [itemsToShow, setItemsToShow] = useState(2);
 
@@ -117,6 +120,7 @@ export default function Processing() {
       service_unit: Entrance?.service_unit,
       entrance_mangament: Entrance?._id,
       file: [],
+      // private: privatSt,
     });
   }, [user, Entrance, reset]);
 
@@ -152,6 +156,7 @@ export default function Processing() {
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
+
   const handleRemoveFile = useCallback(
     (inputFile) => {
       const filtered = values.file.filter((file) => file !== inputFile);
@@ -173,6 +178,12 @@ export default function Processing() {
     enqueueSnackbar('Feild removed successfully', { variant: 'success' });
     refetch();
     reset();
+  };
+
+  const privateOrNotFunction = () => {
+    enqueueSnackbar('private medical report can only seen by you', { variant: 'warning' });
+    setprivate(!privatSt);
+    setValue('private', !privatSt);
   };
 
   const handleViewClick = (idd) => {
@@ -216,6 +227,7 @@ export default function Processing() {
 
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
         refetch();
+        setprivate();
         medicalReportDialog.onFalse();
         reset();
       }
@@ -224,6 +236,7 @@ export default function Processing() {
       enqueueSnackbar('Error uploading data', { variant: 'error' });
     }
   };
+
   const handleHover = (hoverdId) => {
     setHoveredButtonId(hoverdId);
   };
@@ -292,7 +305,7 @@ export default function Processing() {
           <span
             style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
           >
-            Doctor Check List
+            Choose a Check List
           </span>
           <CheckList />
         </>
@@ -304,7 +317,7 @@ export default function Processing() {
     {
       key: 5,
       title: 'medical report (optional)',
-      color: 'primary',
+      color: 'info',
 
       icon:
         Entrance?.medical_report_status === true ? (
@@ -316,7 +329,7 @@ export default function Processing() {
     {
       key: 6,
       title: 'prescription (optional)',
-      color: 'info',
+      color: 'primary',
       icon:
         Entrance?.Drugs_report_status === true ? (
           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
@@ -332,7 +345,7 @@ export default function Processing() {
           <SickLeave patient={data} service_unit={Entrance?.service_unit?._id} />
         </>
       ),
-      color: 'primary',
+      color: 'info',
       icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
     },
     {
@@ -340,11 +353,23 @@ export default function Processing() {
       title: (
         <>
           Adjustable document (optional) <br />
-          <Adjustabledocument patient={data}/>
+          <Adjustabledocument patient={data} />
         </>
       ),
       color: 'primary',
-      icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
+      icon: <Iconify icon="mingcute:document-fill" width={24} />,
+    },
+    {
+      key: 9,
+      title: (
+        <>
+          Services provided
+          <br />
+          <ServicesProvided patient={data} />
+        </>
+      ),
+      color: 'info',
+      icon: <Iconify icon="hugeicons:give-pill" width={25} />,
     },
   ];
 
@@ -370,6 +395,7 @@ export default function Processing() {
           }}
         >
           {`${info?.employee?.name_english} has add ${info?.description} medical report`}
+          <br/>
           <Button onClick={() => removemedicalrepoort(info?._id)}>
             Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
           </Button>
@@ -415,6 +441,26 @@ export default function Processing() {
               onRemoveAll={handleRemoveAllFiles}
             />
           </DialogContent>
+          <Checkbox
+            size="small"
+            name="private"
+            color="success"
+            checked={privatSt}
+            sx={{ position: 'relative', top: 5, left: 25 }}
+            onChange={privateOrNotFunction}
+          />
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              mt: { md: -3, xs: -2.3 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
+              typography: 'caption',
+
+              fontSize: { md: 15, xs: 10 },
+            }}
+          >
+            Private
+          </Typography>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
               {t('Cancel')}
