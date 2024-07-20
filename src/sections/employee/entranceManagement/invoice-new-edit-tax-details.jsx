@@ -54,7 +54,7 @@ export default function InvoiceNewEditDetails() {
     const newDeductionSums = {};
 
     serviceTypesData.forEach((service) => {
-      const matchingItems = values.items.filter((item) => item.service === service._id);
+      const matchingItems = values.items.filter((item) => item.service_type === service._id);
       if (matchingItems.length) {
         matchingItems.forEach((item) => {
           const taxId = service.tax._id;
@@ -105,22 +105,23 @@ export default function InvoiceNewEditDetails() {
     }))
   ), [deductionSums]);
 
-  useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
-  useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
+  // useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
+  // useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
+
 
   // when add item from address component - from activities -
   useEffect(() => { update() }, [values.items.length, update])
 
-  const taxesTotal = values.items?.reduce((acc, one) => acc + (one.tax / 100) * one.subtotal, 0);
-  const deductiontotal = values.items?.reduce((acc, one) => acc + (one.deduction / 100) * one.subtotal, 0);
-  const discountTotal = values.items?.reduce((acc, one) => acc + one.discount_amount, 0);
   const subTotal = values.items?.reduce((acc, one) => acc + one.subtotal, 0);
+  const discountTotal = values.items?.reduce((acc, one) => acc + one.discount_amount, 0);
+  const taxesTotal = values.items?.reduce((acc, one) => acc + (one.tax / 100) * (one.subtotal - one.discount_amount), 0);
+  const deductiontotal = values.items?.reduce((acc, one) => acc + (one.deduction / 100) * (one.subtotal - one.discount_amount), 0);
   const totalAmount = values.items?.reduce((acc, one) => acc + one.total, 0);
 
+  useEffect(() => { setValue('subtotal', subTotal) }, [subTotal, setValue])
+  useEffect(() => { setValue('discount', discountTotal) }, [discountTotal, setValue])
   useEffect(() => { setValue('taxes', taxesTotal) }, [taxesTotal, setValue])
   useEffect(() => { setValue('deduction', deductiontotal) }, [deductiontotal, setValue])
-  useEffect(() => { setValue('discount', discountTotal) }, [discountTotal, setValue])
-  useEffect(() => { setValue('subtotal', subTotal) }, [subTotal, setValue])
   useEffect(() => { setValue('totalAmount', totalAmount) }, [totalAmount, setValue])
 
 
@@ -128,7 +129,7 @@ export default function InvoiceNewEditDetails() {
   const handleAdd = () => {
     append({
       service_type: null,
-      activity: '',
+      activity: null,
       quantity: 1,
       price_per_unit: 0,
       subtotal: 0,

@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
 
-import EntranceManagement from 'src/sections/employee/entranceManagement/view/home';
+import EntranceManagement from 'src/sections/employee/entranceManagement/view/details';
 // ----------------------------------------------------------------------
 
 export default function EntranceManagementHomePage() {

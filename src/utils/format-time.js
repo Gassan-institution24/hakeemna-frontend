@@ -32,7 +32,7 @@ export const useUnitTime = () => {
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date && isValid(date) ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
+  return date && isValid(new Date(date)) ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 export function fMonth(date, newFormat) {
   const fm = newFormat || 'MMM yyyy';
