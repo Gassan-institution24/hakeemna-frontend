@@ -47,7 +47,7 @@ export default function InvoiceNewEditDetails() {
   const handleAdd = () => {
     append({
       service_type: null,
-      activity: '',
+      activity: null,
       quantity: 1,
       price_per_unit: 0,
       subtotal: 0,
@@ -76,12 +76,14 @@ export default function InvoiceNewEditDetails() {
   }, [setValue, subTotal]);
 
   const amountAfterDiscount = values.subtotal - values.discount
-  const taxData = (taxesData.find((one) => one._id === values.taxes))
-  const deductionData = (deductionsData.find((one) => one._id === values.deduction))
+  const taxData = (taxesData.find((one) => one._id === values.taxes_type))
+  const deductionData = (deductionsData.find((one) => one._id === values.deduction_type))
   const taxes = amountAfterDiscount * (taxData ? (taxData.percentage || 0) / 100 : 0)
   const deduction = amountAfterDiscount * (deductionData ? (deductionData.percentage || 0) / 100 : 0)
   const Amount = amountAfterDiscount + taxes + deduction
 
+  useEffect(() => { setValue('taxes', taxes) }, [setValue, taxes])
+  useEffect(() => { setValue('deduction', deduction) }, [setValue, deduction])
   useEffect(() => { setValue('totalAmount', Amount) }, [setValue, Amount])
 
   const handleChangeItemDetails = useCallback(
@@ -165,7 +167,7 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ color: 'text.secondary' }}>{t('tax')}</Box>
         <Box sx={{ width: 180 }}>
           <RHFSelect
-            name='taxes'
+            name='taxes_type'
             size='small'
             sx={{
               width: 160,
@@ -187,7 +189,7 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ color: 'text.secondary' }}>{t('deduction')}</Box>
         <Box sx={{ width: 180 }}>
           <RHFSelect
-            name='deduction'
+            name='deduction_type'
             size='small'
             sx={{
               width: 160,

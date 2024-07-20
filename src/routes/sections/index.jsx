@@ -7,12 +7,13 @@ import { SplashScreen } from 'src/components/loading-screen';
 
 import { authRoutes } from './auth';
 import { userRoutes } from './user';
-import { HomePage, mainRoutes } from './main';
+import { mainRoutes } from './main';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { stakeholderDashboardRoutes } from './stakeholder-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
 import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 
+const HomePage = lazy(() => import('src/pages/home/home'));
 const Page404 = lazy(() => import('src/pages/errors/404'));
 // const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
 

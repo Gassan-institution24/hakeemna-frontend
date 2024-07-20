@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -14,7 +15,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 // import { _addressBooks } from 'src/_mock';
 
@@ -33,12 +34,16 @@ import InvoiceNewEditTaxDetails from '../invoice-new-edit-tax-details';
 export default function InvoiceNewEditForm({ currentInvoice }) {
   const router = useRouter();
   const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext()
 
   const confirm = useBoolean();
-  const loadingSave = useBoolean();
+  // const loadingSave = useBoolean();
   const loadingSend = useBoolean();
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const NewInvoiceSchema = Yup.object().shape({
     // invoiceNumber: Yup.string(),
@@ -52,7 +57,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       Yup.array().of(
         Yup.object({
           service_type: Yup.string().required('Service is required'),
-          activity: Yup.string(),
+          activity: Yup.string().nullable(),
           deduction: Yup.number(),
           price_per_unit: Yup.number(),
           discount_amount: Yup.number(),
@@ -66,11 +71,12 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       )
     ),
     // not required
-    taxes: Yup.number(),
-    deduction: Yup.number(),
     status: Yup.string(),
+    taxes_type: Yup.string().nullable(),
+    taxes: Yup.number(),
+    deduction_type: Yup.string().nullable(),
+    deduction: Yup.number(),
     discount: Yup.number(),
-    shipping: Yup.number(),
     subtotal: Yup.number(),
     totalAmount: Yup.number(),
   });
@@ -86,7 +92,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       detailedTaxes: currentInvoice?.detailedTaxes || false,
       taxes: currentInvoice?.taxes || 0,
       deduction: currentInvoice?.deduction || 0,
-      shipping: currentInvoice?.shipping || 0,
       status: currentInvoice?.status || 'draft',
       discount: currentInvoice?.discount || 0,
       subtotal: currentInvoice?.subtotal || 0,
@@ -94,7 +99,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       items: currentInvoice?.items || [
         {
           service_type: null,
-          activity: '',
+          activity: null,
           quantity: 1,
           price_per_unit: 0,
           subtotal: 0,
@@ -121,31 +126,37 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     formState: { isSubmitting },
   } = methods;
 
-  const handleSaveAsDraft = handleSubmit(async (data) => {
-    loadingSave.onTrue();
-    try {
-      await axiosInstance.post(endpoints.economec_movements.all, data)
-      // reset();
-      loadingSave.onFalse();
-      router.push(paths.dashboard.invoice.root);
-      console.info('DATA', JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error(error);
-      loadingSave.onFalse();
-    }
-  });
+  // const handleSaveAsDraft = handleSubmit(async (data) => {
+  //   loadingSave.onTrue();
+  //   try {
+  //     await axiosInstance.post(endpoints.economec_movements.all, data)
+  //     // reset();
+  //     loadingSave.onFalse();
+  //     router.push(paths.dashboard.invoice.root);
+  //     console.info('DATA', JSON.stringify(data, null, 2));
+  //   } catch (error) {
+  //     console.error(error);
+  //     loadingSave.onFalse();
+  //   }
+  // });
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
 
     try {
       await axiosInstance.post(endpoints.economec_movements.all, data)
-      // reset();
+      reset();
+      enqueueSnackbar(t('created successfully'))
       loadingSend.onFalse();
       router.push(paths.dashboard.invoice.root);
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error(error);
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       loadingSend.onFalse();
     }
   });
@@ -170,7 +181,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           </Card>
 
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-            <LoadingButton
+            {/* <LoadingButton
               color="inherit"
               size="large"
               variant="outlined"
@@ -178,7 +189,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
               onClick={handleSaveAsDraft}
             >
               {t('save as draft')}
-            </LoadingButton>
+            </LoadingButton> */}
 
             <LoadingButton
               size="large"
