@@ -50,7 +50,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { handleAddNew } = useNewScreen();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(id, { select: 'name_english name_arabic' });
+  const { serviceTypesData } = useGetUSActiveServiceTypes(id, {
+    select: 'name_english name_arabic',
+  });
   const { workGroupsData } = useGetUSActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(id);
 

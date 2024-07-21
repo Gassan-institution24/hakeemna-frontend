@@ -62,7 +62,9 @@ export default function InvoiceTableRow({
       <TableRow hover selected={selected}>
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMMMMMMM yyyy')}
+            primary={
+              isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMMMMMMM yyyy')
+            }
             secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -120,7 +122,7 @@ export default function InvoiceTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-      // sx={{ width: 140 }}
+        // sx={{ width: 140 }}
       >
         {status === 'available' && (
           <MenuItem

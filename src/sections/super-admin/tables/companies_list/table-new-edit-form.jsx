@@ -130,79 +130,66 @@ export default function TableNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="unit_service_type"
                 label="unit_service_type"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="country"
                 label="country"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="city"
                 label="city"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="sector"
                 label="sector"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="commercial_name"
                 label="commercial_name"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="province"
                 label="province"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="address"
                 label="address"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="phone_number_1"
                 label="phone_number_1"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="Phone_number_2"
                 label="Phone_number_2"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="work_shift"
                 label="work_shift"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="constitution_objective"
                 label="constitution_objective"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="type_of_specialty_1"
                 label="type_of_specialty_1"
               />
               <RHFTextField
-
                 // onChange={handleEnglishInputChange}
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"

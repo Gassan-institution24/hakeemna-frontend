@@ -48,7 +48,7 @@ export default function PatientProfile() {
     isMedLab && {
       value: 'medicalanalysis',
       label: t('medical analysis'),
-    }
+    },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {

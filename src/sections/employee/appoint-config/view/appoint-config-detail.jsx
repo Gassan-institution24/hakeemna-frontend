@@ -340,7 +340,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

@@ -212,7 +212,7 @@ export default function TableNewEditForm({ currentTable }) {
               )}
               getOptionLabel={(option) => option?._id}
               renderOption={(props, option, idx) => (
-                <li lang='ar' {...props} key={idx} value={option?._id}>
+                <li lang="ar" {...props} key={idx} value={option?._id}>
                   {curLangAr ? option?.employee.name_arabic : option?.employee?.name_english}
                 </li>
               )}

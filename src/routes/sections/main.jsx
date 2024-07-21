@@ -52,8 +52,6 @@ export const mainRoutes = [
         </Suspense>
       </CompactLayout>
     ),
-    children: [
-      { path: 'maintenance', element: <MaintenancePage /> },
-    ],
+    children: [{ path: 'maintenance', element: <MaintenancePage /> }],
   },
 ];

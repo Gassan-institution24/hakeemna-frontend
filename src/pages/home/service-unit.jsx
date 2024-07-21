@@ -10,20 +10,20 @@ import ServiceUnitView from 'src/sections/home/view/unit-service-page';
 // ----------------------------------------------------------------------
 
 export default function ServiceUnitPage() {
-    const params = useParams();
-    const { currentLang } = useLocales();
-    const curLangAr = currentLang.value === 'ar';
+  const params = useParams();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
-    const { id } = params;
-    const { data, loading } = useGetUnitservice(id)
+  const { id } = params;
+  const { data, loading } = useGetUnitservice(id);
 
-    return (
-        <>
-            <Helmet>
-                <title> {curLangAr ? data?.name_arabic || '' : data?.name_english || ''}</title>
-            </Helmet>
+  return (
+    <>
+      <Helmet>
+        <title> {curLangAr ? data?.name_arabic || '' : data?.name_english || ''}</title>
+      </Helmet>
 
-            {data && !loading && <ServiceUnitView USData={data} />}
-        </>
-    );
+      {data && !loading && <ServiceUnitView USData={data} />}
+    </>
+  );
 }

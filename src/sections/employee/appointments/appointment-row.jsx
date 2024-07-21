@@ -194,7 +194,9 @@ export default function AppointmentsTableRow({
             <MenuItem
               lang="ar"
               onClick={() => {
-                router.push(`${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}`);
+                router.push(
+                  `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}`
+                );
                 popover.onClose();
               }}
               sx={{ color: 'info.main' }}

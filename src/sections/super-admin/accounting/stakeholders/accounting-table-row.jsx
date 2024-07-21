@@ -43,7 +43,8 @@ export default function MovementTableRow({
       <TableCell align="center">
         <ListItemText
           primary={
-            (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')) || ''
+            (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')) ||
+            ''
           }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
         />
@@ -51,7 +52,9 @@ export default function MovementTableRow({
 
       <TableCell align="center">
         <ListItemText
-          primary={(isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMMMMMMM yyyy')) || ''}
+          primary={
+            (isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMMMMMMM yyyy')) || ''
+          }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
         />
       </TableCell>

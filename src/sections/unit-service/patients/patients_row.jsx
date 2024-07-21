@@ -105,7 +105,7 @@ export default function CountriesTableRow({ row, selected }) {
       </TableCell>
     </TableRow>
   );
-  
+
   const NewUserSchema = Yup.object().shape({
     note: Yup.string(),
     work_shift: Yup.string().required(t('required field')),
@@ -115,43 +115,47 @@ export default function CountriesTableRow({ row, selected }) {
     start_time: Yup.date().required(t('required field')),
   });
 
-  const defaultValues = useMemo(()=>({
-    note: '',
-    appointment_type: appointmenttypesData?.[0]?._id,
-    start_time: new Date(),
-    work_group: workGroupsData?.[0]?._id,
-    work_shift: workShiftsData.filter((one) => {
-      const currentDate = new Date();
+  const defaultValues = useMemo(
+    () => ({
+      note: '',
+      appointment_type: appointmenttypesData?.[0]?._id,
+      start_time: new Date(),
+      work_group: workGroupsData?.[0]?._id,
+      work_shift: workShiftsData.filter((one) => {
+        const currentDate = new Date();
 
-      const startTime = new Date(currentDate);
-      startTime.setHours(
-        new Date(one.start_time).getHours(),
-        new Date(one.start_time).getMinutes(),
-        0,
-        0
-      );
-
-      const endTime = new Date(currentDate);
-      endTime.setHours(
-        new Date(one.end_time).getHours(),
-        new Date(one.end_time).getMinutes(),
-        0,
-        0
-      );
-      if (startTime.getTime() <= endTime.getTime()) {
-        return (
-          currentDate.getTime() >= startTime.getTime() && currentDate.getTime() < endTime.getTime()
+        const startTime = new Date(currentDate);
+        startTime.setHours(
+          new Date(one.start_time).getHours(),
+          new Date(one.start_time).getMinutes(),
+          0,
+          0
         );
-      }
-      // If the shift crosses midnight
-      const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
-      return (
-        currentDate.getTime() >= startTime.getTime() ||
-        currentDate.getTime() < endTimeNextDay.getTime()
-      );
-    })?.[0]?._id,
-    service_types: [],
-  }), [workGroupsData, workShiftsData, appointmenttypesData]);
+
+        const endTime = new Date(currentDate);
+        endTime.setHours(
+          new Date(one.end_time).getHours(),
+          new Date(one.end_time).getMinutes(),
+          0,
+          0
+        );
+        if (startTime.getTime() <= endTime.getTime()) {
+          return (
+            currentDate.getTime() >= startTime.getTime() &&
+            currentDate.getTime() < endTime.getTime()
+          );
+        }
+        // If the shift crosses midnight
+        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+        return (
+          currentDate.getTime() >= startTime.getTime() ||
+          currentDate.getTime() < endTimeNextDay.getTime()
+        );
+      })?.[0]?._id,
+      service_types: [],
+    }),
+    [workGroupsData, workShiftsData, appointmenttypesData]
+  );
 
   const methods = useForm({
     mode: 'onTouched',

@@ -64,7 +64,9 @@ export default function OffersTableRow({
       </TableCell>
       <TableCell align="center">
         <ListItemText
-          primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')}
+          primary={
+            isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')
+          }
           secondary={isValid(new Date(start_date)) && format(new Date(start_date), 'p')}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{

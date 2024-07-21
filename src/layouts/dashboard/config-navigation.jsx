@@ -393,8 +393,7 @@ export function useNavData() {
         navItemId: 'USInsuranceNav',
       },
       {
-        show:
-          checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) ,
+        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,

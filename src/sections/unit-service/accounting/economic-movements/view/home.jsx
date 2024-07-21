@@ -76,32 +76,36 @@ export default function InvoiceListView() {
   const router = useRouter();
   const table = useTable({ defaultOrderBy: 'createDate' });
   const confirm = useBoolean();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { economecMovementsData, lengths, totals } = useGetEconomicMovements(
-    {
-      unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
-      page: table.page || 0,
-      sortBy: table.orderBy || 'created_at',
-      rowsPerPage: table.rowsPerPage || 10,
-      order: table.order || 'desc',
-      select: 'sequence_number created_at patient employee Balance status updated_at',
-      populate: [{ path: 'employee', select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] },
-      { path: 'patient', select: 'name_english name_arabic' }],
-      ...filters,
-    }
-  )
+  const { economecMovementsData, lengths, totals } = useGetEconomicMovements({
+    unit_service:
+      user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    page: table.page || 0,
+    sortBy: table.orderBy || 'created_at',
+    rowsPerPage: table.rowsPerPage || 10,
+    order: table.order || 'desc',
+    select: 'sequence_number created_at patient employee Balance status updated_at',
+    populate: [
+      {
+        path: 'employee',
+        select: 'employee',
+        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
+      },
+      { path: 'patient', select: 'name_english name_arabic' },
+    ],
+    ...filters,
+  });
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
-  const canReset =
-    (!!filters.startDate && !!filters.endDate);
+  const canReset = !!filters.startDate && !!filters.endDate;
 
   const notFound = (!economecMovementsData.length && canReset) || !economecMovementsData.length;
 
@@ -172,14 +176,14 @@ export default function InvoiceListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading={t("invoices")}
+        heading={t('invoices')}
         links={[
           {
             name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {
-            name: t("invoices"),
+            name: t('invoices'),
           },
         ]}
         action={
@@ -209,7 +213,7 @@ export default function InvoiceListView() {
             sx={{ py: 2 }}
           >
             <InvoiceAnalytic
-              title={t("total")}
+              title={t('total')}
               total={lengths.allLength}
               percent={100}
               price={totals.allTotal}
@@ -218,36 +222,36 @@ export default function InvoiceListView() {
             />
 
             <InvoiceAnalytic
-              title={t("paid")}
+              title={t('paid')}
               total={lengths.paidLength}
-              percent={lengths.paidLength / lengths.allLength * 100}
+              percent={(lengths.paidLength / lengths.allLength) * 100}
               price={totals.paidTotal}
               icon="solar:file-check-bold-duotone"
               color={theme.palette.success.main}
             />
 
             <InvoiceAnalytic
-              title={t("pending")}
+              title={t('pending')}
               total={lengths.pendingLength}
-              percent={lengths.pendingLength / lengths.allLength * 100}
+              percent={(lengths.pendingLength / lengths.allLength) * 100}
               price={totals.pendingTotal}
               icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.warning.main}
             />
 
             <InvoiceAnalytic
-              title={t("overdue")}
+              title={t('overdue')}
               total={lengths.overdueLength}
-              percent={lengths.overdueLength / lengths.allLength * 100}
+              percent={(lengths.overdueLength / lengths.allLength) * 100}
               price={totals.overdueTotal}
               icon="solar:bell-bing-bold-duotone"
               color={theme.palette.error.main}
             />
 
             <InvoiceAnalytic
-              title={t("draft")}
+              title={t('draft')}
               total={lengths.draftLength}
-              percent={lengths.draftLength / lengths.allLength * 100}
+              percent={(lengths.draftLength / lengths.allLength) * 100}
               price={totals.draftTotal}
               icon="solar:file-corrupted-bold-duotone"
               color={theme.palette.text.secondary}
@@ -403,4 +407,3 @@ export default function InvoiceListView() {
     </Container>
   );
 }
-

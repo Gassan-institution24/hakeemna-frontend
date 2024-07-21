@@ -110,7 +110,9 @@ export default function AccountGeneral({ data, refetch }) {
     formState: { isSubmitting },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english name_arabic' });
+  const { tableData } = useGetCountryCities(watch().country, {
+    select: 'name_english name_arabic',
+  });
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];

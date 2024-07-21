@@ -17,7 +17,7 @@ import TableNewEditForm from '../table-new-edit-form';
 export default function TableEditView() {
   const { id } = useParams();
   const { t } = useTranslate();
-  const { data } = useGetAppointment(id,{populate:'all'});
+  const { data } = useGetAppointment(id, { populate: 'all' });
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
