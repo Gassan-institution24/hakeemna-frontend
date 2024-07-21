@@ -149,7 +149,6 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         userName: `${data.name_english} ${data.name_arabic}`,
         ...data,
       });
-      console.log('userData', patient);
       if (afterSignUp) {
         setPatientId(patient?.patient?._id);
         afterSignUp();

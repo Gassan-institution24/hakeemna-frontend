@@ -31,7 +31,7 @@ export default function CheckList() {
   const { id } = params;
   const [thId, setTheId] = useState(null);
   const { user } = useAuthContext();
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id,{populate:'all'});
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );

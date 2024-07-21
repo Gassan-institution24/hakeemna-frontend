@@ -7,6 +7,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 const visuallyHidden = {
@@ -33,6 +35,7 @@ export default function TableHeadCustom({
   onSelectAllRows,
   sx,
 }) {
+  const { t } = useTranslate()
   return (
     <TableHead sx={sx}>
       <TableRow>
@@ -61,7 +64,7 @@ export default function TableHeadCustom({
                 onClick={() => onSort(headCell.id)}
                 sx={{ textTransform: 'capitalize' }}
               >
-                {headCell.label}
+                {t(headCell.label)}
 
                 {orderBy === headCell.id ? (
                   <Box sx={{ ...visuallyHidden }}>
@@ -70,7 +73,7 @@ export default function TableHeadCustom({
                 ) : null}
               </TableSortLabel>
             ) : (
-              headCell.label
+              t(headCell.label)
             )}
           </TableCell>
         ))}

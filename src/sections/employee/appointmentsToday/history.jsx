@@ -35,7 +35,7 @@ export default function History() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryDataInSu(
     Entrance?.patient?._id,

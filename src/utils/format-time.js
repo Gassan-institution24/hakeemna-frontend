@@ -30,7 +30,7 @@ export const useUnitTime = () => {
   };
 };
 export function fDate(date, newFormat) {
-  const fm = newFormat || 'dd MMM yyyy';
+  const fm = newFormat || 'dd MMMMMMMM yyyy';
 
   return date && isValid(new Date(date)) ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
@@ -56,12 +56,12 @@ export function fTimeText(date, newFormat, arabic) {
 }
 
 export function fDateTime(date, newFormat) {
-  const fm = newFormat || 'dd MMM yyyy p';
+  const fm = newFormat || 'dd MMMMMMMM yyyy p';
 
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 export function fDateAndTime(date, newFormat) {
-  const fm = newFormat || 'dd MMM yyyy';
+  const fm = newFormat || 'dd MMMMMMMM yyyy';
 
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }

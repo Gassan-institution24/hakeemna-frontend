@@ -13,7 +13,7 @@ import { inputBaseClasses } from '@mui/material/InputBase';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSActivities, useGetUSActiveServiceTypes, useGetDeductions, useGetTaxes } from 'src/api';
+import { useGetTaxes, useGetDeductions, useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -28,7 +28,8 @@ export default function InvoiceNewEditDetails() {
   const { user } = useAuthContext();
 
   const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    { select: '_id name_english name_arabic Price_per_unit' }
   );
   const { activitiesData } = useGetUSActivities(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id
@@ -330,7 +331,7 @@ export default function InvoiceNewEditDetails() {
                 name={`items[${index}].total`}
                 label={t("total")}
                 placeholder="0.00"
-                value={values.items[index].total === 0 ? '' : values.items[index].total.toFixed(2)}
+                value={values.items[index].total === 0 ? '' : values.items[index]?.total?.toFixed(2)}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

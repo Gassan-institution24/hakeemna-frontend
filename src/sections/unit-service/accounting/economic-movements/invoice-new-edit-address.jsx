@@ -3,9 +3,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatient, useGetUSPatient, useGetOneEntranceManagement, useGetUnitservice } from 'src/api';
+import { useGetPatient, useGetUSPatient, useGetUnitservice, useGetOneEntranceManagement } from 'src/api';
 
 import { RHFAutocomplete } from 'src/components/hook-form';
 
@@ -43,11 +42,14 @@ export default function InvoiceNewEditAddress() {
 
   const values = watch();
 
-  const { unit_service, patient } = values;
+  const { unit_service, patient, entrance } = values;
   const { data } = useGetPatient(patient)
   const { data: USData } = useGetUnitservice(unit_service)
-  const { Entrance } = useGetOneEntranceManagement('669614f30abf2815208c985d')
-  const { patientsData } = useGetUSPatient(USData?._id);
+  const { Entrance } = useGetOneEntranceManagement(entrance, {
+    select: 'activity_happened',
+    populate: [{ path: 'activity_happened', select: 'name_english name_arabic' }]
+  })
+  const { patientsData } = useGetUSPatient(USData?._id, { select: 'name_english name_arabic' });
 
   return (
     <Stack direction={{ md: 'row' }} >
@@ -104,7 +106,7 @@ export default function InvoiceNewEditAddress() {
           </Stack>}
         </Stack>
       </Stack>
-      <Stack flex={0.5} sx={{ p: { md: 5, xs: 2 } }} >
+      {Entrance?.activity_happened?.length > 0 && <Stack flex={0.5} sx={{ p: { md: 5, xs: 2 } }} >
         <Typography variant='body1'>{t('activities')}:</Typography>
         <Stack gap={0.5} px={2} mt={1} maxHeight={200} overflow='auto'>
           {Entrance?.activity_happened?.map((one) => (
@@ -122,7 +124,7 @@ export default function InvoiceNewEditAddress() {
             </Stack>
           ))}
         </Stack>
-      </Stack>
+      </Stack>}
     </Stack>
   );
 }

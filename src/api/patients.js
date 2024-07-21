@@ -181,8 +181,8 @@ export function useGetEmployeePatient(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSPatient(id) {
-  const URL = endpoints.patients.unitservice(id);
+export function useGetUSPatient(id, params) {
+  const URL = [endpoints.patients.unitservice(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

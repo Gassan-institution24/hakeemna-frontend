@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
 
@@ -11,46 +12,39 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import { bgGradient } from 'src/theme/css';
+import { useGetActiveUnitservices } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade } from 'src/components/animate';
 import TextMaxLine from 'src/components/text-max-line';
-import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+import { CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
-export default function OurPartners({ data }) {
+export default function OurPartners() {
   const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const carousel = useCarousel({
-    slidesToShow: 5,
-    speed: 800,
-    autoplay: true,
-    centerMode: true,
-    centerPadding: '60px',
-    responsive: [
-      {
-        breakpoint: 1400,
-        settings: { slidesToShow: 3 },
-      },
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 600,
-        settings: { slidesToShow: 1 },
-      },
-      {
-        breakpoint: 480,
-        settings: { slidesToShow: 1, centerPadding: '0' },
-      },
-    ],
-  });
+  const mdUp = useResponsive('up', 'md');
+  const lgUp = useResponsive('up', 'xl');
+
+  const [page, setPage] = useState(0)
+
+  let rowsPerPage;
+  if (lgUp) {
+    rowsPerPage = 5;
+  } else if (mdUp) {
+    rowsPerPage = 3;
+  } else {
+    rowsPerPage = 1;
+  }
+
+  const { unitservicesData, length } = useGetActiveUnitservices({ select: 'name_english name_arabic company_logo', page, rowsPerPage })
 
   return (
     <>
@@ -74,29 +68,25 @@ export default function OurPartners({ data }) {
           </Typography>
         </m.div>
       </Stack>
-      <Stack sx={{ height: 300, my: 5, position: 'relative' }}>
+      <Stack sx={{ my: 5, position: 'relative' }}>
         <CarouselArrows
           filled
           icon="material-symbols:double-arrow"
-          onNext={carousel.onNext}
-          onPrev={carousel.onPrev}
+          onNext={() => setPage((prev) => prev < Math.ceil(length / rowsPerPage) - 1 ? prev + 1 : 0)}
+          onPrev={() => setPage((prev) => prev > 0 ? prev - 1 : Math.ceil(length / rowsPerPage) - 1)}
         >
-          <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-            {data.map((item, index) => (
+          <Stack direction='row' justifyContent='space-around' >
+            {unitservicesData.map((item, index) => (
               <Box key={item.id} sx={{ px: 1 }}>
-                <CarouselItem key={item.id} item={item} active={index === carousel.currentIndex} />
+                <CarouselItem key={item.id} item={item} />
               </Box>
             ))}
-          </Carousel>
-        </CarouselArrows>
-      </Stack>
+          </Stack>
+        </CarouselArrows >
+      </Stack >
     </>
   );
 }
-
-OurPartners.propTypes = {
-  data: PropTypes.array,
-};
 
 // ----------------------------------------------------------------------
 
@@ -111,7 +101,7 @@ function CarouselItem({ item, active }) {
 
   return (
     <Paper sx={{ position: 'relative', height: { md: 300 }, width: { md: 300 } }}>
-      <Image dir="ltr" alt={name_english} src={company_logo} sx={{ height: { md: 300, xs: 1 }, width: { md: 300, xs: 1 } }} />
+      <Image dir="ltr" alt={name_english} src={company_logo} sx={{ height: { md: 300, xs: 300 }, width: { md: 300, xs: 300 } }} />
 
       <CardContent
         sx={{

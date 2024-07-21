@@ -69,7 +69,7 @@ export default function OrdersView() {
   const { ordersData, length, refetch } = useGetStakeholderOrders(user.stakeholder._id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
-    rowsPerPage: table.rowsPerPage || 25,
+    rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'asc',
     populate: 'unit_service patient',
     ...filters,

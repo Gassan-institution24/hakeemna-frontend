@@ -352,8 +352,8 @@ export function useGetEmployeeTodayAppointment(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetAppointment(id) {
-  const URL = endpoints.appointments.one(id);
+export function useGetAppointment(id, params) {
+  const URL = [endpoints.appointments.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

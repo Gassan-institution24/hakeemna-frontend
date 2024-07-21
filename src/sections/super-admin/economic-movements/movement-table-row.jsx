@@ -93,7 +93,7 @@ export default function MovementTableRow({
         <TableCell align="center">
           <ListItemText
             primary={appointment?.name_english}
-            secondary={format(new Date(appointment?.start_time), 'dd MMM yyyy p')}
+            secondary={format(new Date(appointment?.start_time), 'dd MMMMMMMM yyyy p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -108,7 +108,7 @@ export default function MovementTableRow({
             primary={work_shift?.name_english}
             secondary={
               (isValid(new Date(work_shift?.start_time)) &&
-                isValid(new Date(work_shift?.start_time), 'dd MMM yyyy p')) ||
+                isValid(new Date(work_shift?.start_time), 'dd MMMMMMMM yyyy p')) ||
               ''
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -124,11 +124,11 @@ export default function MovementTableRow({
             primary={type}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            // secondaryTypographyProps={{
-            //   mt: 0.5,
-            //   component: 'span',
-            //   typography: 'caption',
-            // }}
+          // secondaryTypographyProps={{
+          //   mt: 0.5,
+          //   component: 'span',
+          //   typography: 'caption',
+          // }}
           />
         </TableCell>
         <TableCell align="center">
@@ -224,7 +224,7 @@ export default function MovementTableRow({
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(created_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -241,7 +241,7 @@ export default function MovementTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(updated_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{

@@ -56,7 +56,7 @@ export default function BookManually({
   const { handleAddNew } = useNewScreen();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(id);
+  const { serviceTypesData } = useGetUSActiveServiceTypes(id, { select: 'name_english name_arabic' });
   const { workGroupsData } = useGetDepartmentActiveWorkGroups(depid);
   const { workShiftsData } = useGetUSActiveWorkShifts(id);
 
