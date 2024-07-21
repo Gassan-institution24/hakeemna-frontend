@@ -60,13 +60,9 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell align="center">
-          {sequence_number}
-        </TableCell>
+        <TableCell align="center">{sequence_number}</TableCell>
 
-        <TableCell align="center">
-          {fDate(created_at)}
-        </TableCell>
+        <TableCell align="center">{fDate(created_at)}</TableCell>
 
         <TableCell align="center">
           {curLangAr ? patient?.name_arabic : patient?.name_english}
@@ -76,9 +72,7 @@ export default function MovementTableRow({
           {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
         </TableCell>
 
-        <TableCell align="center">
-          {fCurrency(Balance, Currency?.symbol)}
-        </TableCell>
+        <TableCell align="center">{fCurrency(Balance, Currency?.symbol)}</TableCell>
 
         <TableCell align="center">
           <Label

@@ -189,7 +189,6 @@ export default function TableNewEditForm({ currentTable }) {
               )}
               {!isMedLab && (
                 <RHFTextField
-
                   onChange={handleEnglishInputChange}
                   name="name_english"
                   label={t('name english')}

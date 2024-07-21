@@ -1,4 +1,3 @@
-
 import Container from '@mui/material/Container';
 
 import { useParams } from 'src/routes/hooks';
@@ -15,7 +14,7 @@ import InvoiceNewEditForm from '../new-edit-form';
 export default function InvoiceDetailsView() {
   const settings = useSettingsContext();
   const { id } = useParams();
-  const { data } = useGetEconomicMovement(id)
+  const { data } = useGetEconomicMovement(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

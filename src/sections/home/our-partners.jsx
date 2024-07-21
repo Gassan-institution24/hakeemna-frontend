@@ -26,14 +26,14 @@ import { CarouselArrows } from 'src/components/carousel';
 // ----------------------------------------------------------------------
 
 export default function OurPartners() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const mdUp = useResponsive('up', 'md');
   const lgUp = useResponsive('up', 'xl');
 
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(0);
 
   let rowsPerPage;
   if (lgUp) {
@@ -44,7 +44,11 @@ export default function OurPartners() {
     rowsPerPage = 1;
   }
 
-  const { unitservicesData, length } = useGetActiveUnitservices({ select: 'name_english name_arabic company_logo', page, rowsPerPage })
+  const { unitservicesData, length } = useGetActiveUnitservices({
+    select: 'name_english name_arabic company_logo',
+    page,
+    rowsPerPage,
+  });
 
   return (
     <>
@@ -58,7 +62,6 @@ export default function OurPartners() {
         <m.div variants={varFade().inDown}>
           <Typography
             sx={{
-
               fontSize: 45,
               fontWeight: 600,
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
@@ -72,18 +75,22 @@ export default function OurPartners() {
         <CarouselArrows
           filled
           icon="material-symbols:double-arrow"
-          onNext={() => setPage((prev) => prev < Math.ceil(length / rowsPerPage) - 1 ? prev + 1 : 0)}
-          onPrev={() => setPage((prev) => prev > 0 ? prev - 1 : Math.ceil(length / rowsPerPage) - 1)}
+          onNext={() =>
+            setPage((prev) => (prev < Math.ceil(length / rowsPerPage) - 1 ? prev + 1 : 0))
+          }
+          onPrev={() =>
+            setPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(length / rowsPerPage) - 1))
+          }
         >
-          <Stack direction='row' justifyContent='space-around' >
-            {unitservicesData.map((item, index) => (
+          <Stack direction="row" justifyContent="space-around">
+            {unitservicesData?.map((item, index) => (
               <Box key={item.id} sx={{ px: 1 }}>
                 <CarouselItem key={item.id} item={item} />
               </Box>
             ))}
           </Stack>
-        </CarouselArrows >
-      </Stack >
+        </CarouselArrows>
+      </Stack>
     </>
   );
 }
@@ -95,13 +102,18 @@ function CarouselItem({ item, active }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const router = useRouter()
+  const router = useRouter();
 
   const { _id, company_logo, name_english, name_arabic } = item;
 
   return (
     <Paper sx={{ position: 'relative', height: { md: 300 }, width: { md: 300 } }}>
-      <Image dir="ltr" alt={name_english} src={company_logo} sx={{ height: { md: 300, xs: 300 }, width: { md: 300, xs: 300 } }} />
+      <Image
+        dir="ltr"
+        alt={name_english}
+        src={company_logo}
+        sx={{ height: { md: 300, xs: 300 }, width: { md: 300, xs: 300 } }}
+      />
 
       <CardContent
         sx={{
@@ -119,7 +131,11 @@ function CarouselItem({ item, active }) {
           }),
         }}
       >
-        <TextMaxLine variant="h5" onClick={() => router.push(paths.pages.serviceUnit(_id))} sx={{ cursor: 'pointer' }}>
+        <TextMaxLine
+          variant="h5"
+          onClick={() => router.push(paths.pages.serviceUnit(_id))}
+          sx={{ cursor: 'pointer' }}
+        >
           {curLangAr ? name_arabic : name_english}
         </TextMaxLine>
       </CardContent>

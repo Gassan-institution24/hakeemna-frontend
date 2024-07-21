@@ -104,7 +104,6 @@ export default function TableNewEditForm({ currentTable }) {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -120,7 +119,6 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

@@ -263,7 +263,6 @@ export default function TableCreateView() {
     }
   };
 
-
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);

@@ -1,4 +1,3 @@
-
 import Container from '@mui/material/Container';
 
 import { useSettingsContext } from 'src/components/settings';

@@ -119,7 +119,6 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"
@@ -141,7 +140,6 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 sx={{ mt: 3 }}
                 name="description"

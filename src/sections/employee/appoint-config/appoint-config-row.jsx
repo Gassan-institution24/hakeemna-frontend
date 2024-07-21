@@ -220,11 +220,11 @@ export default function AppointmentsTableRow({
           subcategory: 'appointment_configs',
           acl: 'update',
         }) && (
-            <MenuItem lang="ar" onClick={onViewRow}>
-              <Iconify icon="solar:eye-bold" />
-              {t('view')}
-            </MenuItem>
-          )}
+          <MenuItem lang="ar" onClick={onViewRow}>
+            <Iconify icon="solar:eye-bold" />
+            {t('view')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

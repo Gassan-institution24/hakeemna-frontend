@@ -174,13 +174,11 @@ export default function TableNewEditForm() {
             label={t('profrssion practice number')}
           />
           <TextField
-
             onChange={handleEnglishInputChange}
             name="name_english"
             label={t('Full name in English')}
           />
           <TextField
-
             onChange={handleArabicInputChange}
             name="name_arabic"
             label={t('Full name in Arabic')}

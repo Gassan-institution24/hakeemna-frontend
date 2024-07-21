@@ -115,7 +115,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     Subtotal_Amount,
   } = invoice;
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const styles = useStyles();
 
@@ -123,7 +123,10 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image source={unit_service.company_logo ? unit_service.company_logo : "/logo/logo_single.svg"} style={{ width: 48, height: 48 }} />
+          <Image
+            source={unit_service.company_logo ? unit_service.company_logo : '/logo/logo_single.svg'}
+            style={{ width: 48, height: 48 }}
+          />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{t(currentStatus)}</Text>
@@ -134,14 +137,18 @@ export default function InvoicePDF({ invoice, currentStatus }) {
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
-            <Text style={styles.body2}>{curLangAr ? unit_service.name_arabic : unit_service.name_english}</Text>
+            <Text style={styles.body2}>
+              {curLangAr ? unit_service.name_arabic : unit_service.name_english}
+            </Text>
             <Text style={styles.body2}>{unit_service.address}</Text>
             <Text style={styles.body2}>{unit_service.phone}</Text>
           </View>
 
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
-            <Text style={styles.body2}>{curLangAr ? patient.name_arabic : patient.name_english}</Text>
+            <Text style={styles.body2}>
+              {curLangAr ? patient.name_arabic : patient.name_english}
+            </Text>
             <Text style={styles.body2}>{patient.address}</Text>
             <Text style={styles.body2}>{patient.mobile_num1}</Text>
           </View>
@@ -152,10 +159,12 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             <Text style={[styles.subtitle2, styles.mb4]}>{t('date')}</Text>
             <Text style={styles.body2}>{fDate(created_at)}</Text>
           </View>
-          {dueDate && <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('due date')}</Text>
-            <Text style={styles.body2}>{fDate(dueDate)}</Text>
-          </View>}
+          {dueDate && (
+            <View style={styles.col6}>
+              <Text style={[styles.subtitle2, styles.mb4]}>{t('due date')}</Text>
+              <Text style={styles.body2}>{fDate(dueDate)}</Text>
+            </View>
+          )}
         </View>
 
         <Text style={[styles.subtitle1, styles.mb8]}>{t('details')}</Text>
@@ -194,7 +203,9 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
                 <View style={styles.tableCell_2}>
                   <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>{curLangAr ? item.service_type?.name_arabic : item.service_type?.name_english}</Text>
+                  <Text>
+                    {curLangAr ? item.service_type?.name_arabic : item.service_type?.name_english}
+                  </Text>
                 </View>
 
                 <View style={styles.tableCell_3}>

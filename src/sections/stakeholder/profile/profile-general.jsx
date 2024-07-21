@@ -86,7 +86,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country, { select: 'name_english name_arabic' });
+  const { tableData } = useGetCountryCities(watch().country, {
+    select: 'name_english name_arabic',
+  });
   useEffect(() => {
     if (Object.keys(errors).length) {
       Object.keys(errors).forEach((key, idx) =>

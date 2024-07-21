@@ -64,7 +64,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
 
   const handleEmployment = async (row) => {
     try {
-      setSubmitting(true)
+      setSubmitting(true);
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: row._id,
         note,
@@ -72,7 +72,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       });
       await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
-      setSubmitting(false)
+      setSubmitting(false);
       reset();
       // router.back();
     } catch (error) {
@@ -83,7 +83,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
           variant: 'error',
         }
       );
-      setSubmitting(false)
+      setSubmitting(false);
       window.location.reload();
       console.error(error);
     }

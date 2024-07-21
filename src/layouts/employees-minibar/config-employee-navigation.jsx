@@ -20,7 +20,7 @@ export function useNavData() {
   const { user } = useAuthContext();
   const { employeesData, loading } = useGetUSActiveEmployeeEngs(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-    {select:'employee',populate:[{path:'employee',select:'name_english name_arabic'}]}
+    { select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] }
   );
 
   const employeeItems = useMemo(() => {

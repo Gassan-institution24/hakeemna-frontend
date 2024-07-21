@@ -13,7 +13,12 @@ import { inputBaseClasses } from '@mui/material/InputBase';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetTaxes, useGetDeductions, useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
+import {
+  useGetTaxes,
+  useGetDeductions,
+  useGetUSActivities,
+  useGetUSActiveServiceTypes,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -21,7 +26,7 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditDetails() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -35,8 +40,8 @@ export default function InvoiceNewEditDetails() {
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id
   );
 
-  const { taxesData } = useGetTaxes()
-  const { deductionsData } = useGetDeductions()
+  const { taxesData } = useGetTaxes();
+  const { deductionsData } = useGetDeductions();
 
   const { control, setValue, watch } = useFormContext();
 
@@ -63,11 +68,12 @@ export default function InvoiceNewEditDetails() {
     remove(index);
   };
 
-
   const values = watch();
 
   // when add item from address component - from activities -
-  useEffect(() => { update() }, [values.items.length, update])
+  useEffect(() => {
+    update();
+  }, [values.items.length, update]);
 
   const subtotalOnRow = values.items.map((item) => item.subtotal);
   const subTotal = sum(subtotalOnRow);
@@ -76,16 +82,23 @@ export default function InvoiceNewEditDetails() {
     setValue('subtotal', subTotal);
   }, [setValue, subTotal]);
 
-  const amountAfterDiscount = values.subtotal - values.discount
-  const taxData = (taxesData.find((one) => one._id === values.taxes_type))
-  const deductionData = (deductionsData.find((one) => one._id === values.deduction_type))
-  const taxes = amountAfterDiscount * (taxData ? (taxData.percentage || 0) / 100 : 0)
-  const deduction = amountAfterDiscount * (deductionData ? (deductionData.percentage || 0) / 100 : 0)
-  const Amount = amountAfterDiscount + taxes + deduction
+  const amountAfterDiscount = values.subtotal - values.discount;
+  const taxData = taxesData.find((one) => one._id === values.taxes_type);
+  const deductionData = deductionsData.find((one) => one._id === values.deduction_type);
+  const taxes = amountAfterDiscount * (taxData ? (taxData.percentage || 0) / 100 : 0);
+  const deduction =
+    amountAfterDiscount * (deductionData ? (deductionData.percentage || 0) / 100 : 0);
+  const Amount = amountAfterDiscount + taxes + deduction;
 
-  useEffect(() => { setValue('taxes', taxes) }, [setValue, taxes])
-  useEffect(() => { setValue('deduction', deduction) }, [setValue, deduction])
-  useEffect(() => { setValue('totalAmount', Amount) }, [setValue, Amount])
+  useEffect(() => {
+    setValue('taxes', taxes);
+  }, [setValue, taxes]);
+  useEffect(() => {
+    setValue('deduction', deduction);
+  }, [setValue, deduction]);
+  useEffect(() => {
+    setValue('totalAmount', Amount);
+  }, [setValue, Amount]);
 
   const handleChangeItemDetails = useCallback(
     (event, index) => {
@@ -97,10 +110,12 @@ export default function InvoiceNewEditDetails() {
         setValue(event.target.name, Number(event.target.value));
       }
       setValue(
-        `items[${index}].subtotal`, values.items[index].quantity * values.items[index].price_per_unit
+        `items[${index}].subtotal`,
+        values.items[index].quantity * values.items[index].price_per_unit
       );
       setValue(
-        `items[${index}].total`, values.items[index].quantity * values.items[index].price_per_unit
+        `items[${index}].total`,
+        values.items[index].quantity * values.items[index].price_per_unit
       );
     },
     [setValue, values.items, serviceTypesData]
@@ -117,9 +132,9 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ width: 180, typography: 'subtitle2' }}>
           <RHFTextField
             disabled
-            type='number'
-            name='subtotal'
-            size='small'
+            type="number"
+            name="subtotal"
+            size="small"
             sx={{
               width: 160,
               [`& .${inputBaseClasses.input}`]: {
@@ -132,7 +147,8 @@ export default function InvoiceNewEditDetails() {
                   <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
                 </InputAdornment>
               ),
-            }} />
+            }}
+          />
         </Box>
       </Stack>
 
@@ -145,9 +161,9 @@ export default function InvoiceNewEditDetails() {
           }}
         >
           <RHFTextField
-            type='number'
-            name='discount'
-            size='small'
+            type="number"
+            name="discount"
+            size="small"
             sx={{
               width: 160,
               [`& .${inputBaseClasses.input}`]: {
@@ -160,7 +176,8 @@ export default function InvoiceNewEditDetails() {
                   <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
                 </InputAdornment>
               ),
-            }} />
+            }}
+          />
         </Box>
       </Stack>
 
@@ -168,20 +185,21 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ color: 'text.secondary' }}>{t('tax')}</Box>
         <Box sx={{ width: 180 }}>
           <RHFSelect
-            name='taxes_type'
-            size='small'
+            name="taxes_type"
+            size="small"
             sx={{
               width: 160,
               [`& .${inputBaseClasses.input}`]: {
                 textAlign: { md: 'left' },
               },
             }}
-          // onChange={handleChangeOverall}
+            // onChange={handleChangeOverall}
           >
             {taxesData.map((one, idx) => (
               <MenuItem lang="ar" key={idx} value={one._id}>
                 {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
-              </MenuItem>))}
+              </MenuItem>
+            ))}
           </RHFSelect>
         </Box>
       </Stack>
@@ -190,15 +208,15 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ color: 'text.secondary' }}>{t('deduction')}</Box>
         <Box sx={{ width: 180 }}>
           <RHFSelect
-            name='deduction_type'
-            size='small'
+            name="deduction_type"
+            size="small"
             sx={{
               width: 160,
               [`& .${inputBaseClasses.input}`]: {
                 textAlign: { md: 'left' },
               },
             }}
-          // onChange={handleChangeOverall}
+            // onChange={handleChangeOverall}
           >
             {deductionsData.map((one, idx) => (
               <MenuItem lang="ar" key={idx} value={one._id}>
@@ -214,9 +232,9 @@ export default function InvoiceNewEditDetails() {
         <Box sx={{ width: 180 }}>
           <RHFTextField
             disabled
-            type='number'
-            name='totalAmount'
-            size='small'
+            type="number"
+            name="totalAmount"
+            size="small"
             sx={{
               width: 160,
               [`& .${inputBaseClasses.input}`]: {
@@ -229,7 +247,8 @@ export default function InvoiceNewEditDetails() {
                   <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
                 </InputAdornment>
               ),
-            }} />
+            }}
+          />
         </Box>
       </Stack>
     </Stack>
@@ -253,17 +272,13 @@ export default function InvoiceNewEditDetails() {
               <RHFSelect
                 name={`items[${index}].service_type`}
                 size="small"
-                label={t("service")}
+                label={t('service')}
                 sx={{ maxWidth: { md: 400 } }}
                 InputLabelProps={{ shrink: true }}
                 onChange={(event) => handleChangeItemDetails(event, index)}
               >
                 {serviceTypesData?.map((service) => (
-                  <MenuItem
-                    lang='ar'
-                    key={service._id}
-                    value={service._id}
-                  >
+                  <MenuItem lang="ar" key={service._id} value={service._id}>
                     {curLangAr ? service.name_arabic : service.name_english}
                   </MenuItem>
                 ))}
@@ -271,16 +286,12 @@ export default function InvoiceNewEditDetails() {
               <RHFSelect
                 name={`items[${index}].activity`}
                 size="small"
-                label={t("activity")}
+                label={t('activity')}
                 sx={{ maxWidth: { md: 200 } }}
                 InputLabelProps={{ shrink: true }}
               >
                 {activitiesData?.map((one) => (
-                  <MenuItem
-                    lang='ar'
-                    key={one._id}
-                    value={one._id}
-                  >
+                  <MenuItem lang="ar" key={one._id} value={one._id}>
                     {curLangAr ? one.name_arabic : one.name_english}
                   </MenuItem>
                 ))}
@@ -290,7 +301,7 @@ export default function InvoiceNewEditDetails() {
                 size="small"
                 type="number"
                 name={`items[${index}].quantity`}
-                label={t("quantity")}
+                label={t('quantity')}
                 placeholder="0"
                 onChange={(event) => handleChangeItemDetails(event, index)}
                 InputLabelProps={{ shrink: true }}
@@ -307,7 +318,7 @@ export default function InvoiceNewEditDetails() {
                 size="small"
                 type="number"
                 name={`items[${index}].price_per_unit`}
-                label={t("price")}
+                label={t('price')}
                 placeholder="0.00"
                 // onChange={(event) => handleChangeItemDetails(event, index)}
                 InputProps={{
@@ -329,9 +340,11 @@ export default function InvoiceNewEditDetails() {
                 size="small"
                 type="number"
                 name={`items[${index}].total`}
-                label={t("total")}
+                label={t('total')}
                 placeholder="0.00"
-                value={values.items[index].total === 0 ? '' : values.items[index]?.total?.toFixed(2)}
+                value={
+                  values.items[index].total === 0 ? '' : values.items[index]?.total?.toFixed(2)
+                }
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

@@ -395,7 +395,7 @@ export default function Processing() {
           }}
         >
           {`${info?.employee?.name_english} has add ${info?.description} medical report`}
-          <br/>
+          <br />
           <Button onClick={() => removemedicalrepoort(info?._id)}>
             Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
           </Button>

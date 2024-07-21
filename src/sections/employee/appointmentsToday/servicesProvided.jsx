@@ -29,7 +29,6 @@ export default function ServicesProvided() {
     });
   };
 
-
   const onSubmit = async () => {
     try {
       await axiosInstance.patch(`/api/entrance/${id}`, {

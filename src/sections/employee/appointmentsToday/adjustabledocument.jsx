@@ -12,7 +12,6 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
 
-
 export default function Adjustabledocument({ patient }) {
   const { t } = useTranslate();
   const dialog = useBoolean();
@@ -23,7 +22,7 @@ export default function Adjustabledocument({ patient }) {
 
   const onSubmit = async () => {
     try {
-      await axiosInstance.patch(`/api/patient/${patient?._id}`, { 
+      await axiosInstance.patch(`/api/patient/${patient?._id}`, {
         adjustabledocument: adjustabledocumentId,
       });
       enqueueSnackbar('adjustable document sent successfully', { variant: 'success' });
@@ -49,7 +48,8 @@ export default function Adjustabledocument({ patient }) {
             onClick={() => handleButtonClick(adjustabledocumentdata?._id)}
             sx={{
               m: 1,
-              backgroundColor: clickedButtonId === adjustabledocumentdata?._id ? 'info.main' : 'initial',
+              backgroundColor:
+                clickedButtonId === adjustabledocumentdata?._id ? 'info.main' : 'initial',
               color: clickedButtonId === adjustabledocumentdata?._id ? 'white' : 'initial',
             }}
             key={i}
@@ -62,8 +62,6 @@ export default function Adjustabledocument({ patient }) {
       <Button type="submit" variant="contained" onClick={onSubmit} sx={{ m: 2 }}>
         {t('Upload')}
       </Button>
-     
-   
     </Card>
   );
 }

@@ -85,7 +85,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                     newValue,
                     user?.employee?.employee_engagements[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                    Intl.DateTimeFormat().resolvedOptions().timeZone
+                      Intl.DateTimeFormat().resolvedOptions().timeZone
                   );
                   field.onChange(selectedTime);
                 }}
@@ -113,7 +113,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                     newValue,
                     user?.employee?.employee_engagements[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                    Intl.DateTimeFormat().resolvedOptions().timeZone
+                      Intl.DateTimeFormat().resolvedOptions().timeZone
                   );
                   field.onChange(selectedTime);
                 }}
