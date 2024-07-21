@@ -35,7 +35,7 @@ export default function TableHeadCustom({
   onSelectAllRows,
   sx,
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   return (
     <TableHead sx={sx}>
       <TableRow>

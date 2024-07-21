@@ -99,9 +99,7 @@ export default function Doctorpage() {
     appointmentType: selectedAppointmentType, // Type selected by the user
   });
 
-  const { roomsData } = useGetUSRooms(
-    data?.unit_service?._id
-  );
+  const { roomsData } = useGetUSRooms(data?.unit_service?._id);
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
   );
@@ -154,7 +152,7 @@ export default function Doctorpage() {
         note: patientNote,
         info: defaultValues,
         lang: curLangAr,
-        Last_activity_atended: receptionActivity?.activities?._id
+        Last_activity_atended: receptionActivity?.activities?._id,
       });
       await axios.post(endpoints.history.all, {
         patient: patientData,
@@ -561,9 +559,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-            data?.unit_service?.city?.name_english ||
-            data?.unit_service?.name_english ||
-            data?.employee?.description
+          data?.unit_service?.city?.name_english ||
+          data?.unit_service?.name_english ||
+          data?.employee?.description
             ? renderAbout
             : ''}
 

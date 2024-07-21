@@ -13,7 +13,7 @@ import { RHFSelect } from 'src/components/hook-form';
 export default function InvoiceNewEditStatusDate() {
   const { control } = useFormContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Stack
@@ -31,7 +31,7 @@ export default function InvoiceNewEditStatusDate() {
       <RHFSelect
         fullWidth
         name="status"
-        label={t("status")}
+        label={t('status')}
         InputLabelProps={{ shrink: true }}
         PaperPropsSx={{ textTransform: 'capitalize' }}
       >
@@ -47,7 +47,7 @@ export default function InvoiceNewEditStatusDate() {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label={t("create date")}
+            label={t('create date')}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);
@@ -68,7 +68,7 @@ export default function InvoiceNewEditStatusDate() {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label={t("due date")}
+            label={t('due date')}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);

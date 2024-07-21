@@ -39,20 +39,20 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
 
   const { Entrance } = useGetOneEntranceManagement(entrance, {
     select: 'Service_types patient',
-    populate: [{ path: 'Service_types', select: 'name_english name_arabic Price_per_unit' }]
-  })
-  const { data: appointmentData } = useGetAppointment(appointment, { select: 'patient' })
-  const { t } = useTranslate()
+    populate: [{ path: 'Service_types', select: 'name_english name_arabic Price_per_unit' }],
+  });
+  const { data: appointmentData } = useGetAppointment(appointment, { select: 'patient' });
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const confirm = useBoolean();
   // const loadingSave = useBoolean();
   const loadingSend = useBoolean();
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const NewInvoiceSchema = Yup.object().shape({
     // invoiceNumber: Yup.string(),
@@ -96,9 +96,20 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     () => ({
       // invoiceNumber: currentInvoice?.invoiceNumber || 'INV-1990',
       createDate: currentInvoice?.created_at || new Date(),
-      unit_service: currentInvoice?.unit_service?._id || currentInvoice?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
-      employee: currentInvoice?.employee?._id || currentInvoice?.employee || user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-      patient: currentInvoice?.patient?._id || currentInvoice?.patient || appointmentData?.patient || Entrance?.patient || null,
+      unit_service:
+        currentInvoice?.unit_service?._id ||
+        currentInvoice?.unit_service ||
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+      employee:
+        currentInvoice?.employee?._id ||
+        currentInvoice?.employee ||
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+      patient:
+        currentInvoice?.patient?._id ||
+        currentInvoice?.patient ||
+        appointmentData?.patient ||
+        Entrance?.patient ||
+        null,
       dueDate: currentInvoice?.dueDate || null,
       entrance: currentInvoice?.entrance || entrance || null,
       appointment: currentInvoice?.appointment || appointment || null,
@@ -109,8 +120,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       discount: currentInvoice?.Total_discount_amount || 0,
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
-      items: currentInvoice?.Provided_services || Entrance?.Service_types?.map((one) => (
-        {
+      items: currentInvoice?.Provided_services ||
+        Entrance?.Service_types?.map((one) => ({
           service_type: one._id || null,
           activity: null,
           quantity: 1,
@@ -172,9 +183,9 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     loadingSend.onTrue();
 
     try {
-      const invoice = await axiosInstance.post(endpoints.economec_movements.all, data)
+      const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
       reset();
-      enqueueSnackbar(t('created successfully'))
+      enqueueSnackbar(t('created successfully'));
       loadingSend.onFalse();
       router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?._id));
       console.info('DATA', JSON.stringify(data, null, 2));
@@ -197,15 +208,14 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <InvoiceNewEditAddress />
 
             <InvoiceNewEditStatusDate />
-            <Stack direction='row' justifyContent='flex-end' px={5} pt={3} pb={0}>
+            <Stack direction="row" justifyContent="flex-end" px={5} pt={3} pb={0}>
               <RHFCheckbox
-                name='detailedTaxes'
+                name="detailedTaxes"
                 label={t('detailed taxes and deductions')}
                 onChange={confirm.onTrue}
               />
             </Stack>
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
-
           </Card>
 
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
@@ -233,15 +243,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title={t("confirm changing display option")}
+        title={t('confirm changing display option')}
         content={t('you will loose the all details items data')}
         action={
           <Button
             variant="contained"
             color="error"
             onClick={() => {
-              setValue('items', defaultValues.items)
-              setValue('detailedTaxes', !watch().detailedTaxes)
+              setValue('items', defaultValues.items);
+              setValue('detailedTaxes', !watch().detailedTaxes);
               confirm.onFalse();
             }}
           >

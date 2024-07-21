@@ -32,7 +32,7 @@ const INVOICE_STATUS_OPTIONS = [
   { value: 'pending', label: 'Pending' },
   { value: 'overdue', label: 'Overdue' },
   { value: 'draft', label: 'Draft' },
-]
+];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '& td': {
@@ -48,18 +48,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function InvoiceDetails({ invoice, refetch }) {
   // const [currentStatus, setCurrentStatus] = useState(invoice.status);
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const handleChangeStatus = useCallback(async (event) => {
-    try {
-      await axiosInstance.patch(endpoints.economec_movements.one(invoice._id), { status: event.target.value })
-      refetch()
-    } catch (e) {
-      // console.log(e)
-    }
-  }, [invoice._id, refetch]);
+  const handleChangeStatus = useCallback(
+    async (event) => {
+      try {
+        await axiosInstance.patch(endpoints.economec_movements.one(invoice._id), {
+          status: event.target.value,
+        });
+        refetch();
+      } catch (e) {
+        // console.log(e)
+      }
+    },
+    [invoice._id, refetch]
+  );
 
   const renderTotal = (
     <>
@@ -86,9 +91,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
       <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ color: 'text.secondary' }}>{t('deductions')}</TableCell>
-        <TableCell width={120} >
-          {fCurrency(invoice.Total_deduction_amount)}
-        </TableCell>
+        <TableCell width={120}>{fCurrency(invoice.Total_deduction_amount)}</TableCell>
       </StyledTableRow>
 
       <StyledTableRow>
@@ -132,10 +135,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
                 <TableCell>
                   <Box sx={{ maxWidth: 560 }}>
-                    <Typography variant="subtitle2">{curLangAr ? row.service_type?.name_arabic : row.service_type?.name_english}</Typography>
+                    <Typography variant="subtitle2">
+                      {curLangAr ? row.service_type?.name_arabic : row.service_type?.name_english}
+                    </Typography>
 
                     <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      {curLangAr ? row.service_type?.description_arabic : row.service_type?.description_english}
+                      {curLangAr
+                        ? row.service_type?.description_arabic
+                        : row.service_type?.description_english}
                     </Typography>
                   </Box>
                 </TableCell>
@@ -177,7 +184,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
           <Box
             component="img"
             alt="logo"
-            src={invoice.unit_service.company_logo ? invoice.unit_service.company_logo : "/logo/logo_single.svg"}
+            src={
+              invoice.unit_service.company_logo
+                ? invoice.unit_service.company_logo
+                : '/logo/logo_single.svg'
+            }
             sx={{ width: 48, height: 48 }}
           />
 
@@ -228,18 +239,19 @@ export default function InvoiceDetails({ invoice, refetch }) {
             {fDate(invoice.created_at)}
           </Stack>
 
-          {invoice.dueDate && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('due date')}
-            </Typography>
-            {fDate(invoice.dueDate)}
-          </Stack>}
+          {invoice.dueDate && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('due date')}
+              </Typography>
+              {fDate(invoice.dueDate)}
+            </Stack>
+          )}
         </Box>
 
         {renderList}
 
         <Divider sx={{ mt: 5, borderStyle: 'dashed' }} />
-
       </Card>
     </>
   );

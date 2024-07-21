@@ -103,7 +103,6 @@ export default function ProductCatNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

@@ -31,7 +31,7 @@ export default function CheckList() {
   const { id } = params;
   const [thId, setTheId] = useState(null);
   const { user } = useAuthContext();
-  const { Entrance } = useGetOneEntranceManagement(id,{populate:'all'});
+  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
@@ -89,7 +89,7 @@ export default function CheckList() {
         <Box sx={{ display: 'flex' }}>
           {CheckListData?.map((info) => (
             <Button sx={{ mt: 2, ml: 2 }} onClick={() => setTheId(info?._id)}>
-              {info?.title} <Iconify icon="lets-icons:arhive-import" sx={{ml:2}} width={21} />
+              {info?.title} <Iconify icon="lets-icons:arhive-import" sx={{ ml: 2 }} width={21} />
             </Button>
           ))}
         </Box>

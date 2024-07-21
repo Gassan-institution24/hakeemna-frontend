@@ -133,31 +133,31 @@ export default function CountriesTableRow({
       >
         {status === 'active'
           ? checkAcl({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onInactivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="ic:baseline-pause" />
-              {t('inactivate')}
-            </MenuItem>
-          )
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                {t('inactivate')}
+              </MenuItem>
+            )
           : checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onActivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'success.main' }}
-            >
-              <Iconify icon="bi:play-fill" />
-              {t('activate')}
-            </MenuItem>
-          )}
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                {t('activate')}
+              </MenuItem>
+            )}
         <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}

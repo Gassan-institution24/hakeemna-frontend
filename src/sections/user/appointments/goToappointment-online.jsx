@@ -16,7 +16,10 @@ import OnlineAppointmentList from './appointment-online';
 // ----------------------------------------------------------------------
 
 export default function AppointmentItem({ patientData, refetch }) {
-  const { unitservicesData, loading } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
+  const { unitservicesData, loading } = useGetActiveUnitservices({
+    updateRating: true,
+    populate: 'all',
+  });
 
   const handleBook = useCallback(
     async (id) => {
@@ -34,7 +37,7 @@ export default function AppointmentItem({ patientData, refetch }) {
             Units={info}
             patientData={patientData}
             onBook={handleBook}
-          // onView={() => handleView(unitappointment?._id)}
+            // onView={() => handleView(unitappointment?._id)}
           />
         ))}
     </>

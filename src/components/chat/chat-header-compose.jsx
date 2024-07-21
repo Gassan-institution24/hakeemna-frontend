@@ -47,7 +47,7 @@ export default function ChatHeaderCompose({ contacts, onAddRecipients }) {
         isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => <TextField {...params} placeholder="+ Recipients" />}
         renderOption={(props, recipient, { selected }) => (
-          <li lang='ar' {...props} key={recipient.id}>
+          <li lang="ar" {...props} key={recipient.id}>
             <Box
               key={recipient.id}
               sx={{

@@ -90,7 +90,7 @@ export default function CitiesNewEditForm({ currentCity }) {
       console.error(error);
     }
   });
-  
+
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
@@ -110,7 +110,6 @@ export default function CitiesNewEditForm({ currentCity }) {
               }}
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

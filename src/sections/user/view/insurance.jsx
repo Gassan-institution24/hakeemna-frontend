@@ -143,12 +143,7 @@ export default function Insuranceinfo() {
                 />
               )}
             />
-            <RHFTextField
-
-              name="insurance_client_num"
-              label={t('Card number*')}
-              sx={{ mb: 1.5 }}
-            />
+            <RHFTextField name="insurance_client_num" label={t('Card number*')} sx={{ mb: 1.5 }} />
             <RHFSelect
               label={t('insurance*')}
               fullWidth

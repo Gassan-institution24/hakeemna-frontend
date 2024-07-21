@@ -108,11 +108,16 @@ export default function PatientFoundRow({
           </>
         }
         action={
-          <LoadingButton variant="contained" color="info" loading={submitting} onClick={() => {
-            onEmploymentRow()
-            confirm.onFalse()
-            setNote('')
-          }}>
+          <LoadingButton
+            variant="contained"
+            color="info"
+            loading={submitting}
+            onClick={() => {
+              onEmploymentRow();
+              confirm.onFalse();
+              setNote('');
+            }}
+          >
             {t('confirm')}
           </LoadingButton>
         }

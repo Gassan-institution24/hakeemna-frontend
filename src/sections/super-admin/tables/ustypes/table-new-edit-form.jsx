@@ -103,7 +103,6 @@ export default function TableNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

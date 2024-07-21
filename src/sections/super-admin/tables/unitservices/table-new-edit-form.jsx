@@ -146,7 +146,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 options={DefaultDoses.map((option, idx) => option)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option, idx) => (
-                  <li lang='ar' {...props} key={idx}>
+                  <li lang="ar" {...props} key={idx}>
                     {option}
                   </li>
                 )}

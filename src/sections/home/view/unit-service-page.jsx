@@ -56,7 +56,9 @@ export default function UnitServicePage({ USData }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
-  const { employeesData } = useGetUSActiveEmployeeEngs(id, { populate: 'employee unit_service department nationality insurance country city' });
+  const { employeesData } = useGetUSActiveEmployeeEngs(id, {
+    populate: 'employee unit_service department nationality insurance country city',
+  });
 
   const getDirections = () => {
     window.location.href = location_gps;
@@ -101,10 +103,10 @@ export default function UnitServicePage({ USData }) {
             work_start_time === work_end_time
               ? t('24 hours')
               : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                work_end_time,
-                'p',
-                curLangAr
-              )}`,
+                  work_end_time,
+                  'p',
+                  curLangAr
+                )}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
@@ -297,10 +299,10 @@ export default function UnitServicePage({ USData }) {
     <Stack sx={{ m: { md: 10 } }}>
       {renderGallery}
 
-      < Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
 
       {renderContent}
-    </Stack >
+    </Stack>
   );
 }
 
