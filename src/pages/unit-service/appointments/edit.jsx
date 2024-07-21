@@ -15,7 +15,7 @@ import EditAppointmentView from 'src/sections/unit-service/appointments/view/edi
 export default function AppointmentEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data, loading } = useGetAppointment(id);
+  const { data, loading } = useGetAppointment(id, { populate: 'all' });
   const { user } = useAuthContext();
   const serviceUnitName =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service

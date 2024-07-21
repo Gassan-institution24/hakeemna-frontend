@@ -42,7 +42,8 @@ export default function TableNewEditForm({ currentTable }) {
   const { handleAddNew } = useNewScreen();
 
   const { employeesData } = useGetUSActiveEmployeeEngs(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id,
+    { select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] }
   );
 
   const { departmentsData } = useGetUSActiveDepartments(

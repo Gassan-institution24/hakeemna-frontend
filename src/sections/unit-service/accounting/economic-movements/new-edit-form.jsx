@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
@@ -11,28 +11,37 @@ import { Button, Container } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useLocales, useTranslate } from 'src/locales';
-
-// import { _addressBooks } from 'src/_mock';
-
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import FormProvider, { RHFCheckbox } from 'src/components/hook-form';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import InvoiceNewEditAddress from '../invoice-new-edit-address';
-import InvoiceNewEditDetails from '../invoice-new-edit-details';
-import InvoiceNewEditStatusDate from '../invoice-new-edit-status-date';
-import InvoiceNewEditTaxDetails from '../invoice-new-edit-tax-details';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetAppointment, useGetOneEntranceManagement } from 'src/api';
+
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import FormProvider, { RHFCheckbox } from 'src/components/hook-form';
+
+import InvoiceNewEditAddress from './invoice-new-edit-address';
+import InvoiceNewEditDetails from './invoice-new-edit-details';
+import InvoiceNewEditStatusDate from './invoice-new-edit-status-date';
+import InvoiceNewEditTaxDetails from './invoice-new-edit-tax-details';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditForm({ currentInvoice }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const appointment = searchParams.get('appointment');
+  const entrance = searchParams.get('entrance');
+
+  const { Entrance } = useGetOneEntranceManagement(entrance, {
+    select: 'Service_types patient',
+    populate: [{ path: 'Service_types', select: 'name_english name_arabic Price_per_unit' }]
+  })
+  const { data: appointmentData } = useGetAppointment(appointment, { select: 'patient' })
   const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -50,6 +59,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     createDate: Yup.mixed().nullable().required('Create date is required'),
     patient: Yup.mixed().nullable().required('Invoice to is required'),
     unit_service: Yup.mixed(),
+    appointment: Yup.mixed(),
+    entrance: Yup.mixed(),
     employee: Yup.mixed(),
     dueDate: Yup.mixed().nullable(),
     detailedTaxes: Yup.bool(),
@@ -84,33 +95,46 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const defaultValues = useMemo(
     () => ({
       // invoiceNumber: currentInvoice?.invoiceNumber || 'INV-1990',
-      createDate: currentInvoice?.createDate || new Date(),
-      unit_service: currentInvoice?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
-      employee: currentInvoice?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-      patient: currentInvoice?.patient || null,
+      createDate: currentInvoice?.created_at || new Date(),
+      unit_service: currentInvoice?.unit_service?._id || currentInvoice?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+      employee: currentInvoice?.employee?._id || currentInvoice?.employee || user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+      patient: currentInvoice?.patient?._id || currentInvoice?.patient || appointmentData?.patient || Entrance?.patient || null,
       dueDate: currentInvoice?.dueDate || null,
+      entrance: currentInvoice?.entrance || entrance || null,
+      appointment: currentInvoice?.appointment || appointment || null,
       detailedTaxes: currentInvoice?.detailedTaxes || false,
       taxes: currentInvoice?.taxes || 0,
-      deduction: currentInvoice?.deduction || 0,
+      deduction: currentInvoice?.Total_deduction_amount || 0,
       status: currentInvoice?.status || 'draft',
-      discount: currentInvoice?.discount || 0,
-      subtotal: currentInvoice?.subtotal || 0,
+      discount: currentInvoice?.Total_discount_amount || 0,
+      subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
-      items: currentInvoice?.items || [
+      items: currentInvoice?.Provided_services || Entrance?.Service_types?.map((one) => (
         {
-          service_type: null,
+          service_type: one._id || null,
           activity: null,
           quantity: 1,
-          price_per_unit: 0,
-          subtotal: 0,
+          price_per_unit: Number(one.Price_per_unit) || 0,
+          subtotal: Number(one.Price_per_unit) || 0,
           discount_amount: 0,
           deduction: 0,
           tax: 0,
-          total: 0,
-        },
-      ],
+          total: Number(one.Price_per_unit) || 0,
+        })) || [
+          {
+            service_type: null,
+            activity: null,
+            quantity: 1,
+            price_per_unit: 0,
+            subtotal: 0,
+            discount_amount: 0,
+            deduction: 0,
+            tax: 0,
+            total: 0,
+          },
+        ],
     }),
-    [currentInvoice, user?.employee]
+    [currentInvoice, user?.employee, entrance, appointment, appointmentData, Entrance]
   );
 
   const methods = useForm({
@@ -125,6 +149,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   // const handleSaveAsDraft = handleSubmit(async (data) => {
   //   loadingSave.onTrue();
@@ -144,11 +172,11 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     loadingSend.onTrue();
 
     try {
-      await axiosInstance.post(endpoints.economec_movements.all, data)
+      const invoice = await axiosInstance.post(endpoints.economec_movements.all, data)
       reset();
       enqueueSnackbar(t('created successfully'))
       loadingSend.onFalse();
-      router.push(paths.dashboard.invoice.root);
+      router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?._id));
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       enqueueSnackbar(

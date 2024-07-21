@@ -28,7 +28,6 @@ export default function WatingRoom() {
   const { entranceData } = useGetWatingPatient(user?.patient?._id);
   const { entrance } = useGetAllinWatingNow();
   const { t } = useTranslate();
-  console.log(entranceData);
   const collapsible = useBoolean();
   const entranceCount = entrance.length <= 0 ? 0 : entrance.length - 1;
 

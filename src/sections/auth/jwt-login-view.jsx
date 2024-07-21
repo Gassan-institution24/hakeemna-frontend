@@ -74,7 +74,6 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   const onSubmit = handleSubmit(async (data) => {
     try {
       const userData = await login?.(data.email, data.password);
-      console.log('userData', userData);
       if (onSignin) {
         setPatientId(userData.patient);
         await axiosInstance.patch(endpoints.appointments.book(selected), {

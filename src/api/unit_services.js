@@ -31,7 +31,8 @@ export function useGetActiveUnitservices(params) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      unitservicesData: data || [],
+      unitservicesData: data?.unitServices || [],
+      length: data?.length || 0,
       loading: isLoading,
       error,
       validating: isValidating,

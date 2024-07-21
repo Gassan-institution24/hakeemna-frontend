@@ -27,14 +27,14 @@ export default function InvoiceTableFiltersResult({
     onFilters('name', '');
   }, [onFilters]);
 
-  const handleRemoveService = useCallback(
-    (inputValue) => {
-      const newValue = filters.service.filter((item) => item !== inputValue);
+  // const handleRemoveService = useCallback(
+  //   (inputValue) => {
+  //     const newValue = filters.service.filter((item) => item !== inputValue);
 
-      onFilters('service', newValue);
-    },
-    [filters.service, onFilters]
-  );
+  //     onFilters('service', newValue);
+  //   },
+  //   [filters.service, onFilters]
+  // );
 
   const handleRemoveStatus = useCallback(() => {
     onFilters('status', 'all');
@@ -55,7 +55,7 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {!!filters.service.length && (
+        {/* {!!filters.service.length && (
           <Block label="Service:">
             {filters.service.map((item) => (
               <Chip
@@ -66,7 +66,7 @@ export default function InvoiceTableFiltersResult({
               />
             ))}
           </Block>
-        )}
+        )} */}
 
         {filters.status !== 'all' && (
           <Block label="Status:">

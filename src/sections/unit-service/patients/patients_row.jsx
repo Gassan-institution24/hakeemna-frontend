@@ -58,7 +58,8 @@ export default function CountriesTableRow({ row, selected }) {
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+    { select: 'name_english name_arabic' }
   );
   const { workGroupsData } = useGetUSActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id

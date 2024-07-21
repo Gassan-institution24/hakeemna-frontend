@@ -88,7 +88,7 @@ export default function MovementTableRow({
             primary={invoice?.code}
             secondary={
               (isValid(new Date(invoice?.created_at)) &&
-                format(new Date(invoice?.created_at), 'dd MMM yyyy p')) ||
+                format(new Date(invoice?.created_at), 'dd MMMMMMMM yyyy p')) ||
               ''
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -104,21 +104,21 @@ export default function MovementTableRow({
             primary={required_amount}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            // secondaryTypographyProps={{
-            //   mt: 0.5,
-            //   component: 'span',
-            //   typography: 'caption',
-            // }}
+          // secondaryTypographyProps={{
+          //   mt: 0.5,
+          //   component: 'span',
+          //   typography: 'caption',
+          // }}
           />
         </TableCell>
         <TableCell align="center">
-          {isValid(new Date(due_date)) ? format(new Date(due_date), 'dd MMM yyyy') : ''}
+          {isValid(new Date(due_date)) ? format(new Date(due_date), 'dd MMMMMMMM yyyy') : ''}
         </TableCell>
 
         <TableCell align="center">{fCurrency(amount)}</TableCell>
         <TableCell align="center">
           {isValid(new Date(recieved_real_date))
-            ? format(new Date(recieved_real_date), 'dd MMM yyyy')
+            ? format(new Date(recieved_real_date), 'dd MMMMMMMM yyyy')
             : ''}
         </TableCell>
 
@@ -199,7 +199,7 @@ export default function MovementTableRow({
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(created_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -216,7 +216,7 @@ export default function MovementTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(updated_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
