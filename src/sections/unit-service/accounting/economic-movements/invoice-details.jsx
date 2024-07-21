@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,7 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
-import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
@@ -53,13 +52,12 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  console.log('invoice', invoice)
   const handleChangeStatus = useCallback(async (event) => {
     try {
       await axiosInstance.patch(endpoints.economec_movements.one(invoice._id), { status: event.target.value })
       refetch()
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
   }, [invoice._id, refetch]);
 

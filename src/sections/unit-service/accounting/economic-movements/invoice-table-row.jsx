@@ -1,20 +1,22 @@
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
-import { format, isValid } from 'date-fns';
 
 import Box from '@mui/material/Box';
+import { Checkbox } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
+import { fDate } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { fDate } from 'src/utils/format-time';
-import { Checkbox } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -28,14 +30,10 @@ export default function MovementTableRow({
 }) {
   const {
     sequence_number,
-    unit_service,
     patient,
     employee,
-    appointment,
-    stakeholder,
     Balance,
     Currency,
-    Provided_services,
     status,
 
     created_at,
@@ -62,8 +60,12 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           {sequence_number}
+        </TableCell>
+
+        <TableCell align="center">
+          {fDate(created_at)}
         </TableCell>
 
         <TableCell align="center">
@@ -71,17 +73,11 @@ export default function MovementTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {curLangAr ? employee?.name_arabic : employee?.name_english}
+          {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
         </TableCell>
 
         <TableCell align="center">
-          {fDate(created_at)}
-        </TableCell>
-        <TableCell align="center">{Provided_services.length}</TableCell>
-
-        <TableCell align="center">
-          {Currency?.symbol}
-          {Balance}
+          {fCurrency(Balance, Currency?.symbol)}
         </TableCell>
 
         <TableCell align="center">
@@ -122,7 +118,7 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        {/* <MenuItem lang="ar" 
+        {/* <MenuItem lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -130,14 +126,14 @@ export default function MovementTableRow({
         >
           <Iconify icon="solar:pen-bold" />
           {t('edit')}
-          </MenuItem> */}
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
-        {/* 
+        {/* <Divider sx={{ borderStyle: 'dashed' }} />
+        
         <MenuItem lang="ar" 
           onClick={() => {
             confirm.onTrue();
@@ -161,7 +157,7 @@ export default function MovementTableRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(created_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -178,7 +174,7 @@ export default function MovementTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(updated_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{

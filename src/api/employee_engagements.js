@@ -48,8 +48,8 @@ export function useGetUSEmployeeEngs(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSActiveEmployeeEngs(id) {
-  const URL = endpoints.employee_engagements.service_unit.active(id);
+export function useGetUSActiveEmployeeEngs(id, params) {
+  const URL = [endpoints.employee_engagements.service_unit.active(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

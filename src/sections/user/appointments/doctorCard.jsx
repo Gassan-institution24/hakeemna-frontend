@@ -21,7 +21,6 @@ export default function DoctorCard({ info }) {
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
   };
-  console.log(info, 'info');
   return (
     <Box
       sx={{

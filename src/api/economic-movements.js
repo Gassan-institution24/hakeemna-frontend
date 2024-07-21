@@ -3,13 +3,15 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetEconomicMovements() {
-  const URL = endpoints.economec_movements.all;
+export function useGetEconomicMovements(params) {
+  const URL = [endpoints.economec_movements.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      economecMovementsData: data || [],
+      economecMovementsData: data?.economecMovementsData || [],
+      lengths: data?.lengths || {},
+      totals: data?.totals || {},
       loading: isLoading,
       error,
       validating: isValidating,
@@ -69,8 +71,8 @@ export function useGetStackeholderEconomicMovements(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSEconomicMovements(id) {
-  const URL = endpoints.economec_movements.unit_service.one(id);
+export function useGetUSEconomicMovements(id, params) {
+  const URL = [endpoints.economec_movements.unit_service.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

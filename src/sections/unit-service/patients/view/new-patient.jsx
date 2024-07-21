@@ -62,11 +62,12 @@ export default function TableCreateView() {
   // const { myunitTime } = useUnitTime();
   const { handleAddNew } = useNewScreen();
 
-  const { appointmenttypesData, loading: typesLoading } = useGetAppointmentTypes();
+  const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+    { select: 'name_english name_arabic' }
   );
-  const { workGroupsData, loading: wgLoading } = useGetUSActiveWorkGroups(
+  const { workGroupsData } = useGetUSActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(

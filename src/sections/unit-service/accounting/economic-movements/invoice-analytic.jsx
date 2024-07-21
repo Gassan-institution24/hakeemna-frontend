@@ -8,11 +8,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceAnalytic({ title, total, icon, color, percent, price }) {
+  const { t } = useTranslate()
   return (
     <Stack
       spacing={2.5}
@@ -51,7 +54,7 @@ export default function InvoiceAnalytic({ title, total, icon, color, percent, pr
         <Typography variant="subtitle1">{title}</Typography>
 
         <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
-          {fShortenNumber(total)} invoices
+          {fShortenNumber(total)} {t('Invoices')}
         </Box>
 
         <Typography variant="subtitle2">{fCurrency(price)}</Typography>

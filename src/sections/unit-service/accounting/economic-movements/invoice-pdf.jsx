@@ -4,6 +4,7 @@ import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------

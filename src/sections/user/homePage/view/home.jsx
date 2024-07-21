@@ -72,7 +72,7 @@ export default function OverviewAppView() {
     }
     dialog.onFalse();
   };
-  console.log('feedbackData', feedbackData);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -284,7 +284,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         }
       } else {
         updating.onTrue();
-        console.log(data, JSON.stringify(data));
         await axios.post(endpoints.appointment_configs.all, data);
         socket.emit('created', {
           data,

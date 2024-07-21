@@ -131,12 +131,11 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const patient = await register?.({
+      await register?.({
         role: 'stakeholder',
         userName: data.name_english,
         ...data,
       });
-      console.log('patient', patient);
 
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {

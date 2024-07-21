@@ -19,7 +19,7 @@ export default function Rooms() {
   // const { t } = useTranslate();
   const [noteContent, setNoteContent] = useState('');
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
   const router = useRouter();
   const methods = useForm({

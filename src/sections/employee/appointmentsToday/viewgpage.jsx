@@ -19,7 +19,7 @@ export default function ViewPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const handleBackClick = () => {
     router.push(paths.employee.appointmentsToday);
   };

@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import { RHFSelect } from 'src/components/hook-form';
 
@@ -14,8 +14,6 @@ export default function InvoiceNewEditStatusDate() {
   const { control } = useFormContext();
 
   const { t } = useTranslate()
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   return (
     <Stack

@@ -64,7 +64,6 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
   const handleEmployment = async (row) => {
     try {
       const { data } = await createAppointment();
-      console.log('appointment', data);
       await axiosInstance.patch(endpoints.appointments.book(data?._id), {
         patient: row?._id,
         note,
