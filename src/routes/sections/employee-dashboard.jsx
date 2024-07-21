@@ -9,14 +9,6 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
-// ENTRANCE MANAGEMENT
-const EntranceManagementHomePage = lazy(() => import('src/pages/employee/entranceManagement/home'));
-const EntranceManagementAccPage = lazy(() =>
-  import('src/pages/employee/entranceManagement/accounting')
-);
-const EntranceManagementNewPage = lazy(() => import('src/pages/employee/entranceManagement/new'));
-const EntranceManagementEditPage = lazy(() => import('src/pages/employee/entranceManagement/edit'));
-
 // APPOINTMENTS
 const AppointmentsHomePage = lazy(() => import('src/pages/employee/appointments/home'));
 const AppointmentEditPage = lazy(() => import('src/pages/employee/appointments/edit'));
@@ -121,15 +113,6 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: 'list', element: <ChecklistPage /> },
           { path: 'new', element: <ChecklistNewPage /> },
           { path: ':id/edit', element: <ChecklistEditPage /> },
-        ],
-      },
-      {
-        path: 'entrancemanagement',
-        children: [
-          { element: <EntranceManagementHomePage />, index: true },
-          { path: 'new', element: <EntranceManagementNewPage /> },
-          { path: 'accounting', element: <EntranceManagementAccPage /> },
-          { path: ':id/edit', element: <EntranceManagementEditPage /> },
         ],
       },
       {

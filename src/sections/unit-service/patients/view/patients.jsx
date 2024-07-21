@@ -32,7 +32,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Iconify from 'src/components/iconify';
 
@@ -58,8 +57,7 @@ export default function PatientTableView() {
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
     { id: '' },
-  ];
-  const { isMedLab } = useUSTypeGuard();
+  ]
 
   const checkAcl = useAclGuard();
 
@@ -68,7 +66,8 @@ export default function PatientTableView() {
   const { user } = useAuthContext();
 
   const { patientsData, loading } = useGetUSPatient(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+    { populate: 'nationality' }
   );
 
   const [filters, setFilters] = useState(defaultFilters);

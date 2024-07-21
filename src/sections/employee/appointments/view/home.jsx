@@ -133,7 +133,7 @@ export default function AppointmentsView({ employeeData }) {
     {
       page: table.page || 0,
       sortBy: table.orderBy || 'code',
-      rowsPerPage: table.rowsPerPage || 25,
+      rowsPerPage: table.rowsPerPage || 10,
       order: table.order || 'asc',
       populate: 'all',
       ...filters,
@@ -545,9 +545,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

@@ -56,7 +56,7 @@ export default function UnitServicePage({ USData }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
-  const { employeesData } = useGetUSActiveEmployeeEngs(id);
+  const { employeesData } = useGetUSActiveEmployeeEngs(id, { populate: 'employee unit_service department nationality insurance country city' });
 
   const getDirections = () => {
     window.location.href = location_gps;

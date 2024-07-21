@@ -66,7 +66,7 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell align="center">
         <ListItemText
-          primary={isValid(new Date(last_online)) && format(new Date(last_online), 'dd MMM yyyy')}
+          primary={isValid(new Date(last_online)) && format(new Date(last_online), 'dd MMMMMMMM yyyy')}
           secondary={isValid(new Date(last_online)) && format(new Date(last_online), 'p')}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{

@@ -62,7 +62,7 @@ export default function Processing() {
   const { user } = useAuthContext();
   const params = useParams();
   const { id } = params;
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medicalreportsdata, refetch } = useGetEntranceExaminationReports(id);
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);

@@ -3,7 +3,7 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetEntranceManagement(id) { 
+export function useGetEntranceManagement(id) {
   const URL = endpoints.entranceManagement.inrooms(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
@@ -31,7 +31,7 @@ export function useGetWatingPatient(id) {
     () => ({
       entranceData: data,
       loading: isLoading,
-      error, 
+      error,
       validating: isValidating,
       empty: !isLoading && !data?.length,
     }),
@@ -105,8 +105,8 @@ export function useGetAllinWatingNow() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetOneEntranceManagement(id) {
-  const URL = endpoints.entranceManagement.one(id);
+export function useGetOneEntranceManagement(id, params) {
+  const URL = [endpoints.entranceManagement.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

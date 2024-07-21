@@ -102,56 +102,56 @@ export default function TableDetailsRow({
       >
         {status === 'active'
           ? checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'delete',
-            }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onInactivate();
-                  popover.onClose();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
-              </MenuItem>
-            )
+            category: 'unit_service',
+            subcategory: 'management_tables',
+            acl: 'delete',
+          }) && (
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onInactivate();
+                popover.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="ic:baseline-pause" />
+              {t('inactivate')}
+            </MenuItem>
+          )
           : checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'update',
-            }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onActivate();
-                  popover.onClose();
-                }}
-                sx={{ color: 'success.main' }}
-              >
-                <Iconify icon="bi:play-fill" />
-                {t('activate')}
-              </MenuItem>
-            )}
+            category: 'unit_service',
+            subcategory: 'management_tables',
+            acl: 'update',
+          }) && (
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onActivate();
+                popover.onClose();
+              }}
+              sx={{ color: 'success.main' }}
+            >
+              <Iconify icon="bi:play-fill" />
+              {t('activate')}
+            </MenuItem>
+          )}
 
         {checkAcl({
           category: 'unit_service',
           subcategory: 'management_tables',
           acl: 'update',
         }) && (
-          <MenuItem
-            lang="ar"
-            onClick={() => {
-              onEditRow();
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('edit')}
-          </MenuItem>
-        )}
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onEditRow();
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="fluent:edit-32-filled" />
+              {t('edit')}
+            </MenuItem>
+          )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -170,7 +170,7 @@ export default function TableDetailsRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(created_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -187,7 +187,7 @@ export default function TableDetailsRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(updated_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{

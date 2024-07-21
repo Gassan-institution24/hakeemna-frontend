@@ -82,7 +82,7 @@ export default function AppointmentsView() {
   } = useGetTickets({
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
-    rowsPerPage: table.rowsPerPage || 25,
+    rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'asc',
     name: filters.name || null,
     status: filters.status || null,

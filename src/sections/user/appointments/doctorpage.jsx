@@ -84,7 +84,7 @@ export default function Doctorpage() {
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useGetEmployeeEngagement(id);
-  const datacheeck = useGetAppointment(TimeData).data;
+  const datacheeck = useGetAppointment(TimeData, { populate: 'all' }).data;
   const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
   const [currentDateTime, setCurrentDateTime] = useState();
   const [patientNote, setPatientNote] = useState();
@@ -105,9 +105,6 @@ export default function Doctorpage() {
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
   );
-
-  console.log(receptionActivity?.activities?._id);
-
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -157,7 +154,7 @@ export default function Doctorpage() {
         note: patientNote,
         info: defaultValues,
         lang: curLangAr,
-        Last_activity_atended : receptionActivity?.activities?._id
+        Last_activity_atended: receptionActivity?.activities?._id
       });
       await axios.post(endpoints.history.all, {
         patient: patientData,
@@ -564,9 +561,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-          data?.unit_service?.city?.name_english ||
-          data?.unit_service?.name_english ||
-          data?.employee?.description
+            data?.unit_service?.city?.name_english ||
+            data?.unit_service?.name_english ||
+            data?.employee?.description
             ? renderAbout
             : ''}
 

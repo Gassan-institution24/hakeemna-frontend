@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -16,7 +16,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSActivities, useGetUSActiveServiceTypes, useGetTaxes, useGetDeductions } from 'src/api';
+import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -31,7 +31,12 @@ export default function InvoiceNewEditDetails() {
   const { user } = useAuthContext();
 
   const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    {
+      select: 'name_english name_arabic Price_per_unit tax deduction',
+      populate: [{ path: 'tax', select: 'percentage name_english name_arabic' },
+      { path: 'deduction', select: 'percentage name_english name_arabic' }]
+    }
   );
   const { activitiesData } = useGetUSActivities(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id

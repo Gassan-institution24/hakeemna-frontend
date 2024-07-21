@@ -151,7 +151,7 @@ export default function AppointmentsTableRow({
             color={
               (status === 'available' && 'secondary') ||
               (status === 'pending' && 'warning') ||
-              (status === 'Processing' && 'info') ||
+              (status === 'processing' && 'info') ||
               (status === 'finished' && 'success') ||
               (status === 'canceled' && 'error') ||
               (status === 'not booked' && 'secondary') ||
@@ -189,6 +189,20 @@ export default function AppointmentsTableRow({
             {t('edit')}
           </MenuItem>
         )}
+        {['Processing', 'finished'].includes(status) &&
+          checkAcl({ category: 'work_group', subcategory: 'accounting', acl: 'create' }) && (
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                router.push(`${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}`);
+                popover.onClose();
+              }}
+              sx={{ color: 'info.main' }}
+            >
+              <Iconify icon="hugeicons:invoice" />
+              {t('make an invoice')}
+            </MenuItem>
+          )}
         {status === 'available' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
@@ -217,6 +231,7 @@ export default function AppointmentsTableRow({
               {t('cancel')}
             </MenuItem>
           )}
+
         {status === 'canceled' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
@@ -255,7 +270,7 @@ export default function AppointmentsTableRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(created_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -272,7 +287,7 @@ export default function AppointmentsTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
             secondary={format(new Date(updated_at), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
