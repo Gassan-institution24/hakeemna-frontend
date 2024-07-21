@@ -30,7 +30,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
   // const router = useRouter();
   const view = useBoolean();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   // const handleEdit = useCallback(() => {
   //   router.push(paths.unitservice.accounting.economicmovements.edit(invoice.id));
@@ -63,7 +63,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
             </IconButton>
           </Tooltip> */}
 
-          <Tooltip title={t("view")}>
+          <Tooltip title={t('view')}>
             <IconButton onClick={view.onTrue}>
               <Iconify icon="solar:eye-bold" />
             </IconButton>
@@ -75,7 +75,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
-              <Tooltip title={t("download")}>
+              <Tooltip title={t('download')}>
                 <IconButton>
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
@@ -87,7 +87,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
             )}
           </PDFDownloadLink>
 
-          <Tooltip title={t("print")}>
+          <Tooltip title={t('print')}>
             <IconButton onClick={printPdf}>
               <Iconify icon="solar:printer-minimalistic-bold" />
             </IconButton>
@@ -109,7 +109,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
         <TextField
           fullWidth
           select
-          label={t("status")}
+          label={t('status')}
           value={currentStatus}
           onChange={onChangeStatus}
           sx={{
@@ -117,7 +117,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
           }}
         >
           {statusOptions.map((option) => (
-            <MenuItem lang='ar' key={option.value} value={option.value}>
+            <MenuItem lang="ar" key={option.value} value={option.value}>
               {t(option.value)}
             </MenuItem>
           ))}

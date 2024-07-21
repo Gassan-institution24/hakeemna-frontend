@@ -9,7 +9,6 @@ import OurPartners from '../our-partners';
 export default function HomeView() {
   return (
     <>
-
       <HomeHero id="home" />
       <Box
         sx={{

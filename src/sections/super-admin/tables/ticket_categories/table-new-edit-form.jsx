@@ -23,7 +23,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -106,7 +105,6 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"

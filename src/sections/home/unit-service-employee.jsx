@@ -19,10 +19,10 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceEmployees({ employees }) {
-  const router = useRouter()
+  const router = useRouter();
   const handleClick = (id) => {
-    router.push(paths.pages.doctor(id))
-  }
+    router.push(paths.pages.doctor(id));
+  };
   return (
     <Box
       gap={3}

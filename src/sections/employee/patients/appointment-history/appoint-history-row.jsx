@@ -46,7 +46,9 @@ export default function InvoiceTableRow({
       <TableRow hover selected={selected}>
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMMMMMMM yyyy')}
+            primary={
+              isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMMMMMMM yyyy')
+            }
             secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{

@@ -150,7 +150,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });
-  const { reset,
+  const {
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;

@@ -73,7 +73,9 @@ export default function AppointmentsTableRow({
 
         <TableCell onClick={onViewRow} align="center">
           <ListItemText
-            primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')}
+            primary={
+              isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>

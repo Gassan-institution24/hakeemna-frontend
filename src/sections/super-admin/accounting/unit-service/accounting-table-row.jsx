@@ -75,7 +75,8 @@ export default function MovementTableRow({
         <TableCell align="center">
           <ListItemText
             primary={
-              (isValid(new Date(Start_date)) && format(new Date(Start_date), 'dd MMMMMMMM yyyy')) || ''
+              (isValid(new Date(Start_date)) && format(new Date(Start_date), 'dd MMMMMMMM yyyy')) ||
+              ''
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />

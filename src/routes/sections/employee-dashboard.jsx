@@ -76,7 +76,9 @@ const AppointmentsToday = lazy(() =>
   import('src/pages/employee/appointmentsToday/appintmentaToday')
 );
 const RecordPage = lazy(() => import('src/pages/employee/appointmentsToday/recordPage'));
-const PrescriotionPage = lazy(() => import('src/pages/employee/appointmentsToday/prescriotionPage'));
+const PrescriotionPage = lazy(() =>
+  import('src/pages/employee/appointmentsToday/prescriotionPage')
+);
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 
 // PATIENT

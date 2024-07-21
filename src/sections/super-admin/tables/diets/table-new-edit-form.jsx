@@ -87,7 +87,7 @@ export default function TableNewEditForm({ currentSelected }) {
       console.error(error);
     }
   });
-  
+
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
@@ -107,7 +107,6 @@ export default function TableNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"
@@ -128,7 +127,6 @@ export default function TableNewEditForm({ currentSelected }) {
               }}
             >
               <RHFTextField
-
                 onChange={handleEnglishInputChange}
                 sx={{ mt: 3 }}
                 name="description"

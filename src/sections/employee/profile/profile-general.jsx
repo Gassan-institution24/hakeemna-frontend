@@ -187,12 +187,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
     certifications: employeeData?.certifications.length
       ? employeeData?.certifications
       : [
-        {
-          name: '',
-          institution: '',
-          year: null,
-        },
-      ],
+          {
+            name: '',
+            institution: '',
+            year: null,
+          },
+        ],
     fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement].fees || 0,
     currency:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency ||
@@ -379,7 +379,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-              // value={values.profrssion_practice_num}
+                // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -507,14 +507,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li lang='ar' {...props} key={idx} value={option}>
+                  <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -540,14 +540,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
-                  <li lang='ar' {...props} key={idx} value={option}>
+                  <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -586,7 +586,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               )}
               getOptionLabel={(option) => option}
               renderOption={(props, option, idx) => (
-                <li lang='ar' {...props} key={idx} value={option}>
+                <li lang="ar" {...props} key={idx} value={option}>
                   {option}
                 </li>
               )}
@@ -637,7 +637,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               )}
               getOptionLabel={(option) => option}
               renderOption={(props, option, idx) => (
-                <li lang='ar' {...props} key={idx} value={option}>
+                <li lang="ar" {...props} key={idx} value={option}>
                   {option}
                 </li>
               )}

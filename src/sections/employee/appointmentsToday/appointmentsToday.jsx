@@ -53,11 +53,10 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { entrance,refetch2 } = useGetEntranceManagement(
+  const { entrance, refetch2 } = useGetEntranceManagement(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   const { finishedAppointmentsData } = useGetfinishedAppointments();
-
 
   const TABS = [
     {
@@ -96,7 +95,7 @@ export default function AppointmentsToday() {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
       refetch();
-  
+
       enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
         variant: 'success',
       });

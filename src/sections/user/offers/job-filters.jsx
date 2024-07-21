@@ -161,7 +161,7 @@ export default function JobFilters({
         onChange={(event, newValue) => handleFilterRoles(newValue)}
         renderInput={(params) => <TextField placeholder="Select Roles" {...params} />}
         renderOption={(props, option) => (
-          <li lang='ar' {...props} key={option}>
+          <li lang="ar" {...props} key={option}>
             {option}
           </li>
         )}

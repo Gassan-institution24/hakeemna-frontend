@@ -27,38 +27,38 @@ export default function InvoiceTableToolbar({
   serviceOptions,
 }) {
   const popover = usePopover();
-  const { user } = useAuthContext()
-  const USId = user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+  const { user } = useAuthContext();
+  const USId =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { serviceTypesData } = useGetUSActiveServiceTypes(USId, { select: 'name_english name_arabic' })
-  const { employeesData } = useGetUSActiveEmployeeEngs(USId, { select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] })
-  const { patientsData } = useGetUSPatient(USId, { select: 'name_english name_arabic' })
+  const { serviceTypesData } = useGetUSActiveServiceTypes(USId, {
+    select: 'name_english name_arabic',
+  });
+  const { employeesData } = useGetUSActiveEmployeeEngs(USId, {
+    select: 'employee',
+    populate: [{ path: 'employee', select: 'name_english name_arabic' }],
+  });
+  const { patientsData } = useGetUSPatient(USId, { select: 'name_english name_arabic' });
 
   const handleFilterService = useCallback(
     (event) => {
-      onFilters(
-        'service', event.target.value
-      );
+      onFilters('service', event.target.value);
     },
     [onFilters]
   );
   const handleFilterPatient = useCallback(
     (event) => {
-      onFilters(
-        'patient', event.target.value
-      );
+      onFilters('patient', event.target.value);
     },
     [onFilters]
   );
   const handleFilterEmployee = useCallback(
     (event) => {
-      onFilters(
-        'employee', event.target.value
-      );
+      onFilters('employee', event.target.value);
     },
     [onFilters]
   );
@@ -92,7 +92,7 @@ export default function InvoiceTableToolbar({
         }}
       >
         <DatePicker
-          label={t("start date")}
+          label={t('start date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -102,7 +102,7 @@ export default function InvoiceTableToolbar({
         />
 
         <DatePicker
-          label={t("end date")}
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -135,7 +135,7 @@ export default function InvoiceTableToolbar({
             sx={{ textTransform: 'capitalize' }}
             value={filters.patient}
           >
-            <MenuItem value=''>{t("all")}</MenuItem>
+            <MenuItem value="">{t('all')}</MenuItem>
             {patientsData?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
@@ -158,7 +158,7 @@ export default function InvoiceTableToolbar({
             sx={{ textTransform: 'capitalize' }}
             value={filters.employee}
           >
-            <MenuItem value=''>{t('all')}</MenuItem>
+            <MenuItem value="">{t('all')}</MenuItem>
             {employeesData?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.employee.name_arabic : option.employee.name_english}
@@ -173,7 +173,7 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>{t("service")}</InputLabel>
+          <InputLabel>{t('service')}</InputLabel>
 
           <Select
             onChange={handleFilterService}
@@ -181,7 +181,7 @@ export default function InvoiceTableToolbar({
             sx={{ textTransform: 'capitalize' }}
             value={filters.service}
           >
-            <MenuItem value=''>{t('all')}</MenuItem>
+            <MenuItem value="">{t('all')}</MenuItem>
             {serviceTypesData?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}

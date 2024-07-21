@@ -34,9 +34,9 @@ export default function EmployeeCard({ employee }) {
 
   const router = useRouter();
   const confirm = useBoolean();
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { authenticated, user } = useAuthContext()
+  const { authenticated, user } = useAuthContext();
 
   const [note, setNote] = useState('');
   const [page, setPage] = useState(1);
@@ -59,7 +59,7 @@ export default function EmployeeCard({ employee }) {
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     if (authenticated) {
-      confirm.onTrue()
+      confirm.onTrue();
     } else {
       setSignupDialog(true);
     }
@@ -67,7 +67,7 @@ export default function EmployeeCard({ employee }) {
   };
 
   const handleEmployment = async () => {
-    setSubmitting(true)
+    setSubmitting(true);
     try {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: user?.patient?._id,
@@ -76,10 +76,10 @@ export default function EmployeeCard({ employee }) {
       });
       await addToCalendar(appointmentsData.filter((one) => one._id === selected)?.[0]);
       enqueueSnackbar(t('booked successfully!'));
-      setSubmitting(false)
-      confirm.onFalse()
-      setNote('')
-      refetch()
+      setSubmitting(false);
+      confirm.onFalse();
+      setNote('');
+      refetch();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -88,9 +88,9 @@ export default function EmployeeCard({ employee }) {
           variant: 'error',
         }
       );
-      setSubmitting(false)
-      confirm.onFalse()
-      setNote('')
+      setSubmitting(false);
+      confirm.onFalse();
+      setNote('');
       console.error(error);
     }
   };
@@ -104,7 +104,11 @@ export default function EmployeeCard({ employee }) {
         padding={3}
         sx={{ backgroundColor: 'white', borderRadius: 1 }}
       >
-        <Stack direction={{ md: 'row' }} alignItems={{ sm: 'center', md: 'start' }} gap={{ md: 10 }}>
+        <Stack
+          direction={{ md: 'row' }}
+          alignItems={{ sm: 'center', md: 'start' }}
+          gap={{ md: 10 }}
+        >
           <Image
             onClick={() => router.push(paths.pages.doctor(employee._id))}
             sx={{ width: 150, height: 150, cursor: 'pointer' }}
@@ -176,17 +180,17 @@ export default function EmployeeCard({ employee }) {
               <Stack>
                 {employee?.unit_service?.insurance?.length > 5
                   ? employee?.unit_service?.insurance
-                    ?.filter((one, index) => index <= 5)
-                    .map((one) => (
+                      ?.filter((one, index) => index <= 5)
+                      .map((one) => (
+                        <Typography variant="body2">
+                          {curLangAr ? one.name_arabic : one.name_english}
+                        </Typography>
+                      ))
+                  : employee?.unit_service?.insurance?.map((one) => (
                       <Typography variant="body2">
                         {curLangAr ? one.name_arabic : one.name_english}
                       </Typography>
-                    ))
-                  : employee?.unit_service?.insurance?.map((one) => (
-                    <Typography variant="body2">
-                      {curLangAr ? one.name_arabic : one.name_english}
-                    </Typography>
-                  ))}
+                    ))}
                 {employee?.unit_service?.insurance?.length > 5 &&
                   `+${employee.unit_service.insurance.length - 5}`}
               </Stack>
@@ -244,13 +248,16 @@ export default function EmployeeCard({ employee }) {
           <>
             <Card sx={{ p: 2, m: 2 }}>
               <Typography>
-                {t('patient')} : {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
+                {t('patient')} :{' '}
+                {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
               </Typography>
               <Typography>
-                {t('doctor')} : {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
+                {t('doctor')} :{' '}
+                {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
               </Typography>
               <Typography>
-                {t('appointment')} : {fDateTime(appointmentsData.filter((one) => one._id === selected)?.[0]?.start_time)}
+                {t('appointment')} :{' '}
+                {fDateTime(appointmentsData.filter((one) => one._id === selected)?.[0]?.start_time)}
               </Typography>
             </Card>
             <TextField
@@ -265,7 +272,12 @@ export default function EmployeeCard({ employee }) {
           </>
         }
         action={
-          <LoadingButton variant="contained" color="info" loading={submitting} onClick={handleEmployment}>
+          <LoadingButton
+            variant="contained"
+            color="info"
+            loading={submitting}
+            onClick={handleEmployment}
+          >
             {t('confirm')}
           </LoadingButton>
         }

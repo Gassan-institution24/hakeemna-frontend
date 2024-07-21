@@ -15,7 +15,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function InvoiceAnalytic({ title, total, icon, color, percent, price }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   return (
     <Stack
       spacing={2.5}
