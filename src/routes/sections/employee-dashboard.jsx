@@ -121,23 +121,24 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
+          { path: 'list', element: <AppointmentsHomePage /> },
           { path: ':id', element: <AppointmentEditPage /> },
+          { path: 'book', element: <AppointmentsBookPage /> },
+          {
+            path: 'config',
+            children: [
+              { element: <AppointmentConfigPage />, index: true },
+              { path: 'new', element: <NewAppointmentConfigPage /> },
+              { path: ':coid', element: <AppointmentConfigDetailsPage /> },
+            ],
+          },
         ],
       },
-      { path: 'book', element: <AppointmentsBookPage /> },
       {
         path: 'mypatients',
         children: [
           { element: <PatientsPage />, index: true },
           { path: ':id', element: <PatientInfoPage /> },
-        ],
-      },
-      {
-        path: 'appointmentconfig',
-        children: [
-          { element: <AppointmentConfigPage />, index: true },
-          { path: 'new', element: <NewAppointmentConfigPage /> },
-          { path: ':coid', element: <AppointmentConfigDetailsPage /> },
         ],
       },
       {
@@ -174,39 +175,40 @@ export const unitServiceEmployeeDashboardRoutes = [
       },
 
       {
-        path: 'communication',
-        children: [{ element: <CommunicationHomePage />, index: true }],
-      },
-      {
-        path: 'wgroups',
-        children: [
-          { element: <WorkGroupsHomePage />, index: true },
-          {
-            path: ':wgid',
-            element: (
-              <WorkGroupPermissionsBarLayout>
-                <Outlet />
-              </WorkGroupPermissionsBarLayout>
-            ),
-            children: [
-              { element: <WorkGroupsPermissionPage />, index: true },
-              {
-                path: 'employee/:emid',
-                element: <WorkGroupsEmployeePermissionPage />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'qc',
-        children: [{ element: <QCHomePage />, index: true }],
-      },
-      {
         path: 'profile',
         children: [
           { element: <ProfileHomePage />, index: true },
+          { path: 'settings', element: <ProfileHomePage /> },
           { path: 'edit', element: <ProfileEditPage /> },
+          {
+            path: 'communication',
+            children: [{ element: <CommunicationHomePage />, index: true }],
+          },
+          {
+            path: 'wgroups',
+            children: [
+              { element: <WorkGroupsHomePage />, index: true },
+              {
+                path: ':wgid',
+                element: (
+                  <WorkGroupPermissionsBarLayout>
+                    <Outlet />
+                  </WorkGroupPermissionsBarLayout>
+                ),
+                children: [
+                  { element: <WorkGroupsPermissionPage />, index: true },
+                  {
+                    path: 'employee/:emid',
+                    element: <WorkGroupsEmployeePermissionPage />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'qc',
+            children: [{ element: <QCHomePage />, index: true }],
+          },
         ],
       },
       {
