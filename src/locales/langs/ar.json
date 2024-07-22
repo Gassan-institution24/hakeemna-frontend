@@ -223,7 +223,7 @@
   "select a city": "اختر مدينة",
   "select a insurance": "اختر شركة تأمين",
   "select a doctor": "اختر طبيب",
-  "no appointment found": "لا يوجد مواعيد",
+  "no online appointment for this doctor": "لا يوجد مواعيد اونلاين متاحة لهذا الطبيب",
   "our partners": "شركائنا",
   "confirm booking appointment": "تأكيد حجز موعد",
   "doctor": "الطبيب",

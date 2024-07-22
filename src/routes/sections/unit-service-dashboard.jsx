@@ -361,119 +361,18 @@ export const unitServiceDashboardRoutes = [
           },
         ],
       },
-      {
-        path: 'departments',
-        children: [
-          { element: <DepartmentsHomePage />, index: true },
-          { path: 'new', element: <DepartmentsNewPage /> },
-          { path: ':id/edit', element: <DepartmentsEditPage /> },
-          {
-            path: ':id',
-            element: (
-              <DepartmentNavLayout>
-                <Outlet />
-              </DepartmentNavLayout>
-            ),
-            children: [
-              { path: 'info', element: <DepartmentsInfoPage /> },
-              {
-                path: 'employees',
-                children: [
-                  { element: <DepartmentsEmployeesPage />, index: true },
-                  { path: 'new', element: <DepartmentsEmployeesNewPage /> },
-                ],
-              },
-              { path: 'accounting', element: <DepartmentsAccountingPage /> },
-              {
-                path: 'activities',
-                children: [
-                  { element: <DepartmentsActivitiesPage />, index: true },
-                  { path: 'new', element: <DepartmentsNewActivitiesPage /> },
-                  { path: ':acid/edit', element: <DepartmentsEditActivitiesPage /> },
-                ],
-              },
-              {
-                path: 'rooms',
-                children: [
-                  { element: <DepartmentsRoomsPage />, index: true },
-                  { path: 'new', element: <DepartmentsNewRoomsPage /> },
-                  { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
-                ],
-              },
-              {
-                path: 'wgroups',
-                children: [
-                  { element: <DepartmentsWorkGroupsPage />, index: true },
-                  { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
-                  {
-                    path: ':wgid',
-                    element: (
-                      <DepartmentWorkGroupPermissionsBarLayout>
-                        <Outlet />
-                      </DepartmentWorkGroupPermissionsBarLayout>
-                    ),
-                    children: [
-                      { element: <DepartmentsWorkGroupsPermissionPage />, index: true },
-                      {
-                        path: 'employee/:emid',
-                        element: <DepartmentsWorkGroupsEmployeePermissionPage />,
-                      },
-                    ],
-                  },
-                  { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
-                ],
-              },
-              { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
-              { path: 'appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
-              { path: 'qc', element: <DepartmentsQualityControlPage /> },
-            ],
-          },
-        ],
-      },
       { path: 'processingpage/:id', element: <Processing /> },
       { path: 'viewgpage/:id', element: <Viewgpage /> },
       { path: 'test', element: <Test /> },
       {
-        path: 'employees',
-        children: [
-          { element: <EmployeesHomePage />, index: true },
-          { path: 'new', element: <EmployeesNewPage /> },
-          {
-            path: ':id',
-            element: (
-              <SecondaryNavLayout>
-                <EmployeeMinBarLayout>
-                  <Outlet />
-                </EmployeeMinBarLayout>
-              </SecondaryNavLayout>
-            ),
-            children: [
-              { path: 'info', element: <EmployeesInfoPage /> },
-              { path: 'appointments', element: <EmployeesAppointmentsPage /> },
-              { path: 'appointmentconfig', element: <EmployeesAppointmentConfigPage /> },
-              { path: 'appointmentconfig/new', element: <EmployeesNewAppointmentConfigPage /> },
-              {
-                path: 'appointmentconfig/:coid',
-                element: <EmployeesAppointmentConfigDetailsPage />,
-              },
-              { path: 'accounting', element: <EmployeesAccountingPage /> },
-              { path: 'feedback', element: <EmployeesFeedbackPage /> },
-              { path: 'attendence', element: <EmployeesAttendencePage /> },
-              { path: 'offers', element: <EmployeesOffersPage /> },
-              { path: 'acl', element: <EmployeesACLPage /> },
-              { path: 'edit', element: <EmployeesEditPage /> },
-            ],
-          },
-        ],
-      },
-      {
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
+          { path: 'list', element: <AppointmentsHomePage /> },
           { path: ':id/edit', element: <AppointmentsEditPage /> },
+          { path: 'book', element: <AppointmentsBookPage /> },
         ],
       },
-      { path: 'book', element: <AppointmentsBookPage /> },
       {
         path: 'patients',
         children: [
@@ -515,10 +414,6 @@ export const unitServiceDashboardRoutes = [
         ],
       },
       {
-        path: 'insurance',
-        children: [{ element: <InsuranceHomePage />, index: true }],
-      },
-      {
         path: 'offers',
         children: [
           { element: <ProductsHomePage />, index: true },
@@ -526,26 +421,31 @@ export const unitServiceDashboardRoutes = [
         ],
       },
       {
-        path: 'communication',
-        children: [{ element: <CommunicationHomePage />, index: true }],
-      },
-      {
-        path: 'qc',
-        children: [{ element: <QCHomePage />, index: true }],
-      },
-      {
-        path: 'subscriptions',
-        children: [
-          { element: <SubscriptionsHomePage />, index: true },
-          { path: 'new', element: <SubscriptionsNewPage /> },
-          { path: ':id/info', element: <SubscriptionsInfoPage /> },
-        ],
-      },
-      {
         path: 'profile',
         children: [
           { element: <ProfileHomePage />, index: true },
+          { path: 'settings', element: <ProfileHomePage /> },
           { path: 'edit', element: <ProfileEditPage /> },
+          {
+            path: 'insurance',
+            children: [{ element: <InsuranceHomePage />, index: true }],
+          },
+          {
+            path: 'communication',
+            children: [{ element: <CommunicationHomePage />, index: true }],
+          },
+          {
+            path: 'qc',
+            children: [{ element: <QCHomePage />, index: true }],
+          },
+          {
+            path: 'subscriptions',
+            children: [
+              { element: <SubscriptionsHomePage />, index: true },
+              { path: 'new', element: <SubscriptionsNewPage /> },
+              { path: ':id/info', element: <SubscriptionsInfoPage /> },
+            ],
+          },
         ],
       },
       {
@@ -566,13 +466,13 @@ export const unitServiceDashboardRoutes = [
           { path: 'checkout', element: <ProductCheckoutPage /> },
           { path: 'offer/:id', element: <OfferInfoPage /> },
           { path: ':id/edit', element: <RoomsEditPage /> },
-        ],
-      },
-      {
-        path: 'orders',
-        children: [
-          { element: <OrdersPage />, index: true },
-          { path: ':id/details', element: <OrdersDetailsPage /> },
+          {
+            path: 'orders',
+            children: [
+              { element: <OrdersPage />, index: true },
+              { path: ':id/details', element: <OrdersDetailsPage /> },
+            ],
+          },
         ],
       },
       {
@@ -594,6 +494,108 @@ export const unitServiceDashboardRoutes = [
           //     { path: ':id/edit', element: <EmployeeTypesEditPage /> },
           //   ],
           // },
+          {
+            path: 'departments',
+            children: [
+              { element: <DepartmentsHomePage />, index: true },
+              { path: 'new', element: <DepartmentsNewPage /> },
+              { path: ':id/edit', element: <DepartmentsEditPage /> },
+              {
+                path: ':id',
+                element: (
+                  <DepartmentNavLayout>
+                    <Outlet />
+                  </DepartmentNavLayout>
+                ),
+                children: [
+                  { path: 'info', element: <DepartmentsInfoPage /> },
+                  {
+                    path: 'employees',
+                    children: [
+                      { element: <DepartmentsEmployeesPage />, index: true },
+                      { path: 'new', element: <DepartmentsEmployeesNewPage /> },
+                    ],
+                  },
+                  { path: 'accounting', element: <DepartmentsAccountingPage /> },
+                  {
+                    path: 'activities',
+                    children: [
+                      { element: <DepartmentsActivitiesPage />, index: true },
+                      { path: 'new', element: <DepartmentsNewActivitiesPage /> },
+                      { path: ':acid/edit', element: <DepartmentsEditActivitiesPage /> },
+                    ],
+                  },
+                  {
+                    path: 'rooms',
+                    children: [
+                      { element: <DepartmentsRoomsPage />, index: true },
+                      { path: 'new', element: <DepartmentsNewRoomsPage /> },
+                      { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
+                    ],
+                  },
+                  {
+                    path: 'wgroups',
+                    children: [
+                      { element: <DepartmentsWorkGroupsPage />, index: true },
+                      { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
+                      {
+                        path: ':wgid',
+                        element: (
+                          <DepartmentWorkGroupPermissionsBarLayout>
+                            <Outlet />
+                          </DepartmentWorkGroupPermissionsBarLayout>
+                        ),
+                        children: [
+                          { element: <DepartmentsWorkGroupsPermissionPage />, index: true },
+                          {
+                            path: 'employee/:emid',
+                            element: <DepartmentsWorkGroupsEmployeePermissionPage />,
+                          },
+                        ],
+                      },
+                      { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
+                    ],
+                  },
+                  { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
+                  { path: 'appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
+                  { path: 'qc', element: <DepartmentsQualityControlPage /> },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'employees',
+            children: [
+              { element: <EmployeesHomePage />, index: true },
+              { path: 'new', element: <EmployeesNewPage /> },
+              {
+                path: ':id',
+                element: (
+                  <SecondaryNavLayout>
+                    <EmployeeMinBarLayout>
+                      <Outlet />
+                    </EmployeeMinBarLayout>
+                  </SecondaryNavLayout>
+                ),
+                children: [
+                  { path: 'info', element: <EmployeesInfoPage /> },
+                  { path: 'appointments', element: <EmployeesAppointmentsPage /> },
+                  { path: 'appointmentconfig', element: <EmployeesAppointmentConfigPage /> },
+                  { path: 'appointmentconfig/new', element: <EmployeesNewAppointmentConfigPage /> },
+                  {
+                    path: 'appointmentconfig/:coid',
+                    element: <EmployeesAppointmentConfigDetailsPage />,
+                  },
+                  { path: 'accounting', element: <EmployeesAccountingPage /> },
+                  { path: 'feedback', element: <EmployeesFeedbackPage /> },
+                  { path: 'attendence', element: <EmployeesAttendencePage /> },
+                  { path: 'offers', element: <EmployeesOffersPage /> },
+                  { path: 'acl', element: <EmployeesACLPage /> },
+                  { path: 'edit', element: <EmployeesEditPage /> },
+                ],
+              },
+            ],
+          },
           {
             path: 'activities',
             children: [

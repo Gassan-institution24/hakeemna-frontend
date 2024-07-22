@@ -222,6 +222,13 @@ export function useNavData() {
         // icon: <Iconify icon="uis:web-section-alt" />,
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
+        title: t('employees'),
+        path: paths.unitservice.employees.root,
+        // icon: <Iconify icon="fluent:people-20-filled" />,
+        navItemId: 'USEmployeesNav',
+      },
+      {
         show: checkAcl({
           category: 'unit_service',
           subcategory: 'management_tables',
@@ -274,6 +281,14 @@ export function useNavData() {
         navItemId: 'USActivitiesNav',
         // icon: <Iconify icon="material-symbols:volunteer-activism" />,
       },
+      {
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
+        title: t('old patient data'),
+        path: paths.unitservice.oldPatient,
+        // icon: <Iconify icon="entypo:upload" />,
+        navItemId: 'USOldPatientsNav',
+      },
     ];
     const unitServiceItems = [
       {
@@ -288,19 +303,73 @@ export function useNavData() {
         navItemId: 'USDepartmentNav',
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        title: t('appointments'),
+        path: paths.unitservice.appointments.parent,
+        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        navItemId: 'USAppointmentsNav',
+        children: [
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+            title: t('appointments'),
+            path: paths.unitservice.appointments.root,
+            // icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+            navItemId: 'USAppointmentsNav',
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }),
+            title: t('book appointments'),
+            path: paths.unitservice.appointments.book,
+            // icon: <Iconify icon="material-symbols:add-ad" />,
+          },
+        ].filter((one) => one.show)
+      },
+      {
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) &&
+          isMedLab,
+        title: t('appointment configuration'),
+        path: paths.employee.appointmentconfiguration.root,
+        // icon: <Iconify icon="fluent:content-settings-16-regular" />,
+        navItemId: 'EMAppointConfigNav',
+      },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        title: t('accounting'),
+        path: paths.unitservice.accounting.root,
+        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        navItemId: 'USAccountingNav',
+        children: [
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('economic movements'),
+            path: paths.unitservice.accounting.economicmovements.root,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('payment control'),
+            path: paths.unitservice.accounting.paymentcontrol.root,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('reciepts'),
+            path: paths.unitservice.accounting.reciepts.root,
+          },
+        ].filter((one) => one.show),
+      },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        title: t("institution's patients"),
+        path: paths.unitservice.patients.all,
+        icon: <Iconify icon="streamline:health-care-2-solid" />,
+      },
+      {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
         icon: <Iconify icon="icon-park-twotone:data" />,
         navItemId: 'USTablesNav',
         children: unitServiceManagementTables.filter((item) => item.show),
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
-        title: t('employees'),
-        path: paths.unitservice.employees.root,
-        icon: <Iconify icon="fluent:people-20-filled" />,
-        navItemId: 'USEmployeesNav',
       },
       {
         show:
@@ -331,34 +400,6 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
-        title: t('appointments'),
-        path: paths.unitservice.appointments.root,
-        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
-        navItemId: 'USAppointmentsNav',
-      },
-      {
-        show:
-          checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) &&
-          isMedLab,
-        title: t('appointment configuration'),
-        path: paths.employee.appointmentconfiguration.root,
-        icon: <Iconify icon="fluent:content-settings-16-regular" />,
-        navItemId: 'EMAppointConfigNav',
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }),
-        title: t('book appointments'),
-        path: paths.unitservice.appointments.book,
-        icon: <Iconify icon="material-symbols:add-ad" />,
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
-        title: t("institution's patients"),
-        path: paths.unitservice.patients.all,
-        icon: <Iconify icon="streamline:health-care-2-solid" />,
-      },
-      {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
         title: t('products and suppliers'),
         path: paths.unitservice.products.root,
@@ -383,68 +424,14 @@ export function useNavData() {
             title: t('suppliers'),
             path: paths.unitservice.products.stakeholder.root,
           },
-        ],
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('orders'),
-        path: paths.unitservice.orders.root,
-        icon: <Iconify icon="fluent-mdl2:product" />,
-        navItemId: 'USInsuranceNav',
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-        title: t('accounting'),
-        path: paths.unitservice.accounting.root,
-        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
-        navItemId: 'USAccountingNav',
-        children: [
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('economic movements'),
-            path: paths.unitservice.accounting.economicmovements.root,
+            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('orders'),
+            path: paths.unitservice.orders.root,
+            // icon: <Iconify icon="fluent-mdl2:product" />,
+            navItemId: 'USInsuranceNav',
           },
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('payment control'),
-            path: paths.unitservice.accounting.paymentcontrol.root,
-          },
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('reciepts'),
-            path: paths.unitservice.accounting.reciepts.root,
-          },
-        ],
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('insurance'),
-        path: paths.unitservice.insurance.root,
-        icon: <Iconify icon="ic:baseline-security" />,
-        navItemId: 'USInsuranceNav',
-      },
-      {
-        show:
-          false &&
-          checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('communication'),
-        path: paths.unitservice.communication.root,
-        icon: <Iconify icon="solar:call-chat-bold" />,
-        navItemId: 'USCommunicationNav',
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
-        title: t('quality control'),
-        path: paths.unitservice.qualityControl.root,
-        icon: <Iconify icon="healthicons:world-care" />,
-        navItemId: 'USQualityControlNav',
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('subscriptions'),
-        path: paths.unitservice.subscriptions.root,
-        icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
-        navItemId: 'USSubscriptionsNav',
+        ].filter((one) => one.show),
       },
       {
         show: checkAcl({
@@ -453,9 +440,52 @@ export function useNavData() {
           acl: 'update',
         }),
         title: t('unit of service info'),
-        path: paths.unitservice.profile.root,
+        path: paths.unitservice.profile.parent,
         icon: <Iconify icon="fa-solid:clinic-medical" />,
         navItemId: 'USInfoNav',
+        children: [
+          {
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'update',
+            }),
+            title: t('profile'),
+            path: paths.unitservice.profile.root,
+            // icon: <Iconify icon="fa-solid:clinic-medical" />,
+            navItemId: 'USInfoNav',
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('insurance'),
+            path: paths.unitservice.insurance.root,
+            // icon: <Iconify icon="ic:baseline-security" />,
+            navItemId: 'USInsuranceNav',
+          },
+          {
+            show:
+              false &&
+              checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('communication'),
+            path: paths.unitservice.communication.root,
+            // icon: <Iconify icon="solar:call-chat-bold" />,
+            navItemId: 'USCommunicationNav',
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
+            title: t('quality control'),
+            path: paths.unitservice.qualityControl.root,
+            // icon: <Iconify icon="healthicons:world-care" />,
+            navItemId: 'USQualityControlNav',
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            title: t('subscriptions'),
+            path: paths.unitservice.subscriptions.root,
+            // icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+            navItemId: 'USSubscriptionsNav',
+          },
+        ].filter((one) => one.show)
       },
       {
         show: isMedLab,
@@ -463,14 +493,6 @@ export function useNavData() {
         path: paths.employee.profile.root,
         icon: <Iconify icon="iconamoon:profile-bold" />,
         navItemId: 'EMProfileNav',
-      },
-      {
-        show:
-          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
-        title: t('old patient data'),
-        path: paths.unitservice.oldPatient,
-        icon: <Iconify icon="entypo:upload" />,
-        navItemId: 'USOldPatientsNav',
       },
     ];
     const unitServicesDashboars = [
@@ -494,27 +516,49 @@ export function useNavData() {
         navItemId: 'EMEntranceNav',
       },
       {
+        show: !isMedLab,
+        title: t('Appointments Today'),
+        path: paths.employee.appointmentsToday,
+        icon: <Iconify icon="material-symbols:work-history-rounded" />,
+      },
+      {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
-        title: t('my appointments'),
-        path: paths.employee.appointments.root,
+        title: t('appointments'),
+        path: paths.employee.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
         navItemId: 'EMAppointmentsNav',
+        children: [
+          {
+            show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+            title: t('my appointments'),
+            path: paths.employee.appointments.root,
+            // icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+            navItemId: 'EMAppointmentsNav',
+          },
+          {
+            show:
+              checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+              !isMedLab,
+            title: t('book appointments'),
+            path: paths.employee.appointments.book,
+            // icon: <Iconify icon="material-symbols:add-ad" />,
+            navItemId: 'EMAppointmentsNav',
+          },
+          {
+            show: checkAcl({ category: 'work_group', subcategory: 'appointment_configs', acl: 'read' }),
+            title: t('my appointment configuration'),
+            path: paths.employee.appointmentconfiguration.root,
+            // icon: <Iconify icon="fluent:content-settings-16-regular" />,
+            navItemId: 'EMAppointConfigNav',
+          },
+        ]
       },
       {
-        show:
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
-          !isMedLab,
-        title: t('book appointments'),
-        path: paths.employee.appointments.book,
-        icon: <Iconify icon="material-symbols:add-ad" />,
-        navItemId: 'EMAppointmentsNav',
-      },
-      {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointment_configs', acl: 'read' }),
-        title: t('my appointment configuration'),
-        path: paths.employee.appointmentconfiguration.root,
-        icon: <Iconify icon="fluent:content-settings-16-regular" />,
-        navItemId: 'EMAppointConfigNav',
+        show: true,
+        title: t('my calender'),
+        path: paths.employee.calender,
+        icon: <Iconify icon="simple-line-icons:calender" />,
+        navItemId: 'EMCalenderNav',
       },
       {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
@@ -532,13 +576,6 @@ export function useNavData() {
         navItemId: 'EMChecklistNav',
       },
       {
-        show: true,
-        title: t('my work groups'),
-        path: paths.employee.workGroups.root,
-        icon: <Iconify icon="heroicons:user-group-solid" />,
-        navItemId: 'EMWorkGroupsNav',
-      },
-      {
         show: false,
         title: t('my accounting'),
         path: paths.employee.accounting.root,
@@ -546,38 +583,42 @@ export function useNavData() {
         navItemId: 'EMAccountingNav',
       },
       {
-        show: false,
-        title: t('my communication'),
-        path: paths.employee.communication.root,
-        icon: <Iconify icon="solar:call-chat-bold" />,
-        navItemId: 'EMCommunicationNav',
-      },
-      {
-        show: true,
-        title: t('my quality control'),
-        path: paths.employee.qualityControl.root,
-        icon: <Iconify icon="healthicons:world-care" />,
-        navItemId: 'EMQualityControlNav',
-      },
-      {
         show: true,
         title: t('my profile'),
-        path: paths.employee.profile.root,
+        path: paths.employee.profile.parent,
         icon: <Iconify icon="iconamoon:profile-bold" />,
         navItemId: 'EMProfileNav',
-      },
-      {
-        show: true,
-        title: t('my calender'),
-        path: paths.employee.calender,
-        icon: <Iconify icon="simple-line-icons:calender" />,
-        navItemId: 'EMCalenderNav',
-      },
-      {
-        show: !isMedLab,
-        title: t('Appointments Today'),
-        path: paths.employee.appointmentsToday,
-        icon: <Iconify icon="material-symbols:work-history-rounded" />,
+        children: [
+          {
+            show: true,
+            title: t('settings'),
+            path: paths.employee.profile.root,
+            // icon: <Iconify icon="iconamoon:profile-bold" />,
+            navItemId: 'EMProfileNav',
+          },
+          {
+            show: true,
+            title: t('my work groups'),
+            path: paths.employee.workGroups.root,
+            // icon: <Iconify icon="heroicons:user-group-solid" />,
+            navItemId: 'EMWorkGroupsNav',
+          },
+          {
+            show: false,
+            title: t('my communication'),
+            path: paths.employee.communication.root,
+            // icon: <Iconify icon="solar:call-chat-bold" />,
+            navItemId: 'EMCommunicationNav',
+          },
+          {
+            show: true,
+            title: t('my quality control'),
+            path: paths.employee.qualityControl.root,
+            // icon: <Iconify icon="healthicons:world-care" />,
+            navItemId: 'EMQualityControlNav',
+          },
+
+        ].filter((one) => one.show)
       },
     ];
     const employeeDashboard = [
