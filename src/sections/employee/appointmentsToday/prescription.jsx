@@ -151,7 +151,7 @@ export default function Prescription({ Entrance }) {
   };
 
   return (
-    <Card sx={{ mt: 1 }}>
+    <>
       <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ m: 2 }}>
         {t('Add prescription')}
         <Iconify icon="mingcute:add-line" />
@@ -289,7 +289,7 @@ export default function Prescription({ Entrance }) {
           </DialogActions>
         </FormProvider>
       </Dialog>
-    </Card>
+    </>
   );
 
   //   )
