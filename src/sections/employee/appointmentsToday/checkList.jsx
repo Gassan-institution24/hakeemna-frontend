@@ -95,7 +95,7 @@ export default function CheckList() {
         </Box>
 
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ m: 3 }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2, mb: 2 }}>
               <Typography>{data?.title}</Typography>
               {data && (
@@ -173,8 +173,8 @@ export default function CheckList() {
             ))}
           </Box>
 
-          {data?.length > 0 && (
-            <Button type="submit" disabled={isSubmitting} variant="contained">
+          {data && (
+            <Button type="submit" disabled={isSubmitting} variant="contained" sx={{m:3}}>
               Save
             </Button>
           )}
