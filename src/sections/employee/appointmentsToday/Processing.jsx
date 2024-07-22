@@ -52,9 +52,10 @@ import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form'
 
 import Rooms from './rooms';
 import History from './history';
+import TabsView from './tabs-view';
 import CheckList from './checkList';
 import SickLeave from './sickLeave';
-import TestPage from './prescription';
+import Prescription from './prescription';
 import ServicesProvided from './servicesProvided';
 import Adjustabledocument from './adjustabledocument';
 
@@ -326,28 +327,28 @@ export default function Processing() {
           <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />
         ),
     },
-    {
-      key: 6,
-      title: 'prescription (optional)',
-      color: 'primary',
-      icon:
-        Entrance?.Drugs_report_status === true ? (
-          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-        ) : (
-          <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
-        ),
-    },
-    {
-      key: 7,
-      title: (
-        <>
-          sick leave (optional) <br />
-          <SickLeave patient={data} service_unit={Entrance?.service_unit?._id} />
-        </>
-      ),
-      color: 'info',
-      icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
-    },
+    // {
+    //   key: 6,
+    //   title: 'prescription (optional)',
+    //   color: 'primary',
+    //   icon:
+    //     Entrance?.Drugs_report_status === true ? (
+    //       <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+    //     ) : (
+    //       <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
+    //     ),
+    // },
+    // {
+    //   key: 7,
+    //   title: (
+    //     <>
+    //       sick leave (optional) <br />
+    //       <SickLeave patient={data} service_unit={Entrance?.service_unit?._id} />
+    //     </>
+    //   ),
+    //   color: 'info',
+    //   icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
+    // },
     {
       key: 8,
       title: (
@@ -371,9 +372,21 @@ export default function Processing() {
       color: 'info',
       icon: <Iconify icon="hugeicons:give-pill" width={25} />,
     },
+    {
+      key: 10,
+      title: (
+        <>
+         Test
+          <br />
+          <TabsView />
+        </>
+      ),
+      color: 'info',
+      icon: <Iconify icon="hugeicons:give-pill" width={25} />,
+    },
   ];
 
-  const renderPrescritption = <TestPage Entrance={Entrance} />;
+  const renderPrescritption = <Prescription Entrance={Entrance} />;
 
   const renderMedicalReport = (
     <Card sx={{ mt: 1 }}>
