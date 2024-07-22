@@ -32,7 +32,7 @@ export default function ServicesProvided() {
   const onSubmit = async () => {
     try {
       await axiosInstance.patch(`/api/entrance/${id}`, {
-        Provided_service: services,
+        Service_types: services,
       });
       enqueueSnackbar('Sick leave created successfully', { variant: 'success' });
     } catch (error) {
