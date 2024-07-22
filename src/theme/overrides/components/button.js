@@ -1,5 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import { buttonClasses } from '@mui/material/Button';
+import { borderRadius } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export function button(theme) {
     const largeSize = ownerState.size === 'large';
 
     const defaultStyle = {
+      borderRadius: 0,
       ...(inheritColor && {
         // CONTAINED
         ...(containedVariant && {
