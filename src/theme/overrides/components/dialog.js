@@ -6,7 +6,7 @@ export function dialog(theme) {
       styleOverrides: {
         paper: ({ ownerState }) => ({
           boxShadow: theme.customShadows.dialog,
-          borderRadius: theme.shape.borderRadius * 2,
+          // borderRadius: theme.shape.borderRadius * 2,
           ...(!ownerState.fullScreen && {
             margin: theme.spacing(2),
           }),

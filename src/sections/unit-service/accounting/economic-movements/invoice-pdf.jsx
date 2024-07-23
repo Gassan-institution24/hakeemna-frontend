@@ -106,7 +106,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     Total_tax_Amount,
     dueDate,
     Total_discount_amount,
-    Total_deduction_amount,
+    // Total_deduction_amount,
     patient,
     created_at,
     Total_Amount,
@@ -217,7 +217,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 </View>
 
                 <View style={[styles.tableCell_3, styles.alignRight]}>
-                  <Text>{fCurrency(item.total_amount)}</Text>
+                  <Text>{fCurrency(item.income_amount)}</Text>
                 </View>
               </View>
             ))}
@@ -246,7 +246,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               </View>
             </View>
 
-            <View style={[styles.tableRow, styles.noBorder]}>
+            {/* <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
               <View style={styles.tableCell_3} />
@@ -256,7 +256,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text>{fCurrency(Total_deduction_amount)}</Text>
               </View>
-            </View>
+            </View> */}
 
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />

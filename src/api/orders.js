@@ -28,7 +28,7 @@ export function useGetOrders() {
 // ----------------------------------------------------------------------
 
 export function useGetStakeholderOrders(id, query) {
-  const URL = [endpoints.orders.stakeholder(id), { params: query }];
+  const URL = id ? [endpoints.orders.stakeholder(id), { params: query }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
@@ -52,7 +52,7 @@ export function useGetStakeholderOrders(id, query) {
 }
 
 export function useGetUSOrders(id, query) {
-  const URL = [endpoints.orders.unitservice(id), { params: query }];
+  const URL = id?[endpoints.orders.unitservice(id), { params: query }]:'';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
@@ -76,7 +76,7 @@ export function useGetUSOrders(id, query) {
 }
 
 export function useGetPatientOrders(id, query) {
-  const URL = [endpoints.orders.patient(id), { params: query }];
+  const URL = id?[endpoints.orders.patient(id), { params: query }]:'';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
