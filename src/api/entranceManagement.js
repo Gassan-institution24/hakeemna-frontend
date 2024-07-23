@@ -106,7 +106,7 @@ export function useGetAllinWatingNow() {
 }
 
 export function useGetOneEntranceManagement(id, params) {
-  const URL = [endpoints.entranceManagement.one(id), { params }];
+  const URL = id ? [endpoints.entranceManagement.one(id), { params }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

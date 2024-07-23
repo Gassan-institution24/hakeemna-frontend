@@ -26,7 +26,7 @@ export function useGetCities() {
 }
 
 export function useGetCountryCities(id, params) {
-  const URL = [endpoints.cities.country(id), { params }];
+  const URL = id ? [endpoints.cities.country(id), { params }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

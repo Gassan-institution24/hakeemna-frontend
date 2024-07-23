@@ -54,7 +54,7 @@ export default function InvoiceNewEditAddress() {
 
   return (
     <Stack direction={{ md: 'row' }}>
-      <Stack spacing={{ xs: 3, md: 5 }} sx={{ p: 3 }} flex={1}>
+      <Stack spacing={{ xs: 2, md: 3 }} sx={{ p: 3 }} flex={1}>
         <Stack sx={{ width: 1 }}>
           <Stack spacing={1}>
             <Typography variant="h4">

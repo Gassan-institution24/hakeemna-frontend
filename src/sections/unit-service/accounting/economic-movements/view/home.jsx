@@ -118,23 +118,23 @@ export default function InvoiceListView() {
       count: lengths.paidLength || 0,
     },
     {
-      value: 'pending',
-      label: 'pending',
+      value: 'installment',
+      label: 'installment',
       color: 'warning',
-      count: lengths.pendingLength || 0,
+      count: lengths.installmentLength || 0,
     },
     {
-      value: 'overdue',
-      label: 'overdue',
-      color: 'error',
-      count: lengths.overdueLength || 0,
+      value: 'insurance',
+      label: 'insurance',
+      color: 'info',
+      count: lengths.insuranceLength || 0,
     },
-    {
-      value: 'draft',
-      label: 'draft',
-      color: 'default',
-      count: lengths.draftLength || 0,
-    },
+    // {
+    //   value: 'draft',
+    //   label: 'draft',
+    //   color: 'default',
+    //   count: lengths.draftLength || 0,
+    // },
   ];
 
   const handleFilters = useCallback(
@@ -231,30 +231,21 @@ export default function InvoiceListView() {
             />
 
             <InvoiceAnalytic
-              title={t('pending')}
-              total={lengths.pendingLength}
-              percent={(lengths.pendingLength / lengths.allLength) * 100}
-              price={totals.pendingTotal}
+              title={t('installment')}
+              total={lengths.installmentLength}
+              percent={(lengths.installmentLength / lengths.allLength) * 100}
+              price={totals.installmentTotal}
               icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.warning.main}
             />
 
             <InvoiceAnalytic
-              title={t('overdue')}
-              total={lengths.overdueLength}
-              percent={(lengths.overdueLength / lengths.allLength) * 100}
-              price={totals.overdueTotal}
+              title={t('insurance')}
+              total={lengths.installmentLength}
+              percent={(lengths.installmentLength / lengths.allLength) * 100}
+              price={totals.insuranceTotal}
               icon="solar:bell-bing-bold-duotone"
-              color={theme.palette.error.main}
-            />
-
-            <InvoiceAnalytic
-              title={t('draft')}
-              total={lengths.draftLength}
-              percent={(lengths.draftLength / lengths.allLength) * 100}
-              price={totals.draftTotal}
-              icon="solar:file-corrupted-bold-duotone"
-              color={theme.palette.text.secondary}
+              color={theme.palette.info.main}
             />
           </Stack>
         </Scrollbar>
@@ -378,7 +369,7 @@ export default function InvoiceListView() {
                       selected={table.selected.includes(row.id)}
                       onSelectRow={() => table.onSelectRow(row.id)}
                       onViewRow={() => handleViewRow(row.id)}
-                      // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                     />
                   ))}
 

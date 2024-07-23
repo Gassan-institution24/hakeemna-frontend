@@ -13,24 +13,20 @@ import { MenuItem, Typography } from '@mui/material';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
+import { useGetAppointmentTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
   RHFCheckbox,
   RHFTimePicker,
-  RHFMultiSelect,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   // const router = useRouter();
-
-  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -55,10 +51,6 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-    { select: 'name_english name_arabic' }
-  );
 
   const methods = useForm({
     mode: 'onTouched',
@@ -126,14 +118,6 @@ export default function TableNewEditForm({ currentTable }) {
                 </MenuItem>
               ))}
             </RHFSelect>
-            {serviceTypesData && (
-              <RHFMultiSelect
-                checkbox
-                name="service_types"
-                label={t('service types')}
-                options={serviceTypesData}
-              />
-            )}
             <RHFTimePicker name="start_time" label={t('start time')} />
             <RHFCheckbox
               sx={{ ml: 3, mt: 1 }}

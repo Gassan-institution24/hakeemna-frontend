@@ -29,9 +29,8 @@ import InvoiceToolbar from './invoice-toolbar';
 
 const INVOICE_STATUS_OPTIONS = [
   { value: 'paid', label: 'Paid' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'overdue', label: 'Overdue' },
-  { value: 'draft', label: 'Draft' },
+  { value: 'installment', label: 'installment' },
+  { value: 'insurance', label: 'insurance' },
 ];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -88,11 +87,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
         </TableCell>
       </StyledTableRow>
 
-      <StyledTableRow>
+      {/* <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ color: 'text.secondary' }}>{t('deductions')}</TableCell>
         <TableCell width={120}>{fCurrency(invoice.Total_deduction_amount)}</TableCell>
-      </StyledTableRow>
+      </StyledTableRow> */}
 
       <StyledTableRow>
         <TableCell colSpan={3} />
@@ -151,7 +150,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
                 <TableCell align="right">{fCurrency(row.price_per_unit)}</TableCell>
 
-                <TableCell align="right">{fCurrency(row.total_amount)}</TableCell>
+                <TableCell align="right">{fCurrency(row.income_amount)}</TableCell>
               </TableRow>
             ))}
 
@@ -197,8 +196,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
               variant="soft"
               color={
                 (invoice.status === 'paid' && 'success') ||
-                (invoice.status === 'pending' && 'warning') ||
-                (invoice.status === 'overdue' && 'error') ||
+                (invoice.status === 'installment' && 'warning') ||
+                (invoice.status === 'insurance' && 'info') ||
                 'default'
               }
             >
