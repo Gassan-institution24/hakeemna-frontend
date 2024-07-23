@@ -42,7 +42,6 @@ export default function Rooms() {
   }, [user, Entrance, reset]);
 
   const processingPage = async (rooms) => {
-    // has the rooms data
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
         Last_activity_atended: Entrance?.Next_activity,
@@ -57,11 +56,12 @@ export default function Rooms() {
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
       console.error(error.message);
+      console.log(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
   return (
-    <Card sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, p: 2 }}>
+    <Card sx={{ display: 'flex', gap: 20, }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Last Activity</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
@@ -73,32 +73,45 @@ export default function Rooms() {
 
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Next Activity</Typography>
-        {roomsData?.map((rooms, index) => {
-          const isSameActivity =
-            Entrance?.Current_activity?.name_english === rooms?.activities?.name_english;
-          return (
-            <Button
-              key={index}
-              onClick={() => !isSameActivity && processingPage(rooms)}
-              variant="contained"
-              sx={{ bgcolor: isSameActivity ? 'green' : 'success.main', m: 1 }}
-              disabled={isSameActivity}
-              // disabled={isSameActivity || rooms?.patient === null}
-            >
-              {isSameActivity
-                ? `${rooms?.activities?.name_english} (Current)`
-                : `Go to ${rooms?.activities?.name_english} Room`}
-            </Button>
-          );
-        })}
-        <TextField
-          onChange={(e) => setNoteContent(e.target.value)}
-          placeholder="Add comment"
-          fullWidth
-          multiline
-          rows={4}
-          sx={{ mt: 2 }}
-        />
+        <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
+          <TextField
+            onChange={(e) => setNoteContent(e.target.value)}
+            placeholder="Add comment"
+            fullWidth
+            multiline
+            rows={2}
+            sx={{ mt: 2, display: 'inline' }}
+          />
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            {roomsData?.map((rooms, index) => (
+              <Button
+                key={index}
+                onClick={() => {
+                  if (
+                    Entrance?.Current_activity?.name_english !== rooms?.activities?.name_english
+                  ) {
+                    processingPage(rooms);
+                  }
+                }}
+                variant="contained"
+                sx={{
+                  bgcolor:
+                    Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                      ? 'green'
+                      : 'success.main',
+                  m: 2,
+                }}
+                disabled={
+                  Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                }
+              >
+                {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                  ? `${rooms?.activities?.name_english} (Current)`
+                  : `Go to ${rooms?.activities?.name_english} Room`}
+              </Button>
+            ))}
+          </Box>
+        </Box>
       </Box>
     </Card>
   );
