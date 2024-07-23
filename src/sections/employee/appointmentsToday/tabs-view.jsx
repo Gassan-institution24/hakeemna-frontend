@@ -1,13 +1,14 @@
+import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
 import { useState, useCallback } from 'react';
 
-import Masonry from '@mui/lab/Masonry';
 import { Tab, Box, Tabs, Card, Stack, Container } from '@mui/material';
-import PropTypes from 'prop-types';
 
-import { useParams } from 'react-router';
 import { useGetOneEntranceManagement } from 'src/api';
-import Prescription from './prescription';
+
 import SickLeave from './sickLeave';
+import Prescription from './prescription';
+import Medicalreport from './medicalreport';
 
 // ----------------------------------------------------------------------
 
@@ -25,12 +26,12 @@ export default function TabsView({ patient, service_unit }) {
     {
       value: 'two',
       title: 'medical report',
-      label: 'Item Two',
+      label: <Medicalreport />,
     },
     {
       value: 'three',
       title: 'doctor report',
-      label: 'Item Three',
+      label: <Medicalreport />,
     },
     {
       value: 'four',
@@ -44,17 +45,16 @@ export default function TabsView({ patient, service_unit }) {
   }, []);
 
   return (
-    <Card>
+    <Card sx={{mt:3}}>
       <Container sx={{ my: 2 }}>
-        <Masonry columns={{ xs: 1, md: 2 }} spacing={3}>
           <Stack spacing={2} sx={{ width: '100%' }}>
             <Tabs value={currentTab} onChange={handleChangeTab}>
-              {TABS.slice(0, 4).map((tab) => (
+              {TABS.map((tab) => (
                 <Tab key={tab.value} value={tab.value} label={tab.title} />
               ))}
             </Tabs>
 
-            {TABS.slice(0, 4).map(
+            {TABS.map(
               (tab) =>
                 tab.value === currentTab && (
                   <Box
@@ -70,7 +70,6 @@ export default function TabsView({ patient, service_unit }) {
                 )
             )}
           </Stack>
-        </Masonry>
       </Container>
     </Card>
   );
