@@ -28,12 +28,11 @@ import {
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
   useGetUSActiveWorkShifts,
-  useGetUSActiveServiceTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -48,10 +47,6 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { handleAddNew } = useNewScreen();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-    { select: 'name_english name_arabic' }
-  );
   const { workGroupsData } = useGetUSActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
@@ -243,13 +238,6 @@ export default function BookManually({ onClose, refetch, ...other }) {
                     <Iconify icon="material-symbols:new-window-sharp" />
                   </MenuItem>
                 </RHFSelect>
-                <RHFMultiSelect
-                  checkbox
-                  name="service_types"
-                  label={t('service types')}
-                  options={serviceTypesData}
-                  path={paths.unitservice.tables.services.new}
-                />
               </Box>
             </Box>
           </Stack>

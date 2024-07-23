@@ -72,7 +72,7 @@ export function useGetStackeholderEconomicMovements(id) {
 }
 
 export function useGetUSEconomicMovements(id, params) {
-  const URL = [endpoints.economec_movements.unit_service.one(id), { params }];
+  const URL = id ? [endpoints.economec_movements.unit_service.one(id), { params }] : "";
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

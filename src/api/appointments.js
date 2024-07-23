@@ -274,7 +274,7 @@ export function useGetDepartmentAppointments({ id, page, sortBy, rowsPerPage, or
 }
 
 export function useGetEmployeeAppointments(id, params) {
-  const URL = [endpoints.appointments.employee.one(id), { params }];
+  const URL = id ? [endpoints.appointments.employee.one(id), { params }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -353,7 +353,7 @@ export function useGetEmployeeTodayAppointment(id) {
 }
 
 export function useGetAppointment(id, params) {
-  const URL = [endpoints.appointments.one(id), { params }];
+  const URL = id ? [endpoints.appointments.one(id), { params }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

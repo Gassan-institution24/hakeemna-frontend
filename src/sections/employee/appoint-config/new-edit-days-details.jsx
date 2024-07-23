@@ -1,28 +1,18 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
-import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-
-import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useNewScreen } from 'src/hooks/use-new-screen';
-
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
+import { useGetAppointmentTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -39,8 +29,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const proccessing = useBoolean();
   const [show, setShow] = useState(true);
-
-  const { handleAddNew } = useNewScreen();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -63,15 +51,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const values = watch();
 
-  const { user } = useAuthContext();
-
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-    { select: 'name_english name_arabic' }
-  );
 
   const handleAdd = useCallback(() => {
     try {
@@ -229,21 +211,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     [values.appointment_time, values.days_details]
   );
 
-  const renderValues = useCallback(
-    (selectedIds) => {
-      const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
-      return selectedItems
-        ?.map(
-          (item) => (curLangAr ? item?.name_arabic : item?.name_english)
-          // price += item?.Price_per_unit || 0
-        )
-        .join(', ');
-      // setOverAllPrice(price)
-      // return results.join(', ')
-    },
-    [serviceTypesData, curLangAr]
-  );
-
   const appointEstimatedNum = useCallback(
     (index) => {
       const currentDay = values.days_details[index];
@@ -367,64 +334,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         </MenuItem>
                       ))}
                     </RHFSelect>
-                    <Controller
-                      name={`days_details[${index}].service_types`}
-                      control={control}
-                      render={({ field, fieldState: { error } }) => (
-                        <FormControl
-                          error={!!error}
-                          size="small"
-                          sx={{ width: '100%', shrink: true }}
-                        >
-                          <InputLabel shrink> {t('service types')} </InputLabel>
-
-                          <Select
-                            {...field}
-                            multiple
-                            id={`multiple-days_details[${index}].service_types`}
-                            label={t('service types')}
-                            onChange={(e) => {
-                              setValue(`days_details[${index}].service_types`, e.target.value);
-                              processDayDetails(index);
-                            }}
-                            renderValue={renderValues}
-                          >
-                            {serviceTypesData?.map((option, idx) => {
-                              const selected = field?.value?.includes(option._id);
-
-                              return (
-                                <MenuItem lang="ar" key={idx} value={option._id}>
-                                  <Checkbox size="small" disableRipple checked={selected} />
-
-                                  {curLangAr ? option?.name_arabic : option?.name_english}
-                                </MenuItem>
-                              );
-                            })}
-                            <Divider />
-                            <MenuItem
-                              lang="ar"
-                              sx={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                gap: 1,
-                                fontWeight: 600,
-                                // color: 'error.main',
-                              }}
-                              onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
-                            >
-                              <Typography variant="body2" sx={{ color: 'info.main' }}>
-                                {t('Add new')}
-                              </Typography>
-                              <Iconify icon="material-symbols:new-window-sharp" />
-                            </MenuItem>
-                          </Select>
-
-                          {!!error && (
-                            <FormHelperText error={!!error}>{error?.message}</FormHelperText>
-                          )}
-                        </FormControl>
-                      )}
-                    />
                     <RHFTextField
                       disabled
                       size="small"
@@ -541,7 +450,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                 {showAppointments[index] && (
                   <NewEditDayAppointmentsDetails
                     setAppointmentsNum={setAppointmentsNum}
-                    serviceTypesData={serviceTypesData}
                     appointmenttypesData={appointmenttypesData}
                     open={showAppointments[index]}
                     ParentIndex={index}
