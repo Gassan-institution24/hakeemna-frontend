@@ -79,8 +79,8 @@ export default function MovementTableRow({
             variant="soft"
             color={
               (status === 'paid' && 'success') ||
-              (status === 'pending' && 'warning') ||
-              (status === 'overdue' && 'error') ||
+              (status === 'installment' && 'warning') ||
+              (status === 'insurance' && 'info') ||
               'default'
             }
           >

@@ -182,7 +182,7 @@ export function useGetEmployeePatient(id) {
 }
 
 export function useGetUSPatient(id, params) {
-  const URL = [endpoints.patients.unitservice(id), { params }];
+  const URL = id?[endpoints.patients.unitservice(id), { params }]:'';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

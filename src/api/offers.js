@@ -29,7 +29,7 @@ export function useGetOffers(query) {
 // ----------------------------------------------------------------------
 
 export function useGetStakeholderOffers(id, query) {
-  const URL = [endpoints.offers.stakeholder.one(id), { params: query }];
+  const URL = id ? [endpoints.offers.stakeholder.one(id), { params: query }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

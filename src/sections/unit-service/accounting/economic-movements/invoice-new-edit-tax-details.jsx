@@ -36,7 +36,7 @@ export default function InvoiceNewEditDetails() {
       select: 'name_english name_arabic Price_per_unit tax deduction',
       populate: [
         { path: 'tax', select: 'percentage name_english name_arabic' },
-        { path: 'deduction', select: 'percentage name_english name_arabic' },
+        // { path: 'deduction', select: 'percentage name_english name_arabic' },
       ],
     }
   );
@@ -54,11 +54,11 @@ export default function InvoiceNewEditDetails() {
   const values = watch();
 
   const [taxSums, setTaxSums] = useState({});
-  const [deductionSums, setDeductionSums] = useState({});
+  // const [deductionSums, setDeductionSums] = useState({});
 
   useEffect(() => {
     const newTaxSums = {};
-    const newDeductionSums = {};
+    // const newDeductionSums = {};
 
     serviceTypesData.forEach((service) => {
       const matchingItems = values.items.filter((item) => item.service_type === service._id);
@@ -67,8 +67,7 @@ export default function InvoiceNewEditDetails() {
           const taxId = service.tax._id;
           const taxAmount =
             (service.tax.percentage / 100) *
-            (item.price_per_unit - item.discount_amount) *
-            item.quantity;
+            ((item.price_per_unit * item.quantity) - item.discount_amount)
 
           if (!newTaxSums[taxId]) {
             newTaxSums[taxId] = {
@@ -79,28 +78,27 @@ export default function InvoiceNewEditDetails() {
 
           newTaxSums[taxId].value += taxAmount;
 
-          if (service.deduction) {
-            const deductionId = service.deduction._id;
-            const deductionAmount =
-              (service.deduction.percentage / 100) *
-              (item.price_per_unit - item.discount_amount) *
-              item.quantity;
+          // if (service.deduction) {
+          //   const deductionId = service.deduction._id;
+          //   const deductionAmount =
+          //     (service.deduction.percentage / 100) *
+          //     ((item.price_per_unit * item.quantity) - item.discount_amount)
 
-            if (!newDeductionSums[deductionId]) {
-              newDeductionSums[deductionId] = {
-                name: curLangAr ? service.deduction.name_arabic : service.deduction.name_english,
-                value: 0,
-              };
-            }
+          //   if (!newDeductionSums[deductionId]) {
+          //     newDeductionSums[deductionId] = {
+          //       name: curLangAr ? service.deduction.name_arabic : service.deduction.name_english,
+          //       value: 0,
+          //     };
+          //   }
 
-            newDeductionSums[deductionId].value += deductionAmount;
-          }
+          //   newDeductionSums[deductionId].value += deductionAmount;
+          // }
         });
       }
     });
 
     setTaxSums(newTaxSums);
-    setDeductionSums(newDeductionSums);
+    // setDeductionSums(newDeductionSums);
   }, [values, serviceTypesData, curLangAr]);
 
   const summedTaxes = useMemo(
@@ -112,14 +110,14 @@ export default function InvoiceNewEditDetails() {
     [taxSums]
   );
 
-  const summedDeductions = useMemo(
-    () =>
-      Object.keys(deductionSums).map((deductionId) => ({
-        name: deductionSums[deductionId].name,
-        value: deductionSums[deductionId].value,
-      })),
-    [deductionSums]
-  );
+  // const summedDeductions = useMemo(
+  //   () =>
+  //     Object.keys(deductionSums).map((deductionId) => ({
+  //       name: deductionSums[deductionId].name,
+  //       value: deductionSums[deductionId].value,
+  //     })),
+  //   [deductionSums]
+  // );
 
   // useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
   // useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
@@ -135,10 +133,10 @@ export default function InvoiceNewEditDetails() {
     (acc, one) => acc + (one.tax / 100) * (one.subtotal - one.discount_amount),
     0
   );
-  const deductiontotal = values.items?.reduce(
-    (acc, one) => acc + (one.deduction / 100) * (one.subtotal - one.discount_amount),
-    0
-  );
+  // const deductiontotal = values.items?.reduce(
+  //   (acc, one) => acc + (one.deduction / 100) * (one.subtotal - one.discount_amount),
+  //   0
+  // );
   const totalAmount = values.items?.reduce((acc, one) => acc + one.total, 0);
 
   useEffect(() => {
@@ -150,9 +148,9 @@ export default function InvoiceNewEditDetails() {
   useEffect(() => {
     setValue('taxes', taxesTotal);
   }, [taxesTotal, setValue]);
-  useEffect(() => {
-    setValue('deduction', deductiontotal);
-  }, [deductiontotal, setValue]);
+  // useEffect(() => {
+  //   setValue('deduction', deductiontotal);
+  // }, [deductiontotal, setValue]);
   useEffect(() => {
     setValue('totalAmount', totalAmount);
   }, [totalAmount, setValue]);
@@ -165,7 +163,7 @@ export default function InvoiceNewEditDetails() {
       price_per_unit: 0,
       subtotal: 0,
       discount_amount: 0,
-      deduction: 0,
+      // deduction: 0,
       tax: 0,
       total: 0,
     });
@@ -184,12 +182,13 @@ export default function InvoiceNewEditDetails() {
         values.items[index].quantity * values.items[index].price_per_unit
       );
       setValue(`items[${index}].tax`, selected?.tax?.percentage || 0);
-      setValue(`items[${index}].deduction`, selected?.deduction?.percentage || 0);
+      // setValue(`items[${index}].deduction`, selected?.deduction?.percentage || 0);
       const amountAfterDiscount =
         values.items[index].subtotal - values.items[index].discount_amount;
       const tax = amountAfterDiscount * (values.items[index].tax / 100);
-      const deduction = amountAfterDiscount * (values.items[index].deduction / 100);
-      const total = amountAfterDiscount + tax + deduction;
+      // const deduction = amountAfterDiscount * (values.items[index].deduction / 100);
+      // const total = amountAfterDiscount + tax + deduction;
+      const total = amountAfterDiscount + tax ;
       setValue(`items[${index}].total`, total);
     },
     [setValue, values.items, serviceTypesData]
@@ -205,8 +204,9 @@ export default function InvoiceNewEditDetails() {
       const amountAfterDiscount =
         values.items[index].subtotal - values.items[index].discount_amount;
       const tax = amountAfterDiscount * (values.items[index].tax / 100);
-      const deduction = amountAfterDiscount * (values.items[index].deduction / 100);
-      const total = amountAfterDiscount + tax + deduction;
+      // const deduction = amountAfterDiscount * (values.items[index].deduction / 100);
+      // const total = amountAfterDiscount + tax + deduction;
+      const total = amountAfterDiscount + tax ;
       setValue(`items[${index}].total`, total);
     },
     [setValue, values.items]
@@ -222,7 +222,7 @@ export default function InvoiceNewEditDetails() {
         { name: 'subtotal', value: values.subtotal },
         { name: 'discount', value: -values.discount, color: 'red' },
         ...summedTaxes,
-        ...summedDeductions,
+        // ...summedDeductions,
         // { name: 'taxes', value: values.taxes },
         // { name: 'deduction', value: values.deduction },
         {
@@ -425,7 +425,7 @@ export default function InvoiceNewEditDetails() {
                   },
                 }}
               />
-              <RHFTextField
+              {/* <RHFTextField
                 disabled
                 size="small"
                 type="number"
@@ -446,7 +446,7 @@ export default function InvoiceNewEditDetails() {
                     textAlign: { md: 'right' },
                   },
                 }}
-              />
+              /> */}
               <RHFTextField
                 disabled
                 size="small"

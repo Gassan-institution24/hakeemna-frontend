@@ -88,7 +88,7 @@ export function useGetUSServiceTypes(id) {
 }
 
 export function useGetUSActiveServiceTypes(id, params) {
-  const URL = [endpoints.service_types.unit_service.active(id), { params }];
+  const URL = id ? [endpoints.service_types.unit_service.active(id), { params }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

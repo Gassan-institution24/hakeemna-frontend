@@ -35,7 +35,7 @@ export default function InvoiceNewEditStatusDate() {
         InputLabelProps={{ shrink: true }}
         PaperPropsSx={{ textTransform: 'capitalize' }}
       >
-        {['paid', 'pending', 'overdue', 'draft'].map((option) => (
+        {['paid', 'installment', 'insurance'].map((option) => (
           <MenuItem key={option} value={option}>
             {t(option)}
           </MenuItem>
@@ -63,7 +63,7 @@ export default function InvoiceNewEditStatusDate() {
         )}
       />
 
-      <Controller
+      {/* <Controller
         name="dueDate"
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -82,7 +82,7 @@ export default function InvoiceNewEditStatusDate() {
             }}
           />
         )}
-      />
+      /> */}
     </Stack>
   );
 }

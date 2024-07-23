@@ -2,15 +2,15 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Dialog } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
+// import { paths } from 'src/routes/paths';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -19,15 +19,17 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetAppointment, useGetOneEntranceManagement } from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import FormProvider, { RHFCheckbox } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form';
 
+import { paths } from 'src/routes/paths';
 import InvoiceNewEditAddress from './invoice-new-edit-address';
 import InvoiceNewEditDetails from './invoice-new-edit-details';
 import InvoiceNewEditStatusDate from './invoice-new-edit-status-date';
 import InvoiceNewEditTaxDetails from './invoice-new-edit-tax-details';
+import InvoiceNewEditInstallment from './invoice-new-edit-installment';
+import InvoiceNewEditInsurance from './invoice-new-edit-insurance';
 
 // ----------------------------------------------------------------------
 
@@ -37,11 +39,9 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const appointment = searchParams.get('appointment');
   const entrance = searchParams.get('entrance');
 
-  const { Entrance } = useGetOneEntranceManagement(entrance, {
-    select: 'Service_types patient',
-    populate: [{ path: 'Service_types', select: 'name_english name_arabic Price_per_unit' }],
-  });
-  const { data: appointmentData } = useGetAppointment(appointment, { select: 'patient' });
+  const [entranceInfo, setEntranceInfo] = useState()
+  const [appointmentInfo, setAppointmentInfo] = useState()
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -49,18 +49,19 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const { user } = useAuthContext();
 
   const confirm = useBoolean();
+  const insurance = useBoolean();
+  const installment = useBoolean();
   // const loadingSave = useBoolean();
   const loadingSend = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewInvoiceSchema = Yup.object().shape({
-    // invoiceNumber: Yup.string(),
     createDate: Yup.mixed().nullable().required('Create date is required'),
     patient: Yup.mixed().nullable().required('Invoice to is required'),
     unit_service: Yup.mixed(),
-    appointment: Yup.mixed(),
-    entrance: Yup.mixed(),
+    appointment: Yup.mixed().nullable(),
+    entrance: Yup.mixed().nullable(),
     employee: Yup.mixed(),
     dueDate: Yup.mixed().nullable(),
     detailedTaxes: Yup.bool(),
@@ -69,7 +70,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         Yup.object({
           service_type: Yup.string().required('Service is required'),
           activity: Yup.string().nullable(),
-          deduction: Yup.number(),
+          // deduction: Yup.number(),
           price_per_unit: Yup.number(),
           discount_amount: Yup.number(),
           subtotal: Yup.number(),
@@ -85,16 +86,16 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     status: Yup.string(),
     taxes_type: Yup.string().nullable(),
     taxes: Yup.number(),
-    deduction_type: Yup.string().nullable(),
-    deduction: Yup.number(),
+    // deduction_type: Yup.string().nullable(),
+    // deduction: Yup.number(),
     discount: Yup.number(),
+    work_shift: Yup.string().nullable(),
     subtotal: Yup.number(),
     totalAmount: Yup.number(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      // invoiceNumber: currentInvoice?.invoiceNumber || 'INV-1990',
       createDate: currentInvoice?.created_at || new Date(),
       unit_service:
         currentInvoice?.unit_service?._id ||
@@ -107,28 +108,29 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       patient:
         currentInvoice?.patient?._id ||
         currentInvoice?.patient ||
-        appointmentData?.patient ||
-        Entrance?.patient ||
+        entranceInfo?.patient ||
+        appointmentInfo?.patient ||
         null,
+      work_shift: currentInvoice?.work_shift?._id || currentInvoice?.work_shift || entranceInfo?.work_shift || appointmentInfo?.work_shift || null,
       dueDate: currentInvoice?.dueDate || null,
       entrance: currentInvoice?.entrance || entrance || null,
-      appointment: currentInvoice?.appointment || appointment || null,
+      appointment: currentInvoice?.appointment || appointment || entranceInfo?.appointment || null,
       detailedTaxes: currentInvoice?.detailedTaxes || false,
       taxes: currentInvoice?.taxes || 0,
-      deduction: currentInvoice?.Total_deduction_amount || 0,
-      status: currentInvoice?.status || 'draft',
+      // deduction: currentInvoice?.Total_deduction_amount || 0,
+      status: currentInvoice?.status || 'paid',
       discount: currentInvoice?.Total_discount_amount || 0,
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
       items: currentInvoice?.Provided_services ||
-        Entrance?.Service_types?.map((one) => ({
+        entranceInfo?.Service_types?.map((one) => ({
           service_type: one._id || null,
           activity: null,
           quantity: 1,
           price_per_unit: Number(one.Price_per_unit) || 0,
           subtotal: Number(one.Price_per_unit) || 0,
           discount_amount: 0,
-          deduction: 0,
+          // deduction: 0,
           tax: 0,
           total: Number(one.Price_per_unit) || 0,
         })) || [
@@ -139,13 +141,13 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             price_per_unit: 0,
             subtotal: 0,
             discount_amount: 0,
-            deduction: 0,
+            // deduction: 0,
             tax: 0,
             total: 0,
           },
         ],
     }),
-    [currentInvoice, user?.employee, entrance, appointment, appointmentData, Entrance]
+    [currentInvoice, user?.employee, entrance, appointment, appointmentInfo, entranceInfo]
   );
 
   const methods = useForm({
@@ -158,30 +160,41 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     reset,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+  console.log('errors', errors)
 
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
-  // const handleSaveAsDraft = handleSubmit(async (data) => {
-  //   loadingSave.onTrue();
-  //   try {
-  //     await axiosInstance.post(endpoints.economec_movements.all, data)
-  //     // reset();
-  //     loadingSave.onFalse();
-  //     router.push(paths.dashboard.invoice.root);
-  //     console.info('DATA', JSON.stringify(data, null, 2));
-  //   } catch (error) {
-  //     console.error(error);
-  //     loadingSave.onFalse();
-  //   }
-  // });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (entrance) {
+          const { data } = await axiosInstance.get(endpoints.entranceManagement.one(entrance), {
+            params: {
+              select: 'Service_types patient work_shift appointment',
+              populate: [{ path: 'Service_types', select: 'name_english name_arabic Price_per_unit' }],
+            }
+          })
+          setEntranceInfo(data)
+        }
+        else if (appointment) {
+          const { data } = await axiosInstance.get(endpoints.appointments.one(appointment), {
+            params: { select: 'patient work_shift' }
+          })
+          setAppointmentInfo(data)
+        }
+      } catch (e) {
+        console.log('entranceData', e)
+      }
+    }
+    fetchData()
+  }, [appointment, entrance])
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
-
     try {
       const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
       reset();
@@ -206,36 +219,35 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         <FormProvider methods={methods}>
           <Card>
             <InvoiceNewEditAddress />
-
-            <InvoiceNewEditStatusDate />
+            {/* 
             <Stack direction="row" justifyContent="flex-end" px={5} pt={3} pb={0}>
               <RHFCheckbox
                 name="detailedTaxes"
-                label={t('detailed taxes and deductions')}
+                label={t('detailed taxes')}
                 onChange={confirm.onTrue}
               />
-            </Stack>
+            </Stack> */}
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
+            <InvoiceNewEditStatusDate />
+
+            {/* <InvoiceNewEditInstallment open={installment.value} onClose={installment.onFalse} /> */}
+            <InvoiceNewEditInsurance open={insurance.value} onClose={insurance.onFalse} onSubmit={handleCreateAndSend} />
           </Card>
 
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-            {/* <LoadingButton
-              color="inherit"
-              size="large"
-              variant="outlined"
-              loading={loadingSave.value && isSubmitting}
-              onClick={handleSaveAsDraft}
-            >
-              {t('save as draft')}
-            </LoadingButton> */}
-
             <LoadingButton
               size="large"
               variant="contained"
               loading={loadingSend.value && isSubmitting}
-              onClick={handleCreateAndSend}
+              onClick={() => {
+                if (watch().status === 'installment') {
+                  installment.onTrue()
+                } else if (watch().status === 'insurance') {
+                  insurance.onTrue()
+                } else handleCreateAndSend()
+              }}
             >
-              {currentInvoice ? t('update') : t('create')} & {t('send')}
+              {currentInvoice ? t('update') : t('create')} & {t('print')}
             </LoadingButton>
           </Stack>
         </FormProvider>
