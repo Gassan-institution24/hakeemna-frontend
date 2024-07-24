@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 
-import { Box, alpha, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Box, alpha, Paper, Typography, useMediaQuery, Button, Divider } from '@mui/material';
 import {
   Timeline,
   TimelineDot,
@@ -15,7 +14,6 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
 import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -33,13 +31,11 @@ export default function Processing() {
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-  const { t } = useTranslate();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
 
-  const [itemsToShow, setItemsToShow] = useState(2);
 
   const handleBackClick = (idd) => {
     router.push(paths.employee.recored(idd));
@@ -47,43 +43,34 @@ export default function Processing() {
   const firstSequenceNumber =
     medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
   const TIMELINES = [
-    // {
-    //   key: 0,
-    //   title: (
-    //     <>
-    //       {firstSequenceNumber && (
-    //         <span
-    //           style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
-    //         >
-    //           Visits history {firstSequenceNumber}
-    //         </span>
-    //       )}
-    //       <br />
-    //       <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
-    //         {medRecord?.slice(0, itemsToShow).map((test, i) => (
-    //           <Box key={i}>
-    //             <Button onClick={() => handleBackClick(test?._id)} sx={{ width: '100%', m: 1 }}>
-    //               {Entrance?.patient?.name_english} was here in {fDateTime(test?.created_at)}
-    //             </Button>
-    //             <Divider />
-    //           </Box>
-    //         ))}
-    //       </Box>
-    //       {medRecord?.length > itemsToShow && (
-    //         <Button
-    //           variant="contained"
-    //           color="success"
-    //           onClick={() => setItemsToShow(itemsToShow + 2)}
-    //           sx={{ m: 2 }}
-    //         >
-    //           {t('Load More')}
-    //         </Button>
-    //       )}
-    //     </>
-    //   ),
-    //   color: 'info',
-    //   icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
-    // },
+    {
+      key: 0,
+      title: (
+        <>
+          {firstSequenceNumber && (
+            <span
+              style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+            >
+              Visits history {firstSequenceNumber}
+            </span>
+          )}
+          <br />
+          <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
+            {medRecord &&
+              <Box>
+                <Button onClick={() => handleBackClick(id)} sx={{ width: '100%', m: 1 }}>
+                  View all  {Entrance?.patient?.name_english} visits history
+                </Button>
+                <Divider />
+              </Box>
+            }
+          </Box>
+
+        </>
+      ),
+      color: 'info',
+      icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
+    },
     {
       key: 1,
       title: <History />,
