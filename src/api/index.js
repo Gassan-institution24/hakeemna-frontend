@@ -31,6 +31,7 @@ export * from './currencies';
 export * from './prescription';
 export * from './deduction_config';
 export * from './departments';
+export * from './doctor_report';
 export * from './diets';
 export * from './diseases';
 export * from './employee_types';

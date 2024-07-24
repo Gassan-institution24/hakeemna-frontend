@@ -104,6 +104,12 @@ export const endpoints = {
     entrance: (id) => (!id ? null : `/api/examination/entranceExamination/${id}`),
     patiet: (id) => (!id ? null : `/api/examination/patiet/${id}`),
   },
+  doctorreport: {
+    all: '/api/doctorreport/',
+    one: (id) => (!id ? null : `/api/doctorreport/${id}`),
+    entrance: (id) => (!id ? null : `/api/doctorreport/entrancedoctorreport/${id}`),
+    patiet: (id) => (!id ? null : `/api/doctorreport/patiet/${id}`),
+  },
   sickleave: {
     all: '/api/sickleave/',
     one: (id) => (!id ? null : `/api/sickleave/patient/${id}`),
