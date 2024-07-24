@@ -209,7 +209,9 @@ export default function EmployeeCard({ employee }) {
               list={appointmentsData}
             />
           )}
-          {appointmentsData.length < 1 && <Typography>{t('no online appointment for this doctor')}</Typography>}
+          {appointmentsData.length < 1 && (
+            <Typography>{t('no online appointment for this doctor')}</Typography>
+          )}
         </Stack>
       </Stack>
       <Dialog fullWidth open={signupDialog} minWidth="lg" onClose={() => setSignupDialog(false)}>

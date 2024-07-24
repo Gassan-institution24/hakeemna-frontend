@@ -557,7 +557,10 @@ export const unitServiceDashboardRoutes = [
                     ],
                   },
                   { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
-                  { path: 'appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
+                  {
+                    path: 'appointmentconfiguration',
+                    element: <DepartmentsAppointmentConfigPage />,
+                  },
                   { path: 'qc', element: <DepartmentsQualityControlPage /> },
                 ],
               },

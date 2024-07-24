@@ -61,7 +61,7 @@ export default function Rooms() {
     }
   };
   return (
-    <Card sx={{ display: 'flex', gap: 20, }}>
+    <Card sx={{ display: 'flex', gap: 20 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Last Activity</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>

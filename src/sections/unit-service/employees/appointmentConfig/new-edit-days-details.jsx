@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetAppointmentTypes } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';

@@ -586,8 +586,10 @@ export const paths = {
       employees: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/new`,
-        edit: (id, emid) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/edit`,
-        info: (id, emid) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/info`,
+        edit: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/edit`,
+        info: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/info`,
         appointments: (id, emid) =>
           `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/appointments`,
         appointmentconfig: {
@@ -604,7 +606,8 @@ export const paths = {
           `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/feedback`,
         attendence: (id, emid) =>
           `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/attendence`,
-        offers: (id, emid) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/offers`,
+        offers: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/offers`,
         activities: {
           root: (id, emid) =>
             `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/employees/${emid}/activities`,
@@ -619,7 +622,8 @@ export const paths = {
       activities: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/activities`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/activities/new`,
-        edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/activities/${acid}/edit`,
+        edit: (id, acid) =>
+          `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/activities/${acid}/edit`,
       },
       rooms: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/rooms`,
@@ -654,7 +658,8 @@ export const paths = {
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/appointments`,
       appointmentconfig: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/appointmentconfig`,
-        details: (id, coid) => `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/appointmentconfig/${coid}`,
+        details: (id, coid) =>
+          `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/appointmentconfig/${coid}`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/appointmentconfig/new`,
       },
       accounting: (id) => `${ROOTS.SUPERADMIN}/us/tables/employees/${id}/accounting`,

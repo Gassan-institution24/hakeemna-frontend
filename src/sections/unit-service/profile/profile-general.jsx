@@ -31,6 +31,7 @@ import {
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
+  RHFCheckbox,
   // RHFSelect,
   RHFTextField,
   RHFTimePicker,
@@ -95,6 +96,8 @@ export default function AccountGeneral({ unitServiceData }) {
     facebook: Yup.mixed(),
     instagram: Yup.mixed(),
     other: Yup.mixed(),
+    has_tax: Yup.bool(),
+    has_deduction: Yup.bool(),
   });
 
   // const handleCountryChange = (event) => {
@@ -135,6 +138,8 @@ export default function AccountGeneral({ unitServiceData }) {
     facebook: data?.facebook || '',
     instagram: data?.instagram || '',
     other: data?.other || '',
+    has_tax: data?.has_tax || false,
+    has_deduction: data?.has_deduction || false,
   };
 
   const methods = useForm({
@@ -298,6 +303,18 @@ export default function AccountGeneral({ unitServiceData }) {
                 label={`${t('institution email')}* :`}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
+              <Stack alignItems="flex-start">
+                <RHFCheckbox
+                  name="has_tax"
+                  onChange={() => setValue('has_tax', !values.has_tax)}
+                  label={t('subject to sales tax')}
+                />
+                <RHFCheckbox
+                  name="has_deduction"
+                  onChange={() => setValue('has_deduction', !values.has_deduction)}
+                  label={t('subject to deductions - income tax or doctors syndicate')}
+                />
+              </Stack>
               {/* <RHFTextField
                 
                 type="number"
@@ -328,7 +345,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                // onChange={handleCountryChange}
+              // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
