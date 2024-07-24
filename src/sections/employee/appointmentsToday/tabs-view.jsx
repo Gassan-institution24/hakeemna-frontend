@@ -8,6 +8,7 @@ import { useGetOneEntranceManagement } from 'src/api';
 
 import SickLeave from './sickLeave';
 import Prescription from './prescription';
+import Doctorreport from './doctorReport';
 import Medicalreport from './medicalreport';
 
 // ----------------------------------------------------------------------
@@ -31,7 +32,7 @@ export default function TabsView({ patient, service_unit }) {
     {
       value: 'three',
       title: 'doctor report',
-      label: <Medicalreport />,
+      label: <Doctorreport />,
     },
     {
       value: 'four',

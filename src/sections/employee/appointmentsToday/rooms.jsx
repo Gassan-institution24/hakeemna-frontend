@@ -11,7 +11,13 @@ import axiosInstance from 'src/utils/axios';
 
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSRooms, useGetOneEntranceManagement } from 'src/api';
+import {
+  useGetUSRooms,
+  useGetOneEntranceManagement,
+  useGetEntranceDoctorReports,
+  useGetEntranceExaminationReports,
+  useGeEntrancePrescription,
+} from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +25,7 @@ export default function Rooms() {
   // const { t } = useTranslate();
   const [noteContent, setNoteContent] = useState('');
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
+  const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
   const router = useRouter();
   const methods = useForm({
@@ -28,6 +34,15 @@ export default function Rooms() {
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  const { medicalreportsdata } = useGetEntranceExaminationReports(id);
+  const { doctorreportsdata } = useGetEntranceDoctorReports(id);
+  const { prescriptionData } = useGeEntrancePrescription(id);
+
+  const medicalReportIds = medicalreportsdata?.map((report) => report._id);
+  const doctorReportIds = doctorreportsdata?.map((report) => report._id);
+  const prescriptionIds = prescriptionData?.map((report) => report._id);
+
+  console.log(medicalReportIds);
 
   const { reset } = methods;
 
@@ -60,8 +75,45 @@ export default function Rooms() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
+  const handleEndAppointment = async () => {
+    try {
+      await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
+        Patient_attended: true,
+      });
+      await axiosInstance.patch(`/api/appointments/${Entrance?.appointmentId}`, {
+        finished_or_not: true,
+      });
+      await axiosInstance.post('/api/feedback', {
+        unit_service: Entrance?.service_unit?._id,
+        appointment: Entrance?.appointmentId,
+        employee: user?.employee?._id,
+        patient: Entrance?.patient?._id,
+      });
+      await axiosInstance.post(`/api/medrecord/`, {
+        appointmentId: Entrance?.appointmentId,
+        Appointment_date: Entrance?.Appointment_date,
+        service_unit: Entrance?.service_unit,
+        patient: Entrance?.patient?._id,
+        medical_report: medicalReportIds,
+        doctor_report: doctorReportIds,
+        Drugs_report: prescriptionIds,
+        // sick_leave: prescriptionIds,
+      });
+
+      // await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
+      //   patient: null,
+      //   entranceMangament: null,
+      // });
+      enqueueSnackbar('appointment finished', { variant: 'success' });
+      refetch();
+      router.push(paths.employee.appointmentsToday);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('something went wrong', { variant: 'error' });
+    }
+  };
   return (
-    <Card sx={{ display: 'flex', gap: 20, }}>
+    <Card sx={{ display: 'flex', gap: 20 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Last Activity</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
@@ -110,6 +162,13 @@ export default function Rooms() {
                   : `Go to ${rooms?.activities?.name_english} Room`}
               </Button>
             ))}
+            <Button
+              onClick={() => handleEndAppointment()}
+              variant="contained"
+              sx={{ bgcolor: 'error.main', ml: 2 }}
+            >
+              end appointment
+            </Button>
           </Box>
         </Box>
       </Box>
