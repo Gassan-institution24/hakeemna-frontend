@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 
-import { Box, alpha, Paper, Button, Divider, Typography, useMediaQuery } from '@mui/material';
+import { Box, alpha, Paper, Typography, useMediaQuery, Button, Divider } from '@mui/material';
 import {
   Timeline,
   TimelineDot,
@@ -56,16 +56,16 @@ export default function Processing() {
           )}
           <br />
           <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
-            {medRecord && 
+            {medRecord &&
               <Box>
                 <Button onClick={() => handleBackClick(id)} sx={{ width: '100%', m: 1 }}>
-                 View all  {Entrance?.patient?.name_english} visits history
+                  View all  {Entrance?.patient?.name_english} visits history
                 </Button>
                 <Divider />
               </Box>
-           }
+            }
           </Box>
-         
+
         </>
       ),
       color: 'info',

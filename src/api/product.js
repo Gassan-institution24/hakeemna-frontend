@@ -89,7 +89,7 @@ export function useGetProduct(productId) {
 // ----------------------------------------------------------------------
 
 export function useGetStakeholderProducts(id, query) {
-  const URL = id?[endpoints.products.stakeholder(id), { params: query }]:'';
+  const URL = id ? [endpoints.products.stakeholder(id), { params: query }] : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

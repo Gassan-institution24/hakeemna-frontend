@@ -116,7 +116,7 @@ export function button(theme) {
         }),
       }),
       ...(largeSize && {
-        height: 48,
+        height: 40,
         fontSize: 15,
         paddingLeft: 16,
         paddingRight: 16,

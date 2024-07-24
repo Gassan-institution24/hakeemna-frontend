@@ -186,16 +186,16 @@ export default function InvoiceListView() {
             name: t('invoices'),
           },
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.unitservice.accounting.economicmovements.add}
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            {t('new invoice')}
-          </Button>
-        }
+        // action={
+        //   <Button
+        //     component={RouterLink}
+        //     href={paths.unitservice.accounting.economicmovements.add}
+        //     variant="contained"
+        //     startIcon={<Iconify icon="mingcute:add-line" />}
+        //   >
+        //     {t('new invoice')}
+        //   </Button>
+        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -218,7 +218,7 @@ export default function InvoiceListView() {
               percent={100}
               price={totals.allTotal}
               icon="solar:bill-list-bold-duotone"
-              color={theme.palette.info.main}
+              color={theme.palette.secondary.main}
             />
 
             <InvoiceAnalytic
@@ -241,8 +241,8 @@ export default function InvoiceListView() {
 
             <InvoiceAnalytic
               title={t('insurance')}
-              total={lengths.installmentLength}
-              percent={(lengths.installmentLength / lengths.allLength) * 100}
+              total={lengths.insuranceLength}
+              percent={(lengths.insuranceLength / lengths.allLength) * 100}
               price={totals.insuranceTotal}
               icon="solar:bell-bing-bold-duotone"
               color={theme.palette.info.main}
