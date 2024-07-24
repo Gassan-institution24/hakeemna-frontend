@@ -3,13 +3,15 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetIncomePaymentControl() {
-  const URL = endpoints.income_payment.all;
+export function useGetIncomePaymentControl(params) {
+  const URL = [endpoints.income_payment.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      incomePaymentData: data || [],
+      incomePaymentData: data?.incomePaymentData || [],
+      lengths: data?.lengths || {},
+      totals: data?.totals || {},
       loading: isLoading,
       error,
       validating: isValidating,

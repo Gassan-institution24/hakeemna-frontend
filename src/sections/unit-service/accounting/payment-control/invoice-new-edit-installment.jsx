@@ -50,8 +50,9 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
 
   const handleAdd = () => {
     append({
-      due_date: values.payment_details?.[values.payment_details.length - 1]?.due_date || new Date(),
+      due_date: new Date(),
       amount: 0,
+      payment_method: '',
     });
   };
 
@@ -135,9 +136,9 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                   label={t('amount')}
                   placeholder="0"
                   InputLabelProps={{ shrink: true }}
-                  // sx={{
-                  //   maxWidth: { md: 200 },
-                  // }}
+                  sx={{
+                    maxWidth: { md: 200 },
+                  }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -146,7 +147,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                     ),
                   }}
                 />
-                {/* <RHFSelect
+                <RHFSelect
                   size="small"
                   name={`payment_details[${index}].payment_method`}
                   label={t('payment method')}
@@ -161,7 +162,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                       {t(one.label)}
                     </MenuItem>
                   ))}
-                </RHFSelect> */}
+                </RHFSelect>
                 <Button
                   size="small"
                   color="error"

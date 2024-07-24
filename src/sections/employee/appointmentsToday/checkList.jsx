@@ -174,7 +174,7 @@ export default function CheckList() {
           </Box>
 
           {data && (
-            <Button type="submit" disabled={isSubmitting} variant="contained" sx={{m:3}}>
+            <Button type="submit" disabled={isSubmitting} variant="contained" sx={{ m: 3 }}>
               Save
             </Button>
           )}

@@ -317,12 +317,16 @@ export function useNavData() {
             navItemId: 'USAppointmentsNav',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'appointments',
+              acl: 'update',
+            }),
             title: t('book appointments'),
             path: paths.unitservice.appointments.book,
             // icon: <Iconify icon="material-symbols:add-ad" />,
           },
-        ].filter((one) => one.show)
+        ].filter((one) => one.show),
       },
       {
         show:
@@ -425,7 +429,11 @@ export function useNavData() {
             path: paths.unitservice.products.stakeholder.root,
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'read',
+            }),
             title: t('orders'),
             path: paths.unitservice.orders.root,
             // icon: <Iconify icon="fluent-mdl2:product" />,
@@ -456,7 +464,11 @@ export function useNavData() {
             navItemId: 'USInfoNav',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'read',
+            }),
             title: t('insurance'),
             path: paths.unitservice.insurance.root,
             // icon: <Iconify icon="ic:baseline-security" />,
@@ -472,20 +484,28 @@ export function useNavData() {
             navItemId: 'USCommunicationNav',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'quality_control',
+              acl: 'read',
+            }),
             title: t('quality control'),
             path: paths.unitservice.qualityControl.root,
             // icon: <Iconify icon="healthicons:world-care" />,
             navItemId: 'USQualityControlNav',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'read',
+            }),
             title: t('subscriptions'),
             path: paths.unitservice.subscriptions.root,
             // icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
             navItemId: 'USSubscriptionsNav',
           },
-        ].filter((one) => one.show)
+        ].filter((one) => one.show),
       },
       {
         show: isMedLab,
@@ -545,13 +565,17 @@ export function useNavData() {
             navItemId: 'EMAppointmentsNav',
           },
           {
-            show: checkAcl({ category: 'work_group', subcategory: 'appointment_configs', acl: 'read' }),
+            show: checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'read',
+            }),
             title: t('my appointment configuration'),
             path: paths.employee.appointmentconfiguration.root,
             // icon: <Iconify icon="fluent:content-settings-16-regular" />,
             navItemId: 'EMAppointConfigNav',
           },
-        ]
+        ],
       },
       {
         show: true,
@@ -617,8 +641,7 @@ export function useNavData() {
             // icon: <Iconify icon="healthicons:world-care" />,
             navItemId: 'EMQualityControlNav',
           },
-
-        ].filter((one) => one.show)
+        ].filter((one) => one.show),
       },
     ];
     const employeeDashboard = [
