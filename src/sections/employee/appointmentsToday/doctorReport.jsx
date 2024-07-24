@@ -22,16 +22,15 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetOneEntranceManagement, useGetEntranceExaminationReports,  } from 'src/api';
+import { useGetEntranceDoctorReports, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
-
 // ----------------------------------------------------------------------
 
-export default function Medicalreport() {
+export default function Doctorreport() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -42,9 +41,9 @@ export default function Medicalreport() {
 
   const router = useRouter();
 
-  const { medicalreportsdata, refetch } = useGetEntranceExaminationReports(id);
+  const { doctorreportsdata, refetch } = useGetEntranceDoctorReports(id);
 
-  const medicalReportDialog = useBoolean();
+  const doctoReportDialog = useBoolean();
   const { user } = useAuthContext();
   const MedicalReportsSchema = Yup.object().shape({
     employee: Yup.string(),
@@ -97,7 +96,7 @@ export default function Medicalreport() {
     });
   }, [user, Entrance, reset]);
   const removemedicalrepoort = async (IdToremove2) => {
-    await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
+    await axiosInstance.patch(endpoints.doctorreport.one(IdToremove2), {
       Activation: false,
     });
 
@@ -173,27 +172,11 @@ export default function Medicalreport() {
         ImgFiles.forEach((file, index) => {
           formData.append(`file[${index}]`, file);
         });
-
-        await axiosInstance.post(endpoints.history.all, {
-          patient: Entrance?.patient?._id,
-          name_english: 'A medical report has been added',
-          name_arabic: 'تم ارفاق تقرير طبي',
-          sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
-          actual_date: Entrance?.created_at,
-          title: 'medical report',
-          service_unit: Entrance?.service_unit?._id,
-        });
-
-        await axiosInstance.post('/api/examination', formData);
-
-        await axiosInstance.patch(`/api/entrance/${id}`, {
-          medical_report_status: true,
-        });
+        await axiosInstance.post('/api/doctorreport', formData);
 
         enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
         refetch();
-        medicalReportDialog.onFalse();
+        doctoReportDialog.onFalse();
         reset();
       }
     } catch (error) {
@@ -211,11 +194,11 @@ export default function Medicalreport() {
 
   return (
     <>
-      <Button variant="outlined" color="success" onClick={medicalReportDialog.onTrue} sx={{ m: 2 }}>
-        {t('Add medical report')}
+      <Button variant="outlined" color="success" onClick={doctoReportDialog.onTrue} sx={{ m: 2 }}>
+        {t('Add a report')}
         <Iconify icon="mingcute:add-line" />
       </Button>
-      {medicalreportsdata?.map((info, i) => (
+      {doctorreportsdata?.map((info, i) => (
         <Typography
           key={i}
           variant="h6"
@@ -244,7 +227,7 @@ export default function Medicalreport() {
           </Button>
         </Typography>
       ))}
-      <Dialog open={medicalReportDialog.value} onClose={medicalReportDialog.onFalse}>
+      <Dialog open={doctoReportDialog.value} onClose={doctoReportDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
             {t('IMPORTANT')}
@@ -277,7 +260,7 @@ export default function Medicalreport() {
           </DialogContent>
 
           <DialogActions>
-            <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
+            <Button variant="outlined" color="inherit" onClick={doctoReportDialog.onFalse}>
               {t('Cancel')}
             </Button>
             <Button type="submit" loading={isSubmitting} variant="contained">
