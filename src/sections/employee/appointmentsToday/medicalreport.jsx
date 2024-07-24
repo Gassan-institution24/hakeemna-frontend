@@ -1,44 +1,32 @@
-import { useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { enqueueSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect, useCallback } from 'react';
 
 import {
-  Box,
-  Card,
-  Paper,
-  Table,
   Button,
-  Switch,
-  Select,
-  TableRow,
-  MenuItem,
-  TableCell,
-  TableBody,
-  TableHead,
-  Typography,
-  TableContainer,
   Dialog,
+  Typography,
   DialogTitle,
   DialogContent,
-  Checkbox,
   DialogActions,
 } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { fDateTime, fTimeText } from 'src/utils/format-time';
-
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetEntranceExaminationReports, useGetOneEntranceManagement } from 'src/api';
 import { useBoolean } from 'src/hooks/use-boolean';
+
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { enqueueSnackbar } from 'notistack';
+
 import { useAuthContext } from 'src/auth/hooks';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { paths } from 'src/routes/paths';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetOneEntranceManagement, useGetEntranceExaminationReports } from 'src/api';
+
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFTextField, RHFUpload } from 'src/components/hook-form';
+import { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

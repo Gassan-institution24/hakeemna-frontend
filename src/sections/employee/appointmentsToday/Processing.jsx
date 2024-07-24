@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 
-import { Box, alpha, Paper, Button, Divider, Typography, useMediaQuery } from '@mui/material';
+import { Box, alpha, Paper, Typography, useMediaQuery } from '@mui/material';
 import {
   Timeline,
   TimelineDot,
@@ -14,8 +14,6 @@ import {
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
-import { fDateTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
