@@ -578,8 +578,8 @@ export const paths = {
     },
     oldPatient: `${ROOTS.SUPERADMIN}/us/oldpatient`,
     departments: {
-      processingPage: `${ROOTS.SUPERADMIN}/us/tables/processingpage`,
-      viewgPage: `${ROOTS.SUPERADMIN}/us/tables/viewgpage`,
+      processingPage: `${ROOTS.SUPERADMIN}/us/processingpage`,
+      viewgPage: `${ROOTS.SUPERADMIN}/us/viewgpage`,
       root: `${ROOTS.SUPERADMIN}/us/tables/departments`,
       new: `${ROOTS.SUPERADMIN}/us/tables/departments/new`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/tables/departments/${id}/info`,
