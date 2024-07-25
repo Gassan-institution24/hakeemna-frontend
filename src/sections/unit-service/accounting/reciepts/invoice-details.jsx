@@ -58,12 +58,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const { user } = useAuthContext()
 
   const { incomePaymentData } = useGetIncomePaymentControl({ economic_movement: invoice.economic_movement?._id, recieved: true, select: 'balance' })
+
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
       return acc + one.balance;
     }
     return acc;
   }, 0);
+
   const handleChangeStatus = useCallback(
     async (event) => {
       try {
@@ -76,50 +78,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
       }
     },
     [invoice._id, refetch]
-  );
-
-  const renderTotal = (
-    <>
-      <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>
-          <Box sx={{ mt: 2 }} />
-          {t('subtotal')}
-        </TableCell>
-        <TableCell width={120} sx={{ typography: 'subtitle2' }}>
-          <Box sx={{ mt: 2 }} />
-          {fCurrency(invoice.Subtotal_Amount)}
-        </TableCell>
-      </StyledTableRow>
-
-      <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>{t('discount')}</TableCell>
-        <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
-          {fCurrency(-invoice.Total_discount_amount)}
-        </TableCell>
-      </StyledTableRow>
-
-      {/* <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>{t('deductions')}</TableCell>
-        <TableCell width={120}>{fCurrency(invoice.Total_deduction_amount)}</TableCell>
-      </StyledTableRow> */}
-
-      <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ color: 'text.secondary' }}>{t('taxes')}</TableCell>
-        <TableCell width={120}>{fCurrency(invoice.Total_tax_Amount)}</TableCell>
-      </StyledTableRow>
-
-      <StyledTableRow>
-        <TableCell colSpan={3} />
-        <TableCell sx={{ typography: 'subtitle1' }}>{t('total')}</TableCell>
-        <TableCell width={140} sx={{ typography: 'subtitle1' }}>
-          {fCurrency(invoice.Total_Amount)}
-        </TableCell>
-      </StyledTableRow>
-    </>
   );
 
   const renderList = (
@@ -208,7 +166,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
+              {t('date')}
+            </Typography>
+            {fDate(invoice.created_at)}
+          </Stack>
+          <Box />
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t('to')}
             </Typography>
             {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
             <br />
@@ -220,7 +185,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('to')}
+              {t('from')}
             </Typography>
             {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
             <br />
@@ -230,12 +195,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('date')}
-            </Typography>
-            {fDate(invoice.created_at)}
-          </Stack>
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>
