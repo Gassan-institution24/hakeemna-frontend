@@ -860,6 +860,7 @@ export const paths = {
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,
     Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,
+    sickleave: (id) => `${ROOTS.SUPERADMIN}/sickleave/${id}`,
     profile: {
       parent: `${ROOTS.SUPERADMIN}/profile`,
       root: `${ROOTS.SUPERADMIN}/profile/settings`,
