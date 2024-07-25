@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
+// import { debounce } from 'lodash';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
@@ -15,8 +15,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -24,7 +23,7 @@ import { isAfter } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEconomicMovements, useGetIncomePaymentControl } from 'src/api';
+import { useGetIncomePaymentControl } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -50,7 +49,7 @@ import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 
 const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
-  { id: 'created_at', label: 'date' },
+  { id: 'due_date', label: 'due date' },
   { id: 'type', label: 'type' },
   { id: 'insurance', label: 'insurance company' },
   { id: 'patient', label: 'patient' },
@@ -76,7 +75,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceListView() {
+export default function PaymentControlView() {
   const theme = useTheme();
   const settings = useSettingsContext();
   const router = useRouter();
@@ -84,11 +83,14 @@ export default function InvoiceListView() {
   const confirm = useBoolean();
   const { user } = useAuthContext();
 
+  const searchParams = useSearchParams();
+  const movement = searchParams.get('movement');
+
   const { t } = useTranslate();
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const [filters, setFilters] = useState({ ...defaultFilters, movement: movement || '' });
 
-  const { incomePaymentData, lengths, totals } = useGetIncomePaymentControl({
+  const { incomePaymentData, lengths, totals, refetch } = useGetIncomePaymentControl({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     page: table.page || 0,
@@ -104,18 +106,16 @@ export default function InvoiceListView() {
       },
       { path: 'insurance', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
-      { path: 'economic_movement', select: 'sequence_number' },
+      { path: 'economic_movement', select: 'sequence_number created_at' },
     ],
     ...filters,
   });
-
-  console.log('incomePaymentData', incomePaymentData)
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
-  const canReset = !!filters.startDate && !!filters.endDate;
+  const canReset = !!filters.startDate || !!filters.endDate;
 
   const notFound = (!incomePaymentData.length && canReset) || !incomePaymentData.length;
 
@@ -157,12 +157,12 @@ export default function InvoiceListView() {
   //   [router]
   // );
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.accounting.economicmovements.info(id));
-    },
-    [router]
-  );
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.unitservice.accounting.reciepts.info(id));
+  //   },
+  //   [router]
+  // );
 
   const handleFilterStatus = useCallback(
     (event, newValue) => {
@@ -289,10 +289,10 @@ export default function InvoiceListView() {
         )}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
+          {/* <TableSelectedAction
             dense={table.dense}
             numSelected={table.selected.length}
-            rowCount={incomePaymentData.length}
+            rowCount={lengths.length}
             onSelectAllRows={(checked) => {
               table.onSelectAllRows(
                 checked,
@@ -326,7 +326,7 @@ export default function InvoiceListView() {
                 </Tooltip>
               </Stack>
             }
-          />
+          /> */}
 
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -337,34 +337,30 @@ export default function InvoiceListView() {
                 rowCount={incomePaymentData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    incomePaymentData.map((row) => row.id)
-                  )
-                }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     incomePaymentData.map((row) => row.id)
+              //   )
+              // }
               />
 
               <TableBody>
                 {incomePaymentData
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
                   .map((row) => (
                     <InvoiceTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}
                       onSelectRow={() => table.onSelectRow(row.id)}
-                      onViewRow={() => handleViewRow(row.id)}
-                    // onEditRow={() => handleEditRow(row.id)}
+                      // onViewRow={() => handleViewRow(row.id)}
+                      refetch={refetch}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, incomePaymentData.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -374,7 +370,7 @@ export default function InvoiceListView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={incomePaymentData.length}
+          count={lengths.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}

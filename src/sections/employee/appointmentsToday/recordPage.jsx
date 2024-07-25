@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import Card from '@mui/material/Card';
 import { Box, Stack } from '@mui/system';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 import { useParams } from 'src/routes/hooks';
 

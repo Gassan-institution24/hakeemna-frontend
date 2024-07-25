@@ -67,6 +67,7 @@
     "mui-tel-input": "^5.0.0",
     "notistack": "^3.0.1",
     "nprogress": "^0.2.0",
+    "number-to-words": "^1.2.4",
     "numeral": "^2.0.6",
     "prop-types": "^15.8.1",
     "qrcode.react": "^3.1.0",
