@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
+import { fDate } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +78,16 @@ export default function InvoiceTableFiltersResult({
         {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
+          </Block>
+        )}
+        {filters.startDate && !filters.endDate && (
+          <Block label="Date:">
+            <Chip size="small" label={fDate(filters.startDate)} onDelete={handleRemoveDate} />
+          </Block>
+        )}
+        {!filters.startDate && filters.endDate && (
+          <Block label="Date:">
+            <Chip size="small" label={fDate(filters.endDate)} onDelete={handleRemoveDate} />
           </Block>
         )}
 

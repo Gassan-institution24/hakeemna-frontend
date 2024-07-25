@@ -1,4 +1,3 @@
-import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
@@ -6,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import { Divider, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,6 +16,8 @@ import { useGetUSPatient, useGetUSActiveEmployeeEngs } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { TextField } from '@mui/material';
+import { debounce } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -30,32 +30,19 @@ export default function InvoiceTableToolbar({
 }) {
   const popover = usePopover();
   const { user } = useAuthContext();
-  const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+  const USId =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { employeesData } = useGetUSActiveEmployeeEngs(USData?._id, {
+  const { employeesData } = useGetUSActiveEmployeeEngs(USId, {
     select: 'employee',
     populate: [{ path: 'employee', select: 'name_english name_arabic' }],
   });
-  const { patientsData } = useGetUSPatient(USData?._id, { select: 'name_english name_arabic' });
+  const { patientsData } = useGetUSPatient(USId, { select: 'name_english name_arabic' });
 
-  const handleFilterInsurance = useCallback(
-    (event) => {
-      onFilters('insurance', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterType = useCallback(
-    (event) => {
-      onFilters('type', event.target.value);
-    },
-    [onFilters]
-  );
   const handleFilterPatient = useCallback(
     (event) => {
       onFilters('patient', event.target.value);
@@ -147,7 +134,6 @@ export default function InvoiceTableToolbar({
             value={filters.patient}
           >
             <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
             {patientsData?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
@@ -171,7 +157,6 @@ export default function InvoiceTableToolbar({
             value={filters.employee}
           >
             <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
             {employeesData?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.employee.name_arabic : option.employee.name_english}
@@ -180,56 +165,9 @@ export default function InvoiceTableToolbar({
           </Select>
         </FormControl>
 
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>{t('type')}</InputLabel>
-
-          <Select
-            onChange={handleFilterType}
-            input={<OutlinedInput label="type" />}
-            sx={{ textTransform: 'capitalize' }}
-            value={filters.service}
-          >
-            <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
-            {['installment', 'insurance', 'paid']?.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
-                {t(option)}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>{t('insurance')}</InputLabel>
-
-          <Select
-            onChange={handleFilterInsurance}
-            input={<OutlinedInput label="insurance" />}
-            sx={{ textTransform: 'capitalize' }}
-            value={filters.service}
-          >
-            <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
-            {USData?.insurance?.map((option, idx) => (
-              <MenuItem key={idx} value={option?._id}>
-                {curLangAr ? option.name_arabic : option.name_english}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
         <TextField
           onChange={handleFilterMovement}
+          // value={filters.movement}
           label={t('economic movement')}
           sx={{ textTransform: 'capitalize' }}
         />
