@@ -37,7 +37,7 @@ export default function TabsView({ patient, service_unit }) {
     {
       value: 'four',
       title: 'sick leave',
-      label: <SickLeave />,
+      label: <SickLeave patient={patient} service_unit={service_unit} />,
     },
   ];
 
