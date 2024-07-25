@@ -13,24 +13,21 @@ import {
   InputAdornment,
 } from '@mui/material';
 
+import { useGetInsuranceCos } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { RHFTextField, RHFRadioGroup, RHFAutocomplete } from 'src/components/hook-form';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   const { watch, setValue } = useFormContext();
 
-  const { user } = useAuthContext()
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+  const { insuranseCosData } = useGetInsuranceCos();
 
   const values = watch();
   const changeHandler = (e) => {
@@ -101,17 +98,17 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
               sx={{ minWidth: 200 }}
               name="insurance_company"
               // label="insurance company"
-              options={USData?.insurance?.map((one) => one._id)}
+              options={insuranseCosData.map((one) => one._id)}
               getOptionLabel={(option) =>
-                USData?.insurance?.find((one) => one._id === option)?.[
-                curLangAr ? 'name_arabic' : 'name_english'
+                insuranseCosData.find((one) => one._id === option)?.[
+                  curLangAr ? 'name_arabic' : 'name_english'
                 ]
               }
               renderOption={(props, option, idx) => (
                 <li lang="ar" {...props} key={idx} value={option}>
                   {
-                    USData?.insurance?.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                    insuranseCosData.find((one) => one._id === option)?.[
+                      curLangAr ? 'name_arabic' : 'name_english'
                     ]
                   }
                 </li>

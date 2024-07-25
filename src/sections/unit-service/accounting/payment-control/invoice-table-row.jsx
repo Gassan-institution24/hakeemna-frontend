@@ -13,12 +13,11 @@ import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { useBoolean } from 'src/hooks/use-boolean';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import PaymentDialog from './payment-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -28,15 +27,20 @@ export default function MovementTableRow({
   onSelectRow,
   onViewRow,
   onEditRow,
-  onDeleteRow,
+  refetch,
 }) {
   const {
     sequence_number,
     patient,
     employee,
-    Balance,
+    required_amount,
+    balance,
     Currency,
-    status,
+    economic_movement,
+    recieved,
+    insurance,
+    is_it_installment,
+    due_date,
 
     created_at,
     user_creation,
@@ -48,13 +52,20 @@ export default function MovementTableRow({
   } = row;
 
   const { t } = useTranslate();
-  const router = useRouter()
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const DDL = usePopover();
   const popover = usePopover();
+  const payment = useBoolean();
+
+  let type
+  if (insurance) {
+    type = 'insurance'
+  } else if (is_it_installment) {
+    type = 'installment'
+  } else type = 'paid'
 
   return (
     <>
@@ -65,7 +76,9 @@ export default function MovementTableRow({
 
         <TableCell align="center">{sequence_number}</TableCell>
 
-        <TableCell align="center">{fDate(created_at)}</TableCell>
+        <TableCell align="center">{fDate(due_date)}</TableCell>
+        <TableCell align="center">{t(type)}</TableCell>
+        <TableCell align="center">{curLangAr ? insurance?.name_arabic : insurance?.name_english}</TableCell>
 
         <TableCell align="center">
           {curLangAr ? patient?.name_arabic : patient?.name_english}
@@ -75,20 +88,21 @@ export default function MovementTableRow({
           {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
         </TableCell>
 
-        <TableCell align="center">{fCurrency(Balance, Currency?.symbol)}</TableCell>
+        <TableCell align="center">{fCurrency(required_amount, Currency?.symbol)}</TableCell>
+        <TableCell align="center">{fCurrency(balance, Currency?.symbol)}</TableCell>
 
-        <TableCell align="center">
+        {/* <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'paid' && 'success') ||
-              (status === 'installment' && 'warning') ||
-              (status === 'insurance' && 'info') ||
-              'default'
+              recieved ? 'success' : 'warning'
             }
           >
-            {t(status)}
+            {t(recieved ? 'paid' : 'pending')}
           </Label>
+        </TableCell> */}
+        <TableCell align="center">
+          {economic_movement?.sequence_number}-{fDate(created_at, 'yyyy')}
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
@@ -104,7 +118,7 @@ export default function MovementTableRow({
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem
+        {/* <MenuItem
           lang="ar"
           onClick={() => {
             onViewRow();
@@ -113,17 +127,17 @@ export default function MovementTableRow({
         >
           <Iconify icon="solar:eye-bold" />
           {t('view')}
-        </MenuItem>
+        </MenuItem> */}
 
-        <MenuItem lang="ar"
+        {!recieved && <MenuItem lang="ar"
           onClick={() => {
-            router.push(`${paths.unitservice.accounting.paymentcontrol.root}?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`)
+            payment.onTrue();
             popover.onClose();
           }}
         >
-          <Iconify icon="majesticons:checkbox-list-detail" />
-          {t('payment control')}
-        </MenuItem>
+          <Iconify icon="game-icons:money-stack" />
+          {t('pay')}
+        </MenuItem>}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -191,23 +205,13 @@ export default function MovementTableRow({
         </Box>
       </CustomPopover>
 
-      {/* <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      /> */}
+      <PaymentDialog open={payment.value} onClose={payment.onFalse} row={row} refetch={refetch} />
     </>
   );
 }
 
 MovementTableRow.propTypes = {
-  onDeleteRow: PropTypes.func,
+  refetch: PropTypes.func,
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,

@@ -90,3 +90,4 @@ export * from './customers';
 export * from './training';
 export * from './medRecord';
 export * from './patient-medical-analysis';
+export * from './reciepts';

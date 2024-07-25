@@ -5,7 +5,6 @@ import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
@@ -16,7 +15,6 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -105,7 +103,7 @@ export default function InvoiceListView() {
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
-  const canReset = !!filters.startDate && !!filters.endDate;
+  const canReset = !!filters.startDate || !!filters.endDate;
 
   const notFound = (!economecMovementsData.length && canReset) || !economecMovementsData.length;
 
@@ -186,16 +184,16 @@ export default function InvoiceListView() {
             name: t('invoices'),
           },
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.unitservice.accounting.economicmovements.add}
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            {t('new invoice')}
-          </Button>
-        }
+        // action={
+        //   <Button
+        //     component={RouterLink}
+        //     href={paths.unitservice.accounting.economicmovements.add}
+        //     variant="contained"
+        //     startIcon={<Iconify icon="mingcute:add-line" />}
+        //   >
+        //     {t('new invoice')}
+        //   </Button>
+        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -218,7 +216,7 @@ export default function InvoiceListView() {
               percent={100}
               price={totals.allTotal}
               icon="solar:bill-list-bold-duotone"
-              color={theme.palette.info.main}
+              color={theme.palette.secondary.main}
             />
 
             <InvoiceAnalytic
@@ -241,8 +239,8 @@ export default function InvoiceListView() {
 
             <InvoiceAnalytic
               title={t('insurance')}
-              total={lengths.installmentLength}
-              percent={(lengths.installmentLength / lengths.allLength) * 100}
+              total={lengths.insuranceLength}
+              percent={(lengths.insuranceLength / lengths.allLength) * 100}
               price={totals.insuranceTotal}
               icon="solar:bell-bing-bold-duotone"
               color={theme.palette.info.main}
@@ -300,7 +298,7 @@ export default function InvoiceListView() {
         )}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
+          {/* <TableSelectedAction
             dense={table.dense}
             numSelected={table.selected.length}
             rowCount={economecMovementsData.length}
@@ -337,7 +335,7 @@ export default function InvoiceListView() {
                 </Tooltip>
               </Stack>
             }
-          />
+          /> */}
 
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -348,20 +346,16 @@ export default function InvoiceListView() {
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    economecMovementsData.map((row) => row.id)
-                  )
-                }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     economecMovementsData.map((row) => row.id)
+              //   )
+              // }
               />
 
               <TableBody>
                 {economecMovementsData
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
                   .map((row) => (
                     <InvoiceTableRow
                       key={row.id}
@@ -375,7 +369,7 @@ export default function InvoiceListView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, economecMovementsData.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -385,7 +379,7 @@ export default function InvoiceListView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={economecMovementsData.length}
+          count={lengths.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}

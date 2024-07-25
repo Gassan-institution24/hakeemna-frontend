@@ -106,7 +106,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
           </Tooltip> */}
         </Stack>
 
-        {/* <TextField
+        <TextField
           fullWidth
           select
           label={t('status')}
@@ -121,7 +121,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               {t(option.value)}
             </MenuItem>
           ))}
-        </TextField> */}
+        </TextField>
       </Stack>
 
       <Dialog fullScreen open={view.value}>

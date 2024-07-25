@@ -34,9 +34,10 @@ export default function MovementTableRow({
     sequence_number,
     patient,
     employee,
-    Balance,
+    receipt_amount,
+    economic_movement,
     Currency,
-    status,
+    // status,
 
     created_at,
     user_creation,
@@ -75,9 +76,13 @@ export default function MovementTableRow({
           {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
         </TableCell>
 
-        <TableCell align="center">{fCurrency(Balance, Currency?.symbol)}</TableCell>
+        <TableCell align="center">{fCurrency(receipt_amount, Currency?.symbol)}</TableCell>
 
         <TableCell align="center">
+          {economic_movement?.sequence_number}-{fDate(created_at, 'yyyy')}
+        </TableCell>
+
+        {/* <TableCell align="center">
           <Label
             variant="soft"
             color={
@@ -89,7 +94,7 @@ export default function MovementTableRow({
           >
             {t(status)}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -115,7 +120,7 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        <MenuItem lang="ar"
+        {/* <MenuItem lang="ar"
           onClick={() => {
             router.push(`${paths.unitservice.accounting.paymentcontrol.root}?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`)
             popover.onClose();
@@ -123,7 +128,7 @@ export default function MovementTableRow({
         >
           <Iconify icon="majesticons:checkbox-list-detail" />
           {t('payment control')}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
