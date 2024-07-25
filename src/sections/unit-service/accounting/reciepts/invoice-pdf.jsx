@@ -6,6 +6,8 @@ import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { NumberToText } from 'src/utils/number-to-words';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
@@ -32,14 +34,15 @@ const useStyles = () =>
         col4: { width: '25%' },
         col8: { width: '75%' },
         col6: { width: '50%' },
+        flex1: { flex: 1 },
         mb4: { marginBottom: 4 },
-        mb8: { marginBottom: 8 },
+        mb8: { marginBottom: 7 },
         mb40: { marginBottom: 40 },
         h3: { fontSize: 16, fontWeight: 700 },
         h4: { fontSize: 13, fontWeight: 700 },
         body1: { fontSize: 10 },
         body2: { fontSize: 9 },
-        subtitle1: { fontSize: 10, fontWeight: 700 },
+        subtitle1: { fontSize: 10, fontWeight: 700, flex: 1, borderBottom: '1px dashed', textAlign: 'center' },
         subtitle2: { fontSize: 9, fontWeight: 700 },
         alignRight: { textAlign: curLangAr ? 'left' : 'right' },
         page: {
@@ -49,7 +52,7 @@ const useStyles = () =>
           backgroundColor: '#FFFFFF',
           textTransform: 'capitalize',
           textAlign: curLangAr ? 'right' : '',
-          padding: '40px 24px 120px 24px',
+          padding: '24px 40px 40px 24px',
           direction: curLangAr ? 'rtl' : 'ltr',
         },
         footer: {
@@ -67,10 +70,13 @@ const useStyles = () =>
           justifyContent: 'space-between',
           flexDirection: curLangAr ? 'row-reverse' : 'row',
         },
+        flexContainer: {
+          alignItems: 'center',
+          flexDirection: curLangAr ? 'row-reverse' : 'row',
+        },
         table: {
           display: 'flex',
           width: 'auto',
-          // flexDirection: curLangAr ? 'row-reverse' : 'row',
         },
         tableRow: {
           padding: '8px 0',
@@ -100,19 +106,12 @@ const useStyles = () =>
 
 // ----------------------------------------------------------------------
 
-export default function InvoicePDF({ invoice, currentStatus }) {
+export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
   const {
-    Provided_services,
-    Total_tax_Amount,
-    dueDate,
-    Total_discount_amount,
-    // Total_deduction_amount,
     patient,
     created_at,
-    Total_Amount,
     unit_service,
     sequence_number,
-    Subtotal_Amount,
   } = invoice;
 
   const { t } = useTranslate();
@@ -121,7 +120,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" orientation="landscape" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
             source={unit_service.company_logo ? unit_service.company_logo : '/logo/logo_single.svg'}
@@ -129,10 +128,19 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
-            <Text style={styles.h3}>{t(currentStatus)}</Text>
             <Text> {sequence_number} </Text>
+            <Text style={styles.h3}>{fCurrency(invoice?.receipt_amount)}</Text>
           </View>
         </View>
+
+        <View style={[styles.gridContainer, styles.mb40]}>
+          <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('date')}</Text>
+            <Text style={styles.body2}>{fDate(created_at)}</Text>
+          </View>
+        </View>
+
+        <View />
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
@@ -154,148 +162,33 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
         </View>
 
-        <View style={[styles.gridContainer, styles.mb40]}>
-          <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('date')}</Text>
-            <Text style={styles.body2}>{fDate(created_at)}</Text>
-          </View>
-          {dueDate && (
-            <View style={styles.col6}>
-              <Text style={[styles.subtitle2, styles.mb4]}>{t('due date')}</Text>
-              <Text style={styles.body2}>{fDate(dueDate)}</Text>
-            </View>
-          )}
-        </View>
-
         <Text style={[styles.subtitle1, styles.mb8]}>{t('details')}</Text>
-
-        <View style={styles.table}>
-          <View>
-            <View style={styles.tableRow}>
-              <View style={styles.tableCell_1}>
-                <Text style={styles.subtitle2}>#</Text>
-              </View>
-
-              <View style={styles.tableCell_2}>
-                <Text style={styles.subtitle2}>{t('services')}</Text>
-              </View>
-
-              <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>{t('quantity')}</Text>
-              </View>
-
-              <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>{t('price per unit')}</Text>
-              </View>
-
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text style={styles.subtitle2}>{t('total')}</Text>
-              </View>
-            </View>
+        <View style={[styles.flexContainer, styles.mb8]}>
+          <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr / madam')}:</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Text>
+        </View>
+        <View style={[styles.flexContainer, styles.mb8]}>
+          <Text style={[styles.body1, styles.mb8]}>{t('the sum of')}:</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}</Text>
+        </View>
+        <View style={[styles.flexContainer, styles.mb8]}>
+          <Text style={[styles.body1, styles.mb8]}>{t('for the economic movement number')}:</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Text>
+        </View>
+        <View style={[styles.flexContainer, styles.mb8]}>
+          <View style={[styles.flexContainer, styles.mb8, styles.flex1]}>
+            <Text style={[styles.body1, styles.mb8]}>{t('total economic movement amount')}:</Text>
+            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice?.economic_movement?.Total_Amount)}</Text>
           </View>
-
-          <View>
-            {/* {Provided_services.map((item, index) => (
-              <View style={styles.tableRow} key={item.id}>
-                <View style={styles.tableCell_1}>
-                  <Text>{index + 1}</Text>
-                </View>
-
-                <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>
-                    {curLangAr ? item.service_type?.name_arabic : item.service_type?.name_english}
-                  </Text>
-                </View>
-
-                <View style={styles.tableCell_3}>
-                  <Text>{item.quantity}</Text>
-                </View>
-
-                <View style={styles.tableCell_3}>
-                  <Text>{item.price_per_unit}</Text>
-                </View>
-
-                <View style={[styles.tableCell_3, styles.alignRight]}>
-                  <Text>{fCurrency(item.income_amount)}</Text>
-                </View>
-              </View>
-            ))} */}
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>{t('subtotal')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(Subtotal_Amount)}</Text>
-              </View>
-            </View>
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>{t('discount')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(-Total_discount_amount)}</Text>
-              </View>
-            </View>
-
-            {/* <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>{t('deductions')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(Total_deduction_amount)}</Text>
-              </View>
-            </View> */}
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>{t('taxes')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(Total_tax_Amount)}</Text>
-              </View>
-            </View>
-
-            <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text style={styles.h4}>{t('total')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text style={styles.h4}>{fCurrency(Total_Amount)}</Text>
-              </View>
-            </View>
+          <View style={[styles.flexContainer, styles.mb8, styles.flex1]}>
+            <Text style={[styles.body1, styles.mb8]}>{t('total paid amount')}:</Text>
+            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(paidAmount)}</Text>
           </View>
         </View>
-
-        {/* <View style={[styles.gridContainer, styles.footer]} fixed>
-          <View style={styles.col8}>
-            <Text style={styles.subtitle2}>NOTES</Text>
-            <Text>
-              We appreciate your business. Should you need us to add VAT or extra notes let us know!
-            </Text>
-          </View>
-          <View style={[styles.col4, styles.alignRight]}>
-            <Text style={styles.subtitle2}>Have a Question?</Text>
-            <Text>support@abcapp.com</Text>
-          </View>
-        </View> */}
+        <View style={[styles.flexContainer, styles.mb40]}>
+          <Text style={[styles.body1, styles.mb8]}>{t('remaind amount')}:</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice.economic_movement.Total_Amount - paidAmount)}</Text>
+        </View>
       </Page>
     </Document>
   );
@@ -304,4 +197,5 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 InvoicePDF.propTypes = {
   currentStatus: PropTypes.string,
   invoice: PropTypes.object,
+  paidAmount: PropTypes.number,
 };
