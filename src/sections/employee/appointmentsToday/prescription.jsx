@@ -44,9 +44,10 @@ export default function Prescription({ Entrance }) {
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [chronic, setChronic] = useState(false);
+  const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); // Use a unique id to track prescriptions
 
-  const handleHover = (hoverdId) => {
-    setHoveredButtonId(hoverdId);
+  const handleHover = (hoveredId) => {
+    setHoveredButtonId(hoveredId);
   };
   const handleMouseOut = () => {
     setHoveredButtonId(null);
@@ -54,28 +55,76 @@ export default function Prescription({ Entrance }) {
   const handleViewClick = (idd) => {
     router.push(paths.employee.prescription(idd));
   };
+
+  const addPrescriptionField = () => {
+    const newPrescription = {
+      id: prescriptions.length,
+      employee: user?.employee?._id || '',
+      patient: Entrance?.patient?._id || '',
+      entrance_mangament: Entrance?._id || '',
+      Start_time: new Date(),
+      End_time: new Date(),
+      Frequency_per_day: '',
+      Num_days: 0,
+      medicines: '',
+      Doctor_Comments: '',
+      chronic: false,
+    };
+    
+    setPrescriptions((prevPrescriptions) => [
+      ...prevPrescriptions,
+      newPrescription,
+    ]);
+    
+    // Update form values directly
+    setValue(`prescriptions[${prescriptions.length}]`, newPrescription);
+  };
+  
+
+  const removePrescriptionField = (id) => {
+    setPrescriptions((prevPrescriptions) =>
+      prevPrescriptions.filter((prescription) => prescription.id !== id)
+    );
+  
+    // Remove the field from the form state
+    setValue(`prescriptions`, prescriptions.filter((prescription) => prescription.id !== id));
+  };
+  
   const PrescriptionsSchema = Yup.object().shape({
-    employee: Yup.string(),
-    patient: Yup.string(),
-    Start_time: Yup.date(),
-    End_time: Yup.date(),
-    file: Yup.array(),
-    Frequency_per_day: Yup.string(),
-    entrance_mangament: Yup.string(),
-    description: Yup.string(),
-    department: Yup.string(),
-    Drugs_report: Yup.string(),
-    medical_report: Yup.string(),
-    Medical_sick_leave_start: Yup.date(),
-    Medical_sick_leave_end: Yup.date(),
+    prescriptions: Yup.array().of(
+      Yup.object().shape({
+        employee: Yup.string(),
+        patient: Yup.string(),
+        Start_time: Yup.date(),
+        End_time: Yup.date(),
+        file: Yup.array(),
+        Frequency_per_day: Yup.string(),
+        entrance_mangament: Yup.string(),
+        description: Yup.string(),
+        department: Yup.string(),
+        Drugs_report: Yup.string(),
+        medical_report: Yup.string(),
+      })
+    ),
   });
 
   const defaultValues = {
-    employee: user?.employee?._id,
-    patient: Entrance?.patient?._id,
-    entrance_mangament: Entrance?._id,
-    service_unit: Entrance?.service_unit,
+    prescriptions: [
+      {
+        employee: user?.employee?._id || '',
+        patient: Entrance?.patient?._id || '',
+        entrance_mangament: Entrance?._id || '',
+        Start_time: new Date(),
+        End_time: new Date(),
+        Frequency_per_day: '',
+        Num_days: 0,
+        medicines: '',
+        Doctor_Comments: '',
+        chronic: false,
+      },
+    ],
   };
+  
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -90,51 +139,77 @@ export default function Prescription({ Entrance }) {
     setValue,
     formState: { isSubmitting },
   } = methods;
+
   const removePrescription = async (IdToremove) => {
     await axiosInstance.patch(endpoints.prescription.one(IdToremove), {
       Activation: false,
     });
 
-    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    enqueueSnackbar('Field removed successfully', { variant: 'success' });
     refetch();
     reset();
   };
-  const watchStartTime = watch('Start_time');
-  const watchEndTime = watch('End_time');
+
+  const watchStartTimes = watch('prescriptions').map((_, index) =>
+    watch(`prescriptions[${index}].Start_time`)
+  );
+  const watchEndTimes = watch('prescriptions').map((_, index) =>
+    watch(`prescriptions[${index}].End_time`)
+  );
 
   useEffect(() => {
-    if (watchStartTime && watchEndTime) {
-      const start = new Date(watchStartTime);
-      const end = new Date(watchEndTime);
-      const difference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-      setValue('Num_days', difference > 0 ? difference : 0);
-    }
-  }, [watchStartTime, watchEndTime, setValue]);
+    watchStartTimes.forEach((startTime, index) => {
+      const endTime = watchEndTimes[index];
+      if (startTime && endTime) {
+        const start = new Date(startTime);
+        const end = new Date(endTime);
+        const difference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        setValue(`prescriptions[${index}].Num_days`, difference > 0 ? difference : 0);
+      }
+    });
+  }, [watchStartTimes, watchEndTimes, setValue]);
+
   useEffect(() => {
     reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
-      entrance_mangament: Entrance?._id,
+      prescriptions: [
+        {
+          employee: user?.employee?._id || '',
+          patient: Entrance?.patient?._id || '',
+          entrance_mangament: Entrance?._id || '',
+          Start_time: new Date(),
+          End_time: new Date(),
+          Frequency_per_day: '',
+          Num_days: 0,
+          medicines: '',
+          Doctor_Comments: '',
+          chronic: false,
+        },
+      ],
     });
   }, [user, Entrance, reset]);
+  
 
-  const onSubmit = async (submitdata) => {
+  const onSubmit = async (submitData) => {
     try {
-      submitdata.chronic = chronic;
-      submitdata.Doctor_Comments = DoctorComment;
+      const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
+        ...prescription,
+        chronic,
+        Doctor_Comments: DoctorComment,
+      }));
+
       if (prescriptionDialog.value) {
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
-          name_english: 'an prescription has been added',
+          name_english: 'a prescription has been added',
           name_arabic: 'تم ارفاق وصفة طبية',
-          sub_english: `prescription from  ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `وصفة طبية من  ${Entrance?.service_unit?.name_arabic}`,
+          sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
           actual_date: Entrance?.created_at,
           title: 'prescription',
           service_unit: Entrance?.service_unit?._id,
         });
-        await axiosInstance.post('/api/drugs', submitdata);
+
+        await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
         await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
           Drugs_report_status: true,
         });
@@ -196,88 +271,116 @@ export default function Prescription({ Entrance }) {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFSelect
-              label={t('medicine*')}
-              fullWidth
-              name="medicines"
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 2 }}
-            >
-              {medicinesData?.map((test, idx) => (
-                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.trade_name}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-            <RHFTextField name="Frequency_per_day" label={t('Frequency pe day')} sx={{ mb: 2 }} />
-            <RHFTextField name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
+            {prescriptions.map((prescription, index) => (
+              <div key={prescription.id}>
+                <RHFSelect
+                  label={t('medicine*')}
+                  fullWidth
+                  name={`prescriptions[${index}].medicines`}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
+                  sx={{ mb: 2 }}
+                >
+                  {medicinesData?.map((test, idx) => (
+                    <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
+                      {test?.trade_name}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <RHFTextField
+                  name={`prescriptions[${index}].Frequency_per_day`}
+                  label={t('Frequency per day')}
+                  sx={{ mb: 2 }}
+                />
+                <RHFTextField
+                  name={`prescriptions[${index}].Num_days`}
+                  label={t('Number of days')}
+                  sx={{ mb: 2 }}
+                />
 
-            <Controller
-              name="Start_time"
-              control={control}
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('Start time*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
+                <Controller
+                  name={`prescriptions[${index}].Start_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      {...field}
+                      label={t('Start time*')}
+                      sx={{ mb: 2 }}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`prescriptions[${index}].End_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      {...field}
+                      label={t('End time*')}
+                      sx={{ mb: 2 }}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`prescriptions[${index}].Doctor_Comments`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField
+                      {...field}
+                      label={t('Doctor Comments')}
+                      multiline
+                      sx={{ mb: 2 }}
+                      error={!!error}
+                      helperText={error?.message}
+                    />
+                  )}
+                />
+
+                <Checkbox
+                  size="small"
+                  name="chronic"
+                  color="success"
+                  sx={{ position: 'relative', top: 5, left: 25 }}
+                  onChange={() => {
+                    setChronic(!chronic);
                   }}
                 />
-              )}
-            />
-            <Controller
-              name="End_time"
-              control={control}
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('End time*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
+                <Typography
+                  sx={{
+                    color: 'text.secondary',
+                    mt: { md: -3, xs: -2.3 },
+                    ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
+                    typography: 'caption',
+                    fontSize: { md: 15, xs: 10 },
                   }}
-                />
-              )}
-            />
-            <RHFTextField
-              name="Doctor_Comments"
-              label={t('Doctor Comments')}
-              multiline
-              // rows={4}
-              sx={{ mb: 2 }}
-              onChange={(e) => setDoctorComment(e.target.value)}
-            />
+                >
+                  chronic
+                </Typography>
+
+                <Button
+                  onClick={() => removePrescriptionField(prescription.id)}
+                  sx={{ mt: 2, mb: 2 }}
+                >
+                  Remove Prescription
+                </Button>
+              </div>
+            ))}
+            <Button onClick={addPrescriptionField} sx={{ mt: 2 }}>
+              Add new prescription
+            </Button>
           </DialogContent>
-          <Checkbox
-            size="small"
-            name="chronic"
-            color="success"
-            sx={{ position: 'relative', top: 5, left: 25 }}
-            onChange={() => {
-              setChronic(!chronic);
-            }}
-          />
-          <Typography
-            sx={{
-              color: 'text.secondary',
-              mt: { md: -3, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
-              typography: 'caption',
-
-              fontSize: { md: 15, xs: 10 },
-            }}
-          >
-            chronic
-          </Typography>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}
@@ -290,8 +393,6 @@ export default function Prescription({ Entrance }) {
       </Dialog>
     </>
   );
-
-  //   )
 }
 
 Prescription.propTypes = {

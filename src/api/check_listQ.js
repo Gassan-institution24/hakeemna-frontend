@@ -135,7 +135,7 @@ export function useGetAllentranceCheckList(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      answer: data,
       loading: isLoading,
       error,
       validating: isValidating,

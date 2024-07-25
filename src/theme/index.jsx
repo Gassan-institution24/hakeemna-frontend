@@ -44,7 +44,7 @@ export default function ThemeProvider({ children }) {
       },
       direction: settings.themeDirection,
       shadows: shadows(settings.themeMode),
-      shape: { borderRadius: 8 },
+      shape: { borderRadius: 4 },
       typography,
     }),
     [
