@@ -113,6 +113,8 @@ export const endpoints = {
   sickleave: {
     all: '/api/sickleave/',
     one: (id) => (!id ? null : `/api/sickleave/patient/${id}`),
+    onee: (id) => (!id ? null : `/api/sickleave/${id}`),
+    entrance: (id) => (!id ? null : `/api/sickleave/entrancesickleave/${id}`),
   },
   drugs: {
     all: '/api/drugs/',

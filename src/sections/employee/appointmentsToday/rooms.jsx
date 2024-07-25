@@ -2,28 +2,36 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { Box, Card, Button, TextField, Typography } from '@mui/material';
+import { Box, Card, Button, Select, MenuItem, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
 import axiosInstance from 'src/utils/axios';
 
-// import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetUSRooms,
+  useGeEntrancePrescription,
   useGetOneEntranceManagement,
   useGetEntranceDoctorReports,
   useGetEntranceExaminationReports,
-  useGeEntrancePrescription,
 } from 'src/api';
 
-// ----------------------------------------------------------------------
+// Utility function to format text
+const formatTextWithLineBreaks = (text) => {
+  if (!text) return '';
+  const words = text.split(' ');
+  return words.reduce(
+    (formattedText, word, index) => formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
+    ''
+  );
+};
 
 export default function Rooms() {
-  // const { t } = useTranslate();
   const [noteContent, setNoteContent] = useState('');
+  const [selectedValue] = useState('');
+
   const { id } = useParams();
   const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
@@ -41,8 +49,6 @@ export default function Rooms() {
   const medicalReportIds = medicalreportsdata?.map((report) => report._id);
   const doctorReportIds = doctorreportsdata?.map((report) => report._id);
   const prescriptionIds = prescriptionData?.map((report) => report._id);
-
-  console.log(medicalReportIds);
 
   const { reset } = methods;
 
@@ -75,10 +81,12 @@ export default function Rooms() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
+
   const handleEndAppointment = async () => {
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
         Patient_attended: true,
+        note: noteContent,
       });
       await axiosInstance.patch(`/api/appointments/${Entrance?.appointmentId}`, {
         finished_or_not: true,
@@ -112,56 +120,72 @@ export default function Rooms() {
       enqueueSnackbar('something went wrong', { variant: 'error' });
     }
   };
+
   return (
-    <Card sx={{ display: 'flex', gap: 20 }}>
+    <Card sx={{ display: 'flex', gap: 15 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Last Activity</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
         <Typography variant="h6" sx={{ mt: 2 }}>
           Doctor Message
         </Typography>
-        <Typography>{Entrance?.note}</Typography>
+        <Typography
+          dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
+        />
       </Box>
 
       <Box sx={{ m: 2 }}>
         <Typography variant="h6">Next Activity</Typography>
         <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
-          <TextField
-            onChange={(e) => setNoteContent(e.target.value)}
-            placeholder="Add comment"
-            fullWidth
-            multiline
-            rows={2}
-            sx={{ mt: 2, display: 'inline' }}
-          />
-          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            {roomsData?.map((rooms, index) => (
-              <Button
-                key={index}
-                onClick={() => {
-                  if (
-                    Entrance?.Current_activity?.name_english !== rooms?.activities?.name_english
-                  ) {
-                    processingPage(rooms);
-                  }
-                }}
-                variant="contained"
-                sx={{
-                  bgcolor:
-                    Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                      ? 'green'
-                      : 'success.main',
-                  m: 2,
-                }}
-                disabled={
-                  Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                }
-              >
-                {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                  ? `${rooms?.activities?.name_english} (Current)`
-                  : `Go to ${rooms?.activities?.name_english} Room`}
-              </Button>
-            ))}
+          <Box>
+            <TextField
+              onChange={(e) => setNoteContent(e.target.value)}
+              placeholder="Add comment"
+              fullWidth
+              multiline
+              rows={2}
+              sx={{ mb: 2 }}
+            />
+            <Select
+              sx={{
+                width: 150,
+                height: 35,
+              }}
+              value={selectedValue}
+              displayEmpty
+            >
+              <MenuItem value="" disabled sx={{ display: 'none' }}>
+                Choose
+              </MenuItem>
+              {roomsData?.map((rooms, index) => (
+                <MenuItem key={index}>
+                  <Button
+                    onClick={() => {
+                      if (
+                        Entrance?.Current_activity?.name_english !== rooms?.activities?.name_english
+                      ) {
+                        processingPage(rooms);
+                      }
+                    }}
+                    variant="contained"
+                    sx={{
+                      bgcolor:
+                        Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                          ? 'green'
+                          : 'success.main',
+                      m: 2,
+                    }}
+                    disabled={
+                      Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                    }
+                  >
+                    {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                      ? `${rooms?.activities?.name_english} (Current)`
+                      : `Go to ${rooms?.activities?.name_english} Room`}
+                  </Button>
+                </MenuItem>
+              ))}
+            </Select>
             <Button
               onClick={() => handleEndAppointment()}
               variant="contained"
