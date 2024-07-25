@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useTheme } from '@emotion/react';
 
-import { Box, alpha, Paper, Typography, useMediaQuery, Button, Divider } from '@mui/material';
+import { Box, alpha, Paper, Button, Divider, Typography, useMediaQuery } from '@mui/material';
 import {
   Timeline,
   TimelineDot,

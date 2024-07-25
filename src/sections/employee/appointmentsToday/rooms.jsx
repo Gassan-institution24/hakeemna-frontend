@@ -13,10 +13,10 @@ import axiosInstance from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetUSRooms,
+  useGeEntrancePrescription,
   useGetOneEntranceManagement,
   useGetEntranceDoctorReports,
   useGetEntranceExaminationReports,
-  useGeEntrancePrescription,
 } from 'src/api';
 
 // ----------------------------------------------------------------------

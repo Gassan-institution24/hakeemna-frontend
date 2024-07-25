@@ -53,16 +53,14 @@ function Group({ subheader, walktourRun, items, slotProps }) {
     setOpen((prev) => !prev);
   }, []);
   const renderContent = items.map((list, idx) => (
-    // <div id={list.navItemId}>
     <NavList
       // id={list.navItemId}
-      walktourRun={walktourRun}
       key={idx}
+      walktourRun={walktourRun}
       data={list}
       depth={1}
       slotProps={slotProps}
     />
-    // </div>
   ));
 
   return (

@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { Checkbox } from '@mui/material';
+// import { Checkbox } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -17,6 +17,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +48,7 @@ export default function MovementTableRow({
   } = row;
 
   const { t } = useTranslate();
+  const router = useRouter()
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -56,9 +59,9 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="center">{sequence_number}</TableCell>
 
@@ -112,15 +115,15 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        {/* <MenuItem lang="ar"
+        <MenuItem lang="ar"
           onClick={() => {
-            onEditRow();
+            router.push(`${paths.unitservice.accounting.paymentcontrol.root}?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`)
             popover.onClose();
           }}
         >
-          <Iconify icon="solar:pen-bold" />
-          {t('edit')}
-        </MenuItem> */}
+          <Iconify icon="majesticons:checkbox-list-detail" />
+          {t('payment control')}
+        </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
