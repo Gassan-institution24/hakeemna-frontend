@@ -17,6 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
+import { useGetIncomePaymentControl } from 'src/api';
 
 import { useTranslate } from 'src/locales';
 
@@ -32,12 +33,21 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 
   const { t } = useTranslate();
 
+  const { incomePaymentData } = useGetIncomePaymentControl({ economic_movement: invoice.economic_movement?._id, recieved: true, select: 'balance' })
+
+  const paidAmount = incomePaymentData.reduce((acc, one) => {
+    if (typeof one.balance === 'number') {
+      return acc + one.balance;
+    }
+    return acc;
+  }, 0);
+
   // const handleEdit = useCallback(() => {
   //   router.push(paths.unitservice.accounting.economicmovements.edit(invoice.id));
   // }, [invoice.id, router]);
 
   const printPdf = async () => {
-    const blob = await pdf(<InvoicePDF invoice={invoice} currentStatus={currentStatus} />).toBlob();
+    const blob = await pdf(<InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -70,7 +80,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
           </Tooltip>
 
           <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
+            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />}
             fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
             style={{ textDecoration: 'none' }}
           >
@@ -138,7 +148,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 
           <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
             <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-              <InvoicePDF invoice={invoice} currentStatus={currentStatus} />
+              <InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />
             </PDFViewer>
           </Box>
         </Box>
