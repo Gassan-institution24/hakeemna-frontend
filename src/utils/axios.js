@@ -113,6 +113,8 @@ export const endpoints = {
   sickleave: {
     all: '/api/sickleave/',
     one: (id) => (!id ? null : `/api/sickleave/patient/${id}`),
+    onee: (id) => (!id ? null : `/api/sickleave/${id}`),
+    entrance: (id) => (!id ? null : `/api/sickleave/entrancesickleave/${id}`),
   },
   drugs: {
     all: '/api/drugs/',
@@ -532,8 +534,12 @@ export const endpoints = {
       one: (id) => (!id ? null : `/api/economicmovements/stakeholder/${id}`),
     },
   },
+  receipts: {
+    all: '/api/receipts',
+  },
   income_payment: {
     all: '/api/incomepayment',
+    pay: (id) => (!id ? null : `/api/incomepayment/pay/${id}`),
     one: (id) => (!id ? null : `/api/incomepayment/${id}`),
     department: {
       one: (id) => (!id ? null : `/api/incomepayment/department/${id}`),

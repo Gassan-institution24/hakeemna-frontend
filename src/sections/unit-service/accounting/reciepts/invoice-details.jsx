@@ -124,7 +124,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
   const renderList = (
     <Stack gap={3} my={3}>
-      <Typography variant='h5'>{t('details')}</Typography>
+      <Typography variant='h5'>{t('details')}:</Typography>
       <Stack direction='row' gap={2}>
         <Typography variant='body1'>{t('we have recieved from mr / madam')}:</Typography>
         <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Typography>

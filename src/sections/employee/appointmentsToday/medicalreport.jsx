@@ -28,7 +28,6 @@ import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
-
 // ----------------------------------------------------------------------
 
 export default function Medicalreport() {
@@ -78,15 +77,7 @@ export default function Medicalreport() {
     formState: { isSubmitting },
   } = methods;
   const values = watch();
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
-      entrance_mangament: Entrance?._id,
-      file: [],
-    });
-  }, [user, Entrance, reset]);
+
   useEffect(() => {
     reset({
       employee: user?.employee?._id,

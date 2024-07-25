@@ -13,15 +13,11 @@ import { MenuItem, Typography } from '@mui/material';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetAppointmentTypes } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFCheckbox,
-  RHFTimePicker,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFCheckbox, RHFTimePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

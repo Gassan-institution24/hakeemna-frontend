@@ -114,7 +114,9 @@ export default function DoctorPage({ employeeData }) {
                 list={appointmentsData}
               />
             )}
-            {appointmentsData.length < 1 && <Typography>{t('no online appointment for this doctor')}</Typography>}
+            {appointmentsData.length < 1 && (
+              <Typography>{t('no online appointment for this doctor')}</Typography>
+            )}
           </Stack>
         </Stack>
         <Stack gap={3} marginX={5} padding={3}>

@@ -37,7 +37,7 @@ export default function TabsView({ patient, service_unit }) {
     {
       value: 'four',
       title: 'sick leave',
-      label: <SickLeave />,
+      label: <SickLeave patient={patient} service_unit={service_unit} />,
     },
   ];
 
@@ -46,31 +46,31 @@ export default function TabsView({ patient, service_unit }) {
   }, []);
 
   return (
-    <Card sx={{mt:3}}>
+    <Card sx={{ mt: 3 }}>
       <Container sx={{ my: 2 }}>
-          <Stack spacing={2} sx={{ width: '100%' }}>
-            <Tabs value={currentTab} onChange={handleChangeTab}>
-              {TABS.map((tab) => (
-                <Tab key={tab.value} value={tab.value} label={tab.title} />
-              ))}
-            </Tabs>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+          <Tabs value={currentTab} onChange={handleChangeTab}>
+            {TABS.map((tab) => (
+              <Tab key={tab.value} value={tab.value} label={tab.title} />
+            ))}
+          </Tabs>
 
-            {TABS.map(
-              (tab) =>
-                tab.value === currentTab && (
-                  <Box
-                    key={tab.value}
-                    sx={{
-                      p: 2,
-                      borderRadius: 1,
-                      bgcolor: 'background.neutral',
-                    }}
-                  >
-                    {tab.label}
-                  </Box>
-                )
-            )}
-          </Stack>
+          {TABS.map(
+            (tab) =>
+              tab.value === currentTab && (
+                <Box
+                  key={tab.value}
+                  sx={{
+                    p: 2,
+                    borderRadius: 1,
+                    bgcolor: 'background.neutral',
+                  }}
+                >
+                  {tab.label}
+                </Box>
+              )
+          )}
+        </Stack>
       </Container>
     </Card>
   );
