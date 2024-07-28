@@ -24,7 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-// import { useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetUSRooms,
@@ -44,7 +44,7 @@ export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
-  // const { t } = useTranslate();
+  const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
@@ -61,21 +61,21 @@ export default function AppointmentsToday() {
   const TABS = [
     {
       value: 'one',
-      label: 'Appointments Today',
+      label: t('Appointments Today'),
       color: 'info',
       count: appointmentsData?.length,
       data: appointmentsData,
     },
     {
       value: 'two',
-      label: 'Rooms',
+      label: t('Rooms'),
       color: 'warning',
       count: entrance?.length,
       data: entrance,
     },
     {
       value: 'three',
-      label: 'Finished',
+      label: t('Finished'),
       color: 'error',
       count: finishedAppointmentsData?.length,
       data: finishedAppointmentsData,
@@ -141,7 +141,9 @@ export default function AppointmentsToday() {
       });
     } else {
       alert(
-        'Your browser does not support initiating phone calls. Please use a different device or contact the patient using an alternative method.'
+        t(
+          'Your browser does not support initiating phone calls. Please use a different device or contact the patient using an alternative method.'
+        )
       );
     }
   };
@@ -165,7 +167,7 @@ export default function AppointmentsToday() {
             sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
             icon="carbon:view"
           />
-          <span style={{ fontSize: 16 }}>View</span>
+          <span style={{ fontSize: 16 }}>{t("View")}</span>
         </IconButton>
       );
     }
@@ -181,7 +183,7 @@ export default function AppointmentsToday() {
           displayEmpty
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
-            Next activity
+            {t('Next activity')}
           </MenuItem>
           {roomsData.map((activity, index) => (
             <Button
@@ -204,7 +206,7 @@ export default function AppointmentsToday() {
             sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
             icon="material-symbols:call"
           />
-          <span style={{ fontSize: 16 }}>Call</span>
+          <span style={{ fontSize: 16 }}>{t('Call')}</span>
         </IconButton>
       </>
     );
@@ -213,7 +215,7 @@ export default function AppointmentsToday() {
   return (
     <Container>
       <CustomBreadcrumbs
-        heading="Appointments Today"
+        heading={t('Appointments Today')}
         links={[{ name: user.userName }]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -240,16 +242,16 @@ export default function AppointmentsToday() {
             <Table sx={{ minWidth: 400 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Patient</TableCell>
-                  <TableCell>Patient Note</TableCell>
+                  <TableCell>{t('Time')}</TableCell>
+                  <TableCell>{t('patient')}</TableCell>
+                  <TableCell>{t('Patient Note')}</TableCell>
                   {currentTab !== 'three' && (
                     <>
-                      <TableCell>Coming</TableCell>
-                      <TableCell>Arrived</TableCell>
+                      <TableCell>{t('Coming')}</TableCell>
+                      <TableCell>{t('Arrived')}</TableCell>
                     </>
                   )}
-                  <TableCell>Options</TableCell>
+                  <TableCell>{t('Options')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -269,13 +271,13 @@ export default function AppointmentsToday() {
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, true, 'coming')}
                               >
-                                Yes
+                                {t("Yes")}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, false, 'coming')}
                               >
-                                No
+                                {t("No")}
                               </Button>
                             </>
                           )}
@@ -289,13 +291,13 @@ export default function AppointmentsToday() {
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, true, 'arrived')}
                               >
-                                Yes
+                                {t("Yes")}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, false, 'arrived')}
                               >
-                                No
+                                {t("No")}
                               </Button>
                             </>
                           )}
