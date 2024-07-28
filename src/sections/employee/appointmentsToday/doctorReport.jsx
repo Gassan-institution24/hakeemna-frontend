@@ -22,7 +22,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEntranceDoctorReports, useGetOneEntranceManagement } from 'src/api';
+import { useGetEntranceDoctorReports, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -36,6 +36,8 @@ export default function Doctorreport() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
+  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
+
   const [ImgFiles, setImgFiles] = useState([]);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
 
@@ -43,6 +45,8 @@ export default function Doctorreport() {
 
   const { doctorreportsdata, refetch } = useGetEntranceDoctorReports(id);
 
+  const firstSequenceNumber =
+    medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
   const doctoReportDialog = useBoolean();
   const { user } = useAuthContext();
   const MedicalReportsSchema = Yup.object().shape({
@@ -194,8 +198,11 @@ export default function Doctorreport() {
 
   return (
     <>
+      {firstSequenceNumber ? <sapn style={{ color: '#00B8D9' }}>{firstSequenceNumber}</sapn> : ''}
+
+      <br />
       <Button variant="outlined" color="success" onClick={doctoReportDialog.onTrue} sx={{ m: 2 }}>
-        {t('Add a report')}
+        {t('Add to patient file')}
         <Iconify icon="mingcute:add-line" />
       </Button>
       {doctorreportsdata?.map((info, i) => (

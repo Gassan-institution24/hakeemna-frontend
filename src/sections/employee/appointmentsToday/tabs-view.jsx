@@ -21,18 +21,18 @@ export default function TabsView({ patient, service_unit }) {
   const TABS = [
     {
       value: 'one',
+      title: 'Patient file',
+      label: <Doctorreport />,
+    },
+    {
+      value: 'two',
       title: 'Prescription',
       label: <Prescription Entrance={Entrance} />,
     },
     {
-      value: 'two',
+      value: 'three',
       title: 'medical report',
       label: <Medicalreport />,
-    },
-    {
-      value: 'three',
-      title: 'doctor report',
-      label: <Doctorreport />,
     },
     {
       value: 'four',
