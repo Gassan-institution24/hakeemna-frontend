@@ -4,10 +4,9 @@ import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+import { NumberToText } from 'src/utils/number-to-words';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { NumberToText } from 'src/utils/number-to-words';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
@@ -35,9 +34,11 @@ const useStyles = () =>
         col8: { width: '75%' },
         col6: { width: '50%' },
         flex1: { flex: 1 },
+        alignCenter: { textAlign: 'center' },
         mb4: { marginBottom: 4 },
         mb8: { marginBottom: 7 },
-        mb40: { marginBottom: 40 },
+        mb40: { marginBottom: 35 },
+        h2: { fontSize: 20, fontWeight: 800 },
         h3: { fontSize: 16, fontWeight: 700 },
         h4: { fontSize: 13, fontWeight: 700 },
         body1: { fontSize: 10 },
@@ -121,6 +122,7 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
+        <Text style={[styles.h2, styles.mb8, styles.alignCenter]}>{t('receipt voucher')}</Text>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
             source={unit_service.company_logo ? unit_service.company_logo : '/logo/logo_single.svg'}
@@ -161,10 +163,8 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
             <Text style={styles.body2}>{patient.mobile_num1}</Text>
           </View>
         </View>
-
-        <Text style={[styles.subtitle1, styles.mb8]}>{t('details')}</Text>
         <View style={[styles.flexContainer, styles.mb8]}>
-          <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr / madam')}:</Text>
+          <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr./m/s')}:</Text>
           <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>

@@ -115,7 +115,7 @@ export default function AppointmentsFilters({
   const renderInsurance = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        {t('insurance')}
+        {t('Insurance')}
       </Typography>
       <Select onChange={handleFiltedInsurance} name="insurance">
         {insuranseCosData?.map((option, idx) => (

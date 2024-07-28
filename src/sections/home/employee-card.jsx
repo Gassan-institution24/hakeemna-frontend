@@ -176,7 +176,7 @@ export default function EmployeeCard({ employee }) {
               </Stack>
             )}
             <Stack direction="row" gap={1}>
-              <Typography variant="body2">{t('insurance')}:</Typography>
+              <Typography variant="body2">{t('Insurance')}:</Typography>
               <Stack>
                 {employee?.unit_service?.insurance?.length > 5
                   ? employee?.unit_service?.insurance

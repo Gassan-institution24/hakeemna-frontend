@@ -10,7 +10,6 @@ import EmployeeMinBarLayout from 'src/layouts/employees-minibar';
 import DepartmentsNavLayout from 'src/layouts/departments-topbar';
 import PermissionsNavLayout from 'src/layouts/permissions-topbar';
 import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
-import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
 import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
@@ -124,20 +123,10 @@ const EconomicNewPage = lazy(() =>
 const PaymentControlHomePage = lazy(() =>
   import('src/pages/unit-service/accounting/payment-control/home')
 );
-const PaymentControlInfoPage = lazy(() =>
-  import('src/pages/unit-service/accounting/payment-control/info')
-);
-const PaymentControlEditPage = lazy(() =>
-  import('src/pages/unit-service/accounting/payment-control/edit')
-);
-const PaymentControlNewPage = lazy(() =>
-  import('src/pages/unit-service/accounting/payment-control/new')
-);
 // RECEIPTS
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
 const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
-const ReceiptsEditPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/edit'));
-const ReceiptsNewPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/new'));
+const InvoicingHomePage = lazy(() => import('src/pages/unit-service/accounting/invoicing/home'));
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
 // PRODUCTS
@@ -397,9 +386,6 @@ export const unitServiceDashboardRoutes = [
             path: 'paymentcontrol',
             children: [
               { element: <PaymentControlHomePage />, index: true },
-              { path: ':id/info', element: <PaymentControlInfoPage /> },
-              { path: ':id/edit', element: <PaymentControlEditPage /> },
-              { path: 'new', element: <PaymentControlNewPage /> },
             ],
           },
           {
@@ -407,9 +393,10 @@ export const unitServiceDashboardRoutes = [
             children: [
               { element: <ReceiptsHomePage />, index: true },
               { path: ':id/info', element: <ReceiptsInfoPage /> },
-              { path: ':id/edit', element: <ReceiptsEditPage /> },
-              { path: 'new', element: <ReceiptsNewPage /> },
             ],
+          },
+          {
+            path: 'invoicing', element: <InvoicingHomePage />,
           },
         ],
       },
