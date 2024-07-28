@@ -93,10 +93,11 @@ export default function TableCreateView() {
 
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
 
-  const { appointmentsData, AppointDates, loading, refetch } = useGetUSAppointments({
-    id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
-    filters: { ...filters, startDate: selectedDate },
-  });
+  const { appointmentsData, AppointDates, loading, refetch } = useGetUSAppointments(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+    {
+      ...filters, startDate: selectedDate,
+    });
 
   useEffect(() => {
     if (!loading && !appointmentsData.length && AppointDates.length) {
@@ -192,9 +193,10 @@ export default function TableCreateView() {
         { ...data, lang: curLangAr }
       );
       const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
-      await addToCalendar(SelectedAppointment);
+      window.location.reload();
       enqueueSnackbar(t('created successfully!'));
-      reset();
+      // reset();
+      await addToCalendar(SelectedAppointment);
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -278,10 +280,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+          // gridTemplateColumns={{
+          //   xs: 'repeat(1, 1fr)',
+          //   sm: 'repeat(3, 1fr)',
+          // }}
           >
             <FormControl
               sx={{
@@ -295,14 +297,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
+              // renderValue={(selected) =>
+              //   selected
+              // }
+              // MenuProps={{
+              //   PaperProps: {
+              //     sx: { maxHeight: 240 },
+              //   },
+              // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -374,7 +376,7 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-              // sx={{ mt: SPACING }}
+            // sx={{ mt: SPACING }}
             />
           )}
           {selected && (

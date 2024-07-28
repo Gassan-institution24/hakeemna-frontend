@@ -1,34 +1,18 @@
 import * as Yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState, useEffect, useCallback } from 'react';
-
-import { Box, Stack } from '@mui/system';
-import {
-  Card,
-  Button,
-  Dialog,
-  Typography,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-} from '@mui/material';
 
 import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance from 'src/utils/axios';
-import { fDateTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetOneSickLeaves } from 'src/api/sickleave';
 
-import Iconify from 'src/components/iconify/iconify';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { DatePicker } from '@mui/x-date-pickers';
 
 export default function MdicalreportPage() {
   const { t } = useTranslate();

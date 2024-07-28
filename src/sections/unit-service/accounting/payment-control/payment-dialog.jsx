@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -13,17 +15,25 @@ import {
     InputAdornment,
 } from '@mui/material';
 
-import { useTranslate } from 'src/locales';
+import { paths } from 'src/routes/paths';
+
+import { fDate } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
-import { fDate } from 'src/utils/format-time';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useMemo } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function PaymentDialog({ open, onClose, row, refetch }) {
+    const { enqueueSnackbar } = useSnackbar()
+
+    const { t } = useTranslate();
+    const { currentLang } = useLocales();
+    const curLangAr = currentLang.value === 'ar';
+
     const defaultValues = useMemo(
         () => ({
             amount: row.required_amount,
@@ -31,14 +41,16 @@ export default function PaymentDialog({ open, onClose, row, refetch }) {
         }), [row.required_amount])
     const methods = useForm({ defaultValues });
 
-    const { t } = useTranslate();
-
     const handlePayment = methods.handleSubmit(async (data) => {
         try {
-            await axiosInstance.patch(endpoints.income_payment.pay(row._id), data)
+            const paymentdata = await axiosInstance.patch(endpoints.income_payment.pay(row._id), data)
+            enqueueSnackbar(t('paid successfully'))
             refetch()
+            window.open(paths.unitservice.accounting.reciepts.info(paymentdata?.data?.receipt_voucher_num), '_blank');
         } catch (e) {
-            // ss
+            enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
+                variant: 'error',
+            });
         }
     })
 

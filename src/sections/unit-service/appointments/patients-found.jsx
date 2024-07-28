@@ -71,6 +71,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
         lang: curLangAr,
       });
       await addToCalendar(SelectedAppointment);
+      window.location.reload();
       enqueueSnackbar(t('booked successfully!'));
       setSubmitting(false);
       reset();

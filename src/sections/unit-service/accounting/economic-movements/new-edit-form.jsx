@@ -128,7 +128,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
       items: currentInvoice?.Provided_services ||
-        entranceInfo?.Service_types?.map((one) => ({
+        (entranceInfo?.Service_types?.length > 0 && entranceInfo?.Service_types?.map((one) => ({
           service_type: one._id || null,
           activity: null,
           quantity: 1,
@@ -138,7 +138,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           // deduction: 0,
           tax: 0,
           total: Number(one.Price_per_unit) || 0,
-        })) || [
+        }))) || [
           {
             service_type: null,
             activity: null,
@@ -166,9 +166,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     reset,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
-  console.log('errors', errors);
 
   useEffect(() => {
     reset(defaultValues);
@@ -207,7 +206,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       reset();
       enqueueSnackbar(t('created successfully'));
       loadingSend.onFalse();
-      router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?._id));
+      router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id));
+      if (invoice?.data?.receiptPayment?._id) {
+        window.open(paths.unitservice.accounting.reciepts.info(invoice?.data?.receiptPayment?._id), '_blank');
+      }
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       enqueueSnackbar(
@@ -244,10 +246,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                   name="payment_method"
                   label={t('payment method')}
                   options={[
-                    { label: 'cash', value: 'cash' },
-                    { label: 'credit card', value: 'credit_card' },
-                    { label: 'bank transfer', value: 'bank_transfer' },
-                    { label: 'instant bank transfer', value: 'instant_transfere' },
+                    { label: t('cash'), value: 'cash' },
+                    { label: t('credit card'), value: 'credit_card' },
+                    { label: t('bank transfer'), value: 'bank_transfer' },
+                    { label: t('instant bank transfer'), value: 'instant_transfere' },
                   ]}
                 />
               </Stack>
@@ -262,7 +264,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
               onClose={installment.onFalse}
               onSubmit={handleCreateAndSend}
             />
-            
+
             <InvoiceNewEditInsurance
               open={insurance.value}
               onClose={insurance.onFalse}
