@@ -107,7 +107,7 @@ export default function AppointmentsToday() {
 
   const startAppointment = async (data, activityId) => {
     try {
-      await axiosInstance.post(endpoints.entranceManagement.all, {
+      const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
         patient: data?.patient?._id,
         patient_note: data?.note,
         start_time: new Date().toISOString(),
@@ -120,6 +120,7 @@ export default function AppointmentsToday() {
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
+        entrance: entranceData?.data?._id
       });
       refetch();
       refetch2();

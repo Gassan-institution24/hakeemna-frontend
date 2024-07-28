@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -8,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import { fDate } from 'src/utils/format-time';
+
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
@@ -23,78 +24,66 @@ export default function InvoiceTableFiltersResult({
   results,
   ...other
 }) {
+  const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const handleRemoveKeyword = useCallback(() => {
-    onFilters('name', '');
-  }, [onFilters]);
-
-  // const handleRemoveService = useCallback(
-  //   (inputValue) => {
-  //     const newValue = filters.service.filter((item) => item !== inputValue);
-
-  //     onFilters('service', newValue);
-  //   },
-  //   [filters.service, onFilters]
-  // );
-
-  const handleRemoveStatus = useCallback(() => {
+  const handleRemoveStatus = () => {
     onFilters('status', 'all');
-  }, [onFilters]);
+  };
+  const handleRemoveGroup = () => {
+    onFilters('group', '');
+  };
+  const handleRemoveShift = () => {
+    onFilters('shift', '');
+  };
+  const handleRemovetype = () => {
+    onFilters('types', '');
+  };
 
-  const handleRemoveDate = useCallback(() => {
+  const handleRemoveDate = () => {
     onFilters('startDate', null);
     onFilters('endDate', null);
-  }, [onFilters]);
+  };
 
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('results found')}
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {/* {!!filters.service.length && (
-          <Block label="Service:">
-            {filters.service.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveService(item)}
-              />
-            ))}
-          </Block>
-        )} */}
-
-        {filters.status !== 'all' && (
-          <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+        {filters.status !== 'active' && (
+          <Block label={t('status:')}>
+            <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>
         )}
-
-        {filters.startDate && filters.endDate && (
-          <Block label="Date:">
-            <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
-          </Block>
+        {filters.types !== '' && (
+          // <Block>
+          <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
+          // </Block>
         )}
+        {filters.group !== '' && (
+          // <Block>
+          <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
+          // </Block>
+        )}
+        {filters.shift !== '' && (
+          // <Block>
+          <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
+          // </Block>
+        )}
+
         {filters.startDate && !filters.endDate && (
-          <Block label="Date:">
+          <Block label={t('date:')}>
             <Chip size="small" label={fDate(filters.startDate)} onDelete={handleRemoveDate} />
           </Block>
         )}
-        {!filters.startDate && filters.endDate && (
-          <Block label="Date:">
-            <Chip size="small" label={fDate(filters.endDate)} onDelete={handleRemoveDate} />
-          </Block>
-        )}
-
-        {!!filters.name && (
-          <Block label="Keyword:">
-            <Chip label={filters.name} size="small" onDelete={handleRemoveKeyword} />
+        {filters.startDate && filters.endDate && (
+          <Block label={t('date:')}>
+            <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
         )}
 
@@ -103,7 +92,7 @@ export default function InvoiceTableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('clear')}
         </Button>
       </Stack>
     </Stack>

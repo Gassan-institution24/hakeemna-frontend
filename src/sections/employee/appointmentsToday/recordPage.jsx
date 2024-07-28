@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router';
+
 import Card from '@mui/material/Card';
 import { Box, Stack } from '@mui/system';
 import { Button, Divider, Typography } from '@mui/material';
+
 import { useParams } from 'src/routes/hooks';
+
 import { fDateTime } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 import { useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
+
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify/iconify';
 

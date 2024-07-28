@@ -353,7 +353,7 @@ export default function InvoiceNewEditDetails() {
                   label={t('total')}
                   placeholder="0.00"
                   value={
-                    values.items[index].total === 0 ? '' : values.items[index]?.total?.toFixed(2)
+                    values.items[index]?.total === 0 ? '' : values.items[index]?.total?.toFixed(2)
                   }
                   InputProps={{
                     startAdornment: (

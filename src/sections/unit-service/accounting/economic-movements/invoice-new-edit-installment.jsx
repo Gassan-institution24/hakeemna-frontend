@@ -42,7 +42,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   });
 
   const totalInstallments =
-    values.payment_details.reduce((acc, one) => acc + one.amount, 0) + values.patient_paid;
+    (values.patient_paid ? values.patient_paid : 0) + values.payment_details.reduce((acc, one) => acc + one.amount, 0);
 
   useEffect(() => {
     setValue('totalInstallments', totalInstallments);
@@ -250,7 +250,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
 
       <DialogActions>
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          {t('cancel')}
         </Button>
 
         <Button
@@ -261,7 +261,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
             onClose();
           }}
         >
-          Apply
+          {t('submit')}
         </Button>
       </DialogActions>
     </Dialog>

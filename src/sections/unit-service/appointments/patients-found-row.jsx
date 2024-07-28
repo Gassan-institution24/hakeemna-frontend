@@ -8,7 +8,7 @@ import { Card, TextField, IconButton, Typography } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fDateTime } from 'src/utils/format-time';
+import { fDate, fDateTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -63,7 +63,7 @@ export default function PatientFoundRow({
       <TableCell align="center">
         {curLangAr ? nationality?.name_arabic : nationality?.name_english}
       </TableCell>
-      <TableCell align="center">{birth_date}</TableCell>
+      <TableCell align="center">{fDate(birth_date)}</TableCell>
 
       <TableCell align="center" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={confirm.onToggle}>

@@ -247,13 +247,13 @@ export default function UnitServicesInsuranceView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          heading={t('insurance')} /// edit
+          heading={t('Insurance')} /// edit
           links={[
             {
               name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: t('insurance') }, /// edit
+            { name: t('Insurance') }, /// edit
           ]}
           action={
             checkAcl({
@@ -345,12 +345,12 @@ export default function UnitServicesInsuranceView() {
                   rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered?.map((row, idx)  => row._id)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered?.map((row, idx)  => row._id)
+                //   )
+                // }
                 />
 
                 <TableBody>

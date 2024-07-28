@@ -48,7 +48,7 @@ export function useNavData() {
         icon: <Iconify icon="fluent-mdl2:time-entry" />,
       },
       {
-        title: t('insurance'),
+        title: t('Insurance'),
         path: paths.superadmin.unitservices.insurance(id),
         icon: <Iconify icon="eos-icons:activate-subscriptions" />,
       },
