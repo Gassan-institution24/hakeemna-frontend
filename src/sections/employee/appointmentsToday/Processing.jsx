@@ -14,6 +14,7 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -31,7 +32,7 @@ export default function Processing() {
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-
+  const { t } = -useTranslate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
