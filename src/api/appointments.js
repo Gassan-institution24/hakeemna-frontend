@@ -176,15 +176,8 @@ export function useGetUsAppointmentsComingpatients(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
-  const URL = endpoints.appointments.unit_service.one({
-    id,
-    page,
-    sortBy,
-    rowsPerPage,
-    order,
-    filters,
-  });
+export function useGetUSAppointments(id, params) {
+  const URL = [endpoints.appointments.unit_service.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

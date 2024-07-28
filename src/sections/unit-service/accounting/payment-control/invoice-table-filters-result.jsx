@@ -7,9 +7,11 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
+import { fDate } from 'src/utils/format-time';
+
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
-import { fDate } from 'src/utils/format-time';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +24,7 @@ export default function InvoiceTableFiltersResult({
   results,
   ...other
 }) {
+  const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveKeyword = useCallback(() => {
@@ -51,7 +54,7 @@ export default function InvoiceTableFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('results found')}
         </Box>
       </Box>
 
@@ -70,23 +73,23 @@ export default function InvoiceTableFiltersResult({
         )} */}
 
         {filters.status !== 'all' && (
-          <Block label="Status:">
+          <Block label={t("status:")}>
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
         {filters.startDate && filters.endDate && (
-          <Block label="Date:">
+          <Block label={t("date:")}>
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
         )}
         {filters.startDate && !filters.endDate && (
-          <Block label="Date:">
+          <Block label={t("date:")}>
             <Chip size="small" label={fDate(filters.startDate)} onDelete={handleRemoveDate} />
           </Block>
         )}
         {!filters.startDate && filters.endDate && (
-          <Block label="Date:">
+          <Block label={t("date:")}>
             <Chip size="small" label={fDate(filters.endDate)} onDelete={handleRemoveDate} />
           </Block>
         )}
@@ -102,7 +105,7 @@ export default function InvoiceTableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('clear')}
         </Button>
       </Stack>
     </Stack>

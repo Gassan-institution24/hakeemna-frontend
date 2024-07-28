@@ -1,31 +1,21 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
-import TableHead from '@mui/material/TableHead';
-import TableCell from '@mui/material/TableCell';
-import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+import { NumberToText } from 'src/utils/number-to-words';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
-
-import { NumberToText } from 'src/utils/number-to-words';
-import Label from 'src/components/label';
-import Scrollbar from 'src/components/scrollbar';
-import { useGetIncomePaymentControl } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetIncomePaymentControl } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import InvoiceToolbar from './invoice-toolbar';
 
@@ -81,10 +71,10 @@ export default function InvoiceDetails({ invoice, refetch }) {
   );
 
   const renderList = (
-    <Stack gap={3} my={3}>
-      <Typography variant='h5'>{t('details')}:</Typography>
+    <Stack gap={3} my={5}>
+      {/* <Typography variant='h5'>{t('details')}:</Typography> */}
       <Stack direction='row' gap={2}>
-        <Typography variant='body1'>{t('we have recieved from mr / madam')}:</Typography>
+        <Typography variant='body1'>{t('we have recieved from mr./m/s')}:</Typography>
         <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Typography>
       </Stack>
       <Stack direction='row' gap={2}>
@@ -124,6 +114,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
       />
 
       <Card sx={{ pt: 5, px: 5 }}>
+        <Typography textAlign='center' variant="h3">{t('receipt voucher')}</Typography>
         <Box
           rowGap={5}
           display="grid"
@@ -205,12 +196,12 @@ export default function InvoiceDetails({ invoice, refetch }) {
             </Stack>
           )}
         </Box>
-        <Divider />
+        {/* <Divider /> */}
         {renderList}
-        <Divider sx={{ mt: 5, borderStyle: 'dashed' }} />
+        {/* <Divider sx={{ mt: 5, borderStyle: 'dashed' }} />
         <Stack alignItems='flex-end' p={2}>
           <Typography variant='caption'>{t('printed by')}:{user.email}</Typography>
-        </Stack>
+        </Stack> */}
       </Card>
     </>
   );

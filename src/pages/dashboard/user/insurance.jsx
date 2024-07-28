@@ -12,7 +12,7 @@ export default function Insuranceinfo() {
   return (
     <>
       <Helmet>
-        <title> {t('insurance')} </title>
+        <title> {t('Insurance')} </title>
         <meta name="description" content="meta" />
       </Helmet>
 

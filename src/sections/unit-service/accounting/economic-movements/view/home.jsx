@@ -6,17 +6,15 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+// import { useBoolean } from 'src/hooks/use-boolean';
 
 import { isAfter } from 'src/utils/format-time';
 
@@ -25,7 +23,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetEconomicMovements } from 'src/api';
 
 import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -35,7 +32,6 @@ import {
   TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 
@@ -72,8 +68,8 @@ export default function InvoiceListView() {
   const theme = useTheme();
   const settings = useSettingsContext();
   const router = useRouter();
-  const table = useTable({ defaultOrderBy: 'createDate' });
-  const confirm = useBoolean();
+  const table = useTable({ defaultOrderBy: 'created_at' });
+  // const confirm = useBoolean();
   const { user } = useAuthContext();
 
   const { t } = useTranslate();

@@ -13,10 +13,10 @@ import {
   InputAdornment,
 } from '@mui/material';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { RHFTextField, RHFRadioGroup, RHFAutocomplete } from 'src/components/hook-form';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -68,10 +68,10 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
               name="payment_method"
               label={t('payment method')}
               options={[
-                { label: 'cash', value: 'cash' },
-                { label: 'credit card', value: 'credit_card' },
-                { label: 'bank transfer', value: 'bank_transfer' },
-                { label: 'instant bank transfer', value: 'instant_transfere' },
+                { label: t('cash'), value: 'cash' },
+                { label: t('credit card'), value: 'credit_card' },
+                { label: t('bank transfer'), value: 'bank_transfer' },
+                { label: t('instant bank transfer'), value: 'instant_transfere' },
               ]}
             />
           )}
@@ -144,7 +144,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
 
       <DialogActions>
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+          {t("cancel")}
         </Button>
 
         <Button
@@ -154,7 +154,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
             onClose();
           }}
         >
-          Apply
+          {t('submit')}
         </Button>
       </DialogActions>
     </Dialog>

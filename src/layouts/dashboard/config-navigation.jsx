@@ -346,6 +346,11 @@ export function useNavData() {
         children: [
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('invoicing'),
+            path: paths.unitservice.accounting.invoicing,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('economic movements'),
             path: paths.unitservice.accounting.economicmovements.root,
           },
@@ -469,7 +474,7 @@ export function useNavData() {
               subcategory: 'unit_service_info',
               acl: 'read',
             }),
-            title: t('insurance'),
+            title: t('Insurance'),
             path: paths.unitservice.insurance.root,
             // icon: <Iconify icon="ic:baseline-security" />,
             navItemId: 'USInsuranceNav',
