@@ -26,10 +26,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import {
-  useGetUSRooms,
-  useGetEntranceManagementByActivity,
-} from 'src/api';
+import { useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -173,10 +170,10 @@ export default function WaitingRoom() {
                 <Table sx={{ minWidth: 400 }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Last activity</TableCell>
-                      <TableCell>Patient</TableCell>
-                      <TableCell>Doctor Note</TableCell>
-                      <TableCell>Options</TableCell>
+                      <TableCell>{t('Last activity')}</TableCell>
+                      <TableCell>{t('Patient')}</TableCell>
+                      <TableCell>{t('Doctor Note')}</TableCell>
+                      <TableCell>{t('Options')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -192,7 +189,7 @@ export default function WaitingRoom() {
                             sx={{ bgcolor: 'success.main', color: 'white' }}
                             onClick={() => goToProcessingPage(entranceData)}
                           >
-                            Next
+                            {t("Next")}
                           </Button>
                           {/* <Button
                             onClick={() => handleEndAppointment(entranceData)}

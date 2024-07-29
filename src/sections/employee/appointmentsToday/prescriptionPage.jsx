@@ -214,15 +214,10 @@ export default function PrescriptionPage() {
 
       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            {t('IMPORTANT')}
+          <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
+            {curLangAr ? 'تعديل الوصفة الطبية' : 'update prescription'}
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              {curLangAr
-                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
-                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
-            </Typography>
             <RHFSelect
               label={t('medicine*')}
               fullWidth

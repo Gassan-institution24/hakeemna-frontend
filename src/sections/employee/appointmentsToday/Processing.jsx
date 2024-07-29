@@ -14,7 +14,7 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -32,7 +32,9 @@ export default function Processing() {
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
-  const { t } = -useTranslate();
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -56,7 +58,7 @@ export default function Processing() {
                 borderRadius: 10,
               }}
             >
-              Visits history {firstSequenceNumber}
+              {t('Visits history')} {firstSequenceNumber}
             </span>
           )}
 
@@ -65,7 +67,7 @@ export default function Processing() {
               {medRecord && (
                 <Box>
                   <Button onClick={() => handleBackClick(id)} sx={{ width: '100%', m: 1 }}>
-                    View all {Entrance?.patient?.name_english} visits history
+                    {curLangAr ? `عرض السجل المرضي ل ${Entrance?.patient?.name_arabic}` : ` View all ${Entrance?.patient?.name_english} Visits history`}
                   </Button>
                   <Divider />
                 </Box>
@@ -92,7 +94,7 @@ export default function Processing() {
           <span
             style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
           >
-            Choose a Check List
+            {t("Choose a Check List")}
           </span>
           <CheckList />
         </>
@@ -104,7 +106,7 @@ export default function Processing() {
       key: 7,
       title: (
         <>
-          Upload files
+          {t("Upload files")}
           <br />
           <TabsView patient={data} service_unit={Entrance?.service_unit?._id} />
         </>
@@ -117,7 +119,7 @@ export default function Processing() {
       key: 5,
       title: (
         <>
-          Adjustable document (optional) <br />
+         {t("Adjustable document")} ({t("optional")}) <br />
           <Adjustabledocument patient={data} />
         </>
       ),
@@ -128,7 +130,7 @@ export default function Processing() {
       key: 6,
       title: (
         <>
-          Services provided
+          {t("Services provided")} 
           <br />
           <ServicesProvided patient={data} />
         </>
