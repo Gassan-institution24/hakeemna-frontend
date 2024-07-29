@@ -50,7 +50,7 @@ export default function ExistPatientRow({ row, selected }) {
       sender: user?.patient?._id,
       patient: row?._id,
       title: `${user?.patient?.name_english} want to add you as a family member`,
-      title_arabic: `${user?.patient?.name_arabic} يريد اظافتك كفرد عائلة`,
+      title_arabic: `${user?.patient?.name_arabic} يريد اضافتك كفرد عائلة`,
       photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
       category: 'invite',
       type: 'invite',

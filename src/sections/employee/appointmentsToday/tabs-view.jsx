@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 
 import { Tab, Box, Tabs, Card, Stack, Container } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
 import { useGetOneEntranceManagement } from 'src/api';
 
 import SickLeave from './sickLeave';
@@ -17,6 +18,8 @@ export default function TabsView({ patient, service_unit }) {
   const [currentTab, setCurrentTab] = useState('one');
   const params = useParams();
   const { id } = params;
+  const { t } = useTranslate();
+
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const TABS = [
     {
@@ -26,7 +29,7 @@ export default function TabsView({ patient, service_unit }) {
     },
     {
       value: 'two',
-      title: 'Prescription',
+      title: 'prescription',
       label: <Prescription Entrance={Entrance} />,
     },
     {
@@ -51,7 +54,7 @@ export default function TabsView({ patient, service_unit }) {
         <Stack spacing={2} sx={{ width: '100%' }}>
           <Tabs value={currentTab} onChange={handleChangeTab}>
             {TABS.map((tab) => (
-              <Tab key={tab.value} value={tab.value} label={tab.title} />
+              <Tab key={tab.value} value={tab.value} label={t(tab.title)} />
             ))}
           </Tabs>
 

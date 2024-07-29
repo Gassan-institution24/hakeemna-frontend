@@ -124,7 +124,7 @@ export default function Rooms() {
   return (
     <Card sx={{ display: 'flex', gap: 15 }}>
       <Box sx={{ m: 2 }}>
-        <Typography variant="h6">{t("Last Activity")}</Typography>
+        <Typography variant="h6">{t("Last activity")}</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
         <Typography variant="h6" sx={{ mt: 2 }}>
           {t("Doctor Message")}
@@ -140,7 +140,7 @@ export default function Rooms() {
           <Box>
             <TextField
               onChange={(e) => setNoteContent(e.target.value)}
-              placeholder="Add comment"
+              placeholder={t("Add Message")}
               fullWidth
               multiline
               rows={2}
