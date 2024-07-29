@@ -81,6 +81,7 @@ const PrescriotionPage = lazy(() =>
 );
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 const SickleavePage = lazy(() => import('src/pages/employee/appointmentsToday/sickleavePage'));
+const DoctorReportPage = lazy(() => import('src/pages/employee/appointmentsToday/docreport'));
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
@@ -235,6 +236,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'sickleave/:id',
         element: <SickleavePage />,
+      },
+      {
+        path: 'docreport/:id',
+        element: <DoctorReportPage />,
       },
     ],
   },

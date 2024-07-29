@@ -23,8 +23,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance from 'src/utils/axios';
 import { fDateTime } from 'src/utils/format-time';
 
-import { useGetOnemedicalreports } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetOnedoctorreports } from 'src/api/doctor_report';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify/iconify';
@@ -35,11 +35,12 @@ export default function MdicalreportPage() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
-  const { medicalreports, refetch } = useGetOnemedicalreports(id);
+  const { doctorreports, refetch } = useGetOnedoctorreports(id);
+  console.log(doctorreports);
   const [ImgFiles, setImgFiles] = useState([]);
   const medicalReportDialog = useBoolean();
   const navigate = useNavigate();
-  const medicalReportSchema = Yup.object().shape({
+  const doctorreportschema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
     file: Yup.array(),
@@ -55,7 +56,7 @@ export default function MdicalreportPage() {
 
   const methods = useForm({
     mode: 'onTouched',
-    resolver: yupResolver(medicalReportSchema),
+    resolver: yupResolver(doctorreportschema),
     defaultValues,
   });
 
@@ -68,13 +69,13 @@ export default function MdicalreportPage() {
   } = methods;
   const values = watch();
   useEffect(() => {
-    if (medicalreports) {
+    if (doctorreports) {
       reset({
-        file: medicalreports.file || [],
-        description: medicalreports.description || '',
+        file: doctorreports.file || [],
+        description: doctorreports.description || '',
       });
     }
-  }, [medicalreports, reset]);
+  }, [doctorreports, reset]);
 
   const onSubmit = async (submitdata) => {
     try {
@@ -94,7 +95,7 @@ export default function MdicalreportPage() {
         formData.append(`file[${index}]`, file);
       });
 
-      await axiosInstance.patch(`/api/examination/${id}`, submitdata);
+      await axiosInstance.patch(`/api/doctorreport/${id}`, submitdata);
 
       enqueueSnackbar('Prescription updated successfully', { variant: 'success' });
       navigate(-1);
@@ -172,24 +173,24 @@ export default function MdicalreportPage() {
           }}
         >
           <Box>
-            <Typography variant="h3">{medicalreports?.patient?.name_english}</Typography>
+            <Typography variant="h3">{doctorreports?.patient?.name_english}</Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('Date')}:&nbsp; &nbsp;
               <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(medicalreports?.created_at)}
+                {fDateTime(doctorreports?.created_at)}
               </span>
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('Dr.')}&nbsp;
               <span style={{ color: 'gray', fontWeight: 400 }}>
-                {medicalreports?.employee?.name_english}
+                {doctorreports?.employee?.name_english}
               </span>{' '}
               &nbsp; added medical report
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('description')}:&nbsp;&nbsp;
               <span style={{ color: 'gray', fontWeight: 400 }}>
-                {medicalreports?.description}
+                {doctorreports?.description}
               </span>{' '}
             </Typography>
             <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
@@ -199,7 +200,7 @@ export default function MdicalreportPage() {
           </Box>
           <Box>
             <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-              {medicalreports?.file?.map((file, i) => (
+              {doctorreports?.file?.map((file, i) => (
                 <Image key={i} src={file} sx={{ m: 1 }} />
               ))}
             </Box>
@@ -222,7 +223,7 @@ export default function MdicalreportPage() {
               multiline
               name="description"
               label={t('description')}
-              sx={{ mb: 2,mt:2 }}
+              sx={{ mb: 2, mt: 2 }}
             />
             <RHFUpload
               multiple

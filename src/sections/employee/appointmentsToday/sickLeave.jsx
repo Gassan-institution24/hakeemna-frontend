@@ -110,7 +110,7 @@ export default function SickLeave({ patient, service_unit }) {
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ mt: 1 }}>
-        Add sick leave
+        {t('Add sick leave')}
         <Iconify icon="mingcute:add-line" />
       </Button>
       {data?.map((info, i) => (
@@ -126,10 +126,13 @@ export default function SickLeave({ patient, service_unit }) {
             p: 2,
           }}
         >
-          {`${info?.employee?.name_english} has add ${info?.description} medical report`}
+          {curLangAr
+            ? `قام ${info?.employee?.name_arabic} باضافة اجازة مرضية`
+            : `${info?.employee?.name_english} has add ${info?.description} medical report`}
+
           <br />
           <Button onClick={() => removemedicalrepoort(info?._id)}>
-            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
           </Button>
           <Button
             onMouseOver={() => handleHover(info?._id)}
@@ -137,22 +140,17 @@ export default function SickLeave({ patient, service_unit }) {
             onClick={() => handleViewClick(info?._id)}
             sx={{ m: 1 }}
           >
-            View &nbsp;{' '}
+            {t('View')} &nbsp;{' '}
             <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
           </Button>
         </Typography>
       ))}
       <Dialog open={dialog.value} onClose={dialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            {t('IMPORTANT')}
+          <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
+            {curLangAr ? 'اضافة اجازة مرضية' : 'add sick leave'}
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              {curLangAr
-                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
-                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
-            </Typography>
             <Controller
               name="Medical_sick_leave_start"
               control={control}
