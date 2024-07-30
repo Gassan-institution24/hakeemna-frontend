@@ -43,7 +43,7 @@ export default function ServicesProvided() {
   return (
     <Card sx={{ mt: 2 }}>
       <Box>
-        <Typography sx={{ m: 2 }}>Select the services you provided to the patient</Typography>
+        <Typography sx={{ m: 2 }}>{t("Select the services you provided to the patient")}</Typography>
         {serviceTypesData?.map((serviceType) => (
           <Box key={serviceType._id} sx={{ m: 2 }}>
             {serviceType?.name_english}

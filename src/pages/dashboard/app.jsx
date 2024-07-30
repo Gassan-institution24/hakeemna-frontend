@@ -10,7 +10,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import OverviewAppView from 'src/sections/user/homePage/view/home';
+import OverviewAppView from 'src/sections/user/profile-home';
 
 // ----------------------------------------------------------------------
 

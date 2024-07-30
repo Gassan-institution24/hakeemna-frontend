@@ -44,7 +44,7 @@ export default function History() {
   const Title = ['appointment', 'medical report', 'prescription'];
   const [switchh, setSwitch] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(2);
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedTitle, setSelectedTitle] = useState("");
 
   const dataFiltered = applyFilter({
     inputData: switchh === true ? historyDataForPatient : historyData,
@@ -53,7 +53,11 @@ export default function History() {
 
   return (
     <>
-      <div style={{ marginBottom: 10 }}>{`${Entrance?.patient?.name_english} medical history`}</div>
+      <div style={{ marginBottom: 10 }}>
+        {curLangAr
+          ? `التاريخ الطبي ل ${Entrance?.patient?.name_arabic}`
+          : `${Entrance?.patient?.name_english} medical history`}
+      </div>
 
       <Card>
         <Box sx={{ m: 2 }}>
@@ -71,7 +75,7 @@ export default function History() {
             <MenuItem value="">{t('All')}</MenuItem>
             {Title.map((type, index) => (
               <MenuItem key={index} value={type}>
-                {type}
+                {t(type)}
               </MenuItem>
             ))}
           </Select>
@@ -86,9 +90,9 @@ export default function History() {
                 <TableCell>{t('Subject')}</TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span>Private</span>{' '}
+                    <span>{t('Private')}</span>{' '}
                     <Switch value={switchh} onChange={() => setSwitch(!switchh)} />{' '}
-                    <span>Public</span>
+                    <span>{t('Public')}</span>
                   </Box>
                 </TableCell>
               </TableRow>
@@ -99,10 +103,7 @@ export default function History() {
                   historydata?.status === 'active' && (
                     <TableRow key={i}>
                       <TableCell>{fDateTime(historydata?.actual_date)}</TableCell>
-                      <TableCell>
-                        {/* {curLangAr ? historydata?.name_arabic : historydata?.name_english} */}
-                        {historydata?.title}
-                      </TableCell>
+                      <TableCell>{historydata?.title}</TableCell>
                       <TableCell>
                         {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
                       </TableCell>

@@ -249,26 +249,21 @@ export default function Prescription({ Entrance }) {
             onClick={() => handleViewClick(info?._id)}
             sx={{ m: 1 }}
           >
-            View &nbsp;{' '}
+            {t('View')} &nbsp;{' '}
             <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
           </Button>
 
           <Button onClick={() => removePrescription(info?._id)}>
-            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
           </Button>
         </Typography>
       ))}
       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            {t('IMPORTANT')}
+          <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
+            {curLangAr ? 'اضافة وصفة طبية' : 'add prescription'}
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              {curLangAr
-                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
-                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
-            </Typography>
             {prescriptions.map((prescription, index) => (
               <div key={prescription.id}>
                 <RHFSelect
@@ -276,7 +271,7 @@ export default function Prescription({ Entrance }) {
                   fullWidth
                   name={`prescriptions[${index}].medicines`}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 2,mt:2 }}
                 >
                   {medicinesData?.map((test, idx) => (
                     <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
