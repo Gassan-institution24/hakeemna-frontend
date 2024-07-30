@@ -2,10 +2,25 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { Box, Card, Button, Select, MenuItem, TextField, Typography } from '@mui/material';
+import { alpha } from '@mui/material/styles';
+import {
+  Box,
+  Card,
+  Button,
+  Select,
+  Dialog,
+  MenuItem,
+  TextField,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance from 'src/utils/axios';
 
@@ -19,6 +34,8 @@ import {
   useGetEntranceExaminationReports,
 } from 'src/api';
 
+import Image from 'src/components/image';
+
 const formatTextWithLineBreaks = (text) => {
   if (!text) return '';
   const words = text.split(' ');
@@ -31,6 +48,10 @@ const formatTextWithLineBreaks = (text) => {
 
 export default function Rooms() {
   const [noteContent, setNoteContent] = useState('');
+  const [Confirmdroomsdata, setConfirmRoomsdata] = useState('');
+  const { fullWidth } = useState(false);
+  const { maxWidth } = useState('xs');
+  const dialog = useBoolean(false);
   const [selectedValue] = useState('');
   const { t } = useTranslate();
   const { id } = useParams();
@@ -123,56 +144,114 @@ export default function Rooms() {
   };
 
   return (
-    <Card sx={{ display: 'flex', gap: 15 }}>
-      <Box sx={{ m: 2 }}>
-        <Typography variant="h6">{t('Last Activity')}</Typography>
-        <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          {t('Doctor Message')}
-        </Typography>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
-        />
-      </Box>
+    <>
+      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            margin: '20px',
+            gap: '10px',
+          }}
+        >
+          <DialogTitle>{t('Are you sure')}</DialogTitle>
+          <Image
+            src="https://cdn-icons-png.flaticon.com/512/1669/1669503.png"
+            alt="Processing"
+            style={{
+              width: '70px',
+              height: '70px',
+            }}
+          />
+        </div>
+        <DialogContent>
+          <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+            {t('please confirm moving the patient to another room')}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="inherit"
+            size="small"
+            variant="outlined"
+            sx={{
+              mr: 1,
+              border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
+            }}
+            onClick={() => dialog.onFalse()}
+          >
+            {t('Cancel')}
+          </Button>
+          <Button
+            size="small"
+            color="info"
+            variant="contained"
+            sx={{
+              bgcolor: 'info.dark',
+            }}
+            onClick={() => {
+              dialog.onFalse();
+              processingPage(Confirmdroomsdata);
+            }}
+          >
+            {t('Confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-      <Box sx={{ m: 2 }}>
-        <Typography variant="h6">{t('Next Activity')}</Typography>
-        <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
-          <Box>
-            <TextField
-              onChange={(e) => setNoteContent(e.target.value)}
-              placeholder="Add comment"
-              fullWidth
-              multiline
-              rows={2}
-              sx={{ mb: 2 }}
-            />
-            <Select
-              sx={{
-                width: 150,
-                height: 35,
-              }}
-              value={selectedValue}
-              displayEmpty
-            >
-              <MenuItem value="" disabled sx={{ display: 'none' }}>
-                {t('Choose')}
-              </MenuItem>
-              {roomsData?.map((rooms, index) => (
-                <MenuItem key={index}>
-                  <Button
+      <Card sx={{ display: 'flex', gap: 15 }}>
+        <Box sx={{ m: 2 }}>
+          <Typography variant="h6">{t('Last activity')}</Typography>
+          <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            {t('Doctor Message')}
+          </Typography>
+          <Typography
+            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
+          />
+        </Box>
+
+        <Box sx={{ m: 2 }}>
+          <Typography variant="h6">{t('Next Activity')}</Typography>
+          <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
+            <Box>
+              <TextField
+                onChange={(e) => setNoteContent(e.target.value)}
+                placeholder={t('Add Message')}
+                fullWidth
+                multiline
+                rows={2}
+                sx={{ mb: 2 }}
+              />
+              <Select
+                sx={{
+                  width: 150,
+                  height: 35,
+                }}
+                value={selectedValue}
+                displayEmpty
+              >
+                <MenuItem value="" disabled sx={{ display: 'none' }}>
+                  {t('Choose')}
+                </MenuItem>
+                {roomsData?.map((rooms, index) => (
+                  <MenuItem
+                    key={index}
                     onClick={() => {
                       if (
                         Entrance?.Current_activity?.name_english !== rooms?.activities?.name_english
                       ) {
-                        processingPage(rooms);
+                        setConfirmRoomsdata(rooms);
+                        dialog.onTrue();
                       }
                     }}
                     variant="contained"
                     sx={{
                       bgcolor:
                         Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                          ? 'green'
+                          ? ''
                           : 'success.main',
                       m: 2,
                     }}
@@ -183,20 +262,20 @@ export default function Rooms() {
                     {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
                       ? `${rooms?.name_english} (Current)`
                       : `Go to ${rooms?.name_english} Room`}
-                  </Button>
-                </MenuItem>
-              ))}
-            </Select>
-            <Button
-              onClick={() => handleEndAppointment()}
-              variant="contained"
-              sx={{ bgcolor: 'error.main', ml: 2 }}
-            >
-              {t('end appointment')}
-            </Button>
+                  </MenuItem>
+                ))}
+              </Select>
+              <Button
+                onClick={() => handleEndAppointment()}
+                variant="contained"
+                sx={{ bgcolor: 'error.main', ml: 2 }}
+              >
+                {t('end appointment')}
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Card>
+      </Card>
+    </>
   );
 }

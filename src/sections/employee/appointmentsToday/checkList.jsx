@@ -20,6 +20,7 @@ import {
 
 import axiosInstance from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetCheckList,
@@ -34,6 +35,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function CheckList() {
   const params = useParams();
   const { id } = params;
+  const {t} = useTranslate()
   const [thId, setTheId] = useState(null);
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
@@ -186,16 +188,14 @@ export default function CheckList() {
 
               {data && (
                 <Button type="submit" disabled={isSubmitting} variant="contained" sx={{ m: 3 }}>
-                  Save
+                  {t("save")}
                 </Button>
               )}
             </FormProvider>
           </Box>
         </Box>
         <Box sx={{ width: '30%', p: 2, borderLeft: 1, borderColor: 'divider' }}>
-          <Typography sx={{ textAlign: 'center', mb: 2 }} variant="h4">
-            Answers
-          </Typography>
+        <Typography sx={{textAlign:'center',mb:2}} variant="h4">{t("Answers")}</Typography>
 
           {answer?.map((answersAndQ, index) => (
             <Typography key={index}>

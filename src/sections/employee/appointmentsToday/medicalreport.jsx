@@ -219,10 +219,12 @@ export default function Medicalreport() {
             p: 2,
           }}
         >
-          {`${info?.employee?.name_english} has add ${info?.description} medical report`}
+          {curLangAr
+            ? `قام ${info?.employee?.name_arabic} باضافة تقرير طبي جديد`
+            : `${info?.employee?.name_english} has add ${info?.description} medical report`}
           <br />
           <Button onClick={() => removemedicalrepoort(info?._id)}>
-            Remove &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
           </Button>
           <Button
             onMouseOver={() => handleHover(info?._id)}
@@ -230,28 +232,23 @@ export default function Medicalreport() {
             onClick={() => handleViewClick(info?._id)}
             sx={{ m: 1 }}
           >
-            View &nbsp;{' '}
+            {t('View')} &nbsp;{' '}
             <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
           </Button>
         </Typography>
       ))}
       <Dialog open={medicalReportDialog.value} onClose={medicalReportDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            {t('IMPORTANT')}
+          <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
+            {curLangAr ? 'اضافة تقرير طبي  ' : 'add medical report'}
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ mb: 5, fontSize: 14 }}>
-              {curLangAr
-                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
-                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
-            </Typography>
             <RHFTextField
               lang="en"
               multiline
               name="description"
               label={t('description')}
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, mt: 2 }}
             />
             <RHFUpload
               multiple

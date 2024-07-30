@@ -49,6 +49,8 @@ export default function AppointmentsToday() {
   const theme = useTheme();
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
+  
+  const [arrivalTimes, setArrivalTimes] = useState({});
 
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -94,6 +96,15 @@ export default function AppointmentsToday() {
     try {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
+
+    
+      if (type === 'arrived' && status) {
+        setArrivalTimes((prev) => ({
+          ...prev,
+          [id]: new Date().toISOString()
+        }));
+      }
+
       refetch();
 
       enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
@@ -117,6 +128,7 @@ export default function AppointmentsToday() {
         work_group: data?.work_group?._id,
         Last_activity_atended: data?.Last_activity_atended,
         Next_activity: activityId,
+        Arrival_time: arrivalTimes[data?._id] || "", 
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
@@ -159,29 +171,17 @@ export default function AppointmentsToday() {
   const renderOptions = (info) => {
     if (currentTab === 'three') {
       return (
-        <>
-          <IconButton
-            sx={{ p: 2 }}
-            onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
-          >
-            <Iconify
-              width={20}
-              sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
-              icon="carbon:view"
-            />
-            <span style={{ fontSize: 16 }}>{t('View')}</span>
-          </IconButton>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              router.push(
-                `${paths.unitservice.accounting.economicmovements.add}?appointment=${info?.appointmentId}&&entrance=${info?._id}`
-              )
-            }
-          >
-            {t('make an invoice')}
-          </Button>
-        </>
+        <IconButton
+          sx={{ p: 2 }}
+          onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
+        >
+          <Iconify
+            width={20}
+            sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
+            icon="carbon:view"
+          />
+          <span style={{ fontSize: 16 }}>{t('View')}</span>
+        </IconButton>
       );
     }
 

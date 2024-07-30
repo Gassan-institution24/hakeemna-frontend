@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { alpha } from '@mui/material/styles';
 import {
   Box,
   Card,
-  Grow,
-  Alert,
   Table,
   Button,
   Select,
@@ -23,6 +20,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance from 'src/utils/axios';
+import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -35,7 +33,6 @@ import Scrollbar from 'src/components/scrollbar';
 export default function WaitingRoom() {
   const { t } = useTranslate();
   const router = useRouter();
-  const [showAlert, setShowAlert] = useState(false);
 
   const { user } = useAuthContext();
   const { roomsData } = useGetUSRooms(
@@ -52,6 +49,7 @@ export default function WaitingRoom() {
     selectedTitle,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log(EntranceByActivity,"EntranceByActivity");
 
   const goToProcessingPage = async (entrance) => {
     try {
@@ -68,82 +66,8 @@ export default function WaitingRoom() {
       entranceMangament: entrance?._id,
     });
   };
-  // const handleEndAppointment = async (entrance) => {
-  //   try {
-  //     await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
-  //       Patient_attended: true,
-  //     });
-  //     await axiosInstance.patch(`/api/appointments/${entrance?.appointmentId}`, {
-  //       finished_or_not: true,
-  //     });
-  //     await axiosInstance.post('/api/feedback', {
-  //       unit_service: entrance?.service_unit?._id,
-  //       appointment: entrance?.appointmentId,
-  //       employee: user?.employee?._id,
-  //       patient: entrance?.patient?._id,
-  //     });
-  //     await axiosInstance.post(`/api/medrecord/`, {
-  //       appointmentId: entrance?.appointmentId,
-  //       Appointment_date: entrance?.Appointment_date,
-  //       service_unit: entrance?.service_unit,
-  //       patient: entrance?.patient?._id,
-  //     });
-  //     await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
-  //       patient: null,
-  //       entranceMangament: null,
-  //     });
-  //     enqueueSnackbar('appointment finished', { variant: 'success' });
-  //     refetch();
-  //   } catch (error) {
-  //     console.error(error.message);
-  //     enqueueSnackbar('something went wrong', { variant: 'error' });
-  //   }
-  // };
-
   return (
-    <>
-      {showAlert && (
-        <Grow in={showAlert} timeout={600}>
-          <Alert
-            severity="info"
-            variant="filled"
-            sx={{ width: '70%', mb: 3, mt: 3 }}
-            action={
-              <>
-                <Button
-                  color="inherit"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    mr: 1,
-                    border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-                  }}
-                  onClick={() => setShowAlert(false)}
-                >
-                  {t('Cancel')}
-                </Button>
-
-                <Button
-                  size="small"
-                  color="info"
-                  variant="contained"
-                  sx={{
-                    bgcolor: 'info.dark',
-                  }}
-                  onClick={() => {
-                    setShowAlert(false);
-                    // handleEndAppointment();
-                  }}
-                >
-                  {t('Confirm')}
-                </Button>
-              </>
-            }
-          >
-            {t('By accepting you will end this appointment')}
-          </Alert>
-        </Grow>
-      )}
+  
 
       <Card sx={{ mt: 3 }}>
         <Box sx={{ m: 2 }}>
@@ -170,10 +94,11 @@ export default function WaitingRoom() {
                 <Table sx={{ minWidth: 400 }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Last activity</TableCell>
-                      <TableCell>Patient</TableCell>
-                      <TableCell>Doctor Note</TableCell>
-                      <TableCell>Options</TableCell>
+                      <TableCell>{t('Last activity')}</TableCell>
+                      <TableCell>{t('Patient')}</TableCell>
+                      <TableCell>{t('Arrival Time')}</TableCell>
+                      <TableCell>{t('Doctor Note')}</TableCell>
+                      <TableCell>{t('Options')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -182,6 +107,7 @@ export default function WaitingRoom() {
                         <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
 
                         <TableCell>{entranceData?.patient?.name_english}</TableCell>
+                        <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
                         <TableCell>{entranceData?.note}</TableCell>
                         <TableCell>
                           <Button
@@ -189,15 +115,8 @@ export default function WaitingRoom() {
                             sx={{ bgcolor: 'success.main', color: 'white' }}
                             onClick={() => goToProcessingPage(entranceData)}
                           >
-                            Next
+                            {t("Proceed")}
                           </Button>
-                          {/* <Button
-                            onClick={() => handleEndAppointment(entranceData)}
-                            variant="contained"
-                            sx={{ bgcolor: 'error.main', ml: 2 }}
-                          >
-                            end appointment
-                          </Button> */}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -208,6 +127,6 @@ export default function WaitingRoom() {
           </Box>
         </Box>
       </Card>
-    </>
+  
   );
 }
