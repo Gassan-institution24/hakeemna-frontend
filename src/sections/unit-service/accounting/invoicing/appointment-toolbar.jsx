@@ -5,10 +5,8 @@ import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -56,20 +54,6 @@ export default function AppointmentToolbar({
   const handleFilterWorkGroup = useCallback(
     (event) => {
       onFilters('group', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterStartDate = useCallback(
-    (newValue) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterEndDate = useCallback(
-    (newValue) => {
-      onFilters('endDate', newValue);
     },
     [onFilters]
   );

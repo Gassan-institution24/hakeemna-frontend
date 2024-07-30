@@ -29,7 +29,12 @@ import { useGetSymptoms, useGetCategories } from 'src/api';
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
-import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
+import {
+  useTable,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -115,16 +120,40 @@ export default function NewEditManyForm() {
   }, []);
 
   const handleCreate = async () => {
-    const isFormValid = data.every(
-      (one) => one.name_english && one.name_arabic && one.category && one.symptoms.length
-    );
+    // const isFormValid = data.every(
+    //   (one) => one.name_english && one.name_arabic && one.category && one.symptoms.length
+    // );
 
-    if (!isFormValid) {
-      alert('Please fill in all required fields.');
-      return;
-    }
+    // if (!isFormValid) {
+    //   alert('Please fill in all required fields.');
+    //   return;
+    // }
     try {
-      await axiosInstance.post(endpoints.diseases.many, data);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'diseases',
+        mustUpload: data.length,
+      });
+      const chunkSize = 100;
+      const totalChunks = Math.ceil(data.length / chunkSize);
+
+      const promises = Array.from({ length: totalChunks }, (_, index) => {
+        const startIndex = index * chunkSize;
+        const endIndex = Math.min(startIndex + chunkSize, data.length);
+        const chunkData = data.slice(startIndex, endIndex);
+
+        const insertedDataPromise = axiosInstance.post(
+          endpoints.diseases.many,
+          chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+        );
+        return insertedDataPromise.then((insertedData) =>
+          axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+            uploaded: insertedData.data,
+          })
+        );
+      });
+
+      await Promise.all(promises);
+
       router.push(paths.superadmin.tables.diseases.root); /// edit
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });
@@ -210,109 +239,124 @@ export default function NewEditManyForm() {
               />
 
               <TableBody>
-                {data.map((one, index) => (
-                  <TableRow key={index} hover selected={table.selected.includes(index)}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={table.selected.includes(index)}
-                        onClick={() => table.onSelectRow(index)}
-                      />
-                    </TableCell>
+                {data
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((one, index) => (
+                    <TableRow key={index} hover selected={table.selected.includes(index)}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={table.selected.includes(index)}
+                          onClick={() => table.onSelectRow(index)}
+                        />
+                      </TableCell>
 
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleEnglishInputChange(index, e)}
-                        value={one.name_english}
-                        name="name_english"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.name_arabic}
-                        name="name_arabic"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Select
-                        variant="filled"
-                        required
-                        value={one.category || ''}
-                        onChange={(e) => handleSelect(index, e)}
-                        sx={{ width: '80%' }}
-                        size="small"
-                        name="category"
-                      >
-                        {categories.map((category, idx) => (
-                          <MenuItem lang="ar" key={idx} value={category._id}>
-                            {category.name_english}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Select
-                        multiple
-                        variant="filled"
-                        required
-                        value={one.symptoms || []}
-                        onChange={(e) => handleSelect(index, e)}
-                        sx={{ width: '80%' }}
-                        size="small"
-                        name="symptoms"
-                        renderValue={(selected) => (
-                          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                            {selected.map((value, idx) => {
-                              const symptom = tableData.find((item) => item._id === value);
-                              return (
-                                <Chip
-                                  key={idx}
-                                  label={symptom.name_english}
-                                  style={{ margin: 2 }}
-                                />
-                              );
-                            })}
-                          </div>
-                        )}
-                      >
-                        {tableData.map((symptom, idx) => (
-                          <MenuItem lang="ar" key={idx} value={symptom._id}>
-                            {/* <Checkbox
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleEnglishInputChange(index, e)}
+                          value={one.name_english}
+                          name="name_english"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.name_arabic}
+                          name="name_arabic"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Select
+                          variant="filled"
+                          required
+                          value={one.category || ''}
+                          onChange={(e) => handleSelect(index, e)}
+                          sx={{ width: '80%' }}
+                          size="small"
+                          name="category"
+                        >
+                          {categories.map((category, idx) => (
+                            <MenuItem lang="ar" key={idx} value={category._id}>
+                              {category.name_english}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Select
+                          multiple
+                          variant="filled"
+                          required
+                          value={one.symptoms || []}
+                          onChange={(e) => handleSelect(index, e)}
+                          sx={{ width: '80%' }}
+                          size="small"
+                          name="symptoms"
+                          renderValue={(selected) => (
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                              {selected.map((value, idx) => {
+                                const symptom = tableData.find((item) => item._id === value);
+                                return (
+                                  <Chip
+                                    key={idx}
+                                    label={symptom.name_english}
+                                    style={{ margin: 2 }}
+                                  />
+                                );
+                              })}
+                            </div>
+                          )}
+                        >
+                          {tableData.map((symptom, idx) => (
+                            <MenuItem lang="ar" key={idx} value={symptom._id}>
+                              {/* <Checkbox
                                   checked={one?.symptoms?.includes(symptom._id)}
                                   size="small"
                                   disableRipple
                                 /> */}
-                            {symptom.name_english}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleEnglishInputChange(index, e)}
-                        value={one.description}
-                        name="description"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.description_arabic}
-                        name="description_arabic"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
+                              {symptom.name_english}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleEnglishInputChange(index, e)}
+                          value={one.description}
+                          name="description"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.description_arabic}
+                          name="description_arabic"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
+            <TablePaginationCustom
+              count={data.length}
+              page={table.page}
+              rowsPerPage={table.rowsPerPage}
+              onPageChange={table.onChangePage}
+              onRowsPerPageChange={table.onChangeRowsPerPage}
+              //
+              dense={table.dense}
+              onChangeDense={table.onChangeDense}
+            />
           </Scrollbar>
         </TableContainer>
       )}

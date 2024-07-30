@@ -9,9 +9,10 @@ import Button from '@mui/material/Button';
 
 import { fDate } from 'src/utils/format-time';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
-import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -73,23 +74,23 @@ export default function InvoiceTableFiltersResult({
         )} */}
 
         {filters.status !== 'all' && (
-          <Block label={t("status:")}>
+          <Block label={t('status:')}>
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
         {filters.startDate && filters.endDate && (
-          <Block label={t("date:")}>
+          <Block label={t('date:')}>
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
         )}
         {filters.startDate && !filters.endDate && (
-          <Block label={t("date:")}>
+          <Block label={t('date:')}>
             <Chip size="small" label={fDate(filters.startDate)} onDelete={handleRemoveDate} />
           </Block>
         )}
         {!filters.startDate && filters.endDate && (
-          <Block label={t("date:")}>
+          <Block label={t('date:')}>
             <Chip size="small" label={fDate(filters.endDate)} onDelete={handleRemoveDate} />
           </Block>
         )}

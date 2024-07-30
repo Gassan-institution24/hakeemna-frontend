@@ -345,12 +345,12 @@ export default function UnitServicesInsuranceView() {
                   rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered?.map((row, idx)  => row._id)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     dataFiltered?.map((row, idx)  => row._id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

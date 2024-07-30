@@ -78,7 +78,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           total: Yup.number(),
           quantity: Yup.number()
             .required('Quantity is required')
-            .min(1, 'Quantity must be more than 0'),
         })
       )
     ),
@@ -128,17 +127,18 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
       items: currentInvoice?.Provided_services ||
-        (entranceInfo?.Service_types?.length > 0 && entranceInfo?.Service_types?.map((one) => ({
-          service_type: one._id || null,
-          activity: null,
-          quantity: 1,
-          price_per_unit: Number(one.Price_per_unit) || 0,
-          subtotal: Number(one.Price_per_unit) || 0,
-          discount_amount: 0,
-          // deduction: 0,
-          tax: 0,
-          total: Number(one.Price_per_unit) || 0,
-        }))) || [
+        (entranceInfo?.Service_types?.length > 0 &&
+          entranceInfo?.Service_types?.map((one) => ({
+            service_type: one._id || null,
+            activity: null,
+            quantity: 1,
+            price_per_unit: Number(one.Price_per_unit) || 0,
+            subtotal: Number(one.Price_per_unit) || 0,
+            discount_amount: 0,
+            // deduction: 0,
+            tax: 0,
+            total: Number(one.Price_per_unit) || 0,
+          }))) || [
           {
             service_type: null,
             activity: null,
@@ -208,7 +208,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       loadingSend.onFalse();
       router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id));
       if (invoice?.data?.receiptPayment?._id) {
-        window.open(paths.unitservice.accounting.reciepts.info(invoice?.data?.receiptPayment?._id), '_blank');
+        window.open(
+          paths.unitservice.accounting.reciepts.info(invoice?.data?.receiptPayment?._id),
+          '_blank'
+        );
       }
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
@@ -249,7 +252,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                     { label: t('cash'), value: 'cash' },
                     { label: t('credit card'), value: 'credit_card' },
                     { label: t('bank transfer'), value: 'bank_transfer' },
-                    { label: t('instant bank transfer'), value: 'instant_transfere' },
+                    { label: t('instant bank transfer'), value: 'instant_transfer' },
                   ]}
                 />
               </Stack>

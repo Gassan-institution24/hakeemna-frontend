@@ -62,12 +62,12 @@ export default function MovementTableRow({
   const popover = usePopover();
   const payment = useBoolean();
 
-  let type
+  let type;
   if (insurance) {
-    type = 'insurance'
+    type = 'insurance';
   } else if (is_it_installment) {
-    type = 'installment'
-  } else type = 'paid'
+    type = 'installment';
+  } else type = 'paid';
 
   return (
     <>
@@ -80,7 +80,9 @@ export default function MovementTableRow({
 
         <TableCell align="center">{fDate(due_date)}</TableCell>
         <TableCell align="center">{t(type)}</TableCell>
-        <TableCell align="center">{curLangAr ? insurance?.name_arabic : insurance?.name_english}</TableCell>
+        <TableCell align="center">
+          {curLangAr ? insurance?.name_arabic : insurance?.name_english}
+        </TableCell>
 
         <TableCell align="center">
           {curLangAr ? patient?.name_arabic : patient?.name_english}
@@ -131,15 +133,18 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem> */}
 
-        {!recieved && <MenuItem lang="ar"
-          onClick={() => {
-            payment.onTrue();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="game-icons:money-stack" />
-          {t('pay')}
-        </MenuItem>}
+        {!recieved && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              payment.onTrue();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="game-icons:money-stack" />
+            {t('pay')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

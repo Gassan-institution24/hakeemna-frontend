@@ -17,10 +17,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsTableRow({
-  row,
-  selected,
-}) {
+export default function AppointmentsTableRow({ row, selected }) {
   const {
     _id,
     appoint_number,
@@ -118,9 +115,16 @@ export default function AppointmentsTableRow({
       </TableCell>
 
       <TableCell align="center" sx={{ px: 1 }}>
-        <Button variant='outlined' onClick={() => router.push(
-          `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${entrance ? `&&entrance=${entrance}` : ''}`
-        )}>
+        <Button
+          variant="outlined"
+          onClick={() =>
+            router.push(
+              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${
+                entrance ? `&&entrance=${entrance}` : ''
+              }`
+            )
+          }
+        >
           {t('make an invoice')}
         </Button>
       </TableCell>

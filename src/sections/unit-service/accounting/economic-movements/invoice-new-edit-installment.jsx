@@ -16,14 +16,10 @@ import {
   InputAdornment,
 } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import {
-  RHFSelect,
-  RHFTextField,
-  RHFDatePicker,
-} from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -31,8 +27,6 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   const { control, watch, setValue } = useFormContext();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const values = watch();
 
@@ -42,7 +36,8 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   });
 
   const totalInstallments =
-    (values.patient_paid ? values.patient_paid : 0) + values.payment_details.reduce((acc, one) => acc + one.amount, 0);
+    (values.patient_paid ? values.patient_paid : 0) +
+    values.payment_details.reduce((acc, one) => acc + one.amount, 0);
 
   useEffect(() => {
     setValue('totalInstallments', totalInstallments);
@@ -105,7 +100,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                   { label: 'cash', value: 'cash' },
                   { label: 'credit card', value: 'credit_card' },
                   { label: 'bank transfer', value: 'bank_transfer' },
-                  { label: 'instant bank transfer', value: 'instant_transfere' },
+                  { label: 'instant bank transfer', value: 'instant_transfer' },
                 ].map((one, idx) => (
                   <MenuItem key={idx} value={one.value}>
                     {t(one.label)}
@@ -155,7 +150,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                     { label: 'cash', value: 'cash' },
                     { label: 'credit card', value: 'credit_card' },
                     { label: 'bank transfer', value: 'bank_transfer' },
-                    { label: 'instant bank transfer', value: 'instant_transfere' },
+                    { label: 'instant bank transfer', value: 'instant_transfer' },
                   ].map((one, idx) => (
                     <MenuItem key={idx} value={one.value}>
                       {t(one.label)}
@@ -210,7 +205,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                 name="totalAmount"
                 size="small"
                 sx={{
-                  width: 160,
+                  width: 120,
                 }}
                 InputProps={{
                   startAdornment: (
@@ -227,11 +222,12 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
             <Box sx={{ color: 'text.secondary' }}>{t('installments total amount')}:</Box>
             <Box>
               <RHFTextField
+                disabled
                 type="number"
                 name="totalInstallments"
                 size="small"
                 sx={{
-                  width: 160,
+                  width: 120,
                 }}
                 InputProps={{
                   startAdornment: (
@@ -239,6 +235,21 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                       <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
                     </InputAdornment>
                   ),
+                }}
+              />
+            </Box>
+          </Stack>
+          <Stack direction="row" alignItems="center" gap={1}>
+            <Box sx={{ color: 'text.secondary' }}>{t('installments number')}:</Box>
+            <Box>
+              <RHFTextField
+                disabled
+                type="number"
+                value={values.payment_details?.length}
+                name="installment_number"
+                size="small"
+                sx={{
+                  width: 100,
                 }}
               />
             </Box>
