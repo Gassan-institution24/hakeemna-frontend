@@ -31,7 +31,11 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 
   const { t } = useTranslate();
 
-  const { incomePaymentData } = useGetIncomePaymentControl({ economic_movement: invoice.economic_movement?._id, recieved: true, select: 'balance' })
+  const { incomePaymentData } = useGetIncomePaymentControl({
+    economic_movement: invoice.economic_movement?._id,
+    recieved: true,
+    select: 'balance',
+  });
 
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
@@ -45,7 +49,9 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
   // }, [invoice.id, router]);
 
   const printPdf = async () => {
-    const blob = await pdf(<InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />).toBlob();
+    const blob = await pdf(
+      <InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />
+    ).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -78,7 +84,9 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
           </Tooltip>
 
           <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />}
+            document={
+              <InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />
+            }
             fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
             style={{ textDecoration: 'none' }}
           >

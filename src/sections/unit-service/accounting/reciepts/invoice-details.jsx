@@ -4,8 +4,6 @@ import { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 import { fDate } from 'src/utils/format-time';
@@ -13,7 +11,6 @@ import { fCurrency } from 'src/utils/format-number';
 import { NumberToText } from 'src/utils/number-to-words';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useGetIncomePaymentControl } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -27,15 +24,6 @@ const INVOICE_STATUS_OPTIONS = [
   { value: 'insurance', label: 'insurance' },
 ];
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '& td': {
-    textAlign: 'right',
-    borderBottom: 'none',
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-}));
-
 // ----------------------------------------------------------------------
 
 export default function InvoiceDetails({ invoice, refetch }) {
@@ -45,9 +33,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { user } = useAuthContext()
-
-  const { incomePaymentData } = useGetIncomePaymentControl({ economic_movement: invoice.economic_movement?._id, recieved: true, select: 'balance' })
+  const { incomePaymentData } = useGetIncomePaymentControl({
+    economic_movement: invoice.economic_movement?._id,
+    recieved: true,
+    select: 'balance',
+  });
 
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
@@ -73,33 +63,63 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const renderList = (
     <Stack gap={3} my={5}>
       {/* <Typography variant='h5'>{t('details')}:</Typography> */}
-      <Stack direction='row' gap={2}>
-        <Typography variant='body1'>{t('we have recieved from mr./m/s')}:</Typography>
-        <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Typography>
+      <Stack direction="row" gap={2}>
+        <Typography variant="body1">{t('we have recieved from mr./m/s')}:</Typography>
+        <Typography
+          sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+          variant="subtitle1"
+        >
+          {curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}
+        </Typography>
       </Stack>
-      <Stack direction='row' gap={2}>
-        <Typography variant='body1'>{t('the sum of')}:</Typography>
-        <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}</Typography>
+      <Stack direction="row" gap={2}>
+        <Typography variant="body1">{t('the sum of')}:</Typography>
+        <Typography
+          sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+          variant="subtitle1"
+        >
+          {fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}
+        </Typography>
       </Stack>
-      <Stack direction='row' gap={2}>
-        <Typography variant='body1'>{t('for the economic movement number')}:</Typography>
-        <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Typography>
+      <Stack direction="row" gap={2}>
+        <Typography variant="body1">{t('for the economic movement number')}:</Typography>
+        <Typography
+          sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+          variant="subtitle1"
+        >
+          {invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}
+        </Typography>
       </Stack>
       {/* <Stack direction='row' justifyContent='space-between'> */}
       {/* </Stack> */}
-      <Stack direction='row' mt={5}>
-        <Stack direction='row' gap={2} flex={1}>
-          <Typography variant='body1'>{t('total economic movement amount')}:</Typography>
-          <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{fCurrency(invoice?.economic_movement?.Total_Amount)}</Typography>
+      <Stack direction="row" mt={5}>
+        <Stack direction="row" gap={2} flex={1}>
+          <Typography variant="body1">{t('total economic movement amount')}:</Typography>
+          <Typography
+            sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+            variant="subtitle1"
+          >
+            {fCurrency(invoice?.economic_movement?.Total_Amount)}
+          </Typography>
         </Stack>
-        <Stack direction='row' gap={2} flex={1}>
-          <Typography variant='body1'>{t('total paid amount')}:</Typography>
-          <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{fCurrency(paidAmount)}</Typography>
+        <Stack direction="row" gap={2} flex={1}>
+          <Typography variant="body1">{t('total paid amount')}:</Typography>
+          <Typography
+            sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+            variant="subtitle1"
+          >
+            {fCurrency(paidAmount)}
+          </Typography>
         </Stack>
       </Stack>
-      <Stack direction='row' gap={2}>
-        <Typography variant='body1'>{t('remaind amount')}:</Typography>
-        <Typography sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }} variant='subtitle1'>{fCurrency(invoice.economic_movement.Total_Amount - paidAmount)}</Typography>
+      <Stack direction="row" gap={2}>
+        <Typography variant="body1">{t('remaind amount')}:</Typography>
+        <Typography
+          sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
+          variant="subtitle1"
+        >
+          {fCurrency(invoice.economic_movement.Total_Amount - paidAmount)}
+        </Typography>
       </Stack>
     </Stack>
   );
@@ -114,7 +134,9 @@ export default function InvoiceDetails({ invoice, refetch }) {
       />
 
       <Card sx={{ pt: 5, px: 5 }}>
-        <Typography textAlign='center' variant="h3">{t('receipt voucher')}</Typography>
+        <Typography textAlign="center" variant="h3">
+          {t('receipt voucher')}
+        </Typography>
         <Box
           rowGap={5}
           display="grid"
@@ -150,7 +172,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
             </Label> */}
 
             <Typography variant="h6">{invoice.sequence_number}</Typography>
-            <Box mt={4} p={1.5} border='1px solid'>
+            <Box mt={4} p={1.5} border="1px solid">
               <Typography variant="h6">{fCurrency(invoice?.receipt_amount)}</Typography>
             </Box>
           </Stack>
@@ -185,7 +207,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
             {t('phone')}: {invoice.patient.mobile_num1}
             <br />
           </Stack>
-
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>

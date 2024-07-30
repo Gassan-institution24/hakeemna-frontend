@@ -116,15 +116,13 @@ export default function AppointmentsView() {
     finished,
     pending,
     // loading,
-  } = useGetUSAppointments(
-    id,
-    {
-      page: table.page || 0,
-      sortBy: table.orderBy || 'code',
-      rowsPerPage: table.rowsPerPage || 5,
-      order: table.order || 'asc',
-      ...filters,
-    });
+  } = useGetUSAppointments(id, {
+    page: table.page || 0,
+    sortBy: table.orderBy || 'code',
+    rowsPerPage: table.rowsPerPage || 5,
+    order: table.order || 'asc',
+    ...filters,
+  });
 
   const dateError =
     filters.startDate && filters.endDate

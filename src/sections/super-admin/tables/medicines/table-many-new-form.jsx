@@ -30,7 +30,12 @@ import { useGetSymptoms, useGetCountries, useGetMedFamilies } from 'src/api';
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
-import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
+import {
+  useTable,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -45,7 +50,7 @@ const TABLE_HEAD = [
   { label: 'barcode', width: 'calc(100%/10)' },
   { label: 'packaging', width: 'calc(100%/10)' },
 ];
-const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
+// const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 export default function NewEditManyForm() {
   const router = useRouter();
 
@@ -91,13 +96,13 @@ export default function NewEditManyForm() {
     });
   };
 
-  const handleSelectConcentrations = (index, event) => {
-    setData((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], concentrations: event };
-      return updated;
-    });
-  };
+  // const handleSelectConcentrations = (index, event) => {
+  //   setData((prev) => {
+  //     const updated = [...prev];
+  //     updated[index] = { ...updated[index], concentrations: event };
+  //     return updated;
+  //   });
+  // };
 
   const handleSelectMany = (event) => {
     setData((prev) => {
@@ -130,24 +135,32 @@ export default function NewEditManyForm() {
   }, []);
 
   const handleCreate = async () => {
-    const isFormValid = data.every((one) => one.name_english && one.name_arabic);
-
-    if (!isFormValid) {
-      alert('Please fill in all required fields.');
-      return;
-    }
     try {
       const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
         type: 'medicines',
         mustUpload: data.length,
       });
-      const insertedData = await axiosInstance.post(
-        endpoints.medicines.many,
-        data.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
-      );
-      await axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
-        uploaded: insertedData.data,
+      const chunkSize = 100;
+      const totalChunks = Math.ceil(data.length / chunkSize);
+
+      const promises = Array.from({ length: totalChunks }, (_, index) => {
+        const startIndex = index * chunkSize;
+        const endIndex = Math.min(startIndex + chunkSize, data.length);
+        const chunkData = data.slice(startIndex, endIndex);
+
+        const insertedDataPromise = axiosInstance.post(
+          endpoints.medicines.many,
+          chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+        );
+        return insertedDataPromise.then((insertedData) =>
+          axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+            uploaded: insertedData.data,
+          })
+        );
       });
+
+      await Promise.all(promises);
+
       router.push(paths.superadmin.tables.medicines.root); /// edit
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });
@@ -232,176 +245,191 @@ export default function NewEditManyForm() {
               />
 
               <TableBody>
-                {data.map((one, index) => (
-                  <TableRow key={index} hover selected={table.selected.includes(index)}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={table.selected.includes(index)}
-                        onClick={() => table.onSelectRow(index)}
-                      />
-                    </TableCell>
+                {data
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((one, index) => (
+                    <TableRow key={index} hover selected={table.selected.includes(index)}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={table.selected.includes(index)}
+                          onClick={() => table.onSelectRow(index)}
+                        />
+                      </TableCell>
 
-                    <TableCell align="center">
-                      <Select
-                        variant="filled"
-                        required
-                        value={one.country || ''}
-                        onChange={(e) => handleSelect(index, e)}
-                        sx={{ width: '100%' }}
-                        size="small"
-                        name="country"
-                      >
-                        {countriesData.map((country, idx) => (
-                          <MenuItem lang="ar" key={idx} value={country._id}>
-                            {country.name_english}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
+                      <TableCell align="center">
+                        <Select
+                          variant="filled"
+                          required
+                          value={one.country || ''}
+                          onChange={(e) => handleSelect(index, e)}
+                          sx={{ width: '100%' }}
+                          size="small"
+                          name="country"
+                        >
+                          {countriesData.map((country, idx) => (
+                            <MenuItem lang="ar" key={idx} value={country._id}>
+                              {country.name_english}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
 
-                    <TableCell align="center">
-                      <Select
-                        variant="filled"
-                        required
-                        value={one.family || ''}
-                        onChange={(e) => handleSelect(index, e)}
-                        sx={{ width: '100%' }}
-                        size="small"
-                        name="family"
-                      >
-                        {families.map((family, idx) => (
-                          <MenuItem lang="ar" key={idx} value={family._id}>
-                            {family.name_english}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
+                      <TableCell align="center">
+                        <Select
+                          variant="filled"
+                          required
+                          value={one.family || ''}
+                          onChange={(e) => handleSelect(index, e)}
+                          sx={{ width: '100%' }}
+                          size="small"
+                          name="family"
+                        >
+                          {families.map((family, idx) => (
+                            <MenuItem lang="ar" key={idx} value={family._id}>
+                              {family.name_english}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
 
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleEnglishInputChange(index, e)}
-                        value={one.trade_name}
-                        name="trade_name"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleEnglishInputChange(index, e)}
-                        value={one.scientific_name}
-                        name="scientific_name"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Autocomplete
-                        freeSolo
-                        multiple
-                        options={DefaultDoses.map((option, idx) => option)}
-                        value={one.concentrations || []}
-                        onChange={(e, newValue) => handleSelectConcentrations(index, newValue)}
-                        renderInput={(params) => (
-                          <TextField {...params} name="concentrations" variant="filled" />
-                        )}
-                        size="small"
-                        name="concentrations"
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, idx) => (
-                            <Chip
-                              {...getTagProps({ idx })}
-                              key={idx}
-                              label={option}
-                              size="small"
-                              color="primary"
-                              variant="outlined"
-                            />
-                          ))
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Select
-                        multiple
-                        variant="filled"
-                        required
-                        value={one.side_effects || []}
-                        onChange={(e) => handleSelect(index, e)}
-                        sx={{ width: '100%' }}
-                        size="small"
-                        name="side_effects"
-                        renderValue={(selected) => (
-                          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                            {selected.map((value, idx) => {
-                              const symptom = tableData.find((item) => item._id === value);
-                              return (
-                                <Chip
-                                  key={idx}
-                                  label={symptom.name_english}
-                                  style={{ margin: 2 }}
-                                />
-                              );
-                            })}
-                          </div>
-                        )}
-                      >
-                        {tableData.map((symptom, idx) => (
-                          <MenuItem lang="ar" key={idx} value={symptom._id}>
-                            {/* <Checkbox
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleEnglishInputChange(index, e)}
+                          value={one.trade_name}
+                          name="trade_name"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleEnglishInputChange(index, e)}
+                          value={one.scientific_name}
+                          name="scientific_name"
+                        />
+                      </TableCell>
+                      {/* <TableCell align="center">
+                        <Autocomplete
+                          freeSolo
+                          multiple
+                          options={DefaultDoses.map((option, idx) => option)}
+                          value={one.concentrations || []}
+                          onChange={(e, newValue) => handleSelectConcentrations(index, newValue)}
+                          renderInput={(params) => (
+                            <TextField {...params} name="concentrations" variant="filled" />
+                          )}
+                          size="small"
+                          name="concentrations"
+                          renderTags={(value, getTagProps) =>
+                            value?.map((option, idx) => (
+                              <Chip
+                                {...getTagProps({ idx })}
+                                key={idx}
+                                label={option}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                              />
+                            ))
+                          }
+                        />
+                      </TableCell> */}
+                      <TableCell>
+                        <Select
+                          multiple
+                          variant="filled"
+                          required
+                          value={one.side_effects || []}
+                          onChange={(e) => handleSelect(index, e)}
+                          sx={{ width: '100%' }}
+                          size="small"
+                          name="side_effects"
+                          renderValue={(selected) => (
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                              {selected.map((value, idx) => {
+                                const symptom = tableData.find((item) => item._id === value);
+                                return (
+                                  <Chip
+                                    key={idx}
+                                    label={symptom.name_english}
+                                    style={{ margin: 2 }}
+                                  />
+                                );
+                              })}
+                            </div>
+                          )}
+                        >
+                          {tableData?.map((symptom, idx) => (
+                            <MenuItem lang="ar" key={idx} value={symptom._id}>
+                              {/* <Checkbox
                                   checked={one?.symptoms?.includes(symptom._id)}
                                   size="small"
                                   disableRipple
                                 /> */}
-                            {symptom.name_english}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.price}
-                        name="price"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.ATCCODE}
-                        name="ATCCODE"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.barcode}
-                        name="barcode"
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="filled"
-                        onChange={(e) => handleArabicInputChange(index, e)}
-                        value={one.packaging}
-                        name="packaging"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
+                              {symptom.name_english}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.price}
+                          name="price"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.ATCCODE}
+                          name="ATCCODE"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.barcode}
+                          name="barcode"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.packaging}
+                          name="packaging"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
+            <TablePaginationCustom
+              count={data.length}
+              page={table.page}
+              rowsPerPage={table.rowsPerPage}
+              onPageChange={table.onChangePage}
+              onRowsPerPageChange={table.onChangeRowsPerPage}
+              //
+              dense={table.dense}
+              onChangeDense={table.onChangeDense}
+            />
           </Scrollbar>
         </TableContainer>
       )}

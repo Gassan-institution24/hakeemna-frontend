@@ -55,7 +55,7 @@ export default function InvoiceNewEditAddress() {
   return (
     <Stack direction={{ md: 'row' }}>
       <Stack spacing={{ xs: 2, md: 3 }} sx={{ p: 3 }} flex={1}>
-        <Stack sx={{ width: 1 }}>
+        {/* <Stack sx={{ width: 1 }}>
           <Stack spacing={1}>
             <Typography variant="h4">
               {curLangAr ? USData?.name_arabic : USData?.name_english}
@@ -67,7 +67,7 @@ export default function InvoiceNewEditAddress() {
             </Typography>
             <Typography variant="body2"> {USData?.phone}</Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
 
         <Stack sx={{ width: 1 }}>
           <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
@@ -96,14 +96,14 @@ export default function InvoiceNewEditAddress() {
                 options={patientsData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   patientsData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       patientsData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -121,7 +121,7 @@ export default function InvoiceNewEditAddress() {
       {Entrance?.activity_happened?.length > 0 && (
         <Stack flex={0.5} sx={{ p: { md: 5, xs: 2 } }}>
           <Typography variant="body1">{t('activities')}:</Typography>
-          <Stack gap={0.5} px={2} mt={1} maxHeight={200} overflow="auto">
+          <Stack gap={0.5} px={2} mt={1} maxHeight={120} overflow="auto">
             {Entrance?.activity_happened?.map((one) => (
               <Stack direction="row" gap={2}>
                 <Typography variant="subtitle2">

@@ -47,7 +47,7 @@ export default function InvoiceNewEditStatusDate() {
         control={control}
         render={({ field, fieldState: { error } }) => (
           <DatePicker
-            label={t('create date')}
+            label={t('invoice date')}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);

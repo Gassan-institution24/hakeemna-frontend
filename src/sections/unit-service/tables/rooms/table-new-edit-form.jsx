@@ -216,7 +216,7 @@ export default function TableNewEditForm({ currentTable }) {
                     fontWeight: 600,
                     // color: 'error.main',
                   }}
-                  onClick={() => handleAddNew(paths.unitservice.activitiess.new)}
+                  onClick={() => handleAddNew(paths.unitservice.tables.activities.new)}
                 >
                   <Typography variant="body2" sx={{ color: 'info.main' }}>
                     {t('Add new')}
