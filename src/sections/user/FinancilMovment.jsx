@@ -1,122 +1,351 @@
-import PropTypes from 'prop-types';
+import { useState, useCallback } from 'react';
 
-import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Card from '@mui/material/Card';
+import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import { alpha, useTheme } from '@mui/material/styles';
+import TableContainer from '@mui/material/TableContainer';
 
-import { useCountdownDate } from 'src/hooks/use-countdown';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+// import { useBoolean } from 'src/hooks/use-boolean';
+
+import { isAfter } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { ComingSoonIllustration } from 'src/assets/illustrations';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetEconomicMovements } from 'src/api';
+
+import Label from 'src/components/label';
+import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import {
+  useTable,
+  emptyRows,
+  TableNoData,
+  TableEmptyRows,
+  TableHeadCustom,
+  TablePaginationCustom,
+} from 'src/components/table';
+
+// import InvoiceAnalytic from '../invoice-analytic';
+import InvoiceTableRow from './invoice-table-row';
+// import InvoiceTableToolbar from '../invoice-table-toolbar';
+// import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-export default function ComingSoonView() {
-  const { days, hours, minutes, seconds } = useCountdownDate(new Date('07/07/2024 21:30'));
-  const { t } = useTranslate();
+const TABLE_HEAD = [
+  { id: 'sequence_number', label: 'sequence' },
+  { id: 'created_at', label: 'date' },
+  { id: 'unit_service', label: 'unit of service' },
+  { id: 'Balance', label: 'total amount' },
+  // { id: 'sent', label: 'Sent', align: 'center' },
+  { id: 'status', label: 'status' },
+  // { id: '' },
+];
 
-  return (
-    <>
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        {t('Coming Soon!')}
-      </Typography>
-
-      <Typography sx={{ color: 'text.secondary' }}>
-        {t('We are currently working hard on this page!')}
-      </Typography>
-
-      <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
-
-      <Stack
-        direction="row"
-        justifyContent="center"
-        divider={<Box sx={{ mx: { xs: 1, sm: 2.5 } }}>:</Box>}
-        sx={{ typography: 'h2' }}
-      >
-        <TimeBlock label={t('Days')} value={days} />
-
-        <TimeBlock label={t('Hours')} value={hours} />
-
-        <TimeBlock label={t('Minutes')} value={minutes} />
-
-        <TimeBlock label={t('Seconds')} value={seconds} />
-      </Stack>
-      {/* 
-      <TextField
-        fullWidth
-        placeholder="Enter your email"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button variant="contained" size="large">
-                Notify Me
-              </Button>
-            </InputAdornment>
-          ),
-          sx: {
-            pr: 0.5,
-            [`&.${outlinedInputClasses.focused}`]: {
-              boxShadow: (theme) => theme.customShadows.z20,
-              transition: (theme) =>
-                theme.transitions.create(['box-shadow'], {
-                  duration: theme.transitions.duration.shorter,
-                }),
-              [`& .${outlinedInputClasses.notchedOutline}`]: {
-                border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
-              },
-            },
-          },
-        }}
-        sx={{ my: 5 }}
-        /> */}
-    </>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-function TimeBlock({ label, value }) {
-  return (
-    <div>
-      <Box> {value} </Box>
-      <Box sx={{ color: 'text.secondary', typography: 'body1' }}>{label}</Box>
-    </div>
-  );
-}
-
-TimeBlock.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
+const defaultFilters = {
+  employee: '',
+  // patient: '',
+  service: '',
+  status: 'all',
+  startDate: null,
+  endDate: null,
 };
 
-// import Grid from '@mui/material/Unstable_Grid2';
-// // import AccountBillingPayment from '../other/account/account-billing-payment';
-// // import AccountBillingHistory from '../other/account/account-billing-history';
-// // import AccountBillingAddress from '../other/account/account-billing-address';
-// import ComingSoonView from 'src/sections/coming-soon/view';
+// ----------------------------------------------------------------------
 
-// // ----------------------------------------------------------------------
+export default function InvoiceListView() {
+  const theme = useTheme();
+  const settings = useSettingsContext();
+  const router = useRouter();
+  const table = useTable({ defaultOrderBy: 'created_at' });
+  // const confirm = useBoolean();
+  const { user } = useAuthContext();
 
-// export default function FinancilMovment() {
-//   return (
-//     <Grid container spacing={5} disableEqualOverflow>
-//       {/* <Grid xs={12} md={8}>
-//         {/* <AccountBillingPayment /> */}
-//         {/* <AccountBillingAddress /> */}
-//       {/* </Grid>
-//       <Grid
-//         xs={12}
-//         md={4}
-//         title="Invoice History"
-//         sx={{
-//           position: { md: 'relative' },
-//           top: { md: '24px' },
-//         }}
-//       > */}
-//         {/* <AccountBillingHistory /> */}
+  const { t } = useTranslate();
 
-//       {/* </Grid> */}
-//       <ComingSoonView />
-//     </Grid>
-//   );
-// }
+  const [filters, setFilters] = useState(defaultFilters);
+  console.log('user.patient', user.patient._id)
+
+  const { economecMovementsData, lengths, totals } = useGetEconomicMovements({
+    patient: user?.patient._id,
+    page: table.page || 0,
+    sortBy: table.orderBy || 'created_at',
+    rowsPerPage: table.rowsPerPage || 10,
+    order: table.order || 'desc',
+    select: 'sequence_number created_at unit_service Balance status updated_at',
+    populate: [
+      { path: 'unit_service', select: 'name_english name_arabic' },
+    ],
+    ...filters,
+  });
+
+  const dateError = isAfter(filters.startDate, filters.endDate);
+
+  const denseHeight = table.dense ? 56 : 56 + 20;
+
+  const canReset = !!filters.startDate || !!filters.endDate;
+
+  const notFound = (!economecMovementsData.length && canReset) || !economecMovementsData.length;
+
+  const TABS = [
+    { value: 'all', label: 'All', color: 'default', count: lengths.allLength || 0 },
+    {
+      value: 'paid',
+      label: 'paid',
+      color: 'success',
+      count: lengths.paidLength || 0,
+    },
+    {
+      value: 'installment',
+      label: 'installment',
+      color: 'warning',
+      count: lengths.installmentLength || 0,
+    },
+    {
+      value: 'insurance',
+      label: 'insurance',
+      color: 'info',
+      count: lengths.insuranceLength || 0,
+    },
+    // {
+    //   value: 'draft',
+    //   label: 'draft',
+    //   color: 'default',
+    //   count: lengths.draftLength || 0,
+    // },
+  ];
+
+  const handleFilters = useCallback(
+    (name, value) => {
+      table.onResetPage();
+      setFilters((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    },
+    [table]
+  );
+
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters);
+  }, []);
+
+  const handleViewRow = useCallback(
+    (id) => {
+      router.push(paths.unitservice.accounting.economicmovements.info(id));
+    },
+    [router]
+  );
+
+  const handleFilterStatus = useCallback(
+    (event, newValue) => {
+      handleFilters('status', newValue);
+    },
+    [handleFilters]
+  );
+
+  return (
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+     
+      {/* <Card
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      >
+        <Scrollbar>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
+            sx={{ py: 2 }}
+          >
+            <InvoiceAnalytic
+              title={t('total')}
+              total={lengths.allLength}
+              percent={100}
+              price={totals.allTotal}
+              icon="solar:bill-list-bold-duotone"
+              color={theme.palette.secondary.main}
+            />
+
+            <InvoiceAnalytic
+              title={t('paid')}
+              total={lengths.paidLength}
+              percent={(lengths.paidLength / lengths.allLength) * 100}
+              price={totals.paidTotal}
+              icon="solar:file-check-bold-duotone"
+              color={theme.palette.success.main}
+            />
+
+            <InvoiceAnalytic
+              title={t('installment')}
+              total={lengths.installmentLength}
+              percent={(lengths.installmentLength / lengths.allLength) * 100}
+              price={totals.installmentTotal}
+              icon="solar:sort-by-time-bold-duotone"
+              color={theme.palette.warning.main}
+            />
+
+            <InvoiceAnalytic
+              title={t('insurance')}
+              total={lengths.insuranceLength}
+              percent={(lengths.insuranceLength / lengths.allLength) * 100}
+              price={totals.insuranceTotal}
+              icon="solar:bell-bing-bold-duotone"
+              color={theme.palette.info.main}
+            />
+          </Stack>
+        </Scrollbar>
+      </Card> */}
+
+      <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {TABS.map((tab) => (
+            <Tab
+              key={tab.value}
+              value={tab.value}
+              label={t(tab.label)}
+              iconPosition="end"
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={tab.color}
+                >
+                  {tab.count}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+
+        {/* <InvoiceTableToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          //
+          dateError={dateError}
+        /> */}
+
+        {/* {canReset && (
+          <InvoiceTableFiltersResult
+            filters={filters}
+            onFilters={handleFilters}
+            //
+            onResetFilters={handleResetFilters}
+            //
+            results={economecMovementsData.length}
+            sx={{ p: 2.5, pt: 0 }}
+          />
+        )} */}
+
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          {/* <TableSelectedAction
+            dense={table.dense}
+            numSelected={table.selected.length}
+            rowCount={economecMovementsData.length}
+            onSelectAllRows={(checked) => {
+              table.onSelectAllRows(
+                checked,
+                economecMovementsData.map((row) => row.id)
+              );
+            }}
+            action={
+              <Stack direction="row">
+                <Tooltip title="Sent">
+                  <IconButton color="primary">
+                    <Iconify icon="iconamoon:send-fill" />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Download">
+                  <IconButton color="primary">
+                    <Iconify icon="eva:download-outline" />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Print">
+                  <IconButton color="primary">
+                    <Iconify icon="solar:printer-minimalistic-bold" />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Delete">
+                  <IconButton color="primary" onClick={confirm.onTrue}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            }
+          /> */}
+
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={economecMovementsData.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     economecMovementsData.map((row) => row.id)
+              //   )
+              // }
+              />
+
+              <TableBody>
+                {economecMovementsData.map((row) => (
+                  <InvoiceTableRow
+                    key={row.id}
+                    row={row}
+                    selected={table.selected.includes(row.id)}
+                    onSelectRow={() => table.onSelectRow(row.id)}
+                    onViewRow={() => handleViewRow(row.id)}
+                  // onEditRow={() => handleEditRow(row.id)}
+                  />
+                ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
+                />
+
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+
+        <TablePaginationCustom
+          count={lengths.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
+  );
+}

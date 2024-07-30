@@ -23,7 +23,7 @@ import { RHFTextField, RHFRadioGroup, RHFAutocomplete } from 'src/components/hoo
 export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   const { watch, setValue } = useFormContext();
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -71,7 +71,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                 { label: t('cash'), value: 'cash' },
                 { label: t('credit card'), value: 'credit_card' },
                 { label: t('bank transfer'), value: 'bank_transfer' },
-                { label: t('instant bank transfer'), value: 'instant_transfere' },
+                { label: t('instant bank transfer'), value: 'instant_transfer' },
               ]}
             />
           )}
@@ -104,14 +104,14 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
               options={USData?.insurance?.map((one) => one._id)}
               getOptionLabel={(option) =>
                 USData?.insurance?.find((one) => one._id === option)?.[
-                curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                 ]
               }
               renderOption={(props, option, idx) => (
                 <li lang="ar" {...props} key={idx} value={option}>
                   {
                     USData?.insurance?.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                     ]
                   }
                 </li>
@@ -144,7 +144,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
 
       <DialogActions>
         <Button variant="outlined" color="inherit" onClick={onClose}>
-          {t("cancel")}
+          {t('cancel')}
         </Button>
 
         <Button

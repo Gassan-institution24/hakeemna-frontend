@@ -29,7 +29,12 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
-import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
+import {
+  useTable,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -201,16 +206,21 @@ export default function NewEditManyForm() {
                   />
 
                   <TableBody>
-                    {data.map((one, index, idx) => (
-                      <TableRow key={idx} hover selected={table.selected.includes(index)}>
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={table.selected.includes(index)}
-                            onClick={() => table.onSelectRow(index)}
-                          />
-                        </TableCell>
+                    {data
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((one, index, idx) => (
+                        <TableRow key={idx} hover selected={table.selected.includes(index)}>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={table.selected.includes(index)}
+                              onClick={() => table.onSelectRow(index)}
+                            />
+                          </TableCell>
 
-                        {/* <TableCell align="center">
+                          {/* <TableCell align="center">
                           <Select
                             variant="filled"
                             required
@@ -228,46 +238,56 @@ export default function NewEditManyForm() {
                             </Select>
                           </TableCell> */}
 
-                        <TableCell align="center">
-                          <TextField
-                            size="small"
-                            variant="filled"
-                            onChange={(e) => handleEnglishInputChange(index, e)}
-                            value={one.name_english}
-                            name="name_english"
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <TextField
-                            size="small"
-                            variant="filled"
-                            onChange={(e) => handleArabicInputChange(index, e)}
-                            value={one.name_arabic}
-                            name="name_arabic"
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <TextField
-                            size="small"
-                            variant="filled"
-                            onChange={(e) => handleEnglishInputChange(index, e)}
-                            value={one.description}
-                            name="description"
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <TextField
-                            size="small"
-                            variant="filled"
-                            onChange={(e) => handleArabicInputChange(index, e)}
-                            value={one.description_arabic}
-                            name="description_arabic"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          <TableCell align="center">
+                            <TextField
+                              size="small"
+                              variant="filled"
+                              onChange={(e) => handleEnglishInputChange(index, e)}
+                              value={one.name_english}
+                              name="name_english"
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <TextField
+                              size="small"
+                              variant="filled"
+                              onChange={(e) => handleArabicInputChange(index, e)}
+                              value={one.name_arabic}
+                              name="name_arabic"
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <TextField
+                              size="small"
+                              variant="filled"
+                              onChange={(e) => handleEnglishInputChange(index, e)}
+                              value={one.description}
+                              name="description"
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <TextField
+                              size="small"
+                              variant="filled"
+                              onChange={(e) => handleArabicInputChange(index, e)}
+                              value={one.description_arabic}
+                              name="description_arabic"
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
+                <TablePaginationCustom
+                  count={data.length}
+                  page={table.page}
+                  rowsPerPage={table.rowsPerPage}
+                  onPageChange={table.onChangePage}
+                  onRowsPerPageChange={table.onChangeRowsPerPage}
+                  //
+                  dense={table.dense}
+                  onChangeDense={table.onChangeDense}
+                />
               </Scrollbar>
             </TableContainer>
           )}

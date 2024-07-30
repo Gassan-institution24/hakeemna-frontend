@@ -70,26 +70,25 @@ export default function Prescription({ Entrance }) {
       Doctor_Comments: '',
       chronic: false,
     };
-    
-    setPrescriptions((prevPrescriptions) => [
-      ...prevPrescriptions,
-      newPrescription,
-    ]);
-    
+
+    setPrescriptions((prevPrescriptions) => [...prevPrescriptions, newPrescription]);
+
     // Update form values directly
     setValue(`prescriptions[${prescriptions.length}]`, newPrescription);
   };
-  
 
   const removePrescriptionField = (id) => {
     setPrescriptions((prevPrescriptions) =>
       prevPrescriptions.filter((prescription) => prescription.id !== id)
     );
-  
+
     // Remove the field from the form state
-    setValue(`prescriptions`, prescriptions.filter((prescription) => prescription.id !== id));
+    setValue(
+      `prescriptions`,
+      prescriptions.filter((prescription) => prescription.id !== id)
+    );
   };
-  
+
   const PrescriptionsSchema = Yup.object().shape({
     prescriptions: Yup.array().of(
       Yup.object().shape({
@@ -124,7 +123,7 @@ export default function Prescription({ Entrance }) {
       },
     ],
   };
-  
+
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
@@ -187,7 +186,6 @@ export default function Prescription({ Entrance }) {
       ],
     });
   }, [user, Entrance, reset]);
-  
 
   const onSubmit = async (submitData) => {
     try {

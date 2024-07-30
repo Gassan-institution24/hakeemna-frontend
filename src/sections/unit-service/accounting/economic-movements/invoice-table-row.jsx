@@ -49,7 +49,7 @@ export default function MovementTableRow({
   } = row;
 
   const { t } = useTranslate();
-  const router = useRouter()
+  const router = useRouter();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -116,9 +116,14 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        <MenuItem lang="ar"
+        <MenuItem
+          lang="ar"
           onClick={() => {
-            router.push(`${paths.unitservice.accounting.paymentcontrol.root}?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`)
+            router.push(
+              `${
+                paths.unitservice.accounting.paymentcontrol.root
+              }?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`
+            );
             popover.onClose();
           }}
         >

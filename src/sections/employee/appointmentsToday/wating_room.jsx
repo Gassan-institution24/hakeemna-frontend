@@ -26,10 +26,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import {
-  useGetUSRooms,
-  useGetEntranceManagementByActivity,
-} from 'src/api';
+import { useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 

@@ -120,7 +120,7 @@ export default function AppointmentsToday() {
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
-        entrance: entranceData?.data?._id
+        entrance: entranceData?.data?._id,
       });
       refetch();
       refetch2();
@@ -159,17 +159,29 @@ export default function AppointmentsToday() {
   const renderOptions = (info) => {
     if (currentTab === 'three') {
       return (
-        <IconButton
-          sx={{ p: 2 }}
-          onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
-        >
-          <Iconify
-            width={20}
-            sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
-            icon="carbon:view"
-          />
-          <span style={{ fontSize: 16 }}>{t("View")}</span>
-        </IconButton>
+        <>
+          <IconButton
+            sx={{ p: 2 }}
+            onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
+          >
+            <Iconify
+              width={20}
+              sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
+              icon="carbon:view"
+            />
+            <span style={{ fontSize: 16 }}>{t('View')}</span>
+          </IconButton>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              router.push(
+                `${paths.unitservice.accounting.economicmovements.add}?appointment=${info?.appointmentId}&&entrance=${info?._id}`
+              )
+            }
+          >
+            {t('make an invoice')}
+          </Button>
+        </>
       );
     }
 
@@ -272,13 +284,13 @@ export default function AppointmentsToday() {
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, true, 'coming')}
                               >
-                                {t("Yes")}
+                                {t('Yes')}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, false, 'coming')}
                               >
-                                {t("No")}
+                                {t('No')}
                               </Button>
                             </>
                           )}
@@ -292,13 +304,13 @@ export default function AppointmentsToday() {
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, true, 'arrived')}
                               >
-                                {t("Yes")}
+                                {t('Yes')}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
                                 onClick={() => updateStatus(info?._id, false, 'arrived')}
                               >
-                                {t("No")}
+                                {t('No')}
                               </Button>
                             </>
                           )}

@@ -72,8 +72,7 @@ export default function InvoiceTableToolbar({
 
   const handleFilterMovement = debounce((event) => {
     onFilters('movement', event.target.value);
-  }, 1000) // 1000 milliseconds = 1 second
-
+  }, 1000); // 1000 milliseconds = 1 second
 
   return (
     <>

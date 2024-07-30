@@ -342,26 +342,25 @@ export default function InvoiceListView() {
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     economecMovementsData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     economecMovementsData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>
-                {economecMovementsData
-                  .map((row) => (
-                    <InvoiceTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                      onViewRow={() => handleViewRow(row.id)}
+                {economecMovementsData.map((row) => (
+                  <InvoiceTableRow
+                    key={row.id}
+                    row={row}
+                    selected={table.selected.includes(row.id)}
+                    onSelectRow={() => table.onSelectRow(row.id)}
+                    onViewRow={() => handleViewRow(row.id)}
                     // onEditRow={() => handleEditRow(row.id)}
-                    />
-                  ))}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={denseHeight}

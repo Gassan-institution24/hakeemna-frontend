@@ -193,7 +193,9 @@ export default function CheckList() {
           </Box>
         </Box>
         <Box sx={{ width: '30%', p: 2, borderLeft: 1, borderColor: 'divider' }}>
-        <Typography sx={{textAlign:'center',mb:2}} variant="h4">Answers</Typography>
+          <Typography sx={{ textAlign: 'center', mb: 2 }} variant="h4">
+            Answers
+          </Typography>
 
           {answer?.map((answersAndQ, index) => (
             <Typography key={index}>
