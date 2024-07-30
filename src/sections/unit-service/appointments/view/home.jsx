@@ -131,7 +131,8 @@ export default function AppointmentsView({ employeeData }) {
       rowsPerPage: table.rowsPerPage || 5,
       order: table.order || 'asc',
       ...filters,
-    });
+    }
+  );
 
   const dateError =
     filters.startDate && filters.endDate
@@ -153,71 +154,71 @@ export default function AppointmentsView({ employeeData }) {
 
   const TABS = isMedLab
     ? [
-      // { value: 'all', label: t('all'), color: 'default', count: all },
-      {
-        value: 'pending',
-        label: t('pending'),
-        color: 'warning',
-        count: pending,
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: finished,
-      },
-      {
-        value: 'available',
-        label: t('available'),
-        color: 'secondary',
-        count: available,
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: canceled,
-      },
-    ]
+        // { value: 'all', label: t('all'), color: 'default', count: all },
+        {
+          value: 'pending',
+          label: t('pending'),
+          color: 'warning',
+          count: pending,
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: finished,
+        },
+        {
+          value: 'available',
+          label: t('available'),
+          color: 'secondary',
+          count: available,
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'error',
+          count: canceled,
+        },
+      ]
     : [
-      // { value: 'all', label: t('all'), color: 'default', count: all },
-      {
-        value: 'processing',
-        label: t('current'),
-        color: 'info',
-        count: processing,
-      },
-      {
-        value: 'pending',
-        label: t('pending'),
-        color: 'warning',
-        count: pending,
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: finished,
-      },
-      {
-        value: 'available',
-        label: t('available'),
-        color: 'secondary',
-        count: available,
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: canceled,
-      },
-      {
-        value: 'not booked',
-        label: t('not booked'),
-        color: 'secondary',
-        count: notBooked,
-      },
-    ];
+        // { value: 'all', label: t('all'), color: 'default', count: all },
+        {
+          value: 'processing',
+          label: t('current'),
+          color: 'info',
+          count: processing,
+        },
+        {
+          value: 'pending',
+          label: t('pending'),
+          color: 'warning',
+          count: pending,
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: finished,
+        },
+        {
+          value: 'available',
+          label: t('available'),
+          color: 'secondary',
+          count: available,
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'error',
+          count: canceled,
+        },
+        {
+          value: 'not booked',
+          label: t('not booked'),
+          color: 'secondary',
+          count: notBooked,
+        },
+      ];
 
   const handleFilters = useCallback(
     (name, value) => {

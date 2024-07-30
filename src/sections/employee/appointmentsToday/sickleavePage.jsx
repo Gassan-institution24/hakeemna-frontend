@@ -13,7 +13,6 @@ import axiosInstance from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetOneSickLeaves } from 'src/api/sickleave';
 
-
 export default function MdicalreportPage() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();

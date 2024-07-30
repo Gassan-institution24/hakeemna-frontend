@@ -22,7 +22,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEntranceDoctorReports, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
+import { useGetMedRecord, useGetEntranceDoctorReports, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';

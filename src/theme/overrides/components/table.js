@@ -1,10 +1,13 @@
 import { alpha } from '@mui/material/styles';
 import { tableRowClasses } from '@mui/material/TableRow';
 import { tableCellClasses } from '@mui/material/TableCell';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
 export function table(theme) {
+  // eslint-disable-next-line
+  const mdUp = useResponsive('up', 'md');
   return {
     MuiTableContainer: {
       styleOverrides: {
@@ -16,6 +19,9 @@ export function table(theme) {
     MuiTableRow: {
       styleOverrides: {
         root: {
+          display: mdUp ? '' : 'flex',
+          flexDirection: 'column',
+          maxWidth: '90vw',
           [`&.${tableRowClasses.selected}`]: {
             backgroundColor: alpha(theme.palette.primary.dark, 0.04),
             '&:hover': {

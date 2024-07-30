@@ -384,9 +384,7 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'paymentcontrol',
-            children: [
-              { element: <PaymentControlHomePage />, index: true },
-            ],
+            children: [{ element: <PaymentControlHomePage />, index: true }],
           },
           {
             path: 'reciepts',
@@ -396,7 +394,8 @@ export const unitServiceDashboardRoutes = [
             ],
           },
           {
-            path: 'invoicing', element: <InvoicingHomePage />,
+            path: 'invoicing',
+            element: <InvoicingHomePage />,
           },
         ],
       },

@@ -23,7 +23,8 @@ const formatTextWithLineBreaks = (text) => {
   if (!text) return '';
   const words = text.split(' ');
   return words.reduce(
-    (formattedText, word, index) => formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
+    (formattedText, word, index) =>
+      formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
     ''
   );
 };
@@ -31,7 +32,7 @@ const formatTextWithLineBreaks = (text) => {
 export default function Rooms() {
   const [noteContent, setNoteContent] = useState('');
   const [selectedValue] = useState('');
-  const {t} = useTranslate()
+  const { t } = useTranslate();
   const { id } = useParams();
   const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
@@ -124,10 +125,10 @@ export default function Rooms() {
   return (
     <Card sx={{ display: 'flex', gap: 15 }}>
       <Box sx={{ m: 2 }}>
-        <Typography variant="h6">{t("Last Activity")}</Typography>
+        <Typography variant="h6">{t('Last Activity')}</Typography>
         <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
         <Typography variant="h6" sx={{ mt: 2 }}>
-          {t("Doctor Message")}
+          {t('Doctor Message')}
         </Typography>
         <Typography
           dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
@@ -135,7 +136,7 @@ export default function Rooms() {
       </Box>
 
       <Box sx={{ m: 2 }}>
-        <Typography variant="h6">{t("Next Activity")}</Typography>
+        <Typography variant="h6">{t('Next Activity')}</Typography>
         <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
           <Box>
             <TextField
@@ -155,7 +156,7 @@ export default function Rooms() {
               displayEmpty
             >
               <MenuItem value="" disabled sx={{ display: 'none' }}>
-                {t("Choose")}
+                {t('Choose')}
               </MenuItem>
               {roomsData?.map((rooms, index) => (
                 <MenuItem key={index}>
@@ -191,7 +192,7 @@ export default function Rooms() {
               variant="contained"
               sx={{ bgcolor: 'error.main', ml: 2 }}
             >
-             {t("end appointment")}
+              {t('end appointment')}
             </Button>
           </Box>
         </Box>

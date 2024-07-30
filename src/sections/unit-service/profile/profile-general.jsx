@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Chip, MenuItem, Typography } from '@mui/material';
+import { Chip, Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -303,7 +303,9 @@ export default function AccountGeneral({ unitServiceData }) {
                 label={`${t('institution email')}* :`}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
-              <Stack alignItems="flex-start">
+                <Divider />
+              <Stack alignItems="flex-start" gap={1} >
+                <Typography variant='subtitle1'>{t('finantial information')}</Typography>
                 <RHFCheckbox
                   name="has_tax"
                   onChange={() => setValue('has_tax', !values.has_tax)}

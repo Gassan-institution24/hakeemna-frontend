@@ -13,9 +13,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useSearchParams } from 'src/routes/hooks';
 
 import { isAfter } from 'src/utils/format-time';
 
@@ -74,9 +72,7 @@ const defaultFilters = {
 export default function PaymentControlView() {
   const theme = useTheme();
   const settings = useSettingsContext();
-  const router = useRouter();
   const table = useTable({ defaultOrderBy: 'createDate' });
-  const confirm = useBoolean();
   const { user } = useAuthContext();
 
   const searchParams = useSearchParams();
@@ -84,7 +80,10 @@ export default function PaymentControlView() {
 
   const { t } = useTranslate();
 
-  const [filters, setFilters] = useState({ ...defaultFilters, movement: movement || '', startDate: new Date() });
+  const [filters, setFilters] = useState({
+    ...defaultFilters,
+    movement: movement || '',
+  });
 
   const { incomePaymentData, lengths, totals, refetch } = useGetIncomePaymentControl({
     unit_service:
@@ -93,7 +92,8 @@ export default function PaymentControlView() {
     sortBy: table.orderBy || 'created_at',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
-    select: 'sequence_number created_at patient employee economic_movement insurance is_it_installment due_date required_amount recieved balance status updated_at movements_type',
+    select:
+      'sequence_number created_at patient employee economic_movement insurance is_it_installment due_date required_amount recieved balance status updated_at movements_type',
     populate: [
       {
         path: 'employee',
@@ -342,17 +342,16 @@ export default function PaymentControlView() {
               />
 
               <TableBody>
-                {incomePaymentData
-                  .map((row) => (
-                    <InvoiceTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                      // onViewRow={() => handleViewRow(row.id)}
-                      refetch={refetch}
-                    />
-                  ))}
+                {incomePaymentData.map((row) => (
+                  <InvoiceTableRow
+                    key={row.id}
+                    row={row}
+                    selected={table.selected.includes(row.id)}
+                    onSelectRow={() => table.onSelectRow(row.id)}
+                    // onViewRow={() => handleViewRow(row.id)}
+                    refetch={refetch}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={denseHeight}

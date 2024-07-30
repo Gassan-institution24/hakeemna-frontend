@@ -43,7 +43,13 @@ const useStyles = () =>
         h4: { fontSize: 13, fontWeight: 700 },
         body1: { fontSize: 10 },
         body2: { fontSize: 9 },
-        subtitle1: { fontSize: 10, fontWeight: 700, flex: 1, borderBottom: '1px dashed', textAlign: 'center' },
+        subtitle1: {
+          fontSize: 10,
+          fontWeight: 700,
+          flex: 1,
+          borderBottom: '1px dashed',
+          textAlign: 'center',
+        },
         subtitle2: { fontSize: 9, fontWeight: 700 },
         alignRight: { textAlign: curLangAr ? 'left' : 'right' },
         page: {
@@ -108,12 +114,7 @@ const useStyles = () =>
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
-  const {
-    patient,
-    created_at,
-    unit_service,
-    sequence_number,
-  } = invoice;
+  const { patient, created_at, unit_service, sequence_number } = invoice;
 
   const { t } = useTranslate();
 
@@ -165,29 +166,41 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr./m/s')}:</Text>
-          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+            {curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}
+          </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('the sum of')}:</Text>
-          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+            {fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}
+          </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('for the economic movement number')}:</Text>
-          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+            {invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}
+          </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <View style={[styles.flexContainer, styles.mb8, styles.flex1]}>
             <Text style={[styles.body1, styles.mb8]}>{t('total economic movement amount')}:</Text>
-            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice?.economic_movement?.Total_Amount)}</Text>
+            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+              {fCurrency(invoice?.economic_movement?.Total_Amount)}
+            </Text>
           </View>
           <View style={[styles.flexContainer, styles.mb8, styles.flex1]}>
             <Text style={[styles.body1, styles.mb8]}>{t('total paid amount')}:</Text>
-            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(paidAmount)}</Text>
+            <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+              {fCurrency(paidAmount)}
+            </Text>
           </View>
         </View>
         <View style={[styles.flexContainer, styles.mb40]}>
           <Text style={[styles.body1, styles.mb8]}>{t('remaind amount')}:</Text>
-          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>{fCurrency(invoice.economic_movement.Total_Amount - paidAmount)}</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+            {fCurrency(invoice.economic_movement.Total_Amount - paidAmount)}
+          </Text>
         </View>
       </Page>
     </Document>
