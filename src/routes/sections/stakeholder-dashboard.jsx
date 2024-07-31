@@ -33,6 +33,30 @@ const OrderDetailsPage = lazy(() => import('src/pages/stakeholder/orders/details
 // CUSTOMERS
 const CustomersPage = lazy(() => import('src/pages/stakeholder/customers/home'));
 const CustomerDetailsPage = lazy(() => import('src/pages/stakeholder/orders/details'));
+
+// ACCOUNTING
+// ECONOMIC MOVEMENTS
+const EconomicHomePage = lazy(() =>
+  import('src/pages/stakeholder/accounting/economic-movements/home')
+);
+const EconomicInfoPage = lazy(() =>
+  import('src/pages/stakeholder/accounting/economic-movements/info')
+);
+const EconomicEditPage = lazy(() =>
+  import('src/pages/stakeholder/accounting/economic-movements/edit')
+);
+const EconomicNewPage = lazy(() =>
+  import('src/pages/stakeholder/accounting/economic-movements/new')
+);
+// PAYMENT CONTROL
+const PaymentControlHomePage = lazy(() =>
+  import('src/pages/stakeholder/accounting/payment-control/home')
+);
+// RECEIPTS
+const ReceiptsHomePage = lazy(() => import('src/pages/stakeholder/accounting/reciepts/home'));
+const ReceiptsInfoPage = lazy(() => import('src/pages/stakeholder/accounting/reciepts/info'));
+const InvoicingHomePage = lazy(() => import('src/pages/stakeholder/accounting/invoicing/home'));
+
 // ----------------------------------------------------------------------
 
 export const stakeholderDashboardRoutes = [
@@ -91,12 +115,32 @@ export const stakeholderDashboardRoutes = [
         ],
       },
       {
-        path: 'myaccounting',
+        path: 'sh/accounting',
         children: [
-          { element: <ChecklistPage />, index: true },
-          { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
+          {
+            path: 'economicmovements',
+            children: [
+              { element: <EconomicHomePage />, index: true },
+              { path: ':id/info', element: <EconomicInfoPage /> },
+              { path: ':id/edit', element: <EconomicEditPage /> },
+              { path: 'new', element: <EconomicNewPage /> },
+            ],
+          },
+          {
+            path: 'paymentcontrol',
+            children: [{ element: <PaymentControlHomePage />, index: true }],
+          },
+          {
+            path: 'reciepts',
+            children: [
+              { element: <ReceiptsHomePage />, index: true },
+              { path: ':id/info', element: <ReceiptsInfoPage /> },
+            ],
+          },
+          {
+            path: 'invoicing',
+            element: <InvoicingHomePage />,
+          },
         ],
       },
       {

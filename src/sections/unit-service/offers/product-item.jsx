@@ -13,11 +13,12 @@ import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'notistack';
 
 import { useCheckoutContext } from '../checkout/context';
 
@@ -25,6 +26,8 @@ import { useCheckoutContext } from '../checkout/context';
 
 export default function ProductItem({ product }) {
   const { onAddToCart } = useCheckoutContext();
+  const { enqueueSnackbar } = useSnackbar()
+  const { t } = useTranslate()
 
   const {
     _id,
@@ -55,6 +58,8 @@ export default function ProductItem({ product }) {
     };
     try {
       onAddToCart(newProduct);
+      enqueueSnackbar(t('added successfully'))
+
     } catch (error) {
       console.error(error);
     }

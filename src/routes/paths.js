@@ -113,6 +113,7 @@ export const paths = {
       },
 
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
+      financilmovmentInfo: (id) => `${ROOTS.DASHBOARD}/user/financilmovment/${id}`,
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
       bookappointment: (id) => `${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
       oldmedicalreportsview: (id) => `${ROOTS.DASHBOARD}/user/oldmedicalreportsview/${id}`,
@@ -148,7 +149,26 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/mycustomers`,
     },
     accounting: {
-      root: `${ROOTS.SUPERADMIN}/myaccounting`,
+      root: `${ROOTS.SUPERADMIN}/sh/accounting`,
+      invoicing: `${ROOTS.SUPERADMIN}/sh/accounting/invoicing`,
+      economicmovements: {
+        root: `${ROOTS.SUPERADMIN}/sh/accounting/economicmovements`,
+        add: `${ROOTS.SUPERADMIN}/sh/accounting/economicmovements/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/economicmovements/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/economicmovements/${id}/info`,
+      },
+      paymentcontrol: {
+        root: `${ROOTS.SUPERADMIN}/sh/accounting/paymentcontrol`,
+        add: `${ROOTS.SUPERADMIN}/sh/accounting/paymentcontrol/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/paymentcontrol/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/paymentcontrol/${id}/info`,
+      },
+      reciepts: {
+        root: `${ROOTS.SUPERADMIN}/sh/accounting/reciepts`,
+        add: `${ROOTS.SUPERADMIN}/sh/accounting/reciepts/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/reciepts/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/sh/accounting/reciepts/${id}/info`,
+      },
     },
   },
 

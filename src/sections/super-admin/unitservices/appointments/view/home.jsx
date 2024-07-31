@@ -121,6 +121,7 @@ export default function AppointmentsView() {
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 5,
     order: table.order || 'asc',
+    populate: 'all',
     ...filters,
   });
 

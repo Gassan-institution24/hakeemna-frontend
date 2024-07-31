@@ -9,15 +9,11 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -33,10 +29,12 @@ export default function MovementTableRow({
 }) {
   const {
     sequence_number,
-    unit_service,
-    Balance,
+    patient,
+    employee,
+    receipt_amount,
+    economic_movement,
     Currency,
-    status,
+    // status,
 
     created_at,
     user_creation,
@@ -48,7 +46,6 @@ export default function MovementTableRow({
   } = row;
 
   const { t } = useTranslate();
-  const router = useRouter();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -68,12 +65,20 @@ export default function MovementTableRow({
         <TableCell align="center">{fDate(created_at)}</TableCell>
 
         <TableCell align="center">
-          {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
+          {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
 
-        <TableCell align="center">{fCurrency(Balance, Currency?.symbol)}</TableCell>
+        <TableCell align="center">
+          {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
+        </TableCell>
+
+        <TableCell align="center">{fCurrency(receipt_amount, Currency?.symbol)}</TableCell>
 
         <TableCell align="center">
+          {economic_movement?.sequence_number}-{fDate(created_at, 'yyyy')}
+        </TableCell>
+
+        {/* <TableCell align="center">
           <Label
             variant="soft"
             color={
@@ -85,13 +90,13 @@ export default function MovementTableRow({
           >
             {t(status)}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
-        {/* <TableCell align="right" sx={{ px: 1 }}>
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell> */}
+        </TableCell>
       </TableRow>
 
       <CustomPopover
@@ -111,20 +116,15 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        <MenuItem
-          lang="ar"
+        {/* <MenuItem lang="ar"
           onClick={() => {
-            router.push(
-              `${
-                paths.unitservice.accounting.paymentcontrol.root
-              }?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`
-            );
+            router.push(`${paths.stakeholder.accounting.paymentcontrol.root}?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`)
             popover.onClose();
           }}
         >
           <Iconify icon="majesticons:checkbox-list-detail" />
           {t('payment control')}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

@@ -20,7 +20,6 @@ export default function Financilmovment() {
         heading={t('financil movment')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
-          { name: t('user'), href: paths.dashboard.user.root },
           { name: t('financil movment') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}

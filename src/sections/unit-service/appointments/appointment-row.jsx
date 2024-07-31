@@ -54,6 +54,7 @@ export default function AppointmentsTableRow({
     patient,
     start_time,
     status,
+    invoived,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -193,7 +194,7 @@ export default function AppointmentsTableRow({
             {t('edit')}
           </MenuItem>
         )}
-        {['processing', 'finished'].includes(status) &&
+        {['processing', 'finished'].includes(status) && !invoived &&
           checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'create' }) && (
             <MenuItem
               lang="ar"

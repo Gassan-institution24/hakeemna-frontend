@@ -107,6 +107,7 @@ export default function TableCreateView() {
     {
       ...filters,
       startDate: selectedDate,
+      select: 'start_time'
     }
   );
 
