@@ -22,8 +22,9 @@ export default function Adjustabledocument({ patient }) {
 
   const onSubmit = async () => {
     try {
-      await axiosInstance.patch(`/api/patient/${patient?._id}`, {
-        adjustabledocument: adjustabledocumentId,
+      await axiosInstance.post(`/api/instructions`, {
+        patient: patient?._id,
+        adjustable_documents: adjustabledocumentId,
       });
       enqueueSnackbar('adjustable document sent successfully', { variant: 'success' });
       dialog.onFalse();
