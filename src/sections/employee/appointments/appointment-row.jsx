@@ -52,6 +52,7 @@ export default function AppointmentsTableRow({
     appointment_type,
     note,
     patient,
+    invoived,
     start_time,
     status,
     created_at,
@@ -189,7 +190,7 @@ export default function AppointmentsTableRow({
             {t('edit')}
           </MenuItem>
         )}
-        {['Processing', 'finished'].includes(status) &&
+        {['Processing', 'finished'].includes(status) && !invoived &&
           checkAcl({ category: 'work_group', subcategory: 'accounting', acl: 'create' }) && (
             <MenuItem
               lang="ar"

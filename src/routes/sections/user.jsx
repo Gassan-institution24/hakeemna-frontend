@@ -27,6 +27,7 @@ const History = lazy(() => import('src/pages/dashboard/user/history'));
 const HistoryInfo = lazy(() => import('src/pages/dashboard/user/historyinfo'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
+const FinancilMovmentInfo = lazy(() => import('src/pages/dashboard/user/FinancilMovmentInfo'));
 const Family = lazy(() => import('src/pages/dashboard/user/Family'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
@@ -107,6 +108,7 @@ export const userRoutes = [
           { path: 'history', element: <History /> },
           { path: 'historyinfo/:id', element: <HistoryInfo /> },
           { path: 'financilmovment', element: <FinancilMovment /> },
+          { path: 'financilmovment/:id', element: <FinancilMovmentInfo /> },
           { path: 'family', element: <Family /> },
           { path: 'sickLeave', element: <SickLeave /> },
           {

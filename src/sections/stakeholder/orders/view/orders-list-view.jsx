@@ -58,7 +58,7 @@ export default function OrdersView() {
 
   const search = searchParams.get('name');
 
-  const table = useTable({ defaultOrderBy: 'code' });
+  const table = useTable({ defaultOrderBy: 'created_at' });
 
   const { user } = useAuthContext();
 

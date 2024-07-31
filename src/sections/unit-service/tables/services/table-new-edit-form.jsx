@@ -43,11 +43,13 @@ export default function TableNewEditForm({ currentTable }) {
   const [showTax, setShowTax] = useState(false);
   const [showDeduction, setShowDeduction] = useState(false);
 
+  const myUS = user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { taxesData } = useGetTaxes();
   const { deductionsData } = useGetDeductions();
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    myUS?._id
   );
 
   const { enqueueSnackbar } = useSnackbar();
@@ -81,15 +83,14 @@ export default function TableNewEditForm({ currentTable }) {
       name_english: currentTable?.name_english || '',
       description_arabic: currentTable?.description_arabic || '',
       description_english: currentTable?.description_english || '',
-      unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+      unit_service: myUS?._id,
       work_shift: currentTable?.work_shift?._id || null,
       Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
       tax: currentTable?.tax || null,
       deduction: currentTable?.deduction || null,
     }),
-    [currentTable, user]
+    [currentTable, myUS]
   );
 
   const methods = useForm({
@@ -259,16 +260,16 @@ export default function TableNewEditForm({ currentTable }) {
                 name="description_arabic"
                 label={t('arabic description')}
               />
-              <FormControlLabel
+              {myUS?.has_tax && <FormControlLabel
                 sx={{ ml: 2 }}
                 control={<Checkbox onChange={() => setShowTax((prev) => !prev)} />}
                 label={t('tax')}
-              />
-              <FormControlLabel
+              />}
+              {myUS?.has_deduction && <FormControlLabel
                 sx={{ ml: 2 }}
                 control={<Checkbox onChange={() => setShowDeduction((prev) => !prev)} />}
                 label={t('deduction')}
-              />
+              />}
               {showTax && (
                 <RHFSelect name="tax" label={t('tax')}>
                   {taxesData.map((one, idx) => (

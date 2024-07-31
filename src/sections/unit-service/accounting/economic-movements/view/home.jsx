@@ -83,8 +83,9 @@ export default function InvoiceListView() {
     sortBy: table.orderBy || 'created_at',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
-    select: 'sequence_number created_at patient employee Balance status updated_at',
+    select: 'sequence_number created_at unit_service patient employee Balance status updated_at',
     populate: [
+      { path: 'unit_service', select: 'name_english name_arabic' },
       {
         path: 'employee',
         select: 'employee',
@@ -342,12 +343,12 @@ export default function InvoiceListView() {
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     economecMovementsData.map((row) => row.id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     economecMovementsData.map((row) => row.id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -358,7 +359,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
                     onViewRow={() => handleViewRow(row.id)}
-                    // onEditRow={() => handleEditRow(row.id)}
+                  // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

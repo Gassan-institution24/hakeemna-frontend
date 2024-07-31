@@ -14,13 +14,12 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetAppointmentTypes } from 'src/api';
+import { useGetAppointment, useGetAppointmentTypes } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import TimeList from 'src/components/time-list/time-list';
-import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
@@ -35,38 +34,27 @@ export default function BookDetails({
 }) {
   const { t } = useTranslate();
 
+  const { data } = useGetAppointment(selected, {
+    select: '_id work_group appointment_type unit_service start_time online_available',
+    populate: [{ path: 'work_group', select: 'name_english name_arabic' },
+       { path: 'unit_service', select: 'name_english name_arabic' },
+      { path: 'appointment_type', select: 'name_english name_arabic' }]
+  })
+
   const [timeListItem, setTimeListItem] = useState();
   const mdUp = useResponsive('up', 'md');
-
-  const GetIndex = () => {
-    let result = 0;
-    list.forEach((one, index) => {
-      if (one._id === selected) {
-        result = index;
-      }
-    });
-    return result;
-  };
-
-  const carousel = useCarousel({
-    adaptiveHeight: true,
-    initialSlide: !loading && (GetIndex() || 0),
-  });
 
   useEffect(() => {
     if (!loading.value) {
       if (!selected) {
         setSelected(list?.[0]?._id);
         setTimeListItem(list?.[0]?._id);
-        carousel.onTogo(0);
       } else if (!list.some((one) => one._id === selected)) {
         setSelected(list?.[0]?._id);
         setTimeListItem(list?.[0]?._id);
-        carousel.onTogo(0);
       } else {
         list.forEach((one, index) => {
           if (one._id === selected) {
-            carousel.onTogo(index);
             setSelected(list?.[index]?._id);
             setTimeListItem(list?.[index]?._id);
           }
@@ -76,50 +64,9 @@ export default function BookDetails({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list, loading.value]);
 
-  // useEffect(() => {
-  //   setSelected(list[carousel.currentIndex]?._id);
-  //   setSelectedItem(list[carousel.currentIndex]?._id);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [carousel.currentIndex]);
-
-  // useEffect(() => {
-  // setSelected(selectedItem);
-  // list.forEach((one, index) => {
-  // if (one._id === selectedItem) {
-  // carousel.onTogo(index);
-  // }
-  // });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [selectedItem]);
-
-  const carouselHandler = (dir) => {
-    let index = carousel.currentIndex;
-    if (dir === 'next') {
-      carousel.onNext();
-      if (index === list.length - 1) {
-        index = 0;
-      } else {
-        index += 1;
-      }
-    }
-    if (dir === 'prev') {
-      carousel.onPrev();
-      if (index === 0) {
-        index = list.length - 1;
-      } else index -= 1;
-    }
-    setSelected(list[index]?._id);
-    setTimeListItem(list[index]?._id);
-  };
-
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     setTimeListItem(newValue);
-    list.forEach((one, index) => {
-      if (one._id === newValue) {
-        carousel.onTogo(index);
-      }
-    });
   };
 
   return (
@@ -172,41 +119,10 @@ export default function BookDetails({
               {t('Appointment details')}
             </Typography>
           }
-          // subheader="Appointment"
-          action={
-            <CarouselArrows
-              onNext={() => carouselHandler('next')}
-              onPrev={() => carouselHandler('prev')}
-            />
-          }
         />
       )}
-      <Carousel style={{ dir: 'rtl' }} ref={carousel.carouselRef} {...carousel.carouselSettings}>
-        {list.map((item) => (
-          <ReviewItem key={item._id} item={item} />
-        ))}
-      </Carousel>
+      {data && <ReviewItem item={data} />}
       <Divider sx={{ borderStyle: 'dashed', mb: 3 }} />
-      {/* <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 3 }}>
-        <Button
-        fullWidth
-        color="error"
-        variant="soft"
-        onClick={() => console.info('ACCEPT', customerInfo?.id)}
-        >
-        Reject
-        </Button>
-        
-        <Button
-        fullWidth
-        color="inherit"
-        variant="contained"
-        onClick={() => console.info('REJECT', customerInfo?.id)}
-        >
-        Accept
-        </Button>
-      </Stack> */}
-      {/* // </Card> */}
     </>
   );
 }
@@ -230,7 +146,6 @@ function ReviewItem({ item }) {
     appointment_type,
     unit_service,
     start_time,
-    service_types,
     online_available,
   } = item;
 
@@ -298,11 +213,8 @@ function ReviewItem({ item }) {
             color: 'text.disabled',
           }}
         />
-
-        {/* <Rating value={rating} size="small" readOnly precision={0.5} /> */}
         {[
           {
-            // label: t('appointment type'),
             label: (
               <TextField
                 variant="standard"
@@ -323,21 +235,11 @@ function ReviewItem({ item }) {
             icon: <Iconify icon="streamline:waiting-appointments-calendar" />,
           },
           {
-            // label: t('work group'),
             label: curLangAr ? work_group?.name_arabic : work_group?.name_english,
             icon: <Iconify icon="ri:group-line" />,
           },
           {
-            // label: t('work group'),
-            label: service_types.length
-              ? service_types?.reduce((total, service) => total + service.Price_per_unit || 0, 0)
-              : 0,
-            icon: <Iconify icon="solar:tag-price-bold" />,
-          },
-          {
             label: t('available online'),
-            // value:
-            //   work_days.length === 7 ? t('All days') : work_days.map((day) => t(day)).join(', '),
             icon: (
               <Iconify
                 icon={online_available ? 'typcn:tick-outline' : 'mdi:close-outline'}
@@ -366,12 +268,6 @@ function ReviewItem({ item }) {
           </Stack>
         ))}
       </Stack>
-
-      {/* <Stack direction="row" flexWrap="wrap" spacing={1}>
-        {tags.map((tag) => (
-          <Chip size="small" variant="soft" key={tag} label={tag} />
-        ))}
-      </Stack> */}
     </Stack>
   );
 }
