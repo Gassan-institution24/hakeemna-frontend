@@ -103,7 +103,7 @@ export default function TableCreateView() {
     {
       ...filters,
       startDate: selectedDate,
-      populate: 'all',
+      select: 'start_time',
     }
   );
 

@@ -11,7 +11,6 @@ export default function ServiceUnitAppointmentsPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUnitservice(id);
-  // const { appointmentsData, loading } = useGetUSAppointments(id);
   const unitServiceName = data?.name_english || 'unit of service';
   return (
     <>
@@ -19,10 +18,7 @@ export default function ServiceUnitAppointmentsPage() {
         <title> {unitServiceName} appointments </title>
         <meta name="description" content="meta" />
       </Helmet>
-      {/* {loading && <LoadingScreen />} */}
-      {/* {!loading && ( */}
       <UnitServiceAppointemnts unitServiceData={data} />
-      {/* )} */}
     </>
   );
 }
