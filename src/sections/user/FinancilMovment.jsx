@@ -4,8 +4,6 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -14,10 +12,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-// import { useBoolean } from 'src/hooks/use-boolean';
-
-import { isAfter } from 'src/utils/format-time';
-
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEconomicMovements } from 'src/api';
@@ -25,7 +19,6 @@ import { useGetEconomicMovements } from 'src/api';
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -35,10 +28,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-// import InvoiceAnalytic from '../invoice-analytic';
-import InvoiceTableRow from './invoice-table-row';
-// import InvoiceTableToolbar from '../invoice-table-toolbar';
-// import InvoiceTableFiltersResult from '../invoice-table-filters-result';
+import InvoiceTableRow from './financial-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -47,18 +37,12 @@ const TABLE_HEAD = [
   { id: 'created_at', label: 'date' },
   { id: 'unit_service', label: 'unit of service' },
   { id: 'Balance', label: 'total amount' },
-  // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'status' },
-  // { id: '' },
+  { id: '', width: 120 },
 ];
 
 const defaultFilters = {
-  employee: '',
-  // patient: '',
-  service: '',
   status: 'all',
-  startDate: null,
-  endDate: null,
 };
 
 // ----------------------------------------------------------------------
@@ -68,28 +52,25 @@ export default function InvoiceListView() {
   const settings = useSettingsContext();
   const router = useRouter();
   const table = useTable({ defaultOrderBy: 'created_at' });
-  // const confirm = useBoolean();
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
 
   const [filters, setFilters] = useState(defaultFilters);
-  console.log('user.patient', user.patient._id)
 
-  const { economecMovementsData, lengths, totals } = useGetEconomicMovements({
+  const { economecMovementsData, lengths } = useGetEconomicMovements({
     patient: user?.patient._id,
     page: table.page || 0,
     sortBy: table.orderBy || 'created_at',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
-    select: 'sequence_number created_at unit_service Balance status updated_at',
     populate: [
-      { path: 'unit_service', select: 'name_english name_arabic' },
+      { path: 'unit_service', select: 'name_english name_arabic company_logo address phone ' },
+      { path: 'patient', select: 'name_english name_arabic address mobile_num1' },
+      { path: 'Provided_services' },
     ],
     ...filters,
   });
-
-  const dateError = isAfter(filters.startDate, filters.endDate);
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 
@@ -117,12 +98,6 @@ export default function InvoiceListView() {
       color: 'info',
       count: lengths.insuranceLength || 0,
     },
-    // {
-    //   value: 'draft',
-    //   label: 'draft',
-    //   color: 'default',
-    //   count: lengths.draftLength || 0,
-    // },
   ];
 
   const handleFilters = useCallback(
@@ -136,13 +111,9 @@ export default function InvoiceListView() {
     [table]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.accounting.economicmovements.info(id));
+      router.push(paths.dashboard.user.financilmovmentInfo(id));
     },
     [router]
   );
@@ -156,56 +127,6 @@ export default function InvoiceListView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-     
-      {/* <Card
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        <Scrollbar>
-          <Stack
-            direction="row"
-            divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-            sx={{ py: 2 }}
-          >
-            <InvoiceAnalytic
-              title={t('total')}
-              total={lengths.allLength}
-              percent={100}
-              price={totals.allTotal}
-              icon="solar:bill-list-bold-duotone"
-              color={theme.palette.secondary.main}
-            />
-
-            <InvoiceAnalytic
-              title={t('paid')}
-              total={lengths.paidLength}
-              percent={(lengths.paidLength / lengths.allLength) * 100}
-              price={totals.paidTotal}
-              icon="solar:file-check-bold-duotone"
-              color={theme.palette.success.main}
-            />
-
-            <InvoiceAnalytic
-              title={t('installment')}
-              total={lengths.installmentLength}
-              percent={(lengths.installmentLength / lengths.allLength) * 100}
-              price={totals.installmentTotal}
-              icon="solar:sort-by-time-bold-duotone"
-              color={theme.palette.warning.main}
-            />
-
-            <InvoiceAnalytic
-              title={t('insurance')}
-              total={lengths.insuranceLength}
-              percent={(lengths.insuranceLength / lengths.allLength) * 100}
-              price={totals.insuranceTotal}
-              icon="solar:bell-bing-bold-duotone"
-              color={theme.palette.info.main}
-            />
-          </Stack>
-        </Scrollbar>
-      </Card> */}
 
       <Card>
         <Tabs
@@ -236,64 +157,7 @@ export default function InvoiceListView() {
           ))}
         </Tabs>
 
-        {/* <InvoiceTableToolbar
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          dateError={dateError}
-        /> */}
-
-        {/* {canReset && (
-          <InvoiceTableFiltersResult
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            onResetFilters={handleResetFilters}
-            //
-            results={economecMovementsData.length}
-            sx={{ p: 2.5, pt: 0 }}
-          />
-        )} */}
-
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          {/* <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={economecMovementsData.length}
-            onSelectAllRows={(checked) => {
-              table.onSelectAllRows(
-                checked,
-                economecMovementsData.map((row) => row.id)
-              );
-            }}
-            action={
-              <Stack direction="row">
-                <Tooltip title="Sent">
-                  <IconButton color="primary">
-                    <Iconify icon="iconamoon:send-fill" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Download">
-                  <IconButton color="primary">
-                    <Iconify icon="eva:download-outline" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Print">
-                  <IconButton color="primary">
-                    <Iconify icon="solar:printer-minimalistic-bold" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            }
-          /> */}
 
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -304,12 +168,6 @@ export default function InvoiceListView() {
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     economecMovementsData.map((row) => row.id)
-              //   )
-              // }
               />
 
               <TableBody>

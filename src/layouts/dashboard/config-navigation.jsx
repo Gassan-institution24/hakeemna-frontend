@@ -785,9 +785,33 @@ export function useNavData() {
             icon: <Iconify icon="streamline:information-desk-customer-solid" />,
           },
           {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('accounting'),
             path: paths.stakeholder.accounting.root,
             icon: <Iconify icon="fa6-solid:money-bill-transfer" />,
+            navItemId: 'USAccountingNav',
+            children: [
+              {
+                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                title: t('invoicing'),
+                path: paths.stakeholder.accounting.invoicing,
+              },
+              {
+                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                title: t('economic movements'),
+                path: paths.stakeholder.accounting.economicmovements.root,
+              },
+              {
+                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                title: t('payment control'),
+                path: paths.stakeholder.accounting.paymentcontrol.root,
+              },
+              {
+                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                title: t('reciepts'),
+                path: paths.stakeholder.accounting.reciepts.root,
+              },
+            ],
           },
           {
             title: t('profile'),

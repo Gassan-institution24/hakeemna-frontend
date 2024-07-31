@@ -33,6 +33,7 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
@@ -82,7 +83,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     reset,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = methods;
 
   useEffect(() => {
@@ -155,7 +156,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                         newValue,
                         user?.employee?.employee_engagements[user?.employee.selected_engagement]
                           ?.unit_service?.country?.time_zone ||
-                          Intl.DateTimeFormat().resolvedOptions().timeZone
+                        Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}
@@ -248,9 +249,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
             {t('cancel')}
           </Button>
 
-          <Button type="submit" variant="contained">
+          <LoadingButton loading={isSubmitting} type="submit" variant="contained">
             {t('add')}
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </FormProvider>
     </Dialog>

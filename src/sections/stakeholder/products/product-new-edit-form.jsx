@@ -7,7 +7,7 @@ import { useMemo, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+import { Checkbox, MenuItem } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
@@ -23,8 +23,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetCurrencies } from 'src/api';
-import { useTranslate } from 'src/locales';
+import { useGetCurrencies, useGetDeductions, useGetTaxes } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetProductCategories } from 'src/api/product';
 
@@ -43,12 +43,15 @@ export default function ProductNewEditForm({ currentProduct }) {
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { currencies } = useGetCurrencies();
+  const { taxesData } = useGetTaxes();
+  const { deductionsData } = useGetDeductions();
   const { productCat } = useGetProductCategories();
 
   const NewProductSchema = Yup.object().shape({
@@ -300,19 +303,36 @@ export default function ProductNewEditForm({ currentProduct }) {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Box component="span" sx={{ color: 'text.disabled' }}>
-                      $
+                      JOD
                     </Box>
                   </InputAdornment>
                 ),
               }}
             />
-            <RHFSelect name="currency" label={t('currency')} InputLabelProps={{ shrink: true }}>
+            <Stack direction={{ md: 'row' }}>
+              <RHFSelect name="tax" label={t('tax')}>
+                {taxesData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+
+              <RHFSelect name="deduction" label={t('deduction')}>
+                {deductionsData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            </Stack>
+            {/* <RHFSelect name="currency" label={t('currency')} InputLabelProps={{ shrink: true }}>
               {currencies.map((one) => (
                 <MenuItem key={one._id} value={one._id}>
                   {one.symbol || one.name_english}
                 </MenuItem>
               ))}
-            </RHFSelect>
+            </RHFSelect> */}
           </Stack>
         </Card>
       </Grid>

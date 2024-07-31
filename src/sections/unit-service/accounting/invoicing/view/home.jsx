@@ -40,7 +40,7 @@ const defaultFilters = {
   types: '',
   shift: '',
   group: '',
-  startDate: new Date(),
+  startDate: null,
   endDate: null,
 };
 
@@ -69,7 +69,7 @@ export default function AppointmentsView() {
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const [filters, setFilters] = useState({ ...defaultFilters, startDate: new Date() });
 
   const { appointmentsData, appointmentsLength, refetch, loading } = useGetUSAppointments(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
@@ -79,6 +79,14 @@ export default function AppointmentsView() {
       rowsPerPage: table.rowsPerPage || 5,
       order: table.order || 'asc',
       invoiced: false,
+      select: '_id appoint_number entrance unit_service work_group medicalAnalysis appointment_type patient start_time status',
+      populate: [
+        { path: 'unit_service', select: 'country', populate: [{ path: 'country', select: 'time_zone' }] },
+        { path: 'work_group', select: 'name_english name_arabic' },
+        { path: 'appointment_type', select: 'name_english name_arabic' },
+        { path: 'appointment_type', select: 'name_english name_arabic' },
+        { path: 'patient', select: 'name_english name_arabic' },
+      ],
       ...filters,
     }
   );
