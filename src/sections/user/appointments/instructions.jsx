@@ -1,41 +1,51 @@
+import { PDFDownloadLink } from '@react-pdf/renderer';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import { IconButton } from '@mui/material';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { fDate } from 'src/utils/format-time';
 
-import { fTime, fDateAndTime } from 'src/utils/format-time';
-
+import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatientInstructionsData } from 'src/api/Instructions';
 
 import Iconify from 'src/components/iconify';
+// import InvoicePDF from 'src/sections/unit-service/accounting/reciepts/invoice-pdf';
 // ----------------------------------------------------------------------
 
 export default function Instructions() {
-  const router = useRouter();
   const { user } = useAuthContext();
   const { data } = useGetPatientInstructionsData(user?.patient?._id);
-  console.log(data);
-  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const handleViewRow = (id) => {
-    router.push(paths.dashboard.user.bookappointment(id));
-  };
 
   return data?.map((info, index) => (
     <Box>
       <Card key={index}>
         <Stack sx={{ p: 3, pb: 2 }}>
+        <PDFDownloadLink
+            // document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
+            // fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {({ loading }) => (
+              <Tooltip title='download'>
+                <IconButton>
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    <Iconify icon="eva:cloud-download-fill" />
+                  )}
+                </IconButton>
+              </Tooltip>
+            )}
+          </PDFDownloadLink>
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english}
           </Stack>
