@@ -49,7 +49,6 @@ export default function WaitingRoom() {
     selectedTitle,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log(EntranceByActivity,"EntranceByActivity");
 
   const goToProcessingPage = async (entrance) => {
     try {
