@@ -309,7 +309,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                 ),
               }}
             />
-            <Stack direction={{ md: 'row' }}>
+            <Stack direction={{ md: 'row' }} gap={1}>
               <RHFSelect name="tax" label={t('tax')}>
                 {taxesData.map((one, idx) => (
                   <MenuItem lang="ar" key={idx} value={one._id}>
