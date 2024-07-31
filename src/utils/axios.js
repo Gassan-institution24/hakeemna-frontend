@@ -405,6 +405,10 @@ export const endpoints = {
     one: (id, SuId) => `/api/history/patient/${id}/unit/${SuId}`,
     patient: (id) => (!id ? null : `/api/history/patient/${id}`),
   },
+  Instructions: {
+    all: '/api/instructions',
+    patient: (id) => (!id ? null : `/api/instructions/patient/${id}`),
+  },
   generalCheckList: {
     all: '/api/generlaCL',
     one: (id) => (!id ? null : `/api/generlaCL/${id}`),
