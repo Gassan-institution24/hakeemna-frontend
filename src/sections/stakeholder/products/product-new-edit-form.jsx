@@ -63,7 +63,7 @@ export default function ProductNewEditForm({ currentProduct }) {
     category: Yup.string().required('Category is required'),
     quantity: Yup.number().moreThan(0, 'Price should not be 0'),
     price: Yup.number().moreThan(0, 'Price should not be $0.00'),
-    currency: Yup.string(0).required('required field'),
+    // currency: Yup.string(0).required('required field'),
     taxes: Yup.number(),
     status: Yup.string(),
     to_patients: Yup.bool(),
@@ -82,7 +82,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       //
       price: currentProduct?.price || 0,
       quantity: currentProduct?.quantity || 0,
-      currency: currentProduct?.currency?._id || null,
+      // currency: currentProduct?.currency?._id || null,
       taxes: currentProduct?.taxes || 0,
       status: currentProduct?.status || 'published',
       to_patients: currentProduct?.to_patients || true,
@@ -309,7 +309,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                 ),
               }}
             />
-            <Stack direction={{ md: 'row' }}>
+            <Stack direction={{ md: 'row' }} gap={1}>
               <RHFSelect name="tax" label={t('tax')}>
                 {taxesData.map((one, idx) => (
                   <MenuItem lang="ar" key={idx} value={one._id}>

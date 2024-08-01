@@ -41,14 +41,14 @@ export default function DoctornaQCPage() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Doctorna Quality Control"
+        heading="hakeemna Quality Control"
         links={[
           {
             name: 'dashboard',
             href: paths.superadmin.root,
           },
           {
-            name: 'Doctorna Quality Control',
+            name: 'hakeemna Quality Control',
           },
         ]}
         sx={{

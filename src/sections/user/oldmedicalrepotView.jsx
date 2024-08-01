@@ -66,7 +66,7 @@ export default function OldmedicalrepotView() {
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
         {oldmedicalreports?.file?.map((img) => (
           <Image
-            src={`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${img}`}
+            src={`https://api.hakeemna.com/uploaded-files/patients/old_medical_reports/${img}`}
             //  src={`http://localhost:3000/uploaded-files/patients/old_medical_reports/${img}`}
             sx={{ m: 1 }}
           />

@@ -175,7 +175,7 @@ export default function UsPricing() {
               color="inherit"
               size="large"
               variant="contained"
-              href="mailto:doctorna2023@gmail.com?subject=[Feedback] from Customer"
+              href="mailto:info@hakeemna.com?subject=[Feedback] from Customer"
             >
               {t('contact us')}
             </Button>

@@ -8,7 +8,7 @@ export default function QualityControlPage() {
   return (
     <>
       <Helmet>
-        <title> Doctorna Quality Control</title>
+        <title> Hakeemna Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
 
