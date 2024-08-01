@@ -32,8 +32,8 @@ const LINKS = [
   {
     headline: 'legal',
     children: [
-      { name: 'terms and condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' },
+      { name: 'terms and condition', href: paths.pages.Termsandcondition },
+      { name: 'Privacy Policy', href: paths.pages.Privacypolicy },
     ],
   },
   {

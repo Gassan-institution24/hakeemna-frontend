@@ -5,6 +5,8 @@ import MainLayout from 'src/layouts/main';
 import CompactLayout from 'src/layouts/compact';
 
 import { SplashScreen } from 'src/components/loading-screen';
+import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicy';
+import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +36,8 @@ export const mainRoutes = [
     ),
     children: [
       { path: 'patients', element: <Patientsservices /> },
+      { path: 'termsandcondition', element: <TermsAndCondition /> },
+      { path: 'privacypolicy', element: <Privacypolicy/> },
       { path: 'units', element: <Unitservices /> },
       { path: 'UsPricing', element: <UsPricing /> },
       { path: 'about', element: <AboutUs /> },
