@@ -67,7 +67,9 @@ export default function Processing() {
               {medRecord && (
                 <Box>
                   <Button onClick={() => handleBackClick(id)} sx={{ width: '100%', m: 1 }}>
-                    {curLangAr ? `عرض السجل المرضي ل ${Entrance?.patient?.name_arabic}` : ` View all ${Entrance?.patient?.name_english} Visits history`}
+                    {curLangAr
+                      ? `عرض السجل المرضي ل ${Entrance?.patient?.name_arabic}`
+                      : ` View all ${Entrance?.patient?.name_english} Visits history`}
                   </Button>
                   <Divider />
                 </Box>
@@ -80,12 +82,12 @@ export default function Processing() {
       icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
     },
 
-    {
-      key: 1,
-      title: <History />,
-      color: 'primary',
-      icon: <Iconify icon="eva:folder-add-fill" width={24} />,
-    },
+    // {
+    //   key: 1,
+    //   title: <History />,
+    //   color: 'primary',
+    //   icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    // },
 
     {
       key: 3,
@@ -94,7 +96,7 @@ export default function Processing() {
           <span
             style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
           >
-            {t("Choose a Check List")}
+            {t('Choose a Check List')}
           </span>
           <CheckList />
         </>
@@ -106,7 +108,7 @@ export default function Processing() {
       key: 7,
       title: (
         <>
-          {t("Upload files")}
+          {t('Upload files')}
           <br />
           <TabsView patient={data} service_unit={Entrance?.service_unit?._id} />
         </>
@@ -119,7 +121,7 @@ export default function Processing() {
       key: 5,
       title: (
         <>
-         {t("Adjustable document")} ({t("optional")}) <br />
+          {t('Adjustable document')} ({t('optional')}) <br />
           <Adjustabledocument patient={data} />
         </>
       ),
@@ -130,7 +132,7 @@ export default function Processing() {
       key: 6,
       title: (
         <>
-          {t("Services provided")} 
+          {t('Services provided')}
           <br />
           <ServicesProvided patient={data} />
         </>
@@ -157,7 +159,23 @@ export default function Processing() {
         <div key={item.key} style={{ marginBottom: '16px' }}>
           {renderTimelineItems(item)}
         </div>
-      ))}
+      ))}{' '}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
+        <Rooms />
+      </Box>
     </div>
   ) : (
     <>
@@ -172,6 +190,8 @@ export default function Processing() {
           </TimelineItem>
         ))}
       </Timeline>
+      <br />
+      <br />
       <br />
       <br />
       <br />

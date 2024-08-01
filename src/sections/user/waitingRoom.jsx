@@ -56,7 +56,7 @@ export default function WatingRoom() {
                   <TableCell>Go to {entranceData?.Next_activity?.name_english} Room </TableCell>
                 </TableRow>
 
-                <TableRow>
+                {/* <TableRow>
                   <TableCell sx={{ py: 2 }} colSpan={6}>
                     <IconButton
                       size="small"
@@ -106,7 +106,7 @@ export default function WatingRoom() {
                       </Paper>
                     </Collapse>
                   </TableCell>
-                </TableRow>
+                </TableRow> */}
               </TableBody>
             </Table>
           </Scrollbar>

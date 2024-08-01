@@ -99,7 +99,6 @@ export default function Rooms() {
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
       console.error(error.message);
-      console.log(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
@@ -201,7 +200,7 @@ export default function Rooms() {
         </DialogActions>
       </Dialog>
 
-      <Card sx={{ display: 'flex', gap: 15 }}>
+      <Card sx={{ display: { md: 'flex', xs: 'grid' }, gridTemplateColumns: '1fr', gap: {md:15,xs:1} }}>
         <Box sx={{ m: 2 }}>
           <Typography variant="h6">{t('Last activity')}</Typography>
           <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
@@ -215,7 +214,7 @@ export default function Rooms() {
 
         <Box sx={{ m: 2 }}>
           <Typography variant="h6">{t('Next Activity')}</Typography>
-          <Box sx={{ m: 2, display: 'grid', gridTemplateColumns: '1fr 1fr ' }}>
+          <Box sx={{ mb: 9}} >
             <Box>
               <TextField
                 onChange={(e) => setNoteContent(e.target.value)}
@@ -236,34 +235,43 @@ export default function Rooms() {
                 <MenuItem value="" disabled sx={{ display: 'none' }}>
                   {t('Choose')}
                 </MenuItem>
-                {roomsData?.map((rooms, index) => (
-                  <MenuItem
-                    key={index}
-                    onClick={() => {
-                      if (
-                        Entrance?.Current_activity?.name_english !== rooms?.activities?.name_english
-                      ) {
-                        setConfirmRoomsdata(rooms);
-                        dialog.onTrue();
-                      }
-                    }}
-                    variant="contained"
-                    sx={{
-                      bgcolor:
+                {roomsData?.map((rooms, index) => {
+                  // Ensure rooms.employee is an array and map through it to get employee names
+                  const employeeNames = Array.isArray(rooms.employee)
+                    ? rooms.employee.map((employee) => employee.name_english).join(', ')
+                    : '';
+
+                  return (
+                    <MenuItem
+                      key={index}
+                      onClick={() => {
+                        if (
+                          Entrance?.Current_activity?.name_english !==
+                          rooms?.activities?.name_english
+                        ) {
+                          setConfirmRoomsdata(rooms);
+                          dialog.onTrue();
+                        }
+                      }}
+                      variant="contained"
+                      sx={{
+                        bgcolor:
+                          Entrance?.Current_activity?.name_english ===
+                          rooms?.activities?.name_english
+                            ? ''
+                            : 'success.main',
+                        m: 2,
+                      }}
+                      disabled={
                         Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                          ? ''
-                          : 'success.main',
-                      m: 2,
-                    }}
-                    disabled={
-                      Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                    }
-                  >
-                    {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                      ? `${rooms?.name_english} (Current)`
-                      : `Go to ${rooms?.name_english} Room`}
-                  </MenuItem>
-                ))}
+                      }
+                    >
+                      {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
+                        ? `${rooms?.name_english} (Current) ${employeeNames}`
+                        : `Go to ${rooms?.name_english} ${employeeNames}`}
+                    </MenuItem>
+                  );
+                })}
               </Select>
               <Button
                 onClick={() => handleEndAppointment()}
