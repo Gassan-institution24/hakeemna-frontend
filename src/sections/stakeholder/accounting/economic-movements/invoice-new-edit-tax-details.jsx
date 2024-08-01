@@ -30,7 +30,7 @@ export default function InvoiceNewEditDetails() {
 
   const { productsData } = useGetStakeholderProducts(
     user?.stakeholder?._id,
-    { populate: 'category currency', }
+    { populate: 'tax deduction', }
   );
 
   const { control, setValue, watch } = useFormContext();
@@ -43,51 +43,51 @@ export default function InvoiceNewEditDetails() {
   const values = watch();
 
   const [taxSums, setTaxSums] = useState({});
-  // const [deductionSums, setDeductionSums] = useState({});
+  const [deductionSums, setDeductionSums] = useState({});
 
   useEffect(() => {
     const newTaxSums = {};
-    // const newDeductionSums = {};
+    const newDeductionSums = {};
 
     productsData.forEach((product) => {
-      const matchingItems = values.products.filter((item) => item.product_type === product._id);
+      const matchingItems = values.products.filter((item) => item.product === product._id);
       if (matchingItems.length) {
         matchingItems.forEach((item) => {
-          const taxId = product.tax._id;
+          const taxId = product?.tax?._id;
           const taxAmount =
-            (product.tax.percentage / 100) *
+            ((product.tax ? product.tax.percentage : 0) / 100) *
             (item.price_per_unit * item.quantity - item.discount_amount);
+          if (taxAmount) {
+            if (!newTaxSums[taxId]) {
+              newTaxSums[taxId] = {
+                name: curLangAr ? product?.tax?.name_arabic : product.tax?.name_english,
+                value: 0,
+              };
+            }
 
-          if (!newTaxSums[taxId]) {
-            newTaxSums[taxId] = {
-              name: curLangAr ? product.tax.name_arabic : product.tax.name_english,
-              value: 0,
-            };
+            newTaxSums[taxId].value += taxAmount;
           }
+          if (product.deduction) {
+            const deductionId = product?.deduction?._id;
+            const deductionAmount =
+              ((product.deduction ? product.deduction.percentage : 0) / 100) *
+              ((item.price_per_unit * item.quantity) - item.discount_amount)
 
-          newTaxSums[taxId].value += taxAmount;
+            if (!newDeductionSums[deductionId]) {
+              newDeductionSums[deductionId] = {
+                name: curLangAr ? product.deduction?.name_arabic : product.deduction?.name_english,
+                value: 0,
+              };
+            }
 
-          // if (product.deduction) {
-          //   const deductionId = product.deduction._id;
-          //   const deductionAmount =
-          //     (product.deduction.percentage / 100) *
-          //     ((item.price_per_unit * item.quantity) - item.discount_amount)
-
-          //   if (!newDeductionSums[deductionId]) {
-          //     newDeductionSums[deductionId] = {
-          //       name: curLangAr ? product.deduction.name_arabic : product.deduction.name_english,
-          //       value: 0,
-          //     };
-          //   }
-
-          //   newDeductionSums[deductionId].value += deductionAmount;
-          // }
+            newDeductionSums[deductionId].value += deductionAmount;
+          }
         });
       }
     });
 
     setTaxSums(newTaxSums);
-    // setDeductionSums(newDeductionSums);
+    setDeductionSums(newDeductionSums);
   }, [values, productsData, curLangAr]);
 
   const summedTaxes = useMemo(
@@ -99,14 +99,16 @@ export default function InvoiceNewEditDetails() {
     [taxSums]
   );
 
-  // const summedDeductions = useMemo(
-  //   () =>
-  //     Object.keys(deductionSums).map((deductionId) => ({
-  //       name: deductionSums[deductionId].name,
-  //       value: deductionSums[deductionId].value,
-  //     })),
-  //   [deductionSums]
-  // );
+  const summedDeductions = useMemo(
+    () =>
+      Object.keys(deductionSums).map((deductionId) => ({
+        name: deductionSums[deductionId].name,
+        value: deductionSums[deductionId].value,
+      })),
+    [deductionSums]
+  );
+  console.log('summedTaxes', summedTaxes)
+  console.log('summedTaxes', summedDeductions)
 
   // useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
   // useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
@@ -122,10 +124,10 @@ export default function InvoiceNewEditDetails() {
     (acc, one) => acc + (one.tax / 100) * (one.subtotal - one.discount_amount),
     0
   );
-  // const deductiontotal = values.products?.reduce(
-  //   (acc, one) => acc + (one.deduction / 100) * (one.subtotal - one.discount_amount),
-  //   0
-  // );
+  const deductiontotal = values.products?.reduce(
+    (acc, one) => acc + (one.deduction / 100) * (one.subtotal - one.discount_amount),
+    0
+  );
   const totalAmount = values.products?.reduce((acc, one) => acc + one.total, 0);
 
   useEffect(() => {
@@ -137,9 +139,9 @@ export default function InvoiceNewEditDetails() {
   useEffect(() => {
     setValue('taxes', taxesTotal);
   }, [taxesTotal, setValue]);
-  // useEffect(() => {
-  //   setValue('deduction', deductiontotal);
-  // }, [deductiontotal, setValue]);
+  useEffect(() => {
+    setValue('deduction', deductiontotal);
+  }, [deductiontotal, setValue]);
   useEffect(() => {
     setValue('totalAmount', totalAmount);
   }, [totalAmount, setValue]);
@@ -151,7 +153,7 @@ export default function InvoiceNewEditDetails() {
       price_per_unit: 0,
       subtotal: 0,
       discount_amount: 0,
-      // deduction: 0,
+      deduction: 0,
       tax: 0,
       total: 0,
     });
@@ -170,13 +172,13 @@ export default function InvoiceNewEditDetails() {
         values.products[index].quantity * values.products[index].price_per_unit
       );
       setValue(`products[${index}].tax`, selected?.tax?.percentage || 0);
-      // setValue(`products[${index}].deduction`, selected?.deduction?.percentage || 0);
+      setValue(`products[${index}].deduction`, selected?.deduction?.percentage || 0);
       const amountAfterDiscount =
         values.products[index].subtotal - values.products[index].discount_amount;
       const tax = amountAfterDiscount * (values.products[index].tax / 100);
-      // const deduction = amountAfterDiscount * (values.products[index].deduction / 100);
-      // const total = amountAfterDiscount + tax + deduction;
-      const total = amountAfterDiscount + tax;
+      const deduction = amountAfterDiscount * (values.products[index].deduction / 100);
+      const total = amountAfterDiscount + tax + deduction;
+      // const total = amountAfterDiscount + tax;
       setValue(`products[${index}].total`, total);
     },
     [setValue, values.products, productsData]
@@ -192,9 +194,9 @@ export default function InvoiceNewEditDetails() {
       const amountAfterDiscount =
         values.products[index].subtotal - values.products[index].discount_amount;
       const tax = amountAfterDiscount * (values.products[index].tax / 100);
-      // const deduction = amountAfterDiscount * (values.products[index].deduction / 100);
-      // const total = amountAfterDiscount + tax + deduction;
-      const total = amountAfterDiscount + tax;
+      const deduction = amountAfterDiscount * (values.products[index].deduction / 100);
+      const total = amountAfterDiscount + tax + deduction;
+      // const total = amountAfterDiscount + tax;
       setValue(`products[${index}].total`, total);
     },
     [setValue, values.products]
@@ -210,7 +212,7 @@ export default function InvoiceNewEditDetails() {
         { name: 'subtotal', value: values.subtotal },
         { name: 'discount', value: -values.discount, color: 'red' },
         ...summedTaxes,
-        // ...summedDeductions,
+        ...summedDeductions,
         // { name: 'taxes', value: values.taxes },
         // { name: 'deduction', value: values.deduction },
         {
@@ -400,7 +402,7 @@ export default function InvoiceNewEditDetails() {
                   },
                 }}
               />
-              {/* <RHFTextField
+              <RHFTextField
                 disabled
                 size="small"
                 type="number"
@@ -421,7 +423,7 @@ export default function InvoiceNewEditDetails() {
                     textAlign: { md: 'right' },
                   },
                 }}
-              /> */}
+              />
               <RHFTextField
                 disabled
                 size="small"

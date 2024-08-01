@@ -36,11 +36,9 @@ import InvoiceNewEditInstallment from './invoice-new-edit-installment';
 export default function InvoiceNewEditForm({ currentInvoice }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const appointment = searchParams.get('appointment');
-  const entrance = searchParams.get('entrance');
+  const order = searchParams.get('order');
 
-  const [entranceInfo, setEntranceInfo] = useState();
-  const [appointmentInfo, setAppointmentInfo] = useState();
+  const [orderInfo, setOrderInfo] = useState();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -57,27 +55,26 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewInvoiceSchema = Yup.object().shape({
-    createDate: Yup.mixed().nullable().required('Create date is required'),
-    patient: Yup.mixed().nullable().required('Invoice to is required'),
-    unit_service: Yup.mixed(),
+    createDate: Yup.mixed().nullable().required(t('required field')),
+    patient: Yup.mixed().nullable(),
+    unit_service: Yup.mixed().nullable(),
     appointment: Yup.mixed().nullable(),
     entrance: Yup.mixed().nullable(),
-    employee: Yup.mixed(),
+    employee: Yup.mixed().nullable(),
     dueDate: Yup.mixed().nullable(),
     detailedTaxes: Yup.bool(),
-    items: Yup.lazy(() =>
+    products: Yup.lazy(() =>
       Yup.array().of(
         Yup.object({
-          service_type: Yup.string().required('Service is required'),
-          activity: Yup.string().nullable(),
-          // deduction: Yup.number(),
+          product: Yup.string().required(t('required field')),
+          deduction: Yup.number(),
           price_per_unit: Yup.number(),
           discount_amount: Yup.number(),
           subtotal: Yup.number(),
           tax: Yup.number(),
           total: Yup.number(),
           quantity: Yup.number()
-            .required('Quantity is required')
+            .required(t('required field'))
         })
       )
     ),
@@ -85,8 +82,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     status: Yup.string(),
     taxes_type: Yup.string().nullable(),
     taxes: Yup.number(),
-    // deduction_type: Yup.string().nullable(),
-    // deduction: Yup.number(),
+    deduction_type: Yup.string().nullable(),
+    deduction: Yup.number(),
     discount: Yup.number(),
     work_shift: Yup.string().nullable(),
     subtotal: Yup.number(),
@@ -96,53 +93,59 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const defaultValues = useMemo(
     () => ({
       createDate: currentInvoice?.created_at || new Date(),
+      stakeholder:
+        currentInvoice?.unit_service?._id ||
+        currentInvoice?.unit_service ||
+        user?.stakeholder._id || null,
       unit_service:
         currentInvoice?.unit_service?._id ||
         currentInvoice?.unit_service ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        orderInfo?.unit_service?._id || null,
       employee:
         currentInvoice?.employee?._id ||
-        currentInvoice?.employee ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+        currentInvoice?.employee || null,
       patient:
         currentInvoice?.patient?._id ||
-        currentInvoice?.patient ||
-        entranceInfo?.patient ||
-        appointmentInfo?.patient ||
-        null,
-      work_shift:
-        currentInvoice?.work_shift?._id ||
-        currentInvoice?.work_shift ||
-        entranceInfo?.work_shift ||
-        appointmentInfo?.work_shift ||
+        currentInvoice?.patient?._id ||
+        orderInfo?.patient ||
         null,
       dueDate: currentInvoice?.dueDate || null,
-      entrance: currentInvoice?.entrance || entrance || null,
-      appointment: currentInvoice?.appointment || appointment || entranceInfo?.appointment || null,
       detailedTaxes: currentInvoice?.detailedTaxes || true,
       taxes: currentInvoice?.taxes || 0,
-      // deduction: currentInvoice?.Total_deduction_amount || 0,
+      deduction: currentInvoice?.Total_deduction_amount || 0,
       status: currentInvoice?.status || 'paid',
       discount: currentInvoice?.Total_discount_amount || 0,
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
-      products: currentInvoice?.products || [],
-      // items: currentInvoice?.Provided_services ||
-      //   (entranceInfo?.Service_types?.length > 0 &&
-      //     entranceInfo?.Service_types?.map((one) => ({
-      //       service_type: one._id || null,
-      //       activity: null,
-      //       quantity: 1,
-      //       price_per_unit: Number(one.Price_per_unit) || 0,
-      //       subtotal: Number(one.Price_per_unit) || 0,
-      //       discount_amount: 0,
-      //       // deduction: 0,
-      //       tax: 0,
-      //       total: Number(one.Price_per_unit) || 0,
-      //     }))) || [],
+      products: currentInvoice?.products || orderInfo?.products.map((one) => {
+        const subtotal = one.real_delieverd_quantity * one.price
+        const deduction = one.product?.deduction?.percentage ? one.product?.deduction?.percentage : 0
+        const tax = one.product?.tax?.percentage ? one.product?.tax?.percentage : 0
+        return ({
+          product: one.product?._id,
+          quantity: one.real_delieverd_quantity || 1,
+          price_per_unit: one.price || 0,
+          subtotal: subtotal || 0,
+          discount_amount: 0,
+          deduction: deduction || 0,
+          tax: tax || 0,
+          total: subtotal + (deduction / 100) * subtotal + (tax / 100) * subtotal || 0,
+        })
+      }) || [
+          {
+            product: null,
+            quantity: 1,
+            price_per_unit: 0,
+            subtotal: 0,
+            discount_amount: 0,
+            deduction: 0,
+            tax: 0,
+            total: 0,
+          }
+        ],
       payment_details: currentInvoice?.payment_details || [],
     }),
-    [currentInvoice, user?.employee, entrance, appointment, appointmentInfo, entranceInfo]
+    [currentInvoice, user?.stakeholder, orderInfo?.unit_service, orderInfo?.patient, orderInfo?.products]
   );
 
   const methods = useForm({
@@ -157,36 +160,12 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const values = watch()
+  console.log('valuessss', values.products)
 
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (entrance) {
-          const { data } = await axiosInstance.get(endpoints.entranceManagement.one(entrance), {
-            params: {
-              select: 'Service_types patient work_shift appointment',
-              populate: [
-                { path: 'Service_types', select: 'name_english name_arabic Price_per_unit' },
-              ],
-            },
-          });
-          setEntranceInfo(data);
-        } else if (appointment) {
-          const { data } = await axiosInstance.get(endpoints.appointments.one(appointment), {
-            params: { select: 'patient work_shift' },
-          });
-          setAppointmentInfo(data);
-        }
-      } catch (e) {
-        console.log('entranceData', e);
-      }
-    };
-    fetchData();
-  }, [appointment, entrance]);
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
@@ -214,6 +193,27 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     }
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (order) {
+          const { data } = await axiosInstance.get(endpoints.orders.one(order), {
+            params: {
+              select: 'Service_types patient work_shift appointment',
+              populate: [
+                { path: 'Service_types', select: 'name_english name_arabic Price_per_unit' },
+              ],
+            },
+          });
+          setOrderInfo(data);
+        }
+      } catch (e) {
+        console.log('entranceData', e);
+      }
+    };
+    fetchData();
+  }, [order]);
+
   return (
     <>
       <Container maxWidth="xl">
@@ -228,10 +228,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                 onChange={confirm.onTrue}
               />
             </Stack> */}
-            {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
+            {values.detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
             <InvoiceNewEditStatusDate />
 
-            {watch().status === 'paid' && (
+            {values.status === 'paid' && (
               <Stack sx={{ px: 3, py: 1 }}>
                 <RHFRadioGroup
                   row
@@ -268,11 +268,12 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <LoadingButton
               size="large"
               variant="contained"
+              disabled={!values.unit_service && !values.patient}
               loading={loadingSend.value && isSubmitting}
               onClick={() => {
-                if (watch().status === 'installment') {
+                if (values.status === 'installment') {
                   installment.onTrue();
-                } else if (watch().status === 'insurance') {
+                } else if (values.status === 'insurance') {
                   insurance.onTrue();
                 } else handleCreateAndSend();
               }}
@@ -293,7 +294,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             color="error"
             onClick={() => {
               setValue('items', defaultValues.items);
-              setValue('detailedTaxes', !watch().detailedTaxes);
+              setValue('detailedTaxes', !values.detailedTaxes);
               confirm.onFalse();
             }}
           >

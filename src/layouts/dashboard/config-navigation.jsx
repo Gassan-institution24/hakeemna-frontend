@@ -334,7 +334,7 @@ export function useNavData() {
           isMedLab,
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
-        // icon: <Iconify icon="fluent:content-settings-16-regular" />,
+        icon: <Iconify icon="fluent:content-settings-16-regular" />,
         navItemId: 'EMAppointConfigNav',
       },
       {
@@ -747,7 +747,7 @@ export function useNavData() {
             icon: <Iconify icon="ic:round-contact-support" />,
           },
           {
-            title: t('share doctorna'),
+            title: t('share hakeemna'),
             path: paths.dashboard.user.share,
             icon: <Iconify icon="bxs:share-alt" sx={{ color: 'success.main' }} />,
           },
@@ -791,11 +791,6 @@ export function useNavData() {
             icon: <Iconify icon="fa6-solid:money-bill-transfer" />,
             navItemId: 'USAccountingNav',
             children: [
-              {
-                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-                title: t('invoicing'),
-                path: paths.stakeholder.accounting.invoicing,
-              },
               {
                 show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
                 title: t('economic movements'),
