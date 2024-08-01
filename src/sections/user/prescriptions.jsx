@@ -193,7 +193,7 @@ export default function Prescriptions() {
     ),
     [styles, currentDate, user]
   );
-
+console.log(drugs);
   return drugs?.map((med, idx) => (
     <List key={idx} sx={{ bgcolor: 'aliceblue', mb: 2 }}>
       <ListItem sx={{ mb: 1 }}>
