@@ -38,7 +38,7 @@ const LINKS = [
   },
   {
     headline: 'contact',
-    children: [{ name: 'doctorna2023@gmail.com', href: '#' }],
+    children: [{ name: 'info@hakeemna.com', href: '#' }],
   },
 ];
 
@@ -48,28 +48,28 @@ const _socials = [
     name: 'FaceBook',
     icon: 'eva:facebook-fill',
     color: '#1877F2',
-    path: 'https://www.facebook.com/caitlyn.kerluke',
+    path: 'https://www.facebook.com/hakeemna',
   },
   {
     value: 'instagram',
     name: 'Instagram',
     icon: 'ant-design:instagram-filled',
     color: '#E02D69',
-    path: 'https://www.instagram.com/caitlyn.kerluke',
+    path: 'https://www.instagram.com/hakeemna',
   },
   {
     value: 'linkedin',
     name: 'Linkedin',
     icon: 'eva:linkedin-fill',
     color: '#007EBB',
-    path: 'https://www.linkedin.com/caitlyn.kerluke',
+    path: 'https://www.linkedin.com/hakeemna',
   },
   {
     value: 'twitter',
     name: 'Twitter',
     icon: 'eva:twitter-fill',
     color: '#00AAEC',
-    path: 'https://www.twitter.com/caitlyn.kerluke',
+    path: 'https://www.twitter.com/hakeemna',
   },
 ];
 
@@ -185,6 +185,7 @@ export default function Footer() {
                       href={link.href}
                       color="inherit"
                       variant="subtitle2"
+                      textTransform='lowercase'
                     >
                       {t(link.name)}
                     </Link>

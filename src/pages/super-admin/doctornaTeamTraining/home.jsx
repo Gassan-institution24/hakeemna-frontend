@@ -7,7 +7,7 @@ export default function DoctornaTeamTrainingPage() {
   return (
     <>
       <Helmet>
-        <title>Doctorna Team Training</title>
+        <title>hakeemna Team Training</title>
         <meta name="description" content="meta" />
       </Helmet>
 

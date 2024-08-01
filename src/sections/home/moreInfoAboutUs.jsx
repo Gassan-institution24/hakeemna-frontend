@@ -85,6 +85,16 @@ export default function MoreInfoAboutUs() {
             }}
           >
             {t(
+              'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions seeking to achieve efficiency in work. After studying the needs of medical institutions and users (patients and others) in the Arab world.'
+            )}
+          </Typography>
+          <Typography
+            sx={{
+              width: { md: '85%', xs: '100%' },
+              mt: 2,
+            }}
+          >
+            {t(
               'After studying the needs of medical institutions and users (patients and others) in the Arab world, a working team was formed to develop this platform. This team has full belief in the importance of developing electronic health services, especially the private sector in our Arab world, by raising the level of medical services and improving the efficiency of daily practices. For medical service providers, facilitating procedures for patients and keeping their medical information and documents securely and in one place.'
             )}
           </Typography>

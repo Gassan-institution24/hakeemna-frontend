@@ -89,7 +89,7 @@ export default function PatientTableView() {
 
   const router = useRouter();
 
-  const { patientsData, loading, refetch } = useGetPatients();
+  const { patientsData, loading, refetch } = useGetPatients({ populate: 'all' });
 
   const [filters, setFilters] = useState(defaultFilters);
 

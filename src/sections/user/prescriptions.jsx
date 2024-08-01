@@ -139,7 +139,7 @@ export default function Prescriptions() {
             <View key={idx}>
               <View style={styles.imgItem}>
                 <PdfImage src={Doclogo} style={styles.image} />
-                <Text>DOCTORNA HOSPITAL</Text>
+                <Text>HAKEEMNA HOSPITAL</Text>
                 <PdfImage src={Doclogo} style={styles.image} />
               </View>
               <View style={styles.departmentInfo}>

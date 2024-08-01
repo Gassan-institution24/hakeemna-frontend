@@ -26,10 +26,10 @@ export default function PatientsServices() {
             sx={{
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
-              fontSize: { xs: 35, md: 50 },
+              fontSize: { xs: 25, md: 40 },
             }}
           >
-            {t('WHAT WE DO')}
+            {t('What we offer (some services under development)')}
           </Typography>
         </m.div>
       </Container>
