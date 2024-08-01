@@ -71,18 +71,19 @@ export default function Header() {
                   justifyContent: 'space-between',
                 }}
               >
-                <Stack direction="row">
+                <Stack dir="ltr" direction="row">
                   <Iconify icon="ion:call" width={15} />
                   <Typography
+                    dir="ltr"
                     variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, mr: 2, ml: 1 }}
+                    sx={{ fontSize: 13, fontWeight: 500, mx: 1 }}
                   >
-                    +962 799411555
+                    +962 780830087
                   </Typography>
                   <Iconify icon="clarity:email-solid" width={18} />
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', ml: 1 }}
+                    sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', mx: 1 }}
                   >
                     info@hakeemna.com
                   </Typography>

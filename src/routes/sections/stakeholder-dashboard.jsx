@@ -55,7 +55,6 @@ const PaymentControlHomePage = lazy(() =>
 // RECEIPTS
 const ReceiptsHomePage = lazy(() => import('src/pages/stakeholder/accounting/reciepts/home'));
 const ReceiptsInfoPage = lazy(() => import('src/pages/stakeholder/accounting/reciepts/info'));
-const InvoicingHomePage = lazy(() => import('src/pages/stakeholder/accounting/invoicing/home'));
 
 // ----------------------------------------------------------------------
 
@@ -136,10 +135,6 @@ export const stakeholderDashboardRoutes = [
               { element: <ReceiptsHomePage />, index: true },
               { path: ':id/info', element: <ReceiptsInfoPage /> },
             ],
-          },
-          {
-            path: 'invoicing',
-            element: <InvoicingHomePage />,
           },
         ],
       },

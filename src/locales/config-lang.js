@@ -52,7 +52,7 @@ export const allLangs = [
   },
 ];
 
-export const defaultLang = allLangs[0]; // English
+export const defaultLang = allLangs[1]; // English
 
 // GET MORE COUNTRY FLAGS
 // https://icon-sets.iconify.design/flagpack/

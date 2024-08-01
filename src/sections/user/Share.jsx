@@ -12,7 +12,7 @@ import QR from './imges/Qr.png';
 
 export default function Share() {
   const [link, setLink] = useState(
-    'لقد أعجبني تطبيق Doctorna.Online وأريد مشاركته معك https://doctorna.online'
+    'لقد أعجبني تطبيق hakeemna.com وأريد مشاركته معك https://hakeemna.com'
   );
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -27,10 +27,9 @@ export default function Share() {
       })
       .catch((err) => {
         enqueueSnackbar(
-          `${
-            curLangAr
-              ? 'حدث خطأ ما, الرجاء المحاولة لاحفا'
-              : 'Something went wrong, please try again later'
+          `${curLangAr
+            ? 'حدث خطأ ما, الرجاء المحاولة لاحفا'
+            : 'Something went wrong, please try again later'
           }`,
           { variant: 'error' }
         );

@@ -50,7 +50,7 @@ export const langs = [
   // },
 ];
 
-export const defaultLangs = langs[0]; // English
+export const defaultLangs = langs[1]; // English
 
 // GET MORE COUNTRY FLAGS
 // https://icon-sets.iconify.design/flagpack/

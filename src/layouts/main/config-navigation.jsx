@@ -46,7 +46,7 @@ export const navConfig = [
     sectionId: 'home',
   },
   {
-    button: 'book an appointment',
+    button: 'Book Appointment',
     icon: <Iconify icon="streamline:waiting-appointments-calendar" />,
     path: paths?.pages.book,
   },
@@ -56,8 +56,18 @@ export const navConfig = [
     path: PATH_AFTER_LOGIN,
   },
   {
-    button: 'Signup',
+    button: 'join as unit of service',
     icon: <Iconify icon="mdi:register" />,
-    path: paths?.auth.register,
+    path: paths.auth.registersu,
+  },
+  {
+    button: 'join as supplier',
+    icon: <Iconify icon="mdi:register" />,
+    path: paths.auth.stakeholderRegister,
+  },
+  {
+    button: 'join as user',
+    icon: <Iconify icon="mdi:register" />,
+    path: paths.auth.register,
   },
 ];
