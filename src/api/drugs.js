@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetDrugs(id) {
-  const URL = endpoints.drugs.one(id);
+  const URL = endpoints.drugs.patient(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
