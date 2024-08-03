@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -24,10 +23,9 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFMultiSelect,
-  RHFAutocomplete,
 } from 'src/components/hook-form';
 
-const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
+// const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +49,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const NewSchema = Yup.object().shape({
     country: Yup.string().required('country is required'),
     trade_name: Yup.string().required('trade_name is required'),
-    concentrations: Yup.array(),
+    concentration: Yup.string(),
     agent: Yup.string(),
     price_1: Yup.string(),
     price_2: Yup.string(),
@@ -68,7 +66,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
     () => ({
       country: currentSelected?.country?._id || '',
       trade_name: currentSelected?.trade_name || '',
-      concentrations: currentSelected?.concentrations || [],
+      concentration: currentSelected?.concentration || [],
       agent: currentSelected?.agent || '',
       price_1: currentSelected?.price_1 || '',
       price_2: currentSelected?.price_2 || '',
@@ -129,58 +127,16 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFTextField name="trade_name" label="trade name" />
               <RHFTextField name="scientific_name" label="scientific name" />
-            </Box>
-
-            <Box
-              sx={{ my: 2 }}
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(1, 1fr)',
-              }}
-            >
-              <RHFAutocomplete
-                name="concentrations"
-                label="concentrations"
-                placeholder="+ concentration"
-                multiple
-                freeSolo
-                options={DefaultDoses.map((option, idx) => option)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option, idx) => (
-                  <li lang="ar" {...props} key={idx}>
-                    {option}
-                  </li>
-                )}
-                renderTags={(selected, getTagProps) =>
-                  selected.map((option, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={index}
-                      label={option}
-                      size="small"
-                      color="info"
-                      variant="soft"
-                    />
-                  ))
-                }
+              <RHFTextField
+                name="concentration"
+                label="concentration"
               />
-            </Box>
-
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }} /// edit
-            >
               <RHFTextField name="agent" label="agent" />
-              <RHFTextField name="price_1" label="price_1" />
-              <RHFTextField name="price_2" label="price_2" />
+              <RHFTextField name="public_price_with_tax" label="public price with tax" />
+              <RHFTextField name="hospital_price_with_tax" label="hospital price with tax" />
+              <RHFTextField name="public_price" label="public price" />
+              <RHFTextField name="hospital_price" label="hospital price" />
+              <RHFTextField name="pharmacist_price" label="pharmacist price" />
               <RHFTextField name="ATCCODE" label="ATCCODE" />
               <RHFTextField name="packaging" label="packaging" />
               <RHFTextField name="barcode" label="barcode" />
@@ -196,7 +152,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFSelect name="country" label="country">
-                {countriesData.map((country, idx) => (
+                {countriesData?.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
@@ -204,14 +160,14 @@ export default function CountriesNewEditForm({ currentSelected }) {
               </RHFSelect>
 
               <RHFSelect name="family" label="family">
-                {families.map((family, idx) => (
+                {families?.map((family, idx) => (
                   <MenuItem lang="ar" key={idx} value={family._id}>
                     {family.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
-              {sideEffectsMultiSelect.length > 0 && (
+              {sideEffectsMultiSelect?.length > 0 && (
                 <RHFMultiSelect
                   checkbox
                   name="side_effects"

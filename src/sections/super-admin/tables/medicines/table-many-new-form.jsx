@@ -6,7 +6,6 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
-  Chip,
   Table,
   Select,
   Checkbox,
@@ -16,7 +15,6 @@ import {
   TableCell,
   TextField,
   Typography,
-  Autocomplete,
   TableContainer,
 } from '@mui/material';
 
@@ -25,7 +23,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetSymptoms, useGetCountries, useGetMedFamilies } from 'src/api';
+import { useGetCountries, useGetMedFamilies } from 'src/api';
 
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
@@ -43,8 +41,7 @@ const TABLE_HEAD = [
   { label: 'family', width: 'calc(100%/10)' },
   { label: 'trade name*', width: 'calc(100%/10)' },
   { label: 'scientific name*', width: 'calc(100%/10)' },
-  { label: 'concentrations*', width: 'calc(100%/10)' },
-  { label: 'side effects', width: 'calc(100%/10)' },
+  { label: 'concentration*', width: 'calc(100%/10)' },
   { label: 'price', width: 'calc(100%/10)' },
   { label: 'ATCCODE', width: 'calc(100%/10)' },
   { label: 'barcode', width: 'calc(100%/10)' },
@@ -58,7 +55,7 @@ export default function NewEditManyForm() {
 
   const { countriesData } = useGetCountries({ select: 'name_english' }); /// edit
   const { families } = useGetMedFamilies(); /// edit
-  const { tableData } = useGetSymptoms(); /// edit
+  // const { tableData } = useGetSymptoms(); /// edit
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -339,50 +336,13 @@ export default function NewEditManyForm() {
                           }
                         />
                       </TableCell> */}
-                      <TableCell>
-                        <Select
-                          multiple
-                          variant="filled"
-                          required
-                          value={one.side_effects || []}
-                          onChange={(e) => handleSelect(index, e)}
-                          sx={{ width: '100%' }}
-                          size="small"
-                          name="side_effects"
-                          renderValue={(selected) => (
-                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                              {selected.map((value, idx) => {
-                                const symptom = tableData.find((item) => item._id === value);
-                                return (
-                                  <Chip
-                                    key={idx}
-                                    label={symptom.name_english}
-                                    style={{ margin: 2 }}
-                                  />
-                                );
-                              })}
-                            </div>
-                          )}
-                        >
-                          {tableData?.map((symptom, idx) => (
-                            <MenuItem lang="ar" key={idx} value={symptom._id}>
-                              {/* <Checkbox
-                                  checked={one?.symptoms?.includes(symptom._id)}
-                                  size="small"
-                                  disableRipple
-                                /> */}
-                              {symptom.name_english}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </TableCell>
                       <TableCell align="center">
                         <TextField
                           type="number"
                           size="small"
                           variant="filled"
                           onChange={(e) => handleArabicInputChange(index, e)}
-                          value={one.price}
+                          value={one.public_price_with_tax}
                           name="price"
                         />
                       </TableCell>

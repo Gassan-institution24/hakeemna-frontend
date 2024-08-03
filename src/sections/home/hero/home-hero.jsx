@@ -18,6 +18,7 @@ import UnitServiceHero from './unit-service-hero';
 // ----------------------------------------------------------------------
 
 export default function HomeHero() {
+  const xlUp = useResponsive('up', 'xl');
   const mdUp = useResponsive('up', 'md');
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -142,7 +143,7 @@ export default function HomeHero() {
             <Iconify
               sx={{
                 position: 'absolute',
-                bottom: 300,
+                bottom: xlUp ? 300 : 200,
                 right: curLangAr ? -40 : 300,
                 rotate: '-45deg',
                 animation: 'moveUpRight 1s infinite alternate',
@@ -158,10 +159,10 @@ export default function HomeHero() {
               icon="solar:double-alt-arrow-up-line-duotone"
               width={40}
             />
-            <img src="/assets/images/home/hero/users.png" width={300} alt="users" />
+            <img src="/assets/images/home/hero/users.png" width={xlUp ? 300 : 200} alt="users" />
             <div style={{ position: 'absolute', top: -200, right: curLangAr ? 50 : 70 }}>
               <Typography
-                variant="h4"
+                variant={xlUp ? "h4" : 'h5'}
                 sx={{
                   fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
                 }}
@@ -171,7 +172,7 @@ export default function HomeHero() {
               <img
                 src="/assets/images/home/hero/arrow.png"
                 style={{ rotate: '10deg' }}
-                width={100}
+                width={xlUp ? 100 : 70}
                 alt="arrow"
               />
             </div>
@@ -197,11 +198,11 @@ export default function HomeHero() {
               zIndex: 2,
             }}
           >
-            <img src="/assets/images/home/hero/doctors.png" width={350} alt="doctors" />
+            <img src="/assets/images/home/hero/doctors.png" width={xlUp ? 350 : 250} alt="doctors" />
             <Iconify
               sx={{
                 position: 'absolute',
-                bottom: 260,
+                bottom: xlUp ? 260 : 200,
                 left: curLangAr ? 0 : 350,
                 rotate: '45deg',
                 animation: 'moveUpRight 1s infinite alternate',
@@ -219,7 +220,7 @@ export default function HomeHero() {
             />
             <div style={{ position: 'absolute', top: -100, right: 80 }}>
               <Typography
-                variant="h4"
+                variant={xlUp ? "h4" : 'h5'}
                 sx={{
                   position: 'absolute',
                   top: -80,
@@ -232,14 +233,14 @@ export default function HomeHero() {
               <img
                 src="/assets/images/home/hero/arrow2.png"
                 style={{ rotate: '-50deg' }}
-                width={200}
+                width={xlUp ? 200 : 150}
                 alt="arrow"
               />
             </div>
           </div>
           <img
             src="/assets/images/home/hero/stethoscope.png"
-            style={{ position: 'absolute', top: 90, right: '20%', rotate: '240deg', zIndex: 2 }}
+            style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
             width={200}
             alt="stethoscope"
           />

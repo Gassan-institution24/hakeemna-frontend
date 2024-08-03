@@ -17,8 +17,8 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
   const {
     code,
     name_english,
-    name_arabic,
     description,
+    category,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -38,8 +38,8 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{name_arabic}</TableCell>
 
+      <TableCell align="center">{category}</TableCell>
       <TableCell align="center">{description}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

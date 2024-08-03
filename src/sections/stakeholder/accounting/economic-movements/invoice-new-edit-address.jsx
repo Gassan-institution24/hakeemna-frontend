@@ -6,12 +6,12 @@ import Typography from '@mui/material/Typography';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetPatient,
-  useGetUnitservice,
   useGetPatients,
+  useGetUnitservice,
   useGetActiveUnitservices,
 } from 'src/api';
 
-import { RHFAutocomplete, RHFRadioGroup } from 'src/components/hook-form';
+import { RHFRadioGroup, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

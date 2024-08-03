@@ -7,7 +7,7 @@ import { useMemo, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Checkbox, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
@@ -23,9 +23,9 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetCurrencies, useGetDeductions, useGetTaxes } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetTaxes, useGetDeductions } from 'src/api';
 import { useGetProductCategories } from 'src/api/product';
 
 import { useSnackbar } from 'src/components/snackbar';
