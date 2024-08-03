@@ -5,7 +5,7 @@ export default function TermsAndCondition() {
   return (
     <Container>
       <ul>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h3" gutterBottom sx={{mt:4}}>
           Terms and Conditions of Use (For Medical Service Beneficiaries)
         </Typography>
         <li>
@@ -15,11 +15,11 @@ export default function TermsAndCondition() {
             associated applications or related platform pages.
           </Typography>
         </li>
-        <li>
-          <Typography variant="body1" paragraph>
+     
+          <Typography variant="h4" paragraph>
             Definition of Terms:
           </Typography>
-        </li>
+       
         <li>
           <Typography variant="body1" paragraph>
             The first party is Hakeemna.com. When the term platform Hakeemna.com or Hakeemna.com
@@ -44,11 +44,11 @@ export default function TermsAndCondition() {
             residence to work directly or indirectly in the health sector.
           </Typography>
         </li>
-        <li>
-          <Typography variant="body1" paragraph>
+
+          <Typography variant="h4" paragraph>
             Terms and Conditions of Use
           </Typography>
-        </li>
+       
         <li>
           <Typography variant="body1" paragraph>
             Access or use of Hakeemna.com is only permitted for those who have agreed to the terms
