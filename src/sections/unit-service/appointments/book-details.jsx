@@ -14,8 +14,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetAppointment, useGetAppointmentTypes } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetAppointment, useGetAppointmentTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';

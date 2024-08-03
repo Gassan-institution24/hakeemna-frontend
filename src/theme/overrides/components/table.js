@@ -1,6 +1,7 @@
 import { alpha } from '@mui/material/styles';
 import { tableRowClasses } from '@mui/material/TableRow';
 import { tableCellClasses } from '@mui/material/TableCell';
+
 import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------

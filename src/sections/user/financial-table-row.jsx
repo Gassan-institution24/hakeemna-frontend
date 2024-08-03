@@ -1,9 +1,10 @@
 
 import PropTypes from 'prop-types';
-import { pdf, PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { Tooltip, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
@@ -11,8 +12,8 @@ import { fCurrency } from 'src/utils/format-number';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
-import { IconButton, Tooltip } from '@mui/material';
 import Iconify from 'src/components/iconify';
+
 import InvoicePDF from '../unit-service/accounting/economic-movements/invoice-pdf';
 
 // ----------------------------------------------------------------------

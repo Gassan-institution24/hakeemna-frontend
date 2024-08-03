@@ -24,7 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetSymptoms, useGetCategories } from 'src/api';
+import { useGetSymptoms } from 'src/api';
 
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
@@ -38,19 +38,18 @@ import {
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { label: 'name english *', width: 'calc(100%/6)' },
-  { label: 'name arabic *', width: 'calc(100%/6)' },
-  { label: 'category *', width: 'calc(100%/6)' },
-  { label: 'symptoms *', width: 'calc(100%/6)' },
-  { label: 'description english', width: 'calc(100%/6)' },
-  { label: 'description arabic', width: 'calc(100%/6)' },
+  { label: 'Name', width: 'calc(100%/6)' },
+  { label: 'ICD_code', width: 'calc(100%/6)' },
+  { label: 'Parent', width: 'calc(100%/6)' },
+  { label: 'Group', width: 'calc(100%/6)' },
+  { label: 'symptoms', width: 'calc(100%/6)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { categories } = useGetCategories(); /// edit
+  // const { categories } = useGetCategories(); /// edit
   const { tableData } = useGetSymptoms(); /// edit
 
   const { enqueueSnackbar } = useSnackbar();
@@ -147,7 +146,7 @@ export default function NewEditManyForm() {
         );
         return insertedDataPromise.then((insertedData) =>
           axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
-            uploaded: insertedData.data,
+            uploaded: insertedData.data?.length,
           })
         );
       });
@@ -188,7 +187,7 @@ export default function NewEditManyForm() {
             }
             action={
               <>
-                <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Category:</Typography>
+                {/* <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Category:</Typography>
                 <Select
                   variant="filled"
                   sx={{ width: '20%', border: '1px solid gray' }}
@@ -202,7 +201,7 @@ export default function NewEditManyForm() {
                       {category.name_english}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
                 <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Symptoms:</Typography>
                 <Select
                   many
@@ -258,8 +257,8 @@ export default function NewEditManyForm() {
                           size="small"
                           variant="filled"
                           onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.name_english}
-                          name="name_english"
+                          value={one.Name}
+                          name="Name"
                         />
                       </TableCell>
                       <TableCell align="center">
@@ -267,26 +266,27 @@ export default function NewEditManyForm() {
                           size="small"
                           variant="filled"
                           onChange={(e) => handleArabicInputChange(index, e)}
-                          value={one.name_arabic}
-                          name="name_arabic"
+                          value={one.ICD_code}
+                          name="ICD_code"
                         />
                       </TableCell>
                       <TableCell align="center">
-                        <Select
-                          variant="filled"
-                          required
-                          value={one.category || ''}
-                          onChange={(e) => handleSelect(index, e)}
-                          sx={{ width: '80%' }}
+                        <TextField
                           size="small"
-                          name="category"
-                        >
-                          {categories.map((category, idx) => (
-                            <MenuItem lang="ar" key={idx} value={category._id}>
-                              {category.name_english}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.Parent}
+                          name="Parent"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <TextField
+                          size="small"
+                          variant="filled"
+                          onChange={(e) => handleArabicInputChange(index, e)}
+                          value={one.Group}
+                          name="Group"
+                        />
                       </TableCell>
                       <TableCell align="center">
                         <Select
@@ -324,24 +324,6 @@ export default function NewEditManyForm() {
                             </MenuItem>
                           ))}
                         </Select>
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.description}
-                          name="description"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleArabicInputChange(index, e)}
-                          value={one.description_arabic}
-                          name="description_arabic"
-                        />
                       </TableCell>
                     </TableRow>
                   ))}

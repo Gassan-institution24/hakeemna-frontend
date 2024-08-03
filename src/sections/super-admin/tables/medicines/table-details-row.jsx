@@ -34,7 +34,7 @@ export default function CountriesTableRow({
     country,
     ATCCODE,
     barcode,
-    concentrations,
+    // concentrations,
     agent,
     price_1,
     price_2,
@@ -235,14 +235,8 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{price_2}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Barcode:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{barcode}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Concentrations:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          {concentrations.map((one, idx) => (
-            <>{one} / </>
-          ))}
-        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Side Effects:</Box>
-        {side_effects.map((one, idx) => (
+        {side_effects?.map((one, idx) => (
           <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
         ))}
       </CustomPopover>

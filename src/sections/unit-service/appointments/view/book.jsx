@@ -29,13 +29,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Stack, MenuItem, IconButton, Button } from '@mui/material';
+import { Box, Card, Stack, Button, MenuItem, IconButton } from '@mui/material';
 
 import { useSearchParams } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { addToCalendar } from 'src/utils/calender';
 import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+// import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Iconify from 'src/components/iconify';
 // import { LoadingScreen } from 'src/components/loading-screen';
@@ -51,10 +57,6 @@ import {
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
-import { RouterLink } from 'src/routes/components';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
-import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -79,7 +81,7 @@ export default function TableCreateView() {
   const { myunitTime } = useUnitTime();
   const addModal = useBoolean();
   const checkAcl = useAclGuard();
-  const { isMedLab } = useUSTypeGuard();
+  // const { isMedLab } = useUSTypeGuard();
 
   const [search, setSearch] = useState({
     name_english: '',

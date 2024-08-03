@@ -10,8 +10,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // CHECKLIST
 const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
-const ChecklistNewPage = lazy(() => import('src/pages/employee/checklist/new'));
-const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit'));
+// const ChecklistNewPage = lazy(() => import('src/pages/employee/checklist/new'));
+// const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit'));
 
 // PRODUCTS
 const ProductsPage = lazy(() => import('src/pages/stakeholder/products/list'));
