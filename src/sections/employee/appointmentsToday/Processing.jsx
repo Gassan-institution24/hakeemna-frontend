@@ -20,7 +20,7 @@ import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src
 import Iconify from 'src/components/iconify';
 
 import Rooms from './rooms';
-import History from './history';
+// import History from './history';
 import TabsView from './tabs-view';
 import CheckList from './checkList';
 import ServicesProvided from './servicesProvided';
