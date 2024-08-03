@@ -33,8 +33,8 @@ import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/t
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { label: 'name english *', width: 'calc(100%/4)' },
-  { label: 'name arabic *', width: 'calc(100%/4)' },
+  { label: 'name english', width: 'calc(100%/4)' },
+  { label: 'category', width: 'calc(100%/4)' },
   { label: 'description english', width: 'calc(100%/4)' },
   { label: 'description arabic', width: 'calc(100%/4)' },
 ];
@@ -243,8 +243,8 @@ export default function NewEditManyForm() {
                             size="small"
                             variant="filled"
                             onChange={(e) => handleArabicInputChange(index, e)}
-                            value={one.name_arabic}
-                            name="name_arabic"
+                            value={one.category}
+                            name="category"
                           />
                         </TableCell>
                         <TableCell align="center">

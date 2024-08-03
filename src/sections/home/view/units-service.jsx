@@ -22,7 +22,7 @@ export default function HomeView() {
         {mdUp && (
           <img
             src="/assets/images/home/hero/stethoscope.png"
-            style={{ position: 'absolute', top: 90, right: '20%', rotate: '240deg', zIndex: 2 }}
+            style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
             width={200}
             alt="stethoscope"
           />

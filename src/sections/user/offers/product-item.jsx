@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
@@ -20,7 +21,6 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 
 import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 

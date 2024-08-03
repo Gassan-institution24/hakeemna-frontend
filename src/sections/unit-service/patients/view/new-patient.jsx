@@ -15,13 +15,13 @@ import {
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
   useGetUSActiveWorkShifts,
-  useGetUSActiveServiceTypes,
+  // useGetUSActiveServiceTypes,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import { useForm } from 'react-hook-form';
 // import UploadOldPatient from '../upload-old-patient';
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
@@ -43,9 +43,8 @@ import {
   RHFSelect,
   RHFTextField,
   RHFDatePicker,
-  RHFPhoneNumber,
-  RHFMultiSelect,
   RHFRadioGroup,
+  RHFPhoneNumber,
 } from 'src/components/hook-form';
 
 import PatientsFound from '../patients-found';
@@ -73,10 +72,10 @@ export default function TableCreateView() {
   });
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSActiveServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-    { select: 'name_english name_arabic' }
-  );
+  // const { serviceTypesData } = useGetUSActiveServiceTypes(
+  //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+  //   { select: 'name_english name_arabic' }
+  // );
   const { workGroupsData } = useGetUSActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );

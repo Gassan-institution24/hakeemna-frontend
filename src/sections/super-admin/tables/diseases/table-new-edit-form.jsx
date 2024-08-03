@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -16,17 +15,17 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetSymptoms, useGetCategories } from 'src/api';
+import { useGetSymptoms } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const { categories } = useGetCategories();
+  // const { categories } = useGetCategories();
 
   const { tableData } = useGetSymptoms();
 
@@ -41,22 +40,20 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
-    name_english: Yup.string().required('Name is required'),
-    name_arabic: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    description_arabic: Yup.string().required('Description is required'),
-    category: Yup.string().required('Description is required'),
+    Name: Yup.string().required('Name is required'),
+    ICD_code: Yup.string().required('Name is required'),
+    Parent: Yup.string().required('Description is required'),
+    Group: Yup.string().required('Description is required'),
     symptoms: Yup.array(),
   });
 
   const defaultValues = useMemo(
     /// edit
     () => ({
-      name_arabic: currentSelected?.name_arabic || '',
-      name_english: currentSelected?.name_english || '',
-      description: currentSelected?.description || '',
-      description_arabic: currentSelected?.description_arabic || '',
-      category: currentSelected?.category?._id || '',
+      Name: currentSelected?.name_arabic || '',
+      ICD_code: currentSelected?.name_english || '',
+      Parent: currentSelected?.description || '',
+      Group: currentSelected?.description_arabic || '',
       symptoms: currentSelected?.symptoms?.map((disease, idx) => disease._id) || [],
     }),
     [currentSelected]
@@ -74,23 +71,23 @@ export default function CountriesNewEditForm({ currentSelected }) {
     formState: { isSubmitting },
   } = methods;
 
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+  // const handleEnglishInputChange = (event) => {
+  //   // Validate the input based on English language rules
+  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (englishRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -126,52 +123,33 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }} /// edit
             >
               <RHFTextField
-                onChange={handleEnglishInputChange}
-                name="name_english"
-                label="name english"
+                name="Name"
+                label="Name"
               />
               <RHFTextField
-                onChange={handleArabicInputChange}
-                name="name_arabic"
-                label="name arabic"
+                name="ICD_code"
+                label="ICD_code"
+              />
+              <RHFTextField
+                name="Parent"
+                label="Parent"
+              />
+              <RHFTextField
+                name="Group"
+                label="Group"
               />
             </Box>
 
             <Box
               rowGap={3}
               columnGap={2}
+              mt={3}
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField
-                onChange={handleEnglishInputChange}
-                sx={{ mt: 3 }}
-                name="description"
-                label="description"
-                multiline
-                colSpan={14}
-                rows={3}
-              />
-              <RHFTextField
-                onChange={handleArabicInputChange}
-                sx={{ mt: 3 }}
-                name="description_arabic"
-                label="description arabic"
-                multiline
-                colSpan={14}
-                rows={3}
-              />
-
-              <RHFSelect name="category" label="category">
-                {categories.map((category, idx) => (
-                  <MenuItem lang="ar" key={idx} value={category._id}>
-                    {category.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
 
               {symptomsMultiSelect && (
                 <RHFMultiSelect

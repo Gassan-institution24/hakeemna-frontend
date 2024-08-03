@@ -116,6 +116,10 @@ export default function TableNewEditForm({ currentSelected }) {
                 name="name_arabic"
                 label="name arabic"
               />
+              <RHFTextField
+                name="category"
+                label="category"
+              />
             </Box>
             <Box
               rowGap={3}

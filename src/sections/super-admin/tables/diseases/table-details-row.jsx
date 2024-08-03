@@ -2,16 +2,13 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import { ListItemText } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+// import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -21,11 +18,11 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function CountriesTableRow({ row, selected, onEditRow }) {
   const {
     code,
-    name_english,
-    name_arabic,
-    symptoms,
-    category,
-    description,
+    Name,
+    ICD_code,
+    Parent,
+    Group,
+
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -36,7 +33,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
-  const collapse = useBoolean();
+  // const collapse = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -44,10 +41,10 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{name_arabic}</TableCell>
-      <TableCell align="center">{category?.name_english}</TableCell>
-      <TableCell align="center">
+      <TableCell align="center">{ICD_code}</TableCell>
+      <TableCell align="center">{Name}</TableCell>
+      <TableCell align="center">{Parent}</TableCell>
+      {/* <TableCell align="center">
         symptoms
         <IconButton
           color={collapse.value ? 'inherit' : 'default'}
@@ -60,8 +57,8 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton>
-      </TableCell>
-      <TableCell align="center">{description}</TableCell>
+      </TableCell> */}
+      <TableCell align="center">{Group}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -71,58 +68,58 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
     </TableRow>
   );
 
-  const renderSecondary = (
-    <TableRow>
-      <TableCell sx={{ p: 0, border: 'none' }} colSpan={14}>
-        <Collapse
-          in={collapse.value}
-          timeout="auto"
-          unmountOnExit
-          sx={{ bgcolor: 'background.neutral' }}
-        >
-          <Stack component={Paper} sx={{ m: 1.5 }}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={{
-                p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                '&:not(:last-of-type)': {
-                  borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                },
-              }}
-            >
-              <Box sx={{ flex: 1 }}>Code</Box>
-              <Box sx={{ flex: 1 }}>Name</Box>
-              <Box sx={{ flex: 1 }}>Description</Box>
-            </Stack>
-            {symptoms.map((item, idx) => (
-              <Stack
-                key={idx}
-                direction="row"
-                alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
-                }}
-              >
-                <Box sx={{ flex: 1 }}>{item.code}</Box>
-                <Box sx={{ flex: 1 }}>{item.name_english || item.name}</Box>
-                <Box sx={{ flex: 1 }}>{item.description}</Box>
-              </Stack>
-            ))}
-          </Stack>
-        </Collapse>
-      </TableCell>
-    </TableRow>
-  );
+  // const renderSecondary = (
+  //   <TableRow>
+  //     <TableCell sx={{ p: 0, border: 'none' }} colSpan={14}>
+  //       <Collapse
+  //         in={collapse.value}
+  //         timeout="auto"
+  //         unmountOnExit
+  //         sx={{ bgcolor: 'background.neutral' }}
+  //       >
+  //         <Stack component={Paper} sx={{ m: 1.5 }}>
+  //           <Stack
+  //             direction="row"
+  //             alignItems="center"
+  //             sx={{
+  //               p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
+  //               '&:not(:last-of-type)': {
+  //                 borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
+  //               },
+  //             }}
+  //           >
+  //             <Box sx={{ flex: 1 }}>Code</Box>
+  //             <Box sx={{ flex: 1 }}>Name</Box>
+  //             <Box sx={{ flex: 1 }}>Description</Box>
+  //           </Stack>
+  //           {symptoms?.map((item, idx) => (
+  //             <Stack
+  //               key={idx}
+  //               direction="row"
+  //               alignItems="center"
+  //               sx={{
+  //                 p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
+  //                 '&:not(:last-of-type)': {
+  //                   borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
+  //                 },
+  //               }}
+  //             >
+  //               <Box sx={{ flex: 1 }}>{item.code}</Box>
+  //               <Box sx={{ flex: 1 }}>{item.name_english || item.name}</Box>
+  //               <Box sx={{ flex: 1 }}>{item.description}</Box>
+  //             </Stack>
+  //           ))}
+  //         </Stack>
+  //       </Collapse>
+  //     </TableCell>
+  //   </TableRow>
+  // );
 
   return (
     <>
       {renderPrimary}
 
-      {renderSecondary}
+      {/* {renderSecondary} */}
 
       <CustomPopover
         open={popover.open}

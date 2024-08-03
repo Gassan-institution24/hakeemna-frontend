@@ -29,13 +29,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Stack, MenuItem, IconButton, Button } from '@mui/material';
+import { Box, Card, Stack, Button, MenuItem, IconButton } from '@mui/material';
 
 import { useSearchParams } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { addToCalendar } from 'src/utils/calender';
 import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -50,9 +55,6 @@ import {
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { RouterLink } from 'src/routes/components';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
