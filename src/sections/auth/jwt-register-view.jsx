@@ -8,7 +8,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  MenuItem,
+} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -26,6 +33,8 @@ import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
+import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicy';
+import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
 import FormProvider, {
   RHFSelect,
   RHFTextField,
@@ -42,7 +51,8 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const { t } = useTranslate();
 
   const router = useRouter();
-
+  const termsDialog = useBoolean(false);
+  const policyDialog = useBoolean(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
@@ -199,25 +209,55 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   );
 
   const renderTerms = (
-    <Typography
-      component="div"
-      sx={{
-        color: 'text.secondary',
-        mt: 2.5,
-        typography: 'caption',
-        textAlign: 'center',
-      }}
-    >
-      {t('By signing up, I agree to ')}
-      <Link underline="always" color="success.main">
-        {t('Terms of Service ')}
-      </Link>
-      {t('and ')}
-      <Link underline="always" color="success.main">
-        {t('Privacy Policy')}
-      </Link>
-      .
-    </Typography>
+    <>
+      <Dialog open={termsDialog.value}>
+        <DialogContent dividers>
+          <DialogContentText tabIndex={-1}>
+            <TermsAndCondition />
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" onClick={termsDialog.onFalse}>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ----------------------------- */}
+      <Dialog open={policyDialog.value}>
+        <DialogContent dividers>
+          <DialogContentText tabIndex={-1}>
+            <Privacypolicy />
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" onClick={policyDialog.onFalse}>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ----------------------------- */}
+      <Typography
+        component="div"
+        sx={{
+          color: 'text.secondary',
+          mt: 2.5,
+          typography: 'caption',
+          textAlign: 'center',
+        }}
+      >
+        {t('By signing up, I agree to ')}
+        <Link underline="always" color="success.main" onClick={termsDialog.onTrue}>
+          {t('Terms of Service ')}
+        </Link>
+        {t('and ')}
+        <Link underline="always" color="success.main" onClick={policyDialog.onTrue}>
+          {t('Privacy Policy')}
+        </Link>
+        .
+      </Typography>
+    </>
   );
 
   const renderForm = (

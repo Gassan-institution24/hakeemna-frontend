@@ -3,14 +3,14 @@ import { Container, Typography } from '@mui/material';
 export default function Privacypolicy() {
   return (
     <Container>
-      <Typography variant="h4">Terms and Conditions</Typography>
+      <Typography variant="h3" sx={{mt:4}}>Terms and Conditions</Typography>
 
       <Typography paragraph>
         Please read the privacy policy carefully and understand all the terms before signing your
         acceptance and before using the Hakeemna.com website or any related applications or pages.
       </Typography>
 
-      <Typography variant="h6">Definitions:</Typography>
+      <Typography variant="h4">Definitions:</Typography>
 
       <Typography paragraph>
         The First Party refers to Hakeemna.com. When the term Platform Hakeemna.com or System is
@@ -31,7 +31,7 @@ export default function Privacypolicy() {
         of residence.
       </Typography>
 
-      <Typography variant="h6">Privacy Policy:</Typography>
+      <Typography variant="h4">Privacy Policy:</Typography>
 
       <Typography paragraph>
         Hakeemna.com values the importance of maintaining the privacy and confidentiality of users
@@ -49,9 +49,9 @@ export default function Privacypolicy() {
         personal information.
       </Typography>
 
-      <Typography variant="h6">Privacy Policies:</Typography>
+      <Typography variant="h4">Privacy Policies:</Typography>
 
-      <Typography variant="h6">1. Information Stored on the Platform:</Typography>
+      <Typography variant="h4">1. Information Stored on the Platform:</Typography>
 
       <Typography paragraph>a) Information entered by the user (Second Party):</Typography>
 
@@ -92,7 +92,7 @@ export default function Privacypolicy() {
         d) Information about the internet network you use, such as IP Address.
       </Typography>
 
-      <Typography variant="h6">2. How User Information is Used:</Typography>
+      <Typography variant="h4">2. How User Information is Used:</Typography>
 
       <Typography paragraph>
         The data you enter and store is used to provide you with various services offered by
@@ -126,7 +126,7 @@ export default function Privacypolicy() {
         and scientific purposes or other objectives.
       </Typography>
 
-      <Typography variant="h6">3. Data Ownership and Protection:</Typography>
+      <Typography variant="h4">3. Data Ownership and Protection:</Typography>
 
       <Typography paragraph>
         The information you store and your medical file available on your personal page on the
@@ -174,7 +174,7 @@ export default function Privacypolicy() {
         required information to achieve justice.
       </Typography>
 
-      <Typography variant="h6">4. Data Protection, Cybersecurity, and Other Risks:</Typography>
+      <Typography variant="h4">4. Data Protection, Cybersecurity, and Other Risks:</Typography>
 
       <Typography paragraph>
         The security of your information is important to us. Therefore, please be aware that
@@ -241,7 +241,7 @@ export default function Privacypolicy() {
         records.
       </Typography>
 
-      <Typography variant="h6">5. Use and Utilization of Data:</Typography>
+      <Typography variant="h4">5. Use and Utilization of Data:</Typography>
 
       <Typography paragraph>
         The data stored on the platform is used for the following purposes:
@@ -292,7 +292,7 @@ export default function Privacypolicy() {
 
       <Typography paragraph>Marketing services.</Typography>
 
-      <Typography variant="h6">6. Changes to This Privacy Policy:</Typography>
+      <Typography variant="h4">6. Changes to This Privacy Policy:</Typography>
 
       <Typography paragraph>
         Hakeemna.com may update the privacy policy for the website and applications at any time and
@@ -302,7 +302,7 @@ export default function Privacypolicy() {
 
       <Typography paragraph>Last updated: 01/09/2024</Typography>
 
-      <Typography variant="h6">Cookies Policy:</Typography>
+      <Typography variant="h4">Cookies Policy:</Typography>
 
       <Typography paragraph>
         Hakeemna.com does not use cookies on the page. The data in the possession of the platform is
@@ -311,7 +311,7 @@ export default function Privacypolicy() {
 
       <Typography paragraph>Last updated: 01/09/2024</Typography>
 
-      <Typography variant="h6">Liability and Indemnification:</Typography>
+      <Typography variant="h4">Liability and Indemnification:</Typography>
 
       <Typography paragraph>
         The platform and its affiliated applications do not provide any medical advice or

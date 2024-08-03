@@ -43,7 +43,7 @@ export default function WaitingRoom() {
     (activity) => activity?.activities?.name_english === 'Reception'
   );
 
-  const [selectedTitle, setSelectedTitle] = useState(receptionActivity?._id);
+  const [selectedTitle, setSelectedTitle] = useState('');
   const { data } = useGetRoom(selectedTitle);
   const { EntranceByActivity } = useGetEntranceManagementByActivity(
     data?.activities,
@@ -59,9 +59,6 @@ export default function WaitingRoom() {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
-    await axiosInstance.patch(`/api/rooms/${data?._id}`, {
-      employee: user?.employee?._id,
-    });
   };
   const updateRoom = async (roomId) => {
     try {
@@ -71,17 +68,21 @@ export default function WaitingRoom() {
             ?._id
         }`
       );
+
       const currentRoom = allRooms.find((room) =>
         room.employee?.some((emp) => emp._id === user?.employee?._id)
       );
+      if (currentRoom) {
+        await axiosInstance.patch(`/api/rooms/${currentRoom?._id}`, {
+          employee: currentRoom.employee.filter((emp) => emp._id !== user?.employee?._id),
+        });
+      }
 
-      await axiosInstance.patch(`/api/rooms/${currentRoom._id}`, {
-        employee: currentRoom.employee.filter((emp) => emp._id !== user?.employee?._id),
-      });
-
+      const nextRoomEmployees = allRooms.find((one) => one._id === roomId).employee;
       await axiosInstance.patch(`/api/rooms/${roomId}`, {
-        $push: { employee: user?.employee?._id },
+        employee: [...nextRoomEmployees, user?.employee?._id],
       });
+
       enqueueSnackbar('Room updated successfully', { variant: 'success' });
     } catch (error) {
       console.error('Error updating room:', error.message);
@@ -93,7 +94,7 @@ export default function WaitingRoom() {
     <Card sx={{ mt: 3 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
-          {t('Select The activity you are working on today')}{' '}
+          {t('Select The room you are working in today')}{' '}
         </Typography>
         <Select
           sx={{
@@ -101,14 +102,21 @@ export default function WaitingRoom() {
             height: 35,
           }}
           value={selectedTitle}
+          displayEmpty
           onChange={(e) => setSelectedTitle(e.target.value)}
         >
-          {roomsData.map((activitiy, index) => (
-            <MenuItem key={index} value={activitiy?._id} onClick={() => updateRoom(activitiy?._id)}>
-              {activitiy?.name_english}
-            </MenuItem>
-          ))}
+          <MenuItem disabled value="" sx={{ display: 'none' }}>
+            {t("Select Room")}
+          </MenuItem>
+          {roomsData.map((activity, index) =>
+            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
+              <MenuItem key={index} value={activity?._id} onClick={() => updateRoom(activity?._id)}>
+                {activity?.name_english}
+              </MenuItem>
+            ) : null
+          )}
         </Select>
+
         <Box>
           <TableContainer sx={{ mt: 3, mb: 2 }}>
             <Scrollbar>

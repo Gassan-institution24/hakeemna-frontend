@@ -58,8 +58,15 @@ export default function AppointmentsToday() {
   const { entrance, refetch2 } = useGetEntranceManagement(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { finishedAppointmentsData } = useGetfinishedAppointments();
 
+  const { roomsData } = useGetUSRooms(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+
+  const { finishedAppointmentsData } = useGetfinishedAppointments();
+  const receptionActivity = roomsData.find(
+    (activity) => activity?.activities?.name_english === 'Reception'
+  );
   const TABS = [
     {
       value: 'one',
@@ -86,10 +93,6 @@ export default function AppointmentsToday() {
 
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
-  const { roomsData } = useGetUSRooms(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
-
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
   const updateStatus = async (id, status, type) => {
@@ -97,11 +100,10 @@ export default function AppointmentsToday() {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
 
-
       if (type === 'arrived' && status) {
         setArrivalTimes((prev) => ({
           ...prev,
-          [id]: new Date().toISOString()
+          [id]: new Date().toISOString(),
         }));
       }
 
@@ -128,7 +130,7 @@ export default function AppointmentsToday() {
         work_group: data?.work_group?._id,
         Last_activity_atended: data?.Last_activity_atended,
         Next_activity: activityId,
-        Arrival_time: arrivalTimes[data?._id] || "",
+        Arrival_time: arrivalTimes[data?._id] || '',
       });
       await axiosInstance.patch(endpoints.appointments.one(data?._id), {
         started: true,
@@ -206,25 +208,25 @@ export default function AppointmentsToday() {
           }}
           value={selectedTitle}
           displayEmpty
+          onChange={(e) => setSelectedTitle(e.target.value)}
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
             {t('Next activity')}
           </MenuItem>
-          {roomsData.map((activity, index) => (
-            <Button
-              onClick={() => handleButtonClick(activity?.activities?._id, info)}
-              disabled={info?.started || !info.arrived}
-              key={index}
-              value={activity?.activities?._id}
-              sx={{
-                display: 'block',
-                width: '100%',
-              }}
-            >
-              {activity?.activities?.name_english}
-            </Button>
-          ))}
+          {roomsData.map((activity, index) =>
+            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
+              <MenuItem
+                key={index}
+                value={activity?.activities?._id}
+                onClick={() => handleButtonClick(activity?.activities?._id, info)}
+                disabled={info?.started || !info.arrived}
+              >
+                {activity?.activities?.name_english}
+              </MenuItem>
+            ) : null
+          )}
         </Select>
+
         <IconButton sx={{ p: 2 }} onClick={() => callPatient(info?.patient?.mobile_num1)}>
           <Iconify
             width={20}
