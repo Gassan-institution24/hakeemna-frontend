@@ -24,7 +24,7 @@ import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
+import { useGetRoom, useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -43,13 +43,12 @@ export default function WaitingRoom() {
     (activity) => activity?.activities?.name_english === 'Reception'
   );
 
-  const [selectedTitle, setSelectedTitle] = useState(receptionActivity?.activities?._id);
-
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const { data } = useGetRoom(selectedTitle);
   const { EntranceByActivity } = useGetEntranceManagementByActivity(
-    selectedTitle,
+    data?.activities,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-
   const goToProcessingPage = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
@@ -60,72 +59,102 @@ export default function WaitingRoom() {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
-    await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
-      patient: entrance?.patient?._id,
-      entranceMangament: entrance?._id,
-    });
   };
+  const updateRoom = async (roomId) => {
+    try {
+      const { data: allRooms } = await axiosInstance.get(
+        `/api/rooms/unitservice/${
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+            ?._id
+        }`
+      );
+
+      const currentRoom = allRooms.find((room) =>
+        room.employee?.some((emp) => emp._id === user?.employee?._id)
+      );
+      if (currentRoom) {
+        await axiosInstance.patch(`/api/rooms/${currentRoom?._id}`, {
+          employee: currentRoom.employee.filter((emp) => emp._id !== user?.employee?._id),
+        });
+      }
+
+      const nextRoomEmployees = allRooms.find((one) => one._id === roomId).employee;
+      await axiosInstance.patch(`/api/rooms/${roomId}`, {
+        employee: [...nextRoomEmployees, user?.employee?._id],
+      });
+
+      enqueueSnackbar('Room updated successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error updating room:', error.message);
+      enqueueSnackbar('Error updating room', { variant: 'error' });
+    }
+  };
+
   return (
-  
-
-      <Card sx={{ mt: 3 }}>
-        <Box sx={{ m: 2 }}>
-          <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
-            {t('Select The activity you are working on today')}{' '}
-          </Typography>
-          <Select
-            sx={{
-              width: 150,
-              height: 35,
-            }}
-            value={selectedTitle}
-            onChange={(e) => setSelectedTitle(e.target.value)}
-          >
-            {roomsData.map((activitiy, index) => (
-              <MenuItem key={index} value={activitiy?.activities?._id}>
-                {activitiy?.activities?.name_english}
+    <Card sx={{ mt: 3 }}>
+      <Box sx={{ m: 2 }}>
+        <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
+          {t('Select The room you are working in today')}{' '}
+        </Typography>
+        <Select
+          sx={{
+            width: 150,
+            height: 35,
+          }}
+          value={selectedTitle}
+          displayEmpty
+          onChange={(e) => setSelectedTitle(e.target.value)}
+        >
+          <MenuItem disabled value="" sx={{ display: 'none' }}>
+            {t("Select Room")}
+          </MenuItem>
+          {roomsData.map((activity, index) =>
+            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
+              <MenuItem key={index} value={activity?._id} onClick={() => updateRoom(activity?._id)}>
+                {activity?.name_english}
               </MenuItem>
-            ))}
-          </Select>
-          <Box>
-            <TableContainer sx={{ mt: 3, mb: 2 }}>
-              <Scrollbar>
-                <Table sx={{ minWidth: 400 }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>{t('Last activity')}</TableCell>
-                      <TableCell>{t('Patient')}</TableCell>
-                      <TableCell>{t('Arrival Time')}</TableCell>
-                      <TableCell>{t('Doctor Note')}</TableCell>
-                      <TableCell>{t('Options')}</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {EntranceByActivity?.map((entranceData, i) => (
-                      <TableRow key={i}>
-                        <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+            ) : null
+          )}
+        </Select>
 
-                        <TableCell>{entranceData?.patient?.name_english}</TableCell>
-                        <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
-                        <TableCell>{entranceData?.note}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outlined"
-                            sx={{ bgcolor: 'success.main', color: 'white' }}
-                            onClick={() => goToProcessingPage(entranceData)}
-                          >
-                            {t("Proceed")}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Scrollbar>
-            </TableContainer>
-          </Box>
+        <Box>
+          <TableContainer sx={{ mt: 3, mb: 2 }}>
+            <Scrollbar>
+              <Table sx={{ minWidth: 400 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t('Last activity')}</TableCell>
+                    <TableCell>{t('Patient')}</TableCell>
+                    <TableCell>{t('Arrival Time')}</TableCell>
+                    <TableCell>{t('Doctor Note')}</TableCell>
+                    <TableCell>{t('Options')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {EntranceByActivity?.map((entranceData, i) => (
+                    <TableRow key={i}>
+                      <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+
+                      <TableCell>{entranceData?.patient?.name_english}</TableCell>
+                      <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
+                      <TableCell>{entranceData?.note}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          sx={{ bgcolor: 'success.main', color: 'white' }}
+                          onClick={() => goToProcessingPage(entranceData)}
+                        >
+                          {t('Proceed')}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
         </Box>
-      </Card>
-  
+      </Box>
+    </Card>
   );
 }

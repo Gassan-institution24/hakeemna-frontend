@@ -70,9 +70,10 @@ export default function History() {
               height: 35,
             }}
             value={selectedTitle}
+            displayEmpty
             onChange={(e) => setSelectedTitle(e.target.value)}
           >
-            <MenuItem value="">{t('All')}</MenuItem>
+             <MenuItem value="" disabled sx={{ display: 'none' }}>{t('All')}</MenuItem>
             {Title.map((type, index) => (
               <MenuItem key={index} value={type}>
                 {t(type)}
