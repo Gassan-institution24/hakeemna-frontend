@@ -39,18 +39,10 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'name' },
-  { id: 'name_arabic', label: 'arabic name' },
-  { id: 'category', label: 'Category' },
-  { id: 'symptoms', label: 'Symptoms' },
-  { id: 'description', label: 'Description' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: 'ICD_code', label: 'ICD code' },
+  { id: 'Name', label: 'Name' },
+  { id: 'Parent', label: 'Parent' },
+  { id: 'Group', label: 'Group' },
   { id: '', width: 88 },
 ];
 

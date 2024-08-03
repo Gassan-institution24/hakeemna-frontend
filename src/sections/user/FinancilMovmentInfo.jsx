@@ -10,6 +10,8 @@ import TableBody from '@mui/material/TableBody';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
+import { useParams } from 'src/routes/hooks';
+
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetIncomePaymentControl } from 'src/api';
@@ -26,7 +28,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useParams } from 'src/routes/hooks';
 import InvoiceTableRow from './financial-info-table-row';
 
 // ----------------------------------------------------------------------
