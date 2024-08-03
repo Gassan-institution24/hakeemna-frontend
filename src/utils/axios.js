@@ -119,6 +119,7 @@ export const endpoints = {
   drugs: {
     all: '/api/drugs/',
     one: (id) => (!id ? null : `/api/drugs/${id}`),
+    patient: (id) => (!id ? null : `/api/drugs/patient/${id}`),
   },
   adjustabledocument: {
     all: '/api/adjustabledocument/',
