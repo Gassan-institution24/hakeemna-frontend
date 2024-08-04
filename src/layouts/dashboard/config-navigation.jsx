@@ -691,11 +691,11 @@ export function useNavData() {
             path: paths.dashboard.user.watingroom,
             icon: <Iconify icon="medical-icon:i-waiting-area" />,
           },
-          {
-            title: t('emergency'),
-            path: paths.dashboard.user.emergency,
-            icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
-          },
+          // {
+          //   title: t('emergency'),
+          //   path: paths.dashboard.user.emergency,
+          //   icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
+          // },
           {
             title: t('my medical reports'),
             path: paths.dashboard.user.medicalreports,

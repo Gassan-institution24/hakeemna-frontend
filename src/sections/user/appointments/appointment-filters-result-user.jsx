@@ -32,19 +32,8 @@ export default function JobFiltersResult({
     onFilters('start_date', null);
     onFilters('end_date', null);
   };
-
-  // const handleRemoveAppointmentTypes = () => {
-  //   onFilters('appointtypes', 'all');
-  // };
-
-  const handleRemovePaymentMethod = () => {
-    onFilters('payment_methods', 'all');
-  };
   const handleRemoveCountries = () => {
     onFilters('countries', 'all');
-  };
-  const handleRemoveUnitServices = () => {
-    onFilters('unitServices', 'all');
   };
 
   return (
@@ -63,31 +52,7 @@ export default function JobFiltersResult({
           </Block>
         )}
 
-        {/* {filters.appointtypes !== 'all' && (
-          <Block label="Appointment Types:">
-            <Chip
-              size="small"
-              label={
-                appointmentTypeOptions.filter((type) => type._id === filters.appointtypes)[0]
-                  .name_english
-              }
-              onDelete={handleRemoveAppointmentTypes}
-            />
-          </Block>
-        )} */}
-
-        {filters.payment_methods !== 'all' && (
-          <Block label="Payment Methods:">
-            <Chip
-              size="small"
-              label={
-                paymentMethodsOptions.filter((type) => type._id === filters.payment_methods)[0]
-                  .name_english
-              }
-              onDelete={handleRemovePaymentMethod}
-            />
-          </Block>
-        )}
+ 
         {filters.countries !== 'all' && (
           <Block label="Countries:">
             <Chip
@@ -99,18 +64,7 @@ export default function JobFiltersResult({
             />
           </Block>
         )}
-        {filters.unitServices !== 'all' && (
-          <Block label="units of service:">
-            <Chip
-              size="small"
-              label={
-                unitServicesOptions.filter((type) => type._id === filters.unitServices)[0]
-                  .name_english
-              }
-              onDelete={handleRemoveUnitServices}
-            />
-          </Block>
-        )}
+
 
         {canReset && (
           <Button
