@@ -35,16 +35,11 @@ export default function AppointmentsFilters({
   dataFiltered,
   insuranseCosData,
   countriesOptions,
-  appointmentTypeOptions,
+
   dateError,
 }) {
   const { t } = useTranslate();
-  // const handleFilterAppointtypes = useCallback(
-  //   (e) => {
-  //     onFilters('appointtypes', e.target.value);
-  //   },
-  //   [onFilters]
-  // );
+
   const handleFilterCountries = useCallback(
     (e) => {
       onFilters('countries', e.target.value);
@@ -83,20 +78,6 @@ export default function AppointmentsFilters({
     </Stack>
   );
 
-  // const renderappointtypes = (
-  //   <FormControl>
-  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
-  //       {t('Appointment Types')}
-  //     </Typography>
-  //     <Select onChange={handleFilterAppointtypes} name="appointment_type">
-  //       {appointmentTypeOptions?.map((option, idx) => (
-  //         <MenuItem lang="ar" key={idx} value={option._id}>
-  //           {option?.name_english}
-  //         </MenuItem>
-  //       ))}
-  //     </Select>
-  //   </FormControl>
-  // );
   const renderCountries = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -169,10 +150,9 @@ export default function AppointmentsFilters({
       </Drawer>
     </>
   );
-}
+} 
 
 AppointmentsFilters.propTypes = {
-  appointmentTypeOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
   dataFiltered: PropTypes.array,
   insuranseCosData: PropTypes.array,
