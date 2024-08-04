@@ -13,7 +13,9 @@ import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Bmi from '../bmi';
+import Instructions from '../instructions';
 import Mymentalhealth from '../mymentalhealth';
+
 // ----------------------------------------------------------------------
 
 export default function MyHealth() {
@@ -31,6 +33,11 @@ export default function MyHealth() {
       value: 'bmi',
       label: `${curLangAr ? 'مؤشر كتلة الجسم' : 'BMI'}`,
       icon: <Iconify icon="fluent:calculator-24-filled" width={24} />,
+    },
+    {
+      value: 'instructions',
+      label: `${curLangAr ? 'ارشادات' : 'instructions'}`,
+      icon: <Iconify icon="fontisto:prescription" width={23} />,
     },
     {
       value: 'mymentalhealth',
@@ -64,6 +71,7 @@ export default function MyHealth() {
 
       {currentTab === 'bmi' && <Bmi />}
       {currentTab === 'mymentalhealth' && <Mymentalhealth />}
+      {currentTab === 'instructions' && <Instructions />}
     </Container>
   );
 }

@@ -10,6 +10,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDm, fTime } from 'src/utils/format-time';
 
+import {  useTranslate } from 'src/locales';
 import { useGetNearstAppointment } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -18,6 +19,7 @@ import Image from 'src/components/image/image';
 export default function DoctorCard({ info }) {
   const { nearstappointment } = useGetNearstAppointment(info?._id);
   const router = useRouter();
+  const {t} = useTranslate()
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
   };
@@ -79,7 +81,7 @@ export default function DoctorCard({ info }) {
       </Box>
       {info?.visibility_online_appointment === true ? (
         <Box>
-          <Typography sx={{ fontSize: 14, mb: 1 }}>Nearst appointments: </Typography>
+          <Typography sx={{ fontSize: 14, mb: 1 }}>{t("Nearst appointments:")} </Typography>
           {nearstappointment ? (
             <Button
               sx={{ bgcolor: 'rgb(231, 231, 231)', borderRadius: 0 }}
@@ -102,13 +104,13 @@ export default function DoctorCard({ info }) {
             color="success"
             onClick={() => handleViewRow(info?._id)}
           >
-            View all
+            {t("View all")}
           </Button>
         </Box>
       ) : (
         <Box>
           <Typography sx={{ fontSize: 14, mb: 1 }}>
-            Not available to book <br /> an appointment online
+            {t("Not available to book")} <br /> {t("an appointment online")}
           </Typography>
           <Button
             sx={{ mt: 3, display: 'block' }}
