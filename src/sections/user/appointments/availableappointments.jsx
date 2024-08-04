@@ -17,11 +17,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 // import { useAuthContext } from 'src/auth/hooks';
 import {
-  useGetCities,
   useGetCountries,
   useGetInsuranceCos,
-  useGetAppointmentTypes,
-  useGetActiveUnitservices,
   useGetEmployeeEngsBySpecialty,
 } from 'src/api';
 
@@ -61,11 +58,7 @@ export default function AppointmentBooking() {
   const { data } = useGetEmployeeEngsBySpecialty(id);
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
-  const { unitservicesData } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
-  const { appointmenttypesData } = useGetAppointmentTypes();
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
@@ -128,15 +121,12 @@ export default function AppointmentBooking() {
           //
           countriesOptions={countriesData}
           insuranseCosData={insuranseCosData}
-          citiesOptions={tableData}
-          unitServicesOptions={unitservicesData}
           dataFiltered={dataFiltered}
-          // usrate={usrate}
-          appointmentTypeOptions={appointmenttypesData}
+  
           dateError={dateError}
         />
 
-        <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={sortOptions} />
+        {/* <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={sortOptions} /> */}
       </Stack>
     </Stack>
   );
@@ -144,9 +134,6 @@ export default function AppointmentBooking() {
   const renderResults = (
     <AppointmentFiltersResult
       countriesOptions={countriesData}
-      citiesOptions={tableData}
-      unitServicesOptions={unitservicesData}
-      appointmentTypeOptions={appointmenttypesData}
       data={data}
       filters={filters}
       onResetFilters={handleResetFilters}
@@ -178,10 +165,9 @@ export default function AppointmentBooking() {
 }
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, search, comparator, filters, sortBy }) {
+function applyFilter({ inputData, search, filters, sortBy }) {
   const { insurance } = filters;
   const { countries } = filters;
-
   // SORT BY
   if (sortBy === 'rateing') {
     inputData = orderBy(inputData, ['employee.rate'], ['desc']);

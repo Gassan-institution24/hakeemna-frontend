@@ -9,7 +9,6 @@ import { useGetPatientAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 
-import Instructions from './instructions';
 import Currentappoinment from './apointmentscurrent';
 import FinishedAppoinment from './apointmentsfinished';
 
@@ -43,11 +42,7 @@ export default function AppointmentData() {
       label: t('Finished appointment'),
       icon: <Iconify icon="ep:finished" width={24} />,
     },
-    {
-      value: 'instructions',
-      label: t('appointment instructions'),
-      icon: <Iconify icon="fontisto:prescription" width={24} />,
-    },
+
   ];
 
   return (
@@ -86,18 +81,6 @@ export default function AppointmentData() {
           }}
         >
           <FinishedAppoinment finishedAppointments={finishedAppointments} />
-        </Box>
-      )}
-      {currentTab === 'instructions' && (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-            gap: 5,
-            mb: 2,
-          }}
-        >
-          <Instructions/>
         </Box>
       )}
     </Container>
