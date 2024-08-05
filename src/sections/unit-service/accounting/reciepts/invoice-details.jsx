@@ -69,7 +69,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}
+          {curLangAr ? invoice?.patient?.name_arabic || invoice?.stakeholder?.name_arabic : invoice?.patient?.name_english || invoice?.stakeholder?.name_english}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -184,9 +184,22 @@ export default function InvoiceDetails({ invoice, refetch }) {
             {fDate(invoice.created_at)}
           </Stack>
           <Box />
+
+          {invoice.patient && <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t('from')}
+            </Typography>
+            {curLangAr ? invoice.patient?.name_arabic : invoice.patient?.name_english}
+            <br />
+            {invoice.patient?.address}
+            <br />
+            {t('phone')}: {invoice.patient?.mobile_num1}
+            <br />
+          </Stack>}
+
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('to')}
+              {t(invoice.stakeholder ? 'from' : 'to')}
             </Typography>
             {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
             <br />
@@ -196,17 +209,17 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          <Stack sx={{ typography: 'body2' }}>
+          {invoice.stakeholder && <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
+              {t('to')}
             </Typography>
-            {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
+            {curLangAr ? invoice.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
             <br />
-            {invoice.patient.address}
+            {invoice.stakeholder?.address}
             <br />
-            {t('phone')}: {invoice.patient.mobile_num1}
+            {t('phone')}: {invoice.stakeholder?.phone}
             <br />
-          </Stack>
+          </Stack>}
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>

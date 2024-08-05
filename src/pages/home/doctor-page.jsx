@@ -18,7 +18,7 @@ export default function DoctorPage() {
     <>
       <Helmet>
         <title>{curLangAr ? data?.employee?.name_arabic : data?.employee?.name_english}</title>
-        <meta name="description" content="meta" />
+        <meta name="description" content={curLangAr ? data?.employee?.arabic_about_me : data?.employee?.about_me} />
       </Helmet>
 
       {data && <DoctorPageView employeeData={data} />}

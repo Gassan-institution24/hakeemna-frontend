@@ -41,7 +41,7 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
-  { id: 'createmployeeeDate', label: 'employee' },
+  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'receipt_amount', label: 'amount' },
   { id: 'economic_movement', label: 'economic movement' },
   { id: '' },
@@ -69,7 +69,7 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { receiptsData, lengths, totals } = useGetReciepts({
+  const { receiptsData, lengths, totals, unitServices, patients, stakeholders } = useGetReciepts({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     page: table.page || 0,
@@ -77,13 +77,9 @@ export default function InvoiceListView() {
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
     select:
-      'sequence_number economic_movement created_at patient employee receipt_amount updated_at',
+      'sequence_number economic_movement created_at patient stakeholder receipt_amount payment_amount updated_at',
     populate: [
-      {
-        path: 'employee',
-        select: 'employee',
-        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-      },
+      { path: 'stakeholder', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],
@@ -274,6 +270,9 @@ export default function InvoiceListView() {
           onFilters={handleFilters}
           //
           dateError={dateError}
+          unitServices={unitServices}
+          patients={patients}
+          stakeholders={stakeholders}
         />
 
         {canReset && (
@@ -337,12 +336,12 @@ export default function InvoiceListView() {
                 rowCount={receiptsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     receiptsData.map((row) => row.id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     receiptsData.map((row) => row.id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -353,7 +352,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row._id)}
                     onSelectRow={() => table.onSelectRow(row._id)}
                     onViewRow={() => handleViewRow(row._id)}
-                    // onEditRow={() => handleEditRow(row.id)}
+                  // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

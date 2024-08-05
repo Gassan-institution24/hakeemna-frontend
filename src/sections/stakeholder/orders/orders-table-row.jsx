@@ -39,6 +39,7 @@ export default function AppointmentsTableRow({
     products,
     note,
     status,
+    invoiced,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -108,6 +109,16 @@ export default function AppointmentsTableRow({
           <Iconify icon="solar:eye-bold" />
           {t('show')}
         </MenuItem>
+        {!invoiced && <MenuItem
+          lang="ar"
+          onClick={() => {
+            router.push(`${paths.stakeholder.accounting.economicmovements.add}?order=${_id}`);
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="hugeicons:invoice" />
+          {t('make an invoice')}
+        </MenuItem>}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

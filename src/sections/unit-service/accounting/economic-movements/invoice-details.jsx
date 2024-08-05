@@ -87,11 +87,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
         </TableCell>
       </StyledTableRow>
 
-      {/* <StyledTableRow>
+      <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ color: 'text.secondary' }}>{t('deductions')}</TableCell>
         <TableCell width={120}>{fCurrency(invoice.Total_deduction_amount)}</TableCell>
-      </StyledTableRow> */}
+      </StyledTableRow>
 
       <StyledTableRow>
         <TableCell colSpan={3} />
@@ -153,6 +153,31 @@ export default function InvoiceDetails({ invoice, refetch }) {
                 <TableCell align="right">{fCurrency(row.income_amount)}</TableCell>
               </TableRow>
             ))}
+            {invoice.provided_products?.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+
+                <TableCell>
+                  <Box sx={{ maxWidth: 560 }}>
+                    <Typography variant="subtitle2">
+                      {curLangAr ? row.product?.name_arabic : row.product?.name_english}
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                      {curLangAr
+                        ? row.product?.description_arabic
+                        : row.product?.description_english}
+                    </Typography>
+                  </Box>
+                </TableCell>
+
+                <TableCell>{row.quantity}</TableCell>
+
+                <TableCell align="right">{fCurrency(row.price_per_unit)}</TableCell>
+
+                <TableCell align="right">{fCurrency(row.income_amount)}</TableCell>
+              </TableRow>
+            ))}
 
             {renderTotal}
           </TableBody>
@@ -184,8 +209,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
             component="img"
             alt="logo"
             src={
-              invoice.unit_service.company_logo
-                ? invoice.unit_service.company_logo
+              invoice.unit_service?.company_logo
+                ? invoice.unit_service?.company_logo
                 : '/logo/logo_single.svg'
             }
             sx={{ width: 48, height: 48 }}
@@ -207,9 +232,21 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <Typography variant="h6">{invoice.sequence_number}</Typography>
           </Stack>
 
-          <Stack sx={{ typography: 'body2' }}>
+          {invoice?.stakeholder && <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               {t('from')}
+            </Typography>
+            {curLangAr ? invoice?.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
+            <br />
+            {invoice.stakeholder?.address}
+            <br />
+            {t('phone')}: {invoice.stakeholder?.phone}
+            <br />
+          </Stack>}
+
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t(invoice?.stakeholder ? 'to' : 'from')}
             </Typography>
             {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
             <br />
@@ -219,17 +256,17 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          <Stack sx={{ typography: 'body2' }}>
+          {invoice?.patient && <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               {t('to')}
             </Typography>
-            {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
+            {curLangAr ? invoice?.patient?.name_arabic : invoice.patient?.name_english}
             <br />
-            {invoice.patient.address}
+            {invoice.patient?.address}
             <br />
-            {t('phone')}: {invoice.patient.mobile_num1}
+            {t('phone')}: {invoice.patient?.mobile_num1}
             <br />
-          </Stack>
+          </Stack>}
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>

@@ -34,7 +34,7 @@ export default function MovementTableRow({
   const {
     sequence_number,
     patient,
-    employee,
+    unit_service,
     required_amount,
     balance,
     Currency,
@@ -89,11 +89,11 @@ export default function MovementTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
+          {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
         </TableCell>
 
         <TableCell align="center">{fCurrency(required_amount, Currency?.symbol)}</TableCell>
-        <TableCell align="center">{fCurrency(balance, Currency?.symbol)}</TableCell>
+        <TableCell align="center">{fCurrency(-balance, Currency?.symbol)}</TableCell>
 
         {/* <TableCell align="center">
           <Label

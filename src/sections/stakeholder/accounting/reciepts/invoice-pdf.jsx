@@ -114,7 +114,7 @@ const useStyles = () =>
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
-  const { patient, created_at, unit_service, sequence_number } = invoice;
+  const { patient, stakeholder, created_at, unit_service, sequence_number } = invoice;
 
   const { t } = useTranslate();
 
@@ -126,13 +126,13 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
         <Text style={[styles.h2, styles.mb8, styles.alignCenter]}>{t('receipt voucher')}</Text>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={unit_service.company_logo ? unit_service.company_logo : '/logo/logo_single.svg'}
+            source={stakeholder?.company_logo ? stakeholder?.company_logo : '/logo/logo_single.svg'}
             style={{ width: 48, height: 48 }}
           />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text> {sequence_number} </Text>
-            <Text style={styles.h3}>{fCurrency(invoice?.receipt_amount)}</Text>
+            <Text style={styles.h3}>{fCurrency(invoice?.payment_amount)}</Text>
           </View>
         </View>
 
@@ -147,33 +147,42 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
+            <Text style={styles.body2}>
+              {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
+            </Text>
+            <Text style={styles.body2}>{stakeholder.address}</Text>
+            <Text style={styles.body2}>{stakeholder.phone}</Text>
+          </View>
+
+          {unit_service && <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
             <Text style={styles.body2}>
               {curLangAr ? unit_service.name_arabic : unit_service.name_english}
             </Text>
             <Text style={styles.body2}>{unit_service.address}</Text>
-            <Text style={styles.body2}>{unit_service.phone}</Text>
-          </View>
+            <Text style={styles.body2}>{unit_service.mobile_num1}</Text>
+          </View>}
 
-          <View style={styles.col6}>
+          {patient && <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
             <Text style={styles.body2}>
               {curLangAr ? patient.name_arabic : patient.name_english}
             </Text>
             <Text style={styles.body2}>{patient.address}</Text>
             <Text style={styles.body2}>{patient.mobile_num1}</Text>
-          </View>
+          </View>}
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr./m/s')}:</Text>
           <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
-            {curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}
+            {curLangAr ? patient?.name_arabic || unit_service?.name_arabic : patient?.name_english || unit_service?.name_english}
           </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('the sum of')}:</Text>
           <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
-            {fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}
+            {fCurrency(invoice?.payment_amount)} {NumberToText(invoice?.payment_amount)}
           </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>

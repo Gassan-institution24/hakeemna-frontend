@@ -37,6 +37,7 @@ const TABLE_HEAD = [
   { id: 'due_date', label: 'due date' },
   { id: 'type', label: 'type' },
   { id: 'unit_service', label: 'unit of service' },
+  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'required_amount', label: 'required amount' },
   { id: 'balance', label: 'balance' },
   { id: '', width: 120 },
@@ -71,11 +72,13 @@ export default function PaymentControlView() {
     select:
       'sequence_number receipt_voucher_num unit_service created_at economic_movement insurance is_it_installment due_date required_amount recieved balance',
     populate: [
+      { path: 'stakeholder', select: 'name_english name_arabic company_logo address phone' },
       { path: 'unit_service', select: 'name_english name_arabic' },
       {
         path: 'receipt_voucher_num',
         populate: [
           { path: 'unit_service', select: 'name_english name_arabic company_logo address phone' },
+          { path: 'stakeholder', select: 'name_english name_arabic company_logo address phone' },
           { path: 'patient', select: 'name_english name_arabic address mobile_num1' },
           { path: 'economic_movement', select: 'Total_Amount sequence_number' },
         ]

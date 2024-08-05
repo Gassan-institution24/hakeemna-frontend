@@ -13,7 +13,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
-import InvoicePDF from '../unit-service/accounting/reciepts/invoice-pdf';
+import UnitServiceInvoicePDF from '../unit-service/accounting/reciepts/invoice-pdf';
+import StakeholderInvoicePDF from '../stakeholder/accounting/reciepts/invoice-pdf';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function MovementTableRow({
   const {
     sequence_number,
     unit_service,
+    stakeholder,
     required_amount,
     Currency,
     balance,
@@ -45,7 +47,7 @@ export default function MovementTableRow({
 
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
-      return acc + one.balance;
+      return acc - one.balance;
     }
     return acc;
   }, 0);
@@ -63,7 +65,7 @@ export default function MovementTableRow({
 
   const printPdf = async () => {
     const blob = await pdf(
-      <InvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+      stakeholder ? <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} /> : <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
     ).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
@@ -89,13 +91,16 @@ export default function MovementTableRow({
       <TableCell align="center">
         {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
       </TableCell>
+      <TableCell align="center">
+        {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
+      </TableCell>
 
       <TableCell align="center">{fCurrency(required_amount, Currency?.symbol)}</TableCell>
-      <TableCell align="center">{fCurrency(balance, Currency?.symbol)}</TableCell>
+      <TableCell align="center">{fCurrency(-balance, Currency?.symbol)}</TableCell>
       {receipt_voucher_num && <TableCell align="right">
         <PDFDownloadLink
           document={
-            <InvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+            stakeholder ? <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} /> : <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
           }
           fileName={`${fDate(new Date(receipt_voucher_num?.created_at), 'yyyy')} - ${receipt_voucher_num?.sequence_number}`}
           style={{ textDecoration: 'none' }}

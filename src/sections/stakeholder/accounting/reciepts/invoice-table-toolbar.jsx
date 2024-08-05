@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
-import { TextField } from '@mui/material';
+import { Divider, TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +26,9 @@ export default function InvoiceTableToolbar({
   onFilters,
   //
   dateError,
-  serviceOptions,
+  unitServices,
+  patients,
+  stakeholders,
 }) {
   const popover = usePopover();
   const { user } = useAuthContext();
@@ -37,21 +39,15 @@ export default function InvoiceTableToolbar({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { employeesData } = useGetUSActiveEmployeeEngs(USId, {
-    select: 'employee',
-    populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-  });
-  const { patientsData } = useGetUSPatient(USId, { select: 'name_english name_arabic' });
-
   const handleFilterPatient = useCallback(
     (event) => {
       onFilters('patient', event.target.value);
     },
     [onFilters]
   );
-  const handleFilterEmployee = useCallback(
+  const handleFilterUnitService = useCallback(
     (event) => {
-      onFilters('employee', event.target.value);
+      onFilters('unit_service', event.target.value);
     },
     [onFilters]
   );
@@ -133,7 +129,8 @@ export default function InvoiceTableToolbar({
             value={filters.patient}
           >
             <MenuItem value="">{t('all')}</MenuItem>
-            {patientsData?.map((option) => (
+            <Divider />
+            {patients?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
@@ -147,20 +144,22 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>{t('employee')}</InputLabel>
+          <InputLabel>{t('unit of service')}</InputLabel>
 
           <Select
-            onChange={handleFilterEmployee}
-            input={<OutlinedInput label="employee" />}
+            onChange={handleFilterUnitService}
+            input={<OutlinedInput label={t("unit of service")} />}
             sx={{ textTransform: 'capitalize' }}
-            value={filters.employee}
+            value={filters.unit_service}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
-            {employeesData?.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {curLangAr ? option.employee.name_arabic : option.employee.name_english}
+            <MenuItem value={null}>{t('all')}</MenuItem>
+            <Divider />
+            {unitServices?.map((option) => (
+              <MenuItem key={option._id} value={option?._id}>
+                {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
-            ))}
+            )
+            )}
           </Select>
         </FormControl>
 
@@ -219,5 +218,7 @@ InvoiceTableToolbar.propTypes = {
   dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  serviceOptions: PropTypes.array,
+  unitServices: PropTypes.array,
+  patients: PropTypes.array,
+  stakeholders: PropTypes.array,
 };
