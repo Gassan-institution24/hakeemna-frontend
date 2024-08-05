@@ -41,7 +41,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
-      return acc + one.balance;
+      return acc - one.balance;
     }
     return acc;
   }, 0);
@@ -69,7 +69,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english}
+          {curLangAr ? invoice?.patient?.name_arabic || invoice?.unit_service?.name_arabic : invoice?.patient?.name_english || invoice?.unit_service?.name_english}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -78,7 +78,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}
+          {fCurrency(invoice?.payment_amount)} {NumberToText(invoice?.payment_amount)}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -151,8 +151,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
             component="img"
             alt="logo"
             src={
-              invoice.unit_service.company_logo
-                ? invoice.unit_service.company_logo
+              invoice.stakeholder?.company_logo
+                ? invoice.stakeholder?.company_logo
                 : '/logo/logo_single.svg'
             }
             sx={{ width: 48, height: 48 }}
@@ -173,7 +173,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
             <Typography variant="h6">{invoice.sequence_number}</Typography>
             <Box mt={4} p={1.5} border="1px solid">
-              <Typography variant="h6">{fCurrency(invoice?.receipt_amount)}</Typography>
+              <Typography variant="h6">{fCurrency(invoice?.payment_amount)}</Typography>
             </Box>
           </Stack>
 
@@ -188,15 +188,27 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               {t('to')}
             </Typography>
+            {curLangAr ? invoice.stakeholder.name_arabic : invoice.stakeholder.name_english}
+            <br />
+            {invoice.stakeholder.address}
+            <br />
+            {t('phone')}: {invoice.stakeholder.phone}
+            <br />
+          </Stack>
+
+          {invoice.unit_service && <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t('from')}
+            </Typography>
             {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
             <br />
             {invoice.unit_service.address}
             <br />
             {t('phone')}: {invoice.unit_service.phone}
             <br />
-          </Stack>
+          </Stack>}
 
-          <Stack sx={{ typography: 'body2' }}>
+          {invoice.patient && <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               {t('from')}
             </Typography>
@@ -206,7 +218,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
             {t('phone')}: {invoice.patient.mobile_num1}
             <br />
-          </Stack>
+          </Stack>}
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>

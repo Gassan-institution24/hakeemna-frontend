@@ -87,11 +87,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
         </TableCell>
       </StyledTableRow>
 
-      {/* <StyledTableRow>
+      <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ color: 'text.secondary' }}>{t('deductions')}</TableCell>
         <TableCell width={120}>{fCurrency(invoice.Total_deduction_amount)}</TableCell>
-      </StyledTableRow> */}
+      </StyledTableRow>
 
       <StyledTableRow>
         <TableCell colSpan={3} />
@@ -117,7 +117,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <TableRow>
               <TableCell width={40}>#</TableCell>
 
-              <TableCell sx={{ typography: 'subtitle2' }}>{t('services')}</TableCell>
+              <TableCell sx={{ typography: 'subtitle2' }}>{t('items')}</TableCell>
 
               <TableCell>{t('quantity')}</TableCell>
 
@@ -142,6 +142,31 @@ export default function InvoiceDetails({ invoice, refetch }) {
                       {curLangAr
                         ? row.service_type?.description_arabic
                         : row.service_type?.description_english}
+                    </Typography>
+                  </Box>
+                </TableCell>
+
+                <TableCell>{row.quantity}</TableCell>
+
+                <TableCell align="right">{fCurrency(row.price_per_unit)}</TableCell>
+
+                <TableCell align="right">{fCurrency(row.income_amount)}</TableCell>
+              </TableRow>
+            ))}
+            {invoice.provided_products?.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+
+                <TableCell>
+                  <Box sx={{ maxWidth: 560 }}>
+                    <Typography variant="subtitle2">
+                      {curLangAr ? row.product?.name_arabic : row.product?.name_english}
+                    </Typography>
+
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                      {curLangAr
+                        ? row.product?.description_arabic
+                        : row.product?.description_english}
                     </Typography>
                   </Box>
                 </TableCell>
@@ -184,8 +209,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
             component="img"
             alt="logo"
             src={
-              invoice.stakeholder.company_logo
-                ? invoice.stakeholder.company_logo
+              invoice?.stakeholder?.company_logo
+                ? invoice?.stakeholder?.company_logo
                 : '/logo/logo_single.svg'
             }
             sx={{ width: 48, height: 48 }}
@@ -219,17 +244,29 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          <Stack sx={{ typography: 'body2' }}>
+          {invoice.patient && <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               {t('to')}
             </Typography>
-            {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
+            {curLangAr ? invoice.patient?.name_arabic : invoice.patient?.name_english}
             <br />
-            {invoice.patient.address}
+            {invoice.patient?.address}
             <br />
-            {t('phone')}: {invoice.patient.mobile_num1}
+            {t('phone')}: {invoice.patient?.mobile_num1}
             <br />
-          </Stack>
+          </Stack>}
+
+          {invoice.unit_service && <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t('to')}
+            </Typography>
+            {curLangAr ? invoice.unit_service?.name_arabic : invoice.unit_service?.name_english}
+            <br />
+            {invoice.unit_service?.address}
+            <br />
+            {t('phone')}: {invoice.unit_service?.phone}
+            <br />
+          </Stack>}
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>

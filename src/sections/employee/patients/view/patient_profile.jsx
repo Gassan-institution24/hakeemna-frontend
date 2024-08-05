@@ -169,7 +169,7 @@ export default function PatientProfile() {
         </Stack>
       )}
 
-      {data.sport_exercises && (
+      {data?.sport_exercises && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -243,7 +243,7 @@ export default function PatientProfile() {
             {t('Notes')}
           </Typography>
 
-          {data.other_medication_notes[0].split(',').map((info, infokey) => (
+          {data?.other_medication_notes[0].split(',').map((info, infokey) => (
             <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
               -&nbsp; {info.trim()} {/* trim to remove extra whitespaces */}
             </li>
@@ -281,7 +281,7 @@ export default function PatientProfile() {
           }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
-          {curLangAr ? data.name_arabic : data?.name_english}
+          {curLangAr ? data?.name_arabic : data?.name_english}
         </Typography>
       </div>
       {[
@@ -292,7 +292,7 @@ export default function PatientProfile() {
         },
         {
           label: t('Age'),
-          value: calculateAge(data.birth_date),
+          value: calculateAge(data?.birth_date),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -458,7 +458,7 @@ export default function PatientProfile() {
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             {renderOverview}
-            {data.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+            {data?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
           </Grid>
 
           <Grid xs={12} md={7}>

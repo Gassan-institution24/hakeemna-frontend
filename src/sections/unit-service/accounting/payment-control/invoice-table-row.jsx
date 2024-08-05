@@ -34,7 +34,7 @@ export default function MovementTableRow({
   const {
     sequence_number,
     patient,
-    employee,
+    stakeholder,
     required_amount,
     balance,
     Currency,
@@ -89,7 +89,7 @@ export default function MovementTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
+          {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
         </TableCell>
 
         <TableCell align="center">{fCurrency(required_amount, Currency?.symbol)}</TableCell>
@@ -133,7 +133,7 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem> */}
 
-        {!recieved && (
+        {!recieved && !stakeholder && (
           <MenuItem
             lang="ar"
             onClick={() => {

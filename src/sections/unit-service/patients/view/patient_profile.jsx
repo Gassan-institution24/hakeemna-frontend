@@ -14,6 +14,7 @@ import { useGetPatient, useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+import TabsView from 'src/sections/employee/appointmentsToday/tabs-view';
 
 import MedicalAnalysis from '../medical-analysis';
 import AppointmentsHistory from '../appointment-history/appoint-history';
@@ -47,7 +48,7 @@ export default function PatientProfile() {
     },
     isMedLab && {
       value: 'medicalanalysis',
-      label: t('medical analysis'),
+      label: t('upload files'),
     },
   ].filter(Boolean);
 
@@ -168,7 +169,7 @@ export default function PatientProfile() {
         </Stack>
       )}
 
-      {data.sport_exercises && (
+      {data?.sport_exercises && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -242,7 +243,7 @@ export default function PatientProfile() {
             {t('Notes')}
           </Typography>
 
-          {data.other_medication_notes[0].split(',').map((info, infokey) => (
+          {data?.other_medication_notes?.[0].split(',').map((info, infokey) => (
             <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
               -&nbsp; {info.trim()} {/* trim to remove extra whitespaces */}
             </li>
@@ -466,7 +467,8 @@ export default function PatientProfile() {
         </Grid>
       )}
       {currentTab === 'appointments' && <AppointmentsHistory />}
-      {currentTab === 'medicalanalysis' && <MedicalAnalysis />}
+      {/* {currentTab === 'medicalanalysis' && <MedicalAnalysis />} */}
+      {currentTab === 'medicalanalysis' && <TabsView patient={data} />}
     </Container>
   );
 }

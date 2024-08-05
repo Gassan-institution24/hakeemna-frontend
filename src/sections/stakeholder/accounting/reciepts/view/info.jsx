@@ -17,6 +17,7 @@ export default function InvoiceDetailsView() {
     _id: id,
     populate: [
       { path: 'unit_service', select: 'name_english name_arabic address phone' },
+      { path: 'stakeholder', select: 'name_english name_arabic address phone' },
       { path: 'patient', select: 'name_english name_arabic address mobile_num1' },
       { path: 'economic_movement', select: 'sequence_number Total_Amount' },
     ],

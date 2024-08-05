@@ -110,6 +110,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         orderInfo?.patient ||
         null,
       dueDate: currentInvoice?.dueDate || null,
+      order: currentInvoice?.order || order,
       detailedTaxes: currentInvoice?.detailedTaxes || true,
       taxes: currentInvoice?.taxes || 0,
       deduction: currentInvoice?.Total_deduction_amount || 0,
@@ -145,7 +146,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         ],
       payment_details: currentInvoice?.payment_details || [],
     }),
-    [currentInvoice, user?.stakeholder, orderInfo?.unit_service, orderInfo?.patient, orderInfo?.products]
+    [currentInvoice, user?.stakeholder, orderInfo?.unit_service, orderInfo?.patient, orderInfo?.products, order]
   );
 
   const methods = useForm({

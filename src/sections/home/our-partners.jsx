@@ -49,7 +49,7 @@ export default function OurPartners() {
     page,
     rowsPerPage,
   });
-  if (unitservicesData.length < 4) {
+  if (unitservicesData.length < 1) {
     return ''
   }
   return (
