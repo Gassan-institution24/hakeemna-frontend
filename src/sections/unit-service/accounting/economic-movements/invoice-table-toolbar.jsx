@@ -10,12 +10,9 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSPatient, useGetUSActiveEmployeeEngs, useGetUSActiveServiceTypes } from 'src/api';
 
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -24,41 +21,30 @@ export default function InvoiceTableToolbar({
   onFilters,
   //
   dateError,
-  serviceOptions,
+  unitServices,
+  patients,
+  stakeholders,
 }) {
-  const popover = usePopover();
-  const { user } = useAuthContext();
-  const USId =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { serviceTypesData } = useGetUSActiveServiceTypes(USId, {
-    select: 'name_english name_arabic',
-  });
-  const { employeesData } = useGetUSActiveEmployeeEngs(USId, {
-    select: 'employee',
-    populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-  });
-  const { patientsData } = useGetUSPatient(USId, { select: 'name_english name_arabic' });
-
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters('service', event.target.value);
-    },
-    [onFilters]
-  );
   const handleFilterPatient = useCallback(
     (event) => {
       onFilters('patient', event.target.value);
     },
     [onFilters]
   );
-  const handleFilterEmployee = useCallback(
+  const handleFilterStakeholder = useCallback(
     (event) => {
-      onFilters('employee', event.target.value);
+      onFilters('stakeholder', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterType = useCallback(
+    (event) => {
+      onFilters('type', event.target.value);
     },
     [onFilters]
   );
@@ -78,7 +64,6 @@ export default function InvoiceTableToolbar({
   );
 
   return (
-    <>
       <Stack
         spacing={2}
         alignItems={{ xs: 'flex-end', md: 'center' }}
@@ -136,7 +121,8 @@ export default function InvoiceTableToolbar({
             value={filters.patient}
           >
             <MenuItem value="">{t('all')}</MenuItem>
-            {patientsData?.map((option) => (
+            <Divider />
+            {patients?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
@@ -150,20 +136,22 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>{t('employee')}</InputLabel>
+          <InputLabel>{t('stakeholder')}</InputLabel>
 
           <Select
-            onChange={handleFilterEmployee}
-            input={<OutlinedInput label="employee" />}
+            onChange={handleFilterStakeholder}
+            input={<OutlinedInput label="stakeholder" />}
             sx={{ textTransform: 'capitalize' }}
-            value={filters.employee}
+            value={filters.stakeholder}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
-            {employeesData?.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {curLangAr ? option.employee.name_arabic : option.employee.name_english}
+            <MenuItem value={null}>{t('all')}</MenuItem>
+            <Divider />
+            {stakeholders?.map((option) => (
+              <MenuItem key={option._id} value={option?._id}>
+                {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
-            ))}
+            )
+            )}
           </Select>
         </FormControl>
 
@@ -173,64 +161,21 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>{t('service')}</InputLabel>
+          <InputLabel>{t('type')}</InputLabel>
 
           <Select
-            onChange={handleFilterService}
-            input={<OutlinedInput label="Service" />}
+            onChange={handleFilterType}
+            input={<OutlinedInput label={t("type")} />}
             sx={{ textTransform: 'capitalize' }}
-            value={filters.service}
+            value={filters.type}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
-            {serviceTypesData?.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {curLangAr ? option.name_arabic : option.name_english}
-              </MenuItem>
-            ))}
+            <MenuItem value={null}>{t('all')}</MenuItem>
+            <Divider />
+            <MenuItem value='income'> {t('income')} </MenuItem>
+            <MenuItem value='expences'> {t('expences')} </MenuItem>
           </Select>
         </FormControl>
-
-        {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </Stack> */}
       </Stack>
-
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:printer-minimalistic-bold" />
-          {t('print')}
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:import-bold" />
-          {t('import')}
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:export-bold" />
-          {t('export')}
-        </MenuItem>
-      </CustomPopover>
-    </>
   );
 }
 
@@ -238,5 +183,7 @@ InvoiceTableToolbar.propTypes = {
   dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  serviceOptions: PropTypes.array,
+  unitServices: PropTypes.array,
+  patients: PropTypes.array,
+  stakeholders: PropTypes.array,
 };

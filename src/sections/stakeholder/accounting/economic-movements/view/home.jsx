@@ -51,7 +51,7 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
-  { id: 'createmployeeeDate', label: 'employee' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'Balance', label: 'total amount' },
   // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'status' },
@@ -81,7 +81,7 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { economecMovementsData, lengths, totals } = useGetEconomicMovements({
+  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders } = useGetEconomicMovements({
     stakeholder: user?.stakeholder?._id,
     page: table.page || 0,
     sortBy: table.orderBy || 'created_at',
@@ -89,12 +89,8 @@ export default function InvoiceListView() {
     order: table.order || 'desc',
     select: 'sequence_number created_at stakeholder patient employee Balance status updated_at',
     populate: [
-      { path: 'stakeholder', select: 'name_english name_arabic' },
-      {
-        path: 'employee',
-        select: 'employee',
-        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-      },
+      { path: 'stakeholder', select: 'name_english name_arabic company_logo' },
+      { path: 'unit_service', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
     ],
     ...filters,
@@ -215,7 +211,7 @@ export default function InvoiceListView() {
               title={t('total')}
               total={lengths.allLength}
               percent={100}
-              price={totals.allTotal}
+              price={-totals.allTotal}
               icon="solar:bill-list-bold-duotone"
               color={theme.palette.secondary.main}
             />
@@ -224,7 +220,7 @@ export default function InvoiceListView() {
               title={t('paid')}
               total={lengths.paidLength}
               percent={(lengths.paidLength / lengths.allLength) * 100}
-              price={totals.paidTotal}
+              price={-totals.paidTotal}
               icon="solar:file-check-bold-duotone"
               color={theme.palette.success.main}
             />
@@ -233,7 +229,7 @@ export default function InvoiceListView() {
               title={t('installment')}
               total={lengths.installmentLength}
               percent={(lengths.installmentLength / lengths.allLength) * 100}
-              price={totals.installmentTotal}
+              price={-totals.installmentTotal}
               icon="solar:sort-by-time-bold-duotone"
               color={theme.palette.warning.main}
             />
@@ -242,7 +238,7 @@ export default function InvoiceListView() {
               title={t('insurance')}
               total={lengths.insuranceLength}
               percent={(lengths.insuranceLength / lengths.allLength) * 100}
-              price={totals.insuranceTotal}
+              price={-totals.insuranceTotal}
               icon="solar:bell-bing-bold-duotone"
               color={theme.palette.info.main}
             />
@@ -283,6 +279,9 @@ export default function InvoiceListView() {
           filters={filters}
           onFilters={handleFilters}
           //
+          unitServices={unitServices}
+          patients={patients}
+          stakeholders={stakeholders}
           dateError={dateError}
         />
 

@@ -10,6 +10,9 @@ export function useGetEconomicMovements(params) {
   const memoizedValue = useMemo(
     () => ({
       economecMovementsData: data?.economecMovementsData || [],
+      unitServices: data?.unitServices || [],
+      patients: data?.patients || [],
+      stakeholders: data?.stakeholders || [],
       lengths: data?.lengths || {},
       totals: data?.totals || {},
       loading: isLoading,

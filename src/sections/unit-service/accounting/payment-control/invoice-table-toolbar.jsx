@@ -12,9 +12,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSPatient, useGetUSActiveEmployeeEngs } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -26,22 +24,17 @@ export default function InvoiceTableToolbar({
   onFilters,
   //
   dateError,
-  serviceOptions,
+  unitServices,
+  patients,
+  stakeholders,
+  insuranceComapnies,
 }) {
   const popover = usePopover();
-  const { user } = useAuthContext();
-  const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { employeesData } = useGetUSActiveEmployeeEngs(USData?._id, {
-    select: 'employee',
-    populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-  });
-  const { patientsData } = useGetUSPatient(USData?._id, { select: 'name_english name_arabic' });
 
   const handleFilterInsurance = useCallback(
     (event) => {
@@ -62,13 +55,13 @@ export default function InvoiceTableToolbar({
     },
     [onFilters]
   );
-  const handleFilterEmployee = useCallback(
+
+  const handleFilterStakeholder = useCallback(
     (event) => {
-      onFilters('employee', event.target.value);
+      onFilters('stakeholder', event.target.value);
     },
     [onFilters]
   );
-
   const handleFilterStartDate = useCallback(
     (newValue) => {
       onFilters('startDate', newValue);
@@ -147,7 +140,7 @@ export default function InvoiceTableToolbar({
           >
             <MenuItem value="">{t('all')}</MenuItem>
             <Divider />
-            {patientsData?.map((option) => (
+            {patients?.map((option) => (
               <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
@@ -161,21 +154,22 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>{t('employee')}</InputLabel>
+          <InputLabel>{t('stakeholder')}</InputLabel>
 
           <Select
-            onChange={handleFilterEmployee}
-            input={<OutlinedInput label="employee" />}
+            onChange={handleFilterStakeholder}
+            input={<OutlinedInput label="stakeholder" />}
             sx={{ textTransform: 'capitalize' }}
-            value={filters.employee}
+            value={filters.stakeholder}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
+            <MenuItem value={null}>{t('all')}</MenuItem>
             <Divider />
-            {employeesData?.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {curLangAr ? option.employee.name_arabic : option.employee.name_english}
+            {stakeholders?.map((option) => (
+              <MenuItem key={option._id} value={option?._id}>
+                {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
-            ))}
+            )
+            )}
           </Select>
         </FormControl>
 
@@ -195,7 +189,7 @@ export default function InvoiceTableToolbar({
           >
             <MenuItem value="">{t('all')}</MenuItem>
             <Divider />
-            {['installment', 'insurance', 'paid']?.map((option, idx) => (
+            {['income', 'expences']?.map((option, idx) => (
               <MenuItem key={idx} value={option}>
                 {t(option)}
               </MenuItem>
@@ -219,7 +213,7 @@ export default function InvoiceTableToolbar({
           >
             <MenuItem value="">{t('all')}</MenuItem>
             <Divider />
-            {USData?.insurance?.map((option, idx) => (
+            {insuranceComapnies?.map((option, idx) => (
               <MenuItem key={idx} value={option?._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
@@ -281,5 +275,8 @@ InvoiceTableToolbar.propTypes = {
   dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  serviceOptions: PropTypes.array,
+  unitServices: PropTypes.array,
+  patients: PropTypes.array,
+  stakeholders: PropTypes.array,
+  insuranceComapnies: PropTypes.array,
 };

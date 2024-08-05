@@ -10,6 +10,10 @@ export function useGetIncomePaymentControl(params) {
   const memoizedValue = useMemo(
     () => ({
       incomePaymentData: data?.incomePaymentData || [],
+      unitServices: data?.unitServices || [],
+      patients: data?.patients || [],
+      stakeholders: data?.stakeholders || [],
+      insuranceComapnies: data?.insuranceComapnies || [],
       lengths: data?.lengths || {},
       totals: data?.totals || {},
       loading: isLoading,

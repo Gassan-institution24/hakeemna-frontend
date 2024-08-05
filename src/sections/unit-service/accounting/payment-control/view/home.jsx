@@ -47,7 +47,7 @@ const TABLE_HEAD = [
   { id: 'type', label: 'type' },
   { id: 'insurance', label: 'insurance company' },
   { id: 'patient', label: 'patient' },
-  { id: 'createmployeeeDate', label: 'employee' },
+  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'required_amount', label: 'required amount' },
   { id: 'balance', label: 'balance' },
   // { id: 'sent', label: 'Sent', align: 'center' },
@@ -85,7 +85,7 @@ export default function PaymentControlView() {
     movement: movement || '',
   });
 
-  const { incomePaymentData, lengths, totals, refetch } = useGetIncomePaymentControl({
+  const { incomePaymentData, lengths, totals, refetch, unitServices, patients, stakeholders, insuranceComapnies } = useGetIncomePaymentControl({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     page: table.page || 0,
@@ -93,14 +93,10 @@ export default function PaymentControlView() {
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
     select:
-      'sequence_number created_at patient employee economic_movement insurance is_it_installment due_date required_amount recieved balance status updated_at movements_type',
+      'sequence_number created_at patient stakeholder economic_movement insurance is_it_installment due_date required_amount recieved balance status updated_at movements_type',
     populate: [
-      {
-        path: 'employee',
-        select: 'employee',
-        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-      },
       { path: 'insurance', select: 'name_english name_arabic' },
+      { path: 'stakeholder', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],
@@ -270,6 +266,10 @@ export default function PaymentControlView() {
           onFilters={handleFilters}
           //
           dateError={dateError}
+          unitServices={unitServices}
+          patients={patients}
+          stakeholders={stakeholders}
+          insuranceComapnies={insuranceComapnies}
         />
 
         {canReset && (

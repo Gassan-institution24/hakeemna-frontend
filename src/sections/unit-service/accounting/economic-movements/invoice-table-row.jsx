@@ -34,7 +34,8 @@ export default function MovementTableRow({
   const {
     sequence_number,
     patient,
-    employee,
+    stakeholder,
+    // employee,
     Balance,
     Currency,
     status,
@@ -73,10 +74,10 @@ export default function MovementTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
+          {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
         </TableCell>
 
-        <TableCell align="center">{fCurrency(Balance, Currency?.symbol)}</TableCell>
+        <TableCell align="center">{fCurrency(stakeholder ? -Balance : Balance, Currency?.symbol)}</TableCell>
 
         <TableCell align="center">
           <Label
@@ -120,8 +121,7 @@ export default function MovementTableRow({
           lang="ar"
           onClick={() => {
             router.push(
-              `${
-                paths.unitservice.accounting.paymentcontrol.root
+              `${paths.unitservice.accounting.paymentcontrol.root
               }?movement=${sequence_number}-${fDate(created_at, 'yyyy')}`
             );
             popover.onClose();
