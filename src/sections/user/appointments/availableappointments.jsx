@@ -14,21 +14,17 @@ import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 // import { useAuthContext } from 'src/auth/hooks';
 import {
-  useGetCities,
   useGetCountries,
   useGetInsuranceCos,
-  useGetAppointmentTypes,
-  useGetActiveUnitservices,
   useGetEmployeeEngsBySpecialty,
 } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
 // import { useSettingsContext } from 'src/components/settings';
 
-import AppointmentSort from './appointment-sort-user';
 import ClinicAppointmentList from './appointment-clinic';
 import AppointmentSearch from './appointment-search-user';
 import AppointmentFilters from './appointment-filters-user';
@@ -53,22 +49,18 @@ const defaultFilters = {
 
 export default function AppointmentBooking() {
   // const settings = useSettingsContext();
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { id } = useParams();
   const openFilters = useBoolean();
-  const [sortBy, setSortBy] = useState('rateing');
+  // const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
   const { data } = useGetEmployeeEngsBySpecialty(id);
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
-  const { unitservicesData } = useGetActiveUnitservices({ updateRating: true, populate: 'all' });
-  const { appointmenttypesData } = useGetAppointmentTypes();
-
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
+  // const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
@@ -79,7 +71,7 @@ export default function AppointmentBooking() {
     inputData: data,
     filters,
     search,
-    sortBy,
+    // sortBy,
     dateError,
   });
 
@@ -92,9 +84,9 @@ export default function AppointmentBooking() {
     }));
   }, []);
 
-  const handleSortBy = useCallback(() => {
-    setSortBy(defaultFilters);
-  }, []);
+  // const handleSortBy = useCallback(() => {
+  //   setSortBy(defaultFilters);
+  // }, []);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -128,15 +120,12 @@ export default function AppointmentBooking() {
           //
           countriesOptions={countriesData}
           insuranseCosData={insuranseCosData}
-          citiesOptions={tableData}
-          unitServicesOptions={unitservicesData}
           dataFiltered={dataFiltered}
-          // usrate={usrate}
-          appointmentTypeOptions={appointmenttypesData}
+  
           dateError={dateError}
         />
 
-        <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={sortOptions} />
+        {/* <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={sortOptions} /> */}
       </Stack>
     </Stack>
   );
@@ -144,9 +133,6 @@ export default function AppointmentBooking() {
   const renderResults = (
     <AppointmentFiltersResult
       countriesOptions={countriesData}
-      citiesOptions={tableData}
-      unitServicesOptions={unitservicesData}
-      appointmentTypeOptions={appointmenttypesData}
       data={data}
       filters={filters}
       onResetFilters={handleResetFilters}
@@ -178,10 +164,9 @@ export default function AppointmentBooking() {
 }
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, search, comparator, filters, sortBy }) {
+function applyFilter({ inputData, search, filters, sortBy }) {
   const { insurance } = filters;
   const { countries } = filters;
-
   // SORT BY
   if (sortBy === 'rateing') {
     inputData = orderBy(inputData, ['employee.rate'], ['desc']);
