@@ -46,7 +46,7 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
-  { id: 'createmployeeeDate', label: 'employee' },
+  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'Balance', label: 'total amount' },
   // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'status' },
@@ -76,7 +76,7 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { economecMovementsData, lengths, totals } = useGetEconomicMovements({
+  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders } = useGetEconomicMovements({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     page: table.page || 0,
@@ -86,11 +86,7 @@ export default function InvoiceListView() {
     select: 'sequence_number created_at unit_service patient employee Balance status updated_at',
     populate: [
       { path: 'unit_service', select: 'name_english name_arabic' },
-      {
-        path: 'employee',
-        select: 'employee',
-        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-      },
+      { path: 'stakeholder', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
     ],
     ...filters,
@@ -280,6 +276,9 @@ export default function InvoiceListView() {
           onFilters={handleFilters}
           //
           dateError={dateError}
+          unitServices={unitServices}
+          patients={patients}
+          stakeholders={stakeholders}
         />
 
         {canReset && (

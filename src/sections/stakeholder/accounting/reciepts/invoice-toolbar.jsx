@@ -39,7 +39,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 
   const paidAmount = incomePaymentData.reduce((acc, one) => {
     if (typeof one.balance === 'number') {
-      return acc + one.balance;
+      return acc - one.balance;
     }
     return acc;
   }, 0);

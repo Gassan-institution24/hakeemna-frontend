@@ -36,6 +36,7 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'unit_service', label: 'unit of service' },
+  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'Balance', label: 'total amount' },
   { id: 'status', label: 'status' },
   { id: '', width: 120 },
@@ -65,9 +66,11 @@ export default function InvoiceListView() {
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
     populate: [
+      { path: 'stakeholder', select: 'name_english name_arabic company_logo address phone ' },
       { path: 'unit_service', select: 'name_english name_arabic company_logo address phone ' },
       { path: 'patient', select: 'name_english name_arabic address mobile_num1' },
-      { path: 'Provided_services' },
+      { path: 'Provided_services', populate: 'service_type' },
+      { path: 'provided_products', populate: 'product' },
     ],
     ...filters,
   });

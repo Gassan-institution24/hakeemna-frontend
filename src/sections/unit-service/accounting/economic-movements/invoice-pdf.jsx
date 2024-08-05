@@ -102,11 +102,14 @@ const useStyles = () =>
 
 export default function InvoicePDF({ invoice, currentStatus }) {
   const {
+    provided_products,
     Provided_services,
     Total_tax_Amount,
+    Total_deduction_amount,
     dueDate,
     Total_discount_amount,
     // Total_deduction_amount,
+    stakeholder,
     patient,
     created_at,
     Total_Amount,
@@ -124,7 +127,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={unit_service.company_logo ? unit_service.company_logo : '/logo/logo_single.svg'}
+            source={unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'}
             style={{ width: 48, height: 48 }}
           />
 
@@ -134,9 +137,18 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
         </View>
 
+        {stakeholder && <View style={styles.col6}>
+          <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
+          <Text style={styles.body2}>
+            {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
+          </Text>
+          <Text style={styles.body2}>{stakeholder.address}</Text>
+          <Text style={styles.body2}>{stakeholder.phone}</Text>
+        </View>}
+
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t(stakeholder ? 'to' : 'from')}</Text>
             <Text style={styles.body2}>
               {curLangAr ? unit_service.name_arabic : unit_service.name_english}
             </Text>
@@ -144,14 +156,14 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             <Text style={styles.body2}>{unit_service.phone}</Text>
           </View>
 
-          <View style={styles.col6}>
+          {patient && <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
             <Text style={styles.body2}>
               {curLangAr ? patient.name_arabic : patient.name_english}
             </Text>
             <Text style={styles.body2}>{patient.address}</Text>
             <Text style={styles.body2}>{patient.mobile_num1}</Text>
-          </View>
+          </View>}
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
@@ -177,7 +189,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               </View>
 
               <View style={styles.tableCell_2}>
-                <Text style={styles.subtitle2}>{t('services')}</Text>
+                <Text style={styles.subtitle2}>{t('items')}</Text>
               </View>
 
               <View style={styles.tableCell_3}>
@@ -205,6 +217,32 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                   <Text style={styles.subtitle2}>{item.title}</Text>
                   <Text>
                     {curLangAr ? item.service_type?.name_arabic : item.service_type?.name_english}
+                  </Text>
+                </View>
+
+                <View style={styles.tableCell_3}>
+                  <Text>{item.quantity}</Text>
+                </View>
+
+                <View style={styles.tableCell_3}>
+                  <Text>{item.price_per_unit}</Text>
+                </View>
+
+                <View style={[styles.tableCell_3, styles.alignRight]}>
+                  <Text>{fCurrency(item.income_amount)}</Text>
+                </View>
+              </View>
+            ))}
+            {provided_products?.map((item, index) => (
+              <View style={styles.tableRow} key={item.id}>
+                <View style={styles.tableCell_1}>
+                  <Text>{index + 1}</Text>
+                </View>
+
+                <View style={styles.tableCell_2}>
+                  <Text style={styles.subtitle2}>{item.title}</Text>
+                  <Text>
+                    {curLangAr ? item.product?.name_arabic : item.product?.name_english}
                   </Text>
                 </View>
 
@@ -267,6 +305,17 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text>{fCurrency(Total_tax_Amount)}</Text>
+              </View>
+            </View>
+            <View style={[styles.tableRow, styles.noBorder]}>
+              <View style={styles.tableCell_1} />
+              <View style={styles.tableCell_2} />
+              <View style={styles.tableCell_3} />
+              <View style={styles.tableCell_3}>
+                <Text>{t('deductions')}</Text>
+              </View>
+              <View style={[styles.tableCell_3, styles.alignRight]}>
+                <Text>{fCurrency(Total_deduction_amount)}</Text>
               </View>
             </View>
 

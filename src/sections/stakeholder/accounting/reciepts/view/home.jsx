@@ -41,7 +41,7 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
-  { id: 'createmployeeeDate', label: 'employee' },
+  { id: 'unit_service', label: 'unit of sevice' },
   { id: 'receipt_amount', label: 'amount' },
   { id: 'economic_movement', label: 'economic movement' },
   { id: '' },
@@ -69,21 +69,17 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { receiptsData, lengths, totals } = useGetReciepts({
+  const { receiptsData, lengths, totals, unitServices, patients, stakeholders } = useGetReciepts({
     stakeholder: user?.stakeholder?._id,
     page: table.page || 0,
     sortBy: table.orderBy || 'created_at',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
     select:
-      'sequence_number economic_movement created_at patient employee receipt_amount updated_at',
+      'sequence_number economic_movement created_at patient payment_amount updated_at',
     populate: [
-      {
-        path: 'employee',
-        select: 'employee',
-        populate: [{ path: 'employee', select: 'name_english name_arabic' }],
-      },
       { path: 'patient', select: 'name_english name_arabic' },
+      { path: 'unit_service', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],
     ...filters,
@@ -204,7 +200,7 @@ export default function InvoiceListView() {
               title={t('total')}
               total={lengths.allLength}
               percent={100}
-              price={totals.allTotal}
+              price={-totals.allTotal}
               icon="solar:bill-list-bold-duotone"
               color={theme.palette.secondary.main}
             />
@@ -273,6 +269,9 @@ export default function InvoiceListView() {
           onFilters={handleFilters}
           //
           dateError={dateError}
+          unitServices={unitServices}
+          patients={patients}
+          stakeholders={stakeholders}
         />
 
         {canReset && (

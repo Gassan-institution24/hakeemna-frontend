@@ -2691,5 +2691,5 @@ const data = [
 
 ]
 data.forEach((one) => {
-    axios.post('http://localhost:3000/api/analysis', one)
+    axios.post('https://api.doctorna.online/api/analysis', one)
 })

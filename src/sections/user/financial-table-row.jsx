@@ -14,7 +14,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-import InvoicePDF from '../unit-service/accounting/economic-movements/invoice-pdf';
+import UnitServiceInvoicePDF from '../unit-service/accounting/economic-movements/invoice-pdf';
+import StakeholderInvoicePDF from '../stakeholder/accounting/economic-movements/invoice-pdf';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export default function MovementTableRow({
 }) {
   const {
     sequence_number,
+    stakeholder,
     unit_service,
     Balance,
     Currency,
@@ -42,7 +44,8 @@ export default function MovementTableRow({
   const curLangAr = currentLang.value === 'ar';
 
   const printPdf = async () => {
-    const blob = await pdf(<InvoicePDF invoice={row} currentStatus={status} />).toBlob();
+    // eslint-disable-next-line
+    const blob = await pdf(stakeholder ? <StakeholderInvoicePDF invoice={row} currentStatus={status} /> : <UnitServiceInvoicePDF invoice={row} currentStatus={status} />).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -72,6 +75,10 @@ export default function MovementTableRow({
         {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
       </TableCell>
 
+      <TableCell align="center">
+        {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
+      </TableCell>
+
       <TableCell align="center" sx={{
         cursor: 'pointer',
         color: '#3F54EB',
@@ -93,7 +100,8 @@ export default function MovementTableRow({
       </TableCell>
       <TableCell align='right'>
         <PDFDownloadLink
-          document={<InvoicePDF invoice={row} currentStatus={status} />}
+          // eslint-disable-next-line
+          document={stakeholder ? <StakeholderInvoicePDF invoice={row} currentStatus={status} /> : <UnitServiceInvoicePDF invoice={row} currentStatus={status} />}
           fileName={`${fDate(new Date(row.created_at), 'yyyy')} - ${row.sequence_number}`}
           style={{ textDecoration: 'none' }}
         >
@@ -111,7 +119,7 @@ export default function MovementTableRow({
           </IconButton>
         </Tooltip>
       </TableCell>
-    </TableRow>
+    </TableRow >
   );
 }
 
