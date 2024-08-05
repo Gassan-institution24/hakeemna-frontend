@@ -1,16 +1,12 @@
 import Table from '@mui/material/Table';
-import Paper from '@mui/material/Paper';
 import TableRow from '@mui/material/TableRow';
-import Collapse from '@mui/material/Collapse';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { Card, Container, CardHeader } from '@mui/material';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+// import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTime } from 'src/utils/format-time';
 
@@ -18,7 +14,6 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetWatingPatient, useGetAllinWatingNow } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
@@ -28,7 +23,7 @@ export default function WatingRoom() {
   const { entranceData } = useGetWatingPatient(user?.patient?._id);
   const { entrance } = useGetAllinWatingNow();
   const { t } = useTranslate();
-  const collapsible = useBoolean();
+  // const collapsible = useBoolean();
   const entranceCount = entrance.length <= 0 ? 0 : entrance.length - 1;
 
   return entranceData ? (
