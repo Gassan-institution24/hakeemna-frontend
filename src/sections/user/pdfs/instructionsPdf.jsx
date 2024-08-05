@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/renderer';
-
-import { fDate } from 'src/utils/format-time';
-import { fCurrency } from 'src/utils/format-number';
-import { NumberToText } from 'src/utils/number-to-words';
+import { Page, View, Text, Font, Document, StyleSheet } from '@react-pdf/renderer';
 
 import { useLocales, useTranslate } from 'src/locales';
 

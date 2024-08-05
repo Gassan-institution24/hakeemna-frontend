@@ -14,7 +14,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 // import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetCountries,
@@ -25,7 +25,6 @@ import {
 // import Iconify from 'src/components/iconify';
 // import { useSettingsContext } from 'src/components/settings';
 
-import AppointmentSort from './appointment-sort-user';
 import ClinicAppointmentList from './appointment-clinic';
 import AppointmentSearch from './appointment-search-user';
 import AppointmentFilters from './appointment-filters-user';
@@ -50,10 +49,10 @@ const defaultFilters = {
 
 export default function AppointmentBooking() {
   // const settings = useSettingsContext();
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { id } = useParams();
   const openFilters = useBoolean();
-  const [sortBy, setSortBy] = useState('rateing');
+  // const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
   const { data } = useGetEmployeeEngsBySpecialty(id);
 
@@ -61,7 +60,7 @@ export default function AppointmentBooking() {
   const { insuranseCosData } = useGetInsuranceCos();
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
+  // const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
@@ -72,7 +71,7 @@ export default function AppointmentBooking() {
     inputData: data,
     filters,
     search,
-    sortBy,
+    // sortBy,
     dateError,
   });
 
@@ -85,9 +84,9 @@ export default function AppointmentBooking() {
     }));
   }, []);
 
-  const handleSortBy = useCallback(() => {
-    setSortBy(defaultFilters);
-  }, []);
+  // const handleSortBy = useCallback(() => {
+  //   setSortBy(defaultFilters);
+  // }, []);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
