@@ -64,7 +64,7 @@ function calculateAverageRating(feedbackData) {
   // Calculate the average rating
   const averageRating = totalRating / feedbackData.length;
 
-  return averageRating.toFixed(1); // Round to one decimal place
+  return averageRating.toFixed(1); 
 }
 
 // ----------------------------------------------------------------------

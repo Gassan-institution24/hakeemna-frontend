@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -30,26 +30,7 @@ export default function AppointmentSearch({
   );
   // const [value, setValue] = useState('');
   return (
-    // <Input
-    //   sx={{
-    //     border: 1,
-    //     borderRadius: '8px',
-    //     borderColor: 'grey.400',
-    //     padding: '7px',
-    //     '&::placeholder': {
-    //       color: 'red',
-    //     },
-    //   }}
-    //   placeholder="Search..."
-    //   startAdornment={
-    //     <InputAdornment position="start">
-    //       <Iconify icon="iconamoon:search" sx={{ color: 'text.disabled' }} />
-    //     </InputAdornment>
-    //   }
-    //   value={value}
-    //   onChange={(e) => setValue(e.target.value)}
-    //   disableUnderline
-    // />
+  
     <Stack
       spacing={2}
       alignItems={{ xs: 'flex-end', md: 'center' }}
@@ -76,13 +57,10 @@ export default function AppointmentSearch({
             ),
           }}
         />
-        {/* 
-        <IconButton onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton> */}
+       
       </Stack>
 
-      {canReset && (
+      {/* {canReset && (
         <Button
           color="error"
           sx={{ flexShrink: 0 }}
@@ -91,7 +69,7 @@ export default function AppointmentSearch({
         >
           Clear
         </Button>
-      )}
+      )} */}
     </Stack>
   );
 }

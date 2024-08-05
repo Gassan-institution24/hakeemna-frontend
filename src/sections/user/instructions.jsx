@@ -7,16 +7,14 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import CircularProgress from '@mui/material/CircularProgress';
-
-// import { fDate } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetPatientInstructionsData } from 'src/api/Instructions';
 
 import Iconify from 'src/components/iconify';
-// import InvoicePDF from 'src/sections/unit-service/accounting/reciepts/invoice-pdf';
+
+import InstructionsPdf from './pdfs/instructionsPdf';
 // ----------------------------------------------------------------------
 
 export default function Instructions() {
@@ -24,28 +22,12 @@ export default function Instructions() {
   const { data } = useGetPatientInstructionsData(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  console.log(data);
 
   return data?.map((info, index) => (
-    <Box>
-      <Card key={index}>
-        <Stack sx={{ p: 3, pb: 2 }}>
-        <PDFDownloadLink
-            // document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-            // fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
-            style={{ textDecoration: 'none' }}
-          >
-            {({ loading }) => (
-              <Tooltip title='download'>
-                <IconButton>
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    <Iconify icon="eva:cloud-download-fill" />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-          </PDFDownloadLink>
+    <Box key={index}>
+      <Card sx={{ mb: 2 }}>
+        <Stack sx={{ p: 3, pb: 2 }} direction="row" justifyContent="space-between">
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english}
           </Stack>
@@ -65,6 +47,17 @@ export default function Instructions() {
               {info?.adjustable_documents?.title}
             </Stack>
           </Stack>
+          <PDFDownloadLink
+            document={<InstructionsPdf Instructions={info} />}
+            fileName="Instructions"
+            style={{ textDecoration: 'none' }}
+          >
+            <Tooltip title="Download">
+              <IconButton sx={{ color: 'info.main' }}>
+                <Iconify icon="akar-icons:cloud-download" />
+              </IconButton>
+            </Tooltip>
+          </PDFDownloadLink>
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
