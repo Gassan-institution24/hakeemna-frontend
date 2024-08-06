@@ -231,7 +231,8 @@ export const endpoints = {
   },
   insurance_data: {
     all: '/api/insurance/data',
-    one: (id) => (!id ? null : `/api/insurance/data/${id}/patient`),
+    one: (id) => (!id ? null : `/api/insurance/data/${id}/`),
+    patient: (id) => (!id ? null : `/api/insurance/data/${id}/patient`),
   },
   measurment_types: {
     all: '/api/measurementtypes',
