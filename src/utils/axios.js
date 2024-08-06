@@ -444,15 +444,15 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/medrecord/patient/${id}`),
     two: (id, id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
   },
-  oldpatient: {
-    all: '/api/oldpatientsdata',
-    details: '/api/oldpatientsdata/details',
-    one: (id) => (!id ? null : `/api/oldpatientsdata/${id}`),
+  usPatients: {
+    all: '/api/uspatients',
+    details: '/api/uspatients/details',
+    one: (id) => (!id ? null : `/api/uspatients/${id}`),
     unit_service: {
-      all: (id) => (!id ? null : `/api/oldpatientsdata/unitservice/${id}`),
+      all: (id) => (!id ? null : `/api/uspatients/unitservice/${id}`),
     },
     employee: {
-      all: (id) => (!id ? null : `/api/oldpatientsdata/employee/${id}`),
+      all: (id) => (!id ? null : `/api/uspatients/employee/${id}`),
     },
   },
   license_movements: {

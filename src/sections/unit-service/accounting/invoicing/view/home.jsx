@@ -71,7 +71,7 @@ export default function AppointmentsView() {
 
   const [filters, setFilters] = useState({ ...defaultFilters, startDate: new Date() });
 
-  const { appointmentsData, appointmentsLength, refetch, loading } = useGetUSAppointments(
+  const { appointmentsData, lengths, refetch, loading } = useGetUSAppointments(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
     {
       page: table.page || 0,
@@ -166,7 +166,7 @@ export default function AppointmentsView() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={appointmentsLength}
+                rowCount={lengths?.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
               />
@@ -183,7 +183,7 @@ export default function AppointmentsView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -193,7 +193,7 @@ export default function AppointmentsView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={appointmentsLength}
+          count={lengths?.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}

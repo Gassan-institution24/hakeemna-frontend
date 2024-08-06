@@ -64,7 +64,7 @@ function calculateAverageRating(feedbackData) {
   // Calculate the average rating
   const averageRating = totalRating / feedbackData.length;
 
-  return averageRating.toFixed(1); 
+  return averageRating.toFixed(1);
 }
 
 // ----------------------------------------------------------------------
@@ -127,7 +127,7 @@ export default function Doctorpage() {
   const handleDateChange = (date) => {
     setTimeData();
     setSelectedTime();
-    setCurrentDateTime(date);
+    setCurrentDateTime(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0));
   };
 
   const handleAppointmentTypeChange = (event) => {
@@ -559,9 +559,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-          data?.unit_service?.city?.name_english ||
-          data?.unit_service?.name_english ||
-          data?.employee?.description
+            data?.unit_service?.city?.name_english ||
+            data?.unit_service?.name_english ||
+            data?.employee?.description
             ? renderAbout
             : ''}
 
