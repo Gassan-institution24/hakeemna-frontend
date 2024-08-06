@@ -135,11 +135,14 @@ export default function AppointmentsTableRow({
           <Label
             variant="soft"
             color={
-              (status === 'available' && 'secondary') ||
-              (status === 'pending' && 'warning') ||
-              (status === 'Processing' && 'info') ||
+              (status === 'processing' && 'info') ||
+              (status === 'arrived' && 'success') ||
+              (status === 'late' && 'warning') ||
+              (status === 'booked' && 'info') ||
               (status === 'finished' && 'success') ||
-              (status === 'canceled' && 'error') ||
+              (status === 'not arrived' && 'error') ||
+              (status === 'canceled' && 'warning') ||
+              (status === 'available' && 'secondary') ||
               (status === 'not booked' && 'secondary') ||
               'default'
             }

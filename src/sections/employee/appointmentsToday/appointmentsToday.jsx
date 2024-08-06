@@ -91,19 +91,21 @@ export default function AppointmentsToday() {
     },
   ];
 
+  console.log('appointmentsData', appointmentsData)
+
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const updateStatus = async (id, status, type) => {
+  const updateStatus = async (info, status, type) => {
     try {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
-      await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status });
 
       if (type === 'arrived' && status) {
         setArrivalTimes((prev) => ({
           ...prev,
-          [id]: new Date().toISOString(),
+          [info?._id]: new Date().toISOString(),
         }));
       }
 
@@ -296,13 +298,13 @@ export default function AppointmentsToday() {
                             <>
                               <Button
                                 sx={{ p: 2 }}
-                                onClick={() => updateStatus(info?._id, true, 'coming')}
+                                onClick={() => updateStatus(info, true, 'coming')}
                               >
                                 {t('Yes')}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
-                                onClick={() => updateStatus(info?._id, false, 'coming')}
+                                onClick={() => updateStatus(info, false, 'coming')}
                               >
                                 {t('No')}
                               </Button>
@@ -316,13 +318,13 @@ export default function AppointmentsToday() {
                             <>
                               <Button
                                 sx={{ p: 2 }}
-                                onClick={() => updateStatus(info?._id, true, 'arrived')}
+                                onClick={() => updateStatus(info, true, 'arrived')}
                               >
                                 {t('Yes')}
                               </Button>
                               <Button
                                 sx={{ p: 2 }}
-                                onClick={() => updateStatus(info?._id, false, 'arrived')}
+                                onClick={() => updateStatus(info, false, 'arrived')}
                               >
                                 {t('No')}
                               </Button>

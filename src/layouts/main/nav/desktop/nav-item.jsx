@@ -11,11 +11,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export const NavItem = forwardRef(
   ({ title, path, open, active, hasChild, externalLink, subItem, ...other }, ref) => {
+    const { currentLang } = useLocales();
+    const curLangAr = currentLang.value === 'ar';
     const renderContent = (
       <StyledNavItem
         disableRipple
@@ -24,7 +27,7 @@ export const NavItem = forwardRef(
         open={open}
         active={active}
         subItem={subItem}
-        sx={{ textTransform: 'uppercase', fontWeight: 600, fontSize: 14 }}
+        sx={{ textTransform: 'uppercase', fontWeight: 600, fontSize: curLangAr ? 15 : 14 }}
         {...other}
       >
         {title}

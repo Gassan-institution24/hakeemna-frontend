@@ -110,16 +110,8 @@ export default function AppointmentsView({ employeeData }) {
 
   const {
     appointmentsData,
-    appointmentsLength,
     refetch,
-    // all,
-    available,
-    notBooked,
-    processing,
-    canceled,
-    finished,
-    pending,
-    // loading,
+    lengths
   } = useGetEmployeeAppointments(id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
@@ -151,39 +143,57 @@ export default function AppointmentsView({ employeeData }) {
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'processing',
-      label: t('upcoming'),
+      label: t('current'),
       color: 'info',
-      count: processing,
+      count: lengths?.processing,
     },
     {
-      value: 'pending',
-      label: t('pending'),
+      value: 'arrived',
+      label: t('arrived'),
+      color: 'success',
+      count: lengths?.arrived,
+    },
+    {
+      value: 'late',
+      label: t('late'),
       color: 'warning',
-      count: pending,
+      count: lengths?.late,
+    },
+    {
+      value: 'booked',
+      label: t('booked'),
+      color: 'info',
+      count: lengths?.booked,
     },
     {
       value: 'finished',
       label: t('finished'),
       color: 'success',
-      count: finished,
+      count: lengths?.finished,
+    },
+    {
+      value: 'not arrived',
+      label: t('not arrived'),
+      color: 'error',
+      count: lengths?.notArrived,
+    },
+    {
+      value: 'canceled',
+      label: t('canceled'),
+      color: 'warning',
+      count: lengths?.canceled,
     },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
-      count: available,
-    },
-    {
-      value: 'canceled',
-      label: t('canceled'),
-      color: 'error',
-      count: canceled,
+      count: lengths?.available,
     },
     {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
-      count: notBooked,
+      count: lengths?.notBooked,
     },
   ];
 
@@ -300,7 +310,7 @@ export default function AppointmentsView({ employeeData }) {
     enqueueSnackbar(t('canceled successfully!'));
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -308,7 +318,7 @@ export default function AppointmentsView({ employeeData }) {
     refetch,
     dataFiltered.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths?.length,
     table,
     enqueueSnackbar,
     user,
@@ -341,7 +351,7 @@ export default function AppointmentsView({ employeeData }) {
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -349,7 +359,7 @@ export default function AppointmentsView({ employeeData }) {
     refetch,
     dataFiltered.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths?.length,
     table,
     minToDelay,
     enqueueSnackbar,
@@ -381,7 +391,7 @@ export default function AppointmentsView({ employeeData }) {
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -389,7 +399,7 @@ export default function AppointmentsView({ employeeData }) {
     refetch,
     dataFiltered.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths?.length,
     table,
     user,
     enqueueSnackbar,
@@ -534,9 +544,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }
@@ -547,7 +557,7 @@ export default function AppointmentsView({ employeeData }) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsLength}
+                  rowCount={lengths?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
@@ -575,7 +585,7 @@ export default function AppointmentsView({ employeeData }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -585,7 +595,7 @@ export default function AppointmentsView({ employeeData }) {
           </TableContainer>
 
           <TablePaginationCustom
-            count={appointmentsLength}
+            count={lengths?.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}

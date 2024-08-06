@@ -103,7 +103,7 @@ export default function DoctorPage({ employeeData }) {
             justifyContent="center"
             gap={{ md: 10 }}
           >
-            {appointmentsData.length > 0 && (
+            {AppointDates.length > 0 && (
               <BookDetails
                 selected={selected}
                 AppointDates={AppointDates}
@@ -114,7 +114,7 @@ export default function DoctorPage({ employeeData }) {
                 list={appointmentsData}
               />
             )}
-            {appointmentsData.length < 1 && (
+            {AppointDates.length < 1 && (
               <Typography>{t('no online appointment for this doctor')}</Typography>
             )}
           </Stack>
