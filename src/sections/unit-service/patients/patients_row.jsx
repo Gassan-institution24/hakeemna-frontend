@@ -44,7 +44,7 @@ import { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function USPatientsTableRow({ row, selected }) {
-  const { _id, sequence_number, file_code, patient, name_english, name_arabic } = row;
+  const { _id, file_code, patient, name_english, name_arabic } = row;
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

@@ -4,17 +4,15 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
-import { Divider, TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { Divider, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSPatient, useGetUSActiveEmployeeEngs } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -31,9 +29,6 @@ export default function InvoiceTableToolbar({
   stakeholders,
 }) {
   const popover = usePopover();
-  const { user } = useAuthContext();
-  const USId =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
