@@ -140,7 +140,7 @@ export default function AppointmentBooking() {
       canReset={canReset}
       onFilters={handleFilters}
       //
-      results={dataFiltered.length}
+      results={dataFiltered?.length}
     />
   );
 

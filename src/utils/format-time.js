@@ -37,7 +37,7 @@ export function fDate(date, newFormat) {
     : '';
 }
 export function fMonth(date, newFormat) {
-  const fm = newFormat || 'MMM yyyy';
+  const fm = newFormat || 'MMMM yyyy';
 
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
