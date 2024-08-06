@@ -43,8 +43,8 @@ import { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({ row, selected }) {
-  const { _id, sequence_number, nationality, name_english, name_arabic } = row;
+export default function USPatientsTableRow({ row, selected }) {
+  const { _id, sequence_number, file_code, patient, name_english, name_arabic } = row;
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -71,7 +71,7 @@ export default function CountriesTableRow({ row, selected }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+        {String(patient?.nationality?.code).padStart(3, '0')}-{patient?.sequence_number}
       </TableCell>
       <TableCell
         sx={{
@@ -81,7 +81,7 @@ export default function CountriesTableRow({ row, selected }) {
         onClick={() => router.push(paths.unitservice.patients.info(_id))}
         align="center"
       >
-        {name_english}
+        {name_english || patient?.name_english}
       </TableCell>
       <TableCell
         sx={{
@@ -91,7 +91,17 @@ export default function CountriesTableRow({ row, selected }) {
         onClick={() => router.push(paths.unitservice.patients.info(_id))}
         align="center"
       >
-        {name_arabic}
+        {name_arabic || patient?.name_arabic}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        align="center"
+      >
+        {file_code}
       </TableCell>
       <TableCell align="center">
         <Button
@@ -311,7 +321,7 @@ export default function CountriesTableRow({ row, selected }) {
   );
 }
 
-CountriesTableRow.propTypes = {
+USPatientsTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

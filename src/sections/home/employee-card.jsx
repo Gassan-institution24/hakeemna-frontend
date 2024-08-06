@@ -55,7 +55,7 @@ export default function EmployeeCard({ employee }) {
       online_available: true,
     }
   );
-
+  console.log('appointmentsData', appointmentsData)
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     if (authenticated) {
@@ -180,17 +180,17 @@ export default function EmployeeCard({ employee }) {
               <Stack>
                 {employee?.unit_service?.insurance?.length > 5
                   ? employee?.unit_service?.insurance
-                      ?.filter((one, index) => index <= 5)
-                      .map((one) => (
-                        <Typography variant="body2">
-                          {curLangAr ? one.name_arabic : one.name_english}
-                        </Typography>
-                      ))
-                  : employee?.unit_service?.insurance?.map((one) => (
+                    ?.filter((one, index) => index <= 5)
+                    .map((one) => (
                       <Typography variant="body2">
                         {curLangAr ? one.name_arabic : one.name_english}
                       </Typography>
-                    ))}
+                    ))
+                  : employee?.unit_service?.insurance?.map((one) => (
+                    <Typography variant="body2">
+                      {curLangAr ? one.name_arabic : one.name_english}
+                    </Typography>
+                  ))}
                 {employee?.unit_service?.insurance?.length > 5 &&
                   `+${employee.unit_service.insurance.length - 5}`}
               </Stack>
@@ -198,7 +198,7 @@ export default function EmployeeCard({ employee }) {
           </Stack>
         </Stack>
         <Stack direction={{ md: 'row' }} gap={{ md: 10 }}>
-          {appointmentsData.length > 0 && (
+          {AppointDates.length > 0 && (
             <BookDetails
               selected={selected}
               AppointDates={AppointDates}
@@ -209,7 +209,7 @@ export default function EmployeeCard({ employee }) {
               list={appointmentsData}
             />
           )}
-          {appointmentsData.length < 1 && (
+          {AppointDates.length < 1 && (
             <Typography>{t('no online appointment for this doctor')}</Typography>
           )}
         </Stack>

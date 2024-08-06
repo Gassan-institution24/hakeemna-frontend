@@ -183,14 +183,7 @@ export function useGetUSAppointments(id, params) {
   const memoizedValue = useMemo(
     () => ({
       appointmentsData: data?.appointments || [],
-      appointmentsLength: data?.length || 0,
-      all: data?.all || 0,
-      notBooked: data?.notBooked || 0,
-      available: data?.available || 0,
-      finished: data?.finished || 0,
-      processing: data?.processing || 0,
-      pending: data?.pending || 0,
-      canceled: data?.canceled || 0,
+      lengths: data?.lengths || {},
       AppointDates: data?.dates || [],
       loading: isLoading,
       error,
@@ -273,14 +266,7 @@ export function useGetEmployeeAppointments(id, params) {
   const memoizedValue = useMemo(
     () => ({
       appointmentsData: data?.appointments || [],
-      appointmentsLength: data?.length || 0,
-      all: data?.all || 0,
-      notBooked: data?.notBooked || 0,
-      available: data?.available || 0,
-      finished: data?.finished || 0,
-      processing: data?.processing || 0,
-      pending: data?.pending || 0,
-      canceled: data?.canceled || 0,
+      lengths: data?.lengths || {},
       AppointDates: data?.dates || [],
       loading: isLoading,
       error,
