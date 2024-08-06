@@ -31,7 +31,7 @@ export function useGetMyCheckLists(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      CheckListData: data || [],
+      CheckListData: data,
       loading: isLoading,
       error,
       validating: isValidating,
