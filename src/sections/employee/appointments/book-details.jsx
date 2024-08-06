@@ -37,8 +37,8 @@ export default function BookDetails({
   const { data } = useGetAppointment(selected, {
     select: '_id work_group appointment_type unit_service start_time online_available',
     populate: [{ path: 'work_group', select: 'name_english name_arabic' },
-       { path: 'unit_service', select: 'name_english name_arabic' },
-      { path: 'appointment_type', select: 'name_english name_arabic' }]
+    { path: 'unit_service', select: 'name_english name_arabic' },
+    { path: 'appointment_type', select: 'name_english name_arabic' }]
   })
 
   const [timeListItem, setTimeListItem] = useState();
@@ -91,7 +91,7 @@ export default function BookDetails({
           slots={{ toolbar: 'test' }}
           slotProps={{ actionBar: { actions: [] } }}
           value={new Date(selectedDate)}
-          onChange={(newValue) => setSelectedDate(newValue)}
+          onChange={(newValue) => setSelectedDate(new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0))}
         />
         <Stack
           sx={{

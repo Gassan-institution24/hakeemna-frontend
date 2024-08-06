@@ -54,7 +54,7 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'pending',
+  status: 'booked',
   types: [],
   startDate: null,
   endDate: null,
@@ -106,15 +106,8 @@ export default function AppointmentsView() {
 
   const {
     appointmentsData,
-    appointmentsLength,
+    lengths,
     refetch,
-    // all,
-    available,
-    notBooked,
-    processing,
-    canceled,
-    finished,
-    pending,
     // loading,
   } = useGetUSAppointments(id, {
     page: table.page || 0,
@@ -146,7 +139,7 @@ export default function AppointmentsView() {
 
   const canReset =
     !!filters.name ||
-    filters.status !== 'pending' ||
+    filters.status !== 'booked' ||
     !!filters.startDate ||
     !!filters.endDate ||
     filters.types.length > 0;
@@ -157,42 +150,60 @@ export default function AppointmentsView() {
   //   appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    // { value: 'all', label: t('all'), color: 'default', count: appointmentsLength },
-    {
-      value: 'pending',
-      label: t('pending'),
-      color: 'warning',
-      count: pending,
-    },
+    // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'processing',
-      label: t('upcoming'),
+      label: t('current'),
       color: 'info',
-      count: processing,
+      count: lengths?.processing,
+    },
+    {
+      value: 'arrived',
+      label: t('arrived'),
+      color: 'success',
+      count: lengths?.arrived,
+    },
+    {
+      value: 'late',
+      label: t('late'),
+      color: 'warning',
+      count: lengths?.late,
+    },
+    {
+      value: 'booked',
+      label: t('booked'),
+      color: 'info',
+      count: lengths?.booked,
     },
     {
       value: 'finished',
       label: t('finished'),
       color: 'success',
-      count: finished,
+      count: lengths?.finished,
+    },
+    {
+      value: 'not arrived',
+      label: t('not arrived'),
+      color: 'error',
+      count: lengths?.notArrived,
     },
     {
       value: 'canceled',
       label: t('canceled'),
-      color: 'error',
-      count: canceled,
+      color: 'warning',
+      count: lengths?.canceled,
     },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
-      count: available,
+      count: lengths?.available,
     },
     {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
-      count: notBooked,
+      count: lengths?.notBooked,
     },
   ];
 
@@ -291,7 +302,7 @@ export default function AppointmentsView() {
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: appointmentsData.length,
     });
@@ -299,7 +310,7 @@ export default function AppointmentsView() {
     refetch,
     appointmentsData.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths,
     table,
     t,
     enqueueSnackbar,
@@ -327,7 +338,7 @@ export default function AppointmentsView() {
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: appointmentsData.length,
     });
@@ -335,7 +346,7 @@ export default function AppointmentsView() {
     refetch,
     appointmentsData.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths,
     table,
 
     curLangAr,
@@ -362,7 +373,7 @@ export default function AppointmentsView() {
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: appointmentsData.length,
     });
@@ -370,7 +381,7 @@ export default function AppointmentsView() {
     refetch,
     appointmentsData.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths,
     table,
     curLangAr,
     t,
@@ -516,7 +527,7 @@ export default function AppointmentsView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsLength}
+                  rowCount={lengths?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
@@ -548,7 +559,7 @@ export default function AppointmentsView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
                   />
 
                   <TableNoData notFound={notFound} />

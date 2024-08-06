@@ -59,7 +59,7 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'pending',
+  status: 'booked',
   types: '',
   shift: '',
   group: '',
@@ -113,15 +113,8 @@ export default function AppointmentsView({ employeeData }) {
 
   const {
     appointmentsData,
-    appointmentsLength,
     refetch,
-    // all,
-    available,
-    notBooked,
-    processing,
-    canceled,
-    finished,
-    pending,
+    lengths,
     loading,
   } = useGetUSAppointments(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
@@ -157,28 +150,28 @@ export default function AppointmentsView({ employeeData }) {
     ? [
       // { value: 'all', label: t('all'), color: 'default', count: all },
       {
-        value: 'pending',
-        label: t('pending'),
+        value: 'booked',
+        label: t('booked'),
         color: 'warning',
-        count: pending,
+        count: lengths?.booked,
       },
       {
         value: 'finished',
         label: t('finished'),
         color: 'success',
-        count: finished,
+        count: lengths?.finished,
       },
       {
         value: 'available',
         label: t('available'),
         color: 'secondary',
-        count: available,
+        count: lengths?.available,
       },
       {
         value: 'canceled',
         label: t('canceled'),
         color: 'error',
-        count: canceled,
+        count: lengths?.canceled,
       },
     ]
     : [
@@ -187,37 +180,55 @@ export default function AppointmentsView({ employeeData }) {
         value: 'processing',
         label: t('current'),
         color: 'info',
-        count: processing,
+        count: lengths?.processing,
       },
       {
-        value: 'pending',
-        label: t('pending'),
+        value: 'arrived',
+        label: t('arrived'),
+        color: 'success',
+        count: lengths?.arrived,
+      },
+      {
+        value: 'late',
+        label: t('late'),
         color: 'warning',
-        count: pending,
+        count: lengths?.late,
+      },
+      {
+        value: 'booked',
+        label: t('booked'),
+        color: 'info',
+        count: lengths?.booked,
       },
       {
         value: 'finished',
         label: t('finished'),
         color: 'success',
-        count: finished,
+        count: lengths?.finished,
+      },
+      {
+        value: 'not arrived',
+        label: t('not arrived'),
+        color: 'error',
+        count: lengths?.notArrived,
+      },
+      {
+        value: 'canceled',
+        label: t('canceled'),
+        color: 'warning',
+        count: lengths?.canceled,
       },
       {
         value: 'available',
         label: t('available'),
         color: 'secondary',
-        count: available,
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: canceled,
+        count: lengths?.available,
       },
       {
         value: 'not booked',
         label: t('not booked'),
         color: 'secondary',
-        count: notBooked,
+        count: lengths?.notBooked,
       },
     ];
 
@@ -352,7 +363,7 @@ export default function AppointmentsView({ employeeData }) {
       }
       refetch();
       table.onUpdatePageDeleteRows({
-        totalRows: appointmentsLength,
+        totalRows: lengths?.length,
         totalRowsInPage: dataInPage.length,
         totalRowsFiltered: dataFiltered.length,
       });
@@ -362,7 +373,7 @@ export default function AppointmentsView({ employeeData }) {
       curLangAr,
       dataFiltered.length,
       dataInPage.length,
-      appointmentsLength,
+      lengths,
       table,
       enqueueSnackbar,
       user,
@@ -395,7 +406,7 @@ export default function AppointmentsView({ employeeData }) {
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsLength,
+      totalRows: lengths?.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -404,7 +415,7 @@ export default function AppointmentsView({ employeeData }) {
     curLangAr,
     dataFiltered.length,
     dataInPage.length,
-    appointmentsLength,
+    lengths,
     table,
     t,
     minToDelay,
@@ -435,7 +446,7 @@ export default function AppointmentsView({ employeeData }) {
       }
       refetch();
       table.onUpdatePageDeleteRows({
-        totalRows: appointmentsLength,
+        totalRows: lengths?.length,
         totalRowsInPage: dataInPage.length,
         totalRowsFiltered: dataFiltered.length,
       });
@@ -445,7 +456,7 @@ export default function AppointmentsView({ employeeData }) {
       curLangAr,
       dataFiltered.length,
       dataInPage.length,
-      appointmentsLength,
+      lengths,
       table,
       user,
       t,
@@ -614,7 +625,7 @@ export default function AppointmentsView({ employeeData }) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsLength}
+                  rowCount={lengths?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
@@ -642,7 +653,7 @@ export default function AppointmentsView({ employeeData }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -652,7 +663,7 @@ export default function AppointmentsView({ employeeData }) {
           </TableContainer>
 
           <TablePaginationCustom
-            count={appointmentsLength}
+            count={lengths?.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}

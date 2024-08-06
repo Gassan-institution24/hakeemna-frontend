@@ -61,7 +61,7 @@ export default function BookDetails({
         slots={{ toolbar: 'test' }}
         slotProps={{ actionBar: { actions: [] } }}
         value={new Date(selectedDate)}
-        onChange={(newValue) => setSelectedDate(newValue)}
+        onChange={(newValue) => setSelectedDate(new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0))}
       />
       <Stack
         sx={{
