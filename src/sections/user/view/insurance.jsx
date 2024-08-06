@@ -25,16 +25,14 @@ import { useGetInsuranceTypes, useGetActiveInsuranceCos } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import InsurancePage from './insurancePage';
 
 // ----------------------------------------------------------------------
-
+ 
 export default function Insuranceinfo() {
-  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const dialog = useBoolean(false);
   const { currentLang } = useLocales();
@@ -45,10 +43,9 @@ export default function Insuranceinfo() {
   const [checkChange, setCheckChange] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const oldMedicalReportsSchema = Yup.object().shape({
+  const insurancesSchema = Yup.object().shape({
     type: Yup.string(),
     patient: Yup.string(),
-    // file: Yup.array().required('File name is required'),
     insurance: Yup.string().required(),
     insurance_client_num: Yup.string(),
     agree: Yup.boolean().required(),
@@ -58,7 +55,6 @@ export default function Insuranceinfo() {
   const defaultValues = {
     type: '',
     patient: user?.patient?._id,
-    // file: [],
     insurance: '',
     insurance_client_num: '',
     insurance_expiry_time: '',
@@ -66,7 +62,7 @@ export default function Insuranceinfo() {
   };
   const methods = useForm({
     mode: 'onTouched',
-    resolver: yupResolver(oldMedicalReportsSchema),
+    resolver: yupResolver(insurancesSchema),
     defaultValues,
   });
   const {
@@ -123,7 +119,7 @@ export default function Insuranceinfo() {
           </DialogTitle>
           <DialogContent>
             <Typography sx={{ color: 'red', mb: 5, fontSize: 14 }}>
-              {t('The attached card must be present and real')}
+              {t('The attached card must be present and valid')}
             </Typography>
             <Controller
               name="insurance_expiry_time"
@@ -131,7 +127,7 @@ export default function Insuranceinfo() {
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   {...field}
-                  sx={{ mb: 1 }}
+                  sx={{ mb: 3 }}
                   slotProps={{
                     textField: {
                       fullWidth: true,
@@ -143,13 +139,13 @@ export default function Insuranceinfo() {
                 />
               )}
             />
-            <RHFTextField name="insurance_client_num" label={t('Card number*')} sx={{ mb: 1.5 }} />
+            <RHFTextField name="insurance_client_num" label={t('Card number*')} sx={{ mb: 3 }} />
             <RHFSelect
               label={t('insurance*')}
               fullWidth
               name="insurance"
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1.5 }}
+              sx={{ mb: 3 }}
             >
               {insuranseCosData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
@@ -162,7 +158,7 @@ export default function Insuranceinfo() {
               fullWidth
               name="type"
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1.5 }}
+              sx={{ mb: 3 }}
             >
               {insuranseTypesData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
@@ -171,16 +167,6 @@ export default function Insuranceinfo() {
               ))}
             </RHFSelect>
 
-            {/* <RHFUpload
-              autoFocus
-              fullWidth
-              name="file"
-              margin="dense"
-              sx={{ mb: 1 }}
-              variant="outlined"
-              // onDrop={handleDrop}
-              multiple
-            /> */}
           </DialogContent>
           <Checkbox
             size="small"
