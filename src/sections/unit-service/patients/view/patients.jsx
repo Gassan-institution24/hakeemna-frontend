@@ -9,8 +9,8 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetUSPatient, useGetUSPatients } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useGetUSPatients } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -19,7 +19,6 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
+import { Divider } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,8 +12,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
 import { useLocales, useTranslate } from 'src/locales';
-
-import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

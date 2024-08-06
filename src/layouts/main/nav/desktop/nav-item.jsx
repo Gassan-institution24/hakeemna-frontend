@@ -10,8 +10,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { RouterLink } from 'src/routes/components';
 
-import Iconify from 'src/components/iconify';
 import { useLocales } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
