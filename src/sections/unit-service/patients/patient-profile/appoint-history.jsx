@@ -44,10 +44,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-// import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
-import PatientHistoryToolbar from './appoint-history-toolbar';
-import HistoryFiltersResult from './appoint-history-filters-result';
+// import PatientHistoryToolbar from './appoint-history-toolbar';
+// import HistoryFiltersResult from './appoint-history-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +59,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointHistoryView({ patientData }) {
+export default function AppointHistoryView({ patient }) {
   const theme = useTheme();
   const { t } = useTranslate();
   const { isMedLab } = useUSTypeGuard();
@@ -85,11 +84,9 @@ export default function AppointHistoryView({ patientData }) {
 
   const confirm = useBoolean();
 
-  const { id } = useParams();
-
   const { appointmentsData, refetch, loading } = useGetUSPatientAppointments(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
-    id
+    patient?._id
   );
 
   const { appointmenttypesData } = useGetAppointmentTypes();
@@ -133,59 +130,59 @@ export default function AppointHistoryView({ patientData }) {
 
   const TABS = isMedLab
     ? [
-        // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
-        {
-          value: 'pending',
-          label: t('pending'),
-          color: 'secondary',
-          count: getAppointLength('pending'),
-        },
-        // {
-        //   value: 'processing',
-        //   label: t('processing'),
-        //   color: 'info',
-        //   count: getAppointLength('processing'),
-        // },
-        {
-          value: 'finished',
-          label: t('finished'),
-          color: 'success',
-          count: getAppointLength('finished'),
-        },
-        {
-          value: 'canceled',
-          label: t('canceled'),
-          color: 'error',
-          count: getAppointLength('canceled'),
-        },
-      ]
+      // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+      {
+        value: 'pending',
+        label: t('pending'),
+        color: 'secondary',
+        count: getAppointLength('pending'),
+      },
+      // {
+      //   value: 'processing',
+      //   label: t('processing'),
+      //   color: 'info',
+      //   count: getAppointLength('processing'),
+      // },
+      {
+        value: 'finished',
+        label: t('finished'),
+        color: 'success',
+        count: getAppointLength('finished'),
+      },
+      {
+        value: 'canceled',
+        label: t('canceled'),
+        color: 'error',
+        count: getAppointLength('canceled'),
+      },
+    ]
     : [
-        // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
-        {
-          value: 'pending',
-          label: t('pending'),
-          color: 'secondary',
-          count: getAppointLength('pending'),
-        },
-        {
-          value: 'processing',
-          label: t('processing'),
-          color: 'info',
-          count: getAppointLength('processing'),
-        },
-        {
-          value: 'finished',
-          label: t('finished'),
-          color: 'success',
-          count: getAppointLength('finished'),
-        },
-        {
-          value: 'canceled',
-          label: t('canceled'),
-          color: 'error',
-          count: getAppointLength('canceled'),
-        },
-      ];
+      // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+      {
+        value: 'pending',
+        label: t('pending'),
+        color: 'secondary',
+        count: getAppointLength('pending'),
+      },
+      {
+        value: 'processing',
+        label: t('processing'),
+        color: 'info',
+        count: getAppointLength('processing'),
+      },
+      {
+        value: 'finished',
+        label: t('finished'),
+        color: 'success',
+        count: getAppointLength('finished'),
+      },
+      {
+        value: 'canceled',
+        label: t('canceled'),
+        color: 'error',
+        count: getAppointLength('canceled'),
+      },
+    ];
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -217,8 +214,8 @@ export default function AppointHistoryView({ patientData }) {
     });
   }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]);
   const handleAddRow = useCallback(() => {
-    router.push(paths.superadmin.patients.history.addAppointment(id));
-  }, [router, id]);
+    router.push(paths.superadmin.patients.history.addAppointment(patient?._id));
+  }, [router, patient?._id]);
 
   const handleViewRow = useCallback(
     (_id) => {
@@ -274,7 +271,7 @@ export default function AppointHistoryView({ patientData }) {
             ))}
           </Tabs>
 
-          <PatientHistoryToolbar
+          {/* <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
             onAdd={handleAddRow}
@@ -293,19 +290,13 @@ export default function AppointHistoryView({ patientData }) {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
-              // dense={table.dense}
+              dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     dataFiltered.map((row, idx) => row._id)
-              //   )
-              // }
               action={
                 <Tooltip title="Unbook all">
                   <IconButton color="error" onClick={confirm.onTrue}>
@@ -324,12 +315,6 @@ export default function AppointHistoryView({ patientData }) {
                   rowCount={appointmentsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row, idx) => row._id)
-                  //   )
-                  // }
                 />
 
                 <TableBody>
@@ -421,10 +406,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (appointment) =>
         (appointment?.unit_service?.name_english &&
           appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.unit_service?.name_arabic &&
           appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.name_english &&
           appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.name_arabic &&
@@ -451,5 +436,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 AppointHistoryView.propTypes = {
-  patientData: PropTypes.object,
+  patient: PropTypes.object,
 };

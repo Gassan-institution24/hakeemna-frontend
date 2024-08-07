@@ -26,13 +26,13 @@ export function useGetUSPatients(id, params) {
 }
 
 
-export function useGetOldPatients() {
-  const URL = endpoints.oldpatient.all;
+export function useGetOneUSPatient(id, params) {
+  const URL = [endpoints.usPatients.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldPatientsData: data || [],
+      usPatientData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

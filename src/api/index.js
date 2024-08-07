@@ -72,7 +72,7 @@ export * from './offers';
 export * from './system-errors';
 export * from './appointmentConfig';
 export * from './work-groups';
-export * from './old_patients';
+export * from './unit_service_patient'
 export * from './notifications';
 export * from './user';
 export * from './calender';

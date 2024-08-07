@@ -47,7 +47,7 @@ import {
   RHFPhoneNumber,
 } from 'src/components/hook-form';
 
-import PatientsFound from '../patients-found';
+import PatientsFound from '../new-patient/patients-found';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
