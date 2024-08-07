@@ -36,7 +36,6 @@ export default function MdicalreportPage() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { doctorreports, refetch } = useGetOnedoctorreports(id);
-  console.log(doctorreports);
   const [ImgFiles, setImgFiles] = useState([]);
   const medicalReportDialog = useBoolean();
   const navigate = useNavigate();
