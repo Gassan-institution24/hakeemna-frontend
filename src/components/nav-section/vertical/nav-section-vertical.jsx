@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { memo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import { Divider } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
 
@@ -20,7 +20,7 @@ function NavSectionVertical({ data, slotProps, walktourRun, ...other }) {
       {data
         .filter((item) => item.items.length)
         .map((group, idx) => (
-          <>
+          <Box key={idx}>
             <Group
               key={idx}
               walktourRun={walktourRun}
@@ -29,7 +29,7 @@ function NavSectionVertical({ data, slotProps, walktourRun, ...other }) {
               slotProps={slotProps}
             />
             {data[idx + 1] && <Divider />}
-          </>
+          </Box>
         ))}
     </Stack>
   );
