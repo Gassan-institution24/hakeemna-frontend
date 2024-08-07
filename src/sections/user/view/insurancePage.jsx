@@ -1,13 +1,11 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
+import React, { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
-import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
-import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -32,10 +30,9 @@ import Image from 'src/components/image/image';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-export default function InsurancePage({ user }) {
-  const [checkChange, setCheckChange] = useState(false);
-  const [Insuranse, setInsuranse] = useState(null); // Start with null
-  const { patientInsuranseData } = useGetPatientInsurance(user);
+export default function InsurancePage({ patientId }) {
+  const [Insuranse, setInsuranse] = useState();
+  const { patientInsuranseData, refetch } = useGetPatientInsurance(patientId);
   const { oneInsuranseData } = useGetOneInsurance(Insuranse);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -47,21 +44,19 @@ export default function InsurancePage({ user }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const insurancesSchema = Yup.object().shape({
-    // type: Yup.string().required('Type is required'),
+    type: Yup.string().required('Type is required'),
     patient: Yup.string().required('Patient is required'),
     insurance: Yup.string().required('Insurance is required'),
     insurance_client_num: Yup.string().required('Card number is required'),
-    agree: Yup.boolean().oneOf([true], 'You must agree to terms'),
     insurance_expiry_time: Yup.date().required('Date is required'),
   });
 
   const defaultValues = {
-    // type: oneInsuranseData?.type?._id || '',
-    patient: user?.patient?._id || '',
+    type: oneInsuranseData?.type?._id || '',
+    patient: patientId || '',
     insurance: oneInsuranseData?.insurance?._id || '',
     insurance_client_num: oneInsuranseData?.insurance_client_num || '',
-    insurance_expiry_time: '',
-    agree: oneInsuranseData?.agree || false,
+    insurance_expiry_time: null,
   };
 
   const methods = useForm({
@@ -73,40 +68,25 @@ export default function InsurancePage({ user }) {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     reset,
   } = methods;
-
-  // Update form values when oneInsuranseData changes
-  useEffect(() => {
-    if (oneInsuranseData) {
-      reset({
-        type: oneInsuranseData?.type?._id || '',
-        patient: user?.patient?._id || '',
-        insurance: oneInsuranseData?.insurance?._id || '',
-        insurance_client_num: oneInsuranseData?.insurance_client_num || '',
-        insurance_expiry_time:  '',
-        agree: oneInsuranseData?.agree || false,
-      });
-    }
-  }, [oneInsuranseData, reset, user]);
-
+  console.log('errors', errors);
   const saveFunction = (id) => {
     dialog.onTrue();
-    setInsuranse(id); // Save the selected ID
+    setInsuranse(id);
   };
 
-  const updateFunction = async (data) => {
+  const onSubmit = async (data) => {
     try {
-      await axios.patch(`/api/insurance/data/${Insuranse}`, data); // Use the ID stored in Insuranse
+      console.log('Submitting data:', data);
+
+      await axios.patch(`/api/insurance/data/${Insuranse}`, data);
       enqueueSnackbar('Insurance updated successfully', { variant: 'success' });
       dialog.onFalse();
-      setCheckChange(!checkChange);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      refetch();
     } catch (error) {
-      console.error(error.message);
+      console.error('Error during API call:', error);
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -115,21 +95,23 @@ export default function InsurancePage({ user }) {
       );
     }
   };
-
-  const onSubmit = (data) => {
-    if (Insuranse) {
-      updateFunction(data); // Call updateFunction if an insurance ID is set
-    } else {
-      // Handle new insurance creation logic here if applicable
-      enqueueSnackbar('Please select an insurance card to update.', { variant: 'warning' });
+  useEffect(() => {
+    if (oneInsuranseData) {
+      reset({
+        type: oneInsuranseData?.type?._id || '',
+        patient: patientId || '',
+        insurance: oneInsuranseData?.insurance?._id || '',
+        insurance_client_num: oneInsuranseData?.insurance_client_num || '',
+        insurance_expiry_time: null,
+      });
     }
-  };
+  }, [oneInsuranseData, reset, patientId]);
 
   return (
     <>
       <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {patientInsuranseData?.map((info, key) => (
-          <Card key={key} sx={{ borderRadius: 1, width: '75%', mb: 5, bgcolor: '#64a3aa' }}>
+          <Card key={key} sx={{ borderRadius: 1, width: '60%', mb: 5, bgcolor: '#64a3aa',  }}>
             <Box
               sx={{
                 bgcolor: '#ddf0ee',
@@ -148,7 +130,7 @@ export default function InsurancePage({ user }) {
                 {t('Insurance Card')}
               </Typography>
             </Box>
-            <Box sx={{ display: { md: 'flex', xs: 'block' }, margin: 1, gap: 2 }}>
+            <Box sx={{ display: { md: 'grid', xs: 'block' }, gridTemplateColumns:'1fr 1fr 1fr', margin: 1, gap: 2 }}>
               <Image
                 src={info?.patient?.profile_picture}
                 sx={{ width: '100px', height: '135px', mb: 1 }}
@@ -168,19 +150,16 @@ export default function InsurancePage({ user }) {
                 </Box>
               </Box>
               <Iconify
-                icon="mi:options-vertical"
-                sx={{
-                  position: 'relative',
-                  right: '-30%',
-                  color: '#ddf0ee',
-                  '&:hover': {
-                    color: 'black',
-                  },
-                }}
-                width={23}
-                onClick={() => saveFunction(info?._id)}
-              />
+              icon="mi:options-vertical"
+              sx={{
+                color: 'white',
+                ml:10
+              }}
+              width={25}
+              onClick={() => saveFunction(info?._id)}
+            />
             </Box>
+        
           </Card>
         ))}
       </Box>
@@ -197,9 +176,11 @@ export default function InsurancePage({ user }) {
             <Controller
               name="insurance_expiry_time"
               control={control}
-              render={({ field, fieldState: { error } }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <DatePicker
-                  {...field}
+                  value={value || null} // Ensure value is null when undefined
+                  onChange={onChange} // Pass the onChange handler
+                  onBlur={onBlur}
                   sx={{ mb: 3 }}
                   slotProps={{
                     textField: {
@@ -260,30 +241,6 @@ export default function InsurancePage({ user }) {
                 </MenuItem>
               ))}
             </RHFSelect>
-
-            {/* <Box>
-              <Controller
-                name="agree"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <Checkbox
-                    {...field}
-                    error={!!error}
-                    helperText={error?.message}
-                    sx={{ ml: '-5px' }}
-                  />
-                )}
-              />
-              <Link
-                component="button"
-                sx={{
-                  color: 'text.secondary',
-                  typography: 'body2',
-                }}
-              >
-                {t('I agree to the terms and conditions')}
-              </Link>
-            </Box> */}
           </DialogContent>
           <DialogActions>
             <Button color="inherit" onClick={dialog.onFalse}>
@@ -300,5 +257,5 @@ export default function InsurancePage({ user }) {
 }
 
 InsurancePage.propTypes = {
-  user: PropTypes.object,
+  patientId: PropTypes.object,
 };

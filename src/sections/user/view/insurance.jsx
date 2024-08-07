@@ -213,7 +213,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage user={user?.patient?._id} />
+      <InsurancePage patientId={user?.patient?._id} />
     </Container>
   );
 }

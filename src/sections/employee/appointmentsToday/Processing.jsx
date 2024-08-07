@@ -45,6 +45,8 @@ export default function Processing() {
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
+  console.log(medRecord);
+  
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const { serviceTypesData } = useGetUSServiceTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -62,22 +64,20 @@ export default function Processing() {
   const firstSequenceNumber =
     medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
   const TIMELINES = [
-    {
+    medRecord?.length > 0 && {
       key: 0,
       title: (
         <>
-          {firstSequenceNumber && (
-            <span
-              style={{
-                backgroundColor: '#22C55E',
-                color: 'white',
-                padding: 6,
-                borderRadius: 10,
-              }}
-            >
-              {t('Visits history')} {firstSequenceNumber}
-            </span>
-          )}
+          <span
+            style={{
+              backgroundColor: '#22C55E',
+              color: 'white',
+              padding: 6,
+              borderRadius: 10,
+            }}
+          >
+            {t('Visits history')} {firstSequenceNumber}
+          </span>
 
           <Card sx={{ mt: 2 }}>
             <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -149,70 +149,71 @@ export default function Processing() {
       ),
       icon: <Iconify icon="hugeicons:give-pill" width={25} />,
     },
-  ] .filter(Boolean)
-  .map((item, index) => ({
-    ...item,
-    color: index % 2 === 0 ? 'primary' : 'info', 
-  }));
+  ]
+    .filter(Boolean)
+    .map((item, index) => ({
+      ...item,
+      color: index % 2 === 0 ? 'primary' : 'info',
+    }));
 
-const renderTimelineItems = (item) => (
-  <Paper
-    sx={{
-      p: 3,
-      bgcolor: (themee) => alpha(themee.palette.grey[500], 0.12),
-      width: '100%',
-    }}
-  >
-    <Typography variant="subtitle2">{item.title}</Typography>
-  </Paper>
-);
+  const renderTimelineItems = (item) => (
+    <Paper
+      sx={{
+        p: 3,
+        bgcolor: (themee) => alpha(themee.palette.grey[500], 0.12),
+        width: '100%',
+      }}
+    >
+      <Typography variant="subtitle2">{item.title}</Typography>
+    </Paper>
+  );
 
-return isMobile ? (
-  <div>
-    {TIMELINES.map((item) => (
-      <div key={item.key} style={{ marginBottom: '16px' }}>
-        {renderTimelineItems(item)}
-      </div>
-    ))}{' '}
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
-      <Rooms />
-    </Box>
-  </div>
-) : (
-  <>
-    <Timeline position="alternate-reverse">
+  return isMobile ? (
+    <div>
       {TIMELINES.map((item) => (
-        <TimelineItem key={item.key}>
-          <TimelineSeparator>
-            <TimelineDot color={item.color}>{item.icon}</TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>{renderTimelineItems(item)}</TimelineContent>
-        </TimelineItem>
-      ))}
-    </Timeline>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
-      <Rooms />
-    </Box>
-  </>
-);
+        <div key={item.key} style={{ marginBottom: '16px' }}>
+          {renderTimelineItems(item)}
+        </div>
+      ))}{' '}
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
+        <Rooms />
+      </Box>
+    </div>
+  ) : (
+    <>
+      <Timeline position="alternate-reverse">
+        {TIMELINES.map((item) => (
+          <TimelineItem key={item.key}>
+            <TimelineSeparator>
+              <TimelineDot color={item.color}>{item.icon}</TimelineDot>
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent>{renderTimelineItems(item)}</TimelineContent>
+          </TimelineItem>
+        ))}
+      </Timeline>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
+        <Rooms />
+      </Box>
+    </>
+  );
 }
