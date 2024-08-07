@@ -223,7 +223,7 @@ export default function AppointmentsToday() {
                 onClick={() => handleButtonClick(activity?.activities?._id, info)}
                 disabled={info?.started || !info.arrived}
               >
-                {activity?.activities?.name_english}
+                {activity?.name_english}
               </MenuItem>
             ) : null
           )}

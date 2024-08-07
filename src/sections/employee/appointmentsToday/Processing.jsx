@@ -14,8 +14,16 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatient, useGetMedRecord, useGetOneEntranceManagement } from 'src/api';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import {
+  useGetPatient,
+  useGetMedRecord,
+  useGetMyCheckLists,
+  useGetUSServiceTypes,
+  useGetOneEntranceManagement,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 
@@ -28,10 +36,21 @@ import Adjustabledocument from './adjustabledocument';
 
 export default function Processing() {
   const params = useParams();
+  const user = useAuthContext();
+
   const { id } = params;
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
   const { data } = useGetPatient(Entrance?.patient?._id);
+  const { CheckListData } = useGetMyCheckLists(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+  );
+  console.log(medRecord);
+  
+  const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
+  const { serviceTypesData } = useGetUSServiceTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -45,31 +64,34 @@ export default function Processing() {
   const firstSequenceNumber =
     medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
   const TIMELINES = [
-    {
+    medRecord?.length > 0 && {
       key: 0,
       title: (
         <>
-          {firstSequenceNumber && (
-            <span
-              style={{
-                backgroundColor: '#22C55E',
-                color: 'white',
-                padding: 6,
-                borderRadius: 10,
-              }}
-            >
-              {t('Visits history')} {firstSequenceNumber}
-            </span>
-          )}
+          <span
+            style={{
+              backgroundColor: '#22C55E',
+              color: 'white',
+              padding: 6,
+              borderRadius: 10,
+            }}
+          >
+            {t('Visits history')} {firstSequenceNumber}
+          </span>
 
           <Card sx={{ mt: 2 }}>
             <Box sx={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden' }}>
               {medRecord && (
                 <Box>
                   <Button onClick={() => handleBackClick(id)} sx={{ width: '100%', m: 1 }}>
-                    {curLangAr
-                      ? `عرض السجل المرضي ل ${Entrance?.patient?.name_arabic}`
-                      : ` View all ${Entrance?.patient?.name_english} Visits history`}
+                    {curLangAr ? (
+                      `اضغط لعرض تاريخ الزيارة ل ${Entrance?.patient?.name_arabic}`
+                    ) : (
+                      <>
+                        <span style={{ color: '#22C55E' }}>Click&nbsp;</span> to view all{' '}
+                        {Entrance?.patient?.name_english} Visits history
+                      </>
+                    )}
                   </Button>
                   <Divider />
                 </Box>
@@ -78,19 +100,11 @@ export default function Processing() {
           </Card>
         </>
       ),
-      color: 'info',
       icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
     },
 
-    // {
-    //   key: 1,
-    //   title: <History />,
-    //   color: 'primary',
-    //   icon: <Iconify icon="eva:folder-add-fill" width={24} />,
-    // },
-
-    {
-      key: 3,
+    CheckListData && {
+      key: 1,
       title: (
         <>
           <span
@@ -101,7 +115,6 @@ export default function Processing() {
           <CheckList />
         </>
       ),
-      color: 'primary',
       icon: <Iconify icon="octicon:checklist-16" width={23} />,
     },
     {
@@ -113,11 +126,9 @@ export default function Processing() {
           <TabsView patient={data} service_unit={Entrance?.service_unit?._id} />
         </>
       ),
-      color: 'info',
       icon: <Iconify icon="mingcute:folders-fill" width={25} />,
     },
-
-    {
+    adjustabledocument && {
       key: 5,
       title: (
         <>
@@ -125,10 +136,9 @@ export default function Processing() {
           <Adjustabledocument patient={data} />
         </>
       ),
-      color: 'primary',
       icon: <Iconify icon="mingcute:document-fill" width={24} />,
     },
-    {
+    serviceTypesData && {
       key: 6,
       title: (
         <>
@@ -137,10 +147,14 @@ export default function Processing() {
           <ServicesProvided patient={data} />
         </>
       ),
-      color: 'info',
       icon: <Iconify icon="hugeicons:give-pill" width={25} />,
     },
-  ];
+  ]
+    .filter(Boolean)
+    .map((item, index) => ({
+      ...item,
+      color: index % 2 === 0 ? 'primary' : 'info',
+    }));
 
   const renderTimelineItems = (item) => (
     <Paper
@@ -153,6 +167,7 @@ export default function Processing() {
       <Typography variant="subtitle2">{item.title}</Typography>
     </Paper>
   );
+
   return isMobile ? (
     <div>
       {TIMELINES.map((item) => (

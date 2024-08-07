@@ -90,15 +90,7 @@ export default function Doctorreport() {
       file: [],
     });
   }, [user, Entrance, reset]);
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
-      entrance_mangament: Entrance?._id,
-      file: [],
-    });
-  }, [user, Entrance, reset]);
+
   const removemedicalrepoort = async (IdToremove2) => {
     await axiosInstance.patch(endpoints.doctorreport.one(IdToremove2), {
       Activation: false,
@@ -240,7 +232,7 @@ export default function Doctorreport() {
       <Dialog open={doctoReportDialog.value} onClose={doctoReportDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
-          {curLangAr ? 'اضف الى ملف المريض' : 'add to patient file'}
+            {curLangAr ? 'اضف الى ملف المريض' : 'add to patient file'}
           </DialogTitle>
           <DialogContent>
             <RHFTextField
@@ -248,8 +240,10 @@ export default function Doctorreport() {
               multiline
               name="description"
               label={t('description')}
-              sx={{ mb: 2,mt:2 }}
+              rows={10}
+              sx={{ mb: 2, mt: 2 }}
             />
+
             <RHFUpload
               multiple
               autoFocus
