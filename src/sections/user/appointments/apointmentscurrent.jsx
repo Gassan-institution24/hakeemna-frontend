@@ -29,6 +29,7 @@ import { useSnackbar } from 'src/components/snackbar';
 
 export default function Currentappoinment({ pendingAppointments, refetch }) {
   const { t } = useTranslate();
+  
   const { enqueueSnackbar } = useSnackbar();
   const [theId, setTheId] = useState();
   const { currentLang } = useLocales();

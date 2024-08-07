@@ -23,8 +23,7 @@ export default function AppointmentData() {
   }, []);
 
   const pendingAppointments = appointmentsData.filter(
-    (info) =>
-      info.status === 'pending' && info?.started === false && info?.finished_or_not === false
+    (info) => info?.started === false && info?.finished_or_not === false
   );
   const finishedAppointments = appointmentsData?.filter(
     (info) =>
@@ -42,7 +41,6 @@ export default function AppointmentData() {
       label: t('Finished appointment'),
       icon: <Iconify icon="ep:finished" width={24} />,
     },
-
   ];
 
   return (

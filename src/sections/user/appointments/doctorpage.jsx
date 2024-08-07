@@ -127,7 +127,16 @@ export default function Doctorpage() {
   const handleDateChange = (date) => {
     setTimeData();
     setSelectedTime();
-    setCurrentDateTime(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0));
+    setCurrentDateTime(
+      new Date(
+        new Date(date).getFullYear(),
+        new Date(date).getMonth(),
+        new Date(date).getDate(),
+        12,
+        0,
+        0
+      )
+    );
   };
 
   const handleAppointmentTypeChange = (event) => {
@@ -559,9 +568,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-            data?.unit_service?.city?.name_english ||
-            data?.unit_service?.name_english ||
-            data?.employee?.description
+          data?.unit_service?.city?.name_english ||
+          data?.unit_service?.name_english ||
+          data?.employee?.description
             ? renderAbout
             : ''}
 

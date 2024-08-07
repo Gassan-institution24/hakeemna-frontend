@@ -248,6 +248,7 @@ export default function Medicalreport() {
               multiline
               name="description"
               label={t('description')}
+              rows={10}
               sx={{ mb: 2, mt: 2 }}
             />
             <RHFUpload
