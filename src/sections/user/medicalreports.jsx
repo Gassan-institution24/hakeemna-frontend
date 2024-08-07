@@ -9,6 +9,8 @@ import {
   PDFDownloadLink,
   Image as PdfImage,
 } from '@react-pdf/renderer';
+import DOMPurify from 'dompurify';
+import { convert } from 'html-to-text';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -112,32 +114,44 @@ export default function Medicalreports() {
     },
   });
 
+
   const PrescriptionPDF = React.useCallback(
-    ({ report }) => (
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <View>
-            <View style={styles.gridContainer}>
-              <PdfImage src={Doclogo} style={styles.image} />
-              <Text style={styles.text3}>{report.department?.name_english}</Text>
-              <Text style={styles.text4}>Al Waha_cercle at0349</Text>
-              <Text style={styles.text4}>+962776088372</Text>
+    ({ report }) => {
+      // Sanitize the HTML string
+      const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
+
+      // Convert sanitized HTML to plain text
+      const plainText = convert(sanitizedHtmlString, {
+        wordwrap: 130
+      });
+      const result = convert(plainText)
+
+      return (
+        <Document>
+          <Page size="A4" style={styles.page}>
+            <View>
+              <View style={styles.gridContainer}>
+                <PdfImage src={Doclogo} style={styles.image} />
+                <Text style={styles.text3}>{report.department?.name_english}</Text>
+                <Text style={styles.text4}>Al Waha_cercle at0349</Text>
+                <Text style={styles.text4}>+962776088372</Text>
+              </View>
+              <View style={styles.gridBody}>
+                <Text style={styles.text}>Medical Report</Text>
+                {/* <Text style={styles.text2}>Name: {patient?.name_english}</Text> */}
+                {/* <Text style={styles.text2}>Age: {fDateAndTime(patient?.birth_date)}</Text> */}
+                {/* <Text style={styles.text2}>ID no: {patient?.identification_num}</Text> */}
+              </View>
+              <View style={styles.gridFooter}>
+                <Text style={styles.text}>{result}</Text>
+                <PdfImage src={Doclogo} style={styles.department} />
+                <PdfImage src={Doclogo} style={styles.doctor} />
+              </View>
             </View>
-            <View style={styles.gridBody}>
-              <Text style={styles.text}>Medical Report</Text>
-              {/* <Text style={styles.text2}>Name: {patient?.name_english}</Text> */}
-              {/* <Text style={styles.text2}>Age: {fDateAndTime(patient?.birth_date)}</Text> */}
-              {/* <Text style={styles.text2}>ID no: {patient?.identification_num}</Text> */}
-            </View>
-            <View style={styles.gridFooter}>
-              <Text>{report?.description}</Text>
-              <PdfImage src={Doclogo} style={styles.department} />
-              <PdfImage src={Doclogo} style={styles.doctor} />
-            </View>
-          </View>
-        </Page>
-      </Document>
-    ),
+          </Page>
+        </Document>
+      );
+    },
     [styles]
   );
 
