@@ -27,14 +27,14 @@ export default function RecordPage() {
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ flex: 1, mr: 1 }}>
-          <Typography variant="h3">{medRecord[0]?.patient?.name_english}</Typography>
-          <Typography sx={{ fontWeight: 600, p: 2 }}>The clinics private medical file</Typography>
+          <Typography variant="h3">{medRecord?.[0]?.patient?.name_english}</Typography>
+
           <Typography sx={{ fontWeight: 600, p: 2 }}>
             In this file, all appointment procedures added by the doctor are displayed
           </Typography>
         </Box>
         <Image
-          src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tsah7c9evnal289z5fig/IMG%20Worlds%20of%20Adventure%20Admission%20Ticket%20in%20Dubai%20-%20Klook.jpg"
+          src={medRecord?.[0]?.patient?.profile_picture}
           sx={{
             mr: 5,
             mt: 2,
@@ -47,44 +47,52 @@ export default function RecordPage() {
       </Box>
       <Divider />
       {medRecord?.map((info, index) => (
-        <Box key={index} sx={{ my: 2 }}>
-          {info?.doctor_report?.map((doctorReport, i) => (
-            <Box key={`doctorReport-${i}`}>
-              <Typography variant="h3">
-                Doctor Report{' '}
-                <span style={{ fontSize: 12, color: 'gray' }}>{fDateTime(info?.created_at)}</span>{' '}
-              </Typography>
-              <Typography>{doctorReport?.description}</Typography>
-              <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-                <Image src={doctorReport?.file} sx={{ m: 1 }} />
-              </Box>
-            </Box>
-          ))}
-          {info?.medical_report?.map((medicalReport, i) => (
-            <Box key={`medicalReport-${i}`}>
-              <Typography variant="h3">
-                Medical Report{' '}
-                <span style={{ fontSize: 12, color: 'gray' }}> {fDateTime(info?.created_at)}</span>{' '}
-              </Typography>
-              <Typography>{medicalReport?.description}</Typography>
-              <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-                <Image src={medicalReport?.file} sx={{ m: 1 }} />
-              </Box>
-            </Box>
-          ))}
-          {info?.Drugs_report?.map((drugsReport, i) => (
-            <Box key={`drugsReport-${i}`}>
-              <Typography variant="h3">
-                Prescription{' '}
-                <span style={{ fontSize: 12, color: 'gray' }}>{fDateTime(info?.created_at)}</span>{' '}
-              </Typography>
-              <Typography>{drugsReport?.medicines?.trade_name}</Typography>
-              <Typography>{drugsReport?.Frequency_per_day}</Typography>
-              <Typography>{drugsReport?.Num_days}</Typography>
-              <Typography>{drugsReport?.Doctor_Comments}</Typography>
-            </Box>
-          ))}
-        </Box>
+        <>
+          <Box key={index} sx={{ my: 2 }}>
+            <Typography variant="h3"> <mark>{fDateTime(info?.created_at)}</mark> </Typography> <br />
+            {info?.doctor_report?.map(
+              (doctorReport, i) =>
+                doctorReport && (
+                  <Box key={`doctorReport-${i}`}>
+                    <Typography variant="h4">Patient record </Typography>
+                    <Typography sx={{color:'gray'}}>{doctorReport?.description}</Typography>
+                    <Box
+                      sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}
+                    >
+                      <Image src={doctorReport?.file} sx={{ m: 1 }} />
+                    </Box>
+                  </Box>
+                )
+            )}
+            {info?.medical_report?.map(
+              (medicalReport, i) =>
+                medicalReport && (
+                  <Box key={`medicalReport-${i}`}>
+                    <Typography variant="h4">Medical Report </Typography>
+                    <Typography sx={{color:'gray'}}>{medicalReport?.description}</Typography>
+                    <Box
+                      sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}
+                    >
+                      <Image src={medicalReport?.file} sx={{ m: 1 }} />
+                    </Box>
+                  </Box>
+                )
+            )}
+            {info?.Drugs_report?.map(
+              (drugsReport, i) =>
+                drugsReport && (
+                  <Box key={`drugsReport-${i}`}>
+                    <Typography variant="h4">Prescription </Typography>
+                    <Typography sx={{color:'gray'}}>{drugsReport?.medicines?.trade_name}</Typography>
+                    <Typography sx={{color:'gray'}}>{drugsReport?.Frequency_per_day}</Typography>
+                    <Typography sx={{color:'gray'}}>{drugsReport?.Num_days}</Typography>
+                    <Typography sx={{color:'gray'}}>{drugsReport?.Doctor_Comments}</Typography>
+                  </Box>
+                )
+            )}
+          </Box>
+          <Divider sx={{ border: '1px solid lightgray' }} />
+        </>
       ))}
 
       <Button
