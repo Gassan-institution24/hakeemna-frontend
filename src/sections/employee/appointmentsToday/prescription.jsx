@@ -33,7 +33,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 export default function Prescription({ Entrance }) {
   const { user } = useAuthContext();
-  const [DoctorComment, setDoctorComment] = useState();
+  // const [DoctorComment, setDoctorComment] = useState();
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
@@ -192,7 +192,6 @@ export default function Prescription({ Entrance }) {
       const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
         ...prescription,
         chronic,
-        Doctor_Comments: DoctorComment,
       }));
 
       if (prescriptionDialog.value) {
