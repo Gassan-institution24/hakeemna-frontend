@@ -31,133 +31,111 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import Back from './imges/back2.png';
 import Doclogo from '../../components/logo/doc.png';
 
+const styles = StyleSheet.create({
+  page: {
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  headerImage: {
+    width: 80,
+    height: 80,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 10,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 20,
+    right: 20,
+    fontSize: 8,
+    color: '#777',
+    textAlign: 'center',
+  },
+  content: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  text: {
+    fontSize: 13,
+    marginBottom:6
+  },
+  largeText: {
+    fontSize: 15,
+    marginBottom: 7,
+    fontWeight: 'bold',
+  },
+  watermark: {
+    position: 'absolute',
+    top: '30%', // Adjust the vertical position as needed
+    left: '25%', // Adjust the horizontal position as needed
+    width: '50%', // Adjust width for desired size
+    opacity: 0.3, // Set opacity to 30%
+    zIndex: -1,
+  },
+});
+
+const MedicalReportPDF = ({ report }) => {
+  const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
+  const plainText = convert(sanitizedHtmlString, {
+    wordwrap: 130,
+  });
+  const result = convert(plainText);
+
+  return (
+    <Document>
+     <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          {/* <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} /> */}
+          <PdfImage src="https://media.istockphoto.com/id/1321617070/vector/health-medical-logo.jpg?s=612x612&w=0&k=20&c=sus8vhG3c__vCdvOBLDhuf2vPUgIAudIAeUBApU_7Ew=" style={styles.headerImage} />
+          <View>
+            <Text style={styles.headerText}>Medical Report</Text>
+            <Text style={styles.headerText}>test</Text>
+            <Text style={styles.headerText}>trtg grtgr grth</Text>
+            <Text style={styles.headerText}>5674567456747</Text>
+            {/* <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.mobile_num}</Text> */}
+          </View>
+        </View>
+
+        {/* Watermark Logo */}
+        <PdfImage src={Doclogo} style={styles.watermark} />
+
+        {/* Content */}
+        <View style={styles.content}>
+          <Text style={styles.largeText}>Patient Information</Text>
+          <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
+          <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
+          <Text style={styles.largeText}>Report Details</Text>
+          <Text style={styles.text}>{result}</Text>
+        </View>
+
+        {/* Footer */}
+        <Text style={styles.footer}>
+          This is a system-generated report and does not require a signature.
+        </Text>
+      </Page>
+    </Document>
+  );
+};
+
+MedicalReportPDF.propTypes = {
+  report: PropTypes.object,
+};
+
 export default function Medicalreports() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-
-  const styles = StyleSheet.create({
-    icon: {
-      color: 'blue',
-      position: 'relative',
-      top: '3px',
-    },
-    image: {
-      width: '100px',
-      height: '100px',
-    },
-    department: {
-      width: '80px',
-      height: '80px',
-      position: 'relative',
-      left: '60px',
-      top: '135px',
-    },
-    doctor: {
-      width: '80px',
-      height: '80px',
-      position: 'relative',
-      right: '-410px',
-      top: '50px',
-    },
-    page: {
-      backgroundColor: 'aliceblue',
-      border: 1,
-    },
-    text: {
-      textAlign: 'center',
-      fontSize: 15,
-    },
-    text2: {
-      fontSize: 12,
-    },
-    text3: {
-      fontSize: 12,
-    },
-    text4: {
-      fontSize: 10,
-    },
-    gridContainer: {
-      padding: '10px',
-      gap: '10px',
-      marginBottom: 10,
-      alignItems: 'center',
-      fontSize: 12,
-      height: '40%',
-      borderBottom: 1,
-    },
-    gridBody: {
-      fontSize: 12,
-      gap: 20,
-      padding: 10,
-      position: 'relative',
-      top: '-11px',
-      height: '50%',
-      borderBottom: 1,
-    },
-    gridFooter: {
-      fontSize: 12,
-      padding: '10px',
-      position: 'relative',
-      top: '-12px',
-      height: '100%',
-    },
-    pdf: {
-      position: 'absolute',
-      top: 30,
-      right: 15,
-      zIndex: 999,
-    },
-    pdf2: {
-      width: 30,
-      height: 30,
-    },
-  });
-
-
-  const PrescriptionPDF = React.useCallback(
-    ({ report }) => {
-      // Sanitize the HTML string
-      const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
-
-      // Convert sanitized HTML to plain text
-      const plainText = convert(sanitizedHtmlString, {
-        wordwrap: 130
-      });
-      const result = convert(plainText)
-
-      return (
-        <Document>
-          <Page size="A4" style={styles.page}>
-            <View>
-              <View style={styles.gridContainer}>
-                <PdfImage src={Doclogo} style={styles.image} />
-                <Text style={styles.text3}>{report.department?.name_english}</Text>
-                <Text style={styles.text4}>Al Waha_cercle at0349</Text>
-                <Text style={styles.text4}>+962776088372</Text>
-              </View>
-              <View style={styles.gridBody}>
-                <Text style={styles.text}>Medical Report</Text>
-                {/* <Text style={styles.text2}>Name: {patient?.name_english}</Text> */}
-                {/* <Text style={styles.text2}>Age: {fDateAndTime(patient?.birth_date)}</Text> */}
-                {/* <Text style={styles.text2}>ID no: {patient?.identification_num}</Text> */}
-              </View>
-              <View style={styles.gridFooter}>
-                <Text style={styles.text}>{result}</Text>
-                <PdfImage src={Doclogo} style={styles.department} />
-                <PdfImage src={Doclogo} style={styles.doctor} />
-              </View>
-            </View>
-          </Page>
-        </Document>
-      );
-    },
-    [styles]
-  );
-
-  PrescriptionPDF.propTypes = {
-    report: PropTypes.object,
-  };
 
   return medicalreportsdata?.length > 0 ? (
     medicalreportsdata?.map((info, index) => (
@@ -184,8 +162,8 @@ export default function Medicalreports() {
           </Stack>
           <PDFDownloadLink
             style={styles.pdf}
-            document={<PrescriptionPDF report={info} />}
-            fileName={`${user?.patient?.name_english} MediacalReport.pdf`}
+            document={<MedicalReportPDF report={info} />}
+            fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
             <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
           </PDFDownloadLink>

@@ -36,7 +36,6 @@ export default function Medicalreport() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const [ImgFiles, setImgFiles] = useState([]);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
 
   const router = useRouter();
@@ -122,8 +121,9 @@ export default function Medicalreport() {
     );
 
     if (isValidFiles) {
-      const newFiles = acceptedFiles;
-      setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
+      const newFiles = acceptedFiles.filter(
+        (newFile) => !values.file.some((existingFile) => existingFile.name === newFile.name)
+      );
       setValue('file', [...values.file, ...newFiles]);
     } else {
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
@@ -134,7 +134,6 @@ export default function Medicalreport() {
     (inputFile) => {
       const filtered = values.file.filter((file) => file !== inputFile);
       setValue('file', filtered);
-      setImgFiles(filtered);
     },
     [setValue, values.file]
   );
@@ -160,33 +159,28 @@ export default function Medicalreport() {
         }
       });
 
-      if (ImgFiles) {
-        ImgFiles.forEach((file, index) => {
-          formData.append(`file[${index}]`, file);
-        });
+      await axiosInstance.post(endpoints.history.all, {
+        patient: Entrance?.patient?._id,
+        name_english: 'A medical report has been added',
+        name_arabic: 'تم ارفاق تقرير طبي',
+        sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
+        sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
+        actual_date: Entrance?.created_at,
+        title: 'medical report',
+        service_unit: Entrance?.service_unit?._id,
+      });
 
-        await axiosInstance.post(endpoints.history.all, {
-          patient: Entrance?.patient?._id,
-          name_english: 'A medical report has been added',
-          name_arabic: 'تم ارفاق تقرير طبي',
-          sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
-          actual_date: Entrance?.created_at,
-          title: 'medical report',
-          service_unit: Entrance?.service_unit?._id,
-        });
+      await axiosInstance.post('/api/examination', formData);
 
-        await axiosInstance.post('/api/examination', formData);
+      await axiosInstance.patch(`/api/entrance/${id}`, {
+        medical_report_status: true,
+      });
 
-        await axiosInstance.patch(`/api/entrance/${id}`, {
-          medical_report_status: true,
-        });
+      enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+      refetch();
+      medicalReportDialog.onFalse();
 
-        enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
-        refetch();
-        medicalReportDialog.onFalse();
-        reset();
-      }
+      reset();
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error uploading data', { variant: 'error' });

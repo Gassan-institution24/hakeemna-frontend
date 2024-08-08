@@ -35,12 +35,12 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function CheckList() {
   const params = useParams();
   const { id } = params;
-  const {t} = useTranslate()
+  const { t } = useTranslate();
   const [thId, setTheId] = useState(null);
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { CheckListData } = useGetMyCheckLists(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
   );
   const { data } = useGetCheckList(thId);
   const { answer, refetch } = useGetAllentranceCheckList(id);
@@ -188,14 +188,16 @@ export default function CheckList() {
 
               {data && (
                 <Button type="submit" disabled={isSubmitting} variant="contained" sx={{ m: 3 }}>
-                  {t("save")}
+                  {t('save')}
                 </Button>
               )}
             </FormProvider>
           </Box>
         </Box>
         <Box sx={{ width: '30%', p: 2, borderLeft: 1, borderColor: 'divider' }}>
-        <Typography sx={{textAlign:'center',mb:2}} variant="h4">{t("Answers")}</Typography>
+          <Typography sx={{ textAlign: 'center', mb: 2 }} variant="h4">
+            {t('Answers')}
+          </Typography>
 
           {answer?.map((answersAndQ, index) => (
             <Typography key={index}>
