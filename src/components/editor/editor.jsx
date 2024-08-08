@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import { alpha } from '@mui/material/styles';
 
 import { StyledEditor } from './styles';
-import Toolbar, { formats } from './toolbar';
+import { formats } from './toolbar';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ export default function Editor({
       [{ 'color': [] }, { 'background': [] }],
       [{ 'align': [] }],
       ['clean'],
-      [{ container: `#${id}` }],
+      // [{ container: `#${id}` }],
     ],
     history: {
       delay: 500,
@@ -54,7 +54,7 @@ export default function Editor({
           ...sx,
         }}
       >
-        <Toolbar id={id} simple={simple} />
+        {/* <Toolbar id={id} simple={simple} /> */}
 
         <ReactQuill
           modules={modules}

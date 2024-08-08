@@ -1,17 +1,16 @@
 import { useParams } from 'react-router';
 import React, { useState, useCallback } from 'react';
 
-import { Tab, Tabs, Container, Card, Avatar, Typography, Stack, Box } from '@mui/material';
+import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetOneUSPatient } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
-import TabsView from 'src/sections/employee/appointmentsToday/tabs-view';
-
-import PatientAbout from '../patient-profile/patient-about';
-import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientFile from '../patient-profile/patient-file';
+import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
+import AppointmentsHistory from '../patient-profile/appoint-history';
+import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +42,10 @@ export default function PatientProfile() {
     {
       value: 'file',
       label: t('file'),
+    },
+    {
+      value: 'prescriptions',
+      label: t('prescriptions'),
     },
     {
       value: 'appointments',
@@ -115,10 +118,11 @@ export default function PatientProfile() {
           <Tab key={idx} label={tab.label} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'about' && <PatientAbout patient={patientData} />}
-      {currentTab === 'file' && <PatientFile patient={patientData} />}
-      {currentTab === 'appointments' && <AppointmentsHistory patient={patientData} />}
-      {currentTab === 'upload' && <PatientUpload patient={patientData} />}
+      {currentTab === 'about' && <PatientAbout patient={usPatientData} />}
+      {currentTab === 'file' && <PatientFile patient={usPatientData} />}
+      {currentTab === 'prescriptions' && <PatientPrescriptions patient={usPatientData} />}
+      {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
+      {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
     </Container>
   );
 }
