@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetPrescription() {
-  const URL = endpoints.prescription.all;
+export function useGetPrescription(params) {
+  const URL = [endpoints.prescription.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
