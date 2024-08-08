@@ -38,7 +38,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import WaitingRoom from 'src/sections/employee/appointmentsToday/wating_room';
+import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
 
 export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
@@ -90,8 +90,6 @@ export default function AppointmentsToday() {
       data: finishedAppointmentsData,
     },
   ];
-
-  console.log('appointmentsData', appointmentsData)
 
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
