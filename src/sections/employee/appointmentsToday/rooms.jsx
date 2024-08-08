@@ -1,289 +1,176 @@
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { alpha } from '@mui/material/styles';
 import {
   Box,
   Card,
+  Table,
   Button,
   Select,
-  Dialog,
   MenuItem,
-  TextField,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
   Typography,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  TableContainer,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance from 'src/utils/axios';
+import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import {
-  useGetUSRooms,
-  useGeEntrancePrescription,
-  useGetOneEntranceManagement,
-  useGetEntranceDoctorReports,
-  useGetEntranceExaminationReports,
-} from 'src/api';
+import { useGetRoom, useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
-import Image from 'src/components/image';
+import Scrollbar from 'src/components/scrollbar';
 
-const formatTextWithLineBreaks = (text) => {
-  if (!text) return '';
-  const words = text.split(' ');
-  return words.reduce(
-    (formattedText, word, index) =>
-      formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
-    ''
-  );
-};
+// ----------------------------------------------------------------------
 
-export default function Rooms() {
-  const [noteContent, setNoteContent] = useState('');
-  const [Confirmdroomsdata, setConfirmRoomsdata] = useState('');
-  const { fullWidth } = useState(false);
-  const { maxWidth } = useState('xs');
-  const dialog = useBoolean(false);
-  const [selectedValue] = useState('');
+export default function WaitingRoom() {
   const { t } = useTranslate();
-  const { id } = useParams();
-  const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { user } = useAuthContext();
   const router = useRouter();
-  const methods = useForm({
-    mode: 'onTouched',
-  });
+
+  const { user } = useAuthContext();
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  const { medicalreportsdata } = useGetEntranceExaminationReports(id);
-  const { doctorreportsdata } = useGetEntranceDoctorReports(id);
-  const { prescriptionData } = useGeEntrancePrescription(id);
 
-  const medicalReportIds = medicalreportsdata?.map((report) => report._id);
-  const doctorReportIds = doctorreportsdata?.map((report) => report._id);
-  const prescriptionIds = prescriptionData?.map((report) => report._id);
+  const receptionActivity = roomsData.find(
+    (activity) => activity?.activities?.name_english === 'Reception'
+  );
 
-  const { reset } = methods;
-
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
-      unit_service: Entrance?.service_unit?._id,
-      appointment: Entrance?.appointmentId,
-    });
-  }, [user, Entrance, reset]);
-
-  const processingPage = async (rooms) => {
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const { data } = useGetRoom(selectedTitle);
+  const { EntranceByActivity } = useGetEntranceManagementByActivity(
+    data?.activities,
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+  const goToProcessingPage = async (entrance) => {
     try {
-      await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
-        Last_activity_atended: Entrance?.Next_activity,
-        Next_activity: rooms?.activities?._id,
-        note: noteContent,
-        rooms: rooms?._id,
+      await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
+        Current_activity: entrance?.Next_activity?._id,
       });
-      await axiosInstance.patch(`/api/rooms/${rooms?._id}`, {
-        patient: null,
-        entranceMangament: null,
-      });
-      router.push(paths.employee.appointmentsToday);
+      router.push(`${paths.unitservice.departments.processingPage}/${entrance?._id}`);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-
-  const handleEndAppointment = async () => {
+  const updateRoom = async (roomId) => {
     try {
-      await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
-        Patient_attended: true,
-        note: noteContent,
-      });
-      await axiosInstance.patch(`/api/appointments/${Entrance?.appointmentId}`, {
-        finished_or_not: true,
-      });
-      await axiosInstance.post('/api/feedback', {
-        unit_service: Entrance?.service_unit?._id,
-        appointment: Entrance?.appointmentId,
-        employee: user?.employee?._id,
-        patient: Entrance?.patient?._id,
-      });
-      await axiosInstance.post(`/api/medrecord/`, {
-        appointmentId: Entrance?.appointmentId,
-        Appointment_date: Entrance?.Appointment_date,
-        service_unit: Entrance?.service_unit,
-        patient: Entrance?.patient?._id,
-        medical_report: medicalReportIds,
-        doctor_report: doctorReportIds,
-        Drugs_report: prescriptionIds,
-        // sick_leave: prescriptionIds,
-      });
+      const { data: allRooms } = await axiosInstance.get(
+        `/api/rooms/unitservice/${
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+            ?._id
+        }`
+      );
 
-      // await axiosInstance.patch(`/api/rooms/${receptionActivity?._id}`, {
-      //   patient: null,
-      //   entranceMangament: null,
-      // });
-      enqueueSnackbar('appointment finished', { variant: 'success' });
-      refetch();
-      router.push(paths.employee.appointmentsToday);
+      // Find the current room where the employee is assigned
+      const currentRoom = allRooms.find((room) =>
+        room.employee?.some((emp) => emp._id === user?.employee?._id)
+      );
+
+      // Remove the employee from the current room
+      if (currentRoom) {
+        await axiosInstance.patch(`/api/rooms/${currentRoom?._id}`, {
+          employee: currentRoom.employee.filter((emp) => emp._id !== user?.employee?._id),
+        });
+      }
+
+      // Get the employees of the target room
+      const targetRoom = allRooms.find((one) => one._id === roomId);
+      const nextRoomEmployees = targetRoom ? targetRoom.employee : [];
+
+      // Check if the employee is already in the target room
+      const isEmployeeInTargetRoom = nextRoomEmployees.some(
+        (emp) => emp._id === user?.employee?._id
+      );
+
+      // If not already in the target room, add the employee
+      if (!isEmployeeInTargetRoom) {
+        await axiosInstance.patch(`/api/rooms/${roomId}`, {
+          employee: [...nextRoomEmployees, user?.employee?._id],
+        });
+
+        enqueueSnackbar('Room updated successfully', { variant: 'success' });
+      } else {
+        enqueueSnackbar('Employee is already in the selected room', { variant: 'info' });
+      }
     } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar('something went wrong', { variant: 'error' });
+      console.error('Error updating room:', error.message);
+      enqueueSnackbar('Error updating room', { variant: 'error' });
     }
   };
 
   return (
-    <>
-      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            margin: '20px',
-            gap: '10px',
+    <Card sx={{ mt: 3 }}>
+      <Box sx={{ m: 2 }}>
+        <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
+          {t('Select The room you are working in today')}{' '}
+        </Typography>
+        <Select
+          sx={{
+            width: 150,
+            height: 35,
           }}
+          value={selectedTitle}
+          displayEmpty
+          onChange={(e) => setSelectedTitle(e.target.value)}
         >
-          <DialogTitle>{t('Are you sure')}</DialogTitle>
-          <Image
-            src="https://cdn-icons-png.flaticon.com/512/1669/1669503.png"
-            alt="Processing"
-            style={{
-              width: '70px',
-              height: '70px',
-            }}
-          />
-        </div>
-        <DialogContent>
-          <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-            {t('please confirm moving the patient to another room')}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            color="inherit"
-            size="small"
-            variant="outlined"
-            sx={{
-              mr: 1,
-              border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-            }}
-            onClick={() => dialog.onFalse()}
-          >
-            {t('Cancel')}
-          </Button>
-          <Button
-            size="small"
-            color="info"
-            variant="contained"
-            sx={{
-              bgcolor: 'info.dark',
-            }}
-            onClick={() => {
-              dialog.onFalse();
-              processingPage(Confirmdroomsdata);
-            }}
-          >
-            {t('Confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <MenuItem disabled value="" sx={{ display: 'none' }}>
+            {t('Select Room')}
+          </MenuItem>
+          {roomsData.map((activity, index) =>
+            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
+              <MenuItem key={index} value={activity?._id} onClick={() => updateRoom(activity?._id)}>
+                {activity?.name_english}
+              </MenuItem>
+            ) : null
+          )}
+        </Select>
 
-      <Card sx={{ display: { md: 'flex', xs: 'grid' }, gridTemplateColumns: '1fr', gap: {md:15,xs:1} }}>
-        <Box sx={{ m: 2 }}>
-          <Typography variant="h6">{t('Last activity')}</Typography>
-          <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            {t('Doctor Message')}
-          </Typography>
-          <Typography
-            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
-          />
+        <Box>
+          <TableContainer sx={{ mt: 3, mb: 2 }}>
+            <Scrollbar>
+              <Table sx={{ minWidth: 400 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t('Last activity')}</TableCell>
+                    <TableCell>{t('Patient')}</TableCell>
+                    <TableCell>{t('Arrival Time')}</TableCell>
+                    <TableCell>{t('Doctor Note')}</TableCell>
+                    <TableCell>{t('Options')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {EntranceByActivity?.map((entranceData, i) => (
+                    <TableRow key={i}>
+                      <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+
+                      <TableCell>{entranceData?.patient?.name_english}</TableCell>
+                      <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
+                      <TableCell>{entranceData?.note}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          sx={{ bgcolor: 'success.main', color: 'white' }}
+                          onClick={() => goToProcessingPage(entranceData)}
+                        >
+                          {t('Proceed')}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
         </Box>
-
-        <Box sx={{ m: 2 }}>
-          <Typography variant="h6">{t('Next Activity')}</Typography>
-          <Box sx={{ mb: 9}} >
-            <Box>
-              <TextField
-                onChange={(e) => setNoteContent(e.target.value)}
-                placeholder={t('Add Message')}
-                fullWidth
-                multiline
-                rows={2}
-                sx={{ mb: 2 }}
-              />
-              <Select
-                sx={{
-                  width: 150,
-                  height: 35,
-                }}
-                value={selectedValue}
-                displayEmpty
-              >
-                <MenuItem value="" disabled sx={{ display: 'none' }}>
-                  {t('Choose')}
-                </MenuItem>
-                {roomsData?.map((rooms, index) => {
-                  // Ensure rooms.employee is an array and map through it to get employee names
-                  const employeeNames = Array.isArray(rooms.employee)
-                    ? rooms.employee.map((employee) => employee.name_english).join(', ')
-                    : '';
-
-                  return (
-                    <MenuItem
-                      key={index}
-                      onClick={() => {
-                        if (
-                          Entrance?.Current_activity?.name_english !==
-                          rooms?.activities?.name_english
-                        ) {
-                          setConfirmRoomsdata(rooms);
-                          dialog.onTrue();
-                        }
-                      }}
-                      variant="contained"
-                      sx={{
-                        bgcolor:
-                          Entrance?.Current_activity?.name_english ===
-                          rooms?.activities?.name_english
-                            ? ''
-                            : 'success.main',
-                        m: 2,
-                      }}
-                      disabled={
-                        Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                      }
-                    >
-                      {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                        ? `${rooms?.name_english} (Current) ${employeeNames}`
-                        : `Go to ${rooms?.name_english} ${employeeNames}`}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-              <Button
-                onClick={() => handleEndAppointment()}
-                variant="contained"
-                sx={{ bgcolor: 'error.main', ml: 2 }}
-              >
-                {t('end appointment')}
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      </Card>
-    </>
+      </Box>
+    </Card>
   );
 }

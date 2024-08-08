@@ -38,7 +38,6 @@ export default function Doctorreport() {
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
 
-  const [ImgFiles, setImgFiles] = useState([]);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
 
   const router = useRouter();
@@ -127,7 +126,7 @@ export default function Doctorreport() {
 
     if (isValidFiles) {
       const newFiles = acceptedFiles;
-      setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
+
       setValue('file', [...values.file, ...newFiles]);
     } else {
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
@@ -138,7 +137,6 @@ export default function Doctorreport() {
     (inputFile) => {
       const filtered = values.file.filter((file) => file !== inputFile);
       setValue('file', filtered);
-      setImgFiles(filtered);
     },
     [setValue, values.file]
   );
@@ -164,17 +162,12 @@ export default function Doctorreport() {
         }
       });
 
-      if (ImgFiles) {
-        ImgFiles.forEach((file, index) => {
-          formData.append(`file[${index}]`, file);
-        });
-        await axiosInstance.post('/api/doctorreport', formData);
+      await axiosInstance.post('/api/doctorreport', formData);
 
-        enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
-        refetch();
-        doctoReportDialog.onFalse();
-        reset();
-      }
+      enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+      refetch();
+      doctoReportDialog.onFalse();
+      reset();
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error uploading data', { variant: 'error' });
