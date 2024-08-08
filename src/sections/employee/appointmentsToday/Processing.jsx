@@ -27,7 +27,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 
-import Rooms from './rooms';
+import Rooms from './insideRooms';
 // import History from './history';
 import TabsView from './tabs-view';
 import CheckList from './checkList';
@@ -36,7 +36,7 @@ import Adjustabledocument from './adjustabledocument';
 
 export default function Processing() {
   const params = useParams();
-  const user = useAuthContext();
+  const { user } = useAuthContext();
 
   const { id } = params;
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
@@ -45,8 +45,8 @@ export default function Processing() {
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
-  console.log(medRecord);
-  
+  console.log(CheckListData);
+
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const { serviceTypesData } = useGetUSServiceTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -167,7 +167,7 @@ export default function Processing() {
       <Typography variant="subtitle2">{item.title}</Typography>
     </Paper>
   );
-
+  const lineBreaks = Array(14).fill(<br />);
   return isMobile ? (
     <div>
       {TIMELINES.map((item) => (
@@ -175,26 +175,16 @@ export default function Processing() {
           {renderTimelineItems(item)}
         </div>
       ))}{' '}
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      {lineBreaks.map((br) => (
+        <>{br}</>
+      ))}
       <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <Rooms />
       </Box>
     </div>
   ) : (
     <>
-      <Timeline position="alternate-reverse">
+      <Timeline position="alternate">
         {TIMELINES.map((item) => (
           <TimelineItem key={item.key}>
             <TimelineSeparator>
@@ -205,15 +195,26 @@ export default function Processing() {
           </TimelineItem>
         ))}
       </Timeline>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+
+      {lineBreaks.map((br) => (
+        <>{br}</>
+      ))}
       <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <Rooms />
       </Box>
     </>
   );
 }
+
+
+
+       // <TimelineItem>
+          //   <TimelineOppositeContent color="text.secondary">
+          //     09:30 am
+          //   </TimelineOppositeContent>
+          //   <TimelineSeparator>
+          //     <TimelineDot />
+          //     <TimelineConnector />
+          //   </TimelineSeparator>
+          //   <TimelineContent>Eat</TimelineContent>
+          // </TimelineItem>
