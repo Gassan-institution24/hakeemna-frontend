@@ -67,6 +67,8 @@ export default function ChecklistTableView() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
   );
 
+  console.log('CheckListData',CheckListData)
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -85,7 +87,7 @@ export default function ChecklistTableView() {
 
   const canReset = !!filters?.name;
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
@@ -181,7 +183,7 @@ export default function ChecklistTableView() {
             //
             onResetFilters={handleResetFilters}
             //
-            results={dataFiltered.length}
+            results={dataFiltered?.length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
@@ -193,8 +195,8 @@ export default function ChecklistTableView() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
+                rowCount={dataFiltered?.length}
+                numSelected={table.selected?.length}
                 onSort={table.onSort}
               />
 
@@ -204,7 +206,7 @@ export default function ChecklistTableView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row, idx) => (
+                  ?.map((row, idx) => (
                     <TableDetailRow
                       key={idx}
                       row={row}
@@ -216,7 +218,7 @@ export default function ChecklistTableView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, CheckListData.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, CheckListData?.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -226,7 +228,7 @@ export default function ChecklistTableView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
+          count={dataFiltered?.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
@@ -245,15 +247,15 @@ export default function ChecklistTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name } = filters;
 
-  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el, idx) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
