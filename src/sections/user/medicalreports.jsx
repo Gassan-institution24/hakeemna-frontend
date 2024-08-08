@@ -1,5 +1,7 @@
 import * as React from 'react';
+import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
+import { convert } from 'html-to-text';
 import {
   Page,
   Text,
@@ -9,8 +11,6 @@ import {
   PDFDownloadLink,
   Image as PdfImage,
 } from '@react-pdf/renderer';
-import DOMPurify from 'dompurify';
-import { convert } from 'html-to-text';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';

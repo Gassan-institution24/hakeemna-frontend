@@ -17,7 +17,7 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
           {...field}
           fullWidth
           type={type}
-          value={new Date(field.value)}
+          value={field.value ? new Date(field.value) : null}
           views={views}
           onChange={(newValue) => {
             field.onChange(newValue);
