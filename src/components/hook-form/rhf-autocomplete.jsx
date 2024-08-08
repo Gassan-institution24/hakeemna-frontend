@@ -24,13 +24,13 @@ export default function RHFAutocomplete({
       render={({ field, fieldState: { error } }) => (
         <Autocomplete
           {...field}
+          onInputChange={onInputChange}
           onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
           renderInput={(params) => (
             <TextField
               name={name}
               label={label}
               variant={variant}
-              onBlur={onInputChange}
               placeholder={placeholder}
               error={!!error}
               helperText={error ? error?.message : helperText}

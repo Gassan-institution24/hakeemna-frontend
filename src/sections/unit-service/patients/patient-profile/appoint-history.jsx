@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -24,15 +23,14 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSPatientAppointments } from 'src/api';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
-import { useGetAppointmentTypes, useGetUSPatientAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   emptyRows,
@@ -66,7 +64,7 @@ export default function AppointHistoryView({ patient }) {
 
   // const settings = useSettingsContext();
   const TABLE_HEAD = [
-    { id: 'start_time', label: t('start Time') },
+    { id: 'start_time', label: t('start time') },
     { id: 'sequence_number', label: t('sequence') },
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'work_group', label: t('work group') },
@@ -84,12 +82,10 @@ export default function AppointHistoryView({ patient }) {
 
   const confirm = useBoolean();
 
-  const { appointmentsData, refetch, loading } = useGetUSPatientAppointments(
+  const { appointmentsData, refetch } = useGetUSPatientAppointments(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
-    patient?._id
+    patient?.patient?._id
   );
-
-  const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -120,29 +116,14 @@ export default function AppointHistoryView({ patient }) {
   const getAppointLength = (status) =>
     appointmentsData.filter((item) => item.status === status).length;
 
-  // const getTotalAmount = (status) =>
-  //   sumBy(
-  //     appointmentsData.filter((item) => item.status === status),
-  //     'totalAmount'
-  //   );
-
-  // const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
-
   const TABS = isMedLab
     ? [
-      // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
       {
         value: 'pending',
         label: t('pending'),
         color: 'secondary',
         count: getAppointLength('pending'),
       },
-      // {
-      //   value: 'processing',
-      //   label: t('processing'),
-      //   color: 'info',
-      //   count: getAppointLength('processing'),
-      // },
       {
         value: 'finished',
         label: t('finished'),
@@ -213,9 +194,6 @@ export default function AppointHistoryView({ patient }) {
       totalRowsFiltered: dataFiltered.length,
     });
   }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]);
-  const handleAddRow = useCallback(() => {
-    router.push(paths.superadmin.patients.history.addAppointment(patient?._id));
-  }, [router, patient?._id]);
 
   const handleViewRow = useCallback(
     (_id) => {
@@ -230,14 +208,6 @@ export default function AppointHistoryView({ patient }) {
     },
     [handleFilters]
   );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <>
