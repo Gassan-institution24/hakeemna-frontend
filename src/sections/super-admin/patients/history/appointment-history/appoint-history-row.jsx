@@ -15,7 +15,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableRow({
+export default function AppointHistoryRow({
   row,
   selected,
   onSelectRow,
@@ -188,7 +188,7 @@ export default function InvoiceTableRow({
   );
 }
 
-InvoiceTableRow.propTypes = {
+AppointHistoryRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,

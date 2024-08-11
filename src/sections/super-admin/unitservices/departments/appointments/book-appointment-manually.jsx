@@ -45,14 +45,14 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     family_name: Yup.string().required('family name is required'),
     identification_num: Yup.string().required('ID is required'),
     birth_date: Yup.date().nullable(),
-    marital_status: Yup.string(),
+    marital_status: Yup.string().nullable(),
     nationality: Yup.string().nullable(),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
     email: Yup.string().required('Email is required'),
     mobile_num1: Yup.string().required('Mobile number is required'),
     mobile_num2: Yup.string(),
-    gender: Yup.string(),
+    gender: Yup.string().nullable(),
   });
 
   const defaultValues = useMemo(
@@ -61,14 +61,14 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       family_name: '',
       identification_num: '',
       birth_date: null,
-      marital_status: '',
+      marital_status: null,
       nationality: null,
       country: null,
       city: null,
       email: '',
       mobile_num1: '',
       mobile_num2: '',
-      gender: '',
+      gender: null,
     }),
     []
   );
@@ -216,7 +216,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="nationality"
                   label={t('nationality')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -228,7 +228,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   // onChange={handleCountryChange}
                   name="country"
                   label={t('country')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -240,7 +240,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   name="city"
                   label="City"
                   PaperPropsSx={{ textTransform: 'capitalize' }}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {tableData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -251,7 +251,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="marital_status"
                   label={t('marital status')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   <MenuItem lang="ar" value="single">
                     {t('single')}
@@ -272,7 +272,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="gender"
                   label={t('gender')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   <MenuItem lang="ar" value="male">
                     {t('male')}

@@ -50,10 +50,10 @@ export function useNewScreen() {
     const newWindow = window.open(path, '_blank', windowFeatures);
     setNewWin((prev) => [...prev, newWindow]);
     if (newWindow) {
-      const sessionData = sessionStorage;
-      newWindow.sessionStorage.clear();
+      const sessionData = localStorage;
+      newWindow.localStorage.clear();
       Object.keys(sessionData).forEach((key) => {
-        newWindow.sessionStorage.setItem(key, sessionData[key]);
+        newWindow.localStorage.setItem(key, sessionData[key]);
       });
       return newWindow;
     }

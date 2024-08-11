@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -22,14 +21,16 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSPatientAppointments } from 'src/api';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   emptyRows,
@@ -41,22 +42,11 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-// import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
-import PatientHistoryToolbar from './appoint-history-toolbar';
-import HistoryFiltersResult from './appoint-history-filters-result';
+// import PatientHistoryToolbar from './appoint-history-toolbar';
+// import HistoryFiltersResult from './appoint-history-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'start_time', label: 'Start Time' },
-  { id: 'sequence_number', label: 'number' },
-  { id: 'appointment_type', label: 'Appointment Type' },
-  { id: 'work_group', label: 'work group' },
-  { id: 'note', label: 'note' },
-  { id: 'status', label: 'Status' },
-  { id: '' },
-];
 
 const defaultFilters = {
   name: '',
@@ -67,22 +57,36 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointHistoryView({ patientData }) {
+export default function AppointHistoryView({ patient }) {
   const theme = useTheme();
+  const { t } = useTranslate();
+  const { isMedLab } = useUSTypeGuard();
 
   // const settings = useSettingsContext();
+  const TABLE_HEAD = [
+    { id: 'start_time', label: t('start time') },
+    { id: 'sequence_number', label: t('sequence') },
+    { id: 'appointment_type', label: t('appointment type') },
+    { id: 'work_group', label: t('work group') },
+    { id: 'note', label: t('note') },
+    isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') },
+    { id: 'status', label: t('status') },
+    { id: '' },
+  ].filter(Boolean);
 
   const router = useRouter();
+
+  const { user } = useAuthContext();
 
   const table = useTable({ defaultOrderBy: 'code' });
 
   const confirm = useBoolean();
 
-  const { id } = useParams();
-
-  const { appointmentsData, refetch, loading } = useGetPatientAppointments(id);
-
-  const { appointmenttypesData } = useGetAppointmentTypes();
+  const { appointmentsData, refetch } = useGetUSPatientAppointments(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    patient?.patient?._id,
+    patient?._id,
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -113,41 +117,54 @@ export default function AppointHistoryView({ patientData }) {
   const getAppointLength = (status) =>
     appointmentsData.filter((item) => item.status === status).length;
 
-  // const getTotalAmount = (status) =>
-  //   sumBy(
-  //     appointmentsData.filter((item) => item.status === status),
-  //     'totalAmount'
-  //   );
-
-  // const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
-
-  const TABS = [
-    // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
-    {
-      value: 'pending',
-      label: 'Pending',
-      color: 'secondary',
-      count: getAppointLength('pending'),
-    },
-    {
-      value: 'processing',
-      label: 'Processing',
-      color: 'info',
-      count: getAppointLength('processing'),
-    },
-    {
-      value: 'finished',
-      label: 'Finished',
-      color: 'success',
-      count: getAppointLength('finished'),
-    },
-    {
-      value: 'canceled',
-      label: 'Canceled',
-      color: 'error',
-      count: getAppointLength('canceled'),
-    },
-  ];
+  const TABS = isMedLab
+    ? [
+      {
+        value: 'pending',
+        label: t('pending'),
+        color: 'secondary',
+        count: getAppointLength('pending'),
+      },
+      {
+        value: 'finished',
+        label: t('finished'),
+        color: 'success',
+        count: getAppointLength('finished'),
+      },
+      {
+        value: 'canceled',
+        label: t('canceled'),
+        color: 'error',
+        count: getAppointLength('canceled'),
+      },
+    ]
+    : [
+      // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+      {
+        value: 'pending',
+        label: t('pending'),
+        color: 'secondary',
+        count: getAppointLength('pending'),
+      },
+      {
+        value: 'processing',
+        label: t('processing'),
+        color: 'info',
+        count: getAppointLength('processing'),
+      },
+      {
+        value: 'finished',
+        label: t('finished'),
+        color: 'success',
+        count: getAppointLength('finished'),
+      },
+      {
+        value: 'canceled',
+        label: t('canceled'),
+        color: 'error',
+        count: getAppointLength('canceled'),
+      },
+    ];
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -178,9 +195,6 @@ export default function AppointHistoryView({ patientData }) {
       totalRowsFiltered: dataFiltered.length,
     });
   }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]);
-  const handleAddRow = useCallback(() => {
-    router.push(paths.superadmin.patients.history.addAppointment(id));
-  }, [router, id]);
 
   const handleViewRow = useCallback(
     (_id) => {
@@ -195,14 +209,6 @@ export default function AppointHistoryView({ patientData }) {
     },
     [handleFilters]
   );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <>
@@ -236,7 +242,7 @@ export default function AppointHistoryView({ patientData }) {
             ))}
           </Tabs>
 
-          <PatientHistoryToolbar
+          {/* <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
             onAdd={handleAddRow}
@@ -255,19 +261,13 @@ export default function AppointHistoryView({ patientData }) {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
-              // dense={table.dense}
+              dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     dataFiltered.map((row, idx) => row._id)
-              //   )
-              // }
               action={
                 <Tooltip title="Unbook all">
                   <IconButton color="error" onClick={confirm.onTrue}>
@@ -286,12 +286,6 @@ export default function AppointHistoryView({ patientData }) {
                   rowCount={appointmentsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row, idx) => row._id)
-                  //   )
-                  // }
                 />
 
                 <TableBody>
@@ -305,6 +299,7 @@ export default function AppointHistoryView({ patientData }) {
                         key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
+                        refetch={refetch}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onCancelRow={() => handleCancelRow(row._id)}
@@ -341,7 +336,8 @@ export default function AppointHistoryView({ patientData }) {
         title="Cancel"
         content={
           <>
-            Are you sure want to cancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to cancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items')}?
           </>
         }
         action={
@@ -353,7 +349,7 @@ export default function AppointHistoryView({ patientData }) {
               handleCancelRows();
             }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
         }
       />
@@ -381,10 +377,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (appointment) =>
         (appointment?.unit_service?.name_english &&
           appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.unit_service?.name_arabic &&
           appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (appointment?.name_english &&
           appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.name_arabic &&
@@ -411,5 +407,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 AppointHistoryView.propTypes = {
-  patientData: PropTypes.object,
+  patient: PropTypes.object,
 };

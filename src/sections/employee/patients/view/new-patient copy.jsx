@@ -298,7 +298,7 @@ export default function TableCreateView() {
           },
           {
             name: t('patients'),
-            href: paths.unitservice.patients.all,
+            href: paths.employee.patients.all,
           },
           { name: t('new') },
         ]}

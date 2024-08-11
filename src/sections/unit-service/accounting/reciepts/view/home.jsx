@@ -81,6 +81,8 @@ export default function InvoiceListView() {
     populate: [
       { path: 'stakeholder', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
+      { path: 'unit_service_patient', select: 'name_english name_arabic' },
+      { path: 'unit_service_patient', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],
     ...filters,

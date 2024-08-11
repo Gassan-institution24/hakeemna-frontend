@@ -79,6 +79,7 @@ export default function InvoiceListView() {
       'sequence_number economic_movement created_at patient payment_amount updated_at',
     populate: [
       { path: 'patient', select: 'name_english name_arabic' },
+      { path: 'unit_service_patient', select: 'name_english name_arabic' },
       { path: 'unit_service', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],

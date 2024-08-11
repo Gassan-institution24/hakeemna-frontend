@@ -81,6 +81,7 @@ export default function Rooms() {
     reset({
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
       service_unit: Entrance?.service_unit,
       unit_service: Entrance?.service_unit?._id,
       appointment: Entrance?.appointmentId,
@@ -120,12 +121,15 @@ export default function Rooms() {
         appointment: Entrance?.appointmentId,
         employee: user?.employee?._id,
         patient: Entrance?.patient?._id,
+        unit_service_patient: Entrance?.unit_service_patient,
       });
       await axiosInstance.post(`/api/medrecord/`, {
         appointmentId: Entrance?.appointmentId,
         Appointment_date: Entrance?.Appointment_date,
+        unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
         service_unit: Entrance?.service_unit,
         patient: Entrance?.patient?._id,
+        unit_service_patient: Entrance?.unit_service_patient,
         medical_report: medicalReportIds,
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,

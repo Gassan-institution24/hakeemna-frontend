@@ -67,8 +67,8 @@ export default function FamilyMembers() {
 
   const handleChangeUS = async () => {
     try {
-      const accessToken = sessionStorage.getItem('accessToken');
-      sessionStorage.setItem('parentToken', accessToken);
+      const accessToken = localStorage.getItem('accessToken');
+      localStorage.setItem('parentToken', accessToken);
       await login?.(selectedIndex, password);
 
       router.push(PATH_AFTER_LOGIN);

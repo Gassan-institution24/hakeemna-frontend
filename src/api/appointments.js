@@ -69,8 +69,8 @@ export function useGetPatientAppointments(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSPatientAppointments(id, pid) {
-  const URL = endpoints.appointments.unit_service.patient(id, pid);
+export function useGetUSPatientAppointments(id, pid,uspId) {
+  const URL = endpoints.appointments.unit_service.patient(id, pid, uspId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

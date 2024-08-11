@@ -21,7 +21,7 @@ export default function RecordPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
+  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id, Entrance?.unit_service_patient);
   console.log(medRecord);
   return (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
@@ -55,7 +55,7 @@ export default function RecordPage() {
                 doctorReport && (
                   <Box key={`doctorReport-${i}`}>
                     <Typography variant="h4">Patient record </Typography>
-                    <Typography sx={{color:'gray'}}>{doctorReport?.description}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{doctorReport?.description}</Typography>
                     <Box
                       sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}
                     >
@@ -69,7 +69,7 @@ export default function RecordPage() {
                 medicalReport && (
                   <Box key={`medicalReport-${i}`}>
                     <Typography variant="h4">Medical Report </Typography>
-                    <Typography sx={{color:'gray'}}>{medicalReport?.description}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{medicalReport?.description}</Typography>
                     <Box
                       sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}
                     >
@@ -83,10 +83,10 @@ export default function RecordPage() {
                 drugsReport && (
                   <Box key={`drugsReport-${i}`}>
                     <Typography variant="h4">Prescription </Typography>
-                    <Typography sx={{color:'gray'}}>{drugsReport?.medicines?.trade_name}</Typography>
-                    <Typography sx={{color:'gray'}}>{drugsReport?.Frequency_per_day}</Typography>
-                    <Typography sx={{color:'gray'}}>{drugsReport?.Num_days}</Typography>
-                    <Typography sx={{color:'gray'}}>{drugsReport?.Doctor_Comments}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{drugsReport?.medicines?.trade_name}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{drugsReport?.Frequency_per_day}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{drugsReport?.Num_days}</Typography>
+                    <Typography sx={{ color: 'gray' }}>{drugsReport?.Doctor_Comments}</Typography>
                   </Box>
                 )
             )}

@@ -84,7 +84,8 @@ export default function AppointHistoryView({ patient }) {
 
   const { appointmentsData, refetch } = useGetUSPatientAppointments(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
-    patient?.patient?._id
+    patient?.patient?._id,
+    patient?._id,
   );
 
   const [filters, setFilters] = useState(defaultFilters);

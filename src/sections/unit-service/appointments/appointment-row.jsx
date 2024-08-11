@@ -52,6 +52,7 @@ export default function AppointmentsTableRow({
     note,
     appointment_type,
     patient,
+    unit_service_patient,
     start_time,
     status,
     invoived,
@@ -81,6 +82,13 @@ export default function AppointmentsTableRow({
   const uploadAnalysis = useBoolean();
 
   const [minToDelay, setMinToDelay] = useState(0);
+
+  let patientName
+  if (patient) {
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+  } else if (unit_service_patient) {
+    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+  }
 
   return (
     <>
@@ -127,7 +135,7 @@ export default function AppointmentsTableRow({
           }}
           onClick={() => router.push(paths.employee.patients.info(patient?._id))}
         >
-          {curLangAr ? patient?.name_arabic : patient?.name_english}
+          {patientName}
         </TableCell>
         <TableCell align="center">{note}</TableCell>
         {isMedLab && (

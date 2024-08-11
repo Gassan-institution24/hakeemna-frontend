@@ -46,7 +46,7 @@ export default function PatientFoundRow({
     <TableRow hover selected={selected}>
       <TableCell align="center">
         <Box>
-          {String(nationality.code).padStart(3, '0')}-{sequence_number}
+          {String(nationality?.code).padStart(3, '0')}-{sequence_number}
         </Box>
       </TableCell>
 
@@ -77,13 +77,13 @@ export default function PatientFoundRow({
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title={t('confirm checking information')}
+        title={t('Patient identity confirmation:')}
         content={
           <>
             <Typography>
               {' '}
               {t(
-                'Do you confirm checking patient data and check at least three values if they are true?'
+                'By booking the appointment, you confirm that you have been checked patient data and there are at minimum three data that matches with next patient identity:'
               )}
             </Typography>
             <Card sx={{ p: 2, m: 2 }}>
