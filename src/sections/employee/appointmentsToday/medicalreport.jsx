@@ -47,6 +47,7 @@ export default function Medicalreport() {
   const MedicalReportsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
+    unit_service: Yup.string(),
     file: Yup.array(),
     entrance_mangament: Yup.string(),
     description: Yup.string(),
@@ -59,7 +60,8 @@ export default function Medicalreport() {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
     entrance_mangament: Entrance?._id,
-    service_unit: Entrance?.service_unit,
+    service_unit: Entrance?.service_unit?._id,
+    unit_service: Entrance?.service_unit?._id,
     file: [],
   };
   const methods = useForm({
@@ -81,8 +83,9 @@ export default function Medicalreport() {
     reset({
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
-      service_unit: Entrance?.service_unit,
+      // service_unit: Entrance?.service_unit?._id,
       entrance_mangament: Entrance?._id,
+      unit_service: Entrance?.service_unit?._id,
       file: [],
     });
   }, [user, Entrance, reset]);
