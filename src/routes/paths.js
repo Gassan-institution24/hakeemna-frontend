@@ -119,6 +119,7 @@ export const paths = {
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
       bookappointment: (id) => `${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
       oldmedicalreportsview: (id) => `${ROOTS.DASHBOARD}/user/oldmedicalreportsview/${id}`,
+      medicalreportsview: (id) => `${ROOTS.DASHBOARD}/user/medicalreportsview/${id}`,
       doctorpage: (id, date) => `${ROOTS.DASHBOARD}/user/doctorpage/${id}`,
       specialities: `${ROOTS.DASHBOARD}/user/specialities`,
       watingroom: `${ROOTS.DASHBOARD}/user/watingroom`,

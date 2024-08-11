@@ -43,7 +43,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
     <Card sx={{ mt: 2 }}>
       <Box>
         <Typography sx={{ m: 2 }}>
-          {t("Choose an Adjustable document And send it to the patients")}
+          {t('Choose an Adjustable document And send it to the patients')}
         </Typography>
         {adjustabledocument?.map((adjustabledocumentdata, i) => (
           <Button

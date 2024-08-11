@@ -19,6 +19,9 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
@@ -49,6 +52,7 @@ const styles = StyleSheet.create({
   headerText: {
     textAlign: 'center',
     fontSize: 10,
+    marginBottom: 4,
   },
   footer: {
     position: 'absolute',
@@ -65,19 +69,30 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 13,
-    marginBottom:6
+    marginBottom: 6,
   },
   largeText: {
     fontSize: 15,
     marginBottom: 7,
     fontWeight: 'bold',
   },
+  image: {
+    marginTop: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  insideImage: {
+    width: '100%', // Make the image full width
+    height: 'auto', // Maintain the aspect ratio
+  },
   watermark: {
     position: 'absolute',
     top: '30%', // Adjust the vertical position as needed
     left: '25%', // Adjust the horizontal position as needed
     width: '50%', // Adjust width for desired size
-    opacity: 0.3, // Set opacity to 30%
+    opacity: 0.2, // Set opacity to 30%
     zIndex: -1,
   },
 });
@@ -91,19 +106,15 @@ const MedicalReportPDF = ({ report }) => {
 
   return (
     <Document>
-     <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+      <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          {/* <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} /> */}
-          <PdfImage src="https://media.istockphoto.com/id/1321617070/vector/health-medical-logo.jpg?s=612x612&w=0&k=20&c=sus8vhG3c__vCdvOBLDhuf2vPUgIAudIAeUBApU_7Ew=" style={styles.headerImage} />
+          <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
           <View>
             <Text style={styles.headerText}>Medical Report</Text>
-            <Text style={styles.headerText}>test</Text>
-            <Text style={styles.headerText}>trtg grtgr grth</Text>
-            <Text style={styles.headerText}>5674567456747</Text>
-            {/* <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
             <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.mobile_num}</Text> */}
+            <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
           </View>
         </View>
 
@@ -119,15 +130,19 @@ const MedicalReportPDF = ({ report }) => {
           <Text style={styles.text}>{result}</Text>
         </View>
 
+        {/* Images */}
+        <View style={styles.image}>
+          {report?.file?.map((file, index) => (
+            <PdfImage key={index} src={Doclogo} style={styles.insideImage} />
+          ))}
+        </View>
+
         {/* Footer */}
-        <Text style={styles.footer}>
-          This is a system-generated report and does not require a signature.
-        </Text>
+        <Text style={styles.footer}>Made by hakeemna</Text>
       </Page>
     </Document>
   );
 };
-
 MedicalReportPDF.propTypes = {
   report: PropTypes.object,
 };
@@ -135,6 +150,18 @@ MedicalReportPDF.propTypes = {
 export default function Medicalreports() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
+  const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
+  const router = useRouter();
+
+  const handleHover = (id) => {
+    setHoveredButtonId(id);
+  };
+  const handleMouseOut = () => {
+    setHoveredButtonId(null);
+  };
+  const handleViewClick = (id) => {
+    router.push(paths.dashboard.user.medicalreportsview(id));
+  };
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
 
   return medicalreportsdata?.length > 0 ? (
@@ -160,15 +187,22 @@ export default function Medicalreports() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {fDateAndTime(info?.created_at)}
           </Stack>
+        </Stack>
+        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0, }}>
           <PDFDownloadLink
             style={styles.pdf}
             document={<MedicalReportPDF report={info} />}
             fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
+            <Iconify icon="flat-color-icons:download"  width={25} sx={{m:1}} />
           </PDFDownloadLink>
+          <Iconify
+            icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
+            onMouseOver={() => handleHover(info?._id)}
+            onMouseOut={handleMouseOut}
+            onClick={() => handleViewClick(info?._id)} width={25}  sx={{m:1}}
+          />
         </Stack>
-
         <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
 
         <Box
