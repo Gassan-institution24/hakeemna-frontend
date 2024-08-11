@@ -45,8 +45,6 @@ export default function Processing() {
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
-  console.log(CheckListData);
-
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const { serviceTypesData } = useGetUSServiceTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -128,7 +126,7 @@ export default function Processing() {
       ),
       icon: <Iconify icon="mingcute:folders-fill" width={25} />,
     },
-    adjustabledocument && {
+    adjustabledocument?.length > 0  && {
       key: 5,
       title: (
         <>
@@ -205,16 +203,3 @@ export default function Processing() {
     </>
   );
 }
-
-
-
-       // <TimelineItem>
-          //   <TimelineOppositeContent color="text.secondary">
-          //     09:30 am
-          //   </TimelineOppositeContent>
-          //   <TimelineSeparator>
-          //     <TimelineDot />
-          //     <TimelineConnector />
-          //   </TimelineSeparator>
-          //   <TimelineContent>Eat</TimelineContent>
-          // </TimelineItem>
