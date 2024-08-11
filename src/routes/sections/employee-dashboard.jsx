@@ -86,6 +86,7 @@ const DoctorReportPage = lazy(() => import('src/pages/employee/appointmentsToday
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/employee/patients/patient-profile'));
+const PatientNewPage = lazy(() => import('src/pages/employee/patients/new-patient'));
 
 // CHECKLIST
 const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
@@ -140,6 +141,7 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'mypatients',
         children: [
           { element: <PatientsPage />, index: true },
+          { path: 'new', element: <PatientNewPage /> },
           { path: ':id', element: <PatientInfoPage /> },
         ],
       },

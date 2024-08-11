@@ -49,14 +49,14 @@ export const tokenExpired = (exp) => {
     expiredTimer = setTimeout(() => {
       alert('Token expired');
 
-      sessionStorage.removeItem('accessToken');
+      localStorage.removeItem('accessToken');
 
       window.location.pathname = paths.auth.login;
     }, timeLeft);
   } else if (timeLeft < 0) {
     alert('Token expired');
 
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
 
     window.location.pathname = paths.auth.login;
   }
@@ -66,7 +66,7 @@ export const tokenExpired = (exp) => {
 
 export const setSession = (accessToken) => {
   if (accessToken) {
-    sessionStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('accessToken', accessToken);
 
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -77,7 +77,7 @@ export const setSession = (accessToken) => {
       tokenExpired(exp);
     }
   } else {
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
 
     delete axios.defaults.headers.common.Authorization;
   }

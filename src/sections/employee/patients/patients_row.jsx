@@ -1,4 +1,8 @@
+import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -6,17 +10,36 @@ import TableCell from '@mui/material/TableCell';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import {
+  useGetAppointmentTypes,
+  useGetUSActiveWorkGroups,
+  useGetUSActiveWorkShifts,
+} from 'src/api';
+
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({ row, selected }) {
-  const { _id, sequence_number, nationality, name_english, name_arabic } = row;
+export default function USPatientsTableRow({ row, selected }) {
+  const { _id, file_code, patient, name_english, name_arabic } = row;
+  const { t } = useTranslate();
 
   const router = useRouter();
+  const { user } = useAuthContext();
+
+  const { appointmenttypesData } = useGetAppointmentTypes();
+
+  const { workGroupsData } = useGetUSActiveWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+  );
+  const { workShiftsData } = useGetUSActiveWorkShifts(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+  );
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+        {String(patient?.nationality?.code).padStart(3, '0') || ''}-{patient?.sequence_number}
       </TableCell>
       <TableCell
         sx={{
@@ -26,7 +49,7 @@ export default function CountriesTableRow({ row, selected }) {
         onClick={() => router.push(paths.employee.patients.info(_id))}
         align="center"
       >
-        {name_english}
+        {name_english || patient?.name_english}
       </TableCell>
       <TableCell
         sx={{
@@ -36,15 +59,92 @@ export default function CountriesTableRow({ row, selected }) {
         onClick={() => router.push(paths.employee.patients.info(_id))}
         align="center"
       >
-        {name_arabic}
+        {name_arabic || patient?.name_arabic}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={() => router.push(paths.employee.patients.info(_id))}
+        align="center"
+      >
+        {file_code}
       </TableCell>
     </TableRow>
   );
 
-  return <>{renderPrimary}</>;
+  const NewUserSchema = Yup.object().shape({
+    note: Yup.string(),
+    work_shift: Yup.string().required(t('required field')),
+    work_group: Yup.string().required(t('required field')),
+    service_types: Yup.array(),
+    appointment_type: Yup.string().required(t('required field')),
+    start_time: Yup.date().required(t('required field')),
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      note: '',
+      appointment_type: appointmenttypesData?.[0]?._id,
+      start_time: new Date(),
+      work_group: workGroupsData?.[0]?._id,
+      work_shift: workShiftsData.filter((one) => {
+        const currentDate = new Date();
+
+        const startTime = new Date(currentDate);
+        startTime.setHours(
+          new Date(one.start_time).getHours(),
+          new Date(one.start_time).getMinutes(),
+          0,
+          0
+        );
+
+        const endTime = new Date(currentDate);
+        endTime.setHours(
+          new Date(one.end_time).getHours(),
+          new Date(one.end_time).getMinutes(),
+          0,
+          0
+        );
+        if (startTime.getTime() <= endTime.getTime()) {
+          return (
+            currentDate.getTime() >= startTime.getTime() &&
+            currentDate.getTime() < endTime.getTime()
+          );
+        }
+        // If the shift crosses midnight
+        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+        return (
+          currentDate.getTime() >= startTime.getTime() ||
+          currentDate.getTime() < endTimeNextDay.getTime()
+        );
+      })?.[0]?._id,
+      service_types: [],
+    }),
+    [workGroupsData, workShiftsData, appointmenttypesData]
+  );
+
+  const methods = useForm({
+    mode: 'onTouched',
+    resolver: yupResolver(NewUserSchema),
+    defaultValues,
+  });
+
+  const { reset } = methods;
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
+  return (
+    <>
+      {renderPrimary}
+    </>
+  );
 }
 
-CountriesTableRow.propTypes = {
+USPatientsTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

@@ -96,6 +96,7 @@ export default function PaymentControlView() {
     populate: [
       { path: 'insurance', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
+      { path: 'unit_service_patient', select: 'name_english name_arabic' },
       { path: 'unit_service', select: 'name_english name_arabic' },
       { path: 'economic_movement', select: 'sequence_number created_at' },
     ],

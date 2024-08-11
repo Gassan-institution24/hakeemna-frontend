@@ -15,6 +15,8 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -30,6 +32,7 @@ import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useDebounce } from 'src/hooks/use-debounce';
 
 export default function Prescription({ Entrance }) {
   const { user } = useAuthContext();
@@ -37,7 +40,10 @@ export default function Prescription({ Entrance }) {
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
-  const { medicinesData } = useGetMedicines();
+
+  const [medSerach, setMedSerach] = useState()
+  const debouncedQuery = useDebounce(medSerach);
+  const { medicinesData } = useGetMedicines({ select: 'trade_name concentration', search: debouncedQuery })
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -61,6 +67,7 @@ export default function Prescription({ Entrance }) {
       id: prescriptions.length,
       employee: user?.employee?._id || '',
       patient: Entrance?.patient?._id || '',
+      unit_service_patient: Entrance?.unit_service_patient,
       entrance_mangament: Entrance?._id || '',
       Start_time: new Date(),
       End_time: new Date(),
@@ -112,12 +119,13 @@ export default function Prescription({ Entrance }) {
       {
         employee: user?.employee?._id || '',
         patient: Entrance?.patient?._id || '',
+        unit_service_patient: Entrance?.unit_service_patient,
         entrance_mangament: Entrance?._id || '',
         Start_time: new Date(),
         End_time: new Date(),
         Frequency_per_day: '',
         Num_days: 0,
-        medicines: '',
+        medicines: null,
         Doctor_Comments: '',
         chronic: false,
       },
@@ -174,12 +182,14 @@ export default function Prescription({ Entrance }) {
         {
           employee: user?.employee?._id || '',
           patient: Entrance?.patient?._id || '',
+          unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+          unit_service_patient: Entrance?.unit_service_patient,
           entrance_mangament: Entrance?._id || '',
           Start_time: new Date(),
           End_time: new Date(),
           Frequency_per_day: '',
           Num_days: 0,
-          medicines: '',
+          medicines: null,
           Doctor_Comments: '',
           chronic: false,
         },
@@ -197,6 +207,7 @@ export default function Prescription({ Entrance }) {
       if (prescriptionDialog.value) {
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
+          unit_service_patient: Entrance?.unit_service_patient,
           name_english: 'a prescription has been added',
           name_arabic: 'تم ارفاق وصفة طبية',
           sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
@@ -265,19 +276,22 @@ export default function Prescription({ Entrance }) {
           <DialogContent>
             {prescriptions.map((prescription, index) => (
               <div key={prescription.id}>
-                <RHFSelect
-                  label={t('medicine*')}
-                  fullWidth
-                  name={`prescriptions[${index}].medicines`}
-                  PaperPropsSx={{ textTransform: 'capitalize' }}
-                  sx={{ mb: 2,mt:2 }}
-                >
-                  {medicinesData?.map((test, idx) => (
-                    <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                      {test?.trade_name}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
+                <Autocomplete
+                  sx={{ minWidth: 300, flex: 1, my: 2 }}
+                  options={medicinesData}
+                  onChange={(event, newValue) => setValue(`prescriptions[${index}].medicines`, newValue?._id)}
+                  getOptionLabel={(option) => option.trade_name || ''}
+                  onInputChange={(event, newInputValue) => {
+                    setMedSerach(newInputValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('medicine')}
+                      variant="outlined"
+                    />
+                  )}
+                />
                 <RHFTextField
                   name={`prescriptions[${index}].Frequency_per_day`}
                   label={t('Frequency per day')}

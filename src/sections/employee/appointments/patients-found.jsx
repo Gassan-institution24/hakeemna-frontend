@@ -31,7 +31,7 @@ import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
-export default function PatientsFound({ SelectedAppointment, reset, selected, oldPatients }) {
+export default function PatientsFound({ SelectedAppointment, reset, selected, oldPatients, usPatients }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -61,13 +61,19 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
 
   const theme = useTheme();
 
-  const handleEmployment = async (row) => {
+  const handleBook = async (row) => {
     try {
-      await axiosInstance.patch(endpoints.appointments.book(selected), {
-        patient: row._id,
+      const data = {
         note,
         lang: curLangAr,
-      });
+      }
+      if (usPatients) {
+        data.unit_service_patient = row._id
+      } else {
+        data.patient = row._id
+      }
+
+      await axiosInstance.patch(endpoints.appointments.book(selected), data);
       await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
@@ -140,7 +146,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
                 note={note}
                 setNote={setNote}
                 SelectedAppointment={SelectedAppointment}
-                onEmploymentRow={() => handleEmployment(row)}
+                onEmploymentRow={() => handleBook(row)}
               />
             ))}
 
@@ -177,4 +183,5 @@ PatientsFound.propTypes = {
   reset: PropTypes.func,
   selected: PropTypes.string,
   SelectedAppointment: PropTypes.object,
+  usPatients: PropTypes.bool,
 };

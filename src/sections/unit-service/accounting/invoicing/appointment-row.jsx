@@ -27,6 +27,7 @@ export default function AppointmentsTableRow({ row, selected }) {
     medicalAnalysis,
     appointment_type,
     patient,
+    unit_service_patient,
     start_time,
     status,
   } = row;
@@ -39,6 +40,13 @@ export default function AppointmentsTableRow({ row, selected }) {
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  let patientName
+  if (patient) {
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+  } else if (unit_service_patient) {
+    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+  }
 
   return (
     <TableRow hover selected={selected}>
@@ -80,7 +88,7 @@ export default function AppointmentsTableRow({ row, selected }) {
         }}
         onClick={() => router.push(paths.employee.patients.info(patient?._id))}
       >
-        {curLangAr ? patient?.name_arabic : patient?.name_english}
+        {patientName}
       </TableCell>
       {isMedLab && (
         <TableCell align="center">
@@ -122,8 +130,7 @@ export default function AppointmentsTableRow({ row, selected }) {
           variant="outlined"
           onClick={() =>
             router.push(
-              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${
-                entrance ? `&&entrance=${entrance}` : ''
+              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${entrance ? `&&entrance=${entrance}` : ''
               }`
             )
           }

@@ -14,7 +14,7 @@ import Medicalreport from './medicalreport';
 
 // ----------------------------------------------------------------------
 
-export default function TabsView({ patient, service_unit }) {
+export default function TabsView({ patient, unit_service_patient, service_unit }) {
   const [currentTab, setCurrentTab] = useState('one');
   const params = useParams();
   const { id } = params;
@@ -40,7 +40,7 @@ export default function TabsView({ patient, service_unit }) {
     {
       value: 'four',
       title: 'sick leave',
-      label: <SickLeave patient={patient} service_unit={service_unit} />,
+      label: <SickLeave patient={patient} service_unit={service_unit} unit_service_patient={unit_service_patient} />,
     },
   ];
 
@@ -80,5 +80,6 @@ export default function TabsView({ patient, service_unit }) {
 }
 TabsView.propTypes = {
   patient: PropTypes.object,
+  unit_service_patient: PropTypes.string,
   service_unit: PropTypes.string,
 };

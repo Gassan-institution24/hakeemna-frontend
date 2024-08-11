@@ -59,6 +59,7 @@ export default function Medicalreport() {
   const defaultValues = {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
+    unit_service_patient: Entrance?.unit_service_patient,
     entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit?._id,
     unit_service: Entrance?.service_unit?._id,
@@ -83,7 +84,8 @@ export default function Medicalreport() {
     reset({
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
-      // service_unit: Entrance?.service_unit?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
+      service_unit: Entrance?.service_unit,
       entrance_mangament: Entrance?._id,
       unit_service: Entrance?.service_unit?._id,
       file: [],
@@ -164,6 +166,7 @@ export default function Medicalreport() {
 
       await axiosInstance.post(endpoints.history.all, {
         patient: Entrance?.patient?._id,
+        unit_service_patient: Entrance?.unit_service_patient,
         name_english: 'A medical report has been added',
         name_arabic: 'تم ارفاق تقرير طبي',
         sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,

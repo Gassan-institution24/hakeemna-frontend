@@ -60,6 +60,13 @@ export default function InvoiceDetails({ invoice, refetch }) {
     [invoice._id, refetch]
   );
 
+  let patientName
+  if (invoice?.patient) {
+    patientName = curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english
+  } else if (invoice?.unit_service_patient) {
+    patientName = curLangAr ? invoice?.unit_service_patient?.name_arabic : invoice?.unit_service_patient?.name_english
+  }
+
   const renderList = (
     <Stack gap={3} my={5}>
       {/* <Typography variant='h5'>{t('details')}:</Typography> */}
@@ -69,7 +76,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {curLangAr ? invoice?.patient?.name_arabic || invoice?.stakeholder?.name_arabic : invoice?.patient?.name_english || invoice?.stakeholder?.name_english}
+          {curLangAr ? patientName || invoice?.stakeholder?.name_arabic : patientName || invoice?.stakeholder?.name_english}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>

@@ -88,6 +88,7 @@ export default function InvoiceListView() {
       { path: 'unit_service', select: 'name_english name_arabic' },
       { path: 'stakeholder', select: 'name_english name_arabic' },
       { path: 'patient', select: 'name_english name_arabic' },
+      { path: 'unit_service_patient', select: 'name_english name_arabic' },
     ],
     ...filters,
   });
