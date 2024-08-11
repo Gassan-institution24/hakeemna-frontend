@@ -36,9 +36,10 @@ export default function History() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id);
+  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id, Entrance?.unit_service_patient);
   const { historyData } = useGetPatientHistoryDataInSu(
     Entrance?.patient?._id,
+    Entrance?.unit_service_patient,
     Entrance?.service_unit?._id
   );
   const Title = ['appointment', 'medical report', 'prescription'];
@@ -73,7 +74,7 @@ export default function History() {
             displayEmpty
             onChange={(e) => setSelectedTitle(e.target.value)}
           >
-             <MenuItem value="" disabled sx={{ display: 'none' }}>{t('All')}</MenuItem>
+            <MenuItem value="" disabled sx={{ display: 'none' }}>{t('All')}</MenuItem>
             {Title.map((type, index) => (
               <MenuItem key={index} value={type}>
                 {t(type)}

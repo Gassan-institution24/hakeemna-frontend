@@ -100,10 +100,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
         ...data,
         emergency: true,
         unit_service:
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-            ._id,
-        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
-          ._id,
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department?._id,
       });
       socket.emit('updated', {
         user,

@@ -20,6 +20,7 @@ import {
   useGetCountryCities,
   useGetUSAppointments,
   useGetEmployeeActiveWorkGroups,
+  useFindUSPatient,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -57,6 +58,7 @@ import {
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -82,17 +84,6 @@ export default function TableCreateView() {
   const addModal = useBoolean();
   const checkAcl = useAclGuard();
   // const { isMedLab } = useUSTypeGuard();
-
-  const [search, setSearch] = useState({
-    name_english: '',
-    name_arabic: '',
-    email: '',
-    identification_num: '',
-    mobile_num1: '',
-    mobile_num2: '',
-  });
-
-  // const router = useRouter();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -140,7 +131,7 @@ export default function TableCreateView() {
     city: Yup.string().nullable(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
-    gender: Yup.string(),
+    gender: Yup.string().nullable(),
     note: Yup.string(),
     patientExist: Yup.string(),
   });
@@ -153,15 +144,15 @@ export default function TableCreateView() {
       email: '',
       identification_num: '',
       birth_date: null,
-      marital_status: '',
+      marital_status: null,
       nationality: null,
       country: null,
       city: null,
       mobile_num1: '',
       mobile_num2: '',
-      gender: '',
+      gender: null,
       note: '',
-      patientExist: 'exist',
+      patientExist: 'my_patients',
     }),
     []
   );
@@ -190,14 +181,26 @@ export default function TableCreateView() {
   const values = watch();
   const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
+  const debouncedQuery = useDebounce({
+    sequence_number: values.sequence_number,
+    name_english: values.name_english,
+    name_arabic: values.name_arabic,
+    email: values.email.toLowerCase(),
+    identification_num: values.identification_num,
+    mobile_num1: values.mobile_num1,
+    mobile_num2: values.mobile_num2,
+  });
+
   const { existPatients } = useFindPatient({
-    sequence_number: search.sequence_number,
-    name_english: search.name_english,
-    name_arabic: search.name_arabic,
-    email: search.email.toLowerCase(),
-    identification_num: search.identification_num,
-    mobile_num1: search.mobile_num1,
-    mobile_num2: search.mobile_num2,
+    ...debouncedQuery,
+    select:
+      'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality birth_date',
+  });
+
+  const { foundPatients } = useFindUSPatient({
+    ...debouncedQuery,
+    select:
+      'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality birth_date',
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -232,10 +235,6 @@ export default function TableCreateView() {
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);
     }
-  };
-
-  const handleBlur = (event) => {
-    setSearch((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
   const handleEnglishInputChange = (event) => {
@@ -428,13 +427,51 @@ export default function TableCreateView() {
                   row
                   name="patientExist"
                   options={[
-                    { label: 'exist patient', value: 'exist' },
+                    { label: 'my patient', value: 'my_patients' },
+                    { label: 'hakeemna patient', value: 'exist' },
                     { label: 'new patient', value: 'new' },
                   ]}
                 />
                 <br />
                 <br />
-                {values.patientExist === 'exist' ? (
+                {values.patientExist === 'my_patients' && (
+                  <Box
+                    sx={{ mb: 3 }}
+                    rowGap={3}
+                    columnGap={2}
+                    display="grid"
+                    gridTemplateColumns={{
+                      xs: 'repeat(1, 1fr)',
+                      sm: 'repeat(3, 1fr)',
+                    }}
+                  >
+                    <RHFTextField
+                      onChange={handleEnglishInputChange}
+                      name="name_english"
+                      label={t('patient name in english')}
+                    />
+                    <RHFTextField
+                      onChange={handleArabicInputChange}
+                      name="name_arabic"
+                      label={t('patient name in arabic')}
+                    />
+                    <RHFTextField type="email" name="email" label={t('email address')} />
+                    <RHFTextField
+                      onChange={handleEnglishInputChange}
+                      name="identification_num"
+                      label={t('ID number')}
+                    />
+                    <RHFPhoneNumber
+                      name="mobile_num1"
+                      label={t('mobile number')}
+                    />
+                    <RHFPhoneNumber
+                      name="mobile_num2"
+                      label={t('alternative mobile number')}
+                    />
+                  </Box>
+                )}
+                {values.patientExist === 'exist' && (
                   <>
                     <RHFTextField
                       InputLabelProps={{ shrink: true }}
@@ -443,7 +480,6 @@ export default function TableCreateView() {
                       size="small"
                       name="sequence_number"
                       onChange={sequenceChangeHandler}
-                      onBlur={handleBlur}
                       placeholder="001-22"
                       label={t('patient-code')}
                     />
@@ -459,36 +495,32 @@ export default function TableCreateView() {
                     >
                       <RHFTextField
                         onChange={handleEnglishInputChange}
-                        onBlur={handleBlur}
                         name="name_english"
                         label={t('patient name in english')}
                       />
                       <RHFTextField
                         onChange={handleArabicInputChange}
-                        onBlur={handleBlur}
                         name="name_arabic"
                         label={t('patient name in arabic')}
                       />
                       <RHFTextField type="email" name="email" label={t('email address')} />
                       <RHFTextField
                         onChange={handleEnglishInputChange}
-                        onBlur={handleBlur}
                         name="identification_num"
                         label={t('ID number')}
                       />
                       <RHFPhoneNumber
                         name="mobile_num1"
-                        onBlur={handleBlur}
                         label={t('mobile number')}
                       />
                       <RHFPhoneNumber
                         name="mobile_num2"
-                        onBlur={handleBlur}
                         label={t('alternative mobile number')}
                       />
                     </Box>
                   </>
-                ) : (
+                )}
+                {values.patientExist === 'new' && (
                   <>
                     <Box
                       sx={{ mb: 3 }}
@@ -502,31 +534,26 @@ export default function TableCreateView() {
                     >
                       <RHFTextField
                         onChange={handleEnglishInputChange}
-                        onBlur={handleBlur}
                         name="name_english"
                         label={t('patient name in english')}
                       />
                       <RHFTextField
                         onChange={handleArabicInputChange}
-                        onBlur={handleBlur}
                         name="name_arabic"
                         label={t('patient name in arabic')}
                       />
                       <RHFTextField type="email" name="email" label={t('email address')} />
                       <RHFTextField
                         onChange={handleEnglishInputChange}
-                        onBlur={handleBlur}
                         name="identification_num"
                         label={t('ID number')}
                       />
                       <RHFPhoneNumber
                         name="mobile_num1"
-                        onBlur={handleBlur}
                         label={t('mobile number')}
                       />
                       <RHFPhoneNumber
                         name="mobile_num2"
-                        onBlur={handleBlur}
                         label={t('alternative mobile number')}
                       />
                       <RHFDatePicker name="birth_date" label={t('birth date')} />
@@ -599,6 +626,15 @@ export default function TableCreateView() {
                     selected={selected}
                     reset={reset}
                     oldPatients={existPatients}
+                  />
+                )}
+                {foundPatients.length > 0 && values.patientExist === 'my_patients' && (
+                  <PatientsFound
+                    SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+                    selected={selected}
+                    reset={reset}
+                    oldPatients={foundPatients}
+                    usPatients
                   />
                 )}
               </>

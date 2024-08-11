@@ -34,6 +34,7 @@ export default function MovementTableRow({
   const {
     sequence_number,
     patient,
+    unit_service_patient,
     stakeholder,
     // employee,
     Balance,
@@ -58,6 +59,13 @@ export default function MovementTableRow({
   const DDL = usePopover();
   const popover = usePopover();
 
+  let patientName
+  if (patient) {
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+  } else if (unit_service_patient) {
+    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+  }
+
   return (
     <>
       <TableRow hover selected={selected}>
@@ -70,7 +78,7 @@ export default function MovementTableRow({
         <TableCell align="center">{fDate(created_at)}</TableCell>
 
         <TableCell align="center">
-          {curLangAr ? patient?.name_arabic : patient?.name_english}
+          {patientName}
         </TableCell>
 
         <TableCell align="center">

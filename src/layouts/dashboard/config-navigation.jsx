@@ -283,7 +283,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
+        checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,
@@ -291,6 +291,12 @@ export function useNavData() {
       },
     ];
     const unitServiceItems = [
+      {
+        show: isMedLab,
+        title: t('Appointments Today'),
+        path: paths.employee.appointmentsToday,
+        icon: <Iconify icon="material-symbols:work-history-rounded" />,
+      },
       {
         show:
           checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&

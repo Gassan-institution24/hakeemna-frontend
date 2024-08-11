@@ -66,6 +66,7 @@ export default function CheckList() {
 
   const defaultValues = {
     patient: Entrance?.patient?._id,
+    unit_service_patient: Entrance?.unit_service_patient,
     employee: user?.employee?._id,
     entrance: id,
   };
@@ -86,6 +87,7 @@ export default function CheckList() {
   useEffect(() => {
     reset({
       patient: Entrance?.patient?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
       employee: user?.employee?._id,
       entrance: Entrance?._id,
     });

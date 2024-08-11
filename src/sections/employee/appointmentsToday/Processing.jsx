@@ -40,7 +40,7 @@ export default function Processing() {
 
   const { id } = params;
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id);
+  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id, Entrance?.unit_service_patient);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
@@ -123,7 +123,7 @@ export default function Processing() {
         <>
           {t('Upload files')}
           <br />
-          <TabsView patient={data} service_unit={Entrance?.service_unit?._id} />
+          <TabsView patient={data} unit_service_patient={Entrance?.unit_service_patient} service_unit={Entrance?.service_unit?._id} />
         </>
       ),
       icon: <Iconify icon="mingcute:folders-fill" width={25} />,
@@ -133,7 +133,7 @@ export default function Processing() {
       title: (
         <>
           {t('Adjustable document')} ({t('optional')}) <br />
-          <Adjustabledocument patient={data} />
+          <Adjustabledocument patient={data} unit_service_patient={Entrance?.unit_service_patient} />
         </>
       ),
       icon: <Iconify icon="mingcute:document-fill" width={24} />,
@@ -208,13 +208,13 @@ export default function Processing() {
 
 
 
-       // <TimelineItem>
-          //   <TimelineOppositeContent color="text.secondary">
-          //     09:30 am
-          //   </TimelineOppositeContent>
-          //   <TimelineSeparator>
-          //     <TimelineDot />
-          //     <TimelineConnector />
-          //   </TimelineSeparator>
-          //   <TimelineContent>Eat</TimelineContent>
-          // </TimelineItem>
+// <TimelineItem>
+//   <TimelineOppositeContent color="text.secondary">
+//     09:30 am
+//   </TimelineOppositeContent>
+//   <TimelineSeparator>
+//     <TimelineDot />
+//     <TimelineConnector />
+//   </TimelineSeparator>
+//   <TimelineContent>Eat</TimelineContent>
+// </TimelineItem>

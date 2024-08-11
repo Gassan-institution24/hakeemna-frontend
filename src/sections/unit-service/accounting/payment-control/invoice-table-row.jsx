@@ -34,6 +34,7 @@ export default function MovementTableRow({
   const {
     sequence_number,
     patient,
+    unit_service_patient,
     stakeholder,
     required_amount,
     balance,
@@ -69,6 +70,13 @@ export default function MovementTableRow({
     type = 'installment';
   } else type = 'paid';
 
+  let patientName
+  if (patient) {
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+  } else if (unit_service_patient) {
+    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+  }
+
   return (
     <>
       <TableRow hover selected={selected}>
@@ -85,7 +93,7 @@ export default function MovementTableRow({
         </TableCell>
 
         <TableCell align="center">
-          {curLangAr ? patient?.name_arabic : patient?.name_english}
+          {patientName}
         </TableCell>
 
         <TableCell align="center">

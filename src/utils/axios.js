@@ -404,8 +404,8 @@ export const endpoints = {
   },
   history: {
     all: '/api/history',
-    one: (id, SuId) => `/api/history/patient/${id}/unit/${SuId}`,
-    patient: (id) => (!id ? null : `/api/history/patient/${id}`),
+    one: (id, pId, SuId) => `/api/history/patient/${id}/unit/${SuId}/unit_service_patient/${pId}`,
+    patient: (id, pId) => `/api/history/patient/${id}/unit_service_patient/${pId}`,
   },
   Instructions: {
     all: '/api/instructions',
@@ -442,11 +442,12 @@ export const endpoints = {
   medRecord: {
     all: '/api/entrance',
     one: (id) => (!id ? null : `/api/medrecord/patient/${id}`),
-    two: (id, id2) => `/api/medrecord/unit/${id}/patient/${id2}`,
+    two: (id, id2, id3) => `/api/medrecord/unit/${id}/patient/${id2}/unit_service_patient/${id3}`,
   },
   usPatients: {
     all: '/api/uspatients',
     many: '/api/uspatients/many',
+    find: '/api/uspatients/find',
     details: '/api/uspatients/details',
     one: (id) => (!id ? null : `/api/uspatients/${id}`),
     unit_service: {
@@ -512,7 +513,7 @@ export const endpoints = {
     unit_service: {
       one: (id) => (!id ? null : `/api/appointments/unitservice/${id}`),
       available: (id) => (!id ? null : `/api/appointments/available/${id}`),
-      patient: (id, pid) => `/api/appointments/unitservice/${id}/patient/${pid}`,
+      patient: (id, pid, uspId) => `/api/appointments/unitservice/${id}/patient/${pid}/${uspId}`,
       today: (id) => (!id ? null : `/api/appointments/unitserviceappointments/${id}`),
       comingpatients: (id) => (!id ? null : `/api/appointments/comingpatients/${id}`),
     },

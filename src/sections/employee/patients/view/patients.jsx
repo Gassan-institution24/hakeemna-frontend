@@ -10,7 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import { useGetEmployeePatient } from 'src/api';
+import { useGetUSPatients } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -19,13 +19,20 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+
+import { Button } from '@mui/material';
+
+import { RouterLink } from 'src/routes/components';
+
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+
+import Iconify from 'src/components/iconify';
 
 import TableDetailRow from '../patients_row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -44,40 +51,41 @@ export default function PatientTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
-
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
-    { id: 'name_english', label: t('name') },
+    { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
-    // { id: '', width: 88 },
+    { id: 'file_code', label: t('file code') },
+    // { id: '' },
   ];
+
+  const checkAcl = useAclGuard();
+
   const componentRef = useRef();
 
   const { user } = useAuthContext();
 
-  const { patientsData, loading } = useGetEmployeePatient(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
-
-  const dataFiltered = applyFilter({
-    inputData: patientsData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
+  const { patientsData, length, loading } = useGetUSPatients(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+    {
+      select: 'patient name_english name_arabic file_code',
+      populate: [{ path: 'patient', select: 'name_english name_arabic sequence_number', populate: { path: 'nationality', select: 'code' } }],
+      page: table.page || 0,
+      sortBy: table.orderBy || 'code',
+      rowsPerPage: table.rowsPerPage || 5,
+      order: table.order || 'asc',
+      ...filters,
+    }
+  );
 
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!patientsData.length && canReset) || !patientsData.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
@@ -111,8 +119,24 @@ export default function PatientTableView() {
             name: t('dashboard'),
             href: paths.superadmin.root,
           },
-          { name: t('my patients') }, /// edit
+          { name: t("institution's patients") }, /// edit
         ]}
+        action={
+          checkAcl({
+            category: 'unit_service',
+            subcategory: 'unit_service_info',
+            acl: 'create',
+          }) && (
+            <Button
+              component={RouterLink}
+              href={paths.employee.patients.new}
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              {t('add')}
+            </Button>
+          ) /// edit
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -123,7 +147,6 @@ export default function PatientTableView() {
           onPrint={printHandler}
           filters={filters}
           onFilters={handleFilters}
-          //
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
@@ -135,7 +158,7 @@ export default function PatientTableView() {
             //
             onResetFilters={handleResetFilters}
             //
-            results={dataFiltered.length}
+            results={length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
@@ -143,9 +166,9 @@ export default function PatientTableView() {
         <TableContainer>
           <TableSelectedAction
             numSelected={table.selected.length}
-            rowCount={dataFiltered.length}
+            rowCount={patientsData.length}
             color={
-              dataFiltered
+              patientsData
                 .filter((row) => table.selected.includes(row._id))
                 .some((info) => info.status === 'inactive')
                 ? 'primary'
@@ -159,17 +182,13 @@ export default function PatientTableView() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
+                rowCount={patientsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
               />
 
               <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
+                {patientsData
                   .map((row, idx) => (
                     <TableDetailRow
                       key={idx}
@@ -193,7 +212,7 @@ export default function PatientTableView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
+          count={length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
@@ -205,52 +224,4 @@ export default function PatientTableView() {
       </Card>
     </Container>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
-
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el, idx) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_english &&
-          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_arabic &&
-          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_english &&
-          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_arabic &&
-          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_english &&
-          data?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_arabic &&
-          data?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?._id === name ||
-        JSON.stringify(data.code) === name
-    );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
-
-  return inputData;
 }

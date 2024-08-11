@@ -31,7 +31,7 @@ import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
-export default function PatientsFound({ SelectedAppointment, reset, selected, oldPatients, usPatients }) {
+export default function PatientsFound({ SelectedAppointment, createAppointment, oldPatients }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -58,30 +58,19 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [note, setNote] = useState();
-  const [submitting, setSubmitting] = useState(false);
 
   const theme = useTheme();
 
   const handleEmployment = async (row) => {
     try {
-      setSubmitting(true);
-
-      const data = {
+      const { data } = await createAppointment();
+      await axiosInstance.patch(endpoints.appointments.book(data?._id), {
+        patient: row?._id,
         note,
         lang: curLangAr,
-      }
-      if (usPatients) {
-        data.unit_service_patient = row._id
-      } else {
-        data.patient = row._id
-      }
-
-      await axiosInstance.patch(endpoints.appointments.book(selected), data);
-      await addToCalendar(SelectedAppointment);
-      window.location.reload();
+      });
+      await addToCalendar(data);
       enqueueSnackbar(t('booked successfully!'));
-      setSubmitting(false);
-      reset();
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -91,8 +80,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
           variant: 'error',
         }
       );
-      setSubmitting(false);
-      window.location.reload();
+      // window.location.reload();
       console.error(error);
     }
   };
@@ -150,7 +138,6 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
                 row={row}
                 note={note}
                 setNote={setNote}
-                submitting={submitting}
                 SelectedAppointment={SelectedAppointment}
                 onEmploymentRow={() => handleEmployment(row)}
               />
@@ -186,8 +173,6 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
 }
 PatientsFound.propTypes = {
   oldPatients: PropTypes.array,
-  reset: PropTypes.func,
-  selected: PropTypes.string,
+  createAppointment: PropTypes.func,
   SelectedAppointment: PropTypes.object,
-  usPatients: PropTypes.bool,
 };

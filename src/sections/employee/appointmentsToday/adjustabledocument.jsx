@@ -12,7 +12,7 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
 
-export default function Adjustabledocument({ patient }) {
+export default function Adjustabledocument({ patient, unit_service_patient }) {
   const { t } = useTranslate();
   const dialog = useBoolean();
   const { user } = useAuthContext();
@@ -24,6 +24,7 @@ export default function Adjustabledocument({ patient }) {
     try {
       await axiosInstance.post(`/api/instructions`, {
         patient: patient?._id,
+        unit_service_patient,
         adjustable_documents: adjustabledocumentId,
       });
       enqueueSnackbar('adjustable document sent successfully', { variant: 'success' });
@@ -69,4 +70,5 @@ export default function Adjustabledocument({ patient }) {
 
 Adjustabledocument.propTypes = {
   patient: PropTypes.object,
+  unit_service_patient: PropTypes.string,
 };
