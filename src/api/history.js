@@ -42,8 +42,8 @@ export function useGetOneHistoryData(id) {
 
   return memoizedValue;
 }
-export function useGetPatientHistoryData(id) {
-  const URL = endpoints.history.patient(id);
+export function useGetPatientHistoryData(id,pId) {
+  const URL = endpoints.history.patient(id, pId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -63,8 +63,8 @@ export function useGetPatientHistoryData(id) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetPatientHistoryDataInSu(id, SuId) {
-  const URL = endpoints.history.one(id, SuId);
+export function useGetPatientHistoryDataInSu(id,pId, SuId) {
+  const URL = endpoints.history.one(id, pId, SuId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

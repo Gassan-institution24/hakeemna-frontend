@@ -829,6 +829,7 @@ export const paths = {
     patients: {
       info: (id) => `${ROOTS.SUPERADMIN}/mypatients/${id}`,
       all: `${ROOTS.SUPERADMIN}/mypatients`,
+      new: `${ROOTS.SUPERADMIN}/mypatients/new`,
     },
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,

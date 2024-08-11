@@ -114,11 +114,18 @@ const useStyles = () =>
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
-  const { patient, stakeholder, created_at, unit_service, sequence_number } = invoice;
+  const { patient, unit_service_patient, stakeholder, created_at, unit_service, sequence_number } = invoice;
 
   const { t } = useTranslate();
 
   const styles = useStyles();
+
+  let patientName
+  if (patient) {
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+  } else if (unit_service_patient) {
+    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+  }
 
   return (
     <Document>
@@ -148,7 +155,7 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
         {patient && <View style={styles.col6}>
           <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
           <Text style={styles.body2}>
-            {curLangAr ? patient?.name_arabic : patient?.name_english}
+            {patientName}
           </Text>
           <Text style={styles.body2}>{patient?.address}</Text>
           <Text style={styles.body2}>{patient?.mobile_num1}</Text>

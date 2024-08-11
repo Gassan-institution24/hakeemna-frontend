@@ -17,7 +17,7 @@ import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 export default function PatientProfile() {
   const { id } = useParams();
   const { usPatientData } = useGetOneUSPatient(id, {
-    select: 'name_english name_arabic', populate: [{
+    populate: [{
       path: 'patient', populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet'
     }, { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' }]
   });

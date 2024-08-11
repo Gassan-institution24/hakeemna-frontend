@@ -22,7 +22,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance from 'src/utils/axios';
 import { fTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetRoom, useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
 
@@ -32,6 +32,9 @@ import Scrollbar from 'src/components/scrollbar';
 
 export default function WaitingRoom() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const router = useRouter();
 
   const { user } = useAuthContext();
@@ -63,9 +66,8 @@ export default function WaitingRoom() {
   const updateRoom = async (roomId) => {
     try {
       const { data: allRooms } = await axiosInstance.get(
-        `/api/rooms/unitservice/${
-          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-            ?._id
+        `/api/rooms/unitservice/${user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+          ?._id
         }`
       );
 
@@ -147,24 +149,32 @@ export default function WaitingRoom() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {EntranceByActivity?.map((entranceData, i) => (
-                    <TableRow key={i}>
-                      <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+                  {EntranceByActivity?.map((entranceData, i) => {
+                    let patientName
+                    if (entranceData.patient) {
+                      patientName = curLangAr ? entranceData?.patient?.name_arabic : entranceData?.patient?.name_english
+                    } else if (entranceData.unit_service_patient) {
+                      patientName = curLangAr ? entranceData?.unit_service_patient?.name_arabic : entranceData?.unit_service_patient?.name_english
+                    }
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
 
-                      <TableCell>{entranceData?.patient?.name_english}</TableCell>
-                      <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
-                      <TableCell>{entranceData?.note}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          sx={{ bgcolor: 'success.main', color: 'white' }}
-                          onClick={() => goToProcessingPage(entranceData)}
-                        >
-                          {t('Proceed')}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell>{patientName}</TableCell>
+                        <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
+                        <TableCell>{entranceData?.note}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outlined"
+                            sx={{ bgcolor: 'success.main', color: 'white' }}
+                            onClick={() => goToProcessingPage(entranceData)}
+                          >
+                            {t('Proceed')}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
                 </TableBody>
               </Table>
             </Scrollbar>

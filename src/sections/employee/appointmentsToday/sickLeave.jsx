@@ -30,7 +30,7 @@ import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function SickLeave({ patient, service_unit }) {
+export default function SickLeave({ patient, unit_service_patient, service_unit }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const { id } = useParams();
@@ -91,10 +91,11 @@ export default function SickLeave({ patient, service_unit }) {
     reset({
       employee: user?.employee?._id,
       patient: patient?._id,
+      unit_service_patient,
       unit_services: service_unit,
       entrance_mangament: id,
     });
-  }, [user?.employee?._id, reset, patient?._id, service_unit, id]);
+  }, [user?.employee?._id, reset, patient?._id, service_unit, id, unit_service_patient]);
 
   const onSubmit = async (submitdata) => {
     try {
@@ -206,4 +207,5 @@ export default function SickLeave({ patient, service_unit }) {
 SickLeave.propTypes = {
   patient: PropTypes.object,
   service_unit: PropTypes.string,
+  unit_service_patient: PropTypes.string,
 };

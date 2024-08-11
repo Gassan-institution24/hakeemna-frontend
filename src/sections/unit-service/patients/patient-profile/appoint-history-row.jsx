@@ -21,7 +21,7 @@ import UploadAnalysis from '../upload-analysis';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableRow({
+export default function AppointHistoryRow({
   row,
   selected,
   refetch,
@@ -205,14 +205,14 @@ export default function InvoiceTableRow({
       <UploadAnalysis
         open={uploadAnalysis.value}
         onClose={uploadAnalysis.onFalse}
-        analysisData={{ patient: patient._id || patient, appointment: _id }}
+        analysisData={{ patient: patient?._id || patient, appointment: _id }}
         refetch={refetch}
       />
     </>
   );
 }
 
-InvoiceTableRow.propTypes = {
+AppointHistoryRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,

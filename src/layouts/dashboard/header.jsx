@@ -38,10 +38,10 @@ export default function Header({ onOpenNav }) {
   const router = useRouter();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const parentToken = sessionStorage.getItem('parentToken');
+  const parentToken = localStorage.getItem('parentToken');
   const switchBack = () => {
-    sessionStorage.setItem('accessToken', parentToken);
-    sessionStorage.removeItem('parentToken');
+    localStorage.setItem('accessToken', parentToken);
+    localStorage.removeItem('parentToken');
     router.push(PATH_AFTER_LOGIN);
     window.location.reload();
   };

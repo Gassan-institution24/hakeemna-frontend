@@ -137,7 +137,22 @@ export default function StartupCreating({ open, onClose }) {
       content={
         <Stack sx={{ p: 1 }}>
           <Typography variant="subtitle2" paddingBottom="15px">
-            {t('Select types of data you want me to create')}
+            {t('Dear member of our community,')}
+          </Typography>
+          <Typography variant="subtitle2" paddingBottom="15px">
+            {t('Thank you for registering in Hakeemna.Online; for the correct installation of the system, it is required some information of your institution to assure the well functionality of our sustenm.')}
+          </Typography>
+
+          <Typography variant="subtitle2" paddingBottom="15px">
+            {t('For that, we recommend you to complete the next required information of your institution: 1) department, 2) work group, 3) work shift, 4) rooms.')}
+          </Typography>
+
+          <Typography variant="subtitle2" paddingBottom="15px">
+            {t("To make this step easier, we suggest you to use our 'setup information' that will insert automatically the required data.")}
+          </Typography>
+
+          <Typography variant="subtitle2" paddingBottom="15px">
+            {t("Please select 'all' or the 'specify' which information that you want to insert automatically.")}
           </Typography>
 
           {USData &&

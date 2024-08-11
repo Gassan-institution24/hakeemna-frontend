@@ -24,7 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetUSRooms,
@@ -45,6 +45,8 @@ export default function AppointmentsToday() {
 
   const { user } = useAuthContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
@@ -122,6 +124,7 @@ export default function AppointmentsToday() {
     try {
       const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
         patient: data?.patient?._id,
+        unit_service_patient: data?.unit_service_patient?._id,
         patient_note: data?.note,
         start_time: new Date().toISOString(),
         Appointment_date: data?.start_time,
@@ -282,58 +285,66 @@ export default function AppointmentsToday() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentTabData?.data?.map((info, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{fTime(info?.start_time)}</TableCell>
-                    <TableCell>{info?.patient?.name_english}</TableCell>
-                    <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
-                    {currentTab !== 'three' && (
-                      <>
-                        <TableCell>
-                          {info?.coming ? (
-                            'YES'
-                          ) : (
-                            <>
-                              <Button
-                                sx={{ p: 2 }}
-                                onClick={() => updateStatus(info, true, 'coming')}
-                              >
-                                {t('Yes')}
-                              </Button>
-                              <Button
-                                sx={{ p: 2 }}
-                                onClick={() => updateStatus(info, false, 'coming')}
-                              >
-                                {t('No')}
-                              </Button>
-                            </>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {info?.arrived ? (
-                            'YES'
-                          ) : (
-                            <>
-                              <Button
-                                sx={{ p: 2 }}
-                                onClick={() => updateStatus(info, true, 'arrived')}
-                              >
-                                {t('Yes')}
-                              </Button>
-                              <Button
-                                sx={{ p: 2 }}
-                                onClick={() => updateStatus(info, false, 'arrived')}
-                              >
-                                {t('No')}
-                              </Button>
-                            </>
-                          )}
-                        </TableCell>
-                      </>
-                    )}
-                    <TableCell>{renderOptions(info)}</TableCell>
-                  </TableRow>
-                ))}
+                {currentTabData?.data?.map((info, index) => {
+                  let patientName
+                  if (info?.patient) {
+                    patientName = curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english
+                  } else if (info.unit_service_patient) {
+                    patientName = curLangAr ? info?.unit_service_patient?.name_arabic : info?.unit_service_patient?.name_english
+                  }
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>{fTime(info?.start_time)}</TableCell>
+                      <TableCell>{patientName}</TableCell>
+                      <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
+                      {currentTab !== 'three' && (
+                        <>
+                          <TableCell>
+                            {info?.coming ? (
+                              'YES'
+                            ) : (
+                              <>
+                                <Button
+                                  sx={{ p: 2 }}
+                                  onClick={() => updateStatus(info, true, 'coming')}
+                                >
+                                  {t('Yes')}
+                                </Button>
+                                <Button
+                                  sx={{ p: 2 }}
+                                  onClick={() => updateStatus(info, false, 'coming')}
+                                >
+                                  {t('No')}
+                                </Button>
+                              </>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {info?.arrived ? (
+                              'YES'
+                            ) : (
+                              <>
+                                <Button
+                                  sx={{ p: 2 }}
+                                  onClick={() => updateStatus(info, true, 'arrived')}
+                                >
+                                  {t('Yes')}
+                                </Button>
+                                <Button
+                                  sx={{ p: 2 }}
+                                  onClick={() => updateStatus(info, false, 'arrived')}
+                                >
+                                  {t('No')}
+                                </Button>
+                              </>
+                            )}
+                          </TableCell>
+                        </>
+                      )}
+                      <TableCell>{renderOptions(info)}</TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </Scrollbar>
