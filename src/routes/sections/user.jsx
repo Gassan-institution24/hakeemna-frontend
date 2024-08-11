@@ -17,6 +17,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const Sidebar = lazy(() => import('src/sections/user/view/siedBarmd'));
 const OldmedicalrepotView = lazy(() => import('src/sections/user/oldmedicalrepotView'));
+const MedicalrepotView = lazy(() => import('src/sections/user/medicalreportsView'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Exist = lazy(() => import('src/pages/dashboard/user/existmember'));
@@ -87,6 +88,7 @@ export const userRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'Sidebar', element: <Sidebar /> },
           { path: 'oldmedicalreportsview/:id', element: <OldmedicalrepotView /> },
+          { path: 'medicalreportsview/:id', element: <MedicalrepotView /> },
           { path: 'myprofile/:id', element: <ProfileQr /> },
           { path: 'medicalreports', element: <Medicalreports /> },
           { path: 'emergency', element: <Emergency /> },
