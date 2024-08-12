@@ -13,7 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { Divider, MenuItem, Typography } from '@mui/material';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
@@ -137,14 +137,14 @@ export default function BookManually({
               <Controller
                 name="start_time"
                 render={({ field, fieldState: { error } }) => (
-                  <MobileDateTimePicker
+                  <DateTimePicker
                     label={`${t('start date')} *`}
                     sx={{ width: '30vw', minWidth: '300px' }}
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
                         unitServiceData?.country?.time_zone ||
-                          Intl.DateTimeFormat().resolvedOptions().timeZone
+                        Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

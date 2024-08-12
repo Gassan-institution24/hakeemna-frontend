@@ -97,9 +97,10 @@
   "patient information": "معلومات المريض",
   "certifications": "الشهادات العلمية",
   "memberships": "العضوية المهنية",
-  "institution": "المؤسسة التعليمية",
+  "institution": "المؤسسة",
   "invitation sent!": "تم إرسال الدعوة",
   "year": "السنة",
+  "cetificate": "الشهادة",
   "keywords": "الكلمات المفتاحية للبحث",
   "type then press enter to create new": "ادخل الكلمة المناسبة واضغط enter للادخال",
   "unit of service code": "رمز وحدة الخدمة",
@@ -262,8 +263,33 @@
   "amount covered by insurance": "المبلغ المغطى من قبل شركة التأمين",
   "insurance number": "رقم التأمين",
   "concept": "ملاحظات",
+  "smoking": "مدخن",
+  "height": "الطول",
+  "weight": "الوزن",
+  "about": "تفاصيل",
+  "prescriptions": "وصفات طبية",
+  "upload files": "رفع ملفات",
+  "sport exercises": "ممارسة الرياضة",
+  "alcohol consumption": "شرب الكحول",
   "invoice date": "تاريخ الفاتورة",
   "finantial information": "معلومات مالية",
+  "subject to sales tax": "خاضع لضريبة المبيعات",
+  "subject to deductions - income tax or doctors syndicate": "خاضع للاقتطاعات - الضريبية او من المستشفى",
+  "facebook url": "رابط حساب الفيسبوك",
+  "instagram url": "رابط حساب الانستجرام",
+  "other social media": "موقع تواصل اجتماعي اخر",
+  "drug allergies": "حساسية",
+  "surgeries": "عمليات",
+  "diseases": "أمراض",
+  "medicines": "أدوية",
+  "medicine": "الدواء",
+  "frequency": "التكرار",
+  "doctor comment": "ملاحظة الطبيب",
+  "chronic": "دائم",
+  "patient record": "ملف المريض",
+  "added successfully": "تمت الاضافة بنجاح",
+  "trade name": "الاسم التجاري",
+  "frequently": "التكرار",
 
   "What we offer (some services under development)": "ماذا نقدم (بعض الخدمات تحت التطوير)",
   "suppliers offers": "عروض المنشاّت",
@@ -618,11 +644,21 @@
   "Invoices": "فواتير",
   "new invoice": "فاتورة جديدة",
   "All": "الكل",
+  "current": "الحالية",
+  "late": "متأخر",
+  "arrived": "وصل المريض",
+  "booked": "محجوز",
+  "not arrived": "لم يصل المريض",
+  "Creating appointments...": "تتم عملية انشاء مواعيد...",
+  "Do you want to change your existance appointments?": "هل تريد تغيير المواعيد الموجودة لديك؟",
+  "It might take several minutes..": "قد تأخذ عدة دقائق للانتهاء..",
+  "We are getting appointments ready..": "نقوم بجعل المواعيد جاهزة للاستخدام..",
+  "We are almost done..": "اوشكنا على الانتهاء..",
 
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑": "مساء الخير 🌑",
   "How To Use": "طريقة الأستخدام",
-  "Available Offers": "العروض ألمتوفرة",
+  "Available Offers": "العروض المتوفرة",
   "Upcoming Appointments": "مواعيدي القادمة",
   "settings": "الإعدادات",
   "Are you sure you want to cancel": "هل انت متأكد من الغاء الموعد",
@@ -728,8 +764,8 @@
   "share hakeemna": "مشاركة التطبيق",
   "logout": "تسجيل الخروج",
   "My appointments": "مواعيدي",
-  "Finished appointment": "ألمواعيد ألمنتهية",
-  "Appointments": "ألمواعيد",
+  "Finished appointment": "المواعيد المنتهية",
+  "Appointments": "المواعيد",
   "Filters": "تخصيص",
   "TYPE": "فلتر",
   "Time": "الوقت",
@@ -769,7 +805,7 @@
   "Insurance Card": "بطاقة التامين",
   "The attached card must be present and valid": "يجب أن تكون البطاقة المرفقة موجودة وسارية المفعول",
   "Add your insurance cards here": " اظف معلومات التامين",
-  "Ratings": "ألاعلى تقييم",
+  "Ratings": "الأعلى تقييم",
   "Sort By:": "ترتيب حسب:",
   "Account Settings": "أعدادات الحساب",
   "Share": "مشاركة",
@@ -804,11 +840,11 @@
   "More information": "المزيد من المعلومات",
   "I reed the ": " لقد قرأت  ",
   "And agree to ": " واوافق على ",
-  "Terms of Service ": " شروط ألخدمة ",
-  " Terms of Service ": " شروط ألخدمة ",
-  " Privacy Policy": "  سياسة ألخصوصية  ",
-  " Privacy Policy ": "  سياسة ألخصوصية  ",
-  "Upload Your old medical report": "تحميل ملفاات طبية قديمة",
+  "Terms of Service ": " شروط الخدمة ",
+  " Terms of Service ": " شروط الخدمة ",
+  " Privacy Policy": "  سياسة الخصوصية  ",
+  " Privacy Policy ": "  سياسة الخصوصية  ",
+  "Upload Your old medical report": "تحميل ملفات طبية قديمة",
   "end appointment": "انهاء الموعد",
   "Name": "الاسم",
   "Dose": "الجرعة",
@@ -867,7 +903,7 @@
   "Rate your appointment": "اخبرنا عن تجربتك",
   "Department Name": "اسم العيادة",
   "We hope that everything was to your satisfaction": "نتمنى ان كل شيء كان عند حسن ظنك",
-  "financil movment": "االحركات المالية",
+  "financil movment": "الحركات المالية",
   "Age": "العمر",
   "GrandFather": "جد",
   "GrandMother": "جدة",
@@ -887,7 +923,7 @@
   "And the ": "و ",
   "Minutes": "دقائق",
   "Seconds": "ثواني",
-  "Medicines": " ألادوية",
+  "Medicines": " الأدوية",
   "Delete": " حذف",
   "Download": " تحميل",
   "File": " ملف",
@@ -933,7 +969,9 @@
   "updated": "تعديل",
   "created": "إنشاء",
   "error": "خطأ",
-  "Welcome back": "",
+  "my patient": "مرضى العيادة",
+  "hakeemna patient": "مرضى لديهم حساب في حكيمنا",
+  "Welcome back": "اهلا بك من جديد",
   "home page": "الرجوع الى الصفحة الرئيسية",
   "and ": "و ",
   "update password": "تحديث كلمة المرور",

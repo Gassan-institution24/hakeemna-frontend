@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogActions from '@mui/material/DialogActions';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import uuidv4 from 'src/utils/uuidv4';
 import { fTimestamp } from 'src/utils/format-time';
@@ -106,7 +106,7 @@ export default function CalendarForm({ currentEvent, colorOptions, onClose }) {
           name="start"
           control={control}
           render={({ field }) => (
-            <MobileDateTimePicker
+            <DateTimePicker
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {
@@ -129,7 +129,7 @@ export default function CalendarForm({ currentEvent, colorOptions, onClose }) {
           name="end"
           control={control}
           render={({ field }) => (
-            <MobileDateTimePicker
+            <DateTimePicker
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {

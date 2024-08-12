@@ -10,19 +10,19 @@ import {
   Button,
   Dialog,
   Checkbox,
-  MenuItem,
+  TextField,
   Typography,
   DialogTitle,
+  Autocomplete,
   DialogActions,
   DialogContent,
-  Autocomplete,
-  TextField,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -31,8 +31,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useDebounce } from 'src/hooks/use-debounce';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function Prescription({ Entrance }) {
   const { user } = useAuthContext();

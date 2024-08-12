@@ -45,7 +45,7 @@ export default function PatientPrescriptions({ patient }) {
                         {one.medicines?.map((medicine, indx) => (
                             <>
                                 <Typography variant='body2'>{medicine?.medicines?.trade_name}{' '}-{' '}{medicine?.medicines?.concentration}</Typography>
-                                <Typography variant='body2'>{medicine?.Frequency_per_day} {' '} {t('daily')}</Typography>
+                                <Typography variant='body2'>{medicine?.Frequency_per_day}</Typography>
                                 <Typography variant='body2'>{fDate(medicine?.Start_time)}</Typography>
                                 <Typography variant='body2'>{fDate(medicine?.End_time)}</Typography>
                             </>

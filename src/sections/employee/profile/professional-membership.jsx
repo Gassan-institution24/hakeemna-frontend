@@ -58,7 +58,7 @@ export default function ProfessionalMembership() {
               <RHFTextField
                 size="small"
                 name={`memberships[${index}].name`}
-                label={t('title')}
+                label={t('name')}
                 sx={{ flex: 0.6 }}
               />
               <RHFTextField

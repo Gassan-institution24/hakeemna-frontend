@@ -39,7 +39,7 @@ export default function USPatientsTableRow({ row, selected }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        {String(patient?.nationality?.code).padStart(3, '0') || ''}-{patient?.sequence_number}
+        {patient?.nationality?.code ? String(patient?.nationality?.code).padStart(3, '0') : ''}-{patient?.sequence_number}
       </TableCell>
       <TableCell
         sx={{
