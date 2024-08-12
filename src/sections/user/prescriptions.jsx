@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
+import DOMPurify from 'dompurify';
+import PropTypes from 'prop-types';
+import { convert } from 'html-to-text';
 import {
   Page,
   Text,
@@ -9,7 +12,15 @@ import {
   Image as PdfImage,
 } from '@react-pdf/renderer';
 
-import { Grid, List, Avatar, ListItem, ListItemText, ListItemAvatar } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+
+// import { paths } from 'src/routes/paths';
+// import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
@@ -18,236 +29,234 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+import EmptyContent from 'src/components/empty-content/empty-content';
 
+import Back from './imges/back3.png';
 import Doclogo from '../../components/logo/doc.png';
 
-export default function Prescriptions() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const { user } = useAuthContext();
-  const { t } = useTranslate();
-  const { drugs } = useGetDrugs(user?.patient?._id);
-  console.log(drugs,"drugs");
+const styles = StyleSheet.create({
+  page: {
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  headerImage: {
+    width: 80,
+    height: 80,
+  },
+  headerText: {
+    textAlign: 'center',
+    fontSize: 10,
+    marginBottom: 4,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    left: 20,
+    right: 20,
+    fontSize: 8,
+    color: '#777',
+    textAlign: 'center',
+  },
+  content: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  text: {
+    fontSize: 13,
+    marginBottom: 6,
+  },
+  largeText: {
+    fontSize: 15,
+    marginBottom: 7,
+    fontWeight: 'bold',
+  },
+  image: {
+    marginTop: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  insideImage: {
+    width: '100%', // Make the image full width
+    height: 'auto', // Maintain the aspect ratio
+  },
+  watermark: {
+    position: 'absolute',
+    top: '30%', // Adjust the vertical position as needed
+    left: '25%', // Adjust the horizontal position as needed
+    width: '50%', // Adjust width for desired size
+    opacity: 0.2, // Set opacity to 30%
+    zIndex: -1,
+  },
+});
 
-  function calculateAge(birthDate) {
-    if (birthDate) {
-      const today = new Date();
-      const dob = new Date(birthDate);
-
-      const age = today.getFullYear() - dob.getFullYear();
-      if (age === 0) {
-        return `${today.getMonth() - dob.getMonth()} months`;
-      }
-      return `${age} years`;
-    }
-    return '';
-  }
-  function calculateDuration(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    const difference = end.getTime() - start.getTime();
-    const daysDifference = Math.ceil(difference / (1000 * 3600 * 24));
-
-    return daysDifference;
-  }
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 3600000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  const styles = StyleSheet.create({
-    icon: {
-      color: 'blue',
-      position: 'relative',
-      top: '3px',
-    },
-    image: {
-      width: '80px',
-      height: '80px',
-    },
-    imgItem: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '10px',
-      fontSize: '15px',
-    },
-    departmentInfo: {
-      textAlign: 'center',
-      fontSize: 12,
-      position: 'relative',
-      top: '-10px',
-      gap: 20,
-    },
-    page: {
-      backgroundColor: 'aliceblue',
-      border: 1,
-    },
-    gridContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '10px',
-      fontSize: '14px',
-      position: 'relative',
-      bottom: '-40px',
-    },
-    gridBody: {
-      borderTop: 1,
-      padding: '10px',
-      gap: '10px',
-      height: '100%',
-      position: 'relative',
-      top: '40px',
-    },
-    table: {
-      display: 'table',
-      width: 'auto',
-      borderStyle: 'solid',
-      borderWidth: 1,
-      borderRightWidth: 0,
-      borderBottomWidth: 0,
-    },
-    tableRow: {
-      margin: 'auto',
-      flexDirection: 'row',
-    },
-    tableCol: {
-      width: '25%',
-      borderStyle: 'solid',
-      borderWidth: 1,
-      borderLeftWidth: 0,
-      borderTopWidth: 0,
-    },
-    tableCell: {
-      margin: 'auto',
-      marginTop: 5,
-      fontSize: 10,
-      padding: 1,
-    },
+const PrescriptionPDF = ({ report }) => {
+  const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
+  const plainText = convert(sanitizedHtmlString, {
+    wordwrap: 130,
   });
+  const result = convert(plainText);
 
-  const PrescriptionPDF = useCallback(
-    () => (
-      <Document>
-        <Page size="A4" style={styles.page}>
-          {user?.patient.medicines.map((med, idx) => (
-            <View key={idx}>
-              <View style={styles.imgItem}>
-                <PdfImage src={Doclogo} style={styles.image} />
-                <Text>HAKEEMNA HOSPITAL</Text>
-                <PdfImage src={Doclogo} style={styles.image} />
-              </View>
-              <View style={styles.departmentInfo}>
-                <Text>DR: Doctor Name</Text>
-                <Text>Al Waha_cercle at0349</Text>
-                <Text>+962776088372</Text>
-              </View>
-              <View style={styles.gridContainer}>
-                <Text>Name: {user.userName}</Text>
-                <Text>Age: {calculateAge(user?.patient.birth_date)}</Text>
-                <Text>Date: {fDateAndTime(currentDate)}</Text>
-              </View>
-              <View style={styles.gridBody}>
-                <View style={styles.table}>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>Name</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>Dose</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>Frequently</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>Duration</Text>
-                    </View>
-                  </View>
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{med.medicines.trade_name}</Text>
-                    </View>
-                    {/* <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{med.dose}</Text>
-                    </View> */}
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{med.Frequency_per_day}</Text>
-                    </View>
-                    <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>
-                        {calculateDuration(med.Start_time, med.End_time)} Days
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
+  return (
+    <Document>
+      <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
+          <View>
+            <Text style={styles.headerText}>Medical Report</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
+            <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
+          </View>
+        </View>
+
+        {/* Watermark Logo */}
+        <PdfImage src={Doclogo} style={styles.watermark} />
+
+        {/* Content */}
+        <View style={styles.content}>
+          <Text style={styles.largeText}>Patient Information</Text>
+          <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
+          <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
+          <Text style={styles.largeText}>Report Details</Text>
+          <Text style={styles.text}>{result}</Text>
+        </View>
+
+        {/* Images */}
+        <View style={styles.image}>
+          {report?.file?.map((file, index) => (
+            <PdfImage key={index} src={Doclogo} style={styles.insideImage} />
           ))}
-        </Page>
-      </Document>
-    ),
-    [styles, currentDate, user]
+        </View>
+
+        {/* Footer */}
+        <Text style={styles.footer}>Made by hakeemna</Text>
+      </Page>
+    </Document>
   );
+};
+PrescriptionPDF.propTypes = {
+  report: PropTypes.object,
+};
+export default function Prescriptions() {
+  const { t } = useTranslate();
+  const { user } = useAuthContext();
+  const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
+  // const router = useRouter();
 
-  return drugs?.map((med, idx) => (
-    <List key={idx} sx={{ bgcolor: 'aliceblue', mb: 2 }}>
-      <ListItem sx={{ mb: 1 }}>
-        <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
-          <Avatar>
-            <Iconify icon="streamline-emojis:pill" />
-          </Avatar>
-        </ListItemAvatar>
+  const handleHover = (id) => {
+    setHoveredButtonId(id);
+  };
+  const handleMouseOut = () => {
+    setHoveredButtonId(null);
+  };
+  // const handleViewClick = (id) => {
+  //   router.push(paths.dashboard.user.medicalreportsview(id));
+  // };
+  const { drugs } = useGetDrugs(user?.patient?._id);
+  console.log(drugs, 'drugs');
 
-        {/* Left section for Name and Frequently */}
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ListItemText primary={t('Name')} secondary={med.medicines?.trade_name} />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <ListItemText primary={t('Frequently')} secondary={med?.Frequency_per_day} />
-          </Grid>
-        </Grid>
+  return drugs?.length > 0 ? (
+    drugs?.map((info, index) => (
+      <Card
+        key={index}
+        sx={{
+          backgroundImage: `url(${Back})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundColor: 'rgba(255, 255, 255, 0.800)',
+          backgroundBlendMode: 'lighten',
+        }}
+      >
+        <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+          <Avatar
+            alt={info?.name_english}
+            src={user?.patient?.profile_picture}
+            variant="rounded"
+            sx={{ width: 48, height: 48, mb: 2 }}
+          />
 
-        {/* Right section for Start Date and End Date */}
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <ListItemText primary={t('Start Date')} secondary={fDateAndTime(med?.Start_time)} />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <ListItemText primary={t('End Date')} secondary={fDateAndTime(med?.End_time)} />
-          </Grid>
-        </Grid>
+          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+            {fDateAndTime(info?.created_at)}
+          </Stack>
+        </Stack>
+        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
+          <PDFDownloadLink
+            style={styles.pdf}
+            document={<PrescriptionPDF report={info} />}
+            fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
+          >
+            <Iconify icon="flat-color-icons:download" width={25} sx={{ m: 1 }} />
+          </PDFDownloadLink>
+          <Iconify
+            icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
+            onMouseOver={() => handleHover(info?._id)}
+            onMouseOut={handleMouseOut}
+            // onClick={() => handleViewClick(info?._id)}
+            width={25}
+            sx={{ m: 1 }}
+          />
+        </Stack>
+        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
 
-        {/* PDF Download Link */}
-        <PDFDownloadLink
-          document={<PrescriptionPDF medicines={[med]} />}
-          fileName={`${user?.patient?.name_english} prescription.pdf`}
+        <Box
+          rowGap={1.5}
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          sx={{ p: 3, justifyContent: 'space-between' }}
         >
-          {({ loading }) =>
-            loading ? (
-              t('Loading document...')
-            ) : (
-              <Iconify
-                icon="teenyicons:pdf-outline"
-                sx={{
-                  color: { xs: 'green', md: 'blue' },
-                  height: { xs: '25px', md: '25px' },
-                  width: { xs: '25px', md: '25px' },
-                  position: { md: 'relative' },
-                  top: { md: '6px' },
-                }}
-              />
-            )
-          }
-        </PDFDownloadLink>
-      </ListItem>
-    </List>
-  ));
+          {[
+            {
+              label: info?.department?.name_english,
+              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: 'THE EMPLOYEE NAME',
+              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: `${user?.patient?.name_english} `,
+              icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: `ESG`,
+              icon: (
+                <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />
+              ),
+            },
+          ].map((item, idx) => (
+            <Stack
+              key={idx}
+              spacing={0.5}
+              flexShrink={0}
+              direction="row"
+              alignItems="center"
+              sx={{ color: 'black', minWidth: 0 }}
+            >
+              {item?.icon}
+              <Typography variant="caption" noWrap>
+                {item?.label}
+              </Typography>
+            </Stack>
+          ))}
+        </Box>
+      </Card>
+    ))
+  ) : (
+    <EmptyContent
+      filled
+      title={t('No Data')}
+      sx={{
+        py: 10,
+      }}
+    />
+  );
 }

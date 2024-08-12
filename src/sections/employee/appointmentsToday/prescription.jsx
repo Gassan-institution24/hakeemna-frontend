@@ -39,6 +39,7 @@ export default function Prescription({ Entrance }) {
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
+console.log(prescriptionData,"prescriptionData");
 
   const [medSerach, setMedSerach] = useState()
   const debouncedQuery = useDebounce(medSerach);
@@ -308,7 +309,7 @@ export default function Prescription({ Entrance }) {
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
                       {...field}
-                      label={t('Start time*')}
+                      label={t('Start time')}
                       sx={{ mb: 2 }}
                       slotProps={{
                         textField: {
@@ -326,7 +327,7 @@ export default function Prescription({ Entrance }) {
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
                       {...field}
-                      label={t('End time*')}
+                      label={t('End time')}
                       sx={{ mb: 2 }}
                       slotProps={{
                         textField: {
@@ -344,7 +345,7 @@ export default function Prescription({ Entrance }) {
                   render={({ field, fieldState: { error } }) => (
                     <RHFTextField
                       {...field}
-                      label={t('Doctor Comments')}
+                      label={t('doctor comment')}
                       multiline
                       sx={{ mb: 2 }}
                       error={!!error}
@@ -366,24 +367,24 @@ export default function Prescription({ Entrance }) {
                   sx={{
                     color: 'text.secondary',
                     mt: { md: -3, xs: -2.3 },
-                    ml: curLangAr ? { md: -31, xs: -5 } : { md: 8, xs: 4 },
+                    ml: { md: 8, xs: 4 },
                     typography: 'caption',
                     fontSize: { md: 15, xs: 10 },
                   }}
                 >
-                  chronic
+                  {t("chronic")}
                 </Typography>
 
                 <Button
                   onClick={() => removePrescriptionField(prescription.id)}
                   sx={{ mt: 2, mb: 2 }}
                 >
-                  Remove Prescription
+                  {t("Remove Prescription")}
                 </Button>
               </div>
             ))}
             <Button onClick={addPrescriptionField} sx={{ mt: 2 }}>
-              Add new prescription
+              {t("Add new prescription")}
             </Button>
           </DialogContent>
           <DialogActions>
