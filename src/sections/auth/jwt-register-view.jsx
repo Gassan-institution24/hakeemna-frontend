@@ -27,7 +27,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCountries, useGetCountryCities } from 'src/api';
@@ -48,7 +48,10 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const { register } = useAuthContext();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
   const termsDialog = useBoolean(false);
@@ -64,39 +67,39 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const RegisterSchema = Yup.object().shape({
     name_english: Yup.string()
-      .required('English name is required')
+      .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
       }),
     name_arabic: Yup.string()
-      .required('Arabic name is required')
+      .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
       }),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    email: Yup.string().required(t('required field')).email(t('required field')),
+    password: Yup.string().required(t('required field')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .min(8, 'Confirm password must be at least 8 characters'),
-    identification_num: Yup.string().required('Identification number is required'),
+      .oneOf([Yup.ref('password'), null])
+      .min(8, t('at least 8 ')),
+    identification_num: Yup.string().required(t('required field')),
     mobile_num1: Yup.string()
-      .required('Mobile number is required')
+      .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
-    gender: Yup.string().required('Gender is required'),
+    gender: Yup.string().required(t('required field')),
     birth_date: Yup.date()
-      .required('birth date is required')
+      .required(t('required field'))
       .test('is-adult', 'You must be at least 18 years old', (value) => {
         const oldage = new Date();
         const minDate = new Date(oldage.getFullYear() - 18, oldage.getMonth(), oldage.getDate());
         return value <= minDate;
       }),
-    nationality: Yup.string().required('Nationality is required'),
-    country: Yup.string().required('Country is required'),
-    city: Yup.string().required('City is required'),
+    nationality: Yup.string().required(t('required field')),
+    country: Yup.string().required(t('required field')),
+    city: Yup.string().required(t('required field')),
   });
 
   const defaultValues = {
@@ -283,7 +286,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         <RHFSelect name="nationality" label={t('nationality')}>
           {countriesData?.map((country, idx) => (
             <MenuItem lang="ar" key={idx} value={country?._id}>
-              {country?.name_english}
+              {curLangAr ? country?.name_arabic : country?.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
@@ -291,14 +294,14 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData?.map((country, idx) => (
               <MenuItem lang="ar" key={idx} value={country?._id}>
-                {country?.name_english}
+                {curLangAr ? country?.name_arabic : country?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="city" label={t('City')}>
             {tableData?.map((city, idx) => (
               <MenuItem lang="ar" key={idx} value={city?._id}>
-                {city?.name_english}
+                {curLangAr ? city?.name_arabic : city?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>

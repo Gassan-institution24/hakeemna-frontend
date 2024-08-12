@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { DatePicker } from '@mui/x-date-pickers';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -13,26 +14,29 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <DatePicker
-          {...field}
-          fullWidth
-          type={type}
-          value={field.value ? new Date(field.value) : null}
-          views={views}
-          onChange={(newValue) => {
-            field.onChange(newValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              // onClick: () => field.onFocus(),
-              ...other,
-            },
-          }}
-          error={!!error}
-          helperText={error ? error?.message : helperText}
-        />
+        <div style={{ width: '100%' }}>
+          <DatePicker
+            {...field}
+            fullWidth
+            type={type}
+            value={field.value ? new Date(field.value) : null}
+            views={views}
+            onChange={(newValue) => {
+              field.onChange(newValue);
+            }}
+            InputLabelProps={{ shrink: true }}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                // onClick: () => field.onFocus(),
+                ...other,
+              },
+            }}
+            error={!!error}
+            helperText={error ? error?.message : helperText}
+          />
+          {error?.message ? <Typography variant='caption' color='error.main'>{error.message}</Typography> : ''}
+        </div>
       )}
     />
   );

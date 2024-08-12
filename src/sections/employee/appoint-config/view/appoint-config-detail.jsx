@@ -340,7 +340,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs
@@ -397,8 +397,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         onClose={confirm.onFalse}
         title={
           updating.value
-            ? 'Creating appointments...'
-            : 'Do you want to change your existance appointments?'
+            ? t('Creating appointments...')
+            : t('Do you want to change your existance appointments?')
         }
         content={
           updating.value ? (
@@ -409,9 +409,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               <Typewriter
                 options={{
                   strings: [
-                    'It might take several minutes..',
-                    'We are getting appointments ready..',
-                    'We are almost done..',
+                    t('It might take several minutes..'),
+                    t('We are getting appointments ready..'),
+                    t('We are almost done..'),
                   ],
                   autoStart: true,
                   loop: true,

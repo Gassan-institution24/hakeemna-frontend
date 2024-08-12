@@ -12,7 +12,7 @@ const dateList = [
   'DesktopDateTimePicker',
   //
   'MobileDatePicker',
-  'MobileDateTimePicker',
+  'DateTimePicker',
 ];
 
 const timeList = ['TimePicker', 'MobileTimePicker', 'StaticTimePicker', 'DesktopTimePicker'];

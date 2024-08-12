@@ -281,9 +281,9 @@ export default function AppointmentToolbar({
             }}
           /> */}
         <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
+          {/* <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          </IconButton> */}
           {/* {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
             <IconButton color="error" onClick={onAdd}>
               <Iconify icon="zondicons:add-outline" />
