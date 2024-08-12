@@ -60,7 +60,7 @@ export default function Processing() {
     router.push(paths.employee.recored(idd));
   };
   const firstSequenceNumber =
-    medRecord && medRecord.length > 0 ? medRecord[0].sequence_number : null;
+    medRecord && medRecord?.length > 0 ? medRecord[0].sequence_number : null;
   const TIMELINES = [
     medRecord?.length > 0 && {
       key: 0,
@@ -101,7 +101,7 @@ export default function Processing() {
       icon: <Iconify icon="healthicons:medical-records-outline" width={25} />,
     },
 
-    CheckListData && {
+    CheckListData?.length > 0 && {
       key: 1,
       title: (
         <>
