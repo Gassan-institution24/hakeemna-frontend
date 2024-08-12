@@ -91,11 +91,6 @@ export default function StartupCreating({ open, onClose }) {
       if (tables.includes('activities')) {
         await axiosInstance.post(endpoints.activities.all, {
           unit_service: USData?._id,
-          name_english: `reception`,
-          name_arabic: `استقبال`,
-        });
-        await axiosInstance.post(endpoints.activities.all, {
-          unit_service: USData?._id,
           name_english: `accounting`,
           name_arabic: `المحاسبة`,
         });
@@ -224,7 +219,7 @@ export default function StartupCreating({ open, onClose }) {
           </Stack>
           <Stack direction="row">
             <Checkbox
-              disabled={roomsData.length > 0}
+              disabled={roomsData.length > 1}
               checked={tables.includes('rooms')}
               onChange={() =>
                 tables.includes('rooms')
@@ -235,7 +230,7 @@ export default function StartupCreating({ open, onClose }) {
             <Typography variant="subtitle2" alignSelf="center">
               {t('rooms')}
             </Typography>
-            {roomsData.length > 0 && (
+            {roomsData.length > 1 && (
               <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
                 {t('already created')}
               </Typography>
@@ -243,7 +238,7 @@ export default function StartupCreating({ open, onClose }) {
           </Stack>
           <Stack direction="row">
             <Checkbox
-              disabled={activitiesData.length > 0}
+              disabled={activitiesData.length > 1}
               checked={tables.includes('activities')}
               onChange={() =>
                 tables.includes('activities')
@@ -254,7 +249,7 @@ export default function StartupCreating({ open, onClose }) {
             <Typography variant="subtitle2" alignSelf="center">
               {t('activities')}
             </Typography>
-            {activitiesData.length > 0 && (
+            {activitiesData.length > 1 && (
               <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
                 {t('already created')}
               </Typography>

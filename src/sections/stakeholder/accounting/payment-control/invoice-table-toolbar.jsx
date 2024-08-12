@@ -200,8 +200,8 @@ export default function InvoiceTableToolbar({
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </Stack> */}
-      </Stack>
+      </Stack> */}
+    </Stack >
 
       <CustomPopover
         open={popover.open}

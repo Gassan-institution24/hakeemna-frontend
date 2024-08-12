@@ -136,29 +136,30 @@ export default function AppointmentToolbar({
             }}
           />
 
-          <IconButton onClick={popover.onOpen}>
+          {/* <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          </IconButton> */}
         </Stack>
 
         {/* <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
+           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
+          </IconButton> 
+        {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+          <IconButton color="error" onClick={onAdd}>
+            <Iconify icon="zondicons:add-outline" />
           </IconButton>
-          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
-            <IconButton color="error" onClick={onAdd}>
-              <Iconify icon="zondicons:add-outline" />
-            </IconButton>
-          )}
-        </Stack> */}
-      </Stack>
-      {/* </Stack> */}
+        )}
+      </Stack> */}
+    </Stack >
+      {/* </Stack> */ }
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
+      < CustomPopover
+  open = { popover.open }
+  onClose = { popover.onClose }
+  arrow = "right-top"
+  sx = {{ width: 140 }
+}
       >
         <MenuItem
           lang="ar"
@@ -179,7 +180,7 @@ export default function AppointmentToolbar({
           <Iconify icon="solar:export-bold" />
           {t('export')}
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover >
     </>
   );
 }

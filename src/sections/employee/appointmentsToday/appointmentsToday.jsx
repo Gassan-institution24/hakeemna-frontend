@@ -24,8 +24,8 @@ import { useRouter } from 'src/routes/hooks';
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetUSRooms,
   useGetEntranceManagement,
