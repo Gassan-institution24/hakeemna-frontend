@@ -17,10 +17,10 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useFindPatient,
   useGetCountries,
+  useFindUSPatient,
   useGetCountryCities,
   useGetEmployeeAppointments,
   useGetEmployeeActiveWorkGroups,
-  useFindUSPatient,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -36,6 +36,7 @@ import { useSearchParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import { addToCalendar } from 'src/utils/calender';
 import { useUnitTime } from 'src/utils/format-time';
@@ -56,7 +57,6 @@ import {
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
-import { useDebounce } from 'src/hooks/use-debounce';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -424,9 +424,9 @@ export default function TableCreateView() {
                   row
                   name="patientExist"
                   options={[
-                    { label: 'my patient', value: 'my_patients' },
-                    { label: 'hakeemna patient', value: 'exist' },
-                    { label: 'new patient', value: 'new' },
+                    { label: t('my patient'), value: 'my_patients' },
+                    { label: t('hakeemna patient'), value: 'exist' },
+                    { label: t('new patient'), value: 'new' },
                   ]}
                 />
                 <br />

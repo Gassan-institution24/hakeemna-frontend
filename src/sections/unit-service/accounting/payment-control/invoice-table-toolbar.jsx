@@ -228,11 +228,11 @@ export default function InvoiceTableToolbar({
         />
 
         {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
-          <IconButton onClick={popover.onOpen}>
+           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </Stack> */}
-      </Stack>
+          </IconButton> 
+      </Stack> */}
+      </Stack >
 
       <CustomPopover
         open={popover.open}

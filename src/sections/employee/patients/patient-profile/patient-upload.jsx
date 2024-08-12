@@ -163,7 +163,16 @@ export default function PatientUpload({ patient }) {
                 <Card sx={{ p: 2, mb: 4 }}>
                     <Typography variant='subtitle1'>{t('prescription')}</Typography>
                     {fields.map((one, index) => (
-                        <Stack direction='row' flexWrap='wrap' alignItems='center' rowGap={2} columnGap={1} mt={2}>
+                        <Box
+                            rowGap={4}
+                            columnGap={4}
+                            display="grid"
+                            gridTemplateColumns={{
+                                xs: 'repeat(1, 1fr)',
+                                md: 'repeat(2, 1fr)',
+                                xl: 'repeat(3, 1fr)',
+                            }}
+                        >
                             <Autocomplete
                                 sx={{ minWidth: 300, flex: 1 }}
                                 options={medicinesData}
@@ -180,13 +189,15 @@ export default function PatientUpload({ patient }) {
                                     />
                                 )}
                             />
-                            <RHFTextField sx={{ minWidth: 350, flex: 1 }} name={`drugs[${index}].Frequency_per_day`} label={t('frequency')} />
-                            <RHFDatePicker sx={{ minWidth: 200, flex: 1 }} name={`drugs[${index}].Start_time`} label={t('start date')} />
-                            <RHFDatePicker sx={{ minWidth: 200, flex: 1 }} name={`drugs[${index}].End_time`} label={t('end date')} />
-                            <RHFTextField sx={{ minWidth: 350, flex: 1 }} name={`drugs[${index}].Doctor_Comments`} label={t('doctor comment')} />
-                            <RHFCheckbox onChange={() => chronicChange(index)} sx={{ minWidth: 300, flex: 1 }} name={`drugs[${index}].chronic`} label={t('chronic')} />
-                            <IconButton color='error' onClick={() => removeDrug(index)}><Iconify width={25} icon='mi:delete' /></IconButton>
-                        </Stack>
+                            <RHFTextField sx={{ minWidth: 200, flex: 1 }} name={`drugs[${index}].Frequency_per_day`} label={t('frequency')} />
+                            <RHFDatePicker sx={{ minWidth: 150, flex: 1 }} name={`drugs[${index}].Start_time`} label={t('start date')} />
+                            <RHFDatePicker sx={{ minWidth: 150, flex: 1 }} name={`drugs[${index}].End_time`} label={t('end date')} />
+                            <RHFTextField sx={{ minWidth: 300, flex: 1 }} name={`drugs[${index}].Doctor_Comments`} label={t('doctor comment')} />
+                            <Stack direction={{ md: 'row' }} sx={{ width: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+                                <RHFCheckbox onChange={() => chronicChange(index)} sx={{ minWidth: 300, flex: 1 }} name={`drugs[${index}].chronic`} label={t('chronic')} />
+                                <IconButton color='error' onClick={() => removeDrug(index)}><Iconify width={25} icon='mi:delete' /></IconButton>
+                            </Stack>
+                        </Box>
                     ))}
                     <Divider sx={{ mt: 2 }} />
                     <Button color='success' onClick={appendDrug}><Iconify width={20} icon='ri:add-line' />{t('add')}</Button>

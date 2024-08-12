@@ -50,11 +50,10 @@ export function useNewScreen() {
     const newWindow = window.open(path, '_blank', windowFeatures);
     setNewWin((prev) => [...prev, newWindow]);
     if (newWindow) {
-      const sessionData = localStorage;
+      const localData = localStorage.getItem('accessToken');
       newWindow.localStorage.clear();
-      Object.keys(sessionData).forEach((key) => {
-        newWindow.localStorage.setItem(key, sessionData[key]);
-      });
+      newWindow.localStorage.setItem('accessToken', localData);
+
       return newWindow;
     }
     console.error('Popup blocked. Please allow popups for this site.');

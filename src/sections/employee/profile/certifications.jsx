@@ -59,7 +59,7 @@ export default function Certifications() {
               <RHFTextField
                 size="small"
                 name={`certifications[${index}].name`}
-                label={t('title')}
+                label={t('cetificate')}
                 sx={{ flex: 0.5 }}
               />
               <RHFTextField

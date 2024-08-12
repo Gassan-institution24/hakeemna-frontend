@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogActions from '@mui/material/DialogActions';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -112,7 +112,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           name="start"
           control={control}
           render={({ field }) => (
-            <MobileDateTimePicker
+            <DateTimePicker
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {
@@ -135,7 +135,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           name="end"
           control={control}
           render={({ field }) => (
-            <MobileDateTimePicker
+            <DateTimePicker
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {

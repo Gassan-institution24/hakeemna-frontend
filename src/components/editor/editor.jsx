@@ -59,7 +59,7 @@ export default function Editor({
         <ReactQuill
           modules={modules}
           formats={formats}
-          placeholder="Write something awesome..."
+          // placeholder="Write something awesome..."
           {...other}
         />
       </StyledEditor>
