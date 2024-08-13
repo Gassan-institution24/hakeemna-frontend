@@ -1,7 +1,5 @@
 import React from 'react';
-import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
-import { convert } from 'html-to-text';
 import {
   Page,
   Text,
@@ -19,8 +17,8 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-// import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
@@ -95,54 +93,75 @@ const styles = StyleSheet.create({
     opacity: 0.2, // Set opacity to 30%
     zIndex: -1,
   },
+  table: {
+    border: '2px solid gray',
+    margin: 2,
+  },
+  insideTable: {
+    margin: 2,
+  },
 });
 
-const PrescriptionPDF = ({ report }) => {
-  const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
-  const plainText = convert(sanitizedHtmlString, {
-    wordwrap: 130,
-  });
-  const result = convert(plainText);
+const PrescriptionPDF = ({ report }) => (
+  <Document>
+    <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+      {/* Header */}
+      <View style={styles.header}>
+        <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
+        <View>
+          <Text style={styles.headerText}>Drug Report</Text>
+          <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
+          <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
+          <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
+        </View>
+      </View>
 
-  return (
-    <Document>
-      <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
-          <View>
-            <Text style={styles.headerText}>Medical Report</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
+      {/* Watermark Logo */}
+      <PdfImage src={Doclogo} style={styles.watermark} />
+
+      {/* Content */}
+      <View style={styles.content}>
+        <Text style={styles.largeText}>Patient Information</Text>
+        <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
+        <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
+        <Text style={styles.largeText}>Report Details</Text>
+
+        {report?.medicines?.map((info, i) => (
+          <View key={i} style={styles.table}>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>Medicines</Text>
+              <Text style={styles.largeText}>{info?.medicines?.trade_name}</Text>
+            </View>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>Start Time</Text>
+              <Text style={styles.largeText}>{fDateAndTime(info?.Start_time)}</Text>
+            </View>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>End Time</Text>
+              <Text style={styles.largeText}>{fDateAndTime(info?.End_time)}</Text>
+            </View>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>Num Days</Text>
+              <Text style={styles.largeText}>{info?.Num_days}</Text>
+            </View>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>Frequency/Day</Text>
+              <Text style={styles.largeText}>{info?.Frequency_per_day}</Text>
+            </View>
+            <View style={styles.insideTable}>
+              <Text style={{ borderBottom: '1px solid gray' }}>Doctor Comments</Text>
+              <Text style={styles.largeText}>{info?.Doctor_Comments}</Text>
+            </View>
           </View>
-        </View>
+        ))}
+      </View>
 
-        {/* Watermark Logo */}
-        <PdfImage src={Doclogo} style={styles.watermark} />
+      {/* Footer */}
+      <Text style={styles.footer}>Made by hakeemna</Text>
+    </Page>
+  </Document>
+);
 
-        {/* Content */}
-        <View style={styles.content}>
-          <Text style={styles.largeText}>Patient Information</Text>
-          <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
-          <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
-          <Text style={styles.largeText}>Report Details</Text>
-          <Text style={styles.text}>{result}</Text>
-        </View>
-
-        {/* Images */}
-        <View style={styles.image}>
-          {report?.file?.map((file, index) => (
-            <PdfImage key={index} src={Doclogo} style={styles.insideImage} />
-          ))}
-        </View>
-
-        {/* Footer */}
-        <Text style={styles.footer}>Made by hakeemna</Text>
-      </Page>
-    </Document>
-  );
-};
 PrescriptionPDF.propTypes = {
   report: PropTypes.object,
 };
@@ -150,7 +169,7 @@ export default function Prescriptions() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleHover = (id) => {
     setHoveredButtonId(id);
@@ -158,11 +177,10 @@ export default function Prescriptions() {
   const handleMouseOut = () => {
     setHoveredButtonId(null);
   };
-  // const handleViewClick = (id) => {
-  //   router.push(paths.dashboard.user.medicalreportsview(id));
-  // };
+  const handleViewClick = (id) => {
+    router.push(paths.dashboard.user.prescriptionview(id));
+  };
   const { drugs } = useGetDrugs(user?.patient?._id);
-  console.log(drugs, 'drugs');
 
   return drugs?.length > 0 ? (
     drugs?.map((info, index) => (
@@ -200,7 +218,7 @@ export default function Prescriptions() {
             icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
             onMouseOver={() => handleHover(info?._id)}
             onMouseOut={handleMouseOut}
-            // onClick={() => handleViewClick(info?._id)}
+            onClick={() => handleViewClick(info?._id)}
             width={25}
             sx={{ m: 1 }}
           />
@@ -215,7 +233,7 @@ export default function Prescriptions() {
         >
           {[
             {
-              label: info?.department?.name_english,
+              label: info?.unit_service?.name_english,
               icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
             },
             {

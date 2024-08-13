@@ -133,7 +133,7 @@ const MedicalReportPDF = ({ report }) => {
         {/* Images */}
         <View style={styles.image}>
           {report?.file?.map((file, index) => (
-            <PdfImage key={index} src={Doclogo} style={styles.insideImage} />
+            <PdfImage key={index} src={file} style={styles.insideImage} />
           ))}
         </View>
 
@@ -188,19 +188,21 @@ export default function Medicalreports() {
             {fDateAndTime(info?.created_at)}
           </Stack>
         </Stack>
-        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0, }}>
+        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink
             style={styles.pdf}
             document={<MedicalReportPDF report={info} />}
             fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Iconify icon="flat-color-icons:download"  width={25} sx={{m:1}} />
+            <Iconify icon="flat-color-icons:download" width={25} sx={{ m: 1 }} />
           </PDFDownloadLink>
           <Iconify
             icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
             onMouseOver={() => handleHover(info?._id)}
             onMouseOut={handleMouseOut}
-            onClick={() => handleViewClick(info?._id)} width={25}  sx={{m:1}}
+            onClick={() => handleViewClick(info?._id)}
+            width={25}
+            sx={{ m: 1 }}
           />
         </Stack>
         <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
