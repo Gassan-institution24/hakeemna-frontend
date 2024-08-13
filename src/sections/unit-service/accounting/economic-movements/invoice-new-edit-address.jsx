@@ -9,6 +9,7 @@ import {
   useGetUSPatient,
   useGetUnitservice,
   useGetOneEntranceManagement,
+  useGetOneUSPatient,
 } from 'src/api';
 
 import { RHFAutocomplete } from 'src/components/hook-form';
@@ -43,8 +44,9 @@ export default function InvoiceNewEditAddress() {
 
   const values = watch();
 
-  const { unit_service, patient, entrance } = values;
+  const { unit_service, patient, entrance, unit_service_patient } = values;
   const { data } = useGetPatient(patient);
+  const { usPatientData } = useGetOneUSPatient(unit_service_patient, { populate: [{ path: 'country', select: 'name_english name_arabic' }, { path: 'city', select: 'name_english name_arabic' }] });
   const { data: USData } = useGetUnitservice(unit_service);
   const { Entrance } = useGetOneEntranceManagement(entrance, {
     select: 'activity_happened',
@@ -75,7 +77,7 @@ export default function InvoiceNewEditAddress() {
               {t('to')}:
             </Typography>
           </Stack>
-          {patient ? (
+          {patient && (
             <Stack spacing={1}>
               <Typography variant="subtitle2">
                 {curLangAr ? data?.name_arabic : data?.name_english}
@@ -87,7 +89,21 @@ export default function InvoiceNewEditAddress() {
               </Typography>
               <Typography variant="body2"> {data?.phone}</Typography>
             </Stack>
-          ) : (
+          )}
+          {unit_service_patient && (
+            <Stack spacing={1}>
+              <Typography variant="subtitle2">
+                {curLangAr ? usPatientData?.name_arabic : usPatientData?.name_english}
+              </Typography>
+              {/* <Typography variant="body2">
+                {curLangAr
+                  ? `${usPatientData?.city?.name_arabic}, ${usPatientData?.country?.name_arabic}`
+                  : `${usPatientData?.city?.name_english}, ${usPatientData?.country?.name_english}`}
+              </Typography> */}
+              <Typography variant="body2"> {usPatientData?.phone}</Typography>
+            </Stack>
+          )}
+          {!patient && !unit_service_patient && (
             <Stack direction="row" justifyContent="flex-start">
               <RHFAutocomplete
                 lang="ar"

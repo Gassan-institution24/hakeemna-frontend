@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,7 +30,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, setPatientId }) {
-  const { login } = useAuthContext();
+  const { login, authenticated } = useAuthContext();
 
   const router = useRouter();
 
@@ -94,6 +94,12 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
       }
     }
   });
+
+  useEffect(() => {
+    if (authenticated) {
+      router.push(paths.dashboard.root)
+    }
+  }, [authenticated, router])
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>

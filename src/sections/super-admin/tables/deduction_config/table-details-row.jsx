@@ -23,7 +23,7 @@ export default function TableDetailsRow({
   onInactivate,
   onActivate,
   filters,
-  setFilters,
+  onFilters,
 }) {
   const {
     code,
@@ -68,7 +68,7 @@ export default function TableDetailsRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={() => setFilters({ ...filters, name: country?.name_english })}
+        onClick={() => onFilters('name', country?.name_english)}
       >
         {country?.name_english}
       </TableCell>
@@ -79,7 +79,7 @@ export default function TableDetailsRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={() => setFilters({ ...filters, name: city?.name_english })}
+        onClick={() => onFilters('name', city?.name_english)}
       >
         {city?.name_english}
       </TableCell>
@@ -90,9 +90,9 @@ export default function TableDetailsRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={() => setFilters({ ...filters, name: type })}
+        onClick={() => onFilters('name', type)}
       >
-        {type?.name_english}
+        {type}
       </TableCell>
       <TableCell align="center">{Comment}</TableCell>
       <TableCell align="center">{percentage}</TableCell>
@@ -234,7 +234,7 @@ TableDetailsRow.propTypes = {
   onInactivate: PropTypes.func,
   onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,
-  setFilters: PropTypes.func,
+  onFilters: PropTypes.func,
   onEditRow: PropTypes.func,
   row: PropTypes.object,
   filters: PropTypes.object,

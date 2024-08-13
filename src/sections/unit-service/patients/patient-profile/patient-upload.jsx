@@ -16,6 +16,7 @@ import { useLocales, useTranslate } from 'src/locales'
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFEditor, RHFUpload, RHFCheckbox, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 export default function PatientUpload({ patient }) {
     const { t } = useTranslate()
@@ -25,6 +26,8 @@ export default function PatientUpload({ patient }) {
     const curLangAr = currentLang.value === 'ar';
 
     const { enqueueSnackbar } = useSnackbar()
+
+    const { isMedLab } = useUSTypeGuard();
 
     const [medSerach, setMedSerach] = useState()
 
@@ -100,6 +103,7 @@ export default function PatientUpload({ patient }) {
                 }
                 formData.append('unit_service', employee?.unit_service?._id)
                 formData.append('employee', employee?._id)
+                formData.append('type', isMedLab ? 'analysis' : 'report')
                 formData.append('description', values.medical_report_description)
                 values.medical_report_file?.forEach((one, idx) => {
                     formData.append(`file[${idx}]`, one)
@@ -160,7 +164,7 @@ export default function PatientUpload({ patient }) {
     return (
         <Container maxWidth='xl' >
             <FormProvider methods={methods} >
-                <Card sx={{ p: 2, mb: 4 }}>
+                {!isMedLab && <Card sx={{ p: 2, mb: 4 }}>
                     <Typography variant='subtitle1'>{t('prescription')}</Typography>
                     {fields.map((one, index) => (
                         <Stack direction='row' flexWrap='wrap' alignItems='center' rowGap={2} columnGap={1} mt={2}>
@@ -193,7 +197,7 @@ export default function PatientUpload({ patient }) {
                     <Stack alignItems='end' >
                         <Button variant='contained' onClick={() => handleSubmit('prescription')} sx={{ mt: 2 }}>{t('save')}</Button>
                     </Stack>
-                </Card>
+                </Card>}
                 <Box
                     rowGap={4}
                     columnGap={4}
@@ -203,7 +207,7 @@ export default function PatientUpload({ patient }) {
                         md: 'repeat(2, 1fr)',
                     }}
                 >
-                    <Card sx={{ p: 2 }}>
+                    {!isMedLab && <Card sx={{ p: 2 }}>
                         <Typography variant='subtitle1'>{t('patient record')}</Typography>
                         <RHFEditor
                             lang="en"
@@ -223,7 +227,7 @@ export default function PatientUpload({ patient }) {
                         <Stack direction='row' justifyContent='flex-end'>
                             <Button variant='contained' onClick={() => handleSubmit('patient_record')}>{t('save')}</Button>
                         </Stack>
-                    </Card>
+                    </Card>}
                     <Card sx={{ p: 2 }}>
                         <Typography variant='subtitle1'>{t('medical report')}</Typography>
                         <RHFEditor
@@ -246,7 +250,7 @@ export default function PatientUpload({ patient }) {
                         </Stack>
                     </Card>
 
-                    <Card sx={{ p: 2 }}>
+                    {!isMedLab && <Card sx={{ p: 2 }}>
                         <Stack gap={2}>
 
                             <Typography variant='subtitle1'>{t('sick leave')}</Typography>
@@ -262,7 +266,7 @@ export default function PatientUpload({ patient }) {
                                 <Button variant='contained' onClick={() => handleSubmit('sick_leave')}>{t('save')}</Button>
                             </Stack>
                         </Stack>
-                    </Card>
+                    </Card>}
 
                 </Box>
 

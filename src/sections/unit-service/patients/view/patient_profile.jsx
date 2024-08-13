@@ -5,6 +5,7 @@ import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui
 
 import { useGetOneUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import PatientFile from '../patient-profile/patient-file';
 import PatientAbout from '../patient-profile/patient-about';
@@ -16,13 +17,13 @@ import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 
 export default function PatientProfile() {
   const { id } = useParams();
+  const { isMedLab } = useUSTypeGuard();
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [{
       path: 'patient', populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet'
     }, { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' }]
   });
 
-  // const { isMedLab } = useUSTypeGuard();
 
   const patientData = usPatientData.patient ? usPatientData.patient : usPatientData
 
@@ -30,20 +31,20 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [currentTab, setCurrentTab] = useState('about');
+  const [currentTab, setCurrentTab] = useState('upload');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
   const TABS = [
-    {
-      value: 'about',
-      label: t('about'),
-    },
-    {
+    // {
+    //   value: 'about',
+    //   label: t('about'),
+    // },
+    !isMedLab && {
       value: 'file',
       label: t('file'),
     },
-    {
+    !isMedLab && {
       value: 'prescriptions',
       label: t('prescriptions'),
     },
