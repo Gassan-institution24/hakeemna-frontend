@@ -290,6 +290,9 @@
   "added successfully": "تمت الاضافة بنجاح",
   "trade name": "الاسم التجاري",
   "frequently": "التكرار",
+  "identification scan": "صورة الهوية",
+  "the scanned image should be clear and able to read": "يجب ان تكون الصورة واضحة وتحتوي الرقم الوطني المدخل سابقا",
+  "your identification is being confirmed by admin, it might take some time": "يقوم الادمن بالتأكد من صحة رقمك الوطني, قد تأخد هذه العملية مدة من الوقت",
 
   "What we offer (some services under development)": "ماذا نقدم (بعض الخدمات تحت التطوير)",
   "suppliers offers": "عروض المنشاّت",

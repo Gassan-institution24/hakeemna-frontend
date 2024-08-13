@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { matchIsValidTel } from 'mui-tel-input';
@@ -19,6 +19,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Box,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -40,12 +41,15 @@ import FormProvider, {
   RHFTextField,
   RHFDatePicker,
   RHFPhoneNumber,
+  RHFUploadBox,
+  RHFUpload,
 } from 'src/components/hook-form';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId }) {
-  const { register } = useAuthContext();
+  const { register, authenticated } = useAuthContext();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -53,10 +57,13 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const [curPage, setCurPage] = useState(0)
+
   const router = useRouter();
   const termsDialog = useBoolean(false);
   const policyDialog = useBoolean(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [identification, setIdentification] = useState();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
 
   const searchParams = useSearchParams();
@@ -86,6 +93,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       .oneOf([Yup.ref('password'), null])
       .min(8, t('at least 8 ')),
     identification_num: Yup.string().required(t('required field')),
+    scanned_identification: Yup.mixed().required(t('required field')),
     mobile_num1: Yup.string()
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
@@ -110,6 +118,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     confirmPassword: '',
     mobile_num1: '',
     identification_num: '',
+    scanned_identification: null,
     gender: '',
     birth_date: today,
     country: null,
@@ -125,6 +134,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const {
     watch,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -135,7 +145,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
+    setValue('country', selectedCountryId, { shouldValidate: true });
     // setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
@@ -144,7 +154,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
     if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+      setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
 
@@ -153,15 +163,16 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+      setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const patient = await register?.({
-        userName: `${data.name_english} ${data.name_arabic}`,
-        ...data,
-      });
+      const formData = new FormData()
+      formData.append('identification', identification)
+      const patient = await register?.({ ...data, userName: data?.name_english });
+
+      await axiosInstance.patch(endpoints.patients.one(patient?.patient?._id, formData))
       if (afterSignUp) {
         setPatientId(patient?.patient?._id);
         afterSignUp();
@@ -174,6 +185,22 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
+
+  const handleDrop = (acceptedFiles) => {
+    setIdentification(acceptedFiles)
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      const newFile = Object.assign(acceptedFiles[0], {
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      });
+      setValue('scanned_identification', newFile);
+    }
+  };
+
+  useEffect(() => {
+    if (authenticated) {
+      router.push(paths.dashboard.root)
+    }
+  }, [authenticated, router])
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
@@ -213,53 +240,95 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const renderTerms = (
     <>
-      <Dialog open={termsDialog.value}>
-        <DialogContent dividers>
-          <DialogContentText tabIndex={-1}>
-            <TermsAndCondition />
-          </DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button variant="contained" onClick={termsDialog.onFalse}>
-            Ok
+      {curPage === 1 && <>
+        <Box sx={{ display: 'flex', mt: 2 }}>
+          <Button
+            color="inherit"
+            disabled={curPage === 0}
+            onClick={() => setCurPage(0)}
+            sx={{ mt: -1.5 }}
+          >
+            {t('back')}
           </Button>
-        </DialogActions>
-      </Dialog>
-      {/* ----------------------------- */}
-      <Dialog open={policyDialog.value}>
-        <DialogContent dividers>
-          <DialogContentText tabIndex={-1}>
-            <Privacypolicy />
-          </DialogContentText>
-        </DialogContent>
+        </Box>
+        <Dialog open={termsDialog.value}>
+          <DialogContent dividers>
+            <DialogContentText tabIndex={-1}>
+              <TermsAndCondition />
+            </DialogContentText>
+          </DialogContent>
 
-        <DialogActions>
-          <Button variant="contained" onClick={policyDialog.onFalse}>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* ----------------------------- */}
-      <Typography
-        component="div"
-        sx={{
-          color: 'text.secondary',
-          mt: 2.5,
-          typography: 'caption',
-          textAlign: 'center',
-        }}
-      >
-        {t('By signing up, I agree to ')}
-        <Link underline="always" color="success.main" onClick={termsDialog.onTrue}>
-          {t('Terms of Service ')}
-        </Link>
-        {t('and ')}
-        <Link underline="always" color="success.main" onClick={policyDialog.onTrue}>
-          {t('Privacy Policy')}
-        </Link>
-        .
-      </Typography>
+          <DialogActions>
+            <Button variant="contained" onClick={termsDialog.onFalse}>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* ----------------------------- */}
+        <Dialog open={policyDialog.value}>
+          <DialogContent dividers>
+            <DialogContentText tabIndex={-1}>
+              <Privacypolicy />
+            </DialogContentText>
+          </DialogContent>
+
+          <DialogActions>
+            <Button variant="contained" onClick={policyDialog.onFalse}>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* ----------------------------- */}
+        <Typography
+          component="div"
+          sx={{
+            color: 'text.secondary',
+            mt: 2.5,
+            typography: 'caption',
+            textAlign: 'center',
+          }}
+        >
+          {t('By signing up, I agree to ')}
+          <Link underline="always" color="success.main" onClick={termsDialog.onTrue}>
+            {t('Terms of Service ')}
+          </Link>
+          {t('and ')}
+          <Link underline="always" color="success.main" onClick={policyDialog.onTrue}>
+            {t('Privacy Policy')}
+          </Link>
+          .
+        </Typography>
+
+      </>}
+      {curPage === 0 &&
+        <LoadingButton
+          sx={{ mt: 4 }}
+          fullWidth
+          disabled={
+            values.name_english.trim().split(/\s+/)?.length < 3 ||
+            values.name_arabic.trim().split(/\s+/)?.length < 3 ||
+            !values.identification_num ||
+            !values.mobile_num1 ||
+            !values.nationality ||
+            !values.country ||
+            !values.city ||
+            !matchIsValidTel(values.mobile_num1) ||
+            !values.gender ||
+            !values.birth_date
+          }
+          color="inherit"
+          size="large"
+          variant="contained"
+          onClick={() => setCurPage(1)}
+        >
+          {t('Next Step')}{' '}
+          {curLangAr ? (
+            <Iconify width={20} className="arrow" icon="eva:arrow-ios-back-fill" />
+          ) : (
+            <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
+          )}
+        </LoadingButton>
+      }
     </>
   );
 
@@ -268,96 +337,106 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField
-            name="name_english"
-            label={t('name in english')}
-            onChange={handleEnglishInputChange}
-          />
-          <RHFTextField
-            name="name_arabic"
-            label={t('name in arabic')}
-            onChange={handleArabicInputChange}
-          />
-        </Stack>
+        {curPage === 0 &&
+          <>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <RHFTextField
+                name="name_english"
+                label={t('name in english')}
+                onChange={handleEnglishInputChange}
+              />
+              <RHFTextField
+                name="name_arabic"
+                label={t('name in arabic')}
+                onChange={handleArabicInputChange}
+              />
+            </Stack>
 
-        <RHFTextField name="identification_num" label={t('Identification number')} />
-        <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
-        <RHFSelect name="nationality" label={t('nationality')}>
-          {countriesData?.map((country, idx) => (
-            <MenuItem lang="ar" key={idx} value={country?._id}>
-              {curLangAr ? country?.name_arabic : country?.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
-            {countriesData?.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country?._id}>
-                {curLangAr ? country?.name_arabic : country?.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFSelect name="city" label={t('City')}>
-            {tableData?.map((city, idx) => (
-              <MenuItem lang="ar" key={idx} value={city?._id}>
-                {curLangAr ? city?.name_arabic : city?.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-        </Stack>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect name="gender" label={t('Gender')}>
-            <MenuItem lang="ar" value="male">
-              {t('male')}
-            </MenuItem>
-            <MenuItem lang="ar" value="female">
-              {t('female')}
-            </MenuItem>
-          </RHFSelect>
-          <RHFDatePicker name="birth_date" label={t('Date of birth')} />
-        </Stack>
+            <RHFTextField name="identification_num" label={t('Identification number')} />
+            <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+            <RHFSelect name="nationality" label={t('nationality')}>
+              {countriesData?.map((country, idx) => (
+                <MenuItem lang="ar" key={idx} value={country?._id}>
+                  {curLangAr ? country?.name_arabic : country?.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
+                {countriesData?.map((country, idx) => (
+                  <MenuItem lang="ar" key={idx} value={country?._id}>
+                    {curLangAr ? country?.name_arabic : country?.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="city" label={t('City')}>
+                {tableData?.map((city, idx) => (
+                  <MenuItem lang="ar" key={idx} value={city?._id}>
+                    {curLangAr ? city?.name_arabic : city?.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            </Stack>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <RHFSelect name="gender" label={t('Gender')}>
+                <MenuItem lang="ar" value="male">
+                  {t('male')}
+                </MenuItem>
+                <MenuItem lang="ar" value="female">
+                  {t('female')}
+                </MenuItem>
+              </RHFSelect>
+              <RHFDatePicker name="birth_date" label={t('Date of birth')} />
+            </Stack>
+          </>}
+        {curPage === 1 &&
+          <>
+            <RHFTextField name="email" label={t('Email address')} />
+            <RHFTextField
+              name="password"
+              label={t('Password')}
+              type={password.value ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={password.onToggle} edge="end">
+                      <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <RHFTextField
+              name="confirmPassword"
+              label={t('Confirm Password')}
+              type={password.value ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={password.onToggle} edge="end">
+                      <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Stack gap={1}>
+              <Typography variant='subtitle2'>{t('identification scan')}</Typography>
+              <RHFUpload name='scanned_identification' onDrop={handleDrop} label={t('identification photo')} />
+              <Typography variant='caption'>{t('the scanned image should be clear and able to read')}</Typography>
+            </Stack>
 
-        <RHFTextField name="email" label={t('Email address')} />
-        <RHFTextField
-          name="password"
-          label={t('Password')}
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <RHFTextField
-          name="confirmPassword"
-          label={t('Confirm Password')}
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <LoadingButton
-          fullWidth
-          color="inherit"
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          {t('create account')}
-        </LoadingButton>
+            <LoadingButton
+              fullWidth
+              color="inherit"
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+            >
+              {t('create account')}
+            </LoadingButton>
+          </>}
       </Stack>
     </FormProvider>
   );

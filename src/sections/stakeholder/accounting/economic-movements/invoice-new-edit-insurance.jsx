@@ -104,14 +104,14 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
               options={USData?.insurance?.map((one) => one._id)}
               getOptionLabel={(option) =>
                 USData?.insurance?.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                curLangAr ? 'name_arabic' : 'name_english'
                 ]
               }
               renderOption={(props, option, idx) => (
                 <li lang="ar" {...props} key={idx} value={option}>
                   {
                     USData?.insurance?.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                     ]
                   }
                 </li>

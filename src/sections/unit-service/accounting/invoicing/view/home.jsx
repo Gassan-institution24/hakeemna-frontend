@@ -86,6 +86,7 @@ export default function AppointmentsView() {
         { path: 'appointment_type', select: 'name_english name_arabic' },
         { path: 'appointment_type', select: 'name_english name_arabic' },
         { path: 'patient', select: 'name_english name_arabic' },
+        { path: 'unit_service_patient', select: 'name_english name_arabic' },
       ],
       ...filters,
     }

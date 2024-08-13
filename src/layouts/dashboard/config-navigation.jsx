@@ -64,6 +64,11 @@ export function useNavData() {
           //   icon: ICONS.dashboard,
           // },
           {
+            title: t('confirming'),
+            path: paths.superadmin.confirming,
+            icon: <Iconify icon="line-md:confirm-square-twotone" />,
+          },
+          {
             title: t('calender'),
             path: paths.superadmin.ourCalendar,
             icon: <Iconify icon="simple-line-icons:calender" />,
@@ -283,7 +288,7 @@ export function useNavData() {
       },
       {
         show:
-        checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
+          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,

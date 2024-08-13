@@ -57,8 +57,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewInvoiceSchema = Yup.object().shape({
-    createDate: Yup.mixed().nullable().required('Create date is required'),
-    patient: Yup.mixed().nullable().required('Invoice to is required'),
+    createDate: Yup.mixed().nullable().required(t('required field')),
+    patient: Yup.mixed().nullable(),
     unit_service: Yup.mixed(),
     appointment: Yup.mixed().nullable(),
     entrance: Yup.mixed().nullable(),
@@ -109,6 +109,12 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         currentInvoice?.patient ||
         entranceInfo?.patient ||
         appointmentInfo?.patient ||
+        null,
+      unit_service_patient:
+        currentInvoice?.unit_service_patient?._id ||
+        currentInvoice?.unit_service_patient ||
+        entranceInfo?.unit_service_patient ||
+        appointmentInfo?.unit_service_patient ||
         null,
       work_shift:
         currentInvoice?.work_shift?._id ||
@@ -179,7 +185,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         if (entrance) {
           const { data } = await axiosInstance.get(endpoints.entranceManagement.one(entrance), {
             params: {
-              select: 'Service_types patient work_shift appointment',
+              select: 'Service_types patient unit_service_patient work_shift appointment',
               populate: [
                 { path: 'Service_types', select: 'name_english name_arabic Price_per_unit' },
               ],
@@ -188,7 +194,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           setEntranceInfo(data);
         } else if (appointment) {
           const { data } = await axiosInstance.get(endpoints.appointments.one(appointment), {
-            params: { select: 'patient work_shift' },
+            params: { select: 'patient unit_service_patient work_shift' },
           });
           setAppointmentInfo(data);
         }
