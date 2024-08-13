@@ -16,6 +16,7 @@ import {
   TableBody,
   IconButton,
   TableContainer,
+  TextField,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -39,6 +40,8 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import { LoadingButton } from '@mui/lab';
 
 export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
@@ -51,6 +54,7 @@ export default function AppointmentsToday() {
   const theme = useTheme();
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
+  const [addingId, setAddingId] = useState(false);
 
   const [arrivalTimes, setArrivalTimes] = useState({});
 
@@ -97,10 +101,20 @@ export default function AppointmentsToday() {
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const updateStatus = async (info, status, type) => {
+  const updateStatus = async (info, status, type, ID) => {
     try {
+      let newPatient
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
-      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status });
+      if (!info?.unit_service_patient?.identification_num && !info?.patient?.identification_num && !ID) {
+        setAddingId({ info, status, type })
+        return
+      }
+      if (!info.patient) {
+        newPatient = await axiosInstance.post(endpoints.patients.all, { ...info.unit_service_patient, identification_num: ID })
+        await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status, patient: newPatient?.data?._id });
+      } else {
+        await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status });
+      }
 
       if (type === 'arrived' && status) {
         setArrivalTimes((prev) => ({
@@ -243,113 +257,130 @@ export default function AppointmentsToday() {
   };
 
   return (
-    <Container>
-      <CustomBreadcrumbs
-        heading={t('Appointments Today')}
-        links={[{ name: user.userName }]}
-        sx={{ mb: { xs: 3, md: 5 } }}
+    <>
+      <Container>
+        <CustomBreadcrumbs
+          heading={t('Appointments Today')}
+          links={[{ name: user.userName }]}
+          sx={{ mb: { xs: 3, md: 5 } }}
+        />
+        <Tabs
+          value={currentTab}
+          onChange={handleChangeTab}
+          sx={{ px: 2.5, boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}` }}
+        >
+          {TABS.map((tab, idx) => (
+            <Tab
+              key={idx}
+              value={tab.value}
+              label={tab.label}
+              iconPosition="end"
+              icon={<Label color={tab.color}>{tab.count}</Label>}
+            />
+          ))}
+        </Tabs>
+        {currentTab === 'two' ? (
+          <WaitingRoom />
+        ) : (
+          <TableContainer sx={{ mt: 3, mb: 2 }}>
+            <Scrollbar>
+              <Table sx={{ minWidth: 400 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t('Time')}</TableCell>
+                    <TableCell>{t('patient')}</TableCell>
+                    <TableCell>{t('Patient Note')}</TableCell>
+                    {currentTab !== 'three' && (
+                      <>
+                        <TableCell>{t('Coming')}</TableCell>
+                        <TableCell>{t('Arrived')}</TableCell>
+                      </>
+                    )}
+                    <TableCell>{t('Options')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {currentTabData?.data?.map((info, index) => {
+                    let patientName
+                    if (info?.patient) {
+                      patientName = curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english
+                    } else if (info.unit_service_patient) {
+                      patientName = curLangAr ? info?.unit_service_patient?.name_arabic : info?.unit_service_patient?.name_english
+                    }
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{fTime(info?.start_time)}</TableCell>
+                        <TableCell>{patientName}</TableCell>
+                        <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
+                        {currentTab !== 'three' && (
+                          <>
+                            <TableCell>
+                              {info?.coming ? (
+                                'YES'
+                              ) : (
+                                <>
+                                  <Button
+                                    sx={{ p: 2 }}
+                                    onClick={() => updateStatus(info, true, 'coming')}
+                                  >
+                                    {t('Yes')}
+                                  </Button>
+                                  <Button
+                                    sx={{ p: 2 }}
+                                    onClick={() => updateStatus(info, false, 'coming')}
+                                  >
+                                    {t('No')}
+                                  </Button>
+                                </>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {info?.arrived ? (
+                                'YES'
+                              ) : (
+                                <>
+                                  <Button
+                                    sx={{ p: 2 }}
+                                    onClick={() => updateStatus(info, true, 'arrived')}
+                                  >
+                                    {t('Yes')}
+                                  </Button>
+                                  <Button
+                                    sx={{ p: 2 }}
+                                    onClick={() => updateStatus(info, false, 'arrived')}
+                                  >
+                                    {t('No')}
+                                  </Button>
+                                </>
+                              )}
+                            </TableCell>
+                          </>
+                        )}
+                        <TableCell>{renderOptions(info)}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
+      </Container>
+      <ConfirmDialog
+        open={addingId}
+        onClose={() => setAddingId(false)}
+        title={t('add patient ID number')}
+        content={<TextField type='number' onClick={(e) => setAddingId({ ...addingId, ID: e.target.value })} />}
+        action={
+          <LoadingButton
+            variant="contained"
+            color="info"
+            onClick={() => updateStatus(addingId.info, addingId.status, addingId.type, addingId.ID)}
+          >
+            {t('add')}
+          </LoadingButton>
+        }
       />
-      <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
-        sx={{ px: 2.5, boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}` }}
-      >
-        {TABS.map((tab, idx) => (
-          <Tab
-            key={idx}
-            value={tab.value}
-            label={tab.label}
-            iconPosition="end"
-            icon={<Label color={tab.color}>{tab.count}</Label>}
-          />
-        ))}
-      </Tabs>
-      {currentTab === 'two' ? (
-        <WaitingRoom />
-      ) : (
-        <TableContainer sx={{ mt: 3, mb: 2 }}>
-          <Scrollbar>
-            <Table sx={{ minWidth: 400 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>{t('Time')}</TableCell>
-                  <TableCell>{t('patient')}</TableCell>
-                  <TableCell>{t('Patient Note')}</TableCell>
-                  {currentTab !== 'three' && (
-                    <>
-                      <TableCell>{t('Coming')}</TableCell>
-                      <TableCell>{t('Arrived')}</TableCell>
-                    </>
-                  )}
-                  <TableCell>{t('Options')}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {currentTabData?.data?.map((info, index) => {
-                  let patientName
-                  if (info?.patient) {
-                    patientName = curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english
-                  } else if (info.unit_service_patient) {
-                    patientName = curLangAr ? info?.unit_service_patient?.name_arabic : info?.unit_service_patient?.name_english
-                  }
-                  return (
-                    <TableRow key={index}>
-                      <TableCell>{fTime(info?.start_time)}</TableCell>
-                      <TableCell>{patientName}</TableCell>
-                      <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
-                      {currentTab !== 'three' && (
-                        <>
-                          <TableCell>
-                            {info?.coming ? (
-                              'YES'
-                            ) : (
-                              <>
-                                <Button
-                                  sx={{ p: 2 }}
-                                  onClick={() => updateStatus(info, true, 'coming')}
-                                >
-                                  {t('Yes')}
-                                </Button>
-                                <Button
-                                  sx={{ p: 2 }}
-                                  onClick={() => updateStatus(info, false, 'coming')}
-                                >
-                                  {t('No')}
-                                </Button>
-                              </>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {info?.arrived ? (
-                              'YES'
-                            ) : (
-                              <>
-                                <Button
-                                  sx={{ p: 2 }}
-                                  onClick={() => updateStatus(info, true, 'arrived')}
-                                >
-                                  {t('Yes')}
-                                </Button>
-                                <Button
-                                  sx={{ p: 2 }}
-                                  onClick={() => updateStatus(info, false, 'arrived')}
-                                >
-                                  {t('No')}
-                                </Button>
-                              </>
-                            )}
-                          </TableCell>
-                        </>
-                      )}
-                      <TableCell>{renderOptions(info)}</TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-      )}
-    </Container>
+    </>
   );
 }

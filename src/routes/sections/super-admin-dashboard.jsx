@@ -445,6 +445,9 @@ const AddEmployeePage = lazy(() => import('src/pages/super-admin/employees/new')
 // CALENDER
 const CalenderPage = lazy(() => import('src/pages/super-admin/calender/calender'));
 
+// CALENDER
+const ConfirmingPage = lazy(() => import('src/pages/super-admin/confirming/confirming'));
+
 // MAIL
 const MailPage = lazy(() => import('src/pages/super-admin/mail'));
 
@@ -494,6 +497,10 @@ export const dashboardRoutes = [
       {
         path: 'ourcalender',
         element: <CalenderPage />,
+      },
+      {
+        path: 'confirming',
+        element: <ConfirmingPage />,
       },
       {
         path: 'mail',
