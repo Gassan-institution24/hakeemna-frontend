@@ -357,8 +357,10 @@ export default function EmployeesTableView() {
 
   /* eslint-disable */
   useEffect(() => {
-    socket.on('employeeStatusUpdated', () => {
-      refetch();
+    socket.on('employeeStatusUpdated', ({ unit_service }) => {
+      if (user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id === unit_service) {
+        refetch();
+      }
     });
   }, []);
   /* eslint-enable */

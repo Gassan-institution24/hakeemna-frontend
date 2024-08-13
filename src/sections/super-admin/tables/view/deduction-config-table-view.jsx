@@ -387,6 +387,7 @@ export default function DeductionConfigTableView() {
                         onActivate={() => handleActivate(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
+                        onFilters={handleFilters}
                       />
                     ))}
 
@@ -483,10 +484,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.unit_service?.name_english &&
-          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.unit_service?.name_arabic &&
-          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_english &&
+          data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_arabic &&
+          data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_english &&
+          data?.city?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_arabic &&
+          data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type &&
+          data?.type.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

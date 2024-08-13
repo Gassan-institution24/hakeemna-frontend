@@ -30,15 +30,15 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [currentTab, setCurrentTab] = useState('about');
+  const [currentTab, setCurrentTab] = useState('upload');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
   const TABS = [
-    {
-      value: 'about',
-      label: t('about'),
-    },
+    // {
+    //   value: 'about',
+    //   label: t('about'),
+    // },
     {
       value: 'file',
       label: t('file'),

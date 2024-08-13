@@ -70,40 +70,50 @@ export default function NotificationsPopoverPatient() {
     });
   }, []);
   useEffect(() => {
-    socket.on('invite', (data) => {
-      setAllNotifications([]);
-      // setPage(1);
-      refetch();
+    socket.on('invite', ({ patient }) => {
+      if (user?.patient?._id === patient) {
+        setAllNotifications([]);
+        // setPage(1);
+        refetch();
+      }
     });
   }, []);
   useEffect(() => {
-    socket.on('accept', (data) => {
-      setAllNotifications([]);
-      // setPage(1);
-      refetch();
+    socket.on('accept', ({ patient }) => {
+      if (user?.patient?._id === patient) {
+        setAllNotifications([]);
+        // setPage(1);
+        refetch();
+      }
     });
   }, []);
   useEffect(() => {
-    socket.on('patientbooking', (data) => {
-      setAllNotifications([]);
-      // setPage(1);
-      refetch();
+    socket.on('patientbooking', ({ patient }) => {
+      if (user?.patient?._id === patient) {
+        setAllNotifications([]);
+        // setPage(1);
+        refetch();
+      }
     });
   }, []);
 
   useEffect(() => {
-    socket.on('appointmentcancel', (data) => {
-      setAllNotifications([]);
-      // setPage(1);
-      refetch();
+    socket.on('appointmentcancel', ({ patient }) => {
+      if (user?.patient?._id === patient) {
+        setAllNotifications([]);
+        // setPage(1);
+        refetch();
+      }
     });
   }, []);
 
   useEffect(() => {
-    socket.on('upcoming', (data) => {
-      setAllNotifications([]);
-      // setPage(1);
-      refetch();
+    socket.on('upcoming', ({ patient }) => {
+      if (user?.patient?._id === patient) {
+        setAllNotifications([]);
+        // setPage(1);
+        refetch();
+      }
     });
   }, []);
   /* eslint-enable */

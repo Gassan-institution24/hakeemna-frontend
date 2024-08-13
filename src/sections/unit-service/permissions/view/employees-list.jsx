@@ -353,8 +353,10 @@ export default function EmployeesTableView() {
 
   /* eslint-disable */
   useEffect(() => {
-    socket.on('employeeStatusUpdated', () => {
-      refetch();
+    socket.on('employeeStatusUpdated', ({ unit_service }) => {
+      if (user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id === unit_service) {
+        refetch();
+      }
     });
   }, []);
   /* eslint-enable */
@@ -632,7 +634,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.country?.name_english &&
           data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.country?.name_arabic &&
           data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.city?.name_english &&
@@ -641,10 +643,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.nationality?.name_english &&
           data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.nationality?.name_arabic &&
           data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.email &&
           data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||

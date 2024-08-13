@@ -92,19 +92,26 @@ export default function NotificationsPopover() {
       socket.emit('sendUser', user);
     });
     socket.on('error', () => {
-      setAllNotifications([]);
-      setPage(1);
-      refetch();
+      if (user?.role === 'superadmin') {
+        setAllNotifications([]);
+        setPage(1);
+        refetch();
+      }
     });
-    socket.on('created', () => {
-      setAllNotifications([]);
-      setPage(1);
-      refetch();
+    socket.on('created', ({ stakeholder, employees }) => {
+      if (user?.stakeholder?._id === stakeholder || employees?.includes(user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id)) {
+
+        setAllNotifications([]);
+        setPage(1);
+        refetch();
+      }
     });
-    socket.on('updated', () => {
-      setAllNotifications([]);
-      setPage(1);
-      refetch();
+    socket.on('updated', ({ stakeholder, employees }) => {
+      if (user?.stakeholder?._id === stakeholder || employees?.includes(user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id)) {
+        setAllNotifications([]);
+        setPage(1);
+        refetch();
+      }
     });
     socket.on('request', () => {
       setAllNotifications([]);
