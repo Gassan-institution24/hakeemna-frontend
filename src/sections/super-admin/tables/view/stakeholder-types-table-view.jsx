@@ -58,17 +58,8 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
   { id: 'name_arabic', label: 'arabic name' },
-  { id: 'unit_service', label: 'unit of service' },
-  { id: 'service', label: 'Service' },
   { id: 'description', label: 'Description' },
   { id: 'status', label: 'Status' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 

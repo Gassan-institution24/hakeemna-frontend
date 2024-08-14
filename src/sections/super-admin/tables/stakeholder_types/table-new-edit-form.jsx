@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -16,26 +15,20 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetActiveUnitservices, useGetActiveServiceTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { unitservicesData } = useGetActiveUnitservices({ populate: 'all' });
-  const { serviceTypesData } = useGetActiveServiceTypes();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string(),
-    service: Yup.string().nullable(),
     description: Yup.string(),
     description_arabic: Yup.string(),
   });
@@ -44,8 +37,6 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || null,
-      service: currentTable?.service?._id || null,
       description: currentTable?.description || '',
       description_arabic: currentTable?.description_arabic || '',
     }),
@@ -89,13 +80,7 @@ export default function TableNewEditForm({ currentTable }) {
         await axiosInstance.post(endpoints.stakeholder_types.all, data);
       }
       reset();
-      // if (response.status.includes(200, 304)) {
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
-      // } else {
-      //   enqueueSnackbar('Please try again later!', {
-      //     variant: 'error',
-      //   });
-      // }
       router.push(paths.superadmin.tables.stakeholdertypes.root);
     } catch (error) {
       console.error(error);
@@ -130,21 +115,6 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
-
-              <RHFSelect name="unit_service" label="unit_service">
-                {unitservicesData.map((unit_service, idx) => (
-                  <MenuItem lang="ar" key={idx} value={unit_service._id}>
-                    {unit_service.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect name="service" label="service">
-                {serviceTypesData.map((service, idx) => (
-                  <MenuItem lang="ar" key={idx} value={service._id}>
-                    {service.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
             </Box>
             <Box
               rowGap={3}

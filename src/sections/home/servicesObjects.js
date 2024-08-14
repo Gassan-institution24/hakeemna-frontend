@@ -60,7 +60,7 @@ export const USsServices = [
       },
       {
         en: 'Managing appointments for patients, and the ability to book appointments in hospitals participating in our platform to reserve the operating room or any other department.',
-        ar: 'إدارة المواعيد للمرضى، وامكانية حجز مواعيد بشكل في المستشفيات المشاركة في منصتنا لحجز غرفة العمليات أو أي قسم آخر.',
+        ar: 'إدارة المواعيد للمرضى، وامكانية حجز مواعيد بشكل سهل في المستشفيات المشاركة في منصتنا لحجز غرفة العمليات أو أي قسم آخر.',
       },
       { en: 'Marketing campaigns.', ar: 'حملات تسويقية.' },
       { en: 'Electronic signature and payment.', ar: 'التوقيع والدفع الإلكتروني.' },
@@ -78,7 +78,7 @@ export const USsServices = [
       { en: 'Department of Human Ressources.', ar: 'إدارة شؤون الموظفين.' },
       {
         en: 'The ability to manage each department and each work team independently.',
-        ar: 'إمكانية ادارة كل قسم وكل فريق عمل بكل مستقل.',
+        ar: 'إمكانية ادارة كل قسم وكل فريق عمل بشكل مستقل.',
       },
       {
         en: 'Manage the agenda independently for everyone who works in the medical institution.',
@@ -177,7 +177,7 @@ export const patientsServices = [
       },
       {
         en: 'Faster and more accurate access to medical information and files, supporting better decision- making in patient healthcare.',
-        ar: 'وصول أسرع وأكثر دقة المعلومات و الملفات الطبية،  ودعم اتخاذ قرارات أفضل في الرعاية الصحية للمرضى.',
+        ar: 'وصول أسرع وأكثر دقة للمعلومات و للملفات الطبية،  ودعم اتخاذ قرارات أفضل في الرعاية الصحية للمرضى.',
       },
       {
         en: 'Communicate with doctors and all medical institutions electronically in the same country or in another country.',
@@ -263,7 +263,7 @@ export const patientsServices = [
     items: [
       {
         en: 'Use free applications and platforms, whether you are insured by an insurance company or not.',
-        ar: 'استخدام تطبيقات و منصة مجانية سواء كنت مؤمن في شركة تأمين أم لا.',
+        ar: 'استخدام تطبيقات و منصة مجانية سواء كان لديك اشتراك تأمين أم لا.',
       },
       {
         en: 'Join a comprehensive and distinguished medical community.',

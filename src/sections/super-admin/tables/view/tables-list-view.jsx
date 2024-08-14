@@ -86,7 +86,7 @@ export default function TablesListView() {
       { tableName: 'sub_specialities', documents: [] }, //
       { tableName: 'countries', documents: [] }, //
       { tableName: 'added_value_tax_GD', documents: [] },
-      { tableName: 'departments', documents: [] }, //
+      // { tableName: 'departments', documents: [] }, //
       { tableName: 'medicines', documents: [] }, //
       // { tableName: 'unit_services', documents: [] }, //
       { tableName: 'appointment_types', documents: [] }, //
