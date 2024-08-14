@@ -46,8 +46,8 @@ export default function Walktour({ locale, ...other }) {
 
   return (
     <Joyride
-      scrollOffset={120}
-      // spotlightPadding={16}
+      scrollOffset={0}
+      spotlightPadding={5}
       locale={
         curLangAr
           ? arabicLocal

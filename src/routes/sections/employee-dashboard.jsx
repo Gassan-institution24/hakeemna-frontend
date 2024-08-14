@@ -92,6 +92,11 @@ const PatientNewPage = lazy(() => import('src/pages/employee/patients/new-patien
 const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
 const ChecklistNewPage = lazy(() => import('src/pages/employee/checklist/new'));
 const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit'));
+
+// ADJUSTABLE DOC
+const AdjustPage = lazy(() => import('src/pages/employee/adjustable-doc/table'));
+const AdjustNewPage = lazy(() => import('src/pages/employee/adjustable-doc/new'));
+const AdjustEditPage = lazy(() => import('src/pages/employee/adjustable-doc/edit'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -112,12 +117,21 @@ export const unitServiceEmployeeDashboardRoutes = [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
       {
-        path: 'checklist',
+        path: 'documents/checklist',
         children: [
           { element: <ChecklistPage />, index: true },
           { path: 'list', element: <ChecklistPage /> },
           { path: 'new', element: <ChecklistNewPage /> },
           { path: ':id/edit', element: <ChecklistEditPage /> },
+        ],
+      },
+      {
+        path: 'documents/adjustable',
+        children: [
+          { element: <AdjustPage />, index: true },
+          { path: 'list', element: <AdjustPage /> },
+          { path: 'new', element: <AdjustNewPage /> },
+          { path: ':id/edit', element: <AdjustEditPage /> },
         ],
       },
       {
