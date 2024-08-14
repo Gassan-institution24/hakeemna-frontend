@@ -821,6 +821,14 @@ export const paths = {
 
   employee: {
     root: ROOTS.SUPERADMIN,
+    documents: {
+      parent: `${ROOTS.SUPERADMIN}/documents`,
+      adjustable: {
+        root: `${ROOTS.SUPERADMIN}/documents/adjustable`,
+        new: `${ROOTS.SUPERADMIN}/documents/adjustable/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/documents/adjustable/${id}/edit`,
+      }
+    },
     workGroups: {
       root: `${ROOTS.SUPERADMIN}/profile/wgroups`,
       permissions: {
@@ -845,9 +853,9 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}`,
     },
     checklist: {
-      root: `${ROOTS.SUPERADMIN}/checklist`,
-      new: `${ROOTS.SUPERADMIN}/checklist/new`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/checklist/${id}/edit`,
+      root: `${ROOTS.SUPERADMIN}/documents/checklist`,
+      new: `${ROOTS.SUPERADMIN}/documents/checklist/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/documents/checklist/${id}/edit`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointments/config`,
