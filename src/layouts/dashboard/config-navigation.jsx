@@ -20,9 +20,6 @@ import Iconify from 'src/components/iconify';
 
 export function useNavData() {
   const router = useRouter();
-  // const { logout } = useAuthContext();
-  // const popover = usePopover();
-  // const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
@@ -42,27 +39,11 @@ export function useNavData() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
-  // const handleLogout = useCallback(async () => {
-  //   try {
-  //     popover.onClose();
-  //     logout();
-  //     router.replace('/login');
-  //   } catch (error) {
-  //     console.error(error);
-  //     enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //   }
-  // }, [logout, popover, enqueueSnackbar, router]);
-
   const data = useMemo(() => {
     const superAdminItems = [
       {
         subheader: t('overview'),
         items: [
-          // {
-          //   title: t('app'),
-          //   path: paths.dashboard.root,
-          //   icon: ICONS.dashboard,
-          // },
           {
             title: t('confirming'),
             path: paths.superadmin.confirming,
@@ -163,59 +144,10 @@ export function useNavData() {
             path: paths.superadmin.adjustableServices.root,
             icon: <Iconify icon="ic:sharp-published-with-changes" />,
           },
-          // {
-          //   title: t('management tables'),
-          //   path: paths.superadmin.tables.root,
-          //   icon: <Iconify icon="iconamoon:profile-bold" />,
-          //   children: [
-          //     { title: t('list'), path: paths.superadmin.tables.list },
-          //     { title: t('cities'), path: paths.superadmin.tables.cities.root },
-          //     { title: t('countries'), path: paths.superadmin.tables.countries.root },
-          //     { title: t('currency'), path: paths.superadmin.tables.currency.root },
-          //     { title: t('surgeries'), path: paths.superadmin.tables.surgeries.root },
-          //     { title: t('medical categories'), path: paths.superadmin.tables.medcategories.root },
-          //     { title: t('diseases'), path: paths.superadmin.tables.diseases.root },
-          //     { title: t('medicines families'), path: paths.superadmin.tables.medfamilies.root },
-          //     { title: t('medicines'), path: paths.superadmin.tables.medicines.root },
-          //     { title: t('symptoms'), path: paths.superadmin.tables.symptoms.root },
-          //     { title: t('diets'), path: paths.superadmin.tables.diets.root },
-          //     { title: t('analyses'), path: paths.superadmin.tables.analysis.root },
-          //     { title: t('insurance companies'), path: paths.superadmin.tables.insurancecomapnies.root },
-          //     { title: t('units of service'), path: paths.superadmin.tables.unitservices.root },
-          //     { title: t('departments'), path: paths.superadmin.tables.departments.root },
-          //     { title: t('specialities'), path: paths.superadmin.tables.specialities.root },
-          //     { title: t('subspecialities'), path: paths.superadmin.tables.subspecialities.root },
-          //     { title: t('appointment types'), path: paths.superadmin.tables.appointypes.root },
-          //     { title: t('free subscriptions'), path: paths.superadmin.tables.freesub.root },
-          //     { title: t('added value taxes'), path: paths.superadmin.tables.taxes.root },
-          //     { title: t('unit of service types'), path: paths.superadmin.tables.unitservicetypes.root },
-          //     { title: t('activities'), path: paths.superadmin.tables.activities.root },
-          //     { title: t('employee types'), path: paths.superadmin.tables.employeetypes.root },
-          //     { title: t('payment methods'), path: paths.superadmin.tables.paymentmethods.root },
-          //     { title: t('stakeholder types'), path: paths.superadmin.tables.stakeholdertypes.root },
-          //     { title: t('work shifts'), path: paths.superadmin.tables.workshifts.root },
-          //     { title: t('service types'), path: paths.superadmin.tables.servicetypes.root },
-          //     { title: t('measurement types'), path: paths.superadmin.tables.measurementtypes.root },
-          //     { title: t('hospital list'), path: paths.superadmin.tables.hospitallist.root },
-          //     { title: t('deduction config'), path: paths.superadmin.tables.deductionconfig.root },
-          //     { title: t('rooms'), path: paths.superadmin.tables.rooms.root },
-          //   ],
-          // },
         ],
       },
     ];
     const unitServiceManagementTables = [
-      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
-      //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
-      // {
-      //   show: checkAcl({
-      //     category: 'unit_service',
-      //     subcategory: 'management_tables',
-      //     acl: 'read',
-      //   }),
-      //   title: t('employee types'),
-      //   path: paths.unitservice.tables.employeetypes.root,
-      // },
       {
         show:
           checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
@@ -224,13 +156,11 @@ export function useNavData() {
           false,
         title: t('departments'),
         path: paths.unitservice.departments.root,
-        // icon: <Iconify icon="uis:web-section-alt" />,
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
         title: t('employees'),
         path: paths.unitservice.employees.root,
-        // icon: <Iconify icon="fluent:people-20-filled" />,
         navItemId: 'USEmployeesNav',
       },
       {
@@ -284,7 +214,6 @@ export function useNavData() {
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
-        // icon: <Iconify icon="material-symbols:volunteer-activism" />,
       },
       {
         show:
@@ -324,7 +253,6 @@ export function useNavData() {
             show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
             title: t('appointments'),
             path: paths.unitservice.appointments.root,
-            // icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
             navItemId: 'USAppointmentsNav',
           },
           {
@@ -335,7 +263,6 @@ export function useNavData() {
             }),
             title: t('book appointments'),
             path: paths.unitservice.appointments.book,
-            // icon: <Iconify icon="material-symbols:add-ad" />,
           },
         ].filter((one) => one.show),
       },
@@ -452,7 +379,6 @@ export function useNavData() {
             }),
             title: t('orders'),
             path: paths.unitservice.orders.root,
-            // icon: <Iconify icon="fluent-mdl2:product" />,
             navItemId: 'USInsuranceNav',
           },
         ].filter((one) => one.show),
@@ -476,7 +402,6 @@ export function useNavData() {
             }),
             title: t('profile'),
             path: paths.unitservice.profile.root,
-            // icon: <Iconify icon="fa-solid:clinic-medical" />,
             navItemId: 'USInfoNav',
           },
           {
@@ -487,7 +412,6 @@ export function useNavData() {
             }),
             title: t('Insurance'),
             path: paths.unitservice.insurance.root,
-            // icon: <Iconify icon="ic:baseline-security" />,
             navItemId: 'USInsuranceNav',
           },
           {
@@ -496,7 +420,6 @@ export function useNavData() {
               checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
             title: t('communication'),
             path: paths.unitservice.communication.root,
-            // icon: <Iconify icon="solar:call-chat-bold" />,
             navItemId: 'USCommunicationNav',
           },
           {
@@ -507,7 +430,6 @@ export function useNavData() {
             }),
             title: t('quality control'),
             path: paths.unitservice.qualityControl.root,
-            // icon: <Iconify icon="healthicons:world-care" />,
             navItemId: 'USQualityControlNav',
           },
           {
@@ -518,7 +440,6 @@ export function useNavData() {
             }),
             title: t('subscriptions'),
             path: paths.unitservice.subscriptions.root,
-            // icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
             navItemId: 'USSubscriptionsNav',
           },
         ].filter((one) => one.show),
@@ -540,7 +461,6 @@ export function useNavData() {
     const employeeItems = [
       {
         show:
-          // false &&
           checkAcl({
             category: 'work_group',
             subcategory: 'entrance_management',
@@ -568,7 +488,6 @@ export function useNavData() {
             show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
             title: t('my appointments'),
             path: paths.employee.appointments.root,
-            // icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
             navItemId: 'EMAppointmentsNav',
           },
           {
@@ -593,13 +512,7 @@ export function useNavData() {
           },
         ],
       },
-      {
-        show: true,
-        title: t('my calender'),
-        path: paths.employee.calender,
-        icon: <Iconify icon="simple-line-icons:calender" />,
-        navItemId: 'EMCalenderNav',
-      },
+
       {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
         title: t('my patients'),
@@ -607,20 +520,32 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
-        show:
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) &&
-          !isMedLab,
-        title: t('my checklist'),
-        path: paths.employee.checklist.root,
-        icon: <Iconify icon="solar:checklist-outline" />,
-        navItemId: 'EMChecklistNav',
-      },
-      {
         show: false,
         title: t('my accounting'),
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
         navItemId: 'EMAccountingNav',
+      },
+      {
+        show: true,
+        title: t('documents'),
+        path: paths.employee.documents.parent,
+        icon: <Iconify icon="ic:outline-folder" />,
+        children: [
+          {
+            show:
+              checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) &&
+              !isMedLab,
+            title: t('checklist'),
+            path: paths.employee.checklist.root,
+            navItemId: 'EMChecklistNav',
+          },
+          {
+            show: true,
+            title: t('adjustable documents'),
+            path: paths.employee.documents.adjustable.root,
+          },
+        ].filter((one) => one.show),
       },
       {
         show: true,
@@ -658,6 +583,13 @@ export function useNavData() {
             navItemId: 'EMQualityControlNav',
           },
         ].filter((one) => one.show),
+      },
+      {
+        show: true,
+        title: t('my calender'),
+        path: paths.employee.calender,
+        icon: <Iconify icon="simple-line-icons:calender" />,
+        navItemId: 'EMCalenderNav',
       },
     ];
     const employeeDashboard = [
