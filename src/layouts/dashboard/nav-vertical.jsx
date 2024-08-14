@@ -53,6 +53,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const curLangAr = currentLang.value === 'ar';
 
   const [dialog, setDialog] = useState(false);
+  const [runningTour, setRunningTour] = useState(false);
 
   const [ticketDialog, setTicketDialog] = useState(false);
 
@@ -65,6 +66,16 @@ export default function NavVertical({ openNav, onCloseNav }) {
     defaultRun: false,
     showProgress: true,
     steps: [
+      {
+        target: '#USTablesNav',
+        title: 'management table',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            choose management tables button
+          </Typography>
+        ),
+      },
       {
         target: '#USDepartmentNav',
         title: 'Creating departments',
@@ -220,29 +231,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Typography>
         </Tooltip>
       )}
-      {/* <Logo sx={{ mt: 3, ml: 4, mb: 1 }} /> */}
-      {/* <Link
-        component={RouterLink}
-        href={isEmployee ? paths.pages.serviceUnit(USData?._id) : '/'}
-        sx={{ display: 'contents' }}
-      >
-        <Box
-          component="div"
-          sx={{
-            width: { xs: 200, md: 200 },
-            height: { xs: 110, md: 120 },
-            display: 'inline-flex',
-            mt: 3,
-            ml: 4,
-            mb: 1,
-          }}
-        >
-          <img src={isEmployee ? USData?.company_logo : Doclogo} alt="logo" />
-        </Box>
-      </Link> */}
+
       <NavSectionVertical
         data={navData}
-        walktourRun={walktour.run}
+        walktourRun={runningTour}
         slotProps={{
           currentRole: user?.role,
         }}
@@ -296,7 +288,14 @@ export default function NavVertical({ openNav, onCloseNav }) {
         <MenuItem
           lang="ar"
           sx={{ fontSize: 13, color: 'secondary.dark' }}
-          onClick={() => walktour.setRun(true)}
+          onClick={() => {
+            popover.onClose()
+            setRunningTour(true)
+            setTimeout(() => {
+              walktour.setRun(true)
+              setRunningTour(false)
+            }, 200)
+          }}
         >
           {t('walktour for first steps')}
         </MenuItem>
