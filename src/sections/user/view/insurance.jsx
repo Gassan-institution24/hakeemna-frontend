@@ -149,7 +149,7 @@ export default function Insuranceinfo() {
             >
               {insuranseCosData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.name_english}
+                   { curLangAr ? test?.insurance?.name_arabic  : test?.insurance?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -181,7 +181,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -30, xs: -5 } : { md: -21, xs: 4 },
+              ml: curLangAr ? { md: -30, xs: -5 } : { md: -18, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },

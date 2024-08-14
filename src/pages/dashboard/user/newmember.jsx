@@ -17,8 +17,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Image from 'src/components/image';
@@ -29,6 +29,8 @@ export default function Create() {
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { register } = useAuthContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState('');
   const { user } = useAuthContext();
@@ -149,7 +151,6 @@ export default function Create() {
             render={({ field, fieldState: { error } }) => (
               <DatePicker
                 label={t('birth date')}
-                // sx={{ flex: 1 }}
                 value={new Date(values.birth_date ? values.birth_date : '')}
                 onChange={(newValue) => {
                   field.onChange(newValue);
@@ -167,7 +168,7 @@ export default function Create() {
           <RHFSelect onChange={handleNationalityChange} name="nationality" label={t('nationality')}>
             {countriesData?.map((country, idx) => (
               <MenuItem lang="ar" key={idx} value={country?._id}>
-                {country?.name_english}
+                {curLangAr ? country?.name_arabic : country?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
@@ -175,14 +176,14 @@ export default function Create() {
             <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
               {countriesData?.map((country, idx) => (
                 <MenuItem lang="ar" key={idx} value={country?._id}>
-                  {country?.name_english}
+                  {curLangAr ? country?.name_arabic : country?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
             <RHFSelect name="city" label={t('City')}>
               {tableData?.map((city, idx) => (
                 <MenuItem lang="ar" key={idx} value={city?._id}>
-                  {city?.name_english}
+                  {curLangAr ? city?.name_arabic : city?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -234,7 +235,7 @@ export default function Create() {
             variant="contained"
             loading={isSubmitting}
           >
-            {t('Create account')}
+            {t('create account')}
           </LoadingButton>
         </Stack>
         <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 10, mt: 5 }}>
