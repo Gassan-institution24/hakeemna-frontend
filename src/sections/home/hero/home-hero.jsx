@@ -70,6 +70,7 @@ export default function HomeHero() {
             variant="subtitle1"
             sx={{
               textAlign: 'center',
+              textTransform: 'none',
               //  textShadow: '5px 5px 5px black'
             }}
           >
@@ -86,7 +87,7 @@ export default function HomeHero() {
           <Button
             variant="contained"
             color="primary"
-            sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
+            sx={{ borderRadius: 0, width: '50%', py: 1.5, }}
             onClick={() => setCurrentPage('users')}
           >
             {t('beneficiary')}

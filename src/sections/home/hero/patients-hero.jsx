@@ -61,6 +61,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
               variant="subtitle1"
               sx={{
                 textAlign: 'center',
+                textTransform: 'none',
               }}
             >
               {t(
@@ -88,6 +89,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
               variant="subtitle1"
               sx={{
                 textAlign: 'center',
+                textTransform: 'none',
               }}
             >
               {t(

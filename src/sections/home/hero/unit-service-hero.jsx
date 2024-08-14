@@ -60,6 +60,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
               variant="subtitle1"
               sx={{
                 textAlign: 'center',
+                textTransform: 'none',
                 //  textShadow: '5px 5px 5px black'
               }}
             >
@@ -69,17 +70,32 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
             </Typography>
           )}
           {!homePage && (
-            <Typography
-              variant="subtitle1"
-              sx={{
-                textAlign: 'center',
-                //  textShadow: '5px 5px 5px black'
-              }}
-            >
-              {t(
-                'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.\nDigital intelligence requires that it cover all aspects of work in different institutions, and the obstacles that prevent the success of this important transition are varied.Therefore, with the help of God Almighty, the Hakimna platform was designed to take into account those obstacles (financial, tax, training, workability and compatibility with) (systems Different applications and market) to overcome those limitations in the diet of the diet community in one digital platform to provide modern and intelligent care to patients everywhere.'
-              )}
-            </Typography>
+            <>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  textAlign: 'center',
+                  textTransform: 'none',
+                  //  textShadow: '5px 5px 5px black'
+                }}
+              >
+                {t(
+                  'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.'
+                )}
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  textAlign: 'center',
+                  textTransform: 'none',
+                  //  textShadow: '5px 5px 5px black'
+                }}
+              >
+                {t(
+                  'Digital intelligence requires that it cover all aspects of work in different institutions, and the obstacles that prevent the success of this important transition are varied.Therefore, with the help of God Almighty, the Hakeemna platform was designed to take into account those obstacles (financial, tax, training, workability and compatibility with) (systems Different applications and market) to overcome those limitations in the diet of the diet community in one digital platform to provide modern and intelligent care to patients everywhere.'
+                )}
+              </Typography>
+            </>
           )}
         </m.div>
         <br />
