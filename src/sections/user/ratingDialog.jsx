@@ -186,7 +186,7 @@ export default function RatingRoomDialog() {
             </Typography>
             <Box component="form" noValidate>
               <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                <InputLabel htmlFor="max-width">Other</InputLabel>
+                <InputLabel htmlFor="max-width">{t("Other")}</InputLabel>
                 <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>

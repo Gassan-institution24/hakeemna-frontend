@@ -14,6 +14,7 @@ import { useGetPatientInstructionsData } from 'src/api/Instructions';
 
 import Iconify from 'src/components/iconify';
 
+import Back from './imges/back4.png';
 import InstructionsPdf from './pdfs/instructionsPdf';
 // ----------------------------------------------------------------------
 
@@ -22,11 +23,20 @@ export default function Instructions() {
   const { data } = useGetPatientInstructionsData(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  console.log(data);
 
   return data?.map((info, index) => (
     <Box key={index}>
-      <Card sx={{ mb: 2 }}>
+      <Card
+        key={index}
+        sx={{
+          backgroundImage: `url(${Back})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundColor: 'rgba(255, 255, 255, 0.800)',
+          backgroundBlendMode: 'lighten',
+          mb: 3,
+        }}
+      >
         <Stack sx={{ p: 3, pb: 2 }} direction="row" justifyContent="space-between">
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english}

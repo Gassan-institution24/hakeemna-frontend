@@ -15,6 +15,7 @@ import {
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Tooltip } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -194,7 +195,13 @@ export default function Medicalreports() {
             document={<MedicalReportPDF report={info} />}
             fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Iconify icon="flat-color-icons:download" width={25} sx={{ m: 1 }} />
+            <Tooltip title="Download">
+              <Iconify
+                icon="akar-icons:cloud-download"
+                width={23}
+                sx={{ color: 'info.main', mr: 2 }}
+              />
+            </Tooltip>
           </PDFDownloadLink>
           <Iconify
             icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
@@ -202,7 +209,6 @@ export default function Medicalreports() {
             onMouseOut={handleMouseOut}
             onClick={() => handleViewClick(info?._id)}
             width={25}
-            sx={{ m: 1 }}
           />
         </Stack>
         <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />

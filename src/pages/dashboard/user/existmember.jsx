@@ -25,9 +25,9 @@ export default function Exist() {
 
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
-    { id: 'name_english', label: t('Name in english') },
-    { id: 'name_arabic', label: t('Name Arabic') },
-    { id: 'options', label: t('options') },
+    { id: 'name_english', label: t('name in english') },
+    { id: 'name_arabic', label: t('name arabic') },
+    { id: 'options', label: t('Options') },
   ];
 
   const table = useTable({ defaultRowsPerPage: 10 });
@@ -83,12 +83,12 @@ export default function Exist() {
           <TextField
             onChange={handleEnglishInputChange}
             name="name_english"
-            label={t('Name in english')}
+            label={t('name in english')}
           />
           <TextField
             onChange={handleArabicInputChange}
             name="name_arabic"
-            label={t('name in Arabic')}
+            label={t('name in arabic')}
           />
         </Box>
       </Card>

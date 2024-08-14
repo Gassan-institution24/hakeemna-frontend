@@ -68,10 +68,9 @@ export default function InsurancePage({ patientId }) {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
     reset,
   } = methods;
-  console.log('errors', errors);
   const saveFunction = (id) => {
     dialog.onTrue();
     setInsuranse(id);
@@ -109,7 +108,7 @@ export default function InsurancePage({ patientId }) {
 
   return (
     <>
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: {md:'1fr 1fr', xs:'1fr'} }}>
         {patientInsuranseData?.map((info, key) => (
           <Card key={key} sx={{ borderRadius: 1, width: '60%', mb: 5, bgcolor: '#64a3aa',  }}>
             <Box
@@ -137,7 +136,7 @@ export default function InsurancePage({ patientId }) {
               />
               <Box>
                 <Box sx={{ mb: 1 }}>
-                  <Typography sx={{ color: '#e1eeed' }}>{info?.insurance?.name_english}</Typography>
+                  <Typography sx={{ color: '#e1eeed' }}>{ curLangAr ? info?.insurance?.name_arabic  : info?.insurance?.name_english}</Typography>
                   <Typography sx={{ color: '#e1eeed' }}>
                     {info?.patient?.name_english} {info?.patient?.last_name}
                   </Typography>
@@ -198,6 +197,7 @@ export default function InsurancePage({ patientId }) {
               name="insurance"
               label={`${t('Insurance company*')}`}
               placeholder="Insurance"
+              sx={{mb:2}}
             >
               <MenuItem
                 value=""
@@ -221,9 +221,10 @@ export default function InsurancePage({ patientId }) {
               name="insurance_client_num"
               label={t('Insurance card number')}
               placeholder={t('Insurance card number')}
+              sx={{mb:2}}
             />
 
-            <RHFSelect name="type" label={`${t('Insurance type*')}`} placeholder="Insurance type">
+            <RHFSelect name="type" label={`${t('Insurance type*')}`} placeholder="Insurance type"  sx={{mb:2}}>
               <MenuItem
                 value=""
                 disabled

@@ -9,7 +9,7 @@ export function useGetPatientInsurance(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      patientInsuranseData: data || [],
+      patientInsuranseData: data,
       loading: isLoading,
       error,
       validating: isValidating,
