@@ -34,12 +34,12 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useDebounce } from 'src/hooks/use-debounce';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../medicines/table-details-row'; /// edit
@@ -73,7 +73,7 @@ const STATUS_OPTIONS = [
 
 export default function MedicinesTableView() {
   /// edit
-  const table = useTable({ defaultOrderBy: 'code' });
+  const table = useTable({ defaultOrderBy: 'trade_name' });
 
   const componentRef = useRef();
 
@@ -84,9 +84,18 @@ export default function MedicinesTableView() {
 
   const router = useRouter();
 
-  const { medicinesData, loading, refetch } = useGetMedicines();
-
   const [filters, setFilters] = useState(defaultFilters);
+
+  const nameDebounse = useDebounce(filters.name)
+
+
+  const { medicinesData, lengths, loading, refetch } = useGetMedicines({
+    page: table.page || 0,
+    sortBy: table.orderBy || 'trade_name',
+    rowsPerPage: table.rowsPerPage || 10,
+    order: table.order || 'asc',
+    name: nameDebounse,
+  });
 
   const searchParams = useSearchParams();
 
@@ -98,35 +107,23 @@ export default function MedicinesTableView() {
     }
   }, [upload_record]);
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
-
-  const dataFiltered = applyFilter({
-    inputData: medicinesData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
-
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
+  // const dataInPage = medicinesData.slice(
+  //   table.page * table.rowsPerPage,
+  //   table.page * table.rowsPerPage + table.rowsPerPage
+  // );
 
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!medicinesData.length && canReset) || !medicinesData.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
 
   const handleDownload = () => {
-    const excelBody = dataFiltered.reduce((acc, data) => {
+    const excelBody = medicinesData.reduce((acc, data) => {
       acc.push({
         code: data.code,
         name: data.name_english,
@@ -150,9 +147,8 @@ export default function MedicinesTableView() {
         status: 'active',
       });
       refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [refetch]
   );
   const handleInactivate = useCallback(
     async (id) => {
@@ -160,9 +156,8 @@ export default function MedicinesTableView() {
         status: 'inactive',
       });
       refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [refetch]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -171,12 +166,7 @@ export default function MedicinesTableView() {
       ids: table.selected,
     });
     refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: medicinesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, medicinesData, refetch]);
+  }, [refetch, table.selected]);
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(`${endpoints.medicines.all}/updatestatus`, {
@@ -184,12 +174,7 @@ export default function MedicinesTableView() {
       ids: table.selected,
     });
     refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: medicinesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, medicinesData, refetch]);
+  }, [table, refetch]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -287,11 +272,9 @@ export default function MedicinesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && medicinesData.length}
-                    {tab.value === 'active' &&
-                      medicinesData.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      medicinesData.filter((order) => order.status === 'inactive').length}
+                    {tab.value === 'all' && lengths?.AllCount}
+                    {tab.value === 'active' && lengths?.ActiveCount}
+                    {tab.value === 'inactive' && lengths?.InactiveCount}
                   </Label>
                 }
               />
@@ -314,7 +297,7 @@ export default function MedicinesTableView() {
               //
               onResetFilters={handleResetFilters}
               //
-              results={dataFiltered.length}
+              results={medicinesData.length}
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -323,16 +306,16 @@ export default function MedicinesTableView() {
             <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
+              rowCount={medicinesData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row, idx) => row._id)
+                  medicinesData.map((row, idx) => row._id)
                 )
               }
               action={
                 <>
-                  {dataFiltered
+                  {medicinesData
                     .filter((row) => table.selected.includes(row._id))
                     .some((data) => data.status === 'inactive') ? (
                     <Tooltip title="Activate all">
@@ -350,7 +333,7 @@ export default function MedicinesTableView() {
                 </>
               }
               color={
-                dataFiltered
+                medicinesData
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
                   ? 'primary'
@@ -364,23 +347,19 @@ export default function MedicinesTableView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
+                  rowCount={medicinesData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row, idx) => row._id)
+                      medicinesData.map((row, idx) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
+                  {medicinesData
                     .map((row, idx) => (
                       <TableDetailRow
                         key={idx}
@@ -397,7 +376,7 @@ export default function MedicinesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, medicinesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.AllCount)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -407,7 +386,7 @@ export default function MedicinesTableView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={lengths?.AllCount}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -465,45 +444,4 @@ export default function MedicinesTableView() {
       />
     </>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
-
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el, idx) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (data) =>
-        (data?.trade_name && data?.trade_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.scientific_name &&
-          data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.family?.name_english &&
-          data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.family?.name_arabic &&
-          data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        // data?.symptoms?.some(
-        //   (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        // ) ||
-        data?._id === name ||
-        data?.upload_record === name ||
-        JSON.stringify(data.code) === name
-    );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
-
-  return inputData;
 }
