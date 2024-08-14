@@ -27,14 +27,28 @@ export default function ProfileHome() {
       const dob = new Date(birthDate);
 
       const age = today.getFullYear() - dob.getFullYear();
+      const months = today.getMonth() - dob.getMonth();
+
       if (age === 0) {
-        return `${today.getMonth() - dob.getMonth()} months`;
+        return curLangAr ? `${months} شهر` : `${months} months`;
       }
-      return `${age} years`;
+      return curLangAr ? `${age} سنة` : `${age} years`;
     }
     return '';
   }
-
+  const toArabicNumerals = (num) => num.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+  console.log(user?.patient, 'sdkjlsdjfls');
+  const hasData =
+    user?.patient?.drug_allergies?.length > 0 ||
+    user?.patient?.diseases?.length > 0 ||
+    user?.patient?.surgeries?.length > 0 ||
+    user?.patient?.medicines?.length > 0 ||
+    patientInsuranseData?.length > 0 ||
+    user?.patient?.sport_exercises ||
+    user?.patient?.is_on_eating_diet ||
+    user?.patient?.alcohol_consumption ||
+    user?.patient?.smoking ||
+    user?.patient?.other_medication_notes;
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -149,7 +163,7 @@ export default function ProfileHome() {
             {t('Sport Exercises')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.sport_exercises}
+            -&nbsp; {t(user?.patient?.sport_exercises)}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -164,7 +178,7 @@ export default function ProfileHome() {
             {t('Eating Diet')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.is_on_eating_diet}
+            -&nbsp; {t(user?.patient?.is_on_eating_diet)}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -196,12 +210,12 @@ export default function ProfileHome() {
             {t('Smoking')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.smoking}
+            -&nbsp; {t(user?.patient?.smoking)}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.other_medication_notes?.length > 0 ? (
+      {user?.patient?.other_medication_notes && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -214,8 +228,6 @@ export default function ProfileHome() {
 
           {user?.patient?.other_medication_notes}
         </Stack>
-      ) : (
-        ''
       )}
     </Stack>
   );
@@ -252,7 +264,7 @@ export default function ProfileHome() {
       {[
         {
           label: t('Gender'),
-          value: user?.patient?.gender,
+          value: t(user?.patient?.gender),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -262,15 +274,15 @@ export default function ProfileHome() {
         },
         {
           label: t('Height'),
-          value: user?.patient?.height,
+          value: curLangAr ? toArabicNumerals(user?.patient?.height) : user?.patient?.height,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Weight'),
-          value: user?.patient?.weight,
+          value: curLangAr ? toArabicNumerals(user?.patient?.weight) : user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item, i, idx) => (
+      ].map((item, idx) => (
         <>
           {item.value && (
             <Stack key={idx}>
@@ -296,7 +308,9 @@ export default function ProfileHome() {
       {[
         {
           label: t('Identification Number'),
-          value: user?.patient?.identification_num,
+          value: curLangAr
+            ? toArabicNumerals(user?.patient?.identification_num)
+            : user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -321,12 +335,16 @@ export default function ProfileHome() {
         },
         {
           label: t('Mobile Number'),
-          value: user?.patient?.mobile_num1,
+          value: curLangAr
+            ? toArabicNumerals(user?.patient?.mobile_num1)
+            : user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: t('Second Mobile Number'),
-          value: user?.patient?.mobile_num2,
+          value: curLangAr
+            ? toArabicNumerals(user?.patient?.mobile_num2)
+            : user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
       ].map((item, ii) => (
@@ -423,16 +441,21 @@ export default function ProfileHome() {
     >
       <Box sx={{ mt: 4, p: 3, ml: 5 }}>
         <Typography marginBottom={2}>
-          Name:&nbsp;&nbsp;&nbsp; {user?.patient?.name_english}
+          {t('Name')}:&nbsp;&nbsp;&nbsp;
+          {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
         </Typography>
         <Typography marginBottom={2}>
-          Age:&nbsp;&nbsp;&nbsp; {calculateAge(user?.patient?.birth_date)}
+          {t('Age')}:&nbsp;&nbsp;&nbsp; {calculateAge(user?.patient?.birth_date)}
         </Typography>
         <Typography marginBottom={2}>
-          IDno:&nbsp;&nbsp;&nbsp; {user?.patient?.identification_num}
+          {t('IDno')}:&nbsp;&nbsp;&nbsp;{' '}
+          {curLangAr
+            ? toArabicNumerals(user?.patient?.identification_num)
+            : user?.patient?.identification_num}
         </Typography>
         <Typography marginBottom={3}>
-          Mobile Number:&nbsp;&nbsp;&nbsp; {user?.patient?.mobile_num1}
+          {t('Mobile Number')}:&nbsp;&nbsp;&nbsp;{' '}
+          {curLangAr ? toArabicNumerals(user?.patient?.mobile_num1) : user?.patient?.mobile_num1}
         </Typography>
       </Box>
     </Stack>
@@ -446,10 +469,12 @@ export default function ProfileHome() {
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
-      <Grid xs={12} md={7}>
-        {renderContent}
-        <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
-      </Grid>
+      {hasData && (
+        <Grid xs={12} md={7}>
+          {renderContent}
+          <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
+        </Grid>
+      )}
     </Grid>
   );
 }
