@@ -59,7 +59,7 @@ export default function CountriesTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell align="center">
-        {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+        {nationality?.code ? String(nationality?.code).padStart(3, '0') : ''}-{sequence_number}
       </TableCell>
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{name_arabic}</TableCell>

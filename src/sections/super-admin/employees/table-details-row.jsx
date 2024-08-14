@@ -51,7 +51,7 @@ export default function CountriesTableRow({
 
       <TableCell align="center">
         <Box>
-          {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+          {nationality?.code ? String(nationality?.code).padStart(3, '0') : ''}-{sequence_number}
         </Box>
       </TableCell>
 

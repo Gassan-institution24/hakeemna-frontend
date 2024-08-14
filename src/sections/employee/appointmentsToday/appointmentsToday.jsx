@@ -17,6 +17,7 @@ import {
   IconButton,
   TableContainer,
   TextField,
+  Stack,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -55,6 +56,7 @@ export default function AppointmentsToday() {
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
   const [addingId, setAddingId] = useState(false);
+  const [currId, setCurrId] = useState();
 
   const [arrivalTimes, setArrivalTimes] = useState({});
 
@@ -101,20 +103,22 @@ export default function AppointmentsToday() {
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const updateStatus = async (info, status, type, ID) => {
+  const updateStatus = async (info, status, type) => {
     try {
       let newPatient
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
-      if (!info?.unit_service_patient?.identification_num && !info?.patient?.identification_num && !ID) {
+      if (!info?.unit_service_patient?.identification_num && !info?.patient?.identification_num && !currId && endpoint === 'arrived') {
         setAddingId({ info, status, type })
         return
       }
-      if (!info.patient) {
-        newPatient = await axiosInstance.post(endpoints.patients.all, { ...info.unit_service_patient, identification_num: ID })
+      setAddingId(false)
+      if (!info.patient && endpoint === 'arrived') {
+        newPatient = await axiosInstance.post(endpoints.patients.all, { ...info.unit_service_patient, identification_num: currId })
         await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status, patient: newPatient?.data?._id });
       } else {
         await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status });
       }
+      setCurrId(false)
 
       if (type === 'arrived' && status) {
         setArrivalTimes((prev) => ({
@@ -370,12 +374,19 @@ export default function AppointmentsToday() {
         open={addingId}
         onClose={() => setAddingId(false)}
         title={t('add patient ID number')}
-        content={<TextField type='number' onClick={(e) => setAddingId({ ...addingId, ID: e.target.value })} />}
+        content={
+          <Stack alignItems='center' width={1}>
+            <TextField type='number' onChange={(e) => setCurrId(e.target.value)} />
+          </Stack>
+        }
         action={
           <LoadingButton
             variant="contained"
             color="info"
-            onClick={() => updateStatus(addingId.info, addingId.status, addingId.type, addingId.ID)}
+            onClick={() => {
+              updateStatus(addingId.info, addingId.status, addingId.type)
+              setAddingId(false)
+            }}
           >
             {t('add')}
           </LoadingButton>

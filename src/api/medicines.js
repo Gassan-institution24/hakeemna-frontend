@@ -9,7 +9,8 @@ export function useGetMedicines(params) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      medicinesData: data || [],
+      medicinesData: data?.Medicines || [],
+      lengths: data?.lengths || {},
       loading: isLoading,
       error,
       validating: isValidating,
