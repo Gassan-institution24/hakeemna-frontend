@@ -17,23 +17,6 @@ import AppointmentData from '../appointments/appointmentsforpatient';
 
 export default function UserAppointmentsPage() {
   const { t } = useTranslate();
-  // const [currentTab, setCurrentTab] = useState('appointmentData');
-  // const handleChangeTab = useCallback((event, newValue) => {
-  //   setCurrentTab(newValue);
-  // }, []);
-
-  // const TABS = [
-  //   {
-  //     value: 'appointmentData',
-  //     label: t('My appointments'),
-  //     icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
-  //   },
-  //   // {
-  //   //   value: 'bookappointments',
-  //   //   label: t('Book appointment'),
-  //   //   icon: <Iconify icon="solar:user-id-bold" width={24} />,
-  //   // },
-  // ];
   return (
     <Container>
       <CustomBreadcrumbs
@@ -46,19 +29,6 @@ export default function UserAppointmentsPage() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      {/* <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        {TABS.map((tab, idx)  => (
-          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
-        ))}
-      </Tabs>
-      {currentTab === 'appointmentData' && <AppointmentData />}
-      {currentTab === 'bookappointments' && <PatientsAppointment />} */}
       <AppointmentData />
     </Container>
   );

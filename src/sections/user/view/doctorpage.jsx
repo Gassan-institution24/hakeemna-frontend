@@ -20,7 +20,7 @@ export default function Doctorpageinfo() {
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('doctorpage') },
+          { name: t('doctor page') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

@@ -69,12 +69,13 @@ export default function App() {
   // }, [screenshotDetected]);
 
   const charAt = `
-  ██████╗
-  ██╔══██╗
-  ██║░░██║
-  ██║░░██║
-  ██████╔╝
-  ╚═════╝░
+██╗  ██╗
+██║  ██║
+███████║
+██╔══██║
+██║  ██║
+╚═╝  ╚═╝
+
   `;
 
   console.info(`%c${charAt}`, 'color: #5BE49B');

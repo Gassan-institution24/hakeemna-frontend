@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useTranslate } from 'src/locales';
+import { useTranslate,useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -39,7 +39,8 @@ export default function AppointmentsFilters({
   dateError,
 }) {
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const handleFilterCountries = useCallback(
     (e) => {
       onFilters('countries', e.target.value);
@@ -86,7 +87,7 @@ export default function AppointmentsFilters({
       <Select onChange={handleFilterCountries} name="country">
         {countriesOptions?.map((option, idx) => (
           <MenuItem lang="ar" key={idx} value={option._id}>
-            {option?.name_english}
+            { curLangAr ?  option?.name_arabic : option?.name_english}
           </MenuItem>
         ))}
       </Select>
@@ -101,7 +102,7 @@ export default function AppointmentsFilters({
       <Select onChange={handleFiltedInsurance} name="insurance">
         {insuranseCosData?.map((option, idx) => (
           <MenuItem lang="ar" key={idx} value={option._id}>
-            {option?.name_english}
+            { curLangAr ?  option?.name_arabic : option?.name_english}
           </MenuItem>
         ))}
       </Select>
