@@ -135,7 +135,7 @@ export default function FinishedAppoinment({ finishedAppointments }) {
               icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: info?.status,
+              label: t(info?.status),
               icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
             },
             {
