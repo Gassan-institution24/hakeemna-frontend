@@ -66,8 +66,9 @@ export default function WaitingRoom() {
   const updateRoom = async (roomId) => {
     try {
       const { data: allRooms } = await axiosInstance.get(
-        `/api/rooms/unitservice/${user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-          ?._id
+        `/api/rooms/unitservice/${
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+            ?._id
         }`
       );
 
@@ -129,7 +130,7 @@ export default function WaitingRoom() {
           {roomsData.map((activity, index) =>
             activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
               <MenuItem key={index} value={activity?._id} onClick={() => updateRoom(activity?._id)}>
-                {activity?.name_english}
+                {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
             ) : null
           )}
@@ -150,11 +151,15 @@ export default function WaitingRoom() {
                 </TableHead>
                 <TableBody>
                   {EntranceByActivity?.map((entranceData, i) => {
-                    let patientName
+                    let patientName;
                     if (entranceData.patient) {
-                      patientName = curLangAr ? entranceData?.patient?.name_arabic : entranceData?.patient?.name_english
+                      patientName = curLangAr
+                        ? entranceData?.patient?.name_arabic
+                        : entranceData?.patient?.name_english;
                     } else if (entranceData.unit_service_patient) {
-                      patientName = curLangAr ? entranceData?.unit_service_patient?.name_arabic : entranceData?.unit_service_patient?.name_english
+                      patientName = curLangAr
+                        ? entranceData?.unit_service_patient?.name_arabic
+                        : entranceData?.unit_service_patient?.name_english;
                     }
                     return (
                       <TableRow key={i}>
@@ -173,7 +178,7 @@ export default function WaitingRoom() {
                           </Button>
                         </TableCell>
                       </TableRow>
-                    )
+                    );
                   })}
                 </TableBody>
               </Table>

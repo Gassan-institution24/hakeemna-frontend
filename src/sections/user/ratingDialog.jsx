@@ -91,7 +91,7 @@ export default function RatingRoomDialog() {
     setSelectedValue(item);
   };
 
-  const { fullWidth } = useState(false);
+  const { fullWidth } = useState(true);
   const { maxWidth } = useState('xs');
   const onSubmit = async (dataSubmit) => {
     try {
@@ -137,9 +137,11 @@ export default function RatingRoomDialog() {
               ? `${feedbackData?.unit_service?.name_arabic}`
               : `${feedbackData?.unit_service?.name_english}`}
             <br />
-            <span
-              style={{ textAlign: 'center' }}
-            >{`dr. ${feedbackData?.employee?.name_english}`}</span>
+            <span style={{ textAlign: 'center' }}>
+              {curLangAr
+                ? `${feedbackData?.employee?.name_arabic}`
+                : `${feedbackData?.employee?.name_english}`}
+            </span>
           </DialogContent>
           <Image
             src={feedbackData?.unit_service?.company_logo}
@@ -174,7 +176,7 @@ export default function RatingRoomDialog() {
                 ))}
               </div>
               <FormControl sx={{ my: 5, minWidth: '100%' }}>
-                <InputLabel htmlFor="max-width">Other</InputLabel>
+                <InputLabel htmlFor="max-width">{t('Other')}</InputLabel>
                 <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>
@@ -186,7 +188,7 @@ export default function RatingRoomDialog() {
             </Typography>
             <Box component="form" noValidate>
               <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                <InputLabel htmlFor="max-width">{t("Other")}</InputLabel>
+                <InputLabel htmlFor="max-width">{t('Other')}</InputLabel>
                 <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>

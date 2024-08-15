@@ -6,12 +6,13 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientInsurance } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatientFeedbacks, useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
+import RatingRoomDialog from './ratingDialog';
 import patientCard from '../home/images/patientCard.png';
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,8 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
+  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
+  
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -36,8 +39,7 @@ export default function ProfileHome() {
     }
     return '';
   }
-  const toArabicNumerals = (num) => num.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
-  console.log(user?.patient, 'sdkjlsdjfls');
+  const toArabicNumerals = (num) => num?.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
   const hasData =
     user?.patient?.drug_allergies?.length > 0 ||
     user?.patient?.diseases?.length > 0 ||
@@ -465,6 +467,8 @@ export default function ProfileHome() {
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
+        {feedbackData ? <RatingRoomDialog /> : ''}
+
         {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
