@@ -19,7 +19,7 @@ const arabicLocal = {
 export default function Walktour({ locale, ...other }) {
   const theme = useTheme();
 
-  const pageHeight = document.body.scrollHeight;
+  const pageHeight = document.body.scrollHeight + 500;
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

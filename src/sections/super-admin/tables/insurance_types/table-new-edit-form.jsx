@@ -48,7 +48,7 @@ export default function TableNewEditForm({ currentTable }) {
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       Coverage_name: currentTable?.Coverage_name || '',
-      insurance_company: currentTable?.insurance_company?._id || null,
+      insurance_company: currentTable?.insurance_company || null,
       // city: currentTable?.city?._id || null,
       // type: currentTable?.type?._id || null,
       // webpage: currentTable?.webpage || '',

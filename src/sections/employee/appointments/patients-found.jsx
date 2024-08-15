@@ -69,6 +69,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       }
       if (usPatients) {
         data.unit_service_patient = row._id
+        data.patient = row?.patient
       } else {
         data.patient = row._id
       }
