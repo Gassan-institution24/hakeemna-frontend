@@ -55,6 +55,7 @@ export default function PatientTableView() {
     { id: 'code', label: t('code') },
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
+    { id: 'work_group', label: t('work group') },
     { id: 'file_code', label: t('file code') },
     // { id: '' },
   ];
@@ -72,7 +73,10 @@ export default function PatientTableView() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
     {
       select: 'patient name_english name_arabic file_code',
-      populate: [{ path: 'patient', select: 'name_english name_arabic sequence_number', populate: { path: 'nationality', select: 'code' } }],
+      populate: [
+        { path: 'patient', select: 'name_english name_arabic sequence_number', populate: { path: 'nationality', select: 'code' }, },
+        { path: 'work_group', select: 'name_english name_arabic' }],
+      employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
       page: table.page || 0,
       sortBy: table.orderBy || 'code',
       rowsPerPage: table.rowsPerPage || 5,

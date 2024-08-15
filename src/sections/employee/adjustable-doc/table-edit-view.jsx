@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetCheckList } from 'src/api';
+import { useGetAdjustabledDocument } from 'src/api/adjustabledocument';
 // import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
 
@@ -17,21 +17,21 @@ export default function TableEditView() {
   // const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { data } = useGetCheckList(id);
+  const { adjustabledocument } = useGetAdjustabledDocument(id);
 
   const { t } = useTranslate();
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <CustomBreadcrumbs
-        heading={t('update checklist')}
+        heading={t('update adjustable document')}
         links={[
           {
             name: t('dashboard'),
             href: paths.employee.root,
           },
           {
-            name: t('checklists'),
+            name: t('adjustable documents'),
             href: paths.employee.checklist.root,
           },
           { name: t('update') },
@@ -40,7 +40,7 @@ export default function TableEditView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {data && <TableNewEditForm currentRow={data} />}
+      {adjustabledocument && <TableNewEditForm currentRow={adjustabledocument} />}
     </Container>
   );
 }

@@ -197,7 +197,7 @@ export default function TableCreateView() {
   const { foundPatients } = useFindUSPatient({
     ...debouncedQuery,
     select:
-      'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality birth_date',
+      'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality patient birth_date',
   });
 
   const onSubmit = handleSubmit(async (data) => {
