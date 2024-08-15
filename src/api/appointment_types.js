@@ -42,7 +42,7 @@ export function useGetAppointmentType(id) {
   return memoizedValue;
 }
 export function useGetUnitServiceAppointmentType(id) {
-  const URL = endpoints.appointment_types.one(id);
+  const URL = endpoints.appointment_types.unit(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

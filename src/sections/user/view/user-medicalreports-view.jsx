@@ -40,11 +40,11 @@ export default function UserCardList() {
   return (
     <Container>
       <CustomBreadcrumbs
-        heading={t('medical reports')}
+        heading={t('Medical Reports')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('medical reports') },
+          { name: t('Medical Reports') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

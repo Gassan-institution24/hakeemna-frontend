@@ -18,7 +18,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientFeedbacks } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
@@ -27,7 +26,6 @@ import { useSettingsContext } from 'src/components/settings';
 
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
-import RatingRoomDialog from '../../ratingDialog';
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -41,7 +39,6 @@ export default function OverviewAppView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
@@ -103,7 +100,6 @@ export default function OverviewAppView() {
   }, [oldpatientsdata, Us]);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      {feedbackData ? <RatingRoomDialog /> : ''}
 
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
