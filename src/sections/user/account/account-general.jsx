@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import { DatePicker } from '@mui/x-date-pickers';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MenuItem, Typography } from '@mui/material';
 
@@ -70,6 +71,8 @@ export default function AccountGeneral({ data, refetch }) {
     mobile_num2: Yup.string(),
     is_on_eating_diet: Yup.string().nullable(),
     country: Yup.string(),
+    gender: Yup.string(),
+    birth_date: Yup.date(),
     city: Yup.string(),
     address: Yup.string(),
     sport_exercises: Yup.string(),
@@ -84,6 +87,8 @@ export default function AccountGeneral({ data, refetch }) {
     name_english: data?.name_english || '',
     name_arabic: data?.name_arabic || '',
     email: data?.email || '',
+    gender: data?.gender || '',
+    birth_date: data?.birth_date ? new Date(data.birth_date) : null,
     height: data?.height || '',
     weight: data?.weight || '',
     mobile_num1: data?.mobile_num1 || '',
@@ -104,9 +109,10 @@ export default function AccountGeneral({ data, refetch }) {
     defaultValues,
   });
   const {
-    setValue,
-    watch,
     handleSubmit,
+    control,
+    watch,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
@@ -278,6 +284,37 @@ export default function AccountGeneral({ data, refetch }) {
                 ))}
               </RHFSelect>
               <RHFTextField name="address" label={t('Address')} />
+              <RHFSelect
+                label={t('gender')}
+                fullWidth
+                name="gender"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {['male', 'female'].map((gender, idx) => (
+                  <MenuItem lang="ar" key={idx} value={gender}>
+                    {gender}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <Controller
+                name="birth_date"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    {...field}
+                    label={t('birth date')}
+                    sx={{ mb: 2 }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
               <RHFTextField
                 name="height"
                 label={
@@ -306,7 +343,7 @@ export default function AccountGeneral({ data, refetch }) {
               >
                 {SECDATAFORMAP.map((test, idx) => (
                   <MenuItem lang="ar" value={test} key={idx}>
-                    {test}
+                    {t(test)}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -319,7 +356,7 @@ export default function AccountGeneral({ data, refetch }) {
               >
                 {THERDDATAFORMAP.map((test, idx) => (
                   <MenuItem lang="ar" value={test} key={idx}>
-                    {test}
+                    {t(test)}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -333,7 +370,7 @@ export default function AccountGeneral({ data, refetch }) {
               >
                 {DATAFORMAP.map((test, idx) => (
                   <MenuItem lang="ar" value={test} key={idx}>
-                    {test}
+                    {t(test)}
                   </MenuItem>
                 ))}
               </RHFSelect>

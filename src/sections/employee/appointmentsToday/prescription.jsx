@@ -9,6 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import {
   Button,
   Dialog,
+  Divider,
   Checkbox,
   TextField,
   Typography,
@@ -39,11 +40,14 @@ export default function Prescription({ Entrance }) {
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
-console.log(prescriptionData,"prescriptionData");
+  console.log(prescriptionData, 'prescriptionData');
 
-  const [medSerach, setMedSerach] = useState()
+  const [medSerach, setMedSerach] = useState();
   const debouncedQuery = useDebounce(medSerach);
-  const { medicinesData } = useGetMedicines({ select: 'trade_name concentration', search: debouncedQuery })
+  const { medicinesData } = useGetMedicines({
+    select: 'trade_name concentration',
+    search: debouncedQuery,
+  });
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -182,7 +186,9 @@ console.log(prescriptionData,"prescriptionData");
         {
           employee: user?.employee?._id || '',
           patient: Entrance?.patient?._id || '',
-          unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+          unit_service:
+            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+              ?._id,
           unit_service_patient: Entrance?.unit_service_patient,
           entrance_mangament: Entrance?._id || '',
           Start_time: new Date(),
@@ -274,119 +280,129 @@ console.log(prescriptionData,"prescriptionData");
             {curLangAr ? 'اضافة وصفة طبية' : 'add prescription'}
           </DialogTitle>
           <DialogContent>
-            {prescriptions.map((prescription, index) => (
-              <div key={prescription.id}>
-                <Autocomplete
-                  sx={{ minWidth: 300, flex: 1, my: 2 }}
-                  options={medicinesData}
-                  onChange={(event, newValue) => setValue(`prescriptions[${index}].medicines`, newValue?._id)}
-                  getOptionLabel={(option) => option.trade_name || ''}
-                  onInputChange={(event, newInputValue) => {
-                    setMedSerach(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('medicine')}
-                      variant="outlined"
-                    />
-                  )}
-                />
-                <RHFTextField
-                  name={`prescriptions[${index}].Frequency_per_day`}
-                  label={t('Frequency per day')}
-                  sx={{ mb: 2 }}
-                />
-                <RHFTextField
-                  name={`prescriptions[${index}].Num_days`}
-                  label={t('Number of days')}
-                  sx={{ mb: 2 }}
-                />
+  {prescriptions.map((prescription, index) => (
+    <div key={prescription.id}>
+      <Autocomplete
+        sx={{ minWidth: 300, flex: 1, my: 2 }}
+        options={medicinesData}
+        onChange={(event, newValue) =>
+          setValue(`prescriptions[${index}].medicines`, newValue?._id)
+        }
+        getOptionLabel={(option) => option.trade_name || ''}
+        onInputChange={(event, newInputValue) => {
+          setMedSerach(newInputValue);
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label={t('medicine')} variant="outlined" />
+        )}
+      />
+      <RHFTextField
+        name={`prescriptions[${index}].Frequency_per_day`}
+        label={t('Frequency per day')}
+        sx={{ mb: 2 }}
+      />
+      <RHFTextField
+        name={`prescriptions[${index}].Num_days`}
+        label={t('Number of days')}
+        sx={{ mb: 2 }}
+      />
 
-                <Controller
-                  name={`prescriptions[${index}].Start_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      {...field}
-                      label={t('Start time')}
-                      sx={{ mb: 2 }}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name={`prescriptions[${index}].End_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      {...field}
-                      label={t('End time')}
-                      sx={{ mb: 2 }}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name={`prescriptions[${index}].Doctor_Comments`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <RHFTextField
-                      {...field}
-                      label={t('doctor comment')}
-                      multiline
-                      sx={{ mb: 2 }}
-                      error={!!error}
-                      helperText={error?.message}
-                    />
-                  )}
-                />
+      <Controller
+        name={`prescriptions[${index}].Start_time`}
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <DatePicker
+            {...field}
+            label={t('Start time')}
+            sx={{ mb: 2 }}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: !!error,
+                helperText: error?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        name={`prescriptions[${index}].End_time`}
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <DatePicker
+            {...field}
+            label={t('End time')}
+            sx={{ mb: 2 }}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: !!error,
+                helperText: error?.message,
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        name={`prescriptions[${index}].Doctor_Comments`}
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <RHFTextField
+            {...field}
+            label={t('doctor comment')}
+            multiline
+            sx={{ mb: 2 }}
+            error={!!error}
+            helperText={error?.message}
+          />
+        )}
+      />
 
-                <Checkbox
-                  size="small"
-                  name="chronic"
-                  color="success"
-                  sx={{ position: 'relative', top: 5, left: 25 }}
-                  onChange={() => {
-                    setChronic(!chronic);
-                  }}
-                />
-                <Typography
-                  sx={{
-                    color: 'text.secondary',
-                    mt: { md: -3, xs: -2.3 },
-                    ml: { md: 8, xs: 4 },
-                    typography: 'caption',
-                    fontSize: { md: 15, xs: 10 },
-                  }}
-                >
-                  {t("chronic")}
-                </Typography>
+      <Checkbox
+        size="small"
+        name="chronic"
+        color="success"
+        sx={{ position: 'relative', top: 5, left: 25 }}
+        onChange={() => {
+          setChronic(!chronic);
+        }}
+      />
+      <Typography
+        sx={{
+          color: 'text.secondary',
+          mt: { md: -3, xs: -2.3 },
+          ml: { md: 8, xs: 4 },
+          typography: 'caption',
+          fontSize: { md: 15, xs: 10 },
+        }}
+      >
+        {t('chronic')}
+      </Typography>
 
-                <Button
-                  onClick={() => removePrescriptionField(prescription.id)}
-                  sx={{ mt: 2, mb: 2 }}
-                >
-                  {t("Remove Prescription")}
-                </Button>
-              </div>
-            ))}
-            <Button onClick={addPrescriptionField} sx={{ mt: 2 }}>
-              {t("Add new prescription")}
-            </Button>
-          </DialogContent>
+      <Button
+        onClick={() => removePrescriptionField(prescription.id)}
+        sx={{ mt: 2, mb: 2 }}
+        variant="outlined"
+        disabled={prescriptions.length === 1} // Disable if only one prescription
+      >
+        {t('Remove Prescription')}
+      </Button>
+      
+      {index === prescriptions.length - 1 && (
+        <Button
+          onClick={addPrescriptionField}
+          sx={{ ml: 2, bgcolor: 'success.main', display: 'inline' }}
+          variant="contained"
+        >
+          {t('Add more')}
+        </Button>
+      )}
+    </div>
+  ))}
+  <Divider />
+</DialogContent>
+
+
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}

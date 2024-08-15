@@ -97,7 +97,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
             {t('No')}
           </Button>
           <Button variant="contained" onClick={() => cancelBook()}>
-            {t('Cancel')}
+            {t('yes')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -106,7 +106,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
           <IconButton
             onClick={() => savedId(info?._id)}
             sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'red' } }}
-            title="Cancele"
+            title={t("cancel")}
           >
             <Iconify icon="mdi:cancel-bold" />
           </IconButton>
@@ -193,7 +193,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                 icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
               },
               {
-                label: info?.status,
+                label: t(info?.status),
                 icon: (
                   <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />
                 ),

@@ -2,11 +2,13 @@ import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import { Container } from '@mui/system';
+import { LoadingButton } from '@mui/lab';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
   Tab,
   Tabs,
   Table,
+  Stack,
   Button,
   Select,
   MenuItem,
@@ -14,10 +16,9 @@ import {
   TableHead,
   TableCell,
   TableBody,
+  TextField,
   IconButton,
   TableContainer,
-  TextField,
-  Stack,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -38,11 +39,10 @@ import {
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { LoadingButton } from '@mui/lab';
 
 export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
@@ -242,7 +242,7 @@ export default function AppointmentsToday() {
                 onClick={() => handleButtonClick(activity?.activities?._id, info)}
                 disabled={info?.started || !info.arrived}
               >
-                {activity?.name_english}
+                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
             ) : null
           )}
@@ -320,7 +320,7 @@ export default function AppointmentsToday() {
                           <>
                             <TableCell>
                               {info?.coming ? (
-                                'YES'
+                                t('Yes')
                               ) : (
                                 <>
                                   <Button
@@ -340,7 +340,7 @@ export default function AppointmentsToday() {
                             </TableCell>
                             <TableCell>
                               {info?.arrived ? (
-                                'YES'
+                                t('Yes')
                               ) : (
                                 <>
                                   <Button
