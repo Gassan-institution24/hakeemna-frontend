@@ -123,7 +123,8 @@ export const endpoints = {
   },
   adjustabledocument: {
     all: '/api/adjustabledocument/',
-    one: (id) => (!id ? null : `/api/adjustabledocument/employee/${id}`),
+    one: (id) => (!id ? null : `/api/adjustabledocument/${id}`),
+    employee: (id) => (!id ? null : `/api/adjustabledocument/employee/${id}`),
   },
   medfamilies: {
     all: '/api/drugfamilies/',

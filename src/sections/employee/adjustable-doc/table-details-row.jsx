@@ -41,7 +41,7 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
       </TableCell>
 
       <TableCell align="center">{title}</TableCell>
-      <TableCell align="center">{applied}</TableCell>
+      <TableCell align="center">{t(applied)}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

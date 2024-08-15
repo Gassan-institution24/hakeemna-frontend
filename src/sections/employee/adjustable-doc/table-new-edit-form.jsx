@@ -1,10 +1,9 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useFieldArray, useFormContext } from 'react-hook-form';
-import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -13,11 +12,9 @@ import {
   Box,
   Radio,
   Button,
-  Divider,
   MenuItem,
   Container,
   IconButton,
-  Typography,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -27,10 +24,9 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -39,136 +35,53 @@ export default function NewEditForm({ currentRow }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
-  const { t } = useTranslate();
+  const { t } = useTranslate()
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const ChecklistSchema = Yup.object().shape({
-    title: Yup.string().nullable().required('title is required'),
-    // speciality: Yup.string().nullable(),
-    description: Yup.string(),
-    unit_service: Yup.string().nullable(),
-    department: Yup.string().nullable(),
-    work_group: Yup.string().nullable(),
-    general: Yup.bool(),
-    questions: Yup.array().of(
-      Yup.object({
-        question: Yup.string(),
-        answer_way: Yup.string(),
-        category: Yup.string(),
-        options: Yup.array().nullable(),
-      })
-    ),
+  const AdjustableSchema = Yup.object().shape({
+    employee: Yup.string(),
+    title: Yup.string().required(t('required field')),
+    topic: Yup.string().required(t('required field')),
+    applied: Yup.string(),
   });
-
-  // const { specialtiesData } = useGetSpecialties();
-  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-  );
 
   const defaultValues = useMemo(
     () => ({
+      employee: currentRow?.employee || user?.employee?._id,
       title: currentRow?.title || '',
-      // speciality: currentRow?.speciality || null,
-      unit_service: currentRow?.unit_service || null,
-      department: currentRow?.department || null,
-      work_group: currentRow?.work_group || null,
-      general: currentRow?.general || false,
-      description: currentRow?.description || '',
-      questions: currentRow?.questions || [
-        {
-          question: '',
-          answer_way: 'Text',
-          category: '',
-          options: [''],
-        },
-      ],
+      topic: currentRow?.topic || '',
+      applied: currentRow?.applied || '',
     }),
-    [currentRow]
+    [currentRow, user?.employee?._id]
   );
 
   const methods = useForm({
-    resolver: yupResolver(ChecklistSchema),
+    resolver: yupResolver(AdjustableSchema),
     defaultValues,
   });
 
   const {
     reset,
     handleSubmit,
-    control,
-    watch,
-    setValue,
     formState: { isSubmitting },
   } = methods;
-
-  const values = watch();
-
-  const { fields, append, remove, move } = useFieldArray({
-    control,
-    name: 'questions',
-  });
-
-  const handleAdd = () => {
-    append({
-      question: '',
-      answer_way: '',
-      options: [''],
-    });
-  };
-
-  useEffect(() => {
-    reset({
-      title: currentRow?.title || '',
-      // speciality: currentRow?.speciality || null,
-      unit_service: currentRow?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]
-        ?.unit_service?._id,
-      department: currentRow?.department || null,
-      work_group: currentRow?.work_group || null,
-      general: currentRow?.general || false,
-      description: currentRow?.description || '',
-      questions: currentRow?.questions || [
-        {
-          question: '',
-          answer_way: 'Text',
-          category: '',
-          options: [''],
-        },
-      ],
-    });
-  }, [currentRow, reset, user?.employee]);
-
-  const handleRemove = (index) => {
-    remove(index);
-  };
-
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-    move(result.source.index, result.destination.index);
-  };
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     try {
       if (currentRow && currentRow.user_creation === user._id) {
-        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), data);
+        await axiosInstance.patch(endpoints.adjustabledocument.one(currentRow._id), data);
         enqueueSnackbar(t('updated successfuly'));
       } else {
-        delete data._id;
-        const dataToCreate = {
-          ...data,
-          questions: data.questions.map((one) => ({
-            question: one?.question,
-            answer_way: one?.answer_way,
-            options: one?.options,
-          })),
-          employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-        };
-        await axiosInstance.post(endpoints.checklist.all, dataToCreate);
+        await axiosInstance.post(endpoints.adjustabledocument.all, data);
         enqueueSnackbar(t('created successfuly'));
       }
       reset();
-      router.push(paths.employee.checklist.root);
+      router.push(paths.employee.documents.adjustable.root);
     } catch (error) {
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   });
@@ -176,28 +89,32 @@ export default function NewEditForm({ currentRow }) {
   return (
     <Container maxWidth="xl">
       <FormProvider methods={methods}>
-        <Card>
-          <Stack
-            spacing={2}
-            sx={{ width: 1, p: 3 }}
-            alignItems="center"
+        <Card sx={{ p: 5 }}>
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+            }}
           >
-            <RHFTextField name="title" multiline label="tiltle" />
-            <RHFTextField name="topic" multiline label="topic" />
+            <RHFTextField name="title" multiline label={t("title")} />
             <RHFSelect
-              label={t('applied Time')}
+              label={t('applied time')}
               fullWidth
               name="applied"
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 2 }}
+              sx={{ mb: 3 }}
             >
               {['before', 'after']?.map((one, idx) => (
-                <MenuItem lang="ar" value={one} key={idx} sx={{ mb: 1 }}>
-                  {one}
+                <MenuItem lang="ar" value={one} key={idx} >
+                  {t(one)}
                 </MenuItem>
               ))}
             </RHFSelect>
-          </Stack>
+          </Box>
+          <RHFTextField name="topic" multiline rows={5} label={t("topic")} />
         </Card>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>
