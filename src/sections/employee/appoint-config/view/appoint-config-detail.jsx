@@ -55,52 +55,58 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     steps: [
       {
         target: '#currEMNewEditDetails',
-        title: 'General information',
+        title: t('Step One (1) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            In this part you will add a start date and end date where this config should start
-            automatically adding appointments, and work shift
-            <br />
-            in addition to work shift and work group you have already created for organisation
-            perposes <br />
-            and appointment duratin time for every day <br />
-            <span style={{ color: 'red' }}>important:</span> remember the configuration frequency
-            refered to when should appointments created (before how many days)
-          </Typography>
+          <>
+            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+              {t("General information about creating 'Automated Appointment Settings', as these settings will create the appointments available for booking for each day automatically and automatically according to the conditions that you have previously specified, you should know that you can make 'Automated Appointment Settings' flexibly and independently according to each work group and according to each work shift.")}
+            </Typography>
+            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+              <br />
+              {t("In this part of the screen you must enter the following information:")}<br />
+            </Typography>
+            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+              {t("(2) In addition to the above, you must specify for which 'work shift' and for which 'work group' you want to create these appointments. Remember that in the work group you have linked all employees and workers in that group, and therefore creating 'Automated Appointment Settings' will be appointments for all members of that work group.")} <br />
+            </Typography>
+            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+              {t("(3) You must specify the time period for each appointment.")}
+            </Typography>
+            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+              {t("(4) Very important: Remember to write the number of days you want appointments to be available for, for example, if you write 30 days, the patient will be able to book an appointment on any day of the 30 days following today’s date (of course according to the settings conditions that you will write in this step.")}
+            </Typography>
+          </>
         ),
       },
       {
         target: '#currEMNewEditDaysDetails',
-        title: 'Step 2',
+        title: t('Step Two (2) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            here you can add a detailed day routine for every week day and this data reflect
-            directly to appointments
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t('In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.')}
             <br />
-            <span style={{ color: 'red' }}>remember:</span> remember to choose am and pm in time
-            pickers
+            {t("Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly.")}
           </Typography>
         ),
       },
       {
         target: '#currEMNewEditHolidays',
-        title: 'Step 3',
+        title: t('Step Three (3) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            here you can add holidays for one day only
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t('Here you can add holidays that last only one day (eg Labor Day / Independence Day)')}
           </Typography>
         ),
       },
       {
         target: '#currEMNewEditLongHolidays',
-        title: 'Step 4',
+        title: t('Step Four (4) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            here you can add holidays for more than one day
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("Here you can add holidays that last more than one day, for example 'Eid al-Adha' or 'Annual Holiday'.")}
           </Typography>
         ),
       },

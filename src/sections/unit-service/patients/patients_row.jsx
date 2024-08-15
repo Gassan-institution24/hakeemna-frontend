@@ -10,7 +10,7 @@ import TableCell from '@mui/material/TableCell';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetAppointmentTypes,
@@ -21,8 +21,10 @@ import {
 // ----------------------------------------------------------------------
 
 export default function USPatientsTableRow({ row, selected }) {
-  const { _id, file_code, patient, name_english, name_arabic } = row;
+  const { _id, file_code, patient, work_group, name_english, name_arabic } = row;
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
   const { user } = useAuthContext();
@@ -39,7 +41,7 @@ export default function USPatientsTableRow({ row, selected }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        {patient?.nationality?.code?String(patient?.nationality?.code).padStart(3, '0') : ''}-{patient?.sequence_number}
+        {patient?.nationality?.code ? String(patient?.nationality?.code).padStart(3, '0') : ''}-{patient?.sequence_number}
       </TableCell>
       <TableCell
         sx={{
@@ -60,6 +62,16 @@ export default function USPatientsTableRow({ row, selected }) {
         align="center"
       >
         {name_arabic || patient?.name_arabic}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        align="center"
+      >
+        {curLangAr ? work_group?.name_arabic : work_group?.name_english}
       </TableCell>
       <TableCell
         sx={{

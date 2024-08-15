@@ -68,100 +68,91 @@ export default function NavVertical({ openNav, onCloseNav }) {
     steps: [
       {
         target: '#USTablesNav',
-        title: 'management table',
+        title: t('management tables'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            choose management tables button
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t('For the system to work properly and since you are a new establishment on this platform you must enter some basic information in advance before use.')}
           </Typography>
         ),
       },
       {
         target: '#USDepartmentNav',
-        title: 'Creating departments',
+        title: t('creating departments'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            as a new unit of service you should add new departments - if exist - to seperate every
-            department management and services alone
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t('The first of these is information about the departments that make up your organization - of course, if there are departments in your organization - in order to enable independent management of each department in your organization.')}
           </Typography>
         ),
       },
       {
         target: '#USEmployeesNav',
-        title: 'Adding employees',
+        title: t('adding employees'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            then you should add new Employees to your unit of service either by adding an employees
-            that has an account on our system or creating a new one..
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t('Then you must enter the employee data, either by (1) creating a new employee account or (2) adding/linking an employee who has an account on the platform and linking him to your organization.')}
           </Typography>
         ),
       },
       {
         target: '#USWorkShiftNav',
-        title: 'Creating work shifts',
+        title: t('creating work shifts'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            after that you also should add new work shifts for organization reasons, and to be able
-            to add new appointment configuration
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("After the previous two steps, you must add your organization's work shifts (for example: morning/evening/night). Adding these shift information has organizational benefits for your organization and allows you to make appointment settings more flexible, which later creates appointments in an automated and flexible manner.")}
           </Typography>
         ),
       },
       {
         target: '#USWorkGroupNav',
-        title: 'Creating work groups',
+        title: t('creating work groups'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            then you should add new work groups in order to be able to add new appointment - work
-            group: is a term for a group of employees that work together in one appointment - like :
-            doctor, secretery, nurse.
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("Next, you must enter the information of the work team/teams in the organization you work for, this information has administrative importance and is necessary to make 'appointment settings for each work team'. Note that creating a 'work group' in the appointment settings will show in the work schedule (calendar) that appointment for each member of the work group in that team (such as in the surgeon's calendar, also that appointment will appear in the calendar and work schedule of an anesthesiologist, and the same applies to the nurse).")}
           </Typography>
         ),
       },
       {
         target: '#USServicesNav',
-        title: 'Creating services',
+        title: t('creating services'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            we recommend to add services in this step in order to improve your experiense by adding
-            it in appointment configuration to calculate the starter price of the appointment
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("We also recommend adding the services you provide in this step in order to improve your experience and facilitate the use of the platform.")}
           </Typography>
         ),
       },
       {
         target: '#USRoomsNav',
-        title: 'Creating rooms',
+        title: t('creating rooms'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            we recommend to add Rooms names - or numbers - to your system in order to organize your
-            unit of service account and to work with entrance management
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("We also recommend adding room names - or numbers - to your system in order to organize your organization's management and to later activate the work system in managing daily appointments.")}
           </Typography>
         ),
       },
       {
         target: '#USActivitiesNav',
-        title: 'Creating activities',
+        title: t('creating activities'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            creating acticvities allows you to benefit from more features in our system like :
-            entrance management
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("We also recommend adding 'Activities' information to organize the daily and administrative work of your organization.")}
           </Typography>
         ),
       },
       {
         target: '#EMAppointConfigNav',
-        title: 'creating appointment configurations',
+        title: t('creating appointment configurations'),
         disableBeacon: true,
         content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            Now you are ready to create a new appointment configuration - you can also do the
-            previous steps all together in this page -
+          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            {t("By doing all the previous steps, you are now ready to use the platform and create a new appointment - you can also do the previous steps together and automatically on this page -")}
           </Typography>
         ),
       },
@@ -234,7 +225,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
       <NavSectionVertical
         data={navData}
-        walktourRun={runningTour}
+        walktourRun={runningTour || walktour.run}
         slotProps={{
           currentRole: user?.role,
         }}

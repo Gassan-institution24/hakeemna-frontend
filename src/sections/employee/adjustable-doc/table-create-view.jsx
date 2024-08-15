@@ -11,7 +11,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableCreateView() {
   const { t } = useTranslate()
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <CustomBreadcrumbs
         heading={t('update checklist')}
         links={[

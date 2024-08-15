@@ -59,16 +59,17 @@ export default function AppointmentsToday() {
   const [currId, setCurrId] = useState();
 
   const [arrivalTimes, setArrivalTimes] = useState({});
+  const unitServiceId = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
 
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+    unitServiceId
   );
   const { entrance, refetch2 } = useGetEntranceManagement(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+    unitServiceId
   );
 
   const { roomsData } = useGetUSRooms(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+    unitServiceId
   );
 
   const { finishedAppointmentsData } = useGetfinishedAppointments();
@@ -105,19 +106,13 @@ export default function AppointmentsToday() {
 
   const updateStatus = async (info, status, type) => {
     try {
-      let newPatient
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       if (!info?.unit_service_patient?.identification_num && !info?.patient?.identification_num && !currId && endpoint === 'arrived') {
         setAddingId({ info, status, type })
         return
       }
       setAddingId(false)
-      if (!info.patient && endpoint === 'arrived') {
-        newPatient = await axiosInstance.post(endpoints.patients.all, { ...info.unit_service_patient, identification_num: currId })
-        await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status, patient: newPatient?.data?._id });
-      } else {
-        await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status });
-      }
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status, identification_num: currId });
       setCurrId(false)
 
       if (type === 'arrived' && status) {
