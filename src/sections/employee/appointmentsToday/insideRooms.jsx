@@ -36,7 +36,7 @@ import {
 
 import Image from 'src/components/image';
 
-import next from './images/next.png'
+import next from './images/next.png';
 
 const formatTextWithLineBreaks = (text) => {
   if (!text) return '';
@@ -77,17 +77,6 @@ export default function Rooms() {
 
   const { reset } = methods;
 
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      unit_service_patient: Entrance?.unit_service_patient,
-      service_unit: Entrance?.service_unit,
-      unit_service: Entrance?.service_unit?._id,
-      appointment: Entrance?.appointmentId,
-    });
-  }, [user, Entrance, reset]);
-
   const processingPage = async (rooms) => {
     try {
       await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
@@ -117,7 +106,9 @@ export default function Rooms() {
         finished_or_not: true,
       });
       await axiosInstance.post('/api/feedback', {
-        unit_service: Entrance?.service_unit?._id,
+        unit_service:
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+            ?._id,
         appointment: Entrance?.appointmentId,
         employee: user?.employee?._id,
         patient: Entrance?.patient?._id,
@@ -126,7 +117,9 @@ export default function Rooms() {
       await axiosInstance.post(`/api/medrecord/`, {
         appointmentId: Entrance?.appointmentId,
         Appointment_date: Entrance?.Appointment_date,
-        unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+        unit_service:
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+            ?._id,
         service_unit: Entrance?.service_unit,
         patient: Entrance?.patient?._id,
         unit_service_patient: Entrance?.unit_service_patient,
@@ -149,6 +142,19 @@ export default function Rooms() {
     }
   };
 
+  useEffect(() => {
+    reset({
+      employee: user?.employee?._id,
+      patient: Entrance?.patient?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
+      service_unit: Entrance?.service_unit?._id,
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
+      appointment: Entrance?.appointmentId,
+    });
+  }, [user, Entrance, reset]);
+
   return (
     <>
       <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
@@ -159,7 +165,6 @@ export default function Rooms() {
             alignItems: 'center',
             textAlign: 'center',
             margin: '10px',
-           
           }}
         >
           <DialogTitle>{t('Are you sure')}</DialogTitle>

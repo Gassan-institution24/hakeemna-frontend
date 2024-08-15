@@ -86,7 +86,7 @@ export default function ExistPatientRow({ row, selected }) {
               sx={{ border: '#00A76F 1px solid', p: 1, m: 1 }}
               lang="ar"
             >
-              {members?.name_english}
+              {curLangAr ? members?.name_arabic : members?.name_english}
             </MenuItem>
           ))}
         </DialogActions>
@@ -99,7 +99,7 @@ export default function ExistPatientRow({ row, selected }) {
       </Dialog>
       <TableRow selected={selected}>
         <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
-        <TableCell align="center">{name_english}</TableCell>
+        <TableCell align="center"> {curLangAr ? name_arabic : name_english}</TableCell>
         <TableCell align="center">{name_arabic}</TableCell>
 
         <TableCell align="center">

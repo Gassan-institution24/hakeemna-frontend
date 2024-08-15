@@ -195,12 +195,14 @@ export default function Doctorpage() {
       avatar={<Avatar src={data?.employee?.picture} alt="data" />}
       title={
         <Link color="inherit" variant="subtitle1">
-          {data?.employee?.name_english}
+          {curLangAr ? data?.employee?.name_arabic : data?.employee?.name_english}
         </Link>
       }
       subheader={
         <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
-          {data?.employee?.speciality?.name_english}
+          {curLangAr
+            ? data?.employee?.speciality?.name_arabic
+            : data?.employee?.speciality?.name_english}
         </Box>
       }
     />
@@ -208,11 +210,20 @@ export default function Doctorpage() {
 
   const renderFollows = (
     <Card sx={{ py: 3, textAlign: 'center' }}>
-      <Typography typography="h6">
-        ( {averageRating}{' '}
-        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
-        {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
-      </Typography>
+      {curLangAr ? (
+        <Typography typography="h6">
+          ( {averageRating}{' '}
+          <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
+          {numberOfUsers > 0 ? ` من ${numberOfUsers} زائر` : `لا يوجد تقييم بعد`}
+        </Typography>
+      ) : (
+        <Typography typography="h6">
+          ( {averageRating}{' '}
+          <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />)
+          {numberOfUsers > 0 ? ` From ${numberOfUsers} visitors` : ` No rate yet`}
+        </Typography>
+      )}
+
       {currentRating && (
         <Box
           key={currentIndex}
@@ -230,7 +241,11 @@ export default function Doctorpage() {
             src={user?.patient?.profile_picture}
           />
           <Box sx={{ m: 1 }}>
-            <Typography sx={{ float: 'left' }}>{currentRating?.patient?.name_english}</Typography>
+            <Typography sx={{ float: 'left' }}>
+              {curLangAr
+                ? currentRating?.patient?.name_arabic
+                : currentRating?.patient?.name_english}
+            </Typography>
             <br />
             <Typography sx={{ float: 'left' }}>
               {currentRating?.Body} &nbsp;
@@ -251,7 +266,7 @@ export default function Doctorpage() {
 
   const renderAbout = (
     <Card>
-      <CardHeader title="About" />
+      <CardHeader title={t('about')} />
 
       <Stack spacing={3} sx={{ p: 3 }}>
         {data?.employee?.description ? (
@@ -264,9 +279,9 @@ export default function Doctorpage() {
             <Iconify icon="ic:round-business-center" width={24} />
 
             <Box sx={{ typography: 'body2' }}>
-              {`Work at: `}
+              {t(`Work at: `)}
               <Link variant="subtitle2" color="inherit">
-                {data?.unit_service?.name_english}
+                {curLangAr ? data?.unit_service?.name_arabic : data?.unit_service?.name_english}
               </Link>
             </Box>
           </Stack>
@@ -278,13 +293,16 @@ export default function Doctorpage() {
           <Iconify icon="mdi:location" width={24} />
 
           <Box sx={{ typography: 'body2' }}>
-            {`Location: `}
+            {t(`Location: `)}
             <Link variant="subtitle2" color="inherit">
-              {data?.unit_service?.city?.name_english ? data?.unit_service?.city?.name_english : ''}{' '}
-              {` - `}{' '}
-              {data?.unit_service?.country?.name_english
-                ? data?.unit_service?.country?.name_english
-                : ''}
+              {curLangAr
+                ? data?.unit_service?.city?.name_arabic
+                : data?.unit_service?.city?.name_english}
+              {` - `}
+
+              {curLangAr
+                ? data?.unit_service?.country?.name_arabic
+                : data?.unit_service?.country?.name_english}
             </Link>
           </Box>
         </Stack>
@@ -293,7 +311,7 @@ export default function Doctorpage() {
           <Iconify icon="typcn:phone" width={24} />
 
           <Box sx={{ typography: 'body2' }}>
-            {`For booking: `}
+            {t(`For booking: `)}
             <Link variant="subtitle2" color="inherit">
               {data?.unit_service?.phone}
             </Link>
@@ -350,12 +368,12 @@ export default function Doctorpage() {
               {t('Cancel')}
             </Button>
             <Button variant="contained" onClick={() => handleBook(TimeData)}>
-              {t('Book')}
+              {t('book')}
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider  dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
           componentsProps={{ actionBar: { actions: [''] } }}
@@ -385,7 +403,7 @@ export default function Doctorpage() {
             .filter((one) => appointmentTypes.includes(one._id))
             .map((type, test) => (
               <MenuItem key={test} value={type._id}>
-                {type.name_english}
+                {curLangAr ? type.name_englis : type.name_english}
               </MenuItem>
             ))}
         </Select>
@@ -440,11 +458,11 @@ export default function Doctorpage() {
                     sx={{ bgcolor: 'success.main' }}
                     onClick={dialog.onTrue}
                   >
-                    {t('Book')}
+                    {t('book')}
                   </Button>
                 ) : (
                   <Button disabled variant="contained" onClick={dialog.onFalse}>
-                    {t('Book')}
+                    {t('book')}
                   </Button>
                 )}
               </Box>
@@ -462,7 +480,10 @@ export default function Doctorpage() {
                     {doctor?.employee?.visibility_online_appointment === true ? (
                       <span style={{ color: 'inherit' }}>
                         <Iconify width={18} icon="noto:health-worker" />
-                        &nbsp; {doctor?.employee?.employee?.name_english}
+                        &nbsp;{' '}
+                        {curLangAr
+                          ? doctor?.employee?.employee?.name_arabic
+                          : doctor?.employee?.employee?.name_english}
                       </span>
                     ) : null}
                   </Typography>
@@ -475,7 +496,7 @@ export default function Doctorpage() {
                     sx={{ color: 'rgb(20, 161, 255)' }}
                     icon="streamline:online-medical-service-monitor"
                   />
-                  &nbsp; Appointment type: {datacheeck?.appointment_type?.name_english}{' '}
+                  &nbsp; {datacheeck?.appointment_type?.name_english}{' '}
                 </Typography>
               )}
               {datacheeck?.department?.name_english && (
@@ -489,7 +510,7 @@ export default function Doctorpage() {
                 <Typography>
                   {' '}
                   <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />
-                  &nbsp; Fees: {datacheeck?.price}{' '}
+                  &nbsp; {datacheeck?.price}{' '}
                 </Typography>
               )}
               {datacheeck?.start_time && (
@@ -500,20 +521,20 @@ export default function Doctorpage() {
                     sx={{ color: 'palevioletred' }}
                     icon="lets-icons:date-range-fill"
                   />
-                  &nbsp; Date: {fDateAndTime(datacheeck?.start_time)}{' '}
+                  &nbsp; {fDateAndTime(datacheeck?.start_time)}{' '}
                 </Typography>
               )}
               {datacheeck?.start_time && (
                 <Typography>
                   {' '}
                   <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />
-                  &nbsp; Time: {fTime(datacheeck?.start_time)}{' '}
+                  &nbsp; {fTime(datacheeck?.start_time)}{' '}
                 </Typography>
               )}
               {datacheeck && (
                 <Box sx={{ mt: 1 }}>
                   <Typography sx={{ mb: 1 }}>
-                    Let us know if you have any notes to follow for your appointment
+                    {t('Let us know if you have any notes to follow for your appointment')}
                   </Typography>
                   <textarea
                     placeholder="Ex: I have..."
@@ -532,11 +553,11 @@ export default function Doctorpage() {
             <Box sx={{ visibility: { md: 'hidden', xs: 'visible' }, ml: 2 }}>
               {TimeData !== undefined ? (
                 <Button variant="contained" onClick={dialog.onTrue}>
-                  {t('Book')}
+                  {t('book')}
                 </Button>
               ) : (
                 <Button disabled variant="contained" onClick={dialog.onFalse}>
-                  {t('Book')}
+                  {t('book')}
                 </Button>
               )}
             </Box>

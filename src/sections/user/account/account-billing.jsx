@@ -2,10 +2,8 @@ import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-import AccountBillingPlan from './account-billing-plan';
-import AccountBillingAddress from './account-billing-address';
 import AccountBillingHistory from './account-billing-history';
-import AccountBillingPayment from './account-billing-payment';
+
 
 // ----------------------------------------------------------------------
 
@@ -13,11 +11,7 @@ export default function AccountBilling({ cards, plans, invoices, addressBook }) 
   return (
     <Grid container spacing={5} disableEqualOverflow>
       <Grid xs={12} maxWidth="md">
-        <AccountBillingPlan plans={plans} cardList={cards} addressBook={addressBook} />
-
-        <AccountBillingPayment cards={cards} />
-
-        <AccountBillingAddress addressBook={addressBook} />
+        {}
       </Grid>
 
       <Grid xs={12} md={4}>
