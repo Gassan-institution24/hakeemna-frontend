@@ -10,7 +10,7 @@ import Iconify from 'src/components/iconify';
 export default function SmallSidebar() {
   const router = useRouter();
   const gotoHome = () => {
-    router.push(paths.dashboard.root);
+    router.push(paths.dashboard.user.specialities);
   };
   const gotoProfile = () => {
     router.push(paths.dashboard.user.profile);
@@ -18,12 +18,13 @@ export default function SmallSidebar() {
   const gotoSetting = () => {
     router.push(paths.dashboard.user.account);
   };
-  // const gotoHome = () => {
-  //   router.push(paths.dashboard.root);
-  // };
-  // const gotoHome = () => {
-  //   router.push(paths.dashboard.root);
-  // };
+  const gotoAppointments = () => {
+    router.push(paths.dashboard.user.patientsappointments);
+  };
+  const gotoHistory = () => {
+    router.push(paths.dashboard.user.history);
+  };
+
   return (
     <div
       style={{
@@ -53,7 +54,7 @@ export default function SmallSidebar() {
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{ position: 'relative', right: '25%' }}>
+          <Button sx={{ position: 'relative', right: '25%' }} onClick={gotoAppointments}>
             <Iconify
               sx={{ color: 'green', width: '50%', height: '40%' }}
               icon="ph:calendar-duotone"
@@ -62,11 +63,14 @@ export default function SmallSidebar() {
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
           <Button sx={{ position: 'relative', right: '25%' }} onClick={gotoHome}>
-            <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="cil:home" />
+            <Iconify
+              sx={{ color: 'green', width: '50%', height: '40%' }}
+              icon="icon-park:add-one"
+            />
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{ position: 'relative', right: '25%' }}>
+          <Button sx={{ position: 'relative', right: '25%' }} onClick={gotoHistory}>
             <Iconify
               sx={{ color: 'green', width: '50%', height: '40%' }}
               icon="material-symbols:history"

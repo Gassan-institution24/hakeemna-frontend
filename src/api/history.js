@@ -42,8 +42,8 @@ export function useGetOneHistoryData(id) {
 
   return memoizedValue;
 }
-export function useGetPatientHistoryData(id,pId) {
-  const URL = endpoints.history.patient(id, pId);
+export function useGetPatientHistoryDataForUs(id, pId) {
+  const URL = endpoints.history.patientinUs(id, pId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -63,7 +63,28 @@ export function useGetPatientHistoryData(id,pId) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetPatientHistoryDataInSu(id,pId, SuId) {
+export function useGetPatientHistoryData(id) {
+  const URL = endpoints.history.patient(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      historyDataForPatient: data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+export function useGetPatientHistoryDataInSu(id, pId, SuId) {
   const URL = endpoints.history.one(id, pId, SuId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

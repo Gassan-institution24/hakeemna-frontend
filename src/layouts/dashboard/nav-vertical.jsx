@@ -320,7 +320,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         <Box
           sx={{
             position: 'fixed',
-            bottom: { md: 20, xs: 0 },
+            bottom: { md: 20, xs: 40 },
             pb: { md: 0, xs: 2 },
             right: { md: 20, xs: 'auto' },
             left: { md: 'auto', xs: 20 },

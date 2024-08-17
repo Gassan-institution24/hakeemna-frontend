@@ -127,12 +127,7 @@ export default function Rooms() {
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,
       });
-      // await axiosInstance.patch(`/api/rooms/${currentRoom?._id}`, {
-      //   employee: null,
-      //   patient: null,
-      //   entranceMangament: null,
-      // });
-
+   
       enqueueSnackbar('appointment finished', { variant: 'success' });
       refetch();
       router.push(paths.employee.appointmentsToday);

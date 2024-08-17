@@ -25,8 +25,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatintmedicalreports } from 'src/api/medical_repots';
 
 import Iconify from 'src/components/iconify';
@@ -153,7 +153,8 @@ export default function Medicalreports() {
   const { user } = useAuthContext();
   const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
   const router = useRouter();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
@@ -188,6 +189,7 @@ export default function Medicalreports() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {fDateAndTime(info?.created_at)}
           </Stack>
+          <Typography>{info?.description}</Typography>
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink
@@ -195,7 +197,7 @@ export default function Medicalreports() {
             document={<MedicalReportPDF report={info} />}
             fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Tooltip title="Download">
+            <Tooltip title={t('Download')}>
               <Iconify
                 icon="akar-icons:cloud-download"
                 width={23}
@@ -221,22 +223,16 @@ export default function Medicalreports() {
         >
           {[
             {
-              label: info?.department?.name_english,
-              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: 'THE EMPLOYEE NAME',
-              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: `${user?.patient?.name_english} `,
+              label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
               icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: `ESG`,
-              icon: (
-                <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />
-              ),
+              label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
+              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english,
+              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
             },
           ].map((item, idx) => (
             <Stack
