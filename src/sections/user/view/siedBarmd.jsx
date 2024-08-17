@@ -24,7 +24,7 @@ export default function Sidebar() {
   const [hide, setHide] = useState(true);
 
   const gotoHome = () => {
-    router.push(paths.dashboard.root);
+    router.push(paths.dashboard.user.specialities);
   };
   const gotoProfile = () => {
     router.push(paths.dashboard.user.profile);
@@ -34,6 +34,9 @@ export default function Sidebar() {
   };
   const gotoAppointments = () => {
     router.push(paths.dashboard.user.patientsappointments);
+  };
+  const gotoHistory = () => {
+    router.push(paths.dashboard.user.history);
   };
   const stickySidebarStyle = {
     display: 'flex',
@@ -65,8 +68,8 @@ export default function Sidebar() {
           }}
           onClick={gotoHome}
         >
-          <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="cil:home" />
-          <Typography sx={{ fontSize: 10.5 }}>{t('Home')}</Typography>
+          <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="icon-park:add-one" />
+          <Typography sx={{ fontSize: 10.5 }}>{t('Book')}</Typography>
         </Button>
 
         <Divider />
@@ -113,6 +116,7 @@ export default function Sidebar() {
           <Iconify
             sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="material-symbols:history"
+            onClick={gotoHistory}
           />
           <Typography sx={{ fontSize: 10.5 }}>{t('History')}</Typography>
         </Button>

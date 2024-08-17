@@ -24,7 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetDrugs } from 'src/api';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -168,6 +168,8 @@ PrescriptionPDF.propTypes = {
 };
 export default function Prescriptions() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
   const router = useRouter();
@@ -182,6 +184,7 @@ export default function Prescriptions() {
     router.push(paths.dashboard.user.prescriptionview(id));
   };
   const { drugs } = useGetDrugs(user?.patient?._id);
+  console.log(drugs);
 
   return drugs?.length > 0 ? (
     drugs?.map((info, index) => (
@@ -206,14 +209,21 @@ export default function Prescriptions() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {fDateAndTime(info?.created_at)}
           </Stack>
+          {info?.medicines?.map((comment, ii) => (
+            <Typography key={ii}>{comment?.Doctor_Comments}</Typography>
+          ))}
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink
             document={<PrescriptionPDF report={info} />}
             fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Tooltip title="Download" >
-              <Iconify icon="akar-icons:cloud-download" width={23} sx={{ color: 'info.main' ,mr: 2}} />
+            <Tooltip title="Download">
+              <Iconify
+                icon="akar-icons:cloud-download"
+                width={23}
+                sx={{ color: 'info.main', mr: 2 }}
+              />
             </Tooltip>
           </PDFDownloadLink>
           <Iconify
@@ -222,7 +232,6 @@ export default function Prescriptions() {
             onMouseOut={handleMouseOut}
             onClick={() => handleViewClick(info?._id)}
             width={25}
-           
           />
         </Stack>
         <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -235,22 +244,16 @@ export default function Prescriptions() {
         >
           {[
             {
-              label: info?.unit_service?.name_english,
-              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: 'THE EMPLOYEE NAME',
-              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: `${user?.patient?.name_english} `,
+              label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
               icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: `ESG`,
-              icon: (
-                <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />
-              ),
+              label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
+              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english,
+              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
             },
           ].map((item, idx) => (
             <Stack

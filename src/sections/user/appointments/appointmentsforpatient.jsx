@@ -16,6 +16,7 @@ export default function AppointmentData() {
   const { user } = useAuthContext();
   const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
   const { t } = useTranslate();
+  const now = new Date();
 
   const [currentTab, setCurrentTab] = useState('upcoming');
   const handleChangeTab = useCallback((event, newValue) => {
@@ -23,7 +24,8 @@ export default function AppointmentData() {
   }, []);
 
   const pendingAppointments = appointmentsData.filter(
-    (info) => info?.started === false && info?.finished_or_not === false
+    (info) =>
+      new Date(info.start_time) >= now && info?.started === false && info?.finished_or_not === false
   );
   const finishedAppointments = appointmentsData?.filter(
     (info) =>
