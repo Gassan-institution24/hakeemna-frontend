@@ -7,7 +7,7 @@ export default function BookAppointmentPage() {
   return (
     <>
       <Helmet>
-        <title>book an appointment</title>
+        <title>Hakeemna 360 - منصة حكيمنا الطبية :book an appointment</title>
         <meta name="description" content="meta" />
       </Helmet>
 
