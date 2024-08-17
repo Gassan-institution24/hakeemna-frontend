@@ -7,7 +7,7 @@ export default function patients() {
   return (
     <>
       <Helmet>
-        <title>Beneficiaries</title>
+        <title>Hakeemna 360 - منصة حكيمنا الطبية : Beneficiaries</title>
         <meta name="description" content="meta" />
       </Helmet>
 
