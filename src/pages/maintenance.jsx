@@ -8,7 +8,7 @@ export default function MaintenancePage() {
   return (
     <>
       <Helmet>
-        <title> Hakeemna: Maintenance</title>
+        <title> Hakeemna 360 - منصة حكيمنا الطبية : Maintenance</title>
         <meta name="description" content="meta" />
       </Helmet>
 

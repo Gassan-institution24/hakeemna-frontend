@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Units of service</title>
+        <title>Hakeemna 360 - منصة حكيمنا الطبية : Units of service</title>
         <meta name="description" content="meta" />
       </Helmet>
 
