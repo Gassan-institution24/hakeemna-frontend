@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-
 import Table from '@mui/material/Table';
 import { Container } from '@mui/system';
 import TableRow from '@mui/material/TableRow';
@@ -7,32 +7,60 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import { Card, TableBody, CardHeader, IconButton } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
-import { fMonth } from 'src/utils/format-time';
-import axios, { endpoints } from 'src/utils/axios';
-
+import axios from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatientHistoryData } from 'src/api/history';
-
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { paths } from 'src/routes/paths';
+import { fMonth } from 'src/utils/format-time';
+import { useGetPatientHistoryData } from 'src/api/history';
 
 export default function HistoryHead() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const { historyData, refetch } = useGetPatientHistoryData(user?.patient?._id);
   const router = useRouter();
-
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const [displayedData, setDisplayedData] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  const { historyDataForPatient, refetch } = useGetPatientHistoryData(user?.patient?._id);
+
+  useEffect(() => {
+    if (historyDataForPatient?.length > 0) {
+      const initialData = historyDataForPatient.slice(0, 10);
+      setDisplayedData(initialData);
+      setSkip(10);
+      if (historyDataForPatient.length <= 10) {
+        setHasMore(false);
+      }
+    }
+  }, [historyDataForPatient]);
+
+  const loadMoreData = () => {
+    const nextData = historyDataForPatient.slice(skip, skip + 5);
+    setDisplayedData((prev) => [...prev, ...nextData]);
+    setSkip((prev) => prev + nextData.length);
+    if (skip + 5 >= historyDataForPatient.length) {
+      setHasMore(false);
+    }
+  };
+
+  const handleScroll = (e) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.target;
+    if (scrollHeight - scrollTop === clientHeight && hasMore) {
+      loadMoreData();
+    }
+  };
+
   const deletehistoryfeild = async (id) => {
     try {
-      await axios.patch(endpoints.history.one(id));
+      await axios.patch(`/api/history/${id}`);
       refetch();
       enqueueSnackbar('Deleted successfully', { variant: 'success' });
     } catch (error) {
@@ -45,6 +73,7 @@ export default function HistoryHead() {
       );
     }
   };
+
   const handleView = async (id) => {
     router.push(paths.dashboard.user.historyinfo(id));
   };
@@ -58,7 +87,7 @@ export default function HistoryHead() {
           <CardHeader sx={{ mb: 4 }} title={`${user?.patient?.name_english} ${t('History')}`} />
         )}
 
-        <TableContainer sx={{ mt: 3, mb: 2 }}>
+        <TableContainer onScroll={handleScroll} sx={{ mt: 3, mb: 2, maxHeight: 500 }}>
           <Scrollbar>
             <Table sx={{ minWidth: 400 }}>
               <TableHead>
@@ -78,41 +107,30 @@ export default function HistoryHead() {
               </TableHead>
 
               <TableBody>
-                {historyData?.map((data, i) => (
-                  <>
-                    {data?.status === 'active' ? (
-                      <TableRow key={i}>
-                        <TableCell>{fMonth(data?.created_at)}</TableCell>
-                        <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
-                        <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
-
-                        <TableCell>
-                          {' '}
-                          {curLangAr ? (
-                            <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
-                          ) : (
-                            <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
-                          )}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={() => handleView(data?._id)}>
-                            <Iconify
-                              sx={{ cursor: 'pointer', color: '#2788EF' }}
-                              icon="carbon:view"
-                            />
-                          </IconButton>
-                          <IconButton onClick={() => deletehistoryfeild(data?._id)}>
-                            <Iconify
-                              sx={{ cursor: 'pointer', color: 'error.main' }}
-                              icon="solar:trash-bin-trash-bold"
-                            />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      ''
-                    )}
-                  </>
+                {displayedData.map((data, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{fMonth(data?.created_at)}</TableCell>
+                    <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
+                    <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
+                    <TableCell>
+                      {curLangAr ? (
+                        <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
+                      ) : (
+                        <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => handleView(data?._id)}>
+                        <Iconify sx={{ cursor: 'pointer', color: '#2788EF' }} icon="carbon:view" />
+                      </IconButton>
+                      <IconButton onClick={() => deletehistoryfeild(data?._id)}>
+                        <Iconify
+                          sx={{ cursor: 'pointer', color: 'error.main' }}
+                          icon="solar:trash-bin-trash-bold"
+                        />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
