@@ -14,10 +14,10 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <div style={{ width: '100%' }}>
+        <div >
           <DatePicker
             {...field}
-            fullWidth
+            // fullWidth
             type={type}
             value={field.value ? new Date(field.value) : null}
             views={views}
