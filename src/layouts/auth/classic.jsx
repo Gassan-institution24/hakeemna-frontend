@@ -7,8 +7,10 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Video from './Video.mp4';
-import Video2 from './Video2.mp4';
+import LoginAr from './loginAr.mp4';
+import LoginEn from './loginEn.mp4';
+import VideoAr from './clinicAr.mp4';
+import VideoEn from './clinicEn.mp4';
 import Language from '../common/language-home-page';
 
 // ----------------------------------------------------------------------
@@ -52,11 +54,11 @@ export default function AuthClassicLayout({ children, title }) {
         </span>
       </Hidden>
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {t(title) || t('Welcome back')}
+        {t(title)}
       </Typography>
-      {title === undefined ? (
+      {title === 'Happy to see you again' ? (
         <video style={{ width: '70%', height: '60%' }} loop autoPlay muted>
-          <source src={curLangAr ? Video2 : Video2} type="video/mp4" />
+          <source src={curLangAr ? LoginAr : LoginEn} type="video/mp4" />
           <track
             kind="captions"
             srcLang="en"
@@ -67,7 +69,7 @@ export default function AuthClassicLayout({ children, title }) {
         </video>
       ) : (
         <video style={{ width: '70%', height: '60%' }} loop autoPlay muted>
-          <source src={curLangAr ? Video : Video} type="video/mp4" />
+          <source src={curLangAr ? VideoAr : VideoEn} type="video/mp4" />
           <track
             kind="captions"
             srcLang="en"
