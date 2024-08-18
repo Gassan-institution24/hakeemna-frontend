@@ -226,15 +226,13 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         )}
       </Stack>
 
-      {/* {!onSignIn && <Stack direction="row" spacing={0.5}>
+      {!onSignIn && <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">
-          {' '}
-          {t('I am a ')}{' '}
-          <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
-            {t('services provider')}
+          <Link href="/" component={RouterLink} variant="subtitle2">
+            {t('Home page')}
           </Link>
         </Typography>
-      </Stack>} */}
+      </Stack>}
     </Stack>
   );
 

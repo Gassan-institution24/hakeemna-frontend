@@ -228,11 +228,21 @@ export default function Medicalreports() {
             },
             {
               label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
-              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+              icon: <Iconify width={18} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
             },
             {
               label: curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english,
               icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
+            },
+            info?.file?.length > 0 && {
+              label: curLangAr ? (
+                <span style={{ color: '#22C55E', fontWeight: 600 }}>يحتوي على ملف</span>
+              ) : (
+                <span style={{ color: '#22C55E', fontWeight: 600 }}>File inside</span>
+              ),
+              icon: (
+                <Iconify width={20} icon="material-symbols:image-sharp" sx={{ flexShrink: 0 }} />
+              ),
             },
           ].map((item, idx) => (
             <Stack
