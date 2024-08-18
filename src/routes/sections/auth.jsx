@@ -26,7 +26,7 @@ export const authRoutes = [
     path: 'login',
     element: (
       <Suspense fallback={<LoadingScreen />}>
-        <AuthClassicLayout>
+        <AuthClassicLayout title="Happy to see you again">
           <JwtLoginPage />
         </AuthClassicLayout>
       </Suspense>
@@ -43,7 +43,7 @@ export const authRoutes = [
   {
     path: 'register/serviceunit',
     element: (
-      <AuthClassicLayout>
+      <AuthClassicLayout title="your health medical record">
         <JwtUSRegisterPage />
       </AuthClassicLayout>
     ),
@@ -51,7 +51,7 @@ export const authRoutes = [
   {
     path: 'register/stakeholder',
     element: (
-      <AuthClassicLayout>
+      <AuthClassicLayout title="your health medical record">
         <JwtStakeholderRegisterPage />
       </AuthClassicLayout>
     ),
