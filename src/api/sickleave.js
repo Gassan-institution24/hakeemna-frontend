@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetSickLeaves() {
-  const URL = endpoints.sickleave.all;
+export function useGetSickLeaves(params) {
+  const URL = [endpoints.sickleave.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

@@ -20,6 +20,8 @@ import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useNewScreen } from 'src/hooks/use-new-screen';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ export default function InvoiceNewEditDetails() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const { handleAddNew } = useNewScreen();
   const { user } = useAuthContext();
 
   const { serviceTypesData } = useGetUSActiveServiceTypes(
@@ -299,6 +302,23 @@ export default function InvoiceNewEditDetails() {
                     {curLangAr ? service.name_arabic : service.name_english}
                   </MenuItem>
                 ))}
+                <Divider />
+                <MenuItem
+                  lang="ar"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
+                >
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
               </RHFSelect>
               <RHFSelect
                 name={`items[${index}].activity`}
@@ -312,6 +332,23 @@ export default function InvoiceNewEditDetails() {
                     {curLangAr ? one.name_arabic : one.name_english}
                   </MenuItem>
                 ))}
+                <Divider />
+                <MenuItem
+                  lang="ar"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.tables.activities.new)}
+                >
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
               </RHFSelect>
               <RHFTextField
                 size="small"

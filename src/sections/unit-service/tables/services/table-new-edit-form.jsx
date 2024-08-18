@@ -65,7 +65,7 @@ export default function TableNewEditForm({ currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const NewUserSchema = Yup.object().shape({
-    name_arabic: Yup.string().required(t('required field')),
+    name_arabic: Yup.string(),
     name_english: Yup.string().required(t('required field')),
     description_arabic: Yup.string(),
     description_english: Yup.string(),
@@ -102,8 +102,8 @@ export default function TableNewEditForm({ currentTable }) {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    if (arabicRegex.test(event?.target?.value)) {
+      methods.setValue(event?.target?.name, event?.target?.value, { shouldValidate: true });
     }
   };
 
@@ -111,8 +111,8 @@ export default function TableNewEditForm({ currentTable }) {
     // Validate the input based on English language rules
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    if (englishRegex.test(event?.target?.value)) {
+      methods.setValue(event?.target?.name, event?.target?.value, { shouldValidate: true });
     }
   };
 
@@ -122,13 +122,13 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  useEffect(() => {
-    if (Object.keys(errors).length) {
-      Object.keys(errors).forEach((key, idx) =>
-        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
-      );
-    }
-  }, [errors, enqueueSnackbar]);
+  // useEffect(() => {
+  //   if (Object.keys(errors).length) {
+  //     Object.keys(errors).forEach((key, idx) =>
+  //       enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
+  //     );
+  //   }
+  // }, [errors, enqueueSnackbar]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -170,24 +170,24 @@ export default function TableNewEditForm({ currentTable }) {
                   name="name_english"
                   label="name english"
                   // onChange={handleChange}
-                  onInputChange={handleEnglishInputChange}
+                  // onInputChange={handleEnglishInputChange}
                   placeholder="Choose a name english"
                   options={analysesData.map((option) => option.name_english)}
                   getOptionLabel={(option) => option}
                 />
               )}
-              {isMedLab && (
+              {/* {isMedLab && (
                 <RHFAutocomplete
                   freeSolo
                   name="name_arabic"
                   label="name arabic"
                   // onChange={handleChange}
-                  onInputChange={handleArabicInputChange}
+                  // onInputChange={handleArabicInputChange}
                   placeholder="Choose a name arabic"
                   options={analysesData.map((option) => option.name_arabic)}
                   getOptionLabel={(option) => option}
                 />
-              )}
+              )} */}
               {!isMedLab && (
                 <RHFTextField
                   onChange={handleEnglishInputChange}
