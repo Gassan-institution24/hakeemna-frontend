@@ -10,6 +10,7 @@ import { useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
+import Markdown from 'src/components/markdown/markdown';
 
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
@@ -121,9 +122,27 @@ export default function DoctorPage({ employeeData }) {
         </Stack>
         <Stack gap={3} marginX={5} padding={3}>
           <Stack gap={1} flex={1}>
+            {employeeData?.employee?.about_me && (
+              <>
+                <Stack direction="row">
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
+                  >
+                    {t('about me')}:
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" sx={{ px: 3 }}>
+                  {curLangAr ? employeeData?.employee?.arabic_about_me : employeeData?.employee?.about_me}
+                </Typography>
+              </>
+            )}
             {employeeData?.unit_service?.address && (
               <>
-                <Typography variant="subtitle1">{t('address')}:</Typography>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
+                >{t('address')}:</Typography>
                 <Typography variant="body2" sx={{ px: 3 }}>
                   {employeeData?.unit_service?.address}
                 </Typography>
