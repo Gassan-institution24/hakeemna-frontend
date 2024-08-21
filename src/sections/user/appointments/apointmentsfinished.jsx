@@ -30,13 +30,14 @@ export default function FinishedAppoinment({ finishedAppointments }) {
     router.push(paths.dashboard.user.bookappointment(id));
   };
 
-  return finishedAppointments.map((info, index) => (
+  return finishedAppointments?.map((info, index) => (
     <Box>
       <Card key={index}>
         {info?.work_group?.employees?.map((test, i) => (
           <IconButton
             onClick={() => handleViewRow(test?.employee?.employee?.speciality?._id)}
             sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
+            key={i}
           >
             <Iconify icon="fa:repeat" />
           </IconButton>
@@ -50,9 +51,9 @@ export default function FinishedAppoinment({ finishedAppointments }) {
             sx={{ width: 48, height: 48, mb: 2 }}
           />
 
-          {info?.work_group?.employees?.map((doctor, idx) => (
+          {info?.work_group?.employees?.map((doctor, ii) => (
             <ListItemText
-              key={idx}
+              key={ii}
               primary={
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}>
@@ -140,8 +141,8 @@ export default function FinishedAppoinment({ finishedAppointments }) {
             },
             {
               label: (
-                <Typography sx={{ color: 'success.main', fontSize: 13, ml: 0.1 }}>
-                  {info?.price}
+                <Typography sx={{ color: 'success.main', fontSize: 12, ml: 0.1 }}>
+                  {info?.final_price}
                 </Typography>
               ),
               icon: (
@@ -172,4 +173,3 @@ export default function FinishedAppoinment({ finishedAppointments }) {
 FinishedAppoinment.propTypes = {
   finishedAppointments: PropTypes.array,
 };
-// onClick={() => handleViewRow(info?.employees?.employee?.employee?.speciality?._id)}
