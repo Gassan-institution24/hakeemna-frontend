@@ -428,9 +428,9 @@ export default function TableCreateView() {
                   row
                   name="patientExist"
                   options={[
-                    { label: 'my patient', value: 'my_patients' },
-                    { label: 'hakeemna patient', value: 'exist' },
-                    { label: 'new patient', value: 'new' },
+                    { label: t('my patient'), value: 'my_patients' },
+                    { label: t('hakeemna patient'), value: 'exist' },
+                    { label: t('new patient'), value: 'new' },
                   ]}
                 />
                 <br />
