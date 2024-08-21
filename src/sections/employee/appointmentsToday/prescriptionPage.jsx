@@ -71,7 +71,7 @@ export default function PrescriptionPage() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });

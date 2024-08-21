@@ -71,7 +71,7 @@ export default function TourNewEditForm({ currentTour }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewTourSchema),
     defaultValues,
   });

@@ -69,7 +69,7 @@ export default function Doctorreport() {
     file: [],
   };
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(MedicalReportsSchema),
     defaultValues,
   });

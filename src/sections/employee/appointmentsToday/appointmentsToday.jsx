@@ -273,14 +273,25 @@ export default function AppointmentsToday() {
               subcategory: 'appointments',
               acl: 'create',
             }) && (
-              <Button
-                component={RouterLink}
-                onClick={() => setNewDialog(true)}
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
-                {t('add appointment')}
-              </Button>
+              <>
+                <Button
+                  sx={{ mr: 2 }}
+                  component={RouterLink}
+                  href={paths.employee.appointments.book}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  {t('book appointment')}
+                </Button>
+                <Button
+                  component={RouterLink}
+                  onClick={() => setNewDialog(true)}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  {t('create & book appointment')}
+                </Button>
+              </>
             ) /// edit
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -387,7 +398,7 @@ export default function AppointmentsToday() {
           </TableContainer>
         )}
       </Container>
-      <NewAppointmentDialog open={newDialog} close={() => setNewDialog(false)} />
+      <NewAppointmentDialog refetch={refetch} open={newDialog} close={() => setNewDialog(false)} />
       <ConfirmDialog
         open={addingId}
         onClose={() => setAddingId(false)}

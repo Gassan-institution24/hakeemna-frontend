@@ -143,7 +143,7 @@ export default function AccountGeneral({ unitServiceData }) {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
@@ -303,7 +303,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 label={`${t('institution email')}* :`}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
-                <Divider />
+              <Divider />
               <Stack alignItems="flex-start" gap={1} >
                 <Typography variant='subtitle1'>{t('finantial information')}</Typography>
                 <RHFCheckbox
@@ -433,7 +433,7 @@ export default function AccountGeneral({ unitServiceData }) {
                   'choose 12 am for both start and end time if you are working 24 hours'
                 )}
               />
-              <RHFTextField name="location_gps" label={t('location GPS')} />
+              <RHFTextField name="location_gps" label={t('location GPS - goole map url')} />
               <RHFTextField name="facebook" label={t('facebook url')} />
               <RHFTextField name="instagram" label={t('instagram url')} />
               <RHFTextField name="other" label={t('other social media')} />

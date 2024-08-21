@@ -67,7 +67,7 @@ export default function AccountGeneral({ data, refetch }) {
     email: Yup.string(),
     height: Yup.string(),
     weight: Yup.string(),
-    mobile_num1: Yup.string(),
+    mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
     is_on_eating_diet: Yup.string().nullable(),
     country: Yup.string(),
@@ -104,7 +104,7 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });

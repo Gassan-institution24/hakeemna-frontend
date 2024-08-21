@@ -67,7 +67,7 @@ export default function NewPasswordView() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(VerifySchema),
     defaultValues,
   });

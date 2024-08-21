@@ -38,7 +38,7 @@ export default function ForgotPasswordView() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(ForgotPasswordSchema),
     defaultValues,
   });

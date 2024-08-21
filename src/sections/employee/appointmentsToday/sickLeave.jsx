@@ -57,7 +57,7 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });

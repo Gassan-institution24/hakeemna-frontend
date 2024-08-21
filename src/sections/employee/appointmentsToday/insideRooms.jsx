@@ -61,7 +61,7 @@ export default function Rooms() {
   const { user } = useAuthContext();
   const router = useRouter();
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
   });
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -127,7 +127,7 @@ export default function Rooms() {
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,
       });
-   
+
       enqueueSnackbar('appointment finished', { variant: 'success' });
       refetch();
       router.push(paths.employee.appointmentsToday);
@@ -269,7 +269,7 @@ export default function Rooms() {
                       sx={{
                         bgcolor:
                           Entrance?.Current_activity?.name_english ===
-                          rooms?.activities?.name_english
+                            rooms?.activities?.name_english
                             ? ''
                             : 'success.main',
                         m: 2,

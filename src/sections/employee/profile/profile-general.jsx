@@ -199,7 +199,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     //   currencies?.[0]?._id,
   };
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });

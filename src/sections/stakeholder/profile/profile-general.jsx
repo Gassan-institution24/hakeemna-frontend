@@ -74,7 +74,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     picture: employeeData?.picture || null,
   };
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
@@ -209,7 +209,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')} :`}
-                // value={values.identification_num}
+              // value={values.identification_num}
               />
               <TextField
                 // disabled

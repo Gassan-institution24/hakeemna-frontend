@@ -48,7 +48,7 @@ export default function CitiesNewEditForm({ currentCity }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });

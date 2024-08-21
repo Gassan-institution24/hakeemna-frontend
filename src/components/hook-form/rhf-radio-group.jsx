@@ -30,7 +30,7 @@ export default function RHFRadioGroup({
       render={({ field, fieldState: { error } }) => (
         <FormControl component="fieldset">
           {label && (
-            <FormLabel component="legend" id={labelledby} sx={{ typography: 'body2' }}>
+            <FormLabel lang='ar' component="legend" id={labelledby} sx={{ typography: 'body2' }}>
               {label}
             </FormLabel>
           )}
@@ -39,6 +39,7 @@ export default function RHFRadioGroup({
             {options.map((option, idx) => (
               <FormControlLabel
                 key={idx}
+                lang='ar'
                 value={option.value}
                 control={<Radio />}
                 label={option.label}

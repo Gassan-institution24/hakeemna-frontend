@@ -428,9 +428,9 @@ export default function AppointmentsView({ employeeData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <>

@@ -66,7 +66,7 @@ export default function Medicalreport() {
     file: [],
   };
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(MedicalReportsSchema),
     defaultValues,
   });
