@@ -31,7 +31,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 import InsurancePage from './insurancePage';
 
 // ----------------------------------------------------------------------
- 
+
 export default function Insuranceinfo() {
   const { t } = useTranslate();
   const dialog = useBoolean(false);
@@ -61,7 +61,7 @@ export default function Insuranceinfo() {
     agree: !checkChange,
   };
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(insurancesSchema),
     defaultValues,
   });
@@ -149,7 +149,7 @@ export default function Insuranceinfo() {
             >
               {insuranseCosData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                   { curLangAr ? test?.insurance?.name_arabic  : test?.insurance?.name_english}
+                  {curLangAr ? test?.insurance?.name_arabic : test?.insurance?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>

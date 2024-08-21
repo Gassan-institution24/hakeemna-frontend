@@ -92,7 +92,7 @@ export default function ProductNewEditForm({ currentProduct }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewProductSchema),
     defaultValues,
   });

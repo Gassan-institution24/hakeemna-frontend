@@ -127,7 +127,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });

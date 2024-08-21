@@ -32,6 +32,7 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ export default function AppointmentDetails({ onClose, refetch, ...other }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -146,7 +147,8 @@ export default function AppointmentDetails({ onClose, refetch, ...other }) {
             <Controller
               name="start_time"
               render={({ field, fieldState: { error } }) => (
-                <DateTimePicker
+                <MobileDateTimePicker
+                  ampmInClock
                   label={`${t('start date')} *`}
                   sx={{ width: '30vw', minWidth: '300px' }}
                   onChange={(newValue) => {

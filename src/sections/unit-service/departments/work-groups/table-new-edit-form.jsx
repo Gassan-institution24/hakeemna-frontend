@@ -62,7 +62,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -106,9 +106,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
-            departmentData.name_english
-          }</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
+            }</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
@@ -116,9 +115,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
-            departmentData.name_english
-          }</strong> department`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
+            }</strong> department`,
         });
       }
       reset();

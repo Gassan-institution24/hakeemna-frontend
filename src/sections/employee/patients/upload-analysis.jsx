@@ -46,7 +46,7 @@ export default function UploadAnalysis({ open, onClose, refetch, analysisData })
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(oldMedicalReportsSchema),
     defaultValues,
   });

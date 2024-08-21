@@ -146,7 +146,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });

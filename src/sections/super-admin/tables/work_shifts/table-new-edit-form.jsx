@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { TimePicker } from '@mui/x-date-pickers';
+import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
@@ -51,7 +51,7 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -135,6 +135,11 @@ export default function TableNewEditForm({ currentTable }) {
               <TimePicker
                 name="start_time"
                 label="Start date"
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 onChange={(date) => methods.setValue('start_time', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
                 value={
@@ -144,6 +149,11 @@ export default function TableNewEditForm({ currentTable }) {
               <TimePicker
                 name="end_time"
                 label="End date"
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 onChange={(date) => methods.setValue('end_time', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
                 value={

@@ -55,7 +55,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });

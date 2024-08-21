@@ -67,7 +67,7 @@ export default function Create() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });

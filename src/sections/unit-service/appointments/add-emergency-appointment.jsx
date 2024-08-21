@@ -34,6 +34,7 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
@@ -65,17 +66,42 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const defaultValues = useMemo(
     () => ({
-      appointment_type: null,
-      start_time: null,
-      work_group: null,
-      work_shift: null,
+      start_time: new Date(),
+      appointment_type: appointmenttypesData?.[0]?._id,
+      work_group: workGroupsData?.[0]?._id,
+      work_shift: workShiftsData.filter((one) => {
+        const currentDate = new Date();
+
+        const startTime = new Date(currentDate);
+        startTime.setHours(
+          new Date(one.start_time).getHours(),
+          new Date(one.start_time).getMinutes(),
+          0,
+          0
+        );
+
+        const endTime = new Date(currentDate);
+        endTime.setHours(
+          new Date(one.end_time).getHours(),
+          new Date(one.end_time).getMinutes(),
+          0,
+          0
+        );
+
+        if (startTime <= endTime) {
+          return currentDate >= startTime && currentDate < endTime;
+        }
+        // If the shift crosses midnight
+        const endTimeNextDay = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+        return currentDate >= startTime || currentDate < endTimeNextDay;
+      })?.[0]?._id,
       service_types: [],
     }),
-    []
+    [workGroupsData, workShiftsData, appointmenttypesData]
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -125,6 +151,10 @@ export default function BookManually({ onClose, refetch, ...other }) {
     }
   });
 
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
+
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -146,7 +176,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
               <Controller
                 name="start_time"
                 render={({ field, fieldState: { error } }) => (
-                  <DateTimePicker
+                  <MobileDateTimePicker
+                    ampmInClock
                     label={`${t('start date')} *`}
                     sx={{ width: '30vw', minWidth: '300px' }}
                     onChange={(newValue) => {

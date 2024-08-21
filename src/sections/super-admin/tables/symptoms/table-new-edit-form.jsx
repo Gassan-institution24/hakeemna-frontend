@@ -44,7 +44,7 @@ export default function TableNewEditForm({ currentSelected }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewSchema),
     defaultValues,
   });

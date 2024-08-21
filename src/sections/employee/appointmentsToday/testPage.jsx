@@ -42,7 +42,7 @@ export default function Testpage() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(AdjustabledocumentSchema),
     defaultValues,
   });

@@ -137,7 +137,7 @@ export default function Prescription({ Entrance }) {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });
@@ -407,6 +407,20 @@ export default function Prescription({ Entrance }) {
             ))}
             <Divider />
           </DialogContent>
+
+                {/* {index === prescriptions.length - 1 && (
+                  <Button
+                    onClick={addPrescriptionField}
+                    sx={{ ml: 2, bgcolor: 'success.main', display: 'inline' }}
+                    variant="contained"
+                  >
+                    {t('Add more')}
+                  </Button>
+                )}
+              </div>
+            ))}
+            <Divider />
+          </DialogContent> */}
 
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>

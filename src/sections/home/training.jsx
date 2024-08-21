@@ -39,7 +39,7 @@ export default function Training() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });

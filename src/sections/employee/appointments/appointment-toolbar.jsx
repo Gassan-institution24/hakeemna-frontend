@@ -5,7 +5,7 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { TimePicker } from '@mui/x-date-pickers';
+import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
@@ -216,6 +216,11 @@ export default function AppointmentToolbar({
         />
         <TimePicker
           // // ampmInClock
+          viewRenderers={{
+            hours: renderTimeViewClock,
+            minutes: renderTimeViewClock,
+            seconds: renderTimeViewClock,
+          }}
           closeOnSelect
           slots={{
             // toolbar:false,
@@ -239,6 +244,11 @@ export default function AppointmentToolbar({
         />
 
         <TimePicker
+          viewRenderers={{
+            hours: renderTimeViewClock,
+            minutes: renderTimeViewClock,
+            seconds: renderTimeViewClock,
+          }}
           // ampmInClock
           closeOnSelect
           slots={{
