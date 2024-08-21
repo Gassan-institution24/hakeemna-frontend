@@ -10,11 +10,13 @@ import CompactLayout from 'src/layouts/compact';
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function NotFoundView() {
   const { t } = useTranslate();
+  const router = useRouter()
   return (
     <CompactLayout>
       <MotionContainer>
@@ -41,8 +43,8 @@ export default function NotFoundView() {
           />
         </m.div>
 
-        <Button component={RouterLink} href="/" size="large" variant="contained">
-          {t('Go Home')}
+        <Button component={RouterLink} onClick={router.back} size="large" variant="contained">
+          {t('go back')}
         </Button>
       </MotionContainer>
     </CompactLayout>

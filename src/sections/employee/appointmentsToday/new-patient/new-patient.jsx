@@ -48,7 +48,7 @@ import {
 import PatientsFound from './patients-found';
 // ----------------------------------------------------------------------
 
-export default function NewAppointmentDialog({ open, close }) {
+export default function NewAppointmentDialog({ open, close, refetch }) {
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
@@ -80,7 +80,7 @@ export default function NewAppointmentDialog({ open, close }) {
     nationality: Yup.string().required(t('required field')),
     country: Yup.string().nullable(),
     city: Yup.string().nullable(),
-    mobile_num1: Yup.string(),
+    mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
     gender: Yup.string().nullable(),
     note: Yup.string(),
@@ -145,7 +145,7 @@ export default function NewAppointmentDialog({ open, close }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -216,6 +216,7 @@ export default function NewAppointmentDialog({ open, close }) {
       await addToCalendar(appointmentData);
       enqueueSnackbar(t('created successfully!'));
       reset();
+      refetch()
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -274,6 +275,7 @@ export default function NewAppointmentDialog({ open, close }) {
   return (
     <Dialog fullWidth maxWidth="xl" open={open} onClose={close}>
       <Container maxWidth="xl" sx={{ p: 5 }}>
+        <Typography variant='h5'>{t('create & book appointment')}</Typography>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <Stack spacing={2.5} sx={{ my: 3 }}>
             <Typography variant='subtitle1' color='text.disabled'>{t('appointment details')}</Typography>
@@ -351,6 +353,7 @@ export default function NewAppointmentDialog({ open, close }) {
           <Divider />
           <br />
           <Typography
+            lang='ar'
             sx={{ py: 2, fontWeight: 700 }}
             variant="caption"
             color="text.secondary"
@@ -561,6 +564,7 @@ export default function NewAppointmentDialog({ open, close }) {
               createAppointment={createAppointment}
               reset={reset}
               close={close}
+              refetch={refetch}
               oldPatients={existPatients}
             />
           )}
@@ -569,10 +573,20 @@ export default function NewAppointmentDialog({ open, close }) {
               createAppointment={createAppointment}
               reset={reset}
               close={close}
+              refetch={refetch}
               oldPatients={foundPatients}
               usPatients
             />
           )}
+          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <LoadingButton
+              tabIndex={-1}
+              variant="contained"
+              onClick={close}
+            >
+              {t('cancel')}
+            </LoadingButton>
+          </Stack>
         </FormProvider>
       </Container>
     </Dialog>
@@ -580,5 +594,6 @@ export default function NewAppointmentDialog({ open, close }) {
 }
 NewAppointmentDialog.propTypes = {
   open: PropTypes.bool,
-  close: PropTypes.func
+  close: PropTypes.func,
+  refetch: PropTypes.func,
 }

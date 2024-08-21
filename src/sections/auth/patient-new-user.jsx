@@ -60,7 +60,7 @@ export default function NewUserView() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(VerifySchema),
     defaultValues,
   });

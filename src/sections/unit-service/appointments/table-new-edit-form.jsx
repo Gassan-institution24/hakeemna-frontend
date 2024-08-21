@@ -49,7 +49,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });

@@ -23,6 +23,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   });
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(EventSchema),
     defaultValues: currentEvent,
   });
@@ -112,7 +113,8 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           name="start"
           control={control}
           render={({ field }) => (
-            <DateTimePicker
+            <MobileDateTimePicker
+              ampmInClock
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {
@@ -135,7 +137,8 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           name="end"
           control={control}
           render={({ field }) => (
-            <DateTimePicker
+            <MobileDateTimePicker
+              ampmInClock
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {

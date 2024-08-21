@@ -54,7 +54,7 @@ export default function MdicalreportPage() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(doctorreportschema),
     defaultValues,
   });

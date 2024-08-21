@@ -49,7 +49,7 @@ export default function JwtLoginView() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });

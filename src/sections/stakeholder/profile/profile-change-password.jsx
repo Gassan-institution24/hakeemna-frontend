@@ -55,7 +55,7 @@ export default function AccountChangePassword() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(ChangePassWordSchema),
     defaultValues,
   });

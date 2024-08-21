@@ -50,7 +50,7 @@ export default function ClassicVerifyView({ onVerify, patientId, selected, refet
   const { countdown, counting, startCountdown } = useCountdownSeconds(60);
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(VerifySchema),
     defaultValues,
   });

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { TimePicker } from '@mui/x-date-pickers'; // Import English locale
+import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers'; // Import English locale
 
 import { useUnitTime } from 'src/utils/format-time';
 
@@ -25,6 +25,11 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
         <TimePicker
           {...field}
           fullWidth
+          viewRenderers={{
+            hours: renderTimeViewClock,
+            minutes: renderTimeViewClock,
+            seconds: renderTimeViewClock,
+          }}
           // ampmInClock
           slots={{
             clearIcon: (provided, props) => <Iconify icon="mingcute:close-line" {...provided} />,

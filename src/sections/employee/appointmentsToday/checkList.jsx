@@ -72,7 +72,7 @@ export default function CheckList() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(questionSchema),
     defaultValues,
   });

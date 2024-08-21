@@ -301,7 +301,7 @@ export default function WorkGroupsTableView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.tables.workgroups.permissions.root(id));
+      router.push(paths.unitservice.tables.workgroups.edit(id));
     },
     [router]
   );
@@ -451,9 +451,9 @@ export default function WorkGroupsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

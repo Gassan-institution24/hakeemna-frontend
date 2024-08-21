@@ -66,7 +66,7 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewSchema),
     defaultValues,
   });

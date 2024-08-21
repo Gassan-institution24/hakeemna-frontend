@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
-import { TimePicker } from '@mui/x-date-pickers';
+import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -130,7 +130,7 @@ export default function TableCreateView() {
     nationality: Yup.string().required(t('required field')),
     country: Yup.string().nullable(),
     city: Yup.string().nullable(),
-    mobile_num1: Yup.string(),
+    mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
     gender: Yup.string().nullable(),
     note: Yup.string(),
@@ -159,7 +159,7 @@ export default function TableCreateView() {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -264,9 +264,9 @@ export default function TableCreateView() {
     setFilters(defaultFilters);
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <>
@@ -349,6 +349,11 @@ export default function TableCreateView() {
               <TimePicker
                 // ampmInClock
                 closeOnSelect
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 slots={{
                   // toolbar:false,
                   actionBar: 'cancel',
@@ -369,6 +374,11 @@ export default function TableCreateView() {
               <TimePicker
                 // ampmInClock
                 closeOnSelect
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 slots={{
                   // toolbar:false,
                   actionBar: 'cancel',

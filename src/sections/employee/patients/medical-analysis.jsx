@@ -73,7 +73,7 @@ export default function MedicalAnalysis() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(oldMedicalReportsSchema),
     defaultValues,
   });

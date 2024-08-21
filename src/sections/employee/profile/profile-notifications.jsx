@@ -56,7 +56,7 @@ export default function AccountNotifications() {
   // const { user } = useAuthContext();
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     defaultValues: {
       selected: ['activity_comments', 'application_product'],
     },

@@ -102,7 +102,7 @@ export default function TableCreateView() {
     nationality: Yup.string().required(t('required field')),
     country: Yup.string().nullable(),
     city: Yup.string().nullable(),
-    mobile_num1: Yup.string(),
+    mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
     gender: Yup.string().nullable(),
     note: Yup.string(),
@@ -167,7 +167,7 @@ export default function TableCreateView() {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
