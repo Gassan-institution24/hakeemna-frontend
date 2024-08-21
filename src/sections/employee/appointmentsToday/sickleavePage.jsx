@@ -52,7 +52,7 @@ export default function MdicalreportPage() {
   };
   console.log(data, 'data');
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(medicalReportSchema),
     defaultValues,
   });
@@ -114,8 +114,8 @@ export default function MdicalreportPage() {
               {t('Dr.')}&nbsp;
               {curLangAr
                 ? `قام ${data?.employee?.name_arabic} باضافة اجازة مرضية`
-                : `${data?.employee?.name_english} added sick leave` }
-           
+                : `${data?.employee?.name_english} added sick leave`}
+
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('description')}:&nbsp;&nbsp;

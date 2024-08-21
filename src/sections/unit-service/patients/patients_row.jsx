@@ -138,7 +138,7 @@ export default function USPatientsTableRow({ row, selected }) {
   );
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });

@@ -61,7 +61,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });

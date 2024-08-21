@@ -54,7 +54,7 @@ export default function MdicalreportPage() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(medicalReportSchema),
     defaultValues,
   });
@@ -222,7 +222,7 @@ export default function MdicalreportPage() {
               multiline
               name="description"
               label={t('description')}
-              sx={{ mb: 2,mt:2 }}
+              sx={{ mb: 2, mt: 2 }}
             />
             <RHFUpload
               multiple

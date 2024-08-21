@@ -239,7 +239,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
     <>
       <Box
         sx={{
+          height: '100vh',
+          top: 0,
+          position: 'sticky',
           flexShrink: { lg: 0 },
+          overflow:'visible',
           width: { lg: NAV.W_VERTICAL },
           boxShadow: (theme) => theme.customShadows.z8,
         }}
@@ -251,6 +255,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             sx={{
               height: 1,
               position: 'fixed',
+              top: 0,
               width: NAV.W_VERTICAL,
               borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
             }}

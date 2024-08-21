@@ -67,7 +67,7 @@ export default function RatingRoomDialog() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });

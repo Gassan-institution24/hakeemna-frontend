@@ -93,9 +93,9 @@ export default function DoctornaSystemErrorsView() {
   const codeOptions = Array.from(new Set(systemErrorsData.map((data, idx) => data.error_code)));
 
   const canReset =
-    !!filters?.name || filters.status !== 'not read' || filters.errorCodes.length > 0;
+    !!filters?.name || filters.status !== 'not read' || filters.errorCodes?.length > 0;
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
@@ -147,9 +147,9 @@ export default function DoctornaSystemErrorsView() {
         { status: 'read' }
       );
       refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
+      table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage?.length, table, refetch]
   );
 
   const handleUnread = useCallback(
@@ -159,9 +159,9 @@ export default function DoctornaSystemErrorsView() {
         { status: 'not read' }
       );
       refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
+      table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage?.length, table, refetch]
   );
 
   if (loading) {
@@ -196,11 +196,11 @@ export default function DoctornaSystemErrorsView() {
                     'default'
                   }
                 >
-                  {tab.value === 'all' && systemErrorsData.length}
+                  {tab.value === 'all' && systemErrorsData?.length}
                   {tab.value === 'read' &&
-                    systemErrorsData.filter((order) => order.status === 'read').length}
+                    systemErrorsData.filter((order) => order.status === 'read')?.length}
                   {tab.value === 'not read' &&
-                    systemErrorsData.filter((order) => order.status === 'not read').length}
+                    systemErrorsData.filter((order) => order.status === 'not read')?.length}
                 </Label>
               }
             />
@@ -224,7 +224,7 @@ export default function DoctornaSystemErrorsView() {
             //
             onResetFilters={handleResetFilters}
             //
-            results={dataFiltered.length}
+            results={dataFiltered?.length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
@@ -236,15 +236,15 @@ export default function DoctornaSystemErrorsView() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
+                rowCount={dataFiltered?.length}
+                numSelected={table.selected?.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered.map((row, idx)  => row._id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     dataFiltered.map((row, idx)  => row._id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -263,13 +263,13 @@ export default function DoctornaSystemErrorsView() {
                       onUnread={() => handleUnread(row._id)}
                       // selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
-                      // onEditRow={() => handleEditRow(row._id)}
+                    // onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, systemErrorsData.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, systemErrorsData?.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -279,7 +279,7 @@ export default function DoctornaSystemErrorsView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
+          count={dataFiltered?.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
@@ -321,7 +321,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (status !== 'all') {
     inputData = inputData.filter((error) => error.status === status);
   }
-  if (errorCodes.length > 0) {
+  if (errorCodes?.length > 0) {
     inputData = inputData.filter((error) => errorCodes.includes(error.error_code));
   }
 

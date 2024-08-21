@@ -119,7 +119,7 @@ export default function OldMedicalReports() {
   };
 
   const methods = useForm({
-    mode: 'onTouched',
+    mode: 'all',
     resolver: yupResolver(oldMedicalReportsSchema),
     defaultValues,
   });
@@ -409,17 +409,17 @@ export default function OldMedicalReports() {
               variant="outlined"
               onDrop={handleDrop}
               multiple
-              // onRemove={(inputFile) => {
-              //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
-              //     shouldValidate: true,
-              //   });
-              //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
-              // }}
-              // onRemoveAll={() => {
-              //   setValue('files', [], { shouldValidate: true });
-              //   setUploadedFiles([]);
-              // }}
-              // onUpload={onSubmit}
+            // onRemove={(inputFile) => {
+            //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
+            //     shouldValidate: true,
+            //   });
+            //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
+            // }}
+            // onRemoveAll={() => {
+            //   setValue('files', [], { shouldValidate: true });
+            //   setUploadedFiles([]);
+            // }}
+            // onUpload={onSubmit}
             />
 
             <RHFTextField name="note" label={t('More information')} />

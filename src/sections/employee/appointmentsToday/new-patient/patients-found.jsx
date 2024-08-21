@@ -31,7 +31,7 @@ import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
-export default function PatientsFound({ SelectedAppointment, createAppointment, oldPatients, usPatients, reset, close }) {
+export default function PatientsFound({ SelectedAppointment, createAppointment, oldPatients, usPatients, reset, close, refetch }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -78,6 +78,7 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
       await addToCalendar(data);
       enqueueSnackbar(t('booked successfully!'));
       close()
+      refetch()
       reset()
       // router.back();
     } catch (error) {
@@ -181,6 +182,7 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
 }
 PatientsFound.propTypes = {
   oldPatients: PropTypes.array,
+  refetch: PropTypes.func,
   close: PropTypes.func,
   reset: PropTypes.func,
   createAppointment: PropTypes.func,
