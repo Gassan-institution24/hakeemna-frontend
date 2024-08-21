@@ -43,8 +43,13 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
+import { RouterLink } from 'src/routes/components';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
+  const checkAcl = useAclGuard();
+
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
@@ -57,6 +62,7 @@ export default function AppointmentsToday() {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [addingId, setAddingId] = useState(false);
   const [currId, setCurrId] = useState();
+  const [newDialog, setNewDialog] = useState(false);
 
   const [arrivalTimes, setArrivalTimes] = useState({});
   const unitServiceId = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -266,7 +272,7 @@ export default function AppointmentsToday() {
                 onClick={() => handleButtonClick(activity?.activities?._id, info)}
                 disabled={info?.started || !info.arrived}
               >
-                 {curLangAr ? activity?.name_arabic : activity?.name_english}
+                {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
             ) : null
           )}
@@ -290,6 +296,22 @@ export default function AppointmentsToday() {
         <CustomBreadcrumbs
           heading={t('Appointments Today')}
           links={[{ name: user.userName }]}
+          action={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointments',
+              acl: 'create',
+            }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => setNewDialog(true)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('add appointment')}
+              </Button>
+            ) /// edit
+          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
         <Tabs
@@ -394,6 +416,7 @@ export default function AppointmentsToday() {
           </TableContainer>
         )}
       </Container>
+      <NewAppointmentDialog open={newDialog} close={() => setNewDialog(false)} />
       <ConfirmDialog
         open={addingId}
         onClose={() => setAddingId(false)}

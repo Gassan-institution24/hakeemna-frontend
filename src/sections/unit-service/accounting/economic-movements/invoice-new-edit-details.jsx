@@ -22,6 +22,8 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { paths } from 'src/routes/paths';
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +32,7 @@ export default function InvoiceNewEditDetails() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const { handleAddNew } = useNewScreen();
   const { user } = useAuthContext();
 
   const myUS =
@@ -198,7 +201,7 @@ export default function InvoiceNewEditDetails() {
                     textAlign: { md: 'left' },
                   },
                 }}
-                // onChange={handleChangeOverall}
+              // onChange={handleChangeOverall}
               >
                 {taxesData.map((one, idx) => (
                   <MenuItem lang="ar" key={idx} value={one._id}>
@@ -292,6 +295,23 @@ export default function InvoiceNewEditDetails() {
                       {curLangAr ? service.name_arabic : service.name_english}
                     </MenuItem>
                   ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
                 <RHFSelect
                   name={`items[${index}].activity`}
@@ -305,6 +325,23 @@ export default function InvoiceNewEditDetails() {
                       {curLangAr ? one.name_arabic : one.name_english}
                     </MenuItem>
                   ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.activities.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
 
                 <RHFTextField

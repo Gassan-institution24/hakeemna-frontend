@@ -68,7 +68,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     items: Yup.lazy(() =>
       Yup.array().of(
         Yup.object({
-          service_type: Yup.string().required('Service is required'),
+          service_type: Yup.string().required(t('required field')),
           activity: Yup.string().nullable(),
           // deduction: Yup.number(),
           price_per_unit: Yup.number(),
@@ -77,7 +77,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           tax: Yup.number(),
           total: Yup.number(),
           quantity: Yup.number()
-            .required('Quantity is required')
+            .required(t('required field'))
         })
       )
     ),
