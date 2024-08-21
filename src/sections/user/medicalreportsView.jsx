@@ -42,7 +42,7 @@ export default function MedicalrepotView() {
           </span>{' '}
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
-          {t('Specialty')}: &nbsp; &nbsp;
+          {t('description')}: &nbsp; &nbsp;
           <span style={{ color: 'gray', fontWeight: 400 }}>{medicalreports?.description}</span>
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>

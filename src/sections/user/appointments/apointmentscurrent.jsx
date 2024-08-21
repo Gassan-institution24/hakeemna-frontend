@@ -29,7 +29,7 @@ import { useSnackbar } from 'src/components/snackbar';
 
 export default function Currentappoinment({ pendingAppointments, refetch }) {
   const { t } = useTranslate();
-  
+
   const { enqueueSnackbar } = useSnackbar();
   const [theId, setTheId] = useState();
   const { currentLang } = useLocales();
@@ -106,7 +106,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
           <IconButton
             onClick={() => savedId(info?._id)}
             sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'red' } }}
-            title={t("cancel")}
+            title={t('cancel')}
           >
             <Iconify icon="mdi:cancel-bold" />
           </IconButton>
@@ -196,16 +196,6 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                 label: t(info?.status),
                 icon: (
                   <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />
-                ),
-              },
-              {
-                label: (
-                  <Typography sx={{ color: 'success.main', fontSize: 13, ml: 0.1 }}>
-                    {info?.price}
-                  </Typography>
-                ),
-                icon: (
-                  <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
                 ),
               },
             ].map((item, idx) => (

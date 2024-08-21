@@ -257,7 +257,13 @@ export default function Prescription({ Entrance }) {
           }}
           key={i}
         >
-          {info?.medicines?.trade_name}
+          {info?.medicines?.map((medicineName, index) => (
+            <span key={index}>
+              {medicineName?.medicines?.trade_name}
+              {index < info.medicines.length - 1 &&  <mark> - </mark>}
+            </span>
+          ))}
+
           <br />
           <Button
             onMouseOver={() => handleHover(info?._id)}
@@ -402,6 +408,19 @@ export default function Prescription({ Entrance }) {
             <Divider />
           </DialogContent>
 
+                {/* {index === prescriptions.length - 1 && (
+                  <Button
+                    onClick={addPrescriptionField}
+                    sx={{ ml: 2, bgcolor: 'success.main', display: 'inline' }}
+                    variant="contained"
+                  >
+                    {t('Add more')}
+                  </Button>
+                )}
+              </div>
+            ))}
+            <Divider />
+          </DialogContent> */}
 
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
