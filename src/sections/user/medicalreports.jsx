@@ -165,7 +165,15 @@ export default function Medicalreports() {
     router.push(paths.dashboard.user.medicalreportsview(id));
   };
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-
+  const formatTextWithLineBreaks = (text) => {
+    if (!text) return '';
+    const words = text.split(' ');
+    return words.reduce(
+      (formattedText, word, index) =>
+        formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
+      ''
+    );
+  };
   return medicalreportsdata?.length > 0 ? (
     medicalreportsdata?.map((info, index) => (
       <Card
@@ -189,7 +197,9 @@ export default function Medicalreports() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {fDateAndTime(info?.created_at)}
           </Stack>
-          <Typography>{info?.description}</Typography>
+          <Typography
+            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(info?.description || '') }}
+          />
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink

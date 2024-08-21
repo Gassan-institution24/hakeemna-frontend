@@ -185,6 +185,35 @@ export default function AppointmentsToday() {
     }
   };
 
+
+  // const handleEndAppointment = async () => {
+  //   try {
+  //     await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
+  //       Patient_attended: true,
+  //     });
+  //     await axiosInstance.patch(`/api/appointments/${Entrance?.appointmentId}`, {
+  //       finished_or_not: true,
+  //     });
+  //     await axiosInstance.post('/api/feedback', {
+  //       unit_service:
+  //         user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+  //           ?._id,
+  //       appointment: Entrance?.appointmentId,
+  //       patient: Entrance?.patient?._id,
+  //       unit_service_patient: Entrance?.unit_service_patient,
+  //     });
+  
+   
+  //     enqueueSnackbar('appointment finished', { variant: 'success' });
+  //     refetch();
+  //     router.push(paths.employee.appointmentsToday);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     enqueueSnackbar('something went wrong', { variant: 'error' });
+  //   }
+  // };
+
+
   const handleButtonClick = (activityId, info) => {
     setSelectedTitle(activityId);
     if (info.arrived) {
