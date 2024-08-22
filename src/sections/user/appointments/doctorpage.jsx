@@ -312,20 +312,10 @@ export default function Doctorpage() {
 
           <Box sx={{ typography: 'body2' }}>
             {t(`For booking: `)}
-            <Link variant="subtitle2" color="inherit">
+            <Link dir="ltr" variant="subtitle2" color="inherit">
               {data?.unit_service?.phone}
             </Link>
           </Box>
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
-          {data?.employee?.online === false ? (
-            <Iconify icon="fxemoji:noentrysign" width={24} />
-          ) : (
-            <Iconify icon="icon-park:correct" width={24} />
-          )}
-
-          <Box sx={{ typography: 'body2' }}>{t('Available online')}</Box>
         </Stack>
       </Stack>
     </Card>
@@ -373,7 +363,7 @@ export default function Doctorpage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-      <LocalizationProvider  dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
           componentsProps={{ actionBar: { actions: [''] } }}
