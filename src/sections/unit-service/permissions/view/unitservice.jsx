@@ -91,7 +91,7 @@ export default function TableNewEditForm() {
   } = methods;
 
   const { employeesData, loading } = useGetUSActiveEmployeeEngs(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
     { select: 'employee' }
   );
   useEffect(() => {

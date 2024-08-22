@@ -19,7 +19,7 @@ export function useNavData() {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { workGroupsData, loading } = useGetUSWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const employeeItems = useMemo(() => {

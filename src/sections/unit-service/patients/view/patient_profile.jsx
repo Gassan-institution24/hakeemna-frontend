@@ -11,8 +11,8 @@ import PatientFile from '../patient-profile/patient-file';
 import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
 import AppointmentsHistory from '../patient-profile/appoint-history';
-import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
+import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 // ----------------------------------------------------------------------

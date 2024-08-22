@@ -23,29 +23,30 @@ export default function SnackbarProvider({ children }) {
       ref={notistackRef}
       maxSnack={5}
       preventDuplicate
-      autoHideDuration={3000}
+      autoHideDuration={5000}
       TransitionComponent={isRTL ? Collapse : undefined}
       variant="success" // Set default variant
-      anchorOrigin={{ vertical: 'top', horizontal: isRTL ? 'left' : 'right' }}
+      // anchorOrigin={{ vertical: 'top', horizontal: isRTL ? 'left' : 'right' }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       iconVariant={{
         info: (
           <StyledIcon color="info">
-            <Iconify icon="eva:info-fill" width={24} />
+            <Iconify icon="eva:info-fill" width={30} />
           </StyledIcon>
         ),
         success: (
           <StyledIcon color="success">
-            <Iconify icon="eva:checkmark-circle-2-fill" width={24} />
+            <Iconify icon="eva:checkmark-circle-2-fill" width={30} />
           </StyledIcon>
         ),
         warning: (
           <StyledIcon color="warning">
-            <Iconify icon="eva:alert-triangle-fill" width={24} />
+            <Iconify icon="eva:alert-triangle-fill" width={30} />
           </StyledIcon>
         ),
         error: (
           <StyledIcon color="error">
-            <Iconify icon="solar:danger-bold" width={24} />
+            <Iconify icon="solar:danger-bold" width={30} />
           </StyledIcon>
         ),
       }}

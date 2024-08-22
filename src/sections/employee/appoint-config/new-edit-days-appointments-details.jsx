@@ -1,19 +1,14 @@
 import PropTypes from 'prop-types';
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Collapse from '@mui/material/Collapse';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -26,14 +21,13 @@ export default function NewEditDayAppointmentsDetails({
   ParentIndex,
   open,
   appointmenttypesData,
-  serviceTypesData,
   setAppointmentsNum,
 }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, watch } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -52,8 +46,8 @@ export default function NewEditDayAppointmentsDetails({
     };
     const existingData = values.days_details[ParentIndex].appointments
       ? values.days_details[ParentIndex].appointments[
-          values.days_details[ParentIndex].appointments.length - 1
-        ]
+      values.days_details[ParentIndex].appointments.length - 1
+      ]
       : null;
     const start_time = new Date(
       existingData ? existingData?.start_time : values.days_details[ParentIndex].work_start_time
@@ -74,18 +68,6 @@ export default function NewEditDayAppointmentsDetails({
   const handleRemove = (index) => {
     remove(index);
     setAppointmentsNum((prev) => ({ ...prev, [ParentIndex]: prev[ParentIndex] - 1 }));
-  };
-
-  const renderValues = (selectedIds) => {
-    const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
-    return selectedItems
-      ?.map(
-        (item) => (curLangAr ? item.name_arabic : item.name_english)
-        // price += item.Price_per_unit || 0
-      )
-      .join(', ');
-    // setOverAllPrice(price)
-    // return results.join(', ')
   };
   return (
     // <Dialog maxWidth="sm" open={open}>
@@ -116,7 +98,7 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label={`${t('appointment type')} *`}
+                  label={t('appointment type')}
                 >
                   {appointmenttypesData?.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -134,53 +116,13 @@ export default function NewEditDayAppointmentsDetails({
                     },
                   }}
                 />
-                <Controller
-                  name={`days_details[${ParentIndex}].appointments[${index}].service_types`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <FormControl error={!!error} size="small" sx={{ width: '100%', shrink: true }}>
-                      <InputLabel shrink> {t('service types')} </InputLabel>
-
-                      <Select
-                        {...field}
-                        multiple
-                        id={`multiple-days_details[${ParentIndex}].appointments[${index}].service_types`}
-                        label={t('service types')}
-                        renderValue={renderValues}
-                      >
-                        {serviceTypesData?.map((option, idx) => {
-                          const selected = field?.value?.includes(option._id);
-
-                          return (
-                            <MenuItem lang="ar" key={idx} value={option._id}>
-                              <Checkbox size="small" disableRipple checked={selected} />
-
-                              {curLangAr ? option?.name_arabic : option?.name_english}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-
-                      {!!error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
-                    </FormControl>
-                  )}
-                />
                 <RHFCheckbox
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
+                  onChange={() => setValue(`days_details[${ParentIndex}].appointments[${index}].online_available`, !watch(`days_details[${ParentIndex}].appointments[${index}].online_available`))}
                   label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
                 />
-                {/* <RHFTextField
-              
-                  size="small"
-                  name={`days_details[${ParentIndex}].appointments[${index}].price`}
-                  label="Price"
-                  value={overAllPrice}
-                  // inputProps={{ min: 5, max: 180, step: 5 }}
-                  type="number"
-                  InputLabelProps={{ shrink: true }}
-                /> */}
                 <IconButton
                   size="small"
                   color="error"
@@ -213,7 +155,7 @@ export default function NewEditDayAppointmentsDetails({
             startIcon={<Iconify icon="tdesign:plus" />}
             sx={{ padding: 1 }}
             onClick={handleAdd}
-            // sx={{ flexShrink: 0 }}
+          // sx={{ flexShrink: 0 }}
           >
             {curLangAr ? 'إضافة مواعيد بالتفصيل' : 'Add Detailed Appointment'}
           </Button>
@@ -226,7 +168,6 @@ export default function NewEditDayAppointmentsDetails({
 NewEditDayAppointmentsDetails.propTypes = {
   ParentIndex: PropTypes.number,
   open: PropTypes.bool,
-  serviceTypesData: PropTypes.array,
   appointmenttypesData: PropTypes.array,
   setAppointmentsNum: PropTypes.func,
 };

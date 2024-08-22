@@ -16,6 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetActiveUnitservices, useGetUSActiveDepartments } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -25,6 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
+  const { user } = useAuthContext()
 
   const { unitservicesData } = useGetActiveUnitservices({ populate: 'all' });
 
@@ -104,6 +106,10 @@ export default function TableNewEditForm({ currentTable }) {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
+  const employees_number =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      ?.employees_number || 10;
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -136,13 +142,13 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="department" label="Department">
+              {employees_number > 3 && <RHFSelect name="department" label="Department">
                 {departmentsData.map((department, idx) => (
                   <MenuItem lang="ar" key={idx} value={department._id}>
                     {department.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </RHFSelect>}
               <RHFTextField name="details" label="Details" />
               <RHFTextField name="details_arabic" label="Details Arabic" />
             </Box>

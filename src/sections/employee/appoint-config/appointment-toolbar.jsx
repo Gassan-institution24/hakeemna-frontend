@@ -44,8 +44,8 @@ export default function ConfigTableToolbar({
     (newValue) => {
       const selectedTime = zonedTimeToUtc(
         newValue,
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?.country?.time_zone || 'Asia/Amman'
       );
       onFilters('startDate', selectedTime);
     },
@@ -56,8 +56,8 @@ export default function ConfigTableToolbar({
     (newValue) => {
       const selectedTime = zonedTimeToUtc(
         newValue,
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?.country?.time_zone || 'Asia/Amman'
       );
       onFilters('endDate', selectedTime);
     },

@@ -37,7 +37,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
@@ -120,9 +119,8 @@ export default function AppointmentsView({ employeeData }) {
     appointmentsData,
     refetch,
     lengths,
-    loading,
   } = useGetEmployeeAppointments(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
     {
       page: table.page || 0,
       sortBy: table.orderBy || 'code',

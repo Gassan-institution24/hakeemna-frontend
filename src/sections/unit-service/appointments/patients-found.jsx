@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@mui/material/Table';
@@ -6,11 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useSnackbar } from 'src/components/snackbar';
-
-// import { useRouter } from 'src/routes/hooks';
-
-import { useState } from 'react';
+import { useRouter } from 'src/routes/hooks';
 
 import { addToCalendar } from 'src/utils/calender';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -18,6 +15,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 import {
   useTable,
   TableNoData,
@@ -51,7 +49,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
     // { id: '', width: 88 },
   ];
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -79,11 +77,10 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
 
       await axiosInstance.patch(endpoints.appointments.book(selected), data);
       await addToCalendar(SelectedAppointment);
-      window.location.reload();
       enqueueSnackbar(t('booked successfully!'));
       setSubmitting(false);
       reset();
-      // router.back();
+      router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

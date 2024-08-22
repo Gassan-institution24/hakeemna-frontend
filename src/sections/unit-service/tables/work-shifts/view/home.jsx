@@ -94,7 +94,7 @@ export default function WorkGroupsTableView() {
   const confirmInactivate = useBoolean();
 
   const { workShiftsData, loading, refetch } = useGetUSWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -448,9 +448,9 @@ export default function WorkGroupsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

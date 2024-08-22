@@ -54,7 +54,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   return (
@@ -77,15 +77,15 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
-                label={`${t('start date')} *`}
+                label={t('start date')}
                 // sx={{ flex: 1 }}
                 value={myunitTime(values.start_date)}
                 onChange={(newValue) => {
                   const selectedTime = zonedTimeToUtc(
                     newValue,
-                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}
@@ -111,9 +111,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 onChange={(newValue) => {
                   const selectedTime = zonedTimeToUtc(
                     newValue,
-                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}
@@ -137,7 +137,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_shift"
-            label={`${t('work shift')} *`}
+            label={t('work shift')}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -168,7 +168,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_group"
-            label={`${t('work group')} *`}
+            label={t('work group')}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}

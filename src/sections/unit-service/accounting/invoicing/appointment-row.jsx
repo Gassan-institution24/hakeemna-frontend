@@ -55,7 +55,7 @@ export default function AppointmentsTableRow({ row, selected }) {
           primary={
             isValid(new Date(start_time)) &&
             new Date(start_time).toLocaleTimeString(t('en-US'), {
-              timeZone: unit_service?.country?.time_zone,
+              timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
               hour: '2-digit',
               minute: '2-digit',
             })
@@ -65,7 +65,7 @@ export default function AppointmentsTableRow({ row, selected }) {
             new Date(start_time).toLocaleDateString(t('en-US'), {
               timeZone:
                 unit_service?.country?.time_zone ||
-                Intl.DateTimeFormat().resolvedOptions().timeZone,
+                'Asia/Amman',
             })
           }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}

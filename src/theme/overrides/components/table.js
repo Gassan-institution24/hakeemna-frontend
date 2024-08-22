@@ -40,7 +40,7 @@ export function table(theme) {
     MuiTableCell: {
       styleOverrides: {
         root: {
-          borderBottomStyle: 'dashed',
+          // borderBottomStyle: 'dashed',
           borderBottomColor: theme.palette.grey[400],
         },
         head: {

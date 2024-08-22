@@ -36,7 +36,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
     status: 'published',
     to: 'to_unit_service',
     unit_service:
-      user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+      user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
   });
   const { length: productsLength } = useGetStakeholderProducts(_id, {
     page: 0,
@@ -75,9 +75,8 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
               {curLangAr ? name_arabic : name_english}
             </Link>
           }
-          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${
-            curLangAr ? country?.name_arabic : country?.name_english
-          }`}
+          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${curLangAr ? country?.name_arabic : country?.name_english
+            }`}
           primaryTypographyProps={{
             typography: 'subtitle1',
           }}

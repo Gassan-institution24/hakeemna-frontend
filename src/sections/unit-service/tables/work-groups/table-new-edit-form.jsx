@@ -62,7 +62,7 @@ export default function TableNewEditForm({ currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
@@ -143,6 +143,10 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
+  const employees_number =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      ?.employees_number || 10;
+
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
@@ -173,7 +177,7 @@ export default function TableNewEditForm({ currentTable }) {
               placeholder="فريق عمل الدكتور أحمد"
               label={`${t('name arabic')} *`}
             />
-            <RHFSelect name="department" label={t('department')}>
+            {employees_number > 3 &&<RHFSelect name="department" label={t('department')}>
               {departmentsData.map((department, idx) => (
                 <MenuItem lang="ar" key={idx} value={department?._id}>
                   {curLangAr ? department.name_arabic : department.name_english}
@@ -196,7 +200,7 @@ export default function TableNewEditForm({ currentTable }) {
                 </Typography>
                 <Iconify icon="material-symbols:new-window-sharp" />
               </MenuItem>
-            </RHFSelect>
+            </RHFSelect>}
             {/* <Stack spacing={1.5}> */}
             {/* <Typography variant="subtitle2">Working schedule</Typography> */}
             <RHFAutocomplete

@@ -6,11 +6,11 @@ import IconButton from '@mui/material/IconButton';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useLocales } from 'src/locales';
 import { NAV } from '../config-layout';
 
 // ----------------------------------------------------------------------

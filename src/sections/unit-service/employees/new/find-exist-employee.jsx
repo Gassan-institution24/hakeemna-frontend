@@ -49,7 +49,7 @@ export default function TableNewEditForm() {
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const unitServiceData =
-    user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+    user?.employee.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
   const [filters, setFilters] = useState({});
 

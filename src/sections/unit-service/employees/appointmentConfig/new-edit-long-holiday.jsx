@@ -81,7 +81,7 @@ export default function NewEditLongHolidays() {
                   size="small"
                   name={`long_holidays[${index}].description`}
                   label={t('description')}
-                  // sx={{ flex: 2 }}
+                // sx={{ flex: 2 }}
                 />
                 <Controller
                   name={`long_holidays[${index}].start_date`}
@@ -94,9 +94,9 @@ export default function NewEditLongHolidays() {
                       onChange={(newValue) => {
                         const selectedTime = zonedTimeToUtc(
                           newValue,
-                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                             ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                          'Asia/Amman'
                         );
                         setValue(`long_holidays[${index}].end_date`, selectedTime);
                         field.onChange(selectedTime);
@@ -123,9 +123,9 @@ export default function NewEditLongHolidays() {
                       onChange={(newValue) => {
                         const selectedTime = zonedTimeToUtc(
                           newValue,
-                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                             ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                          'Asia/Amman'
                         );
                         field.onChange(selectedTime);
                       }}

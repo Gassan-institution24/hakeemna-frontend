@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -11,6 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 // import { useRouter } from 'src/routes/hooks';
 
 import { Badge, Typography } from '@mui/material';
+
+import { fDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 
@@ -64,7 +65,7 @@ export default function AppointmentsTableRow({
             primary={
               isValid(new Date(start_time)) &&
               new Date(start_time).toLocaleTimeString(t('en-US'), {
-                timeZone: unit_service?.country?.time_zone,
+                timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
                 hour: '2-digit',
                 minute: '2-digit',
               })
@@ -74,7 +75,7 @@ export default function AppointmentsTableRow({
               new Date(start_time).toLocaleDateString(t('en-US'), {
                 timeZone:
                   unit_service?.country?.time_zone ||
-                  Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  'Asia/Amman',
               })
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -136,8 +137,8 @@ export default function AppointmentsTableRow({
         <TableCell align="center">{user_creation?.email}</TableCell>
         <TableCell align="center">
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -147,8 +148,8 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell align="center">
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -190,8 +191,8 @@ export default function AppointmentsTableRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -207,8 +208,8 @@ export default function AppointmentsTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',

@@ -1,4 +1,3 @@
-import { useTranslate } from "src/locales";
 
 const formatDate = (date) =>
   new Date(date)
@@ -8,8 +7,6 @@ const formatDate = (date) =>
     .replace(/\.\d{3}/, '');
 
 export async function addToCalendar(event) {
-// eslint-disable-next-line
-  const { t } = useTranslate()
   try {
     const startTime = encodeURIComponent(formatDate(event.start_time));
     const endTime = encodeURIComponent(formatDate(event.end_time));
@@ -21,7 +18,7 @@ export async function addToCalendar(event) {
     const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${startTime}/${endTime}&text=${title}&location=${location}`;
 
     // eslint-disable-next-line no-restricted-globals
-    const addToGoogleCalendar = confirm(t('Would you like to add this event to your Google Calendar?'));
+    const addToGoogleCalendar = confirm('Would you like to add this event to your Google Calendar?');
 
     if (addToGoogleCalendar) {
       redirectToGoogleCalendar(googleUrl);
