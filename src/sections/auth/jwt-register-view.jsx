@@ -168,6 +168,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
+      delete data.scanned_identification
       const formData = new FormData()
       formData.append('identification', identification)
       const patient = await register?.({ ...data, userName: data?.name_english });
