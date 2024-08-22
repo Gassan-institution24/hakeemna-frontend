@@ -64,7 +64,7 @@ export default function AccountGeneral({ unitServiceData }) {
   const { user } = useAuthContext();
 
   const { data, refetch } = useGetUnitservice(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
@@ -189,7 +189,7 @@ export default function AccountGeneral({ unitServiceData }) {
         formData.append('company_logo_pic', companyLogo);
         await axios.patch(
           `${endpoints.unit_services.one(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+            user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
               ._id
           )}/updatelogo`,
           formData
@@ -202,7 +202,7 @@ export default function AccountGeneral({ unitServiceData }) {
       }
       await axios.patch(
         endpoints.unit_services.one(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
         ),
         dataToSend
       );

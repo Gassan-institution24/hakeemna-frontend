@@ -192,7 +192,7 @@ function ReviewItem({ item }) {
           primary={
             isValid(new Date(start_time)) &&
             new Date(start_time).toLocaleTimeString(t('en-US'), {
-              timeZone: unit_service?.country?.time_zone,
+              timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
               hour: '2-digit',
               minute: '2-digit',
             })
@@ -202,7 +202,7 @@ function ReviewItem({ item }) {
             new Date(start_time).toLocaleDateString(t('en-US'), {
               timeZone:
                 unit_service?.country?.time_zone ||
-                Intl.DateTimeFormat().resolvedOptions().timeZone,
+                'Asia/Amman',
             })
           }
           primaryTypographyProps={{ typography: 'subtitle1', noWrap: true }}

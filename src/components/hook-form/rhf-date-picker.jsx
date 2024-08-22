@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { DatePicker } from '@mui/x-date-pickers';
 import { Typography } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 

@@ -32,10 +32,10 @@ export default function AppointmentToolbar({
   const curLangAr = currentLang.value === 'ar';
 
   const { workGroupsData } = useGetUSActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const popover = usePopover();

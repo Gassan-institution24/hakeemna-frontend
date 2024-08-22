@@ -12,8 +12,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Divider, MenuItem, Typography } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
@@ -34,7 +34,6 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +51,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { workGroupsData } = useGetDepartmentActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const NewUserSchema = Yup.object().shape({
@@ -125,7 +124,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
         ...data,
         emergency: true,
         unit_service:
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
             ._id,
         department: departmentData._id,
       });
@@ -186,9 +185,9 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
-                        user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                           ?.unit_service?.country?.time_zone ||
-                        Intl.DateTimeFormat().resolvedOptions().timeZone
+                        'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

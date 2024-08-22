@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers'; // Import English locale
+import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers'; // Import English locale
 
 import { useUnitTime } from 'src/utils/format-time';
 
@@ -43,8 +43,8 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+                ?.country?.time_zone || 'Asia/Amman'
             );
             field.onChange(selectedTime);
             if (onChange) {

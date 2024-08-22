@@ -64,10 +64,10 @@ export default function ChecklistTableView() {
   const { user } = useAuthContext();
 
   const { CheckListData, loading } = useGetMyCheckLists(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
 
-  console.log('CheckListData',CheckListData)
+  console.log('CheckListData', CheckListData)
 
   const [filters, setFilters] = useState(defaultFilters);
 

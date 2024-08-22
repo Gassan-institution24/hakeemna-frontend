@@ -10,8 +10,8 @@ import TableCell from '@mui/material/TableCell';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
@@ -32,10 +32,10 @@ export default function USPatientsTableRow({ row, selected }) {
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const { workGroupsData } = useGetUSActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const renderPrimary = (

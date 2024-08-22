@@ -12,11 +12,11 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetMedicines } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales'
+import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFEditor, RHFUpload, RHFCheckbox, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
-import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 export default function PatientUpload({ patient }) {
     const { t } = useTranslate()

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { Stack, Button } from '@mui/material';
 
-import { fTime } from 'src/utils/format-time';
+import { fTime, useUnitTime } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 
@@ -11,27 +11,10 @@ import { useLocales } from 'src/locales';
 export default function TimeList({ name, list, helperText, value, onChange, ...other }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { myunitTime } = useUnitTime();
 
-  // const [selectedItem, setSelectedItem] = useState();
-
-  // const TimeList = useCallback(
-  // ({ name, list, helperText, onChange, ...other }) => (
   return (
     <>
-      {/* <Typography
-        sx={{ py: 2, fontWeight: 700 }}
-        variant="caption"
-        color="text.secondary"
-        textTransform="uppercase"
-      >
-        {t('select time')}
-      </Typography> */}
-      {/* <Scrollbar
-        sx={{
-          py: 8,
-          backgroundColor: 'red',
-        }}
-      > */}
       <Stack
         sx={{
           my: 3,
@@ -63,8 +46,6 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
             variant="outlined"
             sx={{
               width: 100,
-              // m: 0.7,
-              // flexGrow: 1,
               '&:hover': {
                 backgroundColor: value === time._id ? 'primary.main' : 'hoverColor',
                 color: value === time._id ? 'white' : 'hoverTextColor',
@@ -72,15 +53,13 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
               fontWeight: value === time._id ? 600 : 500,
               backgroundColor: value === time._id ? 'primary.main' : '',
               color: value === time._id ? 'white' : '',
-              // border: '1px solid GrayText',
               borderRadius: 0,
             }}
             onClick={() => {
-              // setSelectedItem(time._id);
               onChange(time._id);
             }}
           >
-            {fTime(time.start_time, 'p', curLangAr)}
+            {fTime(myunitTime(time.start_time), 'p', curLangAr)}
           </Button>
         ))}
       </Stack>

@@ -8,8 +8,8 @@ import {
   useGetPatient,
   useGetUSPatient,
   useGetUnitservice,
-  useGetOneEntranceManagement,
   useGetOneUSPatient,
+  useGetOneEntranceManagement,
 } from 'src/api';
 
 import { RHFAutocomplete } from 'src/components/hook-form';

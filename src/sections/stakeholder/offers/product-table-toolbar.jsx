@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { TextField, IconButton, InputAdornment } from '@mui/material';
+import { TextField, InputAdornment } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 // import { useGetProductCategories } from 'src/api/product';

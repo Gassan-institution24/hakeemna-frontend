@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -33,10 +32,10 @@ export default function AppointmentToolbar({
   const curLangAr = currentLang.value === 'ar';
 
   const { workGroupsData } = useGetUSActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const popover = usePopover();

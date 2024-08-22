@@ -23,12 +23,14 @@ import {
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import {
   useGetUSRooms,
   useGetEntranceManagement,
@@ -43,8 +45,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
-import { RouterLink } from 'src/routes/components';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
+
 import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {

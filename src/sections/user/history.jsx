@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
+import React, { useState, useEffect } from 'react';
+
 import Table from '@mui/material/Table';
 import { Container } from '@mui/system';
 import TableRow from '@mui/material/TableRow';
@@ -7,15 +8,19 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import { Card, TableBody, CardHeader, IconButton } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
 import axios from 'src/utils/axios';
+import { fMonth } from 'src/utils/format-time';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatientHistoryData } from 'src/api/history';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { paths } from 'src/routes/paths';
-import { fMonth } from 'src/utils/format-time';
-import { useGetPatientHistoryData } from 'src/api/history';
 
 export default function HistoryHead() {
   const { t } = useTranslate();

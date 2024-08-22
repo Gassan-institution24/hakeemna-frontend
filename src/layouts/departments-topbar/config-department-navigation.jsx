@@ -19,7 +19,7 @@ export function useNavData() {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { departmentsData, loading } = useGetUSDepartments(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const employeeItems = useMemo(() => {

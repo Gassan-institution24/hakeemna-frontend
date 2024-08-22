@@ -16,8 +16,8 @@ export const useUnitTime = () => {
   function myunitTime(date) {
     const formattedDate = date ? new Date(date) : null;
     const timeZone =
-      user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-        ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+        ?.country?.time_zone || 'Asia/Amman';
 
     const value = formattedDate
       ? new Date(formattedDate.toLocaleString('en-US', { timeZone }))

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
-import { TextField, IconButton, InputAdornment } from '@mui/material';
+import { TextField, InputAdornment } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 // import { useGetProductCategories } from 'src/api/product';

@@ -327,7 +327,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         setValue(`days_details[${index}].appointment_type`, e.target.value);
                         processDayDetails(index);
                       }}
-                      label={`${t('appointment type')} *`}
+                      label={t('appointment type')}
                     >
                       {appointmenttypesData?.map((option, idx) => (
                         <MenuItem lang="ar" key={idx} value={option._id}>

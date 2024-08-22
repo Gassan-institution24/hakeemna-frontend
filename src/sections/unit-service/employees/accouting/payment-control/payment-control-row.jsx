@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
+import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -111,11 +112,11 @@ export default function MovementTableRow({
             primary={required_amount}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            // secondaryTypographyProps={{
-            //   mt: 0.5,
-            //   component: 'span',
-            //   typography: 'caption',
-            // }}
+          // secondaryTypographyProps={{
+          //   mt: 0.5,
+          //   component: 'span',
+          //   typography: 'caption',
+          // }}
           />
         </TableCell>
         <TableCell align="center">
@@ -206,8 +207,8 @@ export default function MovementTableRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -223,8 +224,8 @@ export default function MovementTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',

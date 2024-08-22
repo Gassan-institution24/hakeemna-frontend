@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import { format, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+
+import { fDate } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -43,7 +45,7 @@ export default function MovementTableRow({
       <TableCell align="center">
         <ListItemText
           primary={
-            (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')) ||
+            (isValid(new Date(start_date)) && fDate(start_date, 'dd MMMMMMMM yyyy')) ||
             ''
           }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -53,7 +55,7 @@ export default function MovementTableRow({
       <TableCell align="center">
         <ListItemText
           primary={
-            (isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMMMMMMM yyyy')) || ''
+            (isValid(new Date(end_date)) && fDate(end_date, 'dd MMMMMMMM yyyy')) || ''
           }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
         />

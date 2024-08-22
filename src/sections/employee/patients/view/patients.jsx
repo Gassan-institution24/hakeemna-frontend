@@ -13,7 +13,6 @@ import { useTranslate } from 'src/locales';
 import { useGetUSPatients } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -28,6 +27,8 @@ import {
 import { Button } from '@mui/material';
 
 import { RouterLink } from 'src/routes/components';
+
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -68,20 +69,21 @@ export default function PatientTableView() {
 
 
   const [filters, setFilters] = useState(defaultFilters);
+  const filtersToSend = useDebounce(filters)
 
-  const { patientsData, length, loading } = useGetUSPatients(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+  const { patientsData, length } = useGetUSPatients(
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
       select: 'patient name_english name_arabic file_code',
       populate: [
         { path: 'patient', select: 'name_english name_arabic sequence_number', populate: { path: 'nationality', select: 'code' }, },
         { path: 'work_group', select: 'name_english name_arabic' }],
-      employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+      employee: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
       page: table.page || 0,
       sortBy: table.orderBy || 'code',
       rowsPerPage: table.rowsPerPage || 5,
       order: table.order || 'asc',
-      ...filters,
+      ...filtersToSend,
     }
   );
 
@@ -110,9 +112,9 @@ export default function PatientTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <Container maxWidth="xl">

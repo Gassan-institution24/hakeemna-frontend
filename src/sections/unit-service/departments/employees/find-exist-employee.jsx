@@ -91,7 +91,7 @@ export default function TableNewEditForm({ departmentData }) {
   const handleEmployment = async (row) => {
     try {
       const unitServiceData =
-        user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+        user?.employee.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
       const SelectedUser = await axios.get(endpoints.auth.users, { params: { employee: row._id } });
       await axios.post(`${endpoints.notifications.all}/invite`, {
         user: SelectedUser.data[0]?._id,

@@ -37,6 +37,7 @@ import FormProvider, {
   RHFAutocomplete,
 } from 'src/components/hook-form';
 
+import Others from './other';
 import Certifications from './certifications';
 import ProfessionalMembership from './professional-membership';
 // ----------------------------------------------------------------------
@@ -149,6 +150,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     languages: Yup.array().required(t('required field')),
     certifications: Yup.array(),
     memberships: Yup.array(),
+    other: Yup.array(),
     keywords: Yup.array(),
     arabic_keywords: Yup.array(),
     fees: Yup.number().required(t('required field')),
@@ -181,10 +183,13 @@ export default function AccountGeneral({ employeeData, refetch }) {
     languages: employeeData?.languages || [],
     arabic_keywords: employeeData?.arabic_keywords || [],
     keywords: employeeData?.keywords || [],
-    memberships: employeeData?.memberships.length
+    memberships: employeeData?.memberships?.length
       ? employeeData?.memberships
       : [{ name: '', institution: '' }],
-    certifications: employeeData?.certifications.length
+    other: employeeData?.other?.length
+      ? employeeData?.other
+      : [{ kind: '', name: '' }],
+    certifications: employeeData?.certifications?.length
       ? employeeData?.certifications
       : [
         {
@@ -619,6 +624,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
             <Certifications />
             <ProfessionalMembership />
+            <Others />
 
             <RHFAutocomplete
               sx={{ mb: 3 }}
