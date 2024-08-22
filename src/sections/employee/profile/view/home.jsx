@@ -11,6 +11,10 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
+import { Button } from '@mui/material';
+
+import { RouterLink } from 'src/routes/components';
+
 import Iconify from 'src/components/iconify';
 // import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -36,6 +40,8 @@ export default function AccountView() {
   // const checkAcl = useAclGuard();
 
   const { data, loading, refetch } = useGetEmployee(user?.employee?._id);
+
+  const employeeEng = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -68,6 +74,17 @@ export default function AccountView() {
       <CustomBreadcrumbs
         heading={t('profile')}
         links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('profile') }]}
+        action={
+          <Button
+            component={RouterLink}
+            href={paths.pages.doctor(employeeEng)}
+            variant="contained"
+            target="_blank"
+            startIcon={<Iconify icon="icomoon-free:new-tab" />}
+          >
+            {t('show page')}
+          </Button>
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

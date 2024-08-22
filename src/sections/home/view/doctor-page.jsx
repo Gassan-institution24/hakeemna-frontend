@@ -10,7 +10,6 @@ import { useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import Markdown from 'src/components/markdown/markdown';
 
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
@@ -122,7 +121,7 @@ export default function DoctorPage({ employeeData }) {
         </Stack>
         <Stack gap={3} marginX={5} padding={3}>
           <Stack gap={1} flex={1}>
-            {employeeData?.employee?.about_me && (
+            {(employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me) && (
               <>
                 <Stack direction="row">
                   <Typography
@@ -158,9 +157,11 @@ export default function DoctorPage({ employeeData }) {
                     {t('phone number')}:
                   </Typography>
                 </Stack>
-                <Typography variant="body2" sx={{ px: 3 }}>
-                  {employeeData?.employee?.phone}
-                </Typography>
+                <Stack direction="row" justifyContent='left'>
+                  <Typography variant="body2" dir='ltr' sx={{ px: 3 }}>
+                    {employeeData?.employee?.phone}
+                  </Typography>
+                </Stack>
               </>
             )}
             {employeeData?.employee?.email && (
@@ -201,13 +202,18 @@ export default function DoctorPage({ employeeData }) {
               </Typography>
             </Stack>
             <Stack px={3} gap={1}>
-              {employeeData?.employee?.certifications?.map((one) => (
-                <Stack direction="row" gap={{ md: 1, xs: 1 }}>
-                  <Typography variant="body2">{one.name}</Typography>,
-                  <Typography variant="body2">{one.institution}</Typography>,
-                  <Typography variant="body2">{fDate(new Date(one.year), 'yyyy')}</Typography>
-                </Stack>
-              ))}
+              {employeeData?.employee?.certifications?.map((one) => {
+                if (one.name && one.year) {
+                  return (
+                    <Stack direction="row" gap={{ md: 1, xs: 1 }}>
+                      <Typography variant="body2">{one.name}</Typography>,
+                      <Typography variant="body2">{one.institution}</Typography>,
+                      <Typography variant="body2">{fDate(new Date(one.year), 'yyyy')}</Typography>
+                    </Stack>
+                  )
+                }
+                return ''
+              })}
             </Stack>
             <Stack direction="row">
               <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
@@ -215,13 +221,39 @@ export default function DoctorPage({ employeeData }) {
               </Typography>
             </Stack>
             <Stack px={3} gap={1}>
-              {employeeData?.employee?.memberships?.map((one) => (
-                <Stack direction="row" gap={1}>
-                  <Typography variant="body2">{one.name}</Typography>,
-                  <Typography variant="body2">{one.institution}</Typography>
-                </Stack>
-              ))}
+              {employeeData?.employee?.memberships?.map((one) => {
+                if (one.name && one.institution) {
+                  return (
+                    <Stack direction="row" gap={1}>
+                      <Typography variant="body2">{one.name}</Typography>,
+                      <Typography variant="body2">{one.institution}</Typography>
+                    </Stack>
+                  )
+                }
+                return ''
+              })}
             </Stack>
+            {employeeData?.employee?.other?.length > 0 && (
+              <>
+                <Stack direction="row">
+                  <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
+                    {t('other')}:
+                  </Typography>
+                </Stack>
+                <Stack px={3} gap={1}>
+                  {employeeData?.employee?.other?.map((one) => {
+                    if (one.kind && one.name) {
+                      return (
+                        <Stack direction="row" gap={1}>
+                          <Typography variant="body2">{one.name}</Typography>,
+                          <Typography variant="body2">{t(one.kind)}</Typography>
+                        </Stack>
+                      )
+                    }
+                    return ''
+                  })}
+                </Stack>
+              </>)}
           </Stack>
           <Stack gap={1} flex={1}>
             <FeedbackSection employee={employeeData} />

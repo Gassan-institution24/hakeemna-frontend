@@ -14,7 +14,7 @@ import PricingCard from '../pricing-card';
 export default function PricingView() {
   const { user } = useAuthContext();
   const { subscriptionsData } = useGetUSSubscriptions(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   return (
     <Container>

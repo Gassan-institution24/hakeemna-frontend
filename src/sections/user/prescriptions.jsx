@@ -24,8 +24,8 @@ import { useRouter } from 'src/routes/hooks';
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetDrugs } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';

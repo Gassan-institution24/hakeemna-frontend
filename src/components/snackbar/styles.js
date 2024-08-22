@@ -10,7 +10,7 @@ export const StyledNotistack = styled(MaterialDesignContent)(({ theme }) => {
   return {
     '& #notistack-snackbar': {
       ...theme.typography.subtitle2,
-      padding: 0,
+      padding: 3,
       flexGrow: 1,
     },
     '&.notistack-MuiContent': {

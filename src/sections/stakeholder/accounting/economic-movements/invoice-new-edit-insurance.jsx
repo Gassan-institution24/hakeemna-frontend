@@ -30,7 +30,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
   const curLangAr = currentLang.value === 'ar';
 
   const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
   const values = watch();
   const changeHandler = (e) => {

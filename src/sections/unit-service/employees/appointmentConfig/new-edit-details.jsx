@@ -55,7 +55,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   return (
@@ -84,9 +84,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 onChange={(newValue) => {
                   const selectedTime = zonedTimeToUtc(
                     newValue,
-                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}
@@ -112,9 +112,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 onChange={(newValue) => {
                   const selectedTime = zonedTimeToUtc(
                     newValue,
-                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                       ?.unit_service?.country?.time_zone ||
-                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                    'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}

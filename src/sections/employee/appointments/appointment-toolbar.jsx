@@ -5,12 +5,11 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers';
 import InputLabel from '@mui/material/InputLabel';
-import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers';
 
 import { useUnitTime } from 'src/utils/format-time';
 
@@ -39,10 +38,10 @@ export default function AppointmentToolbar({
   const { myunitTime } = useUnitTime();
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const popover = usePopover();
@@ -232,8 +231,8 @@ export default function AppointmentToolbar({
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+                ?.country?.time_zone || 'Asia/Amman'
             );
             handleFilterStartTime(selectedTime);
           }}
@@ -261,8 +260,8 @@ export default function AppointmentToolbar({
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+                ?.country?.time_zone || 'Asia/Amman'
             );
             handleFilterEndTime(new Date(selectedTime));
           }}

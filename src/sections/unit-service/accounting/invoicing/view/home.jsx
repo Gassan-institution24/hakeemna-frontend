@@ -72,7 +72,7 @@ export default function AppointmentsView() {
   const [filters, setFilters] = useState({ ...defaultFilters, startDate: new Date() });
 
   const { appointmentsData, lengths, refetch, loading } = useGetUSAppointments(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
     {
       page: table.page || 0,
       sortBy: table.orderBy || 'code',

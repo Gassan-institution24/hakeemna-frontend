@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -6,6 +5,8 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import { Rating, ListItemText } from '@mui/material';
+
+import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -95,8 +96,8 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',

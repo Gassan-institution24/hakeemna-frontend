@@ -22,7 +22,7 @@ export default function AccountView() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const serviceUnitID =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id;
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id;
   const { data, loading, refetch } = useGetUnitservice(serviceUnitID);
 
   if (loading) {

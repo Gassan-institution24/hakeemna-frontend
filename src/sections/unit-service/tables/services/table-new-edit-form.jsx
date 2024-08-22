@@ -43,7 +43,7 @@ export default function TableNewEditForm({ currentTable }) {
   const [showTax, setShowTax] = useState(false);
   const [showDeduction, setShowDeduction] = useState(false);
 
-  const myUS = user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+  const myUS = user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
 
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { taxesData } = useGetTaxes();
@@ -119,7 +119,7 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
   // useEffect(() => {

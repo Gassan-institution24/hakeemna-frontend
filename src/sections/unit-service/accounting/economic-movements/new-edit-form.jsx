@@ -99,11 +99,11 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       unit_service:
         currentInvoice?.unit_service?._id ||
         currentInvoice?.unit_service ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
       employee:
         currentInvoice?.employee?._id ||
         currentInvoice?.employee ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
       patient:
         currentInvoice?.patient?._id ||
         currentInvoice?.patient ||

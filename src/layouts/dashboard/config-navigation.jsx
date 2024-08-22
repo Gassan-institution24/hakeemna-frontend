@@ -36,7 +36,7 @@ export function useNavData() {
   }, [messages]);
 
   const employees_number =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
   const data = useMemo(() => {

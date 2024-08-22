@@ -94,7 +94,7 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         await axiosInstance.patch(endpoints.departments.one(currentTable._id), {
           unit_service:
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+            user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
               ._id,
           ...data,
         });
@@ -108,7 +108,7 @@ export default function TableNewEditForm({ currentTable }) {
         const newDepartment = await axiosInstance.post(endpoints.departments.all, {
           ...data,
           unit_service:
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+            user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
               ._id,
         });
         socket.emit('created', {

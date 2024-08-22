@@ -1,46 +1,43 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-
+import { LoadingButton } from '@mui/lab';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { Box, Stack, Dialog, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+
+import { useDebounce } from 'src/hooks/use-debounce';
+import { useNewScreen } from 'src/hooks/use-new-screen';
+
+import { addToCalendar } from 'src/utils/calender';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useFindPatient,
   useGetCountries,
-  useGetCountryCities,
+  useFindUSPatient,
+  // useGetCountryCities,
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
   useGetUSActiveWorkShifts,
-  useFindUSPatient,
 } from 'src/api';
-
-import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { LoadingButton } from '@mui/lab';
-import { Box, Stack, MenuItem, Dialog } from '@mui/material';
-
-import { useNewScreen } from 'src/hooks/use-new-screen';
-
-import { addToCalendar } from 'src/utils/calender';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import FormProvider from 'src/components/hook-form/form-provider';
-import { useDebounce } from 'src/hooks/use-debounce';
 import {
   RHFSelect,
   RHFTextField,
-  RHFDatePicker,
+  // RHFDatePicker,
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
@@ -61,10 +58,10 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const { workGroupsData } = useGetUSActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const { enqueueSnackbar } = useSnackbar();
@@ -73,16 +70,16 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     sequence_number: Yup.string(),
     name_english: Yup.string(),
     name_arabic: Yup.string(),
-    email: Yup.string(),
-    identification_num: Yup.string(),
-    birth_date: Yup.mixed().nullable(),
-    marital_status: Yup.string().nullable(),
+    // email: Yup.string(),
+    // identification_num: Yup.string(),
+    // birth_date: Yup.mixed().nullable(),
+    // marital_status: Yup.string().nullable(),
     nationality: Yup.string().required(t('required field')),
-    country: Yup.string().nullable(),
-    city: Yup.string().nullable(),
+    // country: Yup.string().nullable(),
+    // city: Yup.string().nullable(),
     mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
-    gender: Yup.string().nullable(),
+    // gender: Yup.string().nullable(),
     note: Yup.string(),
     work_shift: Yup.string().required(t('required field')),
     work_group: Yup.string().required(t('required field')),
@@ -96,19 +93,19 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       sequence_number: '',
       name_english: '',
       name_arabic: '',
-      email: '',
-      identification_num: '',
-      birth_date: null,
-      marital_status: null,
+      // email: '',
+      // identification_num: '',
+      // birth_date: null,
+      // marital_status: null,
       nationality: null,
-      country:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          .country._id,
-      city: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-        .city._id,
+      // country:
+      //   user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      //     .country._id,
+      // city: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      //   .city._id,
       mobile_num1: '',
       mobile_num2: '',
-      gender: null,
+      // gender: null,
       note: '',
       appointment_type: appointmenttypesData?.[0]?._id,
       start_time: new Date(),
@@ -141,7 +138,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       })?.[0]?._id,
       service_types: [],
     }),
-    [workGroupsData, appointmenttypesData, user?.employee, workShiftsData]
+    [workGroupsData, appointmenttypesData, workShiftsData]
   );
 
   const methods = useForm({
@@ -166,7 +163,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
   }, [errors, enqueueSnackbar]);
 
   const values = watch();
-  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
+  // const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const createAppointment = async () => {
     const appoint = await axiosInstance.post(endpoints.appointments.all, {
@@ -177,7 +174,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       service_types: values.service_types,
       emergency: true,
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
       department: workGroupsData.filter((item) => item._id === values.work_group)?.[0]?.department
         ?._id,
     });
@@ -188,8 +185,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     sequence_number: values.sequence_number,
     name_english: values.name_english,
     name_arabic: values.name_arabic,
-    email: values.email.toLowerCase(),
-    identification_num: values.identification_num,
+    // email: values.email.toLowerCase(),
+    // identification_num: values.identification_num,
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
   });
@@ -208,6 +205,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      delete data.sequence_number
       const { data: appointmentData } = await createAppointment();
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(appointmentData?._id),
@@ -216,7 +214,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       await addToCalendar(appointmentData);
       enqueueSnackbar(t('created successfully!'));
       reset();
-      refetch()
+      close()
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -368,7 +366,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
             name="patientExist"
             options={[
               { label: t('my patient'), value: 'my_patients' },
-              { label: t('hakeemna patient'), value: 'exist' },
+              // { label: t('hakeemna patient'), value: 'exist' },
               { label: t('new patient'), value: 'new' },
             ]}
           />
@@ -462,6 +460,19 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
           )}
           {values.patientExist === 'new' && (
             <>
+              <Typography sx={{ mb: 2 }} variant='subtitle2' color='info.dark'>
+                {t('if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number')}
+              </Typography>
+              <RHFTextField
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ style: { textAlign: 'center' } }}
+                sx={{ width: '200px', mb: 3, textAlign: 'center' }}
+                size="small"
+                name="sequence_number"
+                onChange={sequenceChangeHandler}
+                placeholder="001-22"
+                label={t('patient-code')}
+              />
               <Box
                 sx={{ mb: 3 }}
                 rowGap={3}
@@ -482,12 +493,12 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="name_arabic"
                   label={t('patient name in arabic')}
                 />
-                <RHFTextField type="email" name="email" label={t('email address')} />
-                <RHFTextField
+                {/* <RHFTextField type="email" name="email" label={t('email address')} /> */}
+                {/* <RHFTextField
                   onChange={handleEnglishInputChange}
                   name="identification_num"
                   label={t('ID number')}
-                />
+                /> */}
                 <RHFPhoneNumber
                   name="mobile_num1"
                   label={t('mobile number')}
@@ -496,7 +507,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="mobile_num2"
                   label={t('alternative mobile number')}
                 />
-                <RHFDatePicker name="birth_date" label={t('birth date')} />
+                {/* <RHFDatePicker name="birth_date" label={t('birth date')} /> */}
                 <RHFSelect name="nationality" label={t('nationality')}>
                   {countriesData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -504,22 +515,22 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                     </MenuItem>
                   ))}
                 </RHFSelect>
-                <RHFSelect name="country" label={t('country of residence')}>
+                {/* <RHFSelect name="country" label={t('country of residence')}>
                   {countriesData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
-                </RHFSelect>
+                </RHFSelect> */}
 
-                <RHFSelect name="city" label={t('city of residence')}>
+                {/* <RHFSelect name="city" label={t('city of residence')}>
                   {tableData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
-                </RHFSelect>
-                <RHFSelect name="marital_status" label={t('marital status')}>
+                </RHFSelect> */}
+                {/* <RHFSelect name="marital_status" label={t('marital status')}>
                   <MenuItem lang="ar" value="single">
                     {t('single')}
                   </MenuItem>
@@ -543,7 +554,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   <MenuItem lang="ar" value="female">
                     {t('female')}
                   </MenuItem>
-                </RHFSelect>
+                </RHFSelect> */}
               </Box>
               <RHFTextField multiline rows={2} name="note" label={t('note')} />
 
@@ -559,7 +570,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
               </Stack>
             </>
           )}
-          {existPatients.length > 0 && values.patientExist === 'exist' && (
+          {existPatients.length > 0 && values.patientExist === 'new' && (
             <PatientsFound
               createAppointment={createAppointment}
               reset={reset}

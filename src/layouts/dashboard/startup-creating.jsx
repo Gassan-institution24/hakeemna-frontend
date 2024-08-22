@@ -33,7 +33,7 @@ export default function StartupCreating({ open, onClose }) {
   const curLangAr = currentLang.value === 'ar';
 
   const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
   const { departmentsData } = useGetUSDepartments(USData?._id);
   const { workGroupsData } = useGetUSWorkGroups(USData?._id);
@@ -70,7 +70,7 @@ export default function StartupCreating({ open, onClose }) {
         await axiosInstance.post(endpoints.work_groups.all, {
           unit_service: USData?._id,
           employees: [
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+            user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
           ],
           name_english: `${user.employee?.name_english} work group`,
           name_arabic: `فريق عمل ${user.employee?.name_arabic}`,

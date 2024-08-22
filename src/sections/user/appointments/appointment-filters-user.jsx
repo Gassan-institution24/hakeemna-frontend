@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useTranslate,useLocales } from 'src/locales';
+import { useLocales,useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';

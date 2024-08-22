@@ -874,7 +874,7 @@ export default function JwtRegisterView() {
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={() => router.push(paths.auth.login)}>{t('cancel')}</Button>
+            <Button onClick={() => router.push(paths.auth.login)}>{t('return to login page')}</Button>
 
             <Button
               disabled={!values.employees_number || !values.US_type}

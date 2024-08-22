@@ -3,6 +3,7 @@ import { m } from 'framer-motion';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useTranslate } from 'src/locales';
@@ -10,7 +11,6 @@ import CompactLayout from 'src/layouts/compact';
 import { PageNotFoundIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
-import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 

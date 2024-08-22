@@ -73,14 +73,14 @@ export default function TableCreateView() {
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   // const { serviceTypesData } = useGetUSActiveServiceTypes(
-  //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+  //   user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
   //   { select: 'name_english name_arabic' }
   // );
   const { workGroupsData } = useGetUSActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSActiveWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
   );
 
   // const router = useRouter();
@@ -124,9 +124,9 @@ export default function TableCreateView() {
       marital_status: null,
       nationality: null,
       country:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           .country._id,
-      city: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+      city: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
         .city._id,
       mobile_num1: '',
       mobile_num2: '',
@@ -199,7 +199,7 @@ export default function TableCreateView() {
       service_types: values.service_types,
       emergency: true,
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
       department: workGroupsData.filter((item) => item._id === values.work_group)?.[0]?.department
         ?._id,
     });

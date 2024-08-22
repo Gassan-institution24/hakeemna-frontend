@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 
-import { usePathname, useRouter } from 'src/routes/hooks';
-import { useAuthContext } from 'src/auth/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter, usePathname } from 'src/routes/hooks';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 import Footer from './footer';
 import Header from './header';
