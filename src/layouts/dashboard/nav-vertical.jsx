@@ -46,7 +46,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const { messages, refetch } = useGetUnreadMsgs(user._id);
 
   const USData =
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
   const isEmployee = ['employee', 'admin'].includes(user?.role);
 
   const { currentLang } = useLocales();
@@ -239,11 +239,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
     <>
       <Box
         sx={{
-          height: '100vh',
-          top: 0,
-          position: 'sticky',
+          height: { lg: '100vh' },
+          top: { lg: 0 },
+          position: { lg: 'sticky' },
           flexShrink: { lg: 0 },
-          overflow:'visible',
+          overflow: 'visible',
           width: { lg: NAV.W_VERTICAL },
           boxShadow: (theme) => theme.customShadows.z8,
         }}

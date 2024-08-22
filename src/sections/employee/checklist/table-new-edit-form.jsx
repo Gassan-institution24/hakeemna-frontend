@@ -63,7 +63,7 @@ export default function NewEditForm({ currentRow }) {
 
   // const { specialtiesData } = useGetSpecialties();
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
 
   const defaultValues = useMemo(
@@ -120,7 +120,7 @@ export default function NewEditForm({ currentRow }) {
     reset({
       title: currentRow?.title || '',
       // speciality: currentRow?.speciality || null,
-      unit_service: currentRow?.unit_service || user?.employee?.employee_engagements[user?.employee.selected_engagement]
+      unit_service: currentRow?.unit_service || user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
         ?.unit_service?._id,
       department: currentRow?.department || null,
       work_group: currentRow?.work_group || null,
@@ -160,7 +160,7 @@ export default function NewEditForm({ currentRow }) {
             answer_way: one?.answer_way,
             options: one?.options,
           })),
-          employee: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+          employee: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
         };
         await axiosInstance.post(endpoints.checklist.all, dataToCreate);
         enqueueSnackbar(t('created successfuly'));
@@ -213,12 +213,12 @@ export default function NewEditForm({ currentRow }) {
                     'unit_service',
                     values.unit_service
                       ? null
-                      : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                      : user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                         ?.unit_service?._id
                   )
                 }
               />
-              {user?.employee?.employee_engagements[user?.employee.selected_engagement]
+              {user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                 ?.department && (
                   <RHFCheckbox
                     name="department"
@@ -228,7 +228,7 @@ export default function NewEditForm({ currentRow }) {
                         'department',
                         values.department
                           ? null
-                          : user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                          : user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                             ?.department?._id
                       )
                     }

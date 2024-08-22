@@ -73,14 +73,14 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             <ListItemText
               primary={new Date(start_time).toLocaleTimeString('en-US', {
-                timeZone: unit_service?.country?.time_zone,
+                timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
                 hour: '2-digit',
                 minute: '2-digit',
               })}
               secondary={new Date(start_time).toLocaleDateString('en-US', {
                 timeZone:
                   unit_service?.country?.time_zone ||
-                  Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  'Asia/Amman',
               })}
               primaryTypographyProps={{ typography: 'body2', noWrap: true }}
               secondaryTypographyProps={{
@@ -157,7 +157,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {}
+        { }
         <MenuItem
           lang="ar"
           onClick={() => {

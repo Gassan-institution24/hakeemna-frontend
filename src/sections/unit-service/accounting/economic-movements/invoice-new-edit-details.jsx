@@ -11,6 +11,10 @@ import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { inputBaseClasses } from '@mui/material/InputBase';
 
+import { paths } from 'src/routes/paths';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
@@ -22,8 +26,6 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { paths } from 'src/routes/paths';
-import { useNewScreen } from 'src/hooks/use-new-screen';
 
 // ----------------------------------------------------------------------
 

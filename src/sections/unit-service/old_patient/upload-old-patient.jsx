@@ -43,7 +43,7 @@ export default function UploadOldPatient({ refetch }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
       employee: user?.employee?._id,
       name_english: '',
       middle_name: '',

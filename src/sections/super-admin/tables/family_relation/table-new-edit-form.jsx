@@ -111,20 +111,6 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
-              {/* 
-              <RHFSelect name="department" label="department">
-                {departmentsData.map((department, idx) => (
-                  <MenuItem lang="ar" key={idx} value={department._id}>
-                    {department.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField
-                
-                onChange={handleEnglishInputChange}
-                name="general_info"
-                label="general_info"
-              /> */}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

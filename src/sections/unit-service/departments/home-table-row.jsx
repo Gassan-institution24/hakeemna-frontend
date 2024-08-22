@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -8,6 +7,8 @@ import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+
+import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -113,31 +114,31 @@ export default function CountriesTableRow({
       >
         {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onInactivate();
-                  // popover.onClose();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
-              </MenuItem>
-            )
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onInactivate();
+                // popover.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="ic:baseline-pause" />
+              {t('inactivate')}
+            </MenuItem>
+          )
           : checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onActivate();
-                  // popover.onClose();
-                }}
-                sx={{ color: 'success.main' }}
-              >
-                <Iconify icon="bi:play-fill" />
-                {t('activate')}
-              </MenuItem>
-            )}
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onActivate();
+                // popover.onClose();
+              }}
+              sx={{ color: 'success.main' }}
+            >
+              <Iconify icon="bi:play-fill" />
+              {t('activate')}
+            </MenuItem>
+          )}
         {checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
           <MenuItem
             lang="ar"
@@ -168,8 +169,8 @@ export default function CountriesTableRow({
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -185,8 +186,8 @@ export default function CountriesTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',

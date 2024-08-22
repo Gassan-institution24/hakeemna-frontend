@@ -7,8 +7,8 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
-import { useGePrescription } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useGePrescription } from 'src/api';
 
 import Iconify from 'src/components/iconify/iconify';
 

@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
+import { useMemo, useEffect } from 'react';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,8 +13,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Divider, MenuItem, Typography } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { paths } from 'src/routes/paths';
 
@@ -33,7 +33,6 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
@@ -162,9 +161,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
-                        user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                           ?.unit_service?.country?.time_zone ||
-                        Intl.DateTimeFormat().resolvedOptions().timeZone
+                        'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

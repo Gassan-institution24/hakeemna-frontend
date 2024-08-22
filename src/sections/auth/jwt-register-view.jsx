@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -13,13 +13,13 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import {
+  Box,
   Button,
   Dialog,
   MenuItem,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Box,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -28,9 +28,11 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useLocales, useTranslate } from 'src/locales';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -38,13 +40,11 @@ import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/priva
 import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
 import FormProvider, {
   RHFSelect,
+  RHFUpload,
   RHFTextField,
   RHFDatePicker,
   RHFPhoneNumber,
-  RHFUploadBox,
-  RHFUpload,
 } from 'src/components/hook-form';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 

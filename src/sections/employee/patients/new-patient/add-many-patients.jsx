@@ -7,11 +7,15 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
+    Link,
     Table,
+    Select,
     TableRow,
+    MenuItem,
     TableBody,
     TableCell,
     TextField,
+    Typography,
     TableContainer,
 } from '@mui/material';
 
@@ -21,6 +25,8 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
@@ -45,6 +51,9 @@ const TABLE_HEAD = [
 ];
 export default function NewEditManyForm() {
     const router = useRouter();
+    const { t } = useTranslate()
+    const { currentLang } = useLocales();
+    const curLangAr = currentLang.value === 'ar';
 
     const table = useTable({ defaultOrderBy: 'code' });
 
@@ -54,7 +63,10 @@ export default function NewEditManyForm() {
     const { enqueueSnackbar } = useSnackbar();
 
     const [data, setData] = useState([]);
+    const [work_group, setWorkGroup] = useState();
     const [loading, setLoading] = useState(false);
+
+    const { workGroupsData } = useGetEmployeeActiveWorkGroups(employee?._id)
 
 
     const handleChange = useCallback((index, event) => {
@@ -103,7 +115,7 @@ export default function NewEditManyForm() {
 
                 const insertedDataPromise = axiosInstance.post(
                     endpoints.usPatients.many,
-                    chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id, unit_service: employee?.unit_service?._id, employee: employee?._id, birth_date: new Date(one?.birth_date) }))
+                    chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id, unit_service: employee?.unit_service?._id, employee: employee?._id, work_group, birth_date: new Date(one?.birth_date) }))
                 );
                 return insertedDataPromise.then((insertedData) =>
                     axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
@@ -129,6 +141,18 @@ export default function NewEditManyForm() {
                         pb: 2,
                     }}
                 >
+                    <Typography mb={1} variant='subtitle2'>{t('work group')}:</Typography>
+                    <Select sx={{ minWidth: 200 }} name='work_group' error={!work_group} onChange={(e) => setWorkGroup(e.target.value)}>
+                        {workGroupsData?.map((one, idx) => (
+                            <MenuItem key={idx} value={one._id}>
+                                {curLangAr ? one?.name_arabic : one?.name_english}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <Typography my={2} variant='subtitle2'>
+                        {t('the uploaded file should be in this shap to be able to read')} - <Link href='/assets/patients.xlsx'>{t('download')}</Link>
+                    </Typography>
+
                     <Upload
                         name="excel"
                         accept=".xlsx, .xls"
@@ -248,10 +272,11 @@ export default function NewEditManyForm() {
                         <LoadingButton
                             onClick={handleCreate}
                             tabIndex={-1}
+                            disabled={!work_group}
                             loading={loading}
                             variant="contained"
                         >
-                            Create All
+                            {t('create all')}
                         </LoadingButton>
                     </Stack>
                 )}

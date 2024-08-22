@@ -4,11 +4,11 @@ import isEqual from 'lodash/isEqual';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
-import { renderTimeViewClock, TimePicker } from '@mui/x-date-pickers';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers';
 
 import { paths } from 'src/routes/paths';
 
@@ -18,7 +18,6 @@ import {
   useFindPatient,
   useGetCountries,
   useFindUSPatient,
-  useGetCountryCities,
   useGetUSAppointments,
   useGetEmployeeActiveWorkGroups,
 } from 'src/api';
@@ -32,8 +31,8 @@ import { useMemo, useState, useEffect, useCallback } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Stack, Button, MenuItem, IconButton } from '@mui/material';
 
-import { useSearchParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -49,14 +48,12 @@ import { useDebounce } from 'src/hooks/use-debounce';
 import Iconify from 'src/components/iconify';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import { useSnackbar } from 'src/components/snackbar';
-import { LoadingScreen } from 'src/components/loading-screen';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import {
   RHFSelect,
   RHFTextField,
-  RHFDatePicker,
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
@@ -75,6 +72,7 @@ const defaultFilters = {
 export default function TableCreateView() {
   // // const settings = useSettingsContext();
   const { user } = useAuthContext();
+  const router = useRouter()
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -97,7 +95,7 @@ export default function TableCreateView() {
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
 
   const { appointmentsData, AppointDates, loading, refetch } = useGetUSAppointments(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
       ...filters,
       startDate: selectedDate,
@@ -114,7 +112,7 @@ export default function TableCreateView() {
   const [selected, setSelected] = useState(appointment);
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
 
   const { enqueueSnackbar } = useSnackbar();
@@ -123,16 +121,16 @@ export default function TableCreateView() {
     sequence_number: Yup.string(),
     name_english: Yup.string(),
     name_arabic: Yup.string(),
-    email: Yup.string(),
-    identification_num: Yup.string(),
-    birth_date: Yup.mixed().nullable(),
-    marital_status: Yup.string().nullable(),
+    // email: Yup.string(),
+    // identification_num: Yup.string(),
+    // birth_date: Yup.mixed().nullable(),
+    // marital_status: Yup.string().nullable(),
     nationality: Yup.string().required(t('required field')),
-    country: Yup.string().nullable(),
-    city: Yup.string().nullable(),
+    // country: Yup.string().nullable(),
+    // city: Yup.string().nullable(),
     mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
-    gender: Yup.string().nullable(),
+    // gender: Yup.string().nullable(),
     note: Yup.string(),
     patientExist: Yup.string(),
   });
@@ -142,16 +140,16 @@ export default function TableCreateView() {
       sequence_number: '',
       name_english: '',
       name_arabic: '',
-      email: '',
-      identification_num: '',
-      birth_date: null,
-      marital_status: null,
+      // email: '',
+      // identification_num: '',
+      // birth_date: null,
+      // marital_status: null,
       nationality: null,
-      country: null,
-      city: null,
+      // country: null,
+      // city: null,
       mobile_num1: '',
       mobile_num2: '',
-      gender: null,
+      // gender: null,
       note: '',
       patientExist: 'my_patients',
     }),
@@ -180,14 +178,14 @@ export default function TableCreateView() {
   }, [errors, enqueueSnackbar]);
 
   const values = watch();
-  const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
+  // const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const debouncedQuery = useDebounce({
     sequence_number: values.sequence_number,
     name_english: values.name_english,
     name_arabic: values.name_arabic,
-    email: values.email.toLowerCase(),
-    identification_num: values.identification_num,
+    // email: values.email.toLowerCase(),
+    // identification_num: values.identification_num,
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
   });
@@ -206,16 +204,15 @@ export default function TableCreateView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      delete data.sequence_number
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(selected),
         { ...data, lang: curLangAr }
       );
       const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
-      window.location.reload();
       enqueueSnackbar(t('created successfully!'));
-      // reset();
       await addToCalendar(SelectedAppointment);
-      // router.back();
+      router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -230,8 +227,7 @@ export default function TableCreateView() {
   });
 
   const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
 
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);
@@ -239,8 +235,7 @@ export default function TableCreateView() {
   };
 
   const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
 
     if (englishRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);
@@ -330,14 +325,6 @@ export default function TableCreateView() {
                   onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                   size="small"
                   input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
                 >
                   {workGroupsData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -355,7 +342,6 @@ export default function TableCreateView() {
                   seconds: renderTimeViewClock,
                 }}
                 slots={{
-                  // toolbar:false,
                   actionBar: 'cancel',
                 }}
                 minutesStep={5}
@@ -372,7 +358,6 @@ export default function TableCreateView() {
               />
 
               <TimePicker
-                // ampmInClock
                 closeOnSelect
                 viewRenderers={{
                   hours: renderTimeViewClock,
@@ -380,7 +365,6 @@ export default function TableCreateView() {
                   seconds: renderTimeViewClock,
                 }}
                 slots={{
-                  // toolbar:false,
                   actionBar: 'cancel',
                 }}
                 minutesStep={5}
@@ -419,7 +403,6 @@ export default function TableCreateView() {
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 list={appointmentsData}
-              // sx={{ mt: SPACING }}
               />
             )}
             {selected && (
@@ -439,7 +422,7 @@ export default function TableCreateView() {
                   name="patientExist"
                   options={[
                     { label: t('my patient'), value: 'my_patients' },
-                    { label: t('hakeemna patient'), value: 'exist' },
+                    // { label: t('hakeemna patient'), value: 'exist' },
                     { label: t('new patient'), value: 'new' },
                   ]}
                 />
@@ -533,6 +516,19 @@ export default function TableCreateView() {
                 )}
                 {values.patientExist === 'new' && (
                   <>
+                    <Typography sx={{ mb: 2 }} variant='subtitle2' color='info.dark'>
+                      {t('if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number')}
+                    </Typography>
+                    <RHFTextField
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ style: { textAlign: 'center' } }}
+                      sx={{ width: '200px', mb: 3, textAlign: 'center' }}
+                      size="small"
+                      name="sequence_number"
+                      onChange={sequenceChangeHandler}
+                      placeholder="001-22"
+                      label={t('patient-code')}
+                    />
                     <Box
                       sx={{ mb: 3 }}
                       rowGap={3}
@@ -553,12 +549,12 @@ export default function TableCreateView() {
                         name="name_arabic"
                         label={t('patient name in arabic')}
                       />
-                      <RHFTextField type="email" name="email" label={t('email address')} />
-                      <RHFTextField
+                      {/* <RHFTextField type="email" name="email" label={t('email address')} /> */}
+                      {/* <RHFTextField
                         onChange={handleEnglishInputChange}
                         name="identification_num"
                         label={t('ID number')}
-                      />
+                      /> */}
                       <RHFPhoneNumber
                         name="mobile_num1"
                         label={t('mobile number')}
@@ -567,7 +563,7 @@ export default function TableCreateView() {
                         name="mobile_num2"
                         label={t('alternative mobile number')}
                       />
-                      <RHFDatePicker name="birth_date" label={t('birth date')} />
+                      {/* <RHFDatePicker name="birth_date" label={t('birth date')} /> */}
                       <RHFSelect name="nationality" label={t('nationality')}>
                         {countriesData.map((option, idx) => (
                           <MenuItem lang="ar" key={idx} value={option._id}>
@@ -575,7 +571,7 @@ export default function TableCreateView() {
                           </MenuItem>
                         ))}
                       </RHFSelect>
-                      <RHFSelect name="country" label={t('country of residence')}>
+                      {/* <RHFSelect name="country" label={t('country of residence')}>
                         {countriesData.map((option, idx) => (
                           <MenuItem lang="ar" key={idx} value={option._id}>
                             {curLangAr ? option?.name_arabic : option?.name_english}
@@ -614,7 +610,7 @@ export default function TableCreateView() {
                         <MenuItem lang="ar" value="female">
                           {t('female')}
                         </MenuItem>
-                      </RHFSelect>
+                      </RHFSelect> */}
                     </Box>
                     <RHFTextField multiline rows={2} name="note" label={t('note')} />
 
@@ -631,7 +627,7 @@ export default function TableCreateView() {
                     </Stack>
                   </>
                 )}
-                {existPatients.length > 0 && values.patientExist === 'exist' && (
+                {existPatients.length > 0 && values.patientExist === 'new' && (
                   <PatientsFound
                     SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
                     selected={selected}

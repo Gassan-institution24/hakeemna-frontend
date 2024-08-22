@@ -9,6 +9,8 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { fDate } from 'src/utils/format-time';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -65,7 +67,7 @@ export default function OffersTableRow({
       <TableCell align="center">
         <ListItemText
           primary={
-            isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMMMMMMM yyyy')
+            isValid(new Date(start_date)) && fDate(start_date, 'dd MMMMMMMM yyyy')
           }
           secondary={isValid(new Date(start_date)) && format(new Date(start_date), 'p')}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -78,7 +80,7 @@ export default function OffersTableRow({
       </TableCell>
       <TableCell align="center">
         <ListItemText
-          primary={isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMMMMMMM yyyy')}
+          primary={isValid(new Date(end_date)) && fDate(end_date, 'dd MMMMMMMM yyyy')}
           secondary={isValid(new Date(end_date)) && format(new Date(end_date), 'p')}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{
@@ -169,8 +171,8 @@ export default function OffersTableRow({
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(created_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(created_at), 'p')}
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',
@@ -186,8 +188,8 @@ export default function OffersTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
-            primary={format(new Date(updated_at), 'dd MMMMMMMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               component: 'span',

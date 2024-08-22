@@ -94,7 +94,7 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       unit_service:
         currentTable?.unit_service?._id ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
       department: currentTable?.department?._id || '',
       employee_type: currentTable?.employee_type?._id || '',
       email: currentTable?.email || '',
@@ -140,6 +140,8 @@ export default function TableNewEditForm({ currentTable }) {
   };
 
   const {
+    watch,
+    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -155,6 +157,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+
       const submit = await axiosInstance.post(endpoints.auth.register, {
         role: 'employee',
         userName: data.name_english,
@@ -187,6 +190,10 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
+  const employees_number =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      ?.employees_number || 10;
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -210,34 +217,25 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label={`${t('Full name in English')} *`}
+                label={t('Full name in English')}
               />
               <RHFTextField
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label={`${t('Full name in Arabic')} *`}
+                label={t('Full name in Arabic')}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
 
-              <RHFSelect name="nationality" label={`${t('nationality')} *`}>
+              <RHFSelect name="nationality" label={t('nationality')}>
                 {countriesData.map((nationality, idx) => (
                   <MenuItem lang="ar" key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect
+              {employees_number > 3 && <RHFSelect
                 name="department"
                 label={t('department')}
-              // InputProps={{
-              //   endAdornment: (
-              //     <InputAdornment position="start">
-              //       <IconButton onClick={handleAddNew} edge="start">
-              //         <Iconify icon="mdi:add-bold" />
-              //       </IconButton>
-              //     </InputAdornment>
-              //   ),
-              // }}
               >
                 {departmentsData.map((department, idx) => (
                   <MenuItem lang="ar" key={idx} value={department._id}>
@@ -261,7 +259,7 @@ export default function TableNewEditForm({ currentTable }) {
                   </Typography>
                   <Iconify icon="material-symbols:new-window-sharp" />
                 </MenuItem>
-              </RHFSelect>
+              </RHFSelect>}
               <RHFAutocomplete
                 name="employee_type"
                 label={t('employee type')}
@@ -283,7 +281,7 @@ export default function TableNewEditForm({ currentTable }) {
               />
               <RHFAutocomplete
                 name="speciality"
-                label={`${t('speciality')} *`}
+                label={t('speciality')}
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
@@ -300,7 +298,7 @@ export default function TableNewEditForm({ currentTable }) {
                   </li>
                 )}
               />
-              <RHFSelect name="gender" label={`${t('gender')} *`}>
+              <RHFSelect name="gender" label={t('gender')}>
                 <MenuItem lang="ar" value="male">
                   {t('male')}
                 </MenuItem>
@@ -311,11 +309,13 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_US_page"
+                onChange={() => setValue('visibility_US_page', !watch('visibility_US_page'))}
                 label={<Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>}
               />
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_online_appointment"
+                onChange={() => setValue('visibility_online_appointment', !watch('visibility_online_appointment'))}
                 label={
                   <Typography sx={{ fontSize: 12 }}>
                     {t('visible in online appointments')}
@@ -338,10 +338,10 @@ export default function TableNewEditForm({ currentTable }) {
                 name="address"
                 label={t('address')}
               />
-              <RHFTextField name="email" label={`${t('email')} *`} />
+              <RHFTextField name="email" label={t('email')} />
               <RHFTextField
                 name="password"
-                label={`${t('password')} *`}
+                label={t('password')}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -357,7 +357,7 @@ export default function TableNewEditForm({ currentTable }) {
               />
               <RHFTextField
                 name="confirmPassword"
-                label={`${t('confirm password')} *`}
+                label={t('confirm password')}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (

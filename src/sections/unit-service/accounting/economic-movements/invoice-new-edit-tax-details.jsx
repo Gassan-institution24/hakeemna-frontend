@@ -14,14 +14,16 @@ import { fCurrency } from 'src/utils/format-number';
 
 // import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { paths } from 'src/routes/paths';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSActivities, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useNewScreen } from 'src/hooks/use-new-screen';
-import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 

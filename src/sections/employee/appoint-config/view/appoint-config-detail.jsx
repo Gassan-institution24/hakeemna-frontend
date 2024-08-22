@@ -166,10 +166,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     () => ({
       unit_service:
         appointmentConfigData?.unit_service._id ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
       department:
         employeeInfo?.department?._id ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.department?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.department?._id,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],

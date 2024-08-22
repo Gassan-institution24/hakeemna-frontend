@@ -1,9 +1,12 @@
 
 import Container from '@mui/material/Container';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
+import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import { paths } from 'src/routes/paths';
+
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
 import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
