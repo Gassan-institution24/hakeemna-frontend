@@ -11,6 +11,7 @@ import {
   Stack,
   Button,
   Select,
+  Dialog,
   MenuItem,
   TableRow,
   TableHead,
@@ -18,12 +19,18 @@ import {
   TableBody,
   TextField,
   IconButton,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TableContainer,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -61,11 +68,13 @@ export default function AppointmentsToday() {
   const theme = useTheme();
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
+  const [pateintInfo, setPatientInfo] = useState('');
   const [addingId, setAddingId] = useState(false);
-  const [currId, setCurrId] = useState();
+  const { fullWidth } = useState(false);
+  const { maxWidth } = useState('xs');
+  const dialog = useBoolean(false);
   const [newDialog, setNewDialog] = useState(false);
 
-  const [arrivalTimes, setArrivalTimes] = useState({});
   const unitServiceId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
 
@@ -106,35 +115,27 @@ export default function AppointmentsToday() {
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const updateStatus = async (info, status, type) => {
+  const startAppointment = async (info) => {
     try {
-      const endpoint = type === 'arrived' ? 'arrived' : 'coming';
-      if (
-        !info?.unit_service_patient?.identification_num &&
-        !info?.patient?.identification_num &&
-        !currId &&
-        endpoint === 'arrived'
-      ) {
-        setAddingId({ info, status, type });
-        return;
-      }
-      setAddingId(false);
-      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
-        [endpoint]: status,
-        identification_num: currId,
+      const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
+        patient: info?.patient?._id,
+        unit_service_patient: info?.unit_service_patient?._id,
+        patient_note: info?.note,
+        start_time: new Date().toISOString(),
+        Appointment_date: info?.start_time,
+        service_unit: info?.unit_service?._id,
+        appointmentId: info?._id,
+        work_group: info?.work_group?._id,
+        Last_activity_atended: info?.Last_activity_atended,
+        Arrival_time: info?.created_at,
       });
-      setCurrId(false);
-
-      if (type === 'arrived' && status) {
-        setArrivalTimes((prev) => ({
-          ...prev,
-          [info?._id]: new Date().toISOString(),
-        }));
-      }
-
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
+        started: true,
+        entrance: entranceData?.data?._id,
+        arrived: true,
+      });
       refetch();
-
-      enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
+      enqueueSnackbar('Appointment started successfully', {
         variant: 'success',
       });
     } catch (error) {
@@ -142,25 +143,32 @@ export default function AppointmentsToday() {
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
-
-  const startAppointment = async (data, activityId) => {
+  const StatusFunction = async (info, status, alert) => {
     try {
-      const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
-        patient: data?.patient?._id,
-        unit_service_patient: data?.unit_service_patient?._id,
-        patient_note: data?.note,
-        start_time: new Date().toISOString(),
-        Appointment_date: data?.start_time,
-        service_unit: data?.unit_service?._id,
-        appointmentId: data?._id,
-        work_group: data?.work_group?._id,
-        Last_activity_atended: data?.Last_activity_atended,
-        Next_activity: activityId,
-        Arrival_time: arrivalTimes[data?._id] || '',
+      const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
+
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
+      refetch();
+      enqueueSnackbar(`${info?.patient?.name_english} ${alert}`, {
+        variant: 'success',
       });
-      await axiosInstance.patch(endpoints.appointments.one(data?._id), {
-        started: true,
-        entrance: entranceData?.data?._id,
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Error updating status', { variant: 'error' });
+    }
+  };
+  const dialogOnTrue = async (info) => {
+    dialog.onTrue();
+    setPatientInfo(info);
+  };
+
+  const updateAppointmentactivity = async (activityId, info) => {
+    try {
+      await axiosInstance.patch(`${endpoints.entranceManagement.one(info?.entrance)}`, {
+        Next_activity: activityId,
+      });
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
+        activityhappend: true,
       });
       refetch();
       refetch2();
@@ -172,53 +180,26 @@ export default function AppointmentsToday() {
     }
   };
 
-  const callPatient = (mobileNumber) => {
-    if ('contacts' in navigator && 'ContactsManager' in window) {
-      navigator.contacts.select(['phoneNumbers']).then((contact) => {
-        if (contact) {
-          const phoneNumber = contact.phoneNumbers[0].value;
-          window.location.href = `tel:${phoneNumber}`;
-        }
+  const handleEndAppointment = async (appointmentdata) => {
+    try {
+      await axiosInstance.patch(`/api/entrance/${appointmentdata?.entrance}`, {
+        Patient_attended: true,
       });
-    } else {
-      alert(
-        t(
-          'Your browser does not support initiating phone calls. Please use a different device or contact the patient using an alternative method.'
-        )
-      );
-    }
-  };
-
-  // const handleEndAppointment = async () => {
-  //   try {
-  //     await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
-  //       Patient_attended: true,
-  //     });
-  //     await axiosInstance.patch(`/api/appointments/${Entrance?.appointmentId}`, {
-  //       finished_or_not: true,
-  //     });
-  //     await axiosInstance.post('/api/feedback', {
-  //       unit_service:
-  //         user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-  //           ?._id,
-  //       appointment: Entrance?.appointmentId,
-  //       patient: Entrance?.patient?._id,
-  //       unit_service_patient: Entrance?.unit_service_patient,
-  //     });
-
-  //     enqueueSnackbar('appointment finished', { variant: 'success' });
-  //     refetch();
-  //     router.push(paths.employee.appointmentsToday);
-  //   } catch (error) {
-  //     console.error(error.message);
-  //     enqueueSnackbar('something went wrong', { variant: 'error' });
-  //   }
-  // };
-
-  const handleButtonClick = (activityId, info) => {
-    setSelectedTitle(activityId);
-    if (info.arrived) {
-      startAppointment(info, activityId);
+      await axiosInstance.patch(`/api/appointments/${appointmentdata?._id}`, {
+        finished_or_not: true,
+      });
+      await axiosInstance.post('/api/feedback', {
+        unit_service: appointmentdata?.unit_service?._id,
+        appointment: appointmentdata?._id,
+        patient: appointmentdata?.patient?._id,
+        unit_service_patient: appointmentdata?.unit_service_patient?._id,
+      });
+      enqueueSnackbar('appointment finished', { variant: 'success' });
+      refetch();
+      router.push(paths.employee.appointmentsToday);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('something went wrong', { variant: 'error' });
     }
   };
 
@@ -251,7 +232,7 @@ export default function AppointmentsToday() {
       );
     }
 
-    return (
+    return info?.arrived ? (
       <>
         <Select
           sx={{
@@ -270,29 +251,88 @@ export default function AppointmentsToday() {
               <MenuItem
                 key={index}
                 value={activity?.activities?._id}
-                onClick={() => handleButtonClick(activity?.activities?._id, info)}
-                disabled={info?.started || !info.arrived}
+                onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
+                disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
             ) : null
           )}
         </Select>
-
-        <IconButton sx={{ p: 2 }} onClick={() => callPatient(info?.patient?.mobile_num1)}>
-          <Iconify
-            width={20}
-            sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
-            icon="material-symbols:call"
-          />
-          <span style={{ fontSize: 16 }}>{t('Call')}</span>
-        </IconButton>
+        <Button
+          onClick={() => handleEndAppointment(info)}
+          variant="contained"
+          sx={{ bgcolor: 'error.main', ml: 2 }}
+        >
+          {t('end appointment')}
+        </Button>
       </>
+    ) : (
+      <IconButton sx={{ p: 2 }} onClick={() => dialogOnTrue(info?.patient)}>
+        <Iconify
+          width={20}
+          sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
+          icon="material-symbols:call"
+        />
+      </IconButton>
     );
   };
 
   return (
     <>
+      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            margin: '10px',
+          }}
+        >
+          <DialogTitle>{t('Contact patient')}</DialogTitle>
+          <Typography sx={{ mb: 1, fontSize: 15 }}>
+            {t('Thoos are some data the pateint provide to contact')}
+          </Typography>
+        </div>
+        <DialogContent>
+          <Typography sx={{ mb: 1, fontSize: 15, m: 2 }}>
+            {' '}
+            <Iconify
+              width={20}
+              sx={{ cursor: 'pointer', color: 'success.main' }}
+              icon="material-symbols:call"
+            />
+            {pateintInfo?.mobile_num1}
+          </Typography>
+          <Typography sx={{ mb: 1, fontSize: 15, m: 2 }}>
+            {' '}
+            <Iconify
+              width={20}
+              sx={{ cursor: 'pointer', color: 'success.main' }}
+              icon="material-symbols:call"
+            />
+            {pateintInfo?.mobile_num2}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            size="small"
+            color="info"
+            variant="contained"
+            sx={{
+              bgcolor: 'info.dark',
+            }}
+            onClick={() => {
+              dialog.onFalse();
+              setPatientInfo('');
+            }}
+          >
+            {t('cancel')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Container>
         <CustomBreadcrumbs
           heading={t('Appointments Today')}
@@ -322,7 +362,7 @@ export default function AppointmentsToday() {
                   {t('create & book appointment')}
                 </Button>
               </>
-            ) /// edit
+            )
           }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
@@ -351,7 +391,6 @@ export default function AppointmentsToday() {
                   <TableRow>
                     <TableCell>{t('Time')}</TableCell>
                     <TableCell>{t('patient')}</TableCell>
-                    <TableCell>{t('Patient Note')}</TableCell>
                     {currentTab !== 'three' && (
                       <>
                         <TableCell>{t('Coming')}</TableCell>
@@ -374,51 +413,68 @@ export default function AppointmentsToday() {
                         : info?.unit_service_patient?.name_english;
                     }
                     return (
-                      <TableRow key={index}>
+                      <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
                         <TableCell>{fTime(info?.start_time)}</TableCell>
                         <TableCell>{patientName}</TableCell>
-                        <TableCell>{currentTab === 'three' ? info?.note : info?.note}</TableCell>
                         {currentTab !== 'three' && (
                           <>
                             <TableCell>
-                              {info?.coming ? (
-                                t('Yes')
-                              ) : (
-                                <>
-                                  <Button
-                                    sx={{ p: 2 }}
-                                    onClick={() => updateStatus(info, true, 'coming')}
-                                  >
-                                    {t('Yes')}
-                                  </Button>
-                                  <Button
-                                    sx={{ p: 2 }}
-                                    onClick={() => updateStatus(info, false, 'coming')}
-                                  >
-                                    {t('No')}
-                                  </Button>
-                                </>
-                              )}
+                              <>
+                                {info?.coming !== undefined ? (
+                                  <Iconify
+                                    width={22}
+                                    sx={{
+                                      cursor: 'pointer',
+                                      mr: 1,
+                                      color: info.coming ? 'info.main' : 'error.main',
+                                    }}
+                                    icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
+                                  />
+                                ) : (
+                                  <>
+                                    <Button
+                                      sx={{ p: 2 }}
+                                      onClick={() => StatusFunction(info, true, 'coming')}
+                                    >
+                                      {t('Yes')}
+                                    </Button>
+                                    <Button
+                                      sx={{ p: 2 }}
+                                      onClick={() => StatusFunction(info, false, 'coming')}
+                                    >
+                                      {t('No')}
+                                    </Button>
+                                  </>
+                                )}
+                              </>
                             </TableCell>
+
                             <TableCell>
-                              {info?.arrived ? (
-                                t('Yes')
-                              ) : (
-                                <>
-                                  <Button
-                                    sx={{ p: 2 }}
-                                    onClick={() => updateStatus(info, true, 'arrived')}
-                                  >
-                                    {t('Yes')}
-                                  </Button>
-                                  <Button
-                                    sx={{ p: 2 }}
-                                    onClick={() => updateStatus(info, false, 'arrived')}
-                                  >
-                                    {t('No')}
-                                  </Button>
-                                </>
-                              )}
+                              <>
+                                {info?.arrived !== undefined ? (
+                                  <Iconify
+                                    width={22}
+                                    sx={{
+                                      cursor: 'pointer',
+                                      mr: 1,
+                                      color: info.arrived ? 'info.main' : 'error.main',
+                                    }}
+                                    icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
+                                  />
+                                ) : (
+                                  <>
+                                    <Button sx={{ p: 2 }} onClick={() => startAppointment(info)}>
+                                      {t('Yes')}
+                                    </Button>
+                                    <Button
+                                      sx={{ p: 2 }}
+                                      onClick={() => StatusFunction(info, false, 'arrived')}
+                                    >
+                                      {t('No')}
+                                    </Button>
+                                  </>
+                                )}
+                              </>
                             </TableCell>
                           </>
                         )}
@@ -427,6 +483,7 @@ export default function AppointmentsToday() {
                     );
                   })}
                 </TableBody>
+                {/* here */}
               </Table>
             </Scrollbar>
           </TableContainer>
@@ -439,7 +496,8 @@ export default function AppointmentsToday() {
         title={t('add patient ID number')}
         content={
           <Stack alignItems="center" width={1}>
-            <TextField type="number" onChange={(e) => setCurrId(e.target.value)} />
+            {/* <TextField type="number" onChange={(e) => setCurrId(e.target.value)} /> */}
+            <TextField type="number" />
           </Stack>
         }
         action={
@@ -447,7 +505,6 @@ export default function AppointmentsToday() {
             variant="contained"
             color="info"
             onClick={() => {
-              updateStatus(addingId.info, addingId.status, addingId.type);
               setAddingId(false);
             }}
           >
