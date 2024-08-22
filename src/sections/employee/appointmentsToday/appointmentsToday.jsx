@@ -23,11 +23,13 @@ import {
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetUSRooms,
@@ -43,8 +45,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
-import { RouterLink } from 'src/routes/components';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
+
 import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
@@ -65,18 +66,13 @@ export default function AppointmentsToday() {
   const [newDialog, setNewDialog] = useState(false);
 
   const [arrivalTimes, setArrivalTimes] = useState({});
-  const unitServiceId = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
 
-  const { appointmentsData, refetch } = useGetUsAppointmentsToday(
-    unitServiceId
-  );
-  const { entrance, refetch2 } = useGetEntranceManagement(
-    unitServiceId
-  );
+  const { appointmentsData, refetch } = useGetUsAppointmentsToday(unitServiceId);
+  const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
 
-  const { roomsData } = useGetUSRooms(
-    unitServiceId
-  );
+  const { roomsData } = useGetUSRooms(unitServiceId);
 
   const { finishedAppointmentsData } = useGetfinishedAppointments();
   const receptionActivity = roomsData.find(
@@ -113,13 +109,21 @@ export default function AppointmentsToday() {
   const updateStatus = async (info, status, type) => {
     try {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
-      if (!info?.unit_service_patient?.identification_num && !info?.patient?.identification_num && !currId && endpoint === 'arrived') {
-        setAddingId({ info, status, type })
-        return
+      if (
+        !info?.unit_service_patient?.identification_num &&
+        !info?.patient?.identification_num &&
+        !currId &&
+        endpoint === 'arrived'
+      ) {
+        setAddingId({ info, status, type });
+        return;
       }
-      setAddingId(false)
-      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, { [endpoint]: status, identification_num: currId });
-      setCurrId(false)
+      setAddingId(false);
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
+        [endpoint]: status,
+        identification_num: currId,
+      });
+      setCurrId(false);
 
       if (type === 'arrived' && status) {
         setArrivalTimes((prev) => ({
@@ -185,7 +189,6 @@ export default function AppointmentsToday() {
     }
   };
 
-
   // const handleEndAppointment = async () => {
   //   try {
   //     await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
@@ -202,8 +205,7 @@ export default function AppointmentsToday() {
   //       patient: Entrance?.patient?._id,
   //       unit_service_patient: Entrance?.unit_service_patient,
   //     });
-  
-   
+
   //     enqueueSnackbar('appointment finished', { variant: 'success' });
   //     refetch();
   //     router.push(paths.employee.appointmentsToday);
@@ -212,7 +214,6 @@ export default function AppointmentsToday() {
   //     enqueueSnackbar('something went wrong', { variant: 'error' });
   //   }
   // };
-
 
   const handleButtonClick = (activityId, info) => {
     setSelectedTitle(activityId);
@@ -295,7 +296,7 @@ export default function AppointmentsToday() {
       <Container>
         <CustomBreadcrumbs
           heading={t('Appointments Today')}
-          links={[{ name: user.userName }]}
+          links={[{ name: curLangAr ? user.employee?.name_arabic : user.employee?.name_english }]}
           action={
             checkAcl({
               category: 'work_group',
@@ -351,11 +352,15 @@ export default function AppointmentsToday() {
                 </TableHead>
                 <TableBody>
                   {currentTabData?.data?.map((info, index) => {
-                    let patientName
+                    let patientName;
                     if (info?.patient) {
-                      patientName = curLangAr ? info?.patient?.name_arabic : info?.patient?.name_english
+                      patientName = curLangAr
+                        ? info?.patient?.name_arabic
+                        : info?.patient?.name_english;
                     } else if (info.unit_service_patient) {
-                      patientName = curLangAr ? info?.unit_service_patient?.name_arabic : info?.unit_service_patient?.name_english
+                      patientName = curLangAr
+                        ? info?.unit_service_patient?.name_arabic
+                        : info?.unit_service_patient?.name_english;
                     }
                     return (
                       <TableRow key={index}>
@@ -408,7 +413,7 @@ export default function AppointmentsToday() {
                         )}
                         <TableCell>{renderOptions(info)}</TableCell>
                       </TableRow>
-                    )
+                    );
                   })}
                 </TableBody>
               </Table>
@@ -422,8 +427,8 @@ export default function AppointmentsToday() {
         onClose={() => setAddingId(false)}
         title={t('add patient ID number')}
         content={
-          <Stack alignItems='center' width={1}>
-            <TextField type='number' onChange={(e) => setCurrId(e.target.value)} />
+          <Stack alignItems="center" width={1}>
+            <TextField type="number" onChange={(e) => setCurrId(e.target.value)} />
           </Stack>
         }
         action={
@@ -431,8 +436,8 @@ export default function AppointmentsToday() {
             variant="contained"
             color="info"
             onClick={() => {
-              updateStatus(addingId.info, addingId.status, addingId.type)
-              setAddingId(false)
+              updateStatus(addingId.info, addingId.status, addingId.type);
+              setAddingId(false);
             }}
           >
             {t('add')}

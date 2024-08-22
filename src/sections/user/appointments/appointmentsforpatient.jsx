@@ -16,7 +16,7 @@ export default function AppointmentData() {
   const { user } = useAuthContext();
   const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
   const { t } = useTranslate();
-  const now = new Date();
+  // const now = new Date();
 
   const [currentTab, setCurrentTab] = useState('upcoming');
   const handleChangeTab = useCallback((event, newValue) => {
