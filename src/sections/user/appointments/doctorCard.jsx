@@ -91,7 +91,7 @@ export default function DoctorCard({ info }) {
           </Typography>
           <Typography sx={{ fontSize: 13 }}>
             <Iconify width={18} icon="flat-color-icons:cell-phone" />{' '}
-            <span style={{ position: 'relative', top: -3 }}>{info?.unit_service?.phone}</span>
+            <span dir="ltr" style={{ position: 'relative', top: -3 }}>{info?.unit_service?.phone}</span>
           </Typography>
         </Box>
       </Box>
@@ -132,6 +132,7 @@ export default function DoctorCard({ info }) {
             sx={{ mt: 3, display: 'block' }}
             variant="contained"
             color="success"
+            dir="ltr"
             // onClick={() => handleViewRow(info?._id)}
           >
             {info?.unit_service?.phone}
