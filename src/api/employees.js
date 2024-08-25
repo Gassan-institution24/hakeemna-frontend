@@ -9,7 +9,8 @@ export function useGetEmployees(params) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      employeesData: data || [],
+      employeesData: data?.employees || [],
+      lengths: data?.lengths || {},
       loading: isLoading,
       error,
       validating: isValidating,

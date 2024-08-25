@@ -81,9 +81,18 @@ export default function UsersTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { employeesData, loading, refetch } = useGetEmployees();
-
   const [filters, setFilters] = useState(defaultFilters);
+
+  const { employeesData, lengths, loading, refetch } = useGetEmployees({
+    populate: 'all',
+    sortBy: table.orderBy,
+    order: table.order,
+    page: table.page,
+    rowsPerPage: table.rowsPerPage,
+    name: filters.name,
+    status: filters.status,
+  });
+
 
   const dateError =
     filters.startDate && filters.endDate
@@ -276,10 +285,8 @@ export default function UsersTableView() {
                     }
                   >
                     {tab.value === 'all' && employeesData.length}
-                    {tab.value === 'active' &&
-                      employeesData.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      employeesData.filter((order) => order.status === 'inactive').length}
+                    {tab.value === 'active' && lengths.active}
+                    {tab.value === 'inactive' && lengths.inactive}
                   </Label>
                 }
               />
@@ -366,10 +373,10 @@ export default function UsersTableView() {
 
                 <TableBody>
                   {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
+                    // .slice(
+                    //   table.page * table.rowsPerPage,
+                    //   table.page * table.rowsPerPage + table.rowsPerPage
+                    // )
                     .map((row, idx) => (
                       <TableDetailRow
                         key={idx}
@@ -378,14 +385,14 @@ export default function UsersTableView() {
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
-                        // onEditRow={() => handleEditRow(row._id)}
+                      // onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
-                  <TableEmptyRows
+                  {/* <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, employeesData.length)}
-                  />
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
+                  /> */}
 
                   <TableNoData notFound={notFound} />
                 </TableBody>
@@ -394,7 +401,7 @@ export default function UsersTableView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={lengths.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}

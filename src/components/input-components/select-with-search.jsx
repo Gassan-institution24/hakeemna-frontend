@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import MenuItem from '@mui/material/MenuItem';
 import { InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
+import { useDebounce } from 'src/hooks/use-debounce';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from '../iconify';
@@ -20,6 +21,7 @@ export function SelectWithSearch({
   placeholder,
   PaperPropsSx,
   filters,
+  setName,
   ...other
 }) {
   const { t } = useTranslate();
@@ -27,6 +29,14 @@ export function SelectWithSearch({
   const curLangAr = currentLang.value === 'ar';
 
   const [search, setSearch] = useState('');
+
+  const searchName = useDebounce(search)
+
+  useEffect(() => {
+    if (setName) {
+      setName(searchName)
+    }
+  }, [searchName, setName])
 
   return (
     <TextField
@@ -91,4 +101,5 @@ SelectWithSearch.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
   native: PropTypes.bool,
+  setName: PropTypes.func,
 };

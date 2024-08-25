@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Stack } from '@mui/material';
@@ -22,12 +22,15 @@ export default function BookToolbar({ filters, filterChange }) {
   const { country } = filters;
   const { t } = useTranslate();
 
+  const [doctorName, setDoctorName] = useState()
+  // const [specialty, setSpecialty] = useState()
+
   const { unitserviceTypesData } = useGetActiveUSTypes({ select: '_id name_arabic name_english' });
   const { specialtiesData } = useGetSpecialties({ select: '_id name_arabic name_english' });
   const { countriesData } = useGetCountries({ select: '_id name_arabic name_english' });
   const { tableData } = useGetCountryCities(country, { select: '_id name_arabic name_english' });
   const { insuranseCosData } = useGetActiveInsuranceCos({ select: '_id name_arabic name_english' });
-  const { employeesData } = useGetEmployees({ select: '_id name_arabic name_english' });
+  const { employeesData } = useGetEmployees({ select: '_id name_arabic name_english', name: doctorName });
 
   const darkTheme = createTheme({
     palette: {
@@ -73,6 +76,7 @@ export default function BookToolbar({ filters, filterChange }) {
           <SelectWithSearch
             sx={{ flex: 1 }}
             filters={filters}
+            // setName={setSpecialty}
             name="speciality"
             label={t('select a speciality')}
             onChange={(e) => filterChange('speciality', e)}
@@ -106,6 +110,7 @@ export default function BookToolbar({ filters, filterChange }) {
             sx={{ flex: 1 }}
             filters={filters}
             name="doctor"
+            setName={setDoctorName}
             label={t('select a doctor')}
             onChange={(e) => filterChange('doctor', e)}
             options={employeesData}
