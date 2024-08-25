@@ -54,9 +54,9 @@ export default function PatientFoundRow({
       <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">{mobile_num1}</TableCell>
       <TableCell align="center">{mobile_num2}</TableCell>
-      <TableCell align="center" sx={{ textTransform: 'none' }}>
+      {/* <TableCell align="center" sx={{ textTransform: 'none' }}>
         {email}
-      </TableCell>
+      </TableCell> */}
       <TableCell align="center">{identification_num}</TableCell>
       <TableCell align="center">
         {curLangAr ? nationality?.name_arabic : nationality?.name_english}

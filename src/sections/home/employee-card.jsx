@@ -55,7 +55,6 @@ export default function EmployeeCard({ employee }) {
       online_available: true,
     }
   );
-  console.log('appointmentsData', appointmentsData)
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     if (authenticated) {
