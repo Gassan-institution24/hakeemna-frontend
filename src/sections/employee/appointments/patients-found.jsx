@@ -42,7 +42,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
     { id: 'name_arabic', label: t('name in arabic') },
     { id: 'mobile_num1', label: t('mobile number') },
     { id: 'mobile_num2', label: t('alternative mobile number') },
-    { id: 'email', label: t('email') },
+    // { id: 'email', label: t('email') },
     { id: 'identification_num', label: t('ID number') },
     { id: 'nationality', label: t('nationality') },
     { id: 'birth_date', label: t('birth date') },

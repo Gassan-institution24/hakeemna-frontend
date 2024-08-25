@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSPatients } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -33,6 +33,8 @@ import { useDebounce } from 'src/hooks/use-debounce';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useSnackbar } from 'notistack';
 import Iconify from 'src/components/iconify';
 
 import TableDetailRow from '../patients_row'; /// edit
@@ -52,13 +54,16 @@ export default function PatientTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
     { id: 'work_group', label: t('work group') },
     { id: 'file_code', label: t('file code') },
-    // { id: '' },
+    { id: '' },
   ];
 
   const checkAcl = useAclGuard();
@@ -66,12 +71,12 @@ export default function PatientTableView() {
   const componentRef = useRef();
 
   const { user } = useAuthContext();
-
+  const { enqueueSnackbar } = useSnackbar()
 
   const [filters, setFilters] = useState(defaultFilters);
   const filtersToSend = useDebounce(filters)
 
-  const { patientsData, length } = useGetUSPatients(
+  const { patientsData, refetch, length } = useGetUSPatients(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
       select: 'patient name_english name_arabic file_code',
@@ -111,6 +116,21 @@ export default function PatientTableView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const handleDeleteRow = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.delete(endpoints.usPatients.one(id))
+        enqueueSnackbar(t('deleted successfully'))
+        refetch()
+      } catch (error) {
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
+      }
+    },
+    [enqueueSnackbar, refetch, curLangAr, t]
+  );
 
   // if (loading) {
   //   return <LoadingScreen />;
@@ -203,6 +223,7 @@ export default function PatientTableView() {
                       setFilters={setFilters}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
+                      onDeleteRow={() => handleDeleteRow(row._id)}
                     />
                   ))}
 

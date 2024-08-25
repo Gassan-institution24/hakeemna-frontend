@@ -450,7 +450,6 @@ export const endpoints = {
     all: '/api/uspatients',
     many: '/api/uspatients/many',
     find: '/api/uspatients/find',
-    details: '/api/uspatients/details',
     one: (id) => (!id ? null : `/api/uspatients/${id}`),
     unit_service: {
       all: (id) => (!id ? null : `/api/uspatients/unitservice/${id}`),

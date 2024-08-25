@@ -45,6 +45,7 @@ import FormProvider, {
   RHFDatePicker,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const { register, authenticated } = useAuthContext();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const { enqueueSnackbar } = useSnackbar()
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -168,14 +170,24 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      delete data.scanned_identification
+      data.email = data.email?.toLowerCase()
       const formData = new FormData()
-      formData.append('identification', identification)
-      const patient = await register?.({ ...data, userName: data?.name_english });
-
-      await axiosInstance.patch(endpoints.patients.one(patient?.patient?._id, formData))
+      formData.append('identification', identification[0])
+      Object.keys(data).forEach((key) => {
+        if (key !== 'scanned_identification') {
+          if (Array.isArray(data[key])) {
+            data[key].forEach((item, index) => {
+              formData.append(`${key}[${index}]`, item);
+            });
+          } else {
+            formData.append(key, data[key]);
+          }
+        }
+      });
+      const patient = await register?.(formData);
       if (afterSignUp) {
         setPatientId(patient?.patient?._id);
+        enqueueSnackbar(t('appointment booked successfully'))
         afterSignUp();
       } else {
         router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
