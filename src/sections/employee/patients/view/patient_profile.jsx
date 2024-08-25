@@ -13,6 +13,7 @@ import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
+import EditPatient from '../patient-profile/patient-edit';
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,10 @@ export default function PatientProfile() {
     {
       value: 'upload',
       label: t('upload files'),
+    },
+    {
+      value: 'edit',
+      label: t('edit'),
     },
   ].filter(Boolean);
 
@@ -135,6 +140,7 @@ export default function PatientProfile() {
       {currentTab === 'prescriptions' && <PatientPrescriptions patient={usPatientData} />}
       {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
       {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
+      {currentTab === 'edit' && <EditPatient patient={usPatientData} />}
     </Container>
   );
 }

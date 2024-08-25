@@ -26,11 +26,13 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, setPatientId }) {
   const { login, authenticated } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar()
 
   const router = useRouter();
 
@@ -80,6 +82,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
           patient: userData?.user?.patient,
           lang: curLangAr,
         });
+        enqueueSnackbar('appointment booked successfully')
         onSignin();
         refetch();
       } else {
