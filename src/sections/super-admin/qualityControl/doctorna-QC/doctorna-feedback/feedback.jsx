@@ -21,10 +21,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -87,8 +85,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active' || filters.rate.length > 0;
 
@@ -263,11 +259,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
                       // onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, feedbackData.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

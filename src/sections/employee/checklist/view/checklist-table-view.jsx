@@ -67,7 +67,7 @@ export default function ChecklistTableView() {
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
 
-  console.log('CheckListData', CheckListData)
+  console.log('CheckListData', CheckListData);
 
   const [filters, setFilters] = useState(defaultFilters);
 

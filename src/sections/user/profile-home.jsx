@@ -21,7 +21,7 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
-  
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {

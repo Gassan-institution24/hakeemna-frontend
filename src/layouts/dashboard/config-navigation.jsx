@@ -735,17 +735,29 @@ export function useNavData() {
             navItemId: 'USAccountingNav',
             children: [
               {
-                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                show: checkAcl({
+                  category: 'unit_service',
+                  subcategory: 'accounting',
+                  acl: 'read',
+                }),
                 title: t('economic movements'),
                 path: paths.stakeholder.accounting.economicmovements.root,
               },
               {
-                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                show: checkAcl({
+                  category: 'unit_service',
+                  subcategory: 'accounting',
+                  acl: 'read',
+                }),
                 title: t('payment control'),
                 path: paths.stakeholder.accounting.paymentcontrol.root,
               },
               {
-                show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+                show: checkAcl({
+                  category: 'unit_service',
+                  subcategory: 'accounting',
+                  acl: 'read',
+                }),
                 title: t('reciepts'),
                 path: paths.stakeholder.accounting.reciepts.root,
               },

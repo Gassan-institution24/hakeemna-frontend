@@ -36,7 +36,11 @@ export default function Doctorreport() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id, Entrance?.unit_service_patient);
+  const { medRecord } = useGetMedRecord(
+    Entrance?.service_unit?._id,
+    Entrance?.patient?._id,
+    Entrance?.unit_service_patient
+  );
 
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
 
@@ -65,7 +69,8 @@ export default function Doctorreport() {
     unit_service_patient: Entrance?.unit_service_patient,
     entrance_mangament: Entrance?._id,
     service_unit: Entrance?.service_unit,
-    unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+    unit_service:
+      user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     file: [],
   };
   const methods = useForm({
@@ -87,7 +92,9 @@ export default function Doctorreport() {
       employee: user?.employee?._id,
       patient: Entrance?.patient?._id,
       unit_service_patient: Entrance?.unit_service_patient,
-      unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
       service_unit: Entrance?.service_unit,
       entrance_mangament: Entrance?._id,
       file: [],

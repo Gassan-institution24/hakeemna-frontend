@@ -448,9 +448,9 @@ export default function WorkGroupsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

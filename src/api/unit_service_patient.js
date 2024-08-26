@@ -25,7 +25,6 @@ export function useGetUSPatients(id, params) {
   return { ...memoizedValue, refetch };
 }
 
-
 export function useFindUSPatient({
   sequence_number,
   name_english,

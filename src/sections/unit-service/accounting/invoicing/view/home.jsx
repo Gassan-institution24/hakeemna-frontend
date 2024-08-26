@@ -79,9 +79,14 @@ export default function AppointmentsView() {
       rowsPerPage: table.rowsPerPage || 5,
       order: table.order || 'asc',
       invoiced: false,
-      select: '_id appoint_number entrance unit_service work_group medicalAnalysis appointment_type patient start_time status',
+      select:
+        '_id appoint_number entrance unit_service work_group medicalAnalysis appointment_type patient start_time status',
       populate: [
-        { path: 'unit_service', select: 'country', populate: [{ path: 'country', select: 'time_zone' }] },
+        {
+          path: 'unit_service',
+          select: 'country',
+          populate: [{ path: 'country', select: 'time_zone' }],
+        },
         { path: 'work_group', select: 'name_english name_arabic' },
         { path: 'appointment_type', select: 'name_english name_arabic' },
         { path: 'appointment_type', select: 'name_english name_arabic' },

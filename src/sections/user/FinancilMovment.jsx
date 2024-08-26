@@ -130,7 +130,6 @@ export default function InvoiceListView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-
       <Card>
         <Tabs
           value={filters.status}
@@ -161,7 +160,6 @@ export default function InvoiceListView() {
         </Tabs>
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
               <TableHeadCustom
@@ -181,7 +179,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
                     onViewRow={() => handleViewRow(row.id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

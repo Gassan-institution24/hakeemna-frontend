@@ -1,11 +1,10 @@
 import { Container, Typography } from '@mui/material';
 
-
 export default function TermsAndCondition() {
   return (
     <Container>
       <ul>
-        <Typography variant="h3" gutterBottom sx={{mt:4}}>
+        <Typography variant="h3" gutterBottom sx={{ mt: 4 }}>
           Terms and Conditions of Use (For Medical Service Beneficiaries)
         </Typography>
         <li>
@@ -15,11 +14,11 @@ export default function TermsAndCondition() {
             associated applications or related platform pages.
           </Typography>
         </li>
-     
-          <Typography variant="h4" paragraph>
-            Definition of Terms:
-          </Typography>
-       
+
+        <Typography variant="h4" paragraph>
+          Definition of Terms:
+        </Typography>
+
         <li>
           <Typography variant="body1" paragraph>
             The first party is Hakeemna.com. When the term platform Hakeemna.com or Hakeemna.com
@@ -45,10 +44,10 @@ export default function TermsAndCondition() {
           </Typography>
         </li>
 
-          <Typography variant="h4" paragraph>
-            Terms and Conditions of Use
-          </Typography>
-       
+        <Typography variant="h4" paragraph>
+          Terms and Conditions of Use
+        </Typography>
+
         <li>
           <Typography variant="body1" paragraph>
             Access or use of Hakeemna.com is only permitted for those who have agreed to the terms

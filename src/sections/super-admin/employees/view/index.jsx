@@ -30,10 +30,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -93,7 +91,6 @@ export default function UsersTableView() {
     status: filters.status,
   });
 
-
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -110,8 +107,6 @@ export default function UsersTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.role !== 'all' || filters.status !== 'active';
 
@@ -385,7 +380,7 @@ export default function UsersTableView() {
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
-                      // onEditRow={() => handleEditRow(row._id)}
+                        // onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 

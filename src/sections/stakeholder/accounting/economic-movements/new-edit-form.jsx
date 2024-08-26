@@ -73,8 +73,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           subtotal: Yup.number(),
           tax: Yup.number(),
           total: Yup.number(),
-          quantity: Yup.number()
-            .required(t('required field'))
+          quantity: Yup.number().required(t('required field')),
         })
       )
     ),
@@ -96,19 +95,16 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       stakeholder:
         currentInvoice?.unit_service?._id ||
         currentInvoice?.unit_service ||
-        user?.stakeholder._id || null,
+        user?.stakeholder._id ||
+        null,
       unit_service:
         currentInvoice?.unit_service?._id ||
         currentInvoice?.unit_service ||
-        orderInfo?.unit_service?._id || null,
-      employee:
-        currentInvoice?.employee?._id ||
-        currentInvoice?.employee || null,
-      patient:
-        currentInvoice?.patient?._id ||
-        currentInvoice?.patient?._id ||
-        orderInfo?.patient ||
+        orderInfo?.unit_service?._id ||
         null,
+      employee: currentInvoice?.employee?._id || currentInvoice?.employee || null,
+      patient:
+        currentInvoice?.patient?._id || currentInvoice?.patient?._id || orderInfo?.patient || null,
       dueDate: currentInvoice?.dueDate || null,
       order: currentInvoice?.order || order,
       detailedTaxes: currentInvoice?.detailedTaxes || true,
@@ -118,21 +114,24 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       discount: currentInvoice?.Total_discount_amount || 0,
       subtotal: currentInvoice?.Subtotal_Amount || 0,
       totalAmount: currentInvoice?.totalAmount || 0,
-      products: currentInvoice?.products || orderInfo?.products.map((one) => {
-        const subtotal = one.real_delieverd_quantity * one.price
-        const deduction = one.product?.deduction?.percentage ? one.product?.deduction?.percentage : 0
-        const tax = one.product?.tax?.percentage ? one.product?.tax?.percentage : 0
-        return ({
-          product: one.product?._id,
-          quantity: one.real_delieverd_quantity || 1,
-          price_per_unit: one.price || 0,
-          subtotal: subtotal || 0,
-          discount_amount: 0,
-          deduction: deduction || 0,
-          tax: tax || 0,
-          total: subtotal + (deduction / 100) * subtotal + (tax / 100) * subtotal || 0,
-        })
-      }) || [
+      products: currentInvoice?.products ||
+        orderInfo?.products.map((one) => {
+          const subtotal = one.real_delieverd_quantity * one.price;
+          const deduction = one.product?.deduction?.percentage
+            ? one.product?.deduction?.percentage
+            : 0;
+          const tax = one.product?.tax?.percentage ? one.product?.tax?.percentage : 0;
+          return {
+            product: one.product?._id,
+            quantity: one.real_delieverd_quantity || 1,
+            price_per_unit: one.price || 0,
+            subtotal: subtotal || 0,
+            discount_amount: 0,
+            deduction: deduction || 0,
+            tax: tax || 0,
+            total: subtotal + (deduction / 100) * subtotal + (tax / 100) * subtotal || 0,
+          };
+        }) || [
           {
             product: null,
             quantity: 1,
@@ -142,11 +141,18 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             deduction: 0,
             tax: 0,
             total: 0,
-          }
+          },
         ],
       payment_details: currentInvoice?.payment_details || [],
     }),
-    [currentInvoice, user?.stakeholder, orderInfo?.unit_service, orderInfo?.patient, orderInfo?.products, order]
+    [
+      currentInvoice,
+      user?.stakeholder,
+      orderInfo?.unit_service,
+      orderInfo?.patient,
+      orderInfo?.products,
+      order,
+    ]
   );
 
   const methods = useForm({
@@ -161,8 +167,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  const values = watch()
-  console.log('valuessss', values.products)
+  const values = watch();
+  console.log('valuessss', values.products);
 
   useEffect(() => {
     reset(defaultValues);

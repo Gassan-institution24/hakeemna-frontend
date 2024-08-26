@@ -41,11 +41,13 @@ export default function AppointmentsTableRow({ row, selected }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  let patientName
+  let patientName;
   if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
   } else if (unit_service_patient) {
-    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+    patientName = curLangAr
+      ? unit_service_patient?.name_arabic
+      : unit_service_patient?.name_english;
   }
 
   return (
@@ -63,9 +65,7 @@ export default function AppointmentsTableRow({ row, selected }) {
           secondary={
             isValid(new Date(start_time)) &&
             new Date(start_time).toLocaleDateString(t('en-US'), {
-              timeZone:
-                unit_service?.country?.time_zone ||
-                'Asia/Amman',
+              timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
             })
           }
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -130,7 +130,8 @@ export default function AppointmentsTableRow({ row, selected }) {
           variant="outlined"
           onClick={() =>
             router.push(
-              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${entrance ? `&&entrance=${entrance}` : ''
+              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${
+                entrance ? `&&entrance=${entrance}` : ''
               }`
             )
           }

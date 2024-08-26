@@ -43,14 +43,13 @@ export default function TableNewEditForm({ currentTable }) {
   const [showTax, setShowTax] = useState(false);
   const [showDeduction, setShowDeduction] = useState(false);
 
-  const myUS = user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+  const myUS =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { taxesData } = useGetTaxes();
   const { deductionsData } = useGetDeductions();
-  const { workShiftsData } = useGetUSActiveWorkShifts(
-    myUS?._id
-  );
+  const { workShiftsData } = useGetUSActiveWorkShifts(myUS?._id);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -260,16 +259,20 @@ export default function TableNewEditForm({ currentTable }) {
                 name="description_arabic"
                 label={t('arabic description')}
               />
-              {myUS?.has_tax && <FormControlLabel
-                sx={{ ml: 2 }}
-                control={<Checkbox onChange={() => setShowTax((prev) => !prev)} />}
-                label={t('tax')}
-              />}
-              {myUS?.has_deduction && <FormControlLabel
-                sx={{ ml: 2 }}
-                control={<Checkbox onChange={() => setShowDeduction((prev) => !prev)} />}
-                label={t('deduction')}
-              />}
+              {myUS?.has_tax && (
+                <FormControlLabel
+                  sx={{ ml: 2 }}
+                  control={<Checkbox onChange={() => setShowTax((prev) => !prev)} />}
+                  label={t('tax')}
+                />
+              )}
+              {myUS?.has_deduction && (
+                <FormControlLabel
+                  sx={{ ml: 2 }}
+                  control={<Checkbox onChange={() => setShowDeduction((prev) => !prev)} />}
+                  label={t('deduction')}
+                />
+              )}
               {showTax && (
                 <RHFSelect name="tax" label={t('tax')}>
                   {taxesData.map((one, idx) => (

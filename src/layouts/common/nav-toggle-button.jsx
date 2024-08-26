@@ -25,17 +25,17 @@ export default function NavToggleButton({ sx, ...other }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  let arrow
+  let arrow;
   if (settings.themeLayout === 'vertical') {
     if (curLangAr) {
-      arrow = 'eva:arrow-ios-forward-fill'
+      arrow = 'eva:arrow-ios-forward-fill';
     } else {
-      arrow = 'eva:arrow-ios-back-fill'
+      arrow = 'eva:arrow-ios-back-fill';
     }
   } else if (curLangAr) {
-    arrow = 'eva:arrow-ios-back-fill'
+    arrow = 'eva:arrow-ios-back-fill';
   } else {
-    arrow = 'eva:arrow-ios-forward-fill'
+    arrow = 'eva:arrow-ios-forward-fill';
   }
 
   if (!lgUp) {
@@ -63,10 +63,7 @@ export default function NavToggleButton({ sx, ...other }) {
       }}
       {...other}
     >
-      <Iconify
-        width={22}
-        icon={arrow}
-      />
+      <Iconify width={22} icon={arrow} />
     </IconButton>
   );
 }

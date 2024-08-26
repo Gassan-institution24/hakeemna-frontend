@@ -43,8 +43,8 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || 'Asia/Amman'
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                ?.unit_service?.country?.time_zone || 'Asia/Amman'
             );
             field.onChange(selectedTime);
             if (onChange) {

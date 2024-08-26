@@ -232,17 +232,19 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <Typography variant="h6">{invoice.sequence_number}</Typography>
           </Stack>
 
-          {invoice?.stakeholder && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
-            </Typography>
-            {curLangAr ? invoice?.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
-            <br />
-            {invoice.stakeholder?.address}
-            <br />
-            {t('phone')}: {invoice.stakeholder?.phone}
-            <br />
-          </Stack>}
+          {invoice?.stakeholder && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('from')}
+              </Typography>
+              {curLangAr ? invoice?.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
+              <br />
+              {invoice.stakeholder?.address}
+              <br />
+              {t('phone')}: {invoice.stakeholder?.phone}
+              <br />
+            </Stack>
+          )}
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -256,17 +258,19 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          {invoice?.patient && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('to')}
-            </Typography>
-            {curLangAr ? invoice?.patient?.name_arabic : invoice.patient?.name_english}
-            <br />
-            {invoice.patient?.address}
-            <br />
-            {t('phone')}: {invoice.patient?.mobile_num1}
-            <br />
-          </Stack>}
+          {invoice?.patient && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('to')}
+              </Typography>
+              {curLangAr ? invoice?.patient?.name_arabic : invoice.patient?.name_english}
+              <br />
+              {invoice.patient?.address}
+              <br />
+              {t('phone')}: {invoice.patient?.mobile_num1}
+              <br />
+            </Stack>
+          )}
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>

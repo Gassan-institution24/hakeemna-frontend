@@ -79,11 +79,13 @@ export default function AppointmentsTableRow({
 
   const [minToDelay, setMinToDelay] = useState(0);
 
-  let patientName
+  let patientName;
   if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
   } else if (unit_service_patient) {
-    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+    patientName = curLangAr
+      ? unit_service_patient?.name_arabic
+      : unit_service_patient?.name_english;
   }
 
   return (
@@ -106,9 +108,7 @@ export default function AppointmentsTableRow({
             secondary={
               isValid(new Date(start_time)) &&
               new Date(start_time).toLocaleDateString(t('en-US'), {
-                timeZone:
-                  unit_service?.country?.time_zone ||
-                  'Asia/Amman',
+                timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
               })
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}

@@ -114,17 +114,20 @@ const useStyles = () =>
 // ----------------------------------------------------------------------
 
 export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
-  const { patient, unit_service_patient, stakeholder, created_at, unit_service, sequence_number } = invoice;
+  const { patient, unit_service_patient, stakeholder, created_at, unit_service, sequence_number } =
+    invoice;
 
   const { t } = useTranslate();
 
   const styles = useStyles();
 
-  let patientName
+  let patientName;
   if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
   } else if (unit_service_patient) {
-    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+    patientName = curLangAr
+      ? unit_service_patient?.name_arabic
+      : unit_service_patient?.name_english;
   }
 
   return (
@@ -133,7 +136,9 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
         <Text style={[styles.h2, styles.mb8, styles.alignCenter]}>{t('receipt voucher')}</Text>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'}
+            source={
+              unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'
+            }
             style={{ width: 48, height: 48 }}
           />
 
@@ -152,14 +157,14 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
 
         <View />
 
-        {patient && <View style={styles.col6}>
-          <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
-          <Text style={styles.body2}>
-            {patientName}
-          </Text>
-          <Text style={styles.body2}>{patient?.address}</Text>
-          <Text style={styles.body2}>{patient?.mobile_num1}</Text>
-        </View>}
+        {patient && (
+          <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
+            <Text style={styles.body2}>{patientName}</Text>
+            <Text style={styles.body2}>{patient?.address}</Text>
+            <Text style={styles.body2}>{patient?.mobile_num1}</Text>
+          </View>
+        )}
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
@@ -171,20 +176,23 @@ export default function InvoicePDF({ invoice, currentStatus, paidAmount }) {
             <Text style={styles.body2}>{unit_service?.phone}</Text>
           </View>
 
-          {stakeholder && <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
-            <Text style={styles.body2}>
-              {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
-            </Text>
-            <Text style={styles.body2}>{stakeholder?.address}</Text>
-            <Text style={styles.body2}>{stakeholder?.phone}</Text>
-          </View>}
-
+          {stakeholder && (
+            <View style={styles.col6}>
+              <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
+              <Text style={styles.body2}>
+                {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
+              </Text>
+              <Text style={styles.body2}>{stakeholder?.address}</Text>
+              <Text style={styles.body2}>{stakeholder?.phone}</Text>
+            </View>
+          )}
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>
           <Text style={[styles.body1, styles.mb8]}>{t('we have recieved from mr./m/s')}:</Text>
           <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
-            {curLangAr ? invoice?.patient?.name_arabic || invoice?.stakeholder?.name_arabic : invoice?.patient?.name_english || invoice?.stakeholder?.name_english}
+            {curLangAr
+              ? invoice?.patient?.name_arabic || invoice?.stakeholder?.name_arabic
+              : invoice?.patient?.name_english || invoice?.stakeholder?.name_english}
           </Text>
         </View>
         <View style={[styles.flexContainer, styles.mb8]}>

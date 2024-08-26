@@ -48,7 +48,6 @@ const formatTextWithLineBreaks = (text) => {
   );
 };
 
-
 export default function Rooms() {
   const [noteContent, setNoteContent] = useState('');
   const [Confirmdroomsdata, setConfirmRoomsdata] = useState('');
@@ -270,7 +269,7 @@ export default function Rooms() {
                       sx={{
                         bgcolor:
                           Entrance?.Current_activity?.name_english ===
-                            rooms?.activities?.name_english
+                          rooms?.activities?.name_english
                             ? ''
                             : 'success.main',
                         m: 2,

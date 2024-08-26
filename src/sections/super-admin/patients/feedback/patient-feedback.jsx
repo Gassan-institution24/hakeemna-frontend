@@ -25,10 +25,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -93,8 +91,6 @@ export default function PatientFeedbackView({ patientData }) {
   });
 
   const { t } = useTranslate();
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active' || filters.rate.length > 0;
 
@@ -262,11 +258,6 @@ export default function PatientFeedbackView({ patientData }) {
                       // onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, feedbackData.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

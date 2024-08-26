@@ -26,8 +26,8 @@ import { useCheckoutContext } from 'src/sections/unit-service/checkout/context';
 
 export default function ProductItem({ product }) {
   const { onAddToCart } = useCheckoutContext();
-  const { enqueueSnackbar } = useSnackbar()
-  const { t } = useTranslate()
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslate();
 
   const {
     _id,
@@ -58,7 +58,7 @@ export default function ProductItem({ product }) {
     };
     try {
       onAddToCart(newProduct);
-      enqueueSnackbar(t('added successfully'))
+      enqueueSnackbar(t('added successfully'));
     } catch (error) {
       console.error(error);
     }

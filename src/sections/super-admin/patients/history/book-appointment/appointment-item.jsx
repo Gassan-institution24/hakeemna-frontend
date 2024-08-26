@@ -78,9 +78,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
                 minute: '2-digit',
               })}
               secondary={new Date(start_time).toLocaleDateString('en-US', {
-                timeZone:
-                  unit_service?.country?.time_zone ||
-                  'Asia/Amman',
+                timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
               })}
               primaryTypographyProps={{ typography: 'body2', noWrap: true }}
               secondaryTypographyProps={{
@@ -157,7 +155,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        { }
+        {}
         <MenuItem
           lang="ar"
           onClick={() => {

@@ -75,8 +75,7 @@ export default function InvoiceListView() {
     sortBy: table.orderBy || 'created_at',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'desc',
-    select:
-      'sequence_number economic_movement created_at patient payment_amount updated_at',
+    select: 'sequence_number economic_movement created_at patient payment_amount updated_at',
     populate: [
       { path: 'patient', select: 'name_english name_arabic' },
       { path: 'unit_service_patient', select: 'name_english name_arabic' },
@@ -336,12 +335,12 @@ export default function InvoiceListView() {
                 rowCount={receiptsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     receiptsData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     receiptsData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>
@@ -352,7 +351,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row._id)}
                     onSelectRow={() => table.onSelectRow(row._id)}
                     onViewRow={() => handleViewRow(row._id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

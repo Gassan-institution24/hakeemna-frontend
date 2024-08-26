@@ -76,8 +76,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           subtotal: Yup.number(),
           tax: Yup.number(),
           total: Yup.number(),
-          quantity: Yup.number()
-            .required(t('required field'))
+          quantity: Yup.number().required(t('required field')),
         })
       )
     ),
@@ -99,7 +98,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       unit_service:
         currentInvoice?.unit_service?._id ||
         currentInvoice?.unit_service ||
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
       employee:
         currentInvoice?.employee?._id ||
         currentInvoice?.employee ||

@@ -5,7 +5,7 @@ import { Box, Container } from '@mui/system';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientCurrentAppointments,useGetPatientFinishedAppointments } from 'src/api';
+import { useGetPatientCurrentAppointments, useGetPatientFinishedAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 
@@ -23,14 +23,7 @@ export default function AppointmentData() {
     setCurrentTab(newValue);
   }, []);
 
-  const pendingAppointments = appointmentsData.filter(
-    (info) =>
-      info?.finished_or_not === false
-  );
-  
-  
-  
-  
+  const pendingAppointments = appointmentsData.filter((info) => info?.finished_or_not === false);
 
   const finishedAppointments = finishedappointmentsData?.filter(
     (info) =>
