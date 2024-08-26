@@ -69,10 +69,11 @@ export default function AppointmentsToday() {
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
   const [pateintInfo, setPatientInfo] = useState('');
-  const [addingId, setAddingId] = useState(false);
+  const [addingId, setAddingId] = useState();
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
+  const iddialog = useBoolean(false);
   const [newDialog, setNewDialog] = useState(false);
 
   const unitServiceId =
@@ -83,7 +84,7 @@ export default function AppointmentsToday() {
 
   const { roomsData } = useGetUSRooms(unitServiceId);
 
-  const { finishedAppointmentsData } = useGetfinishedAppointments();
+  const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
   );
@@ -196,6 +197,8 @@ export default function AppointmentsToday() {
       });
       enqueueSnackbar('appointment finished', { variant: 'success' });
       refetch();
+      refetch2();
+      refetch3();
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
       console.error(error.message);
@@ -413,73 +416,122 @@ export default function AppointmentsToday() {
                         : info?.unit_service_patient?.name_english;
                     }
                     return (
-                      <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                        <TableCell>{fTime(info?.start_time)}</TableCell>
-                        <TableCell>{patientName}</TableCell>
-                        {currentTab !== 'three' && (
-                          <>
-                            <TableCell>
-                              <>
-                                {info?.coming !== undefined ? (
-                                  <Iconify
-                                    width={22}
-                                    sx={{
-                                      cursor: 'pointer',
-                                      mr: 1,
-                                      color: info.coming ? 'info.main' : 'error.main',
-                                    }}
-                                    icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
-                                  />
-                                ) : (
-                                  <>
-                                    <Button
-                                      sx={{ p: 2 }}
-                                      onClick={() => StatusFunction(info, true, 'coming')}
-                                    >
-                                      {t('Yes')}
-                                    </Button>
-                                    <Button
-                                      sx={{ p: 2 }}
-                                      onClick={() => StatusFunction(info, false, 'coming')}
-                                    >
-                                      {t('No')}
-                                    </Button>
-                                  </>
-                                )}
-                              </>
-                            </TableCell>
+                      <>
+                        <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
+                          <TableCell>{fTime(info?.start_time)}</TableCell>
+                          <TableCell>{patientName}</TableCell>
+                          {currentTab !== 'three' && (
+                            <>
+                              <TableCell>
+                                <>
+                                  {info?.coming !== undefined ? (
+                                    <Iconify
+                                      width={22}
+                                      sx={{
+                                        cursor: 'pointer',
+                                        mr: 1,
+                                        color: info.coming ? 'info.main' : 'error.main',
+                                      }}
+                                      icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
+                                    />
+                                  ) : (
+                                    <>
+                                      <Button
+                                        sx={{ p: 2 }}
+                                        onClick={() => StatusFunction(info, true, 'coming')}
+                                      >
+                                        {t('Yes')}
+                                      </Button>
+                                      <Button
+                                        sx={{ p: 2 }}
+                                        onClick={() => StatusFunction(info, false, 'coming')}
+                                      >
+                                        {t('No')}
+                                      </Button>
+                                    </>
+                                  )}
+                                </>
+                              </TableCell>
 
-                            <TableCell>
-                              <>
-                                {info?.arrived !== undefined ? (
-                                  <Iconify
-                                    width={22}
-                                    sx={{
-                                      cursor: 'pointer',
-                                      mr: 1,
-                                      color: info.arrived ? 'info.main' : 'error.main',
-                                    }}
-                                    icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
-                                  />
-                                ) : (
-                                  <>
-                                    <Button sx={{ p: 2 }} onClick={() => startAppointment(info)}>
-                                      {t('Yes')}
-                                    </Button>
-                                    <Button
-                                      sx={{ p: 2 }}
-                                      onClick={() => StatusFunction(info, false, 'arrived')}
-                                    >
-                                      {t('No')}
-                                    </Button>
-                                  </>
-                                )}
-                              </>
-                            </TableCell>
-                          </>
-                        )}
-                        <TableCell>{renderOptions(info)}</TableCell>
-                      </TableRow>
+                              <TableCell>
+                                <>
+                                  {info?.arrived !== undefined ? (
+                                    <Iconify
+                                      width={22}
+                                      sx={{
+                                        cursor: 'pointer',
+                                        mr: 1,
+                                        color: info.arrived ? 'info.main' : 'error.main',
+                                      }}
+                                      icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
+                                    />
+                                  ) : (
+                                    <>
+                                      <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
+                                        {t('Yes')}
+                                      </Button>
+                                      <Button
+                                        sx={{ p: 2 }}
+                                        onClick={() => StatusFunction(info, false, 'arrived')}
+                                      >
+                                        {t('No')}
+                                      </Button>
+                                    </>
+                                  )}
+                                </>
+                              </TableCell>
+                            </>
+                          )}
+                          <TableCell>{renderOptions(info)}</TableCell>
+                        </TableRow>
+                        <Dialog
+                          open={iddialog.value}
+                          onClose={iddialog.onTrue}
+                          lang="ar"
+                          fullWidth
+                          maxWidth="xs"
+                        >
+                          <DialogTitle>{t('Proof number')}</DialogTitle>
+                          <DialogContent>
+                            <Typography>
+                              {t('Please enter the patient national number')}{' '}
+                              <span style={{ color: 'red' }}>
+                                {t('As entered in the proof document')}
+                              </span>
+                            </Typography>
+                            <TextField
+                              onChange={(e) => setAddingId(e.target.value)}
+                              sx={{ width: '100%', mt: 2 }}
+                              placeholder={curLangAr ? 'مثال: ٢٣٤٢****' : 'Ex: 2342****'}
+                            />
+                          </DialogContent>
+
+                          <DialogActions>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              sx={{
+                                bgcolor: 'info.dark',
+                              }}
+                              onClick={() => {
+                                iddialog.onFalse();
+                                startAppointment(info);
+                              }}
+                            >
+                              {t('add')}
+                            </Button>
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              onClick={() => {
+                                iddialog.onFalse();
+                              }}
+                            >
+                              {t('cancel')}
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      </>
                     );
                   })}
                 </TableBody>
@@ -490,28 +542,6 @@ export default function AppointmentsToday() {
         )}
       </Container>
       <NewAppointmentDialog refetch={refetch} open={newDialog} close={() => setNewDialog(false)} />
-      <ConfirmDialog
-        open={addingId}
-        onClose={() => setAddingId(false)}
-        title={t('add patient ID number')}
-        content={
-          <Stack alignItems="center" width={1}>
-            {/* <TextField type="number" onChange={(e) => setCurrId(e.target.value)} /> */}
-            <TextField type="number" />
-          </Stack>
-        }
-        action={
-          <LoadingButton
-            variant="contained"
-            color="info"
-            onClick={() => {
-              setAddingId(false);
-            }}
-          >
-            {t('add')}
-          </LoadingButton>
-        }
-      />
     </>
   );
 }

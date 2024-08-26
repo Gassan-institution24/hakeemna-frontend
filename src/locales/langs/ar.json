@@ -896,6 +896,8 @@
   "Height": "الطول",
   "Weight": "الوزن",
   "Calculate": "أحسب",
+  "Please enter the patient national number": "الرجاء ادخل الرقم الوطني",
+  "As entered in the proof document": "كما هو مكتوب في سند الاثبات",
   "cm": "سم",
   "kg": "كجم",
   "Normal weight": "وزن طبيعي",

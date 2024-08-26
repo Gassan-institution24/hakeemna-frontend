@@ -43,8 +43,8 @@ export function useGetWatingPatient(id) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetfinishedAppointments() {
-  const URL = endpoints.entranceManagement.finishedAppointments;
+export function useGetfinishedAppointments(usId) {
+  const URL = endpoints.entranceManagement.finishedAppointments(usId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -57,12 +57,12 @@ export function useGetfinishedAppointments() {
     }),
     [data, error, isLoading, isValidating]
   );
-  const refetch = async () => {
+  const refetch3 = async () => {
     // Use the mutate function to re-fetch the data for the specified key (URL)
     await mutate(URL);
   };
 
-  return { ...memoizedValue, refetch };
+  return { ...memoizedValue, refetch3 };
 }
 export function useGetAllEntranceManagement() {
   const URL = endpoints.entranceManagement.all;
