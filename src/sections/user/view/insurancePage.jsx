@@ -110,7 +110,7 @@ export default function InsurancePage({ patientId }) {
     <>
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
         {patientInsuranseData?.map((info, key) => (
-          <Card key={key} sx={{ borderRadius: 1, width: '60%', mb: 5, bgcolor: '#64a3aa', }}>
+          <Card key={key} sx={{ borderRadius: 1, width: '60%', mb: 5, bgcolor: '#64a3aa' }}>
             <Box
               sx={{
                 bgcolor: '#ddf0ee',
@@ -129,14 +129,23 @@ export default function InsurancePage({ patientId }) {
                 {t('Insurance Card')}
               </Typography>
             </Box>
-            <Box sx={{ display: { md: 'grid', xs: 'block' }, gridTemplateColumns: '1fr 1fr 1fr', margin: 1, gap: 2 }}>
+            <Box
+              sx={{
+                display: { md: 'grid', xs: 'block' },
+                gridTemplateColumns: '1fr 1fr 1fr',
+                margin: 1,
+                gap: 2,
+              }}
+            >
               <Image
                 src={info?.patient?.profile_picture}
                 sx={{ width: '100px', height: '135px', mb: 1 }}
               />
               <Box>
                 <Box sx={{ mb: 1 }}>
-                  <Typography sx={{ color: '#e1eeed' }}>{curLangAr ? info?.insurance?.name_arabic : info?.insurance?.name_english}</Typography>
+                  <Typography sx={{ color: '#e1eeed' }}>
+                    {curLangAr ? info?.insurance?.name_arabic : info?.insurance?.name_english}
+                  </Typography>
                   <Typography sx={{ color: '#e1eeed' }}>
                     {info?.patient?.name_english} {info?.patient?.last_name}
                   </Typography>
@@ -152,13 +161,12 @@ export default function InsurancePage({ patientId }) {
                 icon="mi:options-vertical"
                 sx={{
                   color: 'white',
-                  ml: 10
+                  ml: 10,
                 }}
                 width={25}
                 onClick={() => saveFunction(info?._id)}
               />
             </Box>
-
           </Card>
         ))}
       </Box>
@@ -224,7 +232,12 @@ export default function InsurancePage({ patientId }) {
               sx={{ mb: 2 }}
             />
 
-            <RHFSelect name="type" label={`${t('Insurance type*')}`} placeholder="Insurance type" sx={{ mb: 2 }}>
+            <RHFSelect
+              name="type"
+              label={`${t('Insurance type*')}`}
+              placeholder="Insurance type"
+              sx={{ mb: 2 }}
+            >
               <MenuItem
                 value=""
                 disabled

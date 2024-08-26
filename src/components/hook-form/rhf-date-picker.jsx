@@ -14,7 +14,7 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <div >
+        <div>
           <DatePicker
             {...field}
             // fullWidth
@@ -35,7 +35,13 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
             error={!!error}
             helperText={error ? error?.message : helperText}
           />
-          {error?.message ? <Typography variant='caption' color='error.main'>{error.message}</Typography> : ''}
+          {error?.message ? (
+            <Typography variant="caption" color="error.main">
+              {error.message}
+            </Typography>
+          ) : (
+            ''
+          )}
         </div>
       )}
     />

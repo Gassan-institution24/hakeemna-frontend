@@ -142,8 +142,8 @@ export default function BookManually({
   });
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
@@ -173,8 +173,7 @@ export default function BookManually({
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
-                        unitServiceData?.country?.time_zone ||
-                        'Asia/Amman'
+                        unitServiceData?.country?.time_zone || 'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

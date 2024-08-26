@@ -31,9 +31,7 @@ export default function PatientFoundRow({
     nationality,
     birth_date,
     identification_num,
-    email,
     mobile_num1,
-    mobile_num2,
   } = row;
 
   const { t } = useTranslate();
@@ -106,10 +104,14 @@ export default function PatientFoundRow({
           </>
         }
         action={
-          <Button variant="contained" color="info" onClick={() => {
-            onEmploymentRow(row)
-            confirm.onFalse()
-          }}>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => {
+              onEmploymentRow(row);
+              confirm.onFalse();
+            }}
+          >
             {t('confirm')}
           </Button>
         }

@@ -24,10 +24,11 @@ export default function AppointmentData() {
 
   const pendingAppointments = appointmentsData.filter(
     (info) =>
-      info.status  === "booked" || info.status  === "processing" || info.status  === "arrived" || info?.finished_or_not === false
+      info.status === 'booked' ||
+      info.status === 'processing' ||
+      info.status === 'arrived' ||
+      info?.finished_or_not === false
   );
-
-  
 
   const finishedAppointments = appointmentsData?.filter(
     (info) =>

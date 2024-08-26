@@ -46,8 +46,8 @@ export default function NewEditDayAppointmentsDetails({
     };
     const existingData = values.days_details[ParentIndex].appointments
       ? values.days_details[ParentIndex].appointments[
-      values.days_details[ParentIndex].appointments.length - 1
-      ]
+          values.days_details[ParentIndex].appointments.length - 1
+        ]
       : null;
     const start_time = new Date(
       existingData ? existingData?.start_time : values.days_details[ParentIndex].work_start_time
@@ -120,7 +120,12 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  onChange={() => setValue(`days_details[${ParentIndex}].appointments[${index}].online_available`, !watch(`days_details[${ParentIndex}].appointments[${index}].online_available`))}
+                  onChange={() =>
+                    setValue(
+                      `days_details[${ParentIndex}].appointments[${index}].online_available`,
+                      !watch(`days_details[${ParentIndex}].appointments[${index}].online_available`)
+                    )
+                  }
                   label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
                 />
                 <IconButton
@@ -155,7 +160,7 @@ export default function NewEditDayAppointmentsDetails({
             startIcon={<Iconify icon="tdesign:plus" />}
             sx={{ padding: 1 }}
             onClick={handleAdd}
-          // sx={{ flexShrink: 0 }}
+            // sx={{ flexShrink: 0 }}
           >
             {curLangAr ? 'إضافة مواعيد بالتفصيل' : 'Add Detailed Appointment'}
           </Button>

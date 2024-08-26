@@ -144,7 +144,11 @@ export default function BookDetails({
           slots={{ toolbar: 'test' }}
           slotProps={{ actionBar: { actions: [] } }}
           value={new Date(selectedDate)}
-          onChange={(newValue) => setSelectedDate(new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0))}
+          onChange={(newValue) =>
+            setSelectedDate(
+              new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0)
+            )
+          }
         />
         <Stack
           sx={{
@@ -286,9 +290,7 @@ function ReviewItem({ item }) {
           secondary={
             isValid(new Date(start_time)) &&
             new Date(start_time).toLocaleDateString(t('en-US'), {
-              timeZone:
-                unit_service?.country?.time_zone ||
-                'Asia/Amman',
+              timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
             })
           }
           primaryTypographyProps={{ typography: 'subtitle1', noWrap: true }}

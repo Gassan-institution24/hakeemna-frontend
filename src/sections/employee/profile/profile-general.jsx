@@ -19,7 +19,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetKeywrds,
+  useGetKeywords,
   useGetCountries,
   // useGetCurrencies,
   useGetSpecialties,
@@ -186,18 +186,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
     memberships: employeeData?.memberships?.length
       ? employeeData?.memberships
       : [{ name: '', institution: '' }],
-    other: employeeData?.other?.length
-      ? employeeData?.other
-      : [{ kind: '', name: '' }],
+    other: employeeData?.other?.length ? employeeData?.other : [{ kind: '', name: '' }],
     certifications: employeeData?.certifications?.length
       ? employeeData?.certifications
       : [
-        {
-          name: '',
-          institution: '',
-          year: null,
-        },
-      ],
+          {
+            name: '',
+            institution: '',
+            year: null,
+          },
+        ],
     fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement].fees || 0,
     // currency:
     //   user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency ||
@@ -226,7 +224,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const values = watch();
 
-  const { keywordsData } = useGetKeywrds();
+  const { keywordsData } = useGetKeywords();
   // const { arabicKeywordsData } = useGetArabicKeywrds();
 
   const handleDrop = useCallback(
@@ -384,7 +382,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-              // value={values.profrssion_practice_num}
+                // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -479,11 +477,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 name="fees"
                 label={t('fees')}
                 InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      JOD
-                    </InputAdornment>
-                  ),
+                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
                 }}
               />
             </Box>
@@ -508,14 +502,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -541,14 +535,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

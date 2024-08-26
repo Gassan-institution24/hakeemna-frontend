@@ -36,7 +36,7 @@ export default function MovementTableRow({
     due_date,
     insurance,
     is_it_installment,
-    receipt_voucher_num
+    receipt_voucher_num,
   } = row;
 
   const { incomePaymentData } = useGetIncomePaymentControl({
@@ -52,7 +52,7 @@ export default function MovementTableRow({
     return acc;
   }, 0);
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -65,7 +65,11 @@ export default function MovementTableRow({
 
   const printPdf = async () => {
     const blob = await pdf(
-      stakeholder ? <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} /> : <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+      stakeholder ? (
+        <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+      ) : (
+        <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+      )
     ).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
@@ -85,8 +89,8 @@ export default function MovementTableRow({
 
       <TableCell align="center">{sequence_number}</TableCell>
 
-      <TableCell align="center" >{fDate(due_date)}</TableCell>
-      <TableCell align="center" >{type}</TableCell>
+      <TableCell align="center">{fDate(due_date)}</TableCell>
+      <TableCell align="center">{type}</TableCell>
 
       <TableCell align="center">
         {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
@@ -97,28 +101,36 @@ export default function MovementTableRow({
 
       <TableCell align="center">{fCurrency(required_amount, Currency?.symbol)}</TableCell>
       <TableCell align="center">{fCurrency(-balance, Currency?.symbol)}</TableCell>
-      {receipt_voucher_num && <TableCell align="right">
-        <PDFDownloadLink
-          document={
-            stakeholder ? <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} /> : <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
-          }
-          fileName={`${fDate(new Date(receipt_voucher_num?.created_at), 'yyyy')} - ${receipt_voucher_num?.sequence_number}`}
-          style={{ textDecoration: 'none' }}
-        >
-          {({ loading }) => (
-            <Tooltip title={t('download')}>
-              <IconButton>
-                <Iconify icon="eva:cloud-download-fill" />
-              </IconButton>
-            </Tooltip>
-          )}
-        </PDFDownloadLink>
-        <Tooltip title={t('print')}>
-          <IconButton onClick={printPdf}>
-            <Iconify icon="solar:printer-minimalistic-bold" />
-          </IconButton>
-        </Tooltip>
-      </TableCell>}
+      {receipt_voucher_num && (
+        <TableCell align="right">
+          <PDFDownloadLink
+            document={
+              stakeholder ? (
+                <StakeholderInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+              ) : (
+                <UnitServiceInvoicePDF invoice={receipt_voucher_num} paidAmount={paidAmount} />
+              )
+            }
+            fileName={`${fDate(new Date(receipt_voucher_num?.created_at), 'yyyy')} - ${
+              receipt_voucher_num?.sequence_number
+            }`}
+            style={{ textDecoration: 'none' }}
+          >
+            {({ loading }) => (
+              <Tooltip title={t('download')}>
+                <IconButton>
+                  <Iconify icon="eva:cloud-download-fill" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </PDFDownloadLink>
+          <Tooltip title={t('print')}>
+            <IconButton onClick={printPdf}>
+              <Iconify icon="solar:printer-minimalistic-bold" />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+      )}
     </TableRow>
   );
 }

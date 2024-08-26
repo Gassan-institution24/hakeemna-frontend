@@ -115,7 +115,6 @@ export default function MdicalreportPage() {
               {curLangAr
                 ? `قام ${data?.employee?.name_arabic} باضافة اجازة مرضية`
                 : `${data?.employee?.name_english} added sick leave`}
-
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('description')}:&nbsp;&nbsp;

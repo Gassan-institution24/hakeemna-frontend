@@ -122,22 +122,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFTextField
-                name="Name"
-                label="Name"
-              />
-              <RHFTextField
-                name="ICD_code"
-                label="ICD_code"
-              />
-              <RHFTextField
-                name="Parent"
-                label="Parent"
-              />
-              <RHFTextField
-                name="Group"
-                label="Group"
-              />
+              <RHFTextField name="Name" label="Name" />
+              <RHFTextField name="ICD_code" label="ICD_code" />
+              <RHFTextField name="Parent" label="Parent" />
+              <RHFTextField name="Group" label="Group" />
             </Box>
 
             <Box
@@ -150,7 +138,6 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-
               {symptomsMultiSelect && (
                 <RHFMultiSelect
                   checkbox

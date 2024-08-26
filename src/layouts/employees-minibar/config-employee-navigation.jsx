@@ -29,7 +29,7 @@ export function useNavData() {
     }
     return employeesData.map((info, idx) => {
       const currpath = location.pathname.split('/');
-      currpath[4] = info._id;
+      currpath[5] = info._id;
       const path = currpath.join('/');
       return {
         title: curLangAr ? info.employee.name_arabic : info.employee.name_english,

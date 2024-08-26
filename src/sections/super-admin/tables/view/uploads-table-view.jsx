@@ -20,10 +20,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -72,8 +70,6 @@ export default function UploadesTableView() {
     filters,
     dateError,
   });
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;
   // || filters.status !== 'active';
@@ -199,11 +195,6 @@ export default function UploadesTableView() {
                       onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, uploadsData.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

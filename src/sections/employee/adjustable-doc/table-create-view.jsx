@@ -1,4 +1,3 @@
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -12,7 +11,7 @@ import TableNewEditForm from './table-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   return (
     <Container maxWidth="lg">
       <CustomBreadcrumbs
