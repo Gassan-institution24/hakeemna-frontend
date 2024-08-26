@@ -439,7 +439,7 @@ export const endpoints = {
     wating: (id) => (!id ? null : `/api/entrance/wating/${id}`),
     inrooms: (id) => (!id ? null : `/api/entrance/inrooms/${id}`),
     byactivity: (id, usId) => (!id ? null : `/api/entrance/activity/${id}/us/${usId}`),
-    finishedAppointments: `/api/entrance/finishedAppointments`,
+    finishedAppointments: (usId) => `/api/entrance/finishedAppointments/us/${usId}`,
   },
   medRecord: {
     all: '/api/entrance',
@@ -520,6 +520,7 @@ export const endpoints = {
     },
     patient: {
       many: (id) => (!id ? null : `/api/appointments/patient/${id}`),
+      finished: (id) => (!id ? null : `/api/appointments/patientfinished/${id}`),
       notify: (id) => (!id ? null : `/api/appointments/notify/${id}`),
       one: (id) => (!id ? null : `/api/appointments/onepatient/${id}`),
       createPatientAndBookAppoint: (id) => (!id ? null : `/api/appointments/${id}/newpatient`),

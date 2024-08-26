@@ -142,7 +142,10 @@ export default function WaitingRoom() {
               <Table sx={{ minWidth: 400 }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t('Last activity')}</TableCell>
+                    {EntranceByActivity?.[0]?.Last_activity_atended && (
+                      <TableCell>{t('Last activity')}</TableCell>
+                    )}
+
                     <TableCell>{t('Patient')}</TableCell>
                     <TableCell>{t('Arrival Time')}</TableCell>
                     <TableCell>{t('Doctor Note')}</TableCell>
@@ -163,7 +166,9 @@ export default function WaitingRoom() {
                     }
                     return (
                       <TableRow key={i}>
-                        <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+                        {entranceData?.Last_activity_atended?.name_english && (
+                          <TableCell>{entranceData?.Last_activity_atended?.name_english}</TableCell>
+                        )}
 
                         <TableCell>{patientName}</TableCell>
                         <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>

@@ -21,7 +21,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
+import { useGetAppointmentTypes, useGetPatientCurrentAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -80,7 +80,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const confirm = useBoolean();
 
-  const { appointmentsData, refetch, loading } = useGetPatientAppointments(patientData._id);
+  const { appointmentsData, refetch, loading } = useGetPatientCurrentAppointments(patientData._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
