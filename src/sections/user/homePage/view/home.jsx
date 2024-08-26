@@ -100,7 +100,6 @@ export default function OverviewAppView() {
   }, [oldpatientsdata, Us]);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome

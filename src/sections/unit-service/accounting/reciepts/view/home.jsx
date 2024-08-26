@@ -23,9 +23,7 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -89,8 +87,6 @@ export default function InvoiceListView() {
   });
 
   const dateError = isAfter(filters.startDate, filters.endDate);
-
-  const denseHeight = table.dense ? 56 : 56 + 20;
 
   const canReset = !!filters.startDate || !!filters.endDate;
 
@@ -338,12 +334,12 @@ export default function InvoiceListView() {
                 rowCount={receiptsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     receiptsData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     receiptsData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>
@@ -354,14 +350,9 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row._id)}
                     onSelectRow={() => table.onSelectRow(row._id)}
                     onViewRow={() => handleViewRow(row._id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

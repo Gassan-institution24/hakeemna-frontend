@@ -19,9 +19,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -79,8 +77,6 @@ export default function OffersView({ employeeData }) {
     inputData: offersData,
     filters,
   });
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -146,11 +142,6 @@ export default function OffersView({ employeeData }) {
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

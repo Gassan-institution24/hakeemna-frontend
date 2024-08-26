@@ -15,17 +15,17 @@ import Header from './header';
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
 
   const homePage = pathname === '/';
   const loginPage = pathname === '/login';
-  const { authenticated } = useAuthContext()
+  const { authenticated } = useAuthContext();
 
   useEffect(() => {
     if (authenticated && (loginPage || homePage)) {
-      router.push(paths.dashboard.root)
+      router.push(paths.dashboard.root);
     }
-  })
+  });
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>

@@ -19,14 +19,13 @@ export default function Editor({
   sx,
   ...other
 }) {
-
   const modules = {
     toolbar: [
-      [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
       ['bold', 'italic', 'underline'],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
       ['clean'],
       // [{ container: `#${id}` }],
     ],

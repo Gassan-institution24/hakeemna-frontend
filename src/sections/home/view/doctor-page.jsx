@@ -132,7 +132,9 @@ export default function DoctorPage({ employeeData }) {
                   </Typography>
                 </Stack>
                 <Typography variant="body2" sx={{ px: 3 }}>
-                  {curLangAr ? employeeData?.employee?.arabic_about_me : employeeData?.employee?.about_me}
+                  {curLangAr
+                    ? employeeData?.employee?.arabic_about_me
+                    : employeeData?.employee?.about_me}
                 </Typography>
               </>
             )}
@@ -141,7 +143,9 @@ export default function DoctorPage({ employeeData }) {
                 <Typography
                   variant="subtitle2"
                   sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
-                >{t('address')}:</Typography>
+                >
+                  {t('address')}:
+                </Typography>
                 <Typography variant="body2" sx={{ px: 3 }}>
                   {employeeData?.unit_service?.address}
                 </Typography>
@@ -157,8 +161,8 @@ export default function DoctorPage({ employeeData }) {
                     {t('phone number')}:
                   </Typography>
                 </Stack>
-                <Stack direction="row" justifyContent='left'>
-                  <Typography variant="body2" dir='ltr' sx={{ px: 3 }}>
+                <Stack direction="row" justifyContent="left">
+                  <Typography variant="body2" dir="ltr" sx={{ px: 3 }}>
                     {employeeData?.employee?.phone}
                   </Typography>
                 </Stack>
@@ -210,9 +214,9 @@ export default function DoctorPage({ employeeData }) {
                       <Typography variant="body2">{one.institution}</Typography>,
                       <Typography variant="body2">{fDate(new Date(one.year), 'yyyy')}</Typography>
                     </Stack>
-                  )
+                  );
                 }
-                return ''
+                return '';
               })}
             </Stack>
             <Stack direction="row">
@@ -228,9 +232,9 @@ export default function DoctorPage({ employeeData }) {
                       <Typography variant="body2">{one.name}</Typography>,
                       <Typography variant="body2">{one.institution}</Typography>
                     </Stack>
-                  )
+                  );
                 }
-                return ''
+                return '';
               })}
             </Stack>
             {employeeData?.employee?.other?.length > 0 && (
@@ -248,12 +252,13 @@ export default function DoctorPage({ employeeData }) {
                           <Typography variant="body2">{one.name}</Typography>,
                           <Typography variant="body2">{t(one.kind)}</Typography>
                         </Stack>
-                      )
+                      );
                     }
-                    return ''
+                    return '';
                   })}
                 </Stack>
-              </>)}
+              </>
+            )}
           </Stack>
           <Stack gap={1} flex={1}>
             <FeedbackSection employee={employeeData} />

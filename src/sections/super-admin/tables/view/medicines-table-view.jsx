@@ -87,8 +87,7 @@ export default function MedicinesTableView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const nameDebounse = useDebounce(filters.name)
-
+  const nameDebounse = useDebounce(filters.name);
 
   const { medicinesData, lengths, loading, refetch } = useGetMedicines({
     page: table.page || 0,
@@ -360,20 +359,19 @@ export default function MedicinesTableView() {
                 />
 
                 <TableBody>
-                  {medicinesData
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                  {medicinesData.map((row, idx) => (
+                    <TableDetailRow
+                      key={idx}
+                      row={row}
+                      filters={filters}
+                      setFilters={setFilters}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onActivate={() => handleActivate(row._id)}
+                      onInactivate={() => handleInactivate(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
 
                   <TableEmptyRows
                     height={denseHeight}

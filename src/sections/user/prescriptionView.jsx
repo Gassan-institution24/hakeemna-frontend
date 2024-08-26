@@ -30,7 +30,7 @@ export default function OldmedicalrepotView() {
 
   return (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-      <Typography sx={{ fontWeight: 600, p: 2}}>
+      <Typography sx={{ fontWeight: 600, p: 2 }}>
         {t('Date')}:&nbsp; &nbsp;
         <span style={{ color: 'gray', fontWeight: 400 }}>{todayDate}</span>
       </Typography>
@@ -38,7 +38,9 @@ export default function OldmedicalrepotView() {
         {prescriptionData?.medicines?.map((info, i) => (
           <Box key={i} sx={{ border: '2px solid #2F99FF' }}>
             <Typography sx={{ fontWeight: 600, p: 2, textAlign: 'center' }}>
-              <span style={{ color: 'gray', fontWeight: 400 }}>{fDateAndTime(prescriptionData?.created_at)}</span>
+              <span style={{ color: 'gray', fontWeight: 400 }}>
+                {fDateAndTime(prescriptionData?.created_at)}
+              </span>
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('trade_name')}:&nbsp; &nbsp;

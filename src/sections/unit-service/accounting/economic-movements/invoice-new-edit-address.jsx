@@ -46,7 +46,12 @@ export default function InvoiceNewEditAddress() {
 
   const { unit_service, patient, entrance, unit_service_patient } = values;
   const { data } = useGetPatient(patient);
-  const { usPatientData } = useGetOneUSPatient(unit_service_patient, { populate: [{ path: 'country', select: 'name_english name_arabic' }, { path: 'city', select: 'name_english name_arabic' }] });
+  const { usPatientData } = useGetOneUSPatient(unit_service_patient, {
+    populate: [
+      { path: 'country', select: 'name_english name_arabic' },
+      { path: 'city', select: 'name_english name_arabic' },
+    ],
+  });
   const { data: USData } = useGetUnitservice(unit_service);
   const { Entrance } = useGetOneEntranceManagement(entrance, {
     select: 'activity_happened',
@@ -112,14 +117,14 @@ export default function InvoiceNewEditAddress() {
                 options={patientsData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   patientsData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       patientsData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

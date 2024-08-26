@@ -16,11 +16,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 // import { useTranslate } from 'src/locales';
 // import { useAuthContext } from 'src/auth/hooks';
-import {
-  useGetCountries,
-  useGetInsuranceCos,
-  useGetEmployeeEngsBySpecialty,
-} from 'src/api';
+import { useGetCountries, useGetInsuranceCos, useGetEmployeeEngsBySpecialty } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
 // import { useSettingsContext } from 'src/components/settings';
@@ -121,7 +117,6 @@ export default function AppointmentBooking() {
           countriesOptions={countriesData}
           insuranseCosData={insuranseCosData}
           dataFiltered={dataFiltered}
-  
           dateError={dateError}
         />
 

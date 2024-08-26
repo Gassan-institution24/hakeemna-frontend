@@ -301,7 +301,7 @@ export default function WorkGroupsTableView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.tables.workgroups.edit(id));
+      router.push(paths.unitservice.tables.workgroups.permissions.employee(id));
     },
     [router]
   );

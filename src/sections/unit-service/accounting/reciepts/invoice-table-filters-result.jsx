@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 
 import { fDate } from 'src/utils/format-time';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
 
@@ -23,6 +25,7 @@ export default function InvoiceTableFiltersResult({
   results,
   ...other
 }) {
+  const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveKeyword = useCallback(() => {
@@ -52,7 +55,7 @@ export default function InvoiceTableFiltersResult({
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('results found')}
         </Box>
       </Box>
 
@@ -103,7 +106,7 @@ export default function InvoiceTableFiltersResult({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('clear')}
         </Button>
       </Stack>
     </Stack>

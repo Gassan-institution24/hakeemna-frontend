@@ -158,7 +158,7 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   {...field}
-                  label={t("Medical sick leave start*")}
+                  label={t('Medical sick leave start*')}
                   sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
@@ -176,7 +176,7 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   {...field}
-                  label={t("Medical sick leave end*")}
+                  label={t('Medical sick leave end*')}
                   sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
@@ -188,7 +188,7 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
                 />
               )}
             />
-            <RHFTextField name="description" multiline label={t("description")} />
+            <RHFTextField name="description" multiline label={t('description')} />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>

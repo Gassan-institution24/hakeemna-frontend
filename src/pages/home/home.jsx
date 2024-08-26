@@ -9,7 +9,10 @@ export default function HomePage() {
     <>
       <Helmet>
         <title>Hakeemna 360 : منصة حكيمنا الطبية</title>
-        <meta name="description" content="Hakeemna is an electronic health care system EHR provides ultimate services such as booking medical appointment and mangement of unit of service like hospitals and clinics in all field like accounting and entrance management" />
+        <meta
+          name="description"
+          content="Hakeemna is an electronic health care system EHR provides ultimate services such as booking medical appointment and mangement of unit of service like hospitals and clinics in all field like accounting and entrance management"
+        />
       </Helmet>
 
       <HomeView />

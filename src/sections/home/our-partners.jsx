@@ -50,7 +50,7 @@ export default function OurPartners() {
     rowsPerPage,
   });
   if (unitservicesData.length < 1) {
-    return ''
+    return '';
   }
   return (
     <>

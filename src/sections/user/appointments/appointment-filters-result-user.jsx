@@ -52,7 +52,6 @@ export default function JobFiltersResult({
           </Block>
         )}
 
- 
         {filters.countries !== 'all' && (
           <Block label="Countries:">
             <Chip
@@ -64,7 +63,6 @@ export default function JobFiltersResult({
             />
           </Block>
         )}
-
 
         {canReset && (
           <Button

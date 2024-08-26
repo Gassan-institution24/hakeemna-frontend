@@ -60,11 +60,13 @@ export default function InvoiceDetails({ invoice, refetch }) {
     [invoice._id, refetch]
   );
 
-  let patientName
+  let patientName;
   if (invoice?.patient) {
-    patientName = curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english
+    patientName = curLangAr ? invoice?.patient?.name_arabic : invoice?.patient?.name_english;
   } else if (invoice?.unit_service_patient) {
-    patientName = curLangAr ? invoice?.unit_service_patient?.name_arabic : invoice?.unit_service_patient?.name_english
+    patientName = curLangAr
+      ? invoice?.unit_service_patient?.name_arabic
+      : invoice?.unit_service_patient?.name_english;
   }
 
   const renderList = (
@@ -76,7 +78,9 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {curLangAr ? patientName || invoice?.stakeholder?.name_arabic : patientName || invoice?.stakeholder?.name_english}
+          {curLangAr
+            ? patientName || invoice?.stakeholder?.name_arabic
+            : patientName || invoice?.stakeholder?.name_english}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -192,17 +196,19 @@ export default function InvoiceDetails({ invoice, refetch }) {
           </Stack>
           <Box />
 
-          {invoice.patient && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
-            </Typography>
-            {curLangAr ? invoice.patient?.name_arabic : invoice.patient?.name_english}
-            <br />
-            {invoice.patient?.address}
-            <br />
-            {t('phone')}: {invoice.patient?.mobile_num1}
-            <br />
-          </Stack>}
+          {invoice.patient && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('from')}
+              </Typography>
+              {curLangAr ? invoice.patient?.name_arabic : invoice.patient?.name_english}
+              <br />
+              {invoice.patient?.address}
+              <br />
+              {t('phone')}: {invoice.patient?.mobile_num1}
+              <br />
+            </Stack>
+          )}
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -216,17 +222,19 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          {invoice.stakeholder && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('to')}
-            </Typography>
-            {curLangAr ? invoice.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
-            <br />
-            {invoice.stakeholder?.address}
-            <br />
-            {t('phone')}: {invoice.stakeholder?.phone}
-            <br />
-          </Stack>}
+          {invoice.stakeholder && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('to')}
+              </Typography>
+              {curLangAr ? invoice.stakeholder?.name_arabic : invoice.stakeholder?.name_english}
+              <br />
+              {invoice.stakeholder?.address}
+              <br />
+              {t('phone')}: {invoice.stakeholder?.phone}
+              <br />
+            </Stack>
+          )}
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>

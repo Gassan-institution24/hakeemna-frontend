@@ -59,21 +59,29 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         disableBeacon: true,
         content: (
           <>
-            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-              {t("General information about creating 'Automated Appointment Settings', as these settings will create the appointments available for booking for each day automatically and automatically according to the conditions that you have previously specified, you should know that you can make 'Automated Appointment Settings' flexibly and independently according to each work group and according to each work shift.")}
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              {t(
+                "General information about creating 'Automated Appointment Settings', as these settings will create the appointments available for booking for each day automatically and automatically according to the conditions that you have previously specified, you should know that you can make 'Automated Appointment Settings' flexibly and independently according to each work group and according to each work shift."
+              )}
             </Typography>
-            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               <br />
-              {t("In this part of the screen you must enter the following information:")}<br />
+              {t('In this part of the screen you must enter the following information:')}
+              <br />
             </Typography>
-            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-              {t("(2) In addition to the above, you must specify for which 'work shift' and for which 'work group' you want to create these appointments. Remember that in the work group you have linked all employees and workers in that group, and therefore creating 'Automated Appointment Settings' will be appointments for all members of that work group.")} <br />
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              {t(
+                "(2) In addition to the above, you must specify for which 'work shift' and for which 'work group' you want to create these appointments. Remember that in the work group you have linked all employees and workers in that group, and therefore creating 'Automated Appointment Settings' will be appointments for all members of that work group."
+              )}{' '}
+              <br />
             </Typography>
-            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-              {t("(3) You must specify the time period for each appointment.")}
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              {t('(3) You must specify the time period for each appointment.')}
             </Typography>
-            <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-              {t("(4) Very important: Remember to write the number of days you want appointments to be available for, for example, if you write 30 days, the patient will be able to book an appointment on any day of the 30 days following today’s date (of course according to the settings conditions that you will write in this step.")}
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              {t(
+                '(4) Very important: Remember to write the number of days you want appointments to be available for, for example, if you write 30 days, the patient will be able to book an appointment on any day of the 30 days following today’s date (of course according to the settings conditions that you will write in this step.'
+              )}
             </Typography>
           </>
         ),
@@ -83,10 +91,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         title: t('Step Two (2) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t('In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.')}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
+            )}
             <br />
-            {t("Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly.")}
+            {t(
+              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+            )}
           </Typography>
         ),
       },
@@ -95,8 +107,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         title: t('Step Three (3) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t('Here you can add holidays that last only one day (eg Labor Day / Independence Day)')}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'Here you can add holidays that last only one day (eg Labor Day / Independence Day)'
+            )}
           </Typography>
         ),
       },
@@ -105,8 +119,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         title: t('Step Four (4) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("Here you can add holidays that last more than one day, for example 'Eid al-Adha' or 'Annual Holiday'.")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              "Here you can add holidays that last more than one day, for example 'Eid al-Adha' or 'Annual Holiday'."
+            )}
           </Typography>
         ),
       },
@@ -166,7 +182,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     () => ({
       unit_service:
         appointmentConfigData?.unit_service._id ||
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ._id,
       department:
         employeeInfo?.department?._id ||
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.department?._id,
@@ -346,7 +363,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

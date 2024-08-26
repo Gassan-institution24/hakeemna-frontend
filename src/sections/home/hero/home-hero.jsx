@@ -87,7 +87,7 @@ export default function HomeHero() {
           <Button
             variant="contained"
             color="primary"
-            sx={{ borderRadius: 0, width: '50%', py: 1.5, }}
+            sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
             onClick={() => setCurrentPage('users')}
           >
             {t('beneficiary')}
@@ -163,7 +163,7 @@ export default function HomeHero() {
             <img src="/assets/images/home/hero/users.png" width={xlUp ? 300 : 200} alt="users" />
             <div style={{ position: 'absolute', top: -200, right: curLangAr ? 50 : 70 }}>
               <Typography
-                variant={xlUp ? "h4" : 'h5'}
+                variant={xlUp ? 'h4' : 'h5'}
                 sx={{
                   fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
                 }}
@@ -199,7 +199,11 @@ export default function HomeHero() {
               zIndex: 2,
             }}
           >
-            <img src="/assets/images/home/hero/doctors.png" width={xlUp ? 350 : 250} alt="doctors" />
+            <img
+              src="/assets/images/home/hero/doctors.png"
+              width={xlUp ? 350 : 250}
+              alt="doctors"
+            />
             <Iconify
               sx={{
                 position: 'absolute',
@@ -221,7 +225,7 @@ export default function HomeHero() {
             />
             <div style={{ position: 'absolute', top: -100, right: 80 }}>
               <Typography
-                variant={xlUp ? "h4" : 'h5'}
+                variant={xlUp ? 'h4' : 'h5'}
                 sx={{
                   position: 'absolute',
                   top: -80,

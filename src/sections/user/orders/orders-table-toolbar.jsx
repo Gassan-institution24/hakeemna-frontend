@@ -116,15 +116,14 @@ export default function AppointmentToolbar({
           </IconButton>
         )}
       </Stack> */}
-      </Stack >
+      </Stack>
       {/* </Stack> */}
 
-      < CustomPopover
+      <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }
-        }
+        sx={{ width: 140 }}
       >
         <MenuItem
           lang="ar"
@@ -145,7 +144,7 @@ export default function AppointmentToolbar({
           <Iconify icon="solar:export-bold" />
           {t('export')}
         </MenuItem>
-      </CustomPopover >
+      </CustomPopover>
     </>
   );
 }

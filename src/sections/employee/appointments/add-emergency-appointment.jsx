@@ -66,7 +66,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ._id,
       start_time: new Date(),
       appointment_type: appointmenttypesData?.[0]?._id,
       work_group: workGroupsData?.[0]?._id,
@@ -154,8 +155,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
   }, [errors, enqueueSnackbar]);
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
@@ -186,8 +187,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
                         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                          ?.unit_service?.country?.time_zone ||
-                        'Asia/Amman'
+                          ?.unit_service?.country?.time_zone || 'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

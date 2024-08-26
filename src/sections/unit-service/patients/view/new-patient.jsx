@@ -1,4 +1,3 @@
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -12,12 +11,12 @@ import TableManyNewForm from '../new-patient/add-many-patients';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t("add new patients")} /// edit
+        heading={t('add new patients')} /// edit
         links={[
           {
             name: t('dashboard'),
@@ -27,7 +26,7 @@ export default function TableCreateView() {
             name: t('patients'),
             href: paths.superadmin.tables.list,
           },
-          { name: (t('new')) },
+          { name: t('new') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

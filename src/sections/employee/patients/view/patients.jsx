@@ -9,20 +9,20 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSPatients } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+
+import { useSnackbar } from 'notistack';
 
 import { Button } from '@mui/material';
 
@@ -30,12 +30,12 @@ import { RouterLink } from 'src/routes/components';
 
 import { useDebounce } from 'src/hooks/use-debounce';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
 
 import TableDetailRow from '../patients_row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -71,19 +71,23 @@ export default function PatientTableView() {
   const componentRef = useRef();
 
   const { user } = useAuthContext();
-  const { enqueueSnackbar } = useSnackbar()
-
+  const { enqueueSnackbar } = useSnackbar();
 
   const [filters, setFilters] = useState(defaultFilters);
-  const filtersToSend = useDebounce(filters)
+  const filtersToSend = useDebounce(filters);
 
   const { patientsData, refetch, length } = useGetUSPatients(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
       select: 'patient name_english name_arabic file_code',
       populate: [
-        { path: 'patient', select: 'name_english name_arabic sequence_number', populate: { path: 'nationality', select: 'code' }, },
-        { path: 'work_group', select: 'name_english name_arabic' }],
+        {
+          path: 'patient',
+          select: 'name_english name_arabic sequence_number',
+          populate: { path: 'nationality', select: 'code' },
+        },
+        { path: 'work_group', select: 'name_english name_arabic' },
+      ],
       employee: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
       page: table.page || 0,
       sortBy: table.orderBy || 'code',
@@ -92,8 +96,6 @@ export default function PatientTableView() {
       ...filtersToSend,
     }
   );
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -121,9 +123,9 @@ export default function PatientTableView() {
   const handleDeleteRow = useCallback(
     async (id) => {
       try {
-        await axiosInstance.delete(endpoints.usPatients.one(id))
-        enqueueSnackbar(t('deleted successfully'))
-        refetch()
+        await axiosInstance.delete(endpoints.usPatients.one(id));
+        enqueueSnackbar(t('deleted successfully'));
+        refetch();
       } catch (error) {
         enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
           variant: 'error',
@@ -215,23 +217,17 @@ export default function PatientTableView() {
               />
 
               <TableBody>
-                {patientsData
-                  .map((row, idx) => (
-                    <TableDetailRow
-                      key={idx}
-                      row={row}
-                      filters={filters}
-                      setFilters={setFilters}
-                      selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                      onDeleteRow={() => handleDeleteRow(row._id)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, patientsData.length)}
-                />
+                {patientsData.map((row, idx) => (
+                  <TableDetailRow
+                    key={idx}
+                    row={row}
+                    filters={filters}
+                    setFilters={setFilters}
+                    selected={table.selected.includes(row._id)}
+                    onSelectRow={() => table.onSelectRow(row._id)}
+                    onDeleteRow={() => handleDeleteRow(row._id)}
+                  />
+                ))}
 
                 <TableNoData notFound={notFound} />
               </TableBody>

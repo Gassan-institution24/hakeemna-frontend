@@ -31,8 +31,8 @@ export function useFindKeywords(name) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetKeywrds() {
-  const URL = [endpoints.keywords.all];
+export function useGetKeywords(params) {
+  const URL = [endpoints.employees.keywords, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

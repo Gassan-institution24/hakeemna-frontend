@@ -146,23 +146,27 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             <Text style={styles.body2}>{stakeholder.phone}</Text>
           </View>
 
-          {unit_service && <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
-            <Text style={styles.body2}>
-              {curLangAr ? unit_service.name_arabic : unit_service.name_english}
-            </Text>
-            <Text style={styles.body2}>{unit_service.address}</Text>
-            <Text style={styles.body2}>{unit_service.phone}</Text>
-          </View>}
+          {unit_service && (
+            <View style={styles.col6}>
+              <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
+              <Text style={styles.body2}>
+                {curLangAr ? unit_service.name_arabic : unit_service.name_english}
+              </Text>
+              <Text style={styles.body2}>{unit_service.address}</Text>
+              <Text style={styles.body2}>{unit_service.phone}</Text>
+            </View>
+          )}
 
-          {patient && <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
-            <Text style={styles.body2}>
-              {curLangAr ? patient.name_arabic : patient.name_english}
-            </Text>
-            <Text style={styles.body2}>{patient.address}</Text>
-            <Text style={styles.body2}>{patient.mobile_num1}</Text>
-          </View>}
+          {patient && (
+            <View style={styles.col6}>
+              <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
+              <Text style={styles.body2}>
+                {curLangAr ? patient.name_arabic : patient.name_english}
+              </Text>
+              <Text style={styles.body2}>{patient.address}</Text>
+              <Text style={styles.body2}>{patient.mobile_num1}</Text>
+            </View>
+          )}
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
@@ -240,9 +244,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
                 <View style={styles.tableCell_2}>
                   <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>
-                    {curLangAr ? item.product?.name_arabic : item.product?.name_english}
-                  </Text>
+                  <Text>{curLangAr ? item.product?.name_arabic : item.product?.name_english}</Text>
                 </View>
 
                 <View style={styles.tableCell_3}>
