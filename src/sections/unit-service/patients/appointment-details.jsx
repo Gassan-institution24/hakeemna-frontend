@@ -154,8 +154,7 @@ export default function AppointmentDetails({ onClose, refetch, ...other }) {
                     const selectedTime = zonedTimeToUtc(
                       newValue,
                       user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                        ?.unit_service?.country?.time_zone ||
-                      'Asia/Amman'
+                        ?.unit_service?.country?.time_zone || 'Asia/Amman'
                     );
                     setValue('start_time', new Date(selectedTime));
                   }}

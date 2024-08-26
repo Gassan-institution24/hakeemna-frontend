@@ -7,11 +7,11 @@ import AppointmentsToday from 'src/sections/employee/appointmentsToday/appointme
 // ----------------------------------------------------------------------
 
 export default function AppointmentsForToday() {
-  const {t} = useTranslate()
+  const { t } = useTranslate();
   return (
     <>
       <Helmet>
-        <title>{t("appointmentsToday")}</title>
+        <title>{t('appointmentsToday')}</title>
         <meta name="description" content="meta" />
       </Helmet>
       <AppointmentsToday />

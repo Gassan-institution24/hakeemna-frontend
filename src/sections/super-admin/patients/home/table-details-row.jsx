@@ -106,7 +106,7 @@ export default function CountriesTableRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-      // onClick={showCommunications}
+        // onClick={showCommunications}
       >
         Communications
       </TableCell>
@@ -139,7 +139,7 @@ export default function CountriesTableRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-      // onClick={showInsurance}
+        // onClick={showInsurance}
       >
         Offers optained | offers Sent
       </TableCell>

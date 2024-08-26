@@ -21,7 +21,11 @@ export default function RecordPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id, Entrance?.unit_service_patient);
+  const { medRecord } = useGetMedRecord(
+    Entrance?.service_unit?._id,
+    Entrance?.patient?._id,
+    Entrance?.unit_service_patient
+  );
   console.log(medRecord);
   return (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
@@ -49,7 +53,11 @@ export default function RecordPage() {
       {medRecord?.map((info, index) => (
         <>
           <Box key={index} sx={{ my: 2 }}>
-            <Typography variant="h3"> <mark>{fDateTime(info?.created_at)}</mark> </Typography> <br />
+            <Typography variant="h3">
+              {' '}
+              <mark>{fDateTime(info?.created_at)}</mark>{' '}
+            </Typography>{' '}
+            <br />
             {info?.doctor_report?.map(
               (doctorReport, i) =>
                 doctorReport && (
@@ -83,7 +91,9 @@ export default function RecordPage() {
                 drugsReport && (
                   <Box key={`drugsReport-${i}`}>
                     <Typography variant="h4">Prescription </Typography>
-                    <Typography sx={{ color: 'gray' }}>{drugsReport?.medicines?.trade_name}</Typography>
+                    <Typography sx={{ color: 'gray' }}>
+                      {drugsReport?.medicines?.trade_name}
+                    </Typography>
                     <Typography sx={{ color: 'gray' }}>{drugsReport?.Frequency_per_day}</Typography>
                     <Typography sx={{ color: 'gray' }}>{drugsReport?.Num_days}</Typography>
                     <Typography sx={{ color: 'gray' }}>{drugsReport?.Doctor_Comments}</Typography>

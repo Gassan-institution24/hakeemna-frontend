@@ -75,8 +75,9 @@ export default function JobItem({ job, onView, onEdit, onDelete }) {
               {curLangAr ? name_arabic : name_english}
             </Link>
           }
-          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${curLangAr ? country?.name_arabic : country?.name_english
-            }`}
+          secondary={`${curLangAr ? city?.name_arabic : city?.name_english}, ${
+            curLangAr ? country?.name_arabic : country?.name_english
+          }`}
           primaryTypographyProps={{
             typography: 'subtitle1',
           }}

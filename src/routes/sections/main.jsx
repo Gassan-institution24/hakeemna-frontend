@@ -37,7 +37,7 @@ export const mainRoutes = [
     children: [
       { path: 'patients', element: <Patientsservices /> },
       { path: 'termsandcondition', element: <TermsAndCondition /> },
-      { path: 'privacypolicy', element: <Privacypolicy/> },
+      { path: 'privacypolicy', element: <Privacypolicy /> },
       { path: 'units', element: <Unitservices /> },
       { path: 'UsPricing', element: <UsPricing /> },
       { path: 'about', element: <AboutUs /> },

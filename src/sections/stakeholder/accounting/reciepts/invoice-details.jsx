@@ -69,7 +69,9 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {curLangAr ? invoice?.patient?.name_arabic || invoice?.unit_service?.name_arabic : invoice?.patient?.name_english || invoice?.unit_service?.name_english}
+          {curLangAr
+            ? invoice?.patient?.name_arabic || invoice?.unit_service?.name_arabic
+            : invoice?.patient?.name_english || invoice?.unit_service?.name_english}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -196,29 +198,33 @@ export default function InvoiceDetails({ invoice, refetch }) {
             <br />
           </Stack>
 
-          {invoice.unit_service && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
-            </Typography>
-            {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
-            <br />
-            {invoice.unit_service.address}
-            <br />
-            {t('phone')}: {invoice.unit_service.phone}
-            <br />
-          </Stack>}
+          {invoice.unit_service && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('from')}
+              </Typography>
+              {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
+              <br />
+              {invoice.unit_service.address}
+              <br />
+              {t('phone')}: {invoice.unit_service.phone}
+              <br />
+            </Stack>
+          )}
 
-          {invoice.patient && <Stack sx={{ typography: 'body2' }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t('from')}
-            </Typography>
-            {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
-            <br />
-            {invoice.patient.address}
-            <br />
-            {t('phone')}: {invoice.patient.mobile_num1}
-            <br />
-          </Stack>}
+          {invoice.patient && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('from')}
+              </Typography>
+              {curLangAr ? invoice.patient.name_arabic : invoice.patient.name_english}
+              <br />
+              {invoice.patient.address}
+              <br />
+              {t('phone')}: {invoice.patient.mobile_num1}
+              <br />
+            </Stack>
+          )}
 
           {invoice.dueDate && (
             <Stack sx={{ typography: 'body2' }}>

@@ -21,9 +21,7 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -95,8 +93,6 @@ export default function AppointmentsView() {
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
     filters.priority !== defaultFilters.priority || filters.category !== defaultFilters.category;
@@ -253,11 +249,6 @@ export default function AppointmentsView() {
                     />
                   );
                 })}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

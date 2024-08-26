@@ -85,8 +85,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                   const selectedTime = zonedTimeToUtc(
                     newValue,
                     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                      ?.unit_service?.country?.time_zone ||
-                    'Asia/Amman'
+                      ?.unit_service?.country?.time_zone || 'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}
@@ -113,8 +112,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                   const selectedTime = zonedTimeToUtc(
                     newValue,
                     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                      ?.unit_service?.country?.time_zone ||
-                    'Asia/Amman'
+                      ?.unit_service?.country?.time_zone || 'Asia/Amman'
                   );
                   field.onChange(selectedTime);
                 }}

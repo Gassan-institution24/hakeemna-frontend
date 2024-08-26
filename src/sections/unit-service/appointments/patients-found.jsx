@@ -29,7 +29,13 @@ import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
-export default function PatientsFound({ SelectedAppointment, reset, selected, oldPatients, usPatients }) {
+export default function PatientsFound({
+  SelectedAppointment,
+  reset,
+  selected,
+  oldPatients,
+  usPatients,
+}) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -67,12 +73,12 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       const data = {
         note,
         lang: curLangAr,
-      }
+      };
       if (usPatients) {
-        data.unit_service_patient = row._id
-        data.patient = row?.patient
+        data.unit_service_patient = row._id;
+        data.patient = row?.patient;
       } else {
-        data.patient = row._id
+        data.patient = row._id;
       }
 
       await axiosInstance.patch(endpoints.appointments.book(selected), data);

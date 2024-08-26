@@ -199,7 +199,8 @@ export default function TableCreateView() {
       service_types: values.service_types,
       emergency: true,
       unit_service:
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
       department: workGroupsData.filter((item) => item._id === values.work_group)?.[0]?.department
         ?._id,
     });
@@ -309,7 +310,9 @@ export default function TableCreateView() {
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Card sx={{ px: 3, pb: 3 }}>
           <Stack spacing={2.5} sx={{ my: 3 }}>
-            <Typography variant='subtitle1' color='text.disabled'>{t('appointment details')}</Typography>
+            <Typography variant="subtitle1" color="text.disabled">
+              {t('appointment details')}
+            </Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -383,7 +386,9 @@ export default function TableCreateView() {
           </Stack>
           <Divider />
           <br />
-          <Typography variant='subtitle1' color='text.disabled' mb={2.5}>{t('patient details')}</Typography>
+          <Typography variant="subtitle1" color="text.disabled" mb={2.5}>
+            {t('patient details')}
+          </Typography>
           <RHFRadioGroup
             row
             name="patientExist"
@@ -436,11 +441,7 @@ export default function TableCreateView() {
                   name="identification_num"
                   label={t('ID number')}
                 />
-                <RHFPhoneNumber
-                  name="mobile_num1"
-                  onBlur={handleBlur}
-                  label={t('mobile number')}
-                />
+                <RHFPhoneNumber name="mobile_num1" onBlur={handleBlur} label={t('mobile number')} />
                 <RHFPhoneNumber
                   name="mobile_num2"
                   onBlur={handleBlur}
@@ -479,11 +480,7 @@ export default function TableCreateView() {
                   name="identification_num"
                   label={t('ID number')}
                 />
-                <RHFPhoneNumber
-                  name="mobile_num1"
-                  onBlur={handleBlur}
-                  label={t('mobile number')}
-                />
+                <RHFPhoneNumber name="mobile_num1" onBlur={handleBlur} label={t('mobile number')} />
                 <RHFPhoneNumber
                   name="mobile_num2"
                   onBlur={handleBlur}

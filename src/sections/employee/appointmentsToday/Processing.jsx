@@ -40,7 +40,11 @@ export default function Processing() {
 
   const { id } = params;
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { medRecord } = useGetMedRecord(Entrance?.service_unit?._id, Entrance?.patient?._id, Entrance?.unit_service_patient);
+  const { medRecord } = useGetMedRecord(
+    Entrance?.service_unit?._id,
+    Entrance?.patient?._id,
+    Entrance?.unit_service_patient
+  );
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { CheckListData } = useGetMyCheckLists(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
@@ -121,17 +125,24 @@ export default function Processing() {
         <>
           {t('Upload files')}
           <br />
-          <TabsView patient={data} unit_service_patient={Entrance?.unit_service_patient} service_unit={Entrance?.service_unit?._id} />
+          <TabsView
+            patient={data}
+            unit_service_patient={Entrance?.unit_service_patient}
+            service_unit={Entrance?.service_unit?._id}
+          />
         </>
       ),
       icon: <Iconify icon="mingcute:folders-fill" width={25} />,
     },
-    adjustabledocument?.length > 0  && {
+    adjustabledocument?.length > 0 && {
       key: 5,
       title: (
         <>
           {t('Adjustable document')} ({t('optional')}) <br />
-          <Adjustabledocument patient={data} unit_service_patient={Entrance?.unit_service_patient} />
+          <Adjustabledocument
+            patient={data}
+            unit_service_patient={Entrance?.unit_service_patient}
+          />
         </>
       ),
       icon: <Iconify icon="mingcute:document-fill" width={24} />,

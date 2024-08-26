@@ -7,27 +7,31 @@ import { useGetOneUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import PatientFile from '../patient-profile/patient-file';
+import EditPatient from '../patient-profile/patient-edit';
 import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
-import EditPatient from '../patient-profile/patient-edit';
 
 // ----------------------------------------------------------------------
 
 export default function PatientProfile() {
   const { id } = useParams();
   const { usPatientData } = useGetOneUSPatient(id, {
-    populate: [{
-      path: 'patient', populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet'
-    }, { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' }]
+    populate: [
+      {
+        path: 'patient',
+        populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet',
+      },
+      { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
+    ],
   });
 
   // const { isMedLab } = useUSTypeGuard();
 
-  const patientData = usPatientData.patient ? usPatientData.patient : usPatientData
+  const patientData = usPatientData.patient ? usPatientData.patient : usPatientData;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -96,15 +100,20 @@ export default function PatientProfile() {
     { title: 'smoking', value: patientData?.smoking },
     { title: 'alcohol consumption', value: patientData?.alcohol_consumption },
     { title: 'sport exercises', value: patientData?.sport_exercises },
-  ]
+  ];
 
   return (
     <Container maxWidth="xl">
       <Card sx={{ px: 4, py: 2, mb: 4 }}>
-        <Stack direction={{ md: 'row' }} alignItems='center' gap={5} >
-          <Avatar src={patientData?.profile_picture} sx={{ width: { md: 100 }, height: { md: 100 } }} />
+        <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
+          <Avatar
+            src={patientData?.profile_picture}
+            sx={{ width: { md: 100 }, height: { md: 100 } }}
+          />
           <Stack gap={1}>
-            <Typography variant='h6'>{curLangAr ? patientData?.name_arabic : patientData?.name_english}</Typography>
+            <Typography variant="h6">
+              {curLangAr ? patientData?.name_arabic : patientData?.name_english}
+            </Typography>
             <Box
               rowGap={0.5}
               columnGap={8}
@@ -116,7 +125,10 @@ export default function PatientProfile() {
               }}
             >
               {patientGeneralData?.map((one, idx) => (
-                <Typography key={idx} variant='body2'><span style={{ fontWeight: 650, color: '#637381' }}>{t(one?.title)}</span>:{' '}{t(one.value)}{' '}{one.unit}</Typography>
+                <Typography key={idx} variant="body2">
+                  <span style={{ fontWeight: 650, color: '#637381' }}>{t(one?.title)}</span>:{' '}
+                  {t(one.value)} {one.unit}
+                </Typography>
               ))}
             </Box>
           </Stack>

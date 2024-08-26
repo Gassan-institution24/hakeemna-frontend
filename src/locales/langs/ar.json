@@ -656,6 +656,8 @@
   "authored books": "كتب مؤلفة",
   "conferences": "مؤتمرات",
   "other": "اخرى",
+  "filters": "خيارات البحث",
+  "search by doctor, specialty or disease": "ابحث عن طريق اسم الطبيب او التخصص او المرض",
   "are you sure want to delete": "هل تريد حذف",
   "deleted successfully": "تم الحذف بنجاح",
   "create all": "اضافة الكل",

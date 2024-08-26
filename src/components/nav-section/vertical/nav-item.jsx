@@ -48,7 +48,7 @@ const NavItem = forwardRef(
         onClick={logout}
         {...other}
         id={navItemId}
-        lang='ar'
+        lang="ar"
       >
         {!subItem && icon && (
           <Box component="span" className="icon">

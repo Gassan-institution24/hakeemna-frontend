@@ -154,8 +154,8 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
   });
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
@@ -186,8 +186,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
                       const selectedTime = zonedTimeToUtc(
                         newValue,
                         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                          ?.unit_service?.country?.time_zone ||
-                        'Asia/Amman'
+                          ?.unit_service?.country?.time_zone || 'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

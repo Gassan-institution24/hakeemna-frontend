@@ -105,11 +105,11 @@ export default function MovementTableRow({
             primary={required_amount}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          // secondaryTypographyProps={{
-          //   mt: 0.5,
-          //   component: 'span',
-          //   typography: 'caption',
-          // }}
+            // secondaryTypographyProps={{
+            //   mt: 0.5,
+            //   component: 'span',
+            //   typography: 'caption',
+            // }}
           />
         </TableCell>
         <TableCell align="center">

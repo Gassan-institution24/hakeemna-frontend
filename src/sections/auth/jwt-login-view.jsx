@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,13 +27,12 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, setPatientId }) {
   const { login, authenticated } = useAuthContext();
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
 
@@ -82,7 +82,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
           patient: userData?.user?.patient,
           lang: curLangAr,
         });
-        enqueueSnackbar('appointment booked successfully')
+        enqueueSnackbar('appointment booked successfully');
         onSignin();
         refetch();
       } else {
@@ -100,9 +100,9 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
 
   useEffect(() => {
     if (authenticated) {
-      router.push(paths.dashboard.root)
+      router.push(paths.dashboard.root);
     }
-  }, [authenticated, router])
+  }, [authenticated, router]);
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>

@@ -60,12 +60,12 @@ export default function TableDetailsRow({
 
       <TableCell
         align="center"
-      // sx={{
-      //   cursor: 'pointer',
-      //   color: '#3F54EB',
-      //   // textDecoration: 'underline',
-      // }}
-      // onClick={() => setFilters({ ...filters, name: us_type.name_english })}
+        // sx={{
+        //   cursor: 'pointer',
+        //   color: '#3F54EB',
+        //   // textDecoration: 'underline',
+        // }}
+        // onClick={() => setFilters({ ...filters, name: us_type.name_english })}
       >
         {us_type?.name_english}
       </TableCell>

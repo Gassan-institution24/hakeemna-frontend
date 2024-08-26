@@ -35,14 +35,15 @@ export default function BookDetails({
   const { t } = useTranslate();
   const { data } = useGetAppointment(selected, {
     select: '_id work_group appointment_type unit_service start_time online_available',
-    populate: [{ path: 'work_group', select: 'name_english name_arabic' },
-    { path: 'unit_service', select: 'name_english name_arabic' },
-    { path: 'appointment_type', select: 'name_english name_arabic' }]
-  })
+    populate: [
+      { path: 'work_group', select: 'name_english name_arabic' },
+      { path: 'unit_service', select: 'name_english name_arabic' },
+      { path: 'appointment_type', select: 'name_english name_arabic' },
+    ],
+  });
 
   const [timeListItem, setTimeListItem] = useState();
   const mdUp = useResponsive('up', 'md');
-
 
   useEffect(() => {
     if (!loading.value) {
@@ -89,7 +90,11 @@ export default function BookDetails({
           slots={{ toolbar: 'test' }}
           slotProps={{ actionBar: { actions: [] } }}
           value={new Date(selectedDate)}
-          onChange={(newValue) => setSelectedDate(new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0))}
+          onChange={(newValue) =>
+            setSelectedDate(
+              new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0)
+            )
+          }
         />
         <Stack
           sx={{
@@ -139,14 +144,7 @@ BookDetails.propTypes = {
 // ----------------------------------------------------------------------
 
 function ReviewItem({ item }) {
-  const {
-    _id,
-    work_group,
-    appointment_type,
-    unit_service,
-    start_time,
-    online_available,
-  } = item;
+  const { _id, work_group, appointment_type, unit_service, start_time, online_available } = item;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -200,9 +198,7 @@ function ReviewItem({ item }) {
           secondary={
             isValid(new Date(start_time)) &&
             new Date(start_time).toLocaleDateString(t('en-US'), {
-              timeZone:
-                unit_service?.country?.time_zone ||
-                'Asia/Amman',
+              timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
             })
           }
           primaryTypographyProps={{ typography: 'subtitle1', noWrap: true }}

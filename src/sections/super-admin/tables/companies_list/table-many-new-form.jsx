@@ -230,12 +230,12 @@ export default function NewEditManyForm() {
                   headLabel={TABLE_HEAD}
                   rowCount={data.length}
                   numSelected={table.selected.length}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     data.map((row, index, idx) => index)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     data.map((row, index, idx) => index)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

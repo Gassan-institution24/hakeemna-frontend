@@ -151,7 +151,7 @@ export default function InvoiceTableToolbar({
 
           <Select
             onChange={handleFilterUnitService}
-            input={<OutlinedInput label={t("unit of service")} />}
+            input={<OutlinedInput label={t('unit of service')} />}
             sx={{ textTransform: 'capitalize' }}
             value={filters.unit_service}
           >
@@ -161,8 +161,7 @@ export default function InvoiceTableToolbar({
               <MenuItem key={option._id} value={option?._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
-            )
-            )}
+            ))}
           </Select>
         </FormControl>
 
@@ -201,7 +200,7 @@ export default function InvoiceTableToolbar({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
       </Stack> */}
-    </Stack >
+      </Stack>
 
       <CustomPopover
         open={popover.open}

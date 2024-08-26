@@ -31,7 +31,7 @@ const useStyles = () =>
         mb8: { marginBottom: 7 },
         mb40: { marginBottom: 35 },
         h1: { fontSize: 30, fontWeight: 800 },
-        h2: { fontSize: 20, fontWeight: 800 , color:'red'},
+        h2: { fontSize: 20, fontWeight: 800, color: 'red' },
         h3: { fontSize: 12, fontWeight: 800 },
 
         subtitle1: {

@@ -85,7 +85,16 @@ export default function PaymentControlView() {
     movement: movement || '',
   });
 
-  const { incomePaymentData, lengths, totals, refetch, unitServices, patients, stakeholders, insuranceComapnies } = useGetIncomePaymentControl({
+  const {
+    incomePaymentData,
+    lengths,
+    totals,
+    refetch,
+    unitServices,
+    patients,
+    stakeholders,
+    insuranceComapnies,
+  } = useGetIncomePaymentControl({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     page: table.page || 0,
@@ -334,12 +343,12 @@ export default function PaymentControlView() {
                 rowCount={incomePaymentData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     incomePaymentData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     incomePaymentData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>

@@ -144,6 +144,7 @@ export const endpoints = {
   },
   specialities: {
     all: '/api/specialities',
+    options: '/api/specialities/options',
     many: '/api/specialities/many',
     one: (id) => (!id ? null : `/api/specialities/${id}`),
   },
@@ -188,6 +189,7 @@ export const endpoints = {
   },
   employees: {
     all: '/api/employees/',
+    keywords: '/api/employees/keywords',
     one: (id) => (!id ? null : `/api/employees/${id}`),
     find: ({
       email,
