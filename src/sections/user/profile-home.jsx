@@ -441,7 +441,7 @@ export default function ProfileHome() {
         backgroundSize: 'cover',
       }}
     >
-      <Box sx={{ mt: 4, p: 3, ml: 5 }}>
+      <Box sx={{ mt: 10, p: 3, ml: 5 }}>
         <Typography marginBottom={2}>
           {t('Name')}:&nbsp;&nbsp;&nbsp;
           {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}

@@ -5,7 +5,7 @@ import { Box, Container } from '@mui/system';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientAppointments } from 'src/api';
+import { useGetPatientCurrentAppointments, useGetPatientFinishedAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 
@@ -14,7 +14,8 @@ import FinishedAppoinment from './apointmentsfinished';
 
 export default function AppointmentData() {
   const { user } = useAuthContext();
-  const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
+  const { appointmentsData, refetch } = useGetPatientCurrentAppointments(user?.patient?._id);
+  const { finishedappointmentsData } = useGetPatientFinishedAppointments(user?.patient?._id);
   const { t } = useTranslate();
 
   const [currentTab, setCurrentTab] = useState('upcoming');
@@ -22,15 +23,9 @@ export default function AppointmentData() {
     setCurrentTab(newValue);
   }, []);
 
-  const pendingAppointments = appointmentsData.filter(
-    (info) =>
-      info.status === 'booked' ||
-      info.status === 'processing' ||
-      info.status === 'arrived' ||
-      info?.finished_or_not === false
-  );
+  const pendingAppointments = appointmentsData.filter((info) => info?.finished_or_not === false);
 
-  const finishedAppointments = appointmentsData?.filter(
+  const finishedAppointments = finishedappointmentsData?.filter(
     (info) =>
       (info.status === 'finished' && info?.started === false) || info?.finished_or_not === true
   );
