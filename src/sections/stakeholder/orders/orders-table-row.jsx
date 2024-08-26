@@ -110,16 +110,18 @@ export default function AppointmentsTableRow({
           <Iconify icon="solar:eye-bold" />
           {t('show')}
         </MenuItem>
-        {!invoiced && <MenuItem
-          lang="ar"
-          onClick={() => {
-            router.push(`${paths.stakeholder.accounting.economicmovements.add}?order=${_id}`);
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="hugeicons:invoice" />
-          {t('make an invoice')}
-        </MenuItem>}
+        {!invoiced && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              router.push(`${paths.stakeholder.accounting.economicmovements.add}?order=${_id}`);
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="hugeicons:invoice" />
+            {t('make an invoice')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

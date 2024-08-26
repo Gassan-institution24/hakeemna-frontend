@@ -15,20 +15,21 @@ export default function BookAppointment() {
   const [page, setPage] = useState(0);
   const [filters, setFilters] = useState({
     US_type: '',
-    speciality: '',
+    // speciality: '',
     country: '',
     city: '',
     insurance: '',
-    doctor: '',
+    name: '',
     rowsPerPage: 15,
-    sortBy: '',
-    order: '',
+    // sortBy: '',
+    // order: '',
     visibility_online_appointment: true,
   });
 
   const [employees, setEmployees] = useState([]);
   const { employeesData, hasMore, loading } = useGetEmployeeEngs({
     ...filters,
+    name: filters.name,
     page,
   });
 
@@ -53,10 +54,10 @@ export default function BookAppointment() {
     }
   }, [hasMore]);
 
-  const filterChange = (name, e) => {
+  const filterChange = (name, value) => {
     setPage(0);
     setEmployees([]);
-    setFilters((prev) => ({ ...prev, [name]: e.target.value }));
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   return (

@@ -21,7 +21,10 @@ export default function ServiceUnitPage() {
     <>
       <Helmet>
         <title> {curLangAr ? data?.name_arabic || '' : data?.name_english || ''}</title>
-        <meta name="description" content={curLangAr ? data?.arabic_introduction_letter : data?.introduction_letter} />
+        <meta
+          name="description"
+          content={curLangAr ? data?.arabic_introduction_letter : data?.introduction_letter}
+        />
       </Helmet>
 
       {data && !loading && <ServiceUnitView USData={data} />}

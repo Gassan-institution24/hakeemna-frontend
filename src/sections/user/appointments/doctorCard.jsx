@@ -11,7 +11,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fDm, fTime } from 'src/utils/format-time';
 
 import { useGetNearstAppointment } from 'src/api';
-import { useLocales,useTranslate,  } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
@@ -91,7 +91,9 @@ export default function DoctorCard({ info }) {
           </Typography>
           <Typography sx={{ fontSize: 13 }}>
             <Iconify width={18} icon="flat-color-icons:cell-phone" />{' '}
-            <span dir="ltr" style={{ position: 'relative', top: -3 }}>{info?.unit_service?.phone}</span>
+            <span dir="ltr" style={{ position: 'relative', top: -3 }}>
+              {info?.unit_service?.phone}
+            </span>
           </Typography>
         </Box>
       </Box>

@@ -20,10 +20,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -121,8 +119,6 @@ export default function LicenseMovementsView() {
     filters,
     dateError,
   });
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !!filters.name || filters.status !== 'active';
 
@@ -268,15 +264,6 @@ export default function LicenseMovementsView() {
                       onViewRow={() => handleViewRow(row.id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(
-                    table.page,
-                    table.rowsPerPage,
-                    separateEachUsMovement().length
-                  )}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

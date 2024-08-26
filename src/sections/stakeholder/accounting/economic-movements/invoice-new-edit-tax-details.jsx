@@ -28,10 +28,9 @@ export default function InvoiceNewEditDetails() {
 
   const { user } = useAuthContext();
 
-  const { productsData } = useGetStakeholderProducts(
-    user?.stakeholder?._id,
-    { populate: 'tax deduction', }
-  );
+  const { productsData } = useGetStakeholderProducts(user?.stakeholder?._id, {
+    populate: 'tax deduction',
+  });
 
   const { control, setValue, watch } = useFormContext();
 
@@ -71,7 +70,7 @@ export default function InvoiceNewEditDetails() {
             const deductionId = product?.deduction?._id;
             const deductionAmount =
               ((product.deduction ? product.deduction.percentage : 0) / 100) *
-              ((item.price_per_unit * item.quantity) - item.discount_amount)
+              (item.price_per_unit * item.quantity - item.discount_amount);
 
             if (!newDeductionSums[deductionId]) {
               newDeductionSums[deductionId] = {
@@ -107,8 +106,8 @@ export default function InvoiceNewEditDetails() {
       })),
     [deductionSums]
   );
-  console.log('summedTaxes', summedTaxes)
-  console.log('summedTaxes', summedDeductions)
+  console.log('summedTaxes', summedTaxes);
+  console.log('summedTaxes', summedDeductions);
 
   // useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
   // useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])
@@ -336,7 +335,9 @@ export default function InvoiceNewEditDetails() {
                 label={t('subtotal')}
                 placeholder="0.00"
                 value={
-                  values.products[index].subtotal === 0 ? '' : values.products[index].subtotal.toFixed(2)
+                  values.products[index].subtotal === 0
+                    ? ''
+                    : values.products[index].subtotal.toFixed(2)
                 }
                 InputProps={{
                   startAdornment: (
@@ -431,7 +432,9 @@ export default function InvoiceNewEditDetails() {
                 name={`products[${index}].total`}
                 label={t('total')}
                 placeholder="0.00"
-                value={values.products[index].total === 0 ? '' : values.products[index].total.toFixed(2)}
+                value={
+                  values.products[index].total === 0 ? '' : values.products[index].total.toFixed(2)
+                }
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

@@ -27,9 +27,10 @@ export default function Share() {
       })
       .catch((err) => {
         enqueueSnackbar(
-          `${curLangAr
-            ? 'حدث خطأ ما, الرجاء المحاولة لاحفا'
-            : 'Something went wrong, please try again later'
+          `${
+            curLangAr
+              ? 'حدث خطأ ما, الرجاء المحاولة لاحفا'
+              : 'Something went wrong, please try again later'
           }`,
           { variant: 'error' }
         );

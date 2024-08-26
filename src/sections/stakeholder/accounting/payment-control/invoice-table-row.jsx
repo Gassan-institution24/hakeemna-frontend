@@ -69,11 +69,13 @@ export default function MovementTableRow({
     type = 'installment';
   } else type = 'paid';
 
-  let patientName
+  let patientName;
   if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
   } else if (unit_service_patient) {
-    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+    patientName = curLangAr
+      ? unit_service_patient?.name_arabic
+      : unit_service_patient?.name_english;
   }
 
   return (
@@ -91,9 +93,7 @@ export default function MovementTableRow({
           {curLangAr ? insurance?.name_arabic : insurance?.name_english}
         </TableCell>
 
-        <TableCell align="center">
-          {patientName}
-        </TableCell>
+        <TableCell align="center">{patientName}</TableCell>
 
         <TableCell align="center">
           {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}

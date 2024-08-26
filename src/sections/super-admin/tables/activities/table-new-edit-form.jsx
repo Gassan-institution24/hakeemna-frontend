@@ -26,7 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const { unitservicesData } = useGetActiveUnitservices({ populate: 'all' });
 
@@ -142,13 +142,15 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              {employees_number > 3 && <RHFSelect name="department" label="Department">
-                {departmentsData.map((department, idx) => (
-                  <MenuItem lang="ar" key={idx} value={department._id}>
-                    {department.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>}
+              {employees_number > 3 && (
+                <RHFSelect name="department" label="Department">
+                  {departmentsData.map((department, idx) => (
+                    <MenuItem lang="ar" key={idx} value={department._id}>
+                      {department.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
               <RHFTextField name="details" label="Details" />
               <RHFTextField name="details_arabic" label="Details Arabic" />
             </Box>

@@ -48,12 +48,7 @@ import { useSnackbar } from 'src/components/snackbar';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
-import {
-  RHFSelect,
-  RHFTextField,
-  RHFRadioGroup,
-  RHFPhoneNumber,
-} from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFRadioGroup, RHFPhoneNumber } from 'src/components/hook-form';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -69,7 +64,7 @@ const defaultFilters = {
 export default function TableCreateView() {
   // // const settings = useSettingsContext();
   const { user } = useAuthContext();
-  const router = useRouter()
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -148,12 +143,16 @@ export default function TableCreateView() {
       // gender: null,
       note: '',
       patientExist: 'my_patients',
+      work_group: workGroupsData?.[0]?._id,
+      unit_service:
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
     }),
-    []
+    [workGroupsData, user?.employee]
   );
 
   const methods = useForm({
-    // mode: 'all',
+    mode: 'all',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -200,7 +199,7 @@ export default function TableCreateView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      delete data.sequence_number
+      delete data.sequence_number;
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(selected),
         { ...data, lang: curLangAr }
@@ -302,16 +301,17 @@ export default function TableCreateView() {
           }}
         />
         <FormProvider methods={methods} onSubmit={onSubmit}>
-          <Card sx={{ px: 3, pb: 3 }}>
+          <Card sx={{ px: 3, pb: 3, pt: 2 }}>
+            <Typography variant="subtitle2">{t('filters')}:</Typography>
             <Box
-              sx={{ m: 3 }}
+              sx={{ mb: 3, mx: 3, mt: 2 }}
               rowGap={3}
               columnGap={2}
               display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+              // gridTemplateColumns={{
+              //   xs: 'repeat(1, 1fr)',
+              //   sm: 'repeat(3, 1fr)',
+              // }}
             >
               <FormControl
                 sx={{
@@ -322,17 +322,19 @@ export default function TableCreateView() {
 
                 <Select
                   value={filters.group}
-                  onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
+                  onChange={(event) =>
+                    setFilters((prev) => ({ ...prev, group: event.target.value }))
+                  }
                   size="small"
                   input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
+                  // renderValue={(selected) =>
+                  //   selected
+                  // }
+                  // MenuProps={{
+                  //   PaperProps: {
+                  //     sx: { maxHeight: 240 },
+                  //   },
+                  // }}
                 >
                   {workGroupsData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -414,7 +416,7 @@ export default function TableCreateView() {
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 list={appointmentsData}
-              // sx={{ mt: SPACING }}
+                // sx={{ mt: SPACING }}
               />
             )}
             {selected && (
@@ -467,14 +469,8 @@ export default function TableCreateView() {
                       name="identification_num"
                       label={t('ID number')}
                     />
-                    <RHFPhoneNumber
-                      name="mobile_num1"
-                      label={t('mobile number')}
-                    />
-                    <RHFPhoneNumber
-                      name="mobile_num2"
-                      label={t('alternative mobile number')}
-                    />
+                    <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+                    <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
                   </Box>
                 )}
                 {values.patientExist === 'exist' && (
@@ -515,21 +511,17 @@ export default function TableCreateView() {
                         name="identification_num"
                         label={t('ID number')}
                       />
-                      <RHFPhoneNumber
-                        name="mobile_num1"
-                        label={t('mobile number')}
-                      />
-                      <RHFPhoneNumber
-                        name="mobile_num2"
-                        label={t('alternative mobile number')}
-                      />
+                      <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+                      <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
                     </Box>
                   </>
                 )}
                 {values.patientExist === 'new' && (
                   <>
-                    <Typography sx={{ mb: 2 }} variant='subtitle2' color='info.dark'>
-                      {t('if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number')}
+                    <Typography sx={{ mb: 2 }} variant="subtitle2" color="info.dark">
+                      {t(
+                        'if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number'
+                      )}
                     </Typography>
                     <RHFTextField
                       InputLabelProps={{ shrink: true }}
@@ -567,14 +559,8 @@ export default function TableCreateView() {
                         name="identification_num"
                         label={t('ID number')}
                       /> */}
-                      <RHFPhoneNumber
-                        name="mobile_num1"
-                        label={t('mobile number')}
-                      />
-                      <RHFPhoneNumber
-                        name="mobile_num2"
-                        label={t('alternative mobile number')}
-                      />
+                      <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+                      <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
                       {/* <RHFDatePicker name="birth_date" label={t('birth date')} /> */}
                       <RHFSelect name="nationality" label={t('nationality')}>
                         {countriesData.map((option, idx) => (
@@ -641,7 +627,9 @@ export default function TableCreateView() {
                 )}
                 {existPatients.length > 0 && values.patientExist === 'new' && (
                   <PatientsFound
-                    SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+                    SelectedAppointment={appointmentsData.find(
+                      (appoint) => appoint._id === selected
+                    )}
                     selected={selected}
                     reset={reset}
                     oldPatients={existPatients}
@@ -649,7 +637,9 @@ export default function TableCreateView() {
                 )}
                 {foundPatients.length > 0 && values.patientExist === 'my_patients' && (
                   <PatientsFound
-                    SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+                    SelectedAppointment={appointmentsData.find(
+                      (appoint) => appoint._id === selected
+                    )}
                     selected={selected}
                     reset={reset}
                     oldPatients={foundPatients}

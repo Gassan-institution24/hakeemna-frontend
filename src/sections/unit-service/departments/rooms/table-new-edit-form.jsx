@@ -44,7 +44,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       department: departmentData._id,
@@ -101,8 +102,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.rooms.root(departmentData._id),
-          msg: `updated room <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
-            }</strong> department`,
+          msg: `updated room <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.rooms.all, {
@@ -113,10 +115,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.rooms.root(departmentData._id),
-          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${departmentData.name_english
-            }</strong> department`,
-          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> في قسم <strong>${departmentData.name_arabic
-            }</strong>`,
+          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${
+            departmentData.name_english
+          }</strong> department`,
+          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> في قسم <strong>${
+            departmentData.name_arabic
+          }</strong>`,
         });
       }
       reset();

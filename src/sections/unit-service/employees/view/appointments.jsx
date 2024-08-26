@@ -108,11 +108,7 @@ export default function AppointmentsView({ employeeData }) {
   const [filters, setFilters] = useState(defaultFilters);
   const [minToDelay, setMinToDelay] = useState(0);
 
-  const {
-    appointmentsData,
-    refetch,
-    lengths
-  } = useGetEmployeeAppointments(id, {
+  const { appointmentsData, refetch, lengths } = useGetEmployeeAppointments(id, {
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 5,
@@ -544,9 +540,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'canceled')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

@@ -36,7 +36,10 @@ export default function History() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
-  const { historyDataForPatient } = useGetPatientHistoryData(Entrance?.patient?._id, Entrance?.unit_service_patient);
+  const { historyDataForPatient } = useGetPatientHistoryData(
+    Entrance?.patient?._id,
+    Entrance?.unit_service_patient
+  );
   const { historyData } = useGetPatientHistoryDataInSu(
     Entrance?.patient?._id,
     Entrance?.unit_service_patient,
@@ -45,7 +48,7 @@ export default function History() {
   const Title = ['appointment', 'medical report', 'prescription'];
   const [switchh, setSwitch] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(2);
-  const [selectedTitle, setSelectedTitle] = useState("");
+  const [selectedTitle, setSelectedTitle] = useState('');
 
   const dataFiltered = applyFilter({
     inputData: switchh === true ? historyDataForPatient : historyData,
@@ -74,7 +77,9 @@ export default function History() {
             displayEmpty
             onChange={(e) => setSelectedTitle(e.target.value)}
           >
-            <MenuItem value="" disabled sx={{ display: 'none' }}>{t('All')}</MenuItem>
+            <MenuItem value="" disabled sx={{ display: 'none' }}>
+              {t('All')}
+            </MenuItem>
             {Title.map((type, index) => (
               <MenuItem key={index} value={type}>
                 {t(type)}

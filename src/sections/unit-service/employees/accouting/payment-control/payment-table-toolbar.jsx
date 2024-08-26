@@ -88,13 +88,13 @@ export default function PaymentTableToolbar({
             input={<OutlinedInput label="units of service" />}
             renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
             sx={{ textTransform: 'capitalize' }}
-          // MenuProps={{
-          //   PaperProps: {
-          //     style: {
-          //       position:'absolute'
-          //     },
-          //   },
-          // }}
+            // MenuProps={{
+            //   PaperProps: {
+            //     style: {
+            //       position:'absolute'
+            //     },
+            //   },
+            // }}
           >
             {serviceOptions.map((option, idx) => (
               <MenuItem lang="ar" key={idx} value={option}>

@@ -54,7 +54,7 @@ export default function PaymentControlView() {
   const settings = useSettingsContext();
   const table = useTable({ defaultOrderBy: 'createDate' });
   const { user } = useAuthContext();
-  const { id } = useParams()
+  const { id } = useParams();
 
   const { t } = useTranslate();
 
@@ -81,12 +81,11 @@ export default function PaymentControlView() {
           { path: 'stakeholder', select: 'name_english name_arabic company_logo address phone' },
           { path: 'patient', select: 'name_english name_arabic address mobile_num1' },
           { path: 'economic_movement', select: 'Total_Amount sequence_number' },
-        ]
-      }
+        ],
+      },
     ],
     ...filters,
   });
-
 
   const denseHeight = table.dense ? 56 : 56 + 20;
 

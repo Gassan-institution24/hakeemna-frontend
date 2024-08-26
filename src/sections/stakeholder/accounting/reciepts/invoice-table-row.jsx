@@ -53,11 +53,13 @@ export default function MovementTableRow({
   const DDL = usePopover();
   const popover = usePopover();
 
-  let patientName
+  let patientName;
   if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english
+    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
   } else if (unit_service_patient) {
-    patientName = curLangAr ? unit_service_patient?.name_arabic : unit_service_patient?.name_english
+    patientName = curLangAr
+      ? unit_service_patient?.name_arabic
+      : unit_service_patient?.name_english;
   }
 
   return (
@@ -71,9 +73,7 @@ export default function MovementTableRow({
 
         <TableCell align="center">{fDate(created_at)}</TableCell>
 
-        <TableCell align="center">
-          {patientName}
-        </TableCell>
+        <TableCell align="center">{patientName}</TableCell>
 
         <TableCell align="center">
           {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}

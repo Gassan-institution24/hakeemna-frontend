@@ -260,7 +260,7 @@ export default function Prescription({ Entrance }) {
           {info?.medicines?.map((medicineName, index) => (
             <span key={index}>
               {medicineName?.medicines?.trade_name}
-              {index < info.medicines.length - 1 &&  <mark> - </mark>}
+              {index < info.medicines.length - 1 && <mark> - </mark>}
             </span>
           ))}
 
@@ -408,7 +408,7 @@ export default function Prescription({ Entrance }) {
             <Divider />
           </DialogContent>
 
-                {/* {index === prescriptions.length - 1 && (
+          {/* {index === prescriptions.length - 1 && (
                   <Button
                     onClick={addPrescriptionField}
                     sx={{ ml: 2, bgcolor: 'success.main', display: 'inline' }}

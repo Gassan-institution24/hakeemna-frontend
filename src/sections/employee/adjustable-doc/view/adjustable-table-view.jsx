@@ -61,9 +61,7 @@ export default function AdjustableTableView() {
 
   const { user } = useAuthContext();
 
-  const { adjustabledocument, loading } = useGetEmployeeAdjustabledocument(
-    user?.employee?._id
-  );
+  const { adjustabledocument, loading } = useGetEmployeeAdjustabledocument(user?.employee?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -52,6 +52,3 @@ export function useTranslate() {
     onChangeLang,
   };
 }
-
-
-

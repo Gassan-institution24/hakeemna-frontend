@@ -3,7 +3,9 @@ import { Container, Typography } from '@mui/material';
 export default function Privacypolicy() {
   return (
     <Container>
-      <Typography variant="h3" sx={{mt:4}}>Terms and Conditions</Typography>
+      <Typography variant="h3" sx={{ mt: 4 }}>
+        Terms and Conditions
+      </Typography>
 
       <Typography paragraph>
         Please read the privacy policy carefully and understand all the terms before signing your

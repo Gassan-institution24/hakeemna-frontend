@@ -202,7 +202,8 @@ export default function AccountGeneral({ unitServiceData }) {
       }
       await axios.patch(
         endpoints.unit_services.one(
-          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
+          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+            ._id
         ),
         dataToSend
       );
@@ -304,8 +305,8 @@ export default function AccountGeneral({ unitServiceData }) {
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Divider />
-              <Stack alignItems="flex-start" gap={1} >
-                <Typography variant='subtitle1'>{t('finantial information')}</Typography>
+              <Stack alignItems="flex-start" gap={1}>
+                <Typography variant="subtitle1">{t('finantial information')}</Typography>
                 <RHFCheckbox
                   name="has_tax"
                   onChange={() => setValue('has_tax', !values.has_tax)}
@@ -347,7 +348,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-              // onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>

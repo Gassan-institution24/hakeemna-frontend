@@ -231,8 +231,8 @@ export default function AppointmentToolbar({
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || 'Asia/Amman'
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                ?.unit_service?.country?.time_zone || 'Asia/Amman'
             );
             handleFilterStartTime(selectedTime);
           }}
@@ -260,8 +260,8 @@ export default function AppointmentToolbar({
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,
-              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-                ?.country?.time_zone || 'Asia/Amman'
+              user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                ?.unit_service?.country?.time_zone || 'Asia/Amman'
             );
             handleFilterEndTime(new Date(selectedTime));
           }}

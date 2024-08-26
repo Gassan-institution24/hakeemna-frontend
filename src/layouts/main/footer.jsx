@@ -185,7 +185,7 @@ export default function Footer() {
                       href={link.href}
                       color="inherit"
                       variant="subtitle2"
-                      textTransform='lowercase'
+                      textTransform="lowercase"
                     >
                       {t(link.name)}
                     </Link>

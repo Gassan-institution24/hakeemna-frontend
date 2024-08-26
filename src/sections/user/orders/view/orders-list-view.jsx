@@ -20,9 +20,7 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -80,8 +78,6 @@ export default function OrdersView() {
       : false;
 
   const dataFiltered = ordersData;
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -170,11 +166,6 @@ export default function OrdersView() {
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>
