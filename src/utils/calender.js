@@ -1,4 +1,3 @@
-
 const formatDate = (date) =>
   new Date(date)
     .toISOString()
@@ -18,7 +17,9 @@ export async function addToCalendar(event) {
     const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${startTime}/${endTime}&text=${title}&location=${location}`;
 
     // eslint-disable-next-line no-restricted-globals
-    const addToGoogleCalendar = confirm('Would you like to add this event to your Google Calendar?');
+    const addToGoogleCalendar = confirm(
+      'Would you like to add this event to your Google Calendar?'
+    );
 
     if (addToGoogleCalendar) {
       redirectToGoogleCalendar(googleUrl);

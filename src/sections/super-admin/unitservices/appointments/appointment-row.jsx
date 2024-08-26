@@ -98,9 +98,7 @@ export default function AppointmentsTableRow({
             secondary={
               isValid(new Date(start_time)) &&
               new Date(start_time).toLocaleDateString(t('en-US'), {
-                timeZone:
-                  unit_service?.country?.time_zone ||
-                  'Asia/Amman',
+                timeZone: unit_service?.country?.time_zone || 'Asia/Amman',
               })
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}

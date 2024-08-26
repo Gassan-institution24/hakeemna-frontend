@@ -8,14 +8,7 @@ import { useForm, useFieldArray, useFormContext } from 'react-hook-form';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
-import {
-  Box,
-  Radio,
-  Button,
-  MenuItem,
-  Container,
-  IconButton,
-} from '@mui/material';
+import { Box, Radio, Button, MenuItem, Container, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -35,7 +28,7 @@ export default function NewEditForm({ currentRow }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -99,7 +92,7 @@ export default function NewEditForm({ currentRow }) {
               sm: 'repeat(2, 1fr)',
             }}
           >
-            <RHFTextField name="title" multiline label={t("title")} />
+            <RHFTextField name="title" multiline label={t('title')} />
             <RHFSelect
               label={t('applied time')}
               fullWidth
@@ -108,13 +101,13 @@ export default function NewEditForm({ currentRow }) {
               sx={{ mb: 3 }}
             >
               {['before', 'after']?.map((one, idx) => (
-                <MenuItem lang="ar" value={one} key={idx} >
+                <MenuItem lang="ar" value={one} key={idx}>
                   {t(one)}
                 </MenuItem>
               ))}
             </RHFSelect>
           </Box>
-          <RHFTextField name="topic" multiline rows={5} label={t("topic")} />
+          <RHFTextField name="topic" multiline rows={5} label={t('topic')} />
         </Card>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>

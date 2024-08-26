@@ -127,7 +127,9 @@ export default function InvoicePDF({ invoice, currentStatus }) {
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'}
+            source={
+              unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'
+            }
             style={{ width: 48, height: 48 }}
           />
 
@@ -137,14 +139,16 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
         </View>
 
-        {stakeholder && <View style={styles.col6}>
-          <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
-          <Text style={styles.body2}>
-            {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
-          </Text>
-          <Text style={styles.body2}>{stakeholder.address}</Text>
-          <Text style={styles.body2}>{stakeholder.phone}</Text>
-        </View>}
+        {stakeholder && (
+          <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
+            <Text style={styles.body2}>
+              {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
+            </Text>
+            <Text style={styles.body2}>{stakeholder.address}</Text>
+            <Text style={styles.body2}>{stakeholder.phone}</Text>
+          </View>
+        )}
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
@@ -156,14 +160,16 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             <Text style={styles.body2}>{unit_service.phone}</Text>
           </View>
 
-          {patient && <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
-            <Text style={styles.body2}>
-              {curLangAr ? patient.name_arabic : patient.name_english}
-            </Text>
-            <Text style={styles.body2}>{patient.address}</Text>
-            <Text style={styles.body2}>{patient.mobile_num1}</Text>
-          </View>}
+          {patient && (
+            <View style={styles.col6}>
+              <Text style={[styles.subtitle2, styles.mb4]}>{t('to')}</Text>
+              <Text style={styles.body2}>
+                {curLangAr ? patient.name_arabic : patient.name_english}
+              </Text>
+              <Text style={styles.body2}>{patient.address}</Text>
+              <Text style={styles.body2}>{patient.mobile_num1}</Text>
+            </View>
+          )}
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
@@ -241,9 +247,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
                 <View style={styles.tableCell_2}>
                   <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>
-                    {curLangAr ? item.product?.name_arabic : item.product?.name_english}
-                  </Text>
+                  <Text>{curLangAr ? item.product?.name_arabic : item.product?.name_english}</Text>
                 </View>
 
                 <View style={styles.tableCell_3}>

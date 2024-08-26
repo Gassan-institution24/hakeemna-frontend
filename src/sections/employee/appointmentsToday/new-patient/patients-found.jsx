@@ -31,7 +31,15 @@ import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
-export default function PatientsFound({ SelectedAppointment, createAppointment, oldPatients, usPatients, reset, close, refetch }) {
+export default function PatientsFound({
+  SelectedAppointment,
+  createAppointment,
+  oldPatients,
+  usPatients,
+  reset,
+  close,
+  refetch,
+}) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -67,19 +75,19 @@ export default function PatientsFound({ SelectedAppointment, createAppointment, 
       const bookingdata = {
         note,
         lang: curLangAr,
-      }
+      };
       if (usPatients) {
-        bookingdata.unit_service_patient = row._id
-        bookingdata.patient = row?.patient
+        bookingdata.unit_service_patient = row._id;
+        bookingdata.patient = row?.patient;
       } else {
-        bookingdata.patient = row._id
+        bookingdata.patient = row._id;
       }
       await axiosInstance.patch(endpoints.appointments.book(data?._id), bookingdata);
       await addToCalendar(data);
       enqueueSnackbar(t('booked successfully!'));
-      close()
-      refetch()
-      reset()
+      close();
+      refetch();
+      reset();
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -187,5 +195,5 @@ PatientsFound.propTypes = {
   reset: PropTypes.func,
   createAppointment: PropTypes.func,
   SelectedAppointment: PropTypes.object,
-  usPatients: PropTypes.bool
+  usPatients: PropTypes.bool,
 };

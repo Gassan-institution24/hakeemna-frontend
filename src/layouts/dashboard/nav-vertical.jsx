@@ -71,8 +71,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('management tables'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t('For the system to work properly and since you are a new establishment on this platform you must enter some basic information in advance before use.')}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'For the system to work properly and since you are a new establishment on this platform you must enter some basic information in advance before use.'
+            )}
           </Typography>
         ),
       },
@@ -81,8 +83,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating departments'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t('The first of these is information about the departments that make up your organization - of course, if there are departments in your organization - in order to enable independent management of each department in your organization.')}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'The first of these is information about the departments that make up your organization - of course, if there are departments in your organization - in order to enable independent management of each department in your organization.'
+            )}
           </Typography>
         ),
       },
@@ -91,8 +95,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('adding employees'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t('Then you must enter the employee data, either by (1) creating a new employee account or (2) adding/linking an employee who has an account on the platform and linking him to your organization.')}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'Then you must enter the employee data, either by (1) creating a new employee account or (2) adding/linking an employee who has an account on the platform and linking him to your organization.'
+            )}
           </Typography>
         ),
       },
@@ -101,8 +107,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating work shifts'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("After the previous two steps, you must add your organization's work shifts (for example: morning/evening/night). Adding these shift information has organizational benefits for your organization and allows you to make appointment settings more flexible, which later creates appointments in an automated and flexible manner.")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              "After the previous two steps, you must add your organization's work shifts (for example: morning/evening/night). Adding these shift information has organizational benefits for your organization and allows you to make appointment settings more flexible, which later creates appointments in an automated and flexible manner."
+            )}
           </Typography>
         ),
       },
@@ -111,8 +119,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating work groups'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("Next, you must enter the information of the work team/teams in the organization you work for, this information has administrative importance and is necessary to make 'appointment settings for each work team'. Note that creating a 'work group' in the appointment settings will show in the work schedule (calendar) that appointment for each member of the work group in that team (such as in the surgeon's calendar, also that appointment will appear in the calendar and work schedule of an anesthesiologist, and the same applies to the nurse).")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              "Next, you must enter the information of the work team/teams in the organization you work for, this information has administrative importance and is necessary to make 'appointment settings for each work team'. Note that creating a 'work group' in the appointment settings will show in the work schedule (calendar) that appointment for each member of the work group in that team (such as in the surgeon's calendar, also that appointment will appear in the calendar and work schedule of an anesthesiologist, and the same applies to the nurse)."
+            )}
           </Typography>
         ),
       },
@@ -121,8 +131,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating services'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("We also recommend adding the services you provide in this step in order to improve your experience and facilitate the use of the platform.")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'We also recommend adding the services you provide in this step in order to improve your experience and facilitate the use of the platform.'
+            )}
           </Typography>
         ),
       },
@@ -131,8 +143,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating rooms'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("We also recommend adding room names - or numbers - to your system in order to organize your organization's management and to later activate the work system in managing daily appointments.")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              "We also recommend adding room names - or numbers - to your system in order to organize your organization's management and to later activate the work system in managing daily appointments."
+            )}
           </Typography>
         ),
       },
@@ -141,8 +155,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating activities'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("We also recommend adding 'Activities' information to organize the daily and administrative work of your organization.")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              "We also recommend adding 'Activities' information to organize the daily and administrative work of your organization."
+            )}
           </Typography>
         ),
       },
@@ -151,8 +167,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
         title: t('creating appointment configurations'),
         disableBeacon: true,
         content: (
-          <Typography lang='ar' sx={{ color: 'text.secondary' }}>
-            {t("By doing all the previous steps, you are now ready to use the platform and create a new appointment - you can also do the previous steps together and automatically on this page -")}
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'By doing all the previous steps, you are now ready to use the platform and create a new appointment - you can also do the previous steps together and automatically on this page -'
+            )}
           </Typography>
         ),
       },
@@ -195,7 +213,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           run={walktour.run}
           callback={walktour.onCallback}
           getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+          // scrollDuration={500}
         />
       )}
       {isEmployee && (
@@ -285,12 +303,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
           lang="ar"
           sx={{ fontSize: 13, color: 'secondary.dark' }}
           onClick={() => {
-            popover.onClose()
-            setRunningTour(true)
+            popover.onClose();
+            setRunningTour(true);
             setTimeout(() => {
-              walktour.setRun(true)
-              setRunningTour(false)
-            }, 200)
+              walktour.setRun(true);
+              setRunningTour(false);
+            }, 200);
           }}
         >
           {t('walktour for first steps')}
@@ -300,17 +318,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
+            >
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box

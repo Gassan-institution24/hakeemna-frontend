@@ -30,7 +30,6 @@ export default function AppointmentSearch({
   );
   // const [value, setValue] = useState('');
   return (
-  
     <Stack
       spacing={2}
       alignItems={{ xs: 'flex-end', md: 'center' }}
@@ -57,7 +56,6 @@ export default function AppointmentSearch({
             ),
           }}
         />
-       
       </Stack>
 
       {/* {canReset && (

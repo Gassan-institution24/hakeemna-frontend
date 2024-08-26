@@ -122,9 +122,7 @@ export default function AppointmentsTableRow({
         >
           <ListItemText
             primary={
-              end_date
-                ? isValid(new Date(end_date)) && fDate(end_date, 'dd MMMMMMMM yyyy')
-                : null
+              end_date ? isValid(new Date(end_date)) && fDate(end_date, 'dd MMMMMMMM yyyy') : null
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
@@ -222,11 +220,11 @@ export default function AppointmentsTableRow({
           subcategory: 'appointment_configs',
           acl: 'update',
         }) && (
-            <MenuItem lang="ar" onClick={onViewRow}>
-              <Iconify icon="solar:eye-bold" />
-              {t('view')}
-            </MenuItem>
-          )}
+          <MenuItem lang="ar" onClick={onViewRow}>
+            <Iconify icon="solar:eye-bold" />
+            {t('view')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

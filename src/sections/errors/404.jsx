@@ -16,7 +16,7 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 
 export default function NotFoundView() {
   const { t } = useTranslate();
-  const router = useRouter()
+  const router = useRouter();
   return (
     <CompactLayout>
       <MotionContainer>

@@ -110,6 +110,9 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       appointment_type: appointmenttypesData?.[0]?._id,
       start_time: new Date(),
       work_group: workGroupsData?.[0]?._id,
+      unit_service:
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
       work_shift: workShiftsData.filter((one) => {
         const currentDate = new Date();
 
@@ -138,7 +141,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       })?.[0]?._id,
       service_types: [],
     }),
-    [workGroupsData, appointmenttypesData, workShiftsData]
+    [workGroupsData, appointmenttypesData, workShiftsData, user?.employee]
   );
 
   const methods = useForm({
@@ -174,7 +177,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       service_types: values.service_types,
       emergency: true,
       unit_service:
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
       department: workGroupsData.filter((item) => item._id === values.work_group)?.[0]?.department
         ?._id,
     });
@@ -205,7 +209,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      delete data.sequence_number
+      delete data.sequence_number;
       const { data: appointmentData } = await createAppointment();
       await axiosInstance.patch(
         endpoints.appointments.patient.createPatientAndBookAppoint(appointmentData?._id),
@@ -214,7 +218,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       await addToCalendar(appointmentData);
       enqueueSnackbar(t('created successfully!'));
       reset();
-      close()
+      close();
       // router.back();
     } catch (error) {
       // error emitted in backend
@@ -273,10 +277,12 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
   return (
     <Dialog fullWidth maxWidth="xl" open={open} onClose={close}>
       <Container maxWidth="xl" sx={{ p: 5 }}>
-        <Typography variant='h5'>{t('create & book appointment')}</Typography>
+        <Typography variant="h5">{t('create & book appointment')}</Typography>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <Stack spacing={2.5} sx={{ my: 3 }}>
-            <Typography variant='subtitle1' color='text.disabled'>{t('appointment details')}</Typography>
+            <Typography variant="subtitle1" color="text.disabled">
+              {t('appointment details')}
+            </Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -351,7 +357,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
           <Divider />
           <br />
           <Typography
-            lang='ar'
+            lang="ar"
             sx={{ py: 2, fontWeight: 700 }}
             variant="caption"
             color="text.secondary"
@@ -399,14 +405,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                 name="identification_num"
                 label={t('ID number')}
               />
-              <RHFPhoneNumber
-                name="mobile_num1"
-                label={t('mobile number')}
-              />
-              <RHFPhoneNumber
-                name="mobile_num2"
-                label={t('alternative mobile number')}
-              />
+              <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+              <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
             </Box>
           )}
           {values.patientExist === 'exist' && (
@@ -447,21 +447,17 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="identification_num"
                   label={t('ID number')}
                 />
-                <RHFPhoneNumber
-                  name="mobile_num1"
-                  label={t('mobile number')}
-                />
-                <RHFPhoneNumber
-                  name="mobile_num2"
-                  label={t('alternative mobile number')}
-                />
+                <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+                <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
               </Box>
             </>
           )}
           {values.patientExist === 'new' && (
             <>
-              <Typography sx={{ mb: 2 }} variant='subtitle2' color='info.dark'>
-                {t('if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number')}
+              <Typography sx={{ mb: 2 }} variant="subtitle2" color="info.dark">
+                {t(
+                  'if the patient did not exist in our system you are required to add name (arabic or english), nationality and mobile number'
+                )}
               </Typography>
               <RHFTextField
                 InputLabelProps={{ shrink: true }}
@@ -499,14 +495,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="identification_num"
                   label={t('ID number')}
                 /> */}
-                <RHFPhoneNumber
-                  name="mobile_num1"
-                  label={t('mobile number')}
-                />
-                <RHFPhoneNumber
-                  name="mobile_num2"
-                  label={t('alternative mobile number')}
-                />
+                <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+                <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
                 {/* <RHFDatePicker name="birth_date" label={t('birth date')} /> */}
                 <RHFSelect name="nationality" label={t('nationality')}>
                   {countriesData.map((option, idx) => (
@@ -590,11 +580,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
             />
           )}
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton
-              tabIndex={-1}
-              variant="contained"
-              onClick={close}
-            >
+            <LoadingButton tabIndex={-1} variant="contained" onClick={close}>
               {t('cancel')}
             </LoadingButton>
           </Stack>
@@ -607,4 +593,4 @@ NewAppointmentDialog.propTypes = {
   open: PropTypes.bool,
   close: PropTypes.func,
   refetch: PropTypes.func,
-}
+};

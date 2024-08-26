@@ -18,10 +18,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -98,8 +96,6 @@ export default function StakeholdersFeedbacks() {
     filters,
     // dateError,
   });
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !!filters.name || filters.status !== 'active';
 
@@ -204,15 +200,6 @@ export default function StakeholdersFeedbacks() {
                   .map((row, idx) => (
                     <QCTableRow key={idx} row={row} onViewRow={() => handleViewRow(row.id)} />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(
-                    table.page,
-                    table.rowsPerPage,
-                    separateEachStakeholderFeedbacks().length
-                  )}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

@@ -22,10 +22,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
   getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -74,8 +72,6 @@ export default function ChecklistTableView() {
     filters,
     dateError,
   });
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;
 
@@ -211,11 +207,6 @@ export default function ChecklistTableView() {
                       onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, CheckListData.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

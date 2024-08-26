@@ -35,7 +35,6 @@ export default function InvoiceTableToolbar({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-
   const handleFilterInsurance = useCallback(
     (event) => {
       onFilters('insurance', event.target.value);
@@ -168,8 +167,7 @@ export default function InvoiceTableToolbar({
               <MenuItem key={option._id} value={option?._id}>
                 {curLangAr ? option.name_arabic : option.name_english}
               </MenuItem>
-            )
-            )}
+            ))}
           </Select>
         </FormControl>
 
@@ -232,7 +230,7 @@ export default function InvoiceTableToolbar({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton> 
       </Stack> */}
-      </Stack >
+      </Stack>
 
       <CustomPopover
         open={popover.open}

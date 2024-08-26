@@ -69,18 +69,13 @@ export default function MovementTableRow({ row, selected, onEditRow }) {
 
         <TableCell align="center">
           <ListItemText
-            primary={
-              (isValid(new Date(Start_date)) && fDate(Start_date, 'dd MMMMMMMM yyyy')) ||
-              ''
-            }
+            primary={(isValid(new Date(Start_date)) && fDate(Start_date, 'dd MMMMMMMM yyyy')) || ''}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
         <TableCell align="center">
           <ListItemText
-            primary={
-              (isValid(new Date(End_date)) && fDate(End_date, 'dd MMMMMMMM yyyy')) || ''
-            }
+            primary={(isValid(new Date(End_date)) && fDate(End_date, 'dd MMMMMMMM yyyy')) || ''}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>

@@ -256,12 +256,12 @@ export default function UnitServicesAccountingView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     dataFiltered.map((row, idx)  => row._id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row, idx)  => row._id)
+                //   )
+                // }
               />
 
               <TableBody>
@@ -328,7 +328,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         (data?.free_subscription?.name_english &&
           data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (data?.free_subscription?.name_arabic &&
           data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.subscription?.name_english &&

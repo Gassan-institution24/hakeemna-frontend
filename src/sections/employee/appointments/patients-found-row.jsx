@@ -31,7 +31,6 @@ export default function PatientFoundRow({
     nationality,
     birth_date,
     identification_num,
-    email,
     mobile_num1,
     mobile_num2,
   } = row;
@@ -46,7 +45,7 @@ export default function PatientFoundRow({
     <TableRow hover selected={selected}>
       <TableCell align="center">
         <Box>
-          {nationality?.code?String(nationality?.code).padStart(3, '0'):''}-{sequence_number}
+          {nationality?.code ? String(nationality?.code).padStart(3, '0') : ''}-{sequence_number}
         </Box>
       </TableCell>
 

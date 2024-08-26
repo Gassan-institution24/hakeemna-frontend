@@ -99,15 +99,24 @@ export default function NotificationsPopover() {
       }
     });
     socket.on('created', ({ stakeholder, employees }) => {
-      if (user?.stakeholder?._id === stakeholder || employees?.includes(user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id)) {
-
+      if (
+        user?.stakeholder?._id === stakeholder ||
+        employees?.includes(
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+        )
+      ) {
         setAllNotifications([]);
         setPage(1);
         refetch();
       }
     });
     socket.on('updated', ({ stakeholder, employees }) => {
-      if (user?.stakeholder?._id === stakeholder || employees?.includes(user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id)) {
+      if (
+        user?.stakeholder?._id === stakeholder ||
+        employees?.includes(
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+        )
+      ) {
         setAllNotifications([]);
         setPage(1);
         refetch();

@@ -41,7 +41,8 @@ export default function AccountView() {
 
   const { data, loading, refetch } = useGetEmployee(user?.employee?._id);
 
-  const employeeEng = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+  const employeeEng =
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id;
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);

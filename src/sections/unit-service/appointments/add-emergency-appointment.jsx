@@ -125,8 +125,10 @@ export default function BookManually({ onClose, refetch, ...other }) {
         ...data,
         emergency: true,
         unit_service:
-          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
-        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department?._id,
+          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+            ?._id,
+        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
+          ?._id,
       });
       socket.emit('updated', {
         user,
@@ -151,8 +153,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
   });
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
@@ -183,8 +185,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
                         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                          ?.unit_service?.country?.time_zone ||
-                        'Asia/Amman'
+                          ?.unit_service?.country?.time_zone || 'Asia/Amman'
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

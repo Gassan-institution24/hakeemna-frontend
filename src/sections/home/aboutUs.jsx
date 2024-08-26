@@ -50,7 +50,7 @@ export default function Whydoc() {
       }}
     >
       <div style={{ position: 'relative' }}>
-        <Typography variant="h6" sx={{ textAlign: 'center', textTransform: 'none', }}>
+        <Typography variant="h6" sx={{ textAlign: 'center', textTransform: 'none' }}>
           {' '}
           {t(
             'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.'

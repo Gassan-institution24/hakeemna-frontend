@@ -62,9 +62,9 @@ export default function Others() {
                 label={t('type')}
                 sx={{ flex: 0.4 }}
               >
-                <MenuItem value='authored books'>{t('authored books')}</MenuItem>
-                <MenuItem value='conferences'>{t('conferences')}</MenuItem>
-                <MenuItem value='published research'>{t('published research')}</MenuItem>
+                <MenuItem value="authored books">{t('authored books')}</MenuItem>
+                <MenuItem value="conferences">{t('conferences')}</MenuItem>
+                <MenuItem value="published research">{t('published research')}</MenuItem>
               </RHFSelect>
               <RHFTextField
                 size="small"
@@ -74,20 +74,12 @@ export default function Others() {
               />
               <Box sx={{ flex: 0.1 }}>
                 {values.other.length !== 1 && (
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => handleRemove(index)}
-                  >
+                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
                     <Iconify icon="tdesign:minus" />
                   </IconButton>
                 )}
                 {(index === values.other.length - 1 || values.other.length <= 1) && (
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    onClick={handleAdd}
-                  >
+                  <IconButton size="small" color="primary" onClick={handleAdd}>
                     <Iconify icon="tdesign:plus" />
                   </IconButton>
                 )}

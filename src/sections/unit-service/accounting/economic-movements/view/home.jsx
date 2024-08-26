@@ -76,22 +76,24 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders } = useGetEconomicMovements({
-    unit_service:
-      user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
-    page: table.page || 0,
-    sortBy: table.orderBy || 'created_at',
-    rowsPerPage: table.rowsPerPage || 10,
-    order: table.order || 'desc',
-    select: 'sequence_number created_at unit_service patient employee Balance status updated_at',
-    populate: [
-      { path: 'unit_service', select: 'name_english name_arabic' },
-      { path: 'stakeholder', select: 'name_english name_arabic' },
-      { path: 'patient', select: 'name_english name_arabic' },
-      { path: 'unit_service_patient', select: 'name_english name_arabic' },
-    ],
-    ...filters,
-  });
+  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders } =
+    useGetEconomicMovements({
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
+      page: table.page || 0,
+      sortBy: table.orderBy || 'created_at',
+      rowsPerPage: table.rowsPerPage || 10,
+      order: table.order || 'desc',
+      select: 'sequence_number created_at unit_service patient employee Balance status updated_at',
+      populate: [
+        { path: 'unit_service', select: 'name_english name_arabic' },
+        { path: 'stakeholder', select: 'name_english name_arabic' },
+        { path: 'patient', select: 'name_english name_arabic' },
+        { path: 'unit_service_patient', select: 'name_english name_arabic' },
+      ],
+      ...filters,
+    });
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
@@ -343,12 +345,12 @@ export default function InvoiceListView() {
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     economecMovementsData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     economecMovementsData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>
@@ -359,7 +361,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
                     onViewRow={() => handleViewRow(row.id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

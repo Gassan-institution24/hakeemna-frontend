@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 
@@ -45,7 +44,13 @@ export default function MovementTableRow({
 
   const printPdf = async () => {
     // eslint-disable-next-line
-    const blob = await pdf(stakeholder ? <StakeholderInvoicePDF invoice={row} currentStatus={status} /> : <UnitServiceInvoicePDF invoice={row} currentStatus={status} />).toBlob();
+    const blob = await pdf(
+      stakeholder ? (
+        <StakeholderInvoicePDF invoice={row} currentStatus={status} />
+      ) : (
+        <UnitServiceInvoicePDF invoice={row} currentStatus={status} />
+      )
+    ).toBlob();
     const url = URL.createObjectURL(blob);
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -58,18 +63,27 @@ export default function MovementTableRow({
 
   return (
     <TableRow hover selected={selected}>
+      <TableCell
+        align="center"
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+      >
+        {sequence_number}
+      </TableCell>
 
-      <TableCell align="center" sx={{
-        cursor: 'pointer',
-        color: '#3F54EB',
-      }}
-        onClick={onViewRow}>{sequence_number}</TableCell>
-
-      <TableCell align="center" sx={{
-        cursor: 'pointer',
-        color: '#3F54EB',
-      }}
-        onClick={onViewRow}>{fDate(created_at)}</TableCell>
+      <TableCell
+        align="center"
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+      >
+        {fDate(created_at)}
+      </TableCell>
 
       <TableCell align="center">
         {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
@@ -79,11 +93,16 @@ export default function MovementTableRow({
         {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
       </TableCell>
 
-      <TableCell align="center" sx={{
-        cursor: 'pointer',
-        color: '#3F54EB',
-      }}
-        onClick={onViewRow}>{fCurrency(Balance, Currency?.symbol)}</TableCell>
+      <TableCell
+        align="center"
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+      >
+        {fCurrency(Balance, Currency?.symbol)}
+      </TableCell>
 
       <TableCell align="center">
         <Label
@@ -98,10 +117,16 @@ export default function MovementTableRow({
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell align='right'>
+      <TableCell align="right">
         <PDFDownloadLink
           // eslint-disable-next-line
-          document={stakeholder ? <StakeholderInvoicePDF invoice={row} currentStatus={status} /> : <UnitServiceInvoicePDF invoice={row} currentStatus={status} />}
+          document={
+            stakeholder ? (
+              <StakeholderInvoicePDF invoice={row} currentStatus={status} />
+            ) : (
+              <UnitServiceInvoicePDF invoice={row} currentStatus={status} />
+            )
+          }
           fileName={`${fDate(new Date(row.created_at), 'yyyy')} - ${row.sequence_number}`}
           style={{ textDecoration: 'none' }}
         >
@@ -119,7 +144,7 @@ export default function MovementTableRow({
           </IconButton>
         </Tooltip>
       </TableCell>
-    </TableRow >
+    </TableRow>
   );
 }
 

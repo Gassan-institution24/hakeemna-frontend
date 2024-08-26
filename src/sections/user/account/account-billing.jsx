@@ -4,7 +4,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import AccountBillingHistory from './account-billing-history';
 
-
 // ----------------------------------------------------------------------
 
 export default function AccountBilling({ cards, plans, invoices, addressBook }) {

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 import MenuItem from '@mui/material/MenuItem';
 import { InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
 import { useDebounce } from 'src/hooks/use-debounce';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from '../iconify';
@@ -30,19 +31,20 @@ export function SelectWithSearch({
 
   const [search, setSearch] = useState('');
 
-  const searchName = useDebounce(search)
+  const searchName = useDebounce(search);
 
   useEffect(() => {
     if (setName) {
-      setName(searchName)
+      setName(searchName);
     }
-  }, [searchName, setName])
+  }, [searchName, setName]);
 
   return (
     <TextField
       select
       fullWidth
       // variant='filled'
+      size="small"
       InputLabelProps={{
         style: { color: 'white' },
       }}

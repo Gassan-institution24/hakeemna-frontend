@@ -75,7 +75,7 @@ export default function OrderTableToolbar({
             onClick={onResetFilters}
             startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
           >
-            Clear
+            {t('clear')}
           </Button>
         )}
       </Stack>

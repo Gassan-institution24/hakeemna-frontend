@@ -19,11 +19,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetSymptoms, useGetCountries, useGetMedFamilies } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-  RHFMultiSelect,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
 
 // const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 
@@ -127,10 +123,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFTextField name="trade_name" label="trade name" />
               <RHFTextField name="scientific_name" label="scientific name" />
-              <RHFTextField
-                name="concentration"
-                label="concentration"
-              />
+              <RHFTextField name="concentration" label="concentration" />
               <RHFTextField name="agent" label="agent" />
               <RHFTextField name="public_price_with_tax" label="public price with tax" />
               <RHFTextField name="hospital_price_with_tax" label="hospital price with tax" />

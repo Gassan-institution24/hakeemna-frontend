@@ -2,16 +2,18 @@ import PropTypes from 'prop-types';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { Button, MenuItem, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useLocales, useTranslate } from 'src/locales';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { Button, IconButton, MenuItem } from '@mui/material';
+
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -22,13 +24,14 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
-  const confirm = useBoolean()
-  const popover = usePopover()
+  const confirm = useBoolean();
+  const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        {patient?.nationality?.code ? String(patient?.nationality?.code).padStart(3, '0') : ''}-{patient?.sequence_number}
+        {patient?.nationality?.code ? String(patient?.nationality?.code).padStart(3, '0') : ''}-
+        {patient?.sequence_number}
       </TableCell>
       <TableCell
         sx={{
@@ -96,7 +99,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title={t("delete")}
+        title={t('delete')}
         content={
           <>
             {t('are you sure want to delete')} {name_english} {name_arabic}?

@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
@@ -28,8 +29,6 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
@@ -45,7 +44,6 @@ import FormProvider, {
   RHFDatePicker,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -53,13 +51,13 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const { register, authenticated } = useAuthContext();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [curPage, setCurPage] = useState(0)
+  const [curPage, setCurPage] = useState(0);
 
   const router = useRouter();
   const termsDialog = useBoolean(false);
@@ -170,9 +168,9 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      data.email = data.email?.toLowerCase()
-      const formData = new FormData()
-      formData.append('identification', identification[0])
+      data.email = data.email?.toLowerCase();
+      const formData = new FormData();
+      formData.append('identification', identification[0]);
       Object.keys(data).forEach((key) => {
         if (key !== 'scanned_identification') {
           if (Array.isArray(data[key])) {
@@ -187,7 +185,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       const patient = await register?.(formData);
       if (afterSignUp) {
         setPatientId(patient?.patient?._id);
-        enqueueSnackbar(t('appointment booked successfully'))
+        enqueueSnackbar(t('appointment booked successfully'));
         afterSignUp();
       } else {
         router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
@@ -200,7 +198,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   });
 
   const handleDrop = (acceptedFiles) => {
-    setIdentification(acceptedFiles)
+    setIdentification(acceptedFiles);
     if (acceptedFiles && acceptedFiles.length > 0) {
       const newFile = Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0]),
@@ -211,9 +209,9 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   useEffect(() => {
     if (authenticated) {
-      router.push(paths.dashboard.root)
+      router.push(paths.dashboard.root);
     }
-  }, [authenticated, router])
+  }, [authenticated, router]);
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
@@ -239,79 +237,82 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
         )}
       </Stack>
 
-      {!onSignIn && <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">
-          <Link href="/" component={RouterLink} variant="subtitle2">
-            {t('Home page')}
-          </Link>
-        </Typography>
-      </Stack>}
+      {!onSignIn && (
+        <Stack direction="row" spacing={0.5}>
+          <Typography variant="body2">
+            <Link href="/" component={RouterLink} variant="subtitle2">
+              {t('Home page')}
+            </Link>
+          </Typography>
+        </Stack>
+      )}
     </Stack>
   );
 
   const renderTerms = (
     <>
-      {curPage === 1 && <>
-        <Box sx={{ display: 'flex', mt: 2 }}>
-          <Button
-            color="inherit"
-            disabled={curPage === 0}
-            onClick={() => setCurPage(0)}
-            sx={{ mt: -1.5 }}
+      {curPage === 1 && (
+        <>
+          <Box sx={{ display: 'flex', mt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={curPage === 0}
+              onClick={() => setCurPage(0)}
+              sx={{ mt: -1.5 }}
+            >
+              {t('back')}
+            </Button>
+          </Box>
+          <Dialog open={termsDialog.value}>
+            <DialogContent dividers>
+              <DialogContentText tabIndex={-1}>
+                <TermsAndCondition />
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+              <Button variant="contained" onClick={termsDialog.onFalse}>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {/* ----------------------------- */}
+          <Dialog open={policyDialog.value}>
+            <DialogContent dividers>
+              <DialogContentText tabIndex={-1}>
+                <Privacypolicy />
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+              <Button variant="contained" onClick={policyDialog.onFalse}>
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {/* ----------------------------- */}
+          <Typography
+            component="div"
+            sx={{
+              color: 'text.secondary',
+              mt: 2.5,
+              typography: 'caption',
+              textAlign: 'center',
+            }}
           >
-            {t('back')}
-          </Button>
-        </Box>
-        <Dialog open={termsDialog.value}>
-          <DialogContent dividers>
-            <DialogContentText tabIndex={-1}>
-              <TermsAndCondition />
-            </DialogContentText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button variant="contained" onClick={termsDialog.onFalse}>
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {/* ----------------------------- */}
-        <Dialog open={policyDialog.value}>
-          <DialogContent dividers>
-            <DialogContentText tabIndex={-1}>
-              <Privacypolicy />
-            </DialogContentText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button variant="contained" onClick={policyDialog.onFalse}>
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {/* ----------------------------- */}
-        <Typography
-          component="div"
-          sx={{
-            color: 'text.secondary',
-            mt: 2.5,
-            typography: 'caption',
-            textAlign: 'center',
-          }}
-        >
-          {t('By signing up, I agree to ')}
-          <Link underline="always" color="success.main" onClick={termsDialog.onTrue}>
-            {t('Terms of Service ')}
-          </Link>
-          {t('and ')}
-          <Link underline="always" color="success.main" onClick={policyDialog.onTrue}>
-            {t('Privacy Policy')}
-          </Link>
-          .
-        </Typography>
-
-      </>}
-      {curPage === 0 &&
+            {t('By signing up, I agree to ')}
+            <Link underline="always" color="success.main" onClick={termsDialog.onTrue}>
+              {t('Terms of Service ')}
+            </Link>
+            {t('and ')}
+            <Link underline="always" color="success.main" onClick={policyDialog.onTrue}>
+              {t('Privacy Policy')}
+            </Link>
+            .
+          </Typography>
+        </>
+      )}
+      {curPage === 0 && (
         <LoadingButton
           sx={{ mt: 4 }}
           fullWidth
@@ -339,7 +340,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
             <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
           )}
         </LoadingButton>
-      }
+      )}
     </>
   );
 
@@ -348,7 +349,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-        {curPage === 0 &&
+        {curPage === 0 && (
           <>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <RHFTextField
@@ -399,8 +400,9 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
               </RHFSelect>
               <RHFDatePicker name="birth_date" label={t('Date of birth')} />
             </Stack>
-          </>}
-        {curPage === 1 &&
+          </>
+        )}
+        {curPage === 1 && (
           <>
             <RHFTextField name="email" label={t('Email address')} />
             <RHFTextField
@@ -432,9 +434,15 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
               }}
             />
             <Stack gap={1}>
-              <Typography variant='subtitle2'>{t('identification scan')}</Typography>
-              <RHFUpload name='scanned_identification' onDrop={handleDrop} label={t('identification photo')} />
-              <Typography variant='caption'>{t('the scanned image should be clear and able to read')}</Typography>
+              <Typography variant="subtitle2">{t('identification scan')}</Typography>
+              <RHFUpload
+                name="scanned_identification"
+                onDrop={handleDrop}
+                label={t('identification photo')}
+              />
+              <Typography variant="caption">
+                {t('the scanned image should be clear and able to read')}
+              </Typography>
             </Stack>
 
             <LoadingButton
@@ -447,7 +455,8 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
             >
               {t('create account')}
             </LoadingButton>
-          </>}
+          </>
+        )}
       </Stack>
     </FormProvider>
   );

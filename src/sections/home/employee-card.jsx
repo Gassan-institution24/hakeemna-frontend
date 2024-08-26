@@ -174,26 +174,28 @@ export default function EmployeeCard({ employee }) {
                 <Typography variant="body2">{employee?.employee?.email}</Typography>
               </Stack>
             )}
-            <Stack direction="row" gap={1}>
-              <Typography variant="body2">{t('Insurance')}:</Typography>
-              <Stack>
-                {employee?.unit_service?.insurance?.length > 5
-                  ? employee?.unit_service?.insurance
-                    ?.filter((one, index) => index <= 5)
-                    .map((one) => (
-                      <Typography variant="body2">
-                        {curLangAr ? one.name_arabic : one.name_english}
-                      </Typography>
-                    ))
-                  : employee?.unit_service?.insurance?.map((one) => (
-                    <Typography variant="body2">
-                      {curLangAr ? one.name_arabic : one.name_english}
-                    </Typography>
-                  ))}
-                {employee?.unit_service?.insurance?.length > 5 &&
-                  `+${employee.unit_service.insurance.length - 5}`}
+            {employee?.unit_service?.insurance?.length > 0 && (
+              <Stack direction="row" gap={1}>
+                <Typography variant="body2">{t('Insurance')}:</Typography>
+                <Stack>
+                  {employee?.unit_service?.insurance?.length > 5
+                    ? employee?.unit_service?.insurance
+                        ?.filter((one, index) => index <= 5)
+                        .map((one) => (
+                          <Typography variant="body2">
+                            {curLangAr ? one.name_arabic : one.name_english}
+                          </Typography>
+                        ))
+                    : employee?.unit_service?.insurance?.map((one) => (
+                        <Typography variant="body2">
+                          {curLangAr ? one.name_arabic : one.name_english}
+                        </Typography>
+                      ))}
+                  {employee?.unit_service?.insurance?.length > 5 &&
+                    `+${employee.unit_service.insurance.length - 5}`}
+                </Stack>
               </Stack>
-            </Stack>
+            )}
           </Stack>
         </Stack>
         <Stack direction={{ md: 'row' }} gap={{ md: 10 }}>
