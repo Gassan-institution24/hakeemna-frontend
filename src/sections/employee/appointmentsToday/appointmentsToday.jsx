@@ -2,13 +2,11 @@ import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import { Container } from '@mui/system';
-import { LoadingButton } from '@mui/lab';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
   Tab,
   Tabs,
   Table,
-  Stack,
   Button,
   Select,
   Dialog,
@@ -48,7 +46,6 @@ import {
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
@@ -134,6 +131,7 @@ export default function AppointmentsToday() {
         started: true,
         entrance: entranceData?.data?._id,
         arrived: true,
+        identification_num: addingId,
       });
       refetch();
       enqueueSnackbar('Appointment started successfully', {
@@ -467,9 +465,20 @@ export default function AppointmentsToday() {
                                     />
                                   ) : (
                                     <>
-                                      <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
-                                        {t('Yes')}
-                                      </Button>
+                                      {info?.unit_service_patient?.identification_num ||
+                                      info?.patient?.identification_num ? (
+                                        <Button
+                                          sx={{ p: 2 }}
+                                          onClick={() => startAppointment(info)}
+                                        >
+                                          {t('Yes')}
+                                        </Button>
+                                      ) : (
+                                        <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
+                                          {t('Yes')}
+                                        </Button>
+                                      )}
+
                                       <Button
                                         sx={{ p: 2 }}
                                         onClick={() => StatusFunction(info, false, 'arrived')}
@@ -535,7 +544,6 @@ export default function AppointmentsToday() {
                     );
                   })}
                 </TableBody>
-                {/* here */}
               </Table>
             </Scrollbar>
           </TableContainer>
