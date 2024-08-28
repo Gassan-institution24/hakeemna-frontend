@@ -72,7 +72,7 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
   };
 
   const removemedicalrepoort = async (IdToremove2) => {
-    await axiosInstance.patch(endpoints.sickleave.onee(IdToremove2), {
+    await axiosInstance.delete(endpoints.sickleave.onee(IdToremove2), {
       Activation: false,
     });
 

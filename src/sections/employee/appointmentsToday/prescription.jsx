@@ -152,9 +152,7 @@ export default function Prescription({ Entrance }) {
   } = methods;
 
   const removePrescription = async (IdToremove) => {
-    await axiosInstance.patch(endpoints.prescription.one(IdToremove), {
-      Activation: false,
-    });
+    await axiosInstance.delete(endpoints.prescription.one(IdToremove));
 
     enqueueSnackbar('Field removed successfully', { variant: 'success' });
     refetch();

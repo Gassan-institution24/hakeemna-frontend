@@ -21,7 +21,7 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fDateAndTime } from 'src/utils/format-time';
+import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useGetDrugs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
@@ -124,7 +124,7 @@ const PrescriptionPDF = ({ report }) => (
       <View style={styles.content}>
         <Text style={styles.largeText}>Patient Information</Text>
         <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
-        <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
+        <Text style={styles.text}>Age: {fDmPdf(report?.patient?.birth_date)}</Text>
         <Text style={styles.largeText}>Report Details</Text>
 
         {report?.medicines?.map((info, i) => (
@@ -135,11 +135,11 @@ const PrescriptionPDF = ({ report }) => (
             </View>
             <View style={styles.insideTable}>
               <Text style={{ borderBottom: '1px solid gray' }}>Start Time</Text>
-              <Text style={styles.largeText}>{fDateAndTime(info?.Start_time)}</Text>
+              <Text style={styles.largeText}>{fDmPdf(info?.Start_time)}</Text>
             </View>
             <View style={styles.insideTable}>
               <Text style={{ borderBottom: '1px solid gray' }}>End Time</Text>
-              <Text style={styles.largeText}>{fDateAndTime(info?.End_time)}</Text>
+              <Text style={styles.largeText}>{fDmPdf(info?.End_time)}</Text>
             </View>
             <View style={styles.insideTable}>
               <Text style={{ borderBottom: '1px solid gray' }}>Num Days</Text>
@@ -184,7 +184,6 @@ export default function Prescriptions() {
     router.push(paths.dashboard.user.prescriptionview(id));
   };
   const { drugs } = useGetDrugs(user?.patient?._id);
-  console.log(drugs);
 
   return drugs?.length > 0 ? (
     drugs?.map((info, index) => (
@@ -209,8 +208,10 @@ export default function Prescriptions() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {fDateAndTime(info?.created_at)}
           </Stack>
-          {info?.medicines?.map((comment, ii) => (
-            <Typography key={ii}>{comment?.Doctor_Comments}</Typography>
+          {info?.medicines?.map((medicine, ii) => (
+            <Typography key={ii} sx={{ pt: 1 }}>
+              - {medicine?.medicines?.trade_name}
+            </Typography>
           ))}
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
@@ -234,7 +235,9 @@ export default function Prescriptions() {
             width={25}
           />
         </Stack>
-        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
+        <Divider
+          sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 10 }}
+        />
 
         <Box
           rowGap={1.5}
