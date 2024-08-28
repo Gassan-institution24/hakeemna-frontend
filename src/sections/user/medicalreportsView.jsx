@@ -43,12 +43,17 @@ export default function MedicalrepotView() {
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('description')}: &nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>{medicalreports?.description}</span>
+          <Typography
+            dangerouslySetInnerHTML={{ __html: medicalreports?.description }}
+            sx={{ color: 'gray', fontWeight: 400 }}
+          />
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('Date')}:&nbsp; &nbsp;
           <span style={{ color: 'gray', fontWeight: 400 }}>
-            {fDateAndTime(medicalreports?.entrance_mangament?.Appointment_date)}
+            {fDateAndTime(
+              medicalreports?.entrance_mangament?.Appointment_date || medicalreports?.created_at
+            )}
           </span>
         </Typography>
         <Button onClick={() => handleViewClick()} variant="outlined" sx={{ mt: 2 }}>

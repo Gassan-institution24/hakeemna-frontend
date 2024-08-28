@@ -92,9 +92,7 @@ export default function Medicalreport() {
     });
   }, [user, Entrance, reset]);
   const removemedicalrepoort = async (IdToremove2) => {
-    await axiosInstance.patch(endpoints.medicalreports.one(IdToremove2), {
-      Activation: false,
-    });
+    await axiosInstance.delete(endpoints.medicalreports.one(IdToremove2));
 
     enqueueSnackbar('Feild removed successfully', { variant: 'success' });
     refetch();
