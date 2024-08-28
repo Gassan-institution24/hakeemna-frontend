@@ -23,7 +23,7 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fDateAndTime } from 'src/utils/format-time';
+import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -126,7 +126,7 @@ const MedicalReportPDF = ({ report }) => {
         <View style={styles.content}>
           <Text style={styles.largeText}>Patient Information</Text>
           <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
-          <Text style={styles.text}>Age: {fDateAndTime(report?.patient?.birth_date)}</Text>
+          <Text style={styles.text}>Age: {fDmPdf(report?.patient?.birth_date)}</Text>
           <Text style={styles.largeText}>Report Details</Text>
           <Text style={styles.text}>{result}</Text>
         </View>
@@ -167,13 +167,16 @@ export default function Medicalreports() {
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
   const formatTextWithLineBreaks = (text) => {
     if (!text) return '';
-    const words = text.split(' ');
-    return words.reduce(
-      (formattedText, word, index) =>
-        formattedText + word + ((index + 1) % 20 === 0 ? '<br />' : ' '),
-      ''
-    );
+
+    const chunks = [];
+
+    for (let i = 0; i < text.length; i += 100) {
+      chunks.push(text.slice(i, i + 100));
+    }
+
+    return chunks.join('<br />');
   };
+
   return medicalreportsdata?.length > 0 ? (
     medicalreportsdata?.map((info, index) => (
       <Card
@@ -198,7 +201,8 @@ export default function Medicalreports() {
             {fDateAndTime(info?.created_at)}
           </Stack>
           <Typography
-            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(info?.description || '') }}
+            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(info?.description) }}
+            sx={{ fontSize: 13 }}
           />
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
@@ -223,7 +227,7 @@ export default function Medicalreports() {
             width={25}
           />
         </Stack>
-        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
+        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 5 }} />
 
         <Box
           rowGap={1.5}

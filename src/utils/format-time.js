@@ -78,6 +78,11 @@ export function fDm(date, newFormat) {
 
   return date ? format(new Date(date), fm) : '';
 }
+export function fDmPdf(date, newFormat) {
+  const fm = newFormat || 'dd MMMMMMMM yyyy';
+
+  return date ? format(new Date(date), fm) : '';
+}
 
 export function fTimestamp(date) {
   return date ? getTime(new Date(date)) : '';
