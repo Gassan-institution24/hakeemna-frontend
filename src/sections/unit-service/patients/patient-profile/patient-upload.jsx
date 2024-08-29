@@ -60,6 +60,7 @@ export default function PatientUpload({ patient }) {
 
   const defaultDrug = {
     unit_service: employee?.unit_service?._id,
+    employee: user?.employee?._id,
     patient: patient?.patient?._id,
     unit_service_patient: patient?._id,
     medicines: null,
@@ -123,7 +124,7 @@ export default function PatientUpload({ patient }) {
           formData.append('unit_service_patient', patient?._id);
         }
         formData.append('unit_service', employee?.unit_service?._id);
-        formData.append('employee', employee?._id);
+        formData.append('employee', user?.employee?._id);
         formData.append('type', isMedLab ? 'analysis' : 'report');
         formData.append('description', values.medical_report_description);
         values.medical_report_file?.forEach((one, idx) => {
@@ -145,7 +146,7 @@ export default function PatientUpload({ patient }) {
           formData.append('unit_service_patient', patient?._id);
         }
         formData.append('unit_service', employee?.unit_service?._id);
-        formData.append('employee', employee?._id);
+        formData.append('employee', user?.employee?._id);
         formData.append('description', values.patient_record_description);
         values.patient_record_file?.forEach((one, idx) => {
           formData.append(`file[${idx}]`, one);
@@ -161,8 +162,8 @@ export default function PatientUpload({ patient }) {
         await axiosInstance.post(endpoints.sickleave.all, {
           patient: patient?.patient?._id,
           unit_service_patient: patient?._id,
-          unit_service: employee?.unit_service?._id,
-          employee: employee?._id,
+          unit_services: employee?.unit_service?._id,
+          employee: user?.employee?._id,
           Medical_sick_leave_start: values.start_date,
           Medical_sick_leave_end: values.end_date,
           description: values.sick_leave_description,
