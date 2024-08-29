@@ -224,7 +224,7 @@ export default function TableCreateView() {
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);
@@ -308,10 +308,10 @@ export default function TableCreateView() {
               rowGap={3}
               columnGap={2}
               display="flex"
-              // gridTemplateColumns={{
-              //   xs: 'repeat(1, 1fr)',
-              //   sm: 'repeat(3, 1fr)',
-              // }}
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
             >
               <FormControl
                 sx={{
@@ -327,14 +327,14 @@ export default function TableCreateView() {
                   }
                   size="small"
                   input={<OutlinedInput label={t('work group')} />}
-                  // renderValue={(selected) =>
-                  //   selected
-                  // }
-                  // MenuProps={{
-                  //   PaperProps: {
-                  //     sx: { maxHeight: 240 },
-                  //   },
-                  // }}
+                // renderValue={(selected) =>
+                //   selected
+                // }
+                // MenuProps={{
+                //   PaperProps: {
+                //     sx: { maxHeight: 240 },
+                //   },
+                // }}
                 >
                   {workGroupsData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -416,7 +416,7 @@ export default function TableCreateView() {
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 list={appointmentsData}
-                // sx={{ mt: SPACING }}
+              // sx={{ mt: SPACING }}
               />
             )}
             {selected && (
