@@ -7,13 +7,17 @@ import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatientFeedbacks, useGetPatientInsurance } from 'src/api';
+import {
+  useGetPatientFeedbacks,
+  useGetPatientInsurance,
+  useGetCurrentPatientMedicines,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
 import RatingRoomDialog from './ratingDialog';
-import patientCard from '../home/images/patientCard.png';
+import patientCard from '../home/images/cardimage.png';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
@@ -21,6 +25,8 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
+  const { prescriptionData } = useGetCurrentPatientMedicines(user?.patient?._id);
+  console.log(prescriptionData);
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -55,9 +61,9 @@ export default function ProfileHome() {
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:no-drug-or-substance"
             />
             &nbsp;
@@ -75,9 +81,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.diseases?.length > 0 && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="ph:virus"
             />
             &nbsp;
@@ -95,9 +101,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.surgeries?.length > 0 && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:surgery"
             />
             &nbsp;
@@ -113,20 +119,25 @@ export default function ProfileHome() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.medicines?.length > 0 && (
+      {prescriptionData?.length > 0 && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:medicines-outline"
             />
             &nbsp;
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.medicines?.map((data, datakey) => (
+            {prescriptionData?.map((data, datakey) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
-                -&nbsp; {data?.medicine?.trade_name}
+                -&nbsp; {data?.medicines?.trade_name}{' '}
+                {data?.chronic === true ? (
+                  <span style={{ color: 'orange' }}>{t("CHRONIC")}</span>
+                ) : (
+                  ''
+                )}
               </li>
             ))}
           </Stack>
@@ -135,9 +146,9 @@ export default function ProfileHome() {
       )}
       {patientInsuranseData?.length > 0 && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="streamline:insurance-hand"
             />
             &nbsp;
@@ -156,9 +167,9 @@ export default function ProfileHome() {
 
       {user?.patient?.sport_exercises && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="icon-park-outline:sport"
             />
             &nbsp;
@@ -172,9 +183,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.is_on_eating_diet && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="fluent:food-apple-20-regular"
             />
             {t('Eating Diet')}
@@ -187,9 +198,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.alcohol_consumption && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:alcohol"
             />
             &nbsp;
@@ -203,9 +214,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.smoking && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:smoking-outline"
             />
             &nbsp;
@@ -219,9 +230,9 @@ export default function ProfileHome() {
       )}
       {user?.patient?.other_medication_notes && (
         <Stack spacing={2}>
-          <Typography style={{ color: 'gray' }} variant="body1">
+          <Typography sx={{ color: 'gray' }} variant="body1">
             <Iconify
-              style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
+              sx={{ color: 'success.main', position: 'relative', left: '-3px', top: '2px' }}
               icon="charm:notes"
             />
             &nbsp;
@@ -248,13 +259,13 @@ export default function ProfileHome() {
         />
         <Iconify
           icon="subway:pin"
-          style={{
+          sx={{
             position: 'absolute',
             top: 15,
             left: 108,
             height: '27px',
             width: '27px',
-            color: 'rgb(0, 156, 0)',
+            color: 'success.main',
             zIndex: 1,
             display: curLangAr ? 'none' : 'flex',
           }}
@@ -441,22 +452,22 @@ export default function ProfileHome() {
         backgroundSize: 'cover',
       }}
     >
-      <Box sx={{ mt: 10, p: 3, ml: 5 }}>
-        <Typography marginBottom={2}>
-          {t('Name')}:&nbsp;&nbsp;&nbsp;
+      <Box sx={{ mt: 4, p: 3, ml: 3 }}>
+        <Typography sx={{ mb: 2 }}>
+          {t('Name')}:&nbsp;&nbsp;
           {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
         </Typography>
-        <Typography marginBottom={2}>
-          {t('Age')}:&nbsp;&nbsp;&nbsp; {calculateAge(user?.patient?.birth_date)}
+        <Typography sx={{ mb: 2 }}>
+          {t('Age')}:&nbsp;&nbsp; {calculateAge(user?.patient?.birth_date)}
         </Typography>
-        <Typography marginBottom={2}>
-          {t('IDno')}:&nbsp;&nbsp;&nbsp;{' '}
+        <Typography sx={{ mb: 2 }}>
+          {t('IDno')}:&nbsp;&nbsp;
           {curLangAr
             ? toArabicNumerals(user?.patient?.identification_num)
             : user?.patient?.identification_num}
         </Typography>
-        <Typography marginBottom={3}>
-          {t('Mobile Number')}:&nbsp;&nbsp;&nbsp;{' '}
+        <Typography sx={{ mb: 2, mt: 0.5 }}>
+          {t('Mobile Number')}:&nbsp;&nbsp;
           {curLangAr ? toArabicNumerals(user?.patient?.mobile_num1) : user?.patient?.mobile_num1}
         </Typography>
       </Box>

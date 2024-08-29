@@ -140,6 +140,7 @@ export const endpoints = {
     all: '/api/drugs/',
     many: '/api/drugs/many',
     one: (id) => (!id ? null : `/api/drugs/${id}`),
+    current: (id) => (!id ? null : `/api/drugs/current/patient/${id}`),
     entrance: (id) => (!id ? null : `/api/drugs/entranceprescription/${id}`),
   },
   specialities: {
