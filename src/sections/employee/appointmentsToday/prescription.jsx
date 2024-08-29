@@ -298,7 +298,6 @@ export default function Prescription({ Entrance }) {
                     setValue(`prescriptions[${index}].medicines`, newValue?._id)
                   }
                   getOptionLabel={(option) => option.trade_name || ''}
-                  onBlur={() => setMedSerach()}
                   onInputChange={(event, newInputValue) => {
                     setMedSerach(newInputValue);
                   }}
