@@ -226,7 +226,7 @@ export default function TableCreateView() {
   });
 
   const handleArabicInputChange = (event) => {
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
 
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);
@@ -308,10 +308,10 @@ export default function TableCreateView() {
               rowGap={3}
               columnGap={2}
               display="flex"
-              // gridTemplateColumns={{
-              //   xs: 'repeat(1, 1fr)',
-              //   sm: 'repeat(3, 1fr)',
-              // }}
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
             >
               <FormControl
                 sx={{

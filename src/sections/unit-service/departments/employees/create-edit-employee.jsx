@@ -108,7 +108,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   });
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -172,9 +172,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         router.push(
           submit.data?.engagement?._id
             ? paths.unitservice.departments.employees.acl(
-                departmentData._id,
-                submit.data?.engagement?._id
-              )
+              departmentData._id,
+              submit.data?.engagement?._id
+            )
             : paths.unitservice.departments.employees.root(departmentData._id)
         );
       }
@@ -250,14 +250,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

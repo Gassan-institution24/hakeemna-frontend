@@ -38,6 +38,7 @@ import FormProvider, {
   RHFPhoneNumber,
   RHFAutocomplete,
   RHFUploadAvatar,
+  RHFEditor,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -228,7 +229,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -348,7 +349,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                // onChange={handleCountryChange}
+              // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
@@ -472,7 +473,19 @@ export default function AccountGeneral({ unitServiceData }) {
               }
             />
             <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
-            <RHFTextField
+            <RHFEditor
+              lang="en"
+              name="introduction_letter"
+              label={t('introduction letter in english')}
+              sx={{ mt: 3, textTransform: 'lowercase' }}
+            />
+            <RHFEditor
+              lang="en"
+              name="arabic_introduction_letter"
+              label={t('introduction letter in arabic')}
+              sx={{ mt: 3, textTransform: 'lowercase' }}
+            />
+            {/* <RHFTextField
               multiline
               colSpan={14}
               rows={4}
@@ -489,7 +502,7 @@ export default function AccountGeneral({ unitServiceData }) {
               onChange={handleArabicInputChange}
               name="arabic_introduction_letter"
               label={t('introduction letter in arabic')}
-            />
+            /> */}
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
