@@ -26,7 +26,6 @@ export default function ProfileHome() {
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
   const { prescriptionData } = useGetCurrentPatientMedicines(user?.patient?._id);
-  console.log(prescriptionData);
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
