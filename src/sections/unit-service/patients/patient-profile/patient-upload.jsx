@@ -228,6 +228,9 @@ export default function PatientUpload({ patient }) {
                 />
                 <RHFDatePicker
                   sx={{ minWidth: 200, flex: 1 }}
+                  shouldDisableDate={(date) => (
+                    date < new Date(watch(`drugs[${index}].Start_time`))
+                  )}
                   name={`drugs[${index}].End_time`}
                   label={t('end date')}
                 />
