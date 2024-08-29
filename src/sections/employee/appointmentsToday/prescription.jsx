@@ -55,7 +55,6 @@ export default function Prescription({ Entrance }) {
   const [ischronic, setChronic] = useState(false);
   const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); // Use a unique id to track prescriptions
 
-  console.log(prescriptionData);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -78,7 +77,6 @@ export default function Prescription({ Entrance }) {
       End_time: new Date(),
       Frequency_per_day: '',
       Num_days: 0,
-      medicines: '',
       Doctor_Comments: '',
       chronic: ischronic,
     };
@@ -106,7 +104,7 @@ export default function Prescription({ Entrance }) {
       Yup.object().shape({
         employee: Yup.string(),
         patient: Yup.string(),
-        medicines: Yup.string(),
+        // medicines: Yup.string(),
         Start_time: Yup.date(),
         End_time: Yup.date(),
         file: Yup.array(),
@@ -131,9 +129,8 @@ export default function Prescription({ Entrance }) {
         End_time: new Date(),
         Frequency_per_day: '',
         Num_days: 0,
-        medicines: null,
         Doctor_Comments: '',
-        chronic: false,
+        chronic: ischronic,
       },
     ],
   };
