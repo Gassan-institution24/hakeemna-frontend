@@ -40,7 +40,6 @@ export default function Prescription({ Entrance }) {
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
-  console.log(prescriptionData, 'prescriptionData');
 
   const [medSerach, setMedSerach] = useState();
   const debouncedQuery = useDebounce(medSerach);
@@ -53,8 +52,10 @@ export default function Prescription({ Entrance }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const [chronic, setChronic] = useState(false);
+  const [ischronic, setChronic] = useState(false);
   const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); // Use a unique id to track prescriptions
+
+  console.log(prescriptionData);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -79,7 +80,7 @@ export default function Prescription({ Entrance }) {
       Num_days: 0,
       medicines: '',
       Doctor_Comments: '',
-      chronic: false,
+      chronic: ischronic,
     };
 
     setPrescriptions((prevPrescriptions) => [...prevPrescriptions, newPrescription]);
@@ -105,6 +106,7 @@ export default function Prescription({ Entrance }) {
       Yup.object().shape({
         employee: Yup.string(),
         patient: Yup.string(),
+        medicines: Yup.string(),
         Start_time: Yup.date(),
         End_time: Yup.date(),
         file: Yup.array(),
@@ -148,8 +150,10 @@ export default function Prescription({ Entrance }) {
     control,
     watch,
     setValue,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+
+  console.log('errorsssss', errors);
 
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
@@ -195,17 +199,17 @@ export default function Prescription({ Entrance }) {
           Num_days: 0,
           medicines: null,
           Doctor_Comments: '',
-          chronic: false,
+          chronic: ischronic,
         },
       ],
     });
-  }, [user, Entrance, reset]);
+  }, [user, Entrance, reset, ischronic]);
 
   const onSubmit = async (submitData) => {
     try {
       const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
         ...prescription,
-        chronic,
+        ischronic,
       }));
 
       if (prescriptionDialog.value) {
@@ -294,6 +298,7 @@ export default function Prescription({ Entrance }) {
                     setValue(`prescriptions[${index}].medicines`, newValue?._id)
                   }
                   getOptionLabel={(option) => option.trade_name || ''}
+                  onBlur={() => setMedSerach()}
                   onInputChange={(event, newInputValue) => {
                     setMedSerach(newInputValue);
                   }}
@@ -338,6 +343,10 @@ export default function Prescription({ Entrance }) {
                       {...field}
                       label={t('End time')}
                       sx={{ mb: 2 }}
+                      shouldDisableDate={(date) => {
+                        const startTime = watch(`prescriptions[${index}].Start_time`);
+                        return startTime && date < new Date(startTime);
+                      }}
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -348,6 +357,7 @@ export default function Prescription({ Entrance }) {
                     />
                   )}
                 />
+
                 <Controller
                   name={`prescriptions[${index}].Doctor_Comments`}
                   control={control}
@@ -369,7 +379,7 @@ export default function Prescription({ Entrance }) {
                   color="success"
                   sx={{ position: 'relative', top: 5, left: 25 }}
                   onChange={() => {
-                    setChronic(!chronic);
+                    setChronic(!ischronic);
                   }}
                 />
                 <Typography
@@ -406,21 +416,6 @@ export default function Prescription({ Entrance }) {
             ))}
             <Divider />
           </DialogContent>
-
-          {/* {index === prescriptions.length - 1 && (
-                  <Button
-                    onClick={addPrescriptionField}
-                    sx={{ ml: 2, bgcolor: 'success.main', display: 'inline' }}
-                    variant="contained"
-                  >
-                    {t('Add more')}
-                  </Button>
-                )}
-              </div>
-            ))}
-            <Divider />
-          </DialogContent> */}
-
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}
