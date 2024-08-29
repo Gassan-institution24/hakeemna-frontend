@@ -224,6 +224,9 @@ export default function PatientUpload({ patient }) {
                 sx={{ minWidth: 200, flex: 1 }}
                 name={`drugs[${index}].End_time`}
                 label={t('end date')}
+                shouldDisableDate={(date) => (
+                  date < new Date(watch(`drugs[${index}].Start_time`))
+                )}
               />
               <RHFTextField
                 sx={{ minWidth: 350, flex: 1 }}
