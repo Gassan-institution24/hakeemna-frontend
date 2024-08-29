@@ -50,7 +50,7 @@ export default function NewEditManyForm() {
   const [data, setData] = useState([]);
 
   const handleArabicInputChange = (index, event) => {
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
 
     if (arabicRegex.test(event.target.value)) {
       setData((prev) => {

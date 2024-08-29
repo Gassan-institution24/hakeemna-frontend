@@ -47,6 +47,7 @@ export default function PatientUpload({ patient }) {
   const { isMedLab } = useUSTypeGuard();
 
   const [medSerach, setMedSerach] = useState();
+  const [loading, setLoading] = useState();
 
   const debouncedQuery = useDebounce(medSerach);
 
@@ -87,7 +88,11 @@ export default function PatientUpload({ patient }) {
   };
 
   const removeDrug = (index) => {
+    setLoading(true)
     remove(index);
+    setTimeout(() => {
+      setLoading(false)
+    }, 100)
   };
 
   const handleDrop = (acceptedFile, name) => {
@@ -166,10 +171,13 @@ export default function PatientUpload({ patient }) {
         setValue('end_date', null);
         setValue('sick_leave_description', null);
       } else if (table === 'prescription') {
+        setLoading(true)
         await axiosInstance.post(endpoints.prescription.all, values.drugs);
         setValue('drugs', [defaultDrug]);
+        setLoading(false)
       }
-      enqueueSnackbar(t('added successfully'));
+      // eslint-disable-next-line
+      enqueueSnackbar(t(table.replace(/_/g, ' ')) + ' ' + t('added successfully'));
     } catch (e) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
         variant: 'error',
@@ -183,7 +191,7 @@ export default function PatientUpload({ patient }) {
         {!isMedLab && (
           <Card sx={{ p: 2, mb: 4 }}>
             <Typography variant="subtitle1">{t('prescription')}</Typography>
-            {fields.map((one, index) => (
+            {!loading && fields.map((one, index) => (
               <Stack
                 direction="row"
                 flexWrap="wrap"
@@ -195,6 +203,7 @@ export default function PatientUpload({ patient }) {
                 <Autocomplete
                   sx={{ minWidth: 300, flex: 1 }}
                   options={medicinesData}
+                  onBlur={() => setMedSerach()}
                   onChange={(event, newValue) =>
                     setValue(`drugs[${index}].medicines`, newValue?._id)
                   }

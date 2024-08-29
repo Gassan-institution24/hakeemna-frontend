@@ -234,7 +234,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
   });
 
   const handleArabicInputChange = (event) => {
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
 
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value);

@@ -14,13 +14,17 @@ export default function DoctorPage() {
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const stripHtmlTags = (html) => {
+    if (!html) return '';
+    return html.replace(/<\/?[^>]+(>|$)/g, "");
+  };
   return (
     <>
       <Helmet>
         <title>{curLangAr ? data?.employee?.name_arabic : data?.employee?.name_english}</title>
         <meta
           name="description"
-          content={curLangAr ? data?.employee?.arabic_about_me : data?.employee?.about_me}
+          content={curLangAr ? stripHtmlTags(data?.employee?.arabic_about_me) : stripHtmlTags(data?.employee?.about_me)}
         />
       </Helmet>
 
