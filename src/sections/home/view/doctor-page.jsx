@@ -10,6 +10,7 @@ import { useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
+import { ConvertToHTML } from 'src/utils/convert-to-html';
 
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
@@ -41,6 +42,8 @@ export default function DoctorPage({ employeeData }) {
     setSignupDialog(true);
     // setTimeListItem(newValue);
   };
+
+
 
   return (
     <>
@@ -133,8 +136,8 @@ export default function DoctorPage({ employeeData }) {
                 </Stack>
                 <Typography variant="body2" sx={{ px: 3 }}>
                   {curLangAr
-                    ? employeeData?.employee?.arabic_about_me
-                    : employeeData?.employee?.about_me}
+                    ? ConvertToHTML(employeeData?.employee?.arabic_about_me)
+                    : ConvertToHTML(employeeData?.employee?.about_me)}
                 </Typography>
               </>
             )}

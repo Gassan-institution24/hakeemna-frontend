@@ -68,7 +68,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   });
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -98,9 +98,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
-            departmentData.name_english
-          }</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
+            }</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
@@ -108,12 +107,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
-            departmentData.name_english
-          }</strong> department`,
-          ar_msg: `إنشاء مجموعة عمل <strong>${data.name_arabic || ''}</strong> في قسم <strong>${
-            departmentData.name_arabic
-          }</strong>`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
+            }</strong> department`,
+          ar_msg: `إنشاء مجموعة عمل <strong>${data.name_arabic || ''}</strong> في قسم <strong>${departmentData.name_arabic
+            }</strong>`,
         });
       }
       reset();

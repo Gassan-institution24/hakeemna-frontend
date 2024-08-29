@@ -23,7 +23,7 @@ export default function OverviewAppPage() {
     if (user.role === 'superadmin') {
       router.push(paths.superadmin.users.root);
     } else if (user.role === 'admin') {
-      router.push(paths.unitservice.employees.root);
+      router.push(paths.employee.calender);
     } else if (user.role === 'employee') {
       router.push(paths.employee.calender);
     }

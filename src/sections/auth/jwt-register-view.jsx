@@ -152,7 +152,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
     if (arabicRegex.test(event.target.value)) {
       setValue(event.target.name, event.target.value, { shouldValidate: true });
     }

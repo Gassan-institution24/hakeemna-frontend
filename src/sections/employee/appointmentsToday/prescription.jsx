@@ -291,6 +291,7 @@ export default function Prescription({ Entrance }) {
                 <Autocomplete
                   sx={{ minWidth: 300, flex: 1, my: 2 }}
                   options={medicinesData}
+                  onBlur={() => setMedSerach()}
                   onChange={(event, newValue) =>
                     setValue(`prescriptions[${index}].medicines`, newValue?._id)
                   }

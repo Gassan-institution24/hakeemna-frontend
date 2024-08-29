@@ -71,7 +71,7 @@ export default function NewEditManyForm() {
   const [loading, setLoading] = useState(false);
 
   // const handleArabicInputChange = (index, event) => {
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
 
   //   if (arabicRegex.test(event.target.value)) {
   //     setData((prev) => {
@@ -230,12 +230,12 @@ export default function NewEditManyForm() {
                   headLabel={TABLE_HEAD}
                   rowCount={data.length}
                   numSelected={table.selected.length}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     data.map((row, index, idx) => index)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     data.map((row, index, idx) => index)
+                //   )
+                // }
                 />
 
                 <TableBody>

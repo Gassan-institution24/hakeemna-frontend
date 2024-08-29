@@ -30,17 +30,14 @@ export default function EditPatient({ patient }) {
   const [em_phone, setEMphone] = useState(patient.mobile_num1);
   const [em_phone2, setEMphone2] = useState(patient.mobile_num2);
   const handleArabicInputChange = (event) => {
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
-
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
 
   const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
-
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
@@ -140,7 +137,7 @@ export default function EditPatient({ patient }) {
               />
 
               <MuiTelInput
-                label={`${t('Mobile Number')} *`}
+                label={t('Mobile Number')}
                 forceCallingCode
                 defaultCountry="JO"
                 value={em_phone}
@@ -151,7 +148,7 @@ export default function EditPatient({ patient }) {
                 }}
               />
               <MuiTelInput
-                label={`${t('Alternative Mobile Number')} *`}
+                label={t('Alternative Mobile Number')}
                 forceCallingCode
                 defaultCountry="JO"
                 value={em_phone2}

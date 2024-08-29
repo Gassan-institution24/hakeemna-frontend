@@ -61,7 +61,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   });
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -99,12 +99,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
-          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${
-            departmentData.name_english
-          }</strong> department`,
-          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> داخل قسم <strong>${
-            departmentData.name_arabic
-          }</strong>`,
+          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${departmentData.name_english
+            }</strong> department`,
+          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> داخل قسم <strong>${departmentData.name_arabic
+            }</strong>`,
         });
       }
       reset();
