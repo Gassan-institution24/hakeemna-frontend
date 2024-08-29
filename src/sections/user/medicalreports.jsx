@@ -12,13 +12,7 @@ import {
   Image as PdfImage,
 } from '@react-pdf/renderer';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import { Tooltip } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+import { Box, Card, Stack, Avatar, Tooltip, Divider, Typography, Link } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -165,7 +159,7 @@ export default function Medicalreports() {
     router.push(paths.dashboard.user.medicalreportsview(id));
   };
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-  const formatTextWithLineBreaks = (text) => {
+  const formatTextWithLineBreaks = (text, id, limit = 20) => {
     if (!text) return '';
 
     const chunks = [];
@@ -174,7 +168,16 @@ export default function Medicalreports() {
       chunks.push(text.slice(i, i + 100));
     }
 
-    return chunks.join('<br />');
+    let formattedText = chunks.join('<br />');
+
+    if (text.length > limit) {
+      formattedText = `${text.slice(
+        0,
+        limit
+      )}... <a href="/dashboard/user/medicalreportsview/${id}" style="color:blue;">Read more</a>`;
+    }
+
+    return formattedText;
   };
 
   return medicalreportsdata?.length > 0 ? (
@@ -201,7 +204,9 @@ export default function Medicalreports() {
             {fDateAndTime(info?.created_at)}
           </Stack>
           <Typography
-            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(info?.description) }}
+            dangerouslySetInnerHTML={{
+              __html: formatTextWithLineBreaks(info?.description, info?._id),
+            }}
             sx={{ fontSize: 13 }}
           />
         </Stack>
