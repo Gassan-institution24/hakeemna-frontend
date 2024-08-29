@@ -20,6 +20,7 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
+import { ConvertToHTML } from 'src/utils/convert-to-html';
 import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -32,9 +33,6 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import Back from './imges/back.png';
 import Doclogo from '../../components/logo/doc.png';
 
-function stripHtmlTags(html) {
-  return html.replace(/<\/?[^>]+(>|$)/g, '');
-}
 
 const styles = StyleSheet.create({
   page: {
@@ -197,7 +195,7 @@ export default function SickLeaves() {
             {fDateAndTime(info?.Medical_sick_leave_end)}
           </Stack>
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {stripHtmlTags(info?.description)}
+            {ConvertToHTML(info?.description)}
           </Stack>
           </Stack>
           <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
