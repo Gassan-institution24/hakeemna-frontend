@@ -20,7 +20,7 @@ import { useAuthContext } from '../hooks';
 export function useAclGuard() {
   const { user } = useAuthContext();
   const { data } = useGetwgroupEmployeeEngs(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
 
   const checkAcl = useCallback(
@@ -58,10 +58,10 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
   const { user } = useAuthContext();
   const { t } = useTranslate();
 
-  const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement].acl;
+  const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
 
   const { data } = useGetwgroupEmployeeEngs(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
 
   if (

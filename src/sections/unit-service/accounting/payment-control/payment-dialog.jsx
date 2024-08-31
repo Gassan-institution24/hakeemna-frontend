@@ -104,7 +104,7 @@ export default function PaymentDialog({ open, onClose, row, refetch }) {
 
         <DialogActions>
           <Button variant="outlined" color="inherit" onClick={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
 
           <Button
@@ -114,7 +114,7 @@ export default function PaymentDialog({ open, onClose, row, refetch }) {
               onClose();
             }}
           >
-            Apply
+            {t('pay')}
           </Button>
         </DialogActions>
       </FormProvider>

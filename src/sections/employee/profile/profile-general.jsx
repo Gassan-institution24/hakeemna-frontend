@@ -197,9 +197,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
           year: null,
         },
       ],
-    fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement].fees || 0,
+    fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
     // currency:
-    //   user?.employee?.employee_engagements?.[user.employee.selected_engagement].currency ||
+    //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
     //   currencies?.[0]?._id,
   };
   const methods = useForm({
@@ -273,7 +273,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
       await axios.patch(
         endpoints.employee_engagements.one(
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
         { fees: data.fees, currency: data?.currency }
       );
