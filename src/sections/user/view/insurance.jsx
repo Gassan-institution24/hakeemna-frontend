@@ -38,6 +38,7 @@ export default function Insuranceinfo() {
   const { currentLang } = useLocales();
   const { insuranseCosData } = useGetActiveInsuranceCos();
   const { insuranseTypesData } = useGetInsuranceTypes();
+console.log(insuranseCosData);
 
   const curLangAr = currentLang.value === 'ar';
   const [checkChange, setCheckChange] = useState(false);
@@ -149,7 +150,7 @@ export default function Insuranceinfo() {
             >
               {insuranseCosData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {curLangAr ? test?.insurance?.name_arabic : test?.insurance?.name_english}
+                  {curLangAr ? test?.name_arabic : test?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
