@@ -52,9 +52,7 @@ export default function Prescription({ Entrance }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const [ischronic, setChronic] = useState(false);
-  const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); // Use a unique id to track prescriptions
-
+  const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); 
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -78,7 +76,6 @@ export default function Prescription({ Entrance }) {
       Frequency_per_day: '',
       Num_days: 0,
       Doctor_Comments: '',
-      chronic: ischronic,
     };
 
     setPrescriptions((prevPrescriptions) => [...prevPrescriptions, newPrescription]);
@@ -100,22 +97,17 @@ export default function Prescription({ Entrance }) {
   };
 
   const PrescriptionsSchema = Yup.object().shape({
-    prescriptions: Yup.array().of(
-      Yup.object().shape({
-        employee: Yup.string(),
-        patient: Yup.string(),
-        // medicines: Yup.string(),
-        Start_time: Yup.date(),
-        End_time: Yup.date(),
-        file: Yup.array(),
-        Frequency_per_day: Yup.string(),
-        entrance_mangament: Yup.string(),
-        description: Yup.string(),
-        department: Yup.string(),
-        Drugs_report: Yup.string(),
-        medical_report: Yup.string(),
-      })
-    ),
+    employee: Yup.string(),
+    patient: Yup.string(),
+    medicines: Yup.string(),
+    Start_time: Yup.date(),
+    End_time: Yup.date(),
+    Frequency_per_day: Yup.string(),
+    entrance_mangament: Yup.string(),
+    Doctor_Comments: Yup.string(),
+    chronic: Yup.boolean(),
+    Drugs_report: Yup.string(),
+    medical_report: Yup.string(),
   });
 
   const defaultValues = {
@@ -123,14 +115,17 @@ export default function Prescription({ Entrance }) {
       {
         employee: user?.employee?._id || '',
         patient: Entrance?.patient?._id || '',
+        unit_service:
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+            ?._id,
         unit_service_patient: Entrance?.unit_service_patient,
         entrance_mangament: Entrance?._id || '',
         Start_time: new Date(),
         End_time: new Date(),
         Frequency_per_day: '',
         Num_days: 0,
+        medicines: null,
         Doctor_Comments: '',
-        chronic: ischronic,
       },
     ],
   };
@@ -196,17 +191,15 @@ export default function Prescription({ Entrance }) {
           Num_days: 0,
           medicines: null,
           Doctor_Comments: '',
-          chronic: ischronic,
         },
       ],
     });
-  }, [user, Entrance, reset, ischronic]);
+  }, [user, Entrance, reset]);
 
   const onSubmit = async (submitData) => {
     try {
       const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
         ...prescription,
-        ischronic,
       }));
 
       if (prescriptionDialog.value) {
@@ -369,14 +362,16 @@ export default function Prescription({ Entrance }) {
                   )}
                 />
 
-                <Checkbox
-                  size="small"
-                  name="chronic"
-                  color="success"
-                  sx={{ position: 'relative', top: 5, left: 25 }}
-                  onChange={() => {
-                    setChronic(!ischronic);
-                  }}
+                <Controller
+                  name={`prescriptions[${index}].chronic`}
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      {...field}
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  )}
                 />
                 <Typography
                   sx={{
