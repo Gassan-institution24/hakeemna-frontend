@@ -43,7 +43,7 @@ export default function RatingRoomDialog() {
   const [bodyState, setBodyState] = useState();
 
   const { user } = useAuthContext();
-  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
+  const { feedbackData, refetch } = useGetPatientFeedbacks(user?.patient?._id);
   const skipfunction = async () => {
     try {
       await axios.patch(`api/feedback/${feedbackData?._id}`, {
@@ -91,8 +91,6 @@ export default function RatingRoomDialog() {
     setSelectedValue(item);
   };
 
-  const { fullWidth } = useState(true);
-  const { maxWidth } = useState('xs');
   const onSubmit = async (dataSubmit) => {
     try {
       await axios.patch(`api/feedback/${feedbackData?._id}`, {
@@ -103,9 +101,7 @@ export default function RatingRoomDialog() {
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      refetch();
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(
@@ -118,7 +114,16 @@ export default function RatingRoomDialog() {
   };
 
   return (
-    <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+    <Dialog
+      open={dialog.value}
+      onClose={dialog.onTrue}
+      PaperProps={{
+        sx: {
+          width: '500px',
+          maxWidth: '500px',
+        },
+      }}
+    >
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <div
           style={{

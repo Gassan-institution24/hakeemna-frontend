@@ -48,7 +48,11 @@ export default function WatingRoom() {
                   <TableCell>{fTime(entranceData?.Appointment_date)}</TableCell>
                   <TableCell>{fTime(entranceData?.start_time)}</TableCell>
                   <TableCell>{entranceCount}</TableCell>
-                  <TableCell>Go to {entranceData?.Next_activity?.name_english} Room </TableCell>
+                  {entranceData?.Next_activity?.name_english ? (
+                    <TableCell>Go to {entranceData?.Next_activity?.name_english} Room </TableCell>
+                  ) : (
+                    <TableCell>___</TableCell>
+                  )}
                 </TableRow>
 
                 {/* <TableRow>

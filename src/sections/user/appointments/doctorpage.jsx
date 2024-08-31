@@ -79,8 +79,6 @@ export default function Doctorpage() {
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
-  const { fullWidth } = useState(false);
-  const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useGetEmployeeEngagement(id);
@@ -322,7 +320,16 @@ export default function Doctorpage() {
   );
   const renderPostInput = (
     <Card sx={{ p: 3 }}>
-      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+      <Dialog
+        open={dialog.value}
+        onClose={dialog.onTrue}
+        PaperProps={{
+          sx: {
+            width: '300px',
+            maxWidth: '300px',
+          },
+        }}
+      >
         <FormProvider>
           <div
             style={{
@@ -363,6 +370,7 @@ export default function Doctorpage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
