@@ -90,8 +90,8 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     email: Yup.string().required(t('required field')).email(t('required field')),
     password: Yup.string().required(t('required field')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null])
-      .min(8, t('at least 8 ')),
+      .oneOf([Yup.ref('password'), t('must be exactly as password')])
+      .min(8, t('must be at least 8')),
     identification_num: Yup.string().required(t('required field')),
     scanned_identification: Yup.mixed().required(t('required field')),
     mobile_num1: Yup.string()
@@ -100,7 +100,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.date()
       .required(t('required field'))
-      .test('is-adult', 'You must be at least 18 years old', (value) => {
+      .test('is-adult', t('You must be at least 18 years old'), (value) => {
         const oldage = new Date();
         const minDate = new Date(oldage.getFullYear() - 18, oldage.getMonth(), oldage.getDate());
         return value <= minDate;

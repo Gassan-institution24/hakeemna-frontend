@@ -89,8 +89,8 @@ export default function InvoiceNewEditAddress() {
               </Typography>
               <Typography variant="body2">
                 {curLangAr
-                  ? `${data?.city?.name_arabic}, ${data?.country?.name_arabic}`
-                  : `${data?.city?.name_english}, ${data?.country?.name_english}`}
+                  ? `${data?.city?.name_arabic || ''}, ${data?.country?.name_arabic || ''}`
+                  : `${data?.city?.name_english || ''}, ${data?.country?.name_english || ''}`}
               </Typography>
               <Typography variant="body2"> {data?.phone}</Typography>
             </Stack>
@@ -117,14 +117,14 @@ export default function InvoiceNewEditAddress() {
                 options={patientsData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   patientsData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       patientsData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
