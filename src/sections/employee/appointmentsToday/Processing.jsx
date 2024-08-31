@@ -47,7 +47,7 @@ export default function Processing() {
   );
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { CheckListData } = useGetMyCheckLists(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const { serviceTypesData } = useGetUSServiceTypes(

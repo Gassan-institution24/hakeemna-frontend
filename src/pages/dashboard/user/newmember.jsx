@@ -41,8 +41,8 @@ export default function Create() {
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .min(8, 'Confirm password must be at least 8 characters'),
+      .oneOf([Yup.ref('password'), t('must be exactly as password')], 'Passwords must match')
+      .min(8, `${t('must be at least')} 8`),
     identification_num: Yup.string().required('Identification number is required'),
     birth_date: Yup.date().required('birth_date is required'),
     gender: Yup.string().required('Gender is required'),
