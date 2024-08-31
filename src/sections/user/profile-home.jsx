@@ -18,6 +18,7 @@ import Image from 'src/components/image/image';
 
 import RatingRoomDialog from './ratingDialog';
 import patientCard from '../home/images/cardimage.png';
+import patientCardAr from '../home/images/cardimagear.png';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
@@ -133,7 +134,7 @@ export default function ProfileHome() {
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
                 -&nbsp; {data?.medicines?.trade_name}{' '}
                 {data?.chronic === true ? (
-                  <span style={{ color: 'orange' }}>{t("CHRONIC")}</span>
+                  <span style={{ color: 'orange' }}>{t('CHRONIC')}</span>
                 ) : (
                   ''
                 )}
@@ -347,16 +348,12 @@ export default function ProfileHome() {
         },
         {
           label: t('Mobile Number'),
-          value: curLangAr
-            ? toArabicNumerals(user?.patient?.mobile_num1)
-            : user?.patient?.mobile_num1,
+          value: curLangAr ? user?.patient?.mobile_num1 : user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: t('Second Mobile Number'),
-          value: curLangAr
-            ? toArabicNumerals(user?.patient?.mobile_num2)
-            : user?.patient?.mobile_num2,
+          value: curLangAr ? user?.patient?.mobile_num2 : user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
       ].map((item, ii) => (
@@ -447,7 +444,7 @@ export default function ProfileHome() {
       sx={{
         p: 3,
         marginBottom: 2,
-        backgroundImage: `url(${patientCard})`,
+        backgroundImage: curLangAr ? `url(${patientCardAr})` : `url(${patientCard})`,
         backgroundSize: 'cover',
       }}
     >
@@ -467,7 +464,7 @@ export default function ProfileHome() {
         </Typography>
         <Typography sx={{ mb: 2, mt: 0.5 }}>
           {t('Mobile Number')}:&nbsp;&nbsp;
-          {curLangAr ? toArabicNumerals(user?.patient?.mobile_num1) : user?.patient?.mobile_num1}
+          {user?.patient?.mobile_num1}
         </Typography>
       </Box>
     </Stack>
