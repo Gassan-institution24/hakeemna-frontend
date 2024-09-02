@@ -154,18 +154,30 @@ export default function PrescriptionPage() {
               </span>
             </Typography>
             <Typography sx={{ fontWeight: 600, p: 2 }}>
+              {t('name')}:&nbsp; &nbsp;
+              {prescriptionData?.medicines?.map((medicineName, index) => (
+                <span style={{ color: 'gray', fontWeight: 400 }} key={index}>
+                  ({medicineName?.medicines?.trade_name}){' '}
+                </span>
+              ))}
+            </Typography>
+
+            <Typography sx={{ fontWeight: 600, p: 2 }}>
               {t('Dr.')}&nbsp;
               <span style={{ color: 'gray', fontWeight: 400 }}>
                 {prescriptionData?.employee?.name_english}
               </span>{' '}
-              &nbsp; added a new prescription
+              &nbsp; {t('added a new prescription')}
             </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('note')}:&nbsp;&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.Doctor_Comments}
-              </span>{' '}
-            </Typography>
+            {prescriptionData?.Doctor_Comments && (
+              <Typography sx={{ fontWeight: 600, p: 2 }}>
+                {t('note')}:&nbsp;&nbsp;
+                <span style={{ color: 'gray', fontWeight: 400 }}>
+                  {prescriptionData?.Doctor_Comments}
+                </span>{' '}
+              </Typography>
+            )}
+
             <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
               <Iconify icon="icon-park:back" />
               &nbsp; {t('Back')}
@@ -179,35 +191,40 @@ export default function PrescriptionPage() {
                 {fDateTime(prescriptionData?.created_at)}
               </span>
             </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Frequency')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.Frequency_per_day}
-              </span>
-            </Typography>
-            {prescriptionData?.chronic ? (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>{t('Chronic: Yes')}</Typography>
-            ) : (
+            {prescriptionData?.Frequency_per_day && (
               <Typography sx={{ fontWeight: 600, p: 2 }}>
-                {t('Duration')}:&nbsp;&nbsp;
-                {prescriptionData?.Start_time && prescriptionData?.End_time ? (
-                  <>
-                    From {fDateAndTime(prescriptionData?.Start_time)} To{' '}
-                    {fDateAndTime(prescriptionData?.End_time)}
-                    <span style={{ color: '#2F88FF', fontWeight: 500 }}>
-                      &nbsp;{prescriptionData?.Num_days} day/s
-                    </span>
-                  </>
-                ) : (
-                  `${prescriptionData?.Num_days} day/s`
-                )}
+                {t('Frequency')}:&nbsp; &nbsp;
+                <span style={{ color: 'gray', fontWeight: 400 }}>
+                  {prescriptionData?.Frequency_per_day}
+                </span>
               </Typography>
             )}
 
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={prescriptionDialog.onTrue}>
+            {prescriptionData?.chronic ? (
+              <Typography sx={{ fontWeight: 600, p: 2 }}>{t('Chronic: Yes')}</Typography>
+            ) : (
+              prescriptionData?.Num_days && (
+                <Typography sx={{ fontWeight: 600, p: 2 }}>
+                  {t('Duration')}:&nbsp;&nbsp;
+                  {prescriptionData?.Start_time && prescriptionData?.End_time ? (
+                    <>
+                      {t('From')} {fDateAndTime(prescriptionData?.Start_time)} {t('To')}{' '}
+                      {fDateAndTime(prescriptionData?.End_time)}
+                      <span style={{ color: '#2F88FF', fontWeight: 500 }}>
+                        &nbsp;{prescriptionData?.Num_days} day/s
+                      </span>
+                    </>
+                  ) : (
+                    `${prescriptionData?.Num_days} day/s`
+                  )}
+                </Typography>
+              )
+            )}
+
+            {/* <Button variant="outlined" sx={{ mt: 2 }} onClick={prescriptionDialog.onTrue}>
               <Iconify icon="icon-park:edit-two" />
               &nbsp; {t('Update')}
-            </Button>
+            </Button> */}
           </Box>
         </Stack>
       </Box>
