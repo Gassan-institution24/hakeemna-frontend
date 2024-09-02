@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -137,11 +137,11 @@ export default function JwtRegisterView() {
       .email(t('Email must be a valid email address')),
     password: Yup.string().min(8, `${t('must be at least')} 8`),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+      .oneOf([Yup.ref('password'), t('must be exactly as password')], t('Passwords must match'))
       .min(8, `${t('must be at least')} 8`),
   });
 
-  const defaultValues = {
+  const defaultValues = useMemo(() => ({
     employees_number: '',
     us_name_arabic: '',
     us_name_english: '',
@@ -158,7 +158,7 @@ export default function JwtRegisterView() {
     em_nationality: '',
     em_identification_num: '',
     em_profrssion_practice_num: '',
-    em_type: '',
+    em_type: employeeTypesData?.[0]?._id,
     em_gender: '',
     em_phone: '',
     em_speciality: null,
@@ -168,7 +168,7 @@ export default function JwtRegisterView() {
     email: '',
     password: '',
     confirmPassword: '',
-  };
+  }), [employeeTypesData]);
 
   const methods = useForm({
     mode: 'all',
@@ -179,6 +179,7 @@ export default function JwtRegisterView() {
   const {
     handleSubmit,
     setValue,
+    reset,
     watch,
     formState: { isSubmitting, errors },
   } = methods;
@@ -236,6 +237,11 @@ export default function JwtRegisterView() {
       setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
     }
   });
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
+
   useEffect(() => {
     setErrorMsg();
     if (Object.keys(errors).length) {
@@ -328,7 +334,7 @@ export default function JwtRegisterView() {
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of unit of service')}
-          placeholder="عيادة الدكتور أحمد"
+        // placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
@@ -337,7 +343,7 @@ export default function JwtRegisterView() {
         onChange={handleEnglishInputChange}
         name="us_name_english"
         label={t('English name of unit of service')}
-        placeholder="Dr.Ahmad Clinic"
+      // placeholder="Dr.Ahmad Clinic"
       />
       {/* </Tooltip> */}
       {!curLangAr && (
@@ -346,7 +352,7 @@ export default function JwtRegisterView() {
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of unit of service')}
-          placeholder="عيادة الدكتور أحمد"
+        // placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
@@ -489,7 +495,7 @@ export default function JwtRegisterView() {
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
-            placeholder="أحمد سالم القناص"
+          // placeholder="أحمد سالم القناص"
           />
           // {/* </Tooltip> */}
         )}
@@ -498,7 +504,7 @@ export default function JwtRegisterView() {
           onChange={handleEnglishInputChange}
           name="em_name_english"
           label={t('Manager full name in English')}
-          placeholder="Ahmad Salem Al-kanas"
+        // placeholder="Ahmad Salem Al-kanas"
         />
         {/* </Tooltip> */}
         {!curLangAr && (
@@ -507,7 +513,7 @@ export default function JwtRegisterView() {
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
-            placeholder="أحمد سالم القناص"
+          // placeholder="ا"
           />
           // </Tooltip>
         )}
@@ -544,7 +550,7 @@ export default function JwtRegisterView() {
             // <Tooltip placement="top" title="speciality of admin">
             <RHFAutocomplete
               name="em_speciality"
-              label={`${t('speciality')} *`}
+              label={t('speciality')}
               options={specialtiesData.map((speciality) => speciality._id)}
               getOptionLabel={(option) =>
                 specialtiesData.find((one) => one._id === option)?.[
@@ -673,7 +679,7 @@ export default function JwtRegisterView() {
           <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
         </Alert>
       )}
-      {curLangAr && (
+      {/* {curLangAr && (
         // <Tooltip placement="top" title="admin middle name - father name -">
         <RHFTextField
           disabled
@@ -682,18 +688,18 @@ export default function JwtRegisterView() {
         // label={t('Manager full name in Arabic')}
         // placeholder="أحمد سالم القناص"
         />
-        // {/* </Tooltip> */}
-      )}
+        // {/* </Tooltip> 
+      )} */}
       {/* <Tooltip placement="top" title="admin first name"> */}
-      <RHFTextField
+      {/* <RHFTextField
         disabled
         // onChange={handleEnglishInputChange}
         name="em_name_english"
       // label={t('Manager full name in English')}
       // placeholder="Ahmad Salem Al-kanas"
-      />
+      /> */}
       {/* </Tooltip> */}
-      {!curLangAr && (
+      {/* {!curLangAr && (
         // <Tooltip placement="top" title="admin middle name - father name -">
         <RHFTextField
           disabled
@@ -703,7 +709,7 @@ export default function JwtRegisterView() {
         // placeholder="أحمد سالم القناص"
         />
         // </Tooltip>
-      )}
+      )} */}
       {/* <Tooltip placement="top" title="admin email address to sign in"> */}
       <RHFTextField name="email" label={t('email')} />
       {/* </Tooltip> */}

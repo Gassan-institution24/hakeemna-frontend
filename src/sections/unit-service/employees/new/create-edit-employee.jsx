@@ -86,7 +86,7 @@ export default function TableNewEditForm({ currentTable }) {
     visibility_online_appointment: Yup.bool(),
     password: Yup.string().min(8, `${t('must be at least')} 8`),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+      .oneOf([Yup.ref('password'), t('must be exactly as password')], t('Passwords must match'))
       .min(8, `${t('must be at least')} 8`),
   });
 

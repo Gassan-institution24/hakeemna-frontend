@@ -72,8 +72,8 @@ export default function StartupCreating({ open, onClose }) {
           employees: [
             user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
           ],
-          name_english: `${user.employee?.name_english} work group`,
-          name_arabic: `فريق عمل ${user.employee?.name_arabic}`,
+          name_english: `${user.employee?.name_english || ''} work group`,
+          name_arabic: `فريق عمل ${user.employee?.name_arabic || ''}`,
         });
       }
       if (tables.includes('rooms')) {
@@ -116,7 +116,7 @@ export default function StartupCreating({ open, onClose }) {
     } catch (error) {
       loading.onFalse();
       enqueueSnackbar(
-        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        curLangAr ? error.arabic_message || error.message : error.message,
         {
           variant: 'error',
         }

@@ -3,8 +3,10 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers'; // Import English locale
+import { Button, IconButton, InputAdornment } from '@mui/material';
 
 import { useUnitTime } from 'src/utils/format-time';
+import { useTranslate } from 'src/locales';
 
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -13,6 +15,7 @@ import Iconify from '../iconify/iconify';
 // ----------------------------------------------------------------------
 
 export default function RHFTimePicker({ name, helperText, type, onChange, ...other }) {
+  const { t } = useTranslate()
   const { control } = useFormContext();
   const { user } = useAuthContext();
   const { myunitTime } = useUnitTime();
@@ -32,9 +35,15 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           }}
           // ampmInClock
           slots={{
-            clearIcon: (provided, props) => <Iconify icon="mingcute:close-line" {...provided} />,
-            clearButton: <Iconify icon="mingcute:close-line" />,
-            actionBar: 'cancel',
+            actionBar: ({ onClear, onCancel }) => (
+              <Button sx={{ position: 'absolute' }} onClick={() => {
+                field.onChange(null);
+                onClear();
+              }}>
+
+                {t('clear')}
+              </Button>
+            ),
           }}
           minutesStep={5}
           format="hh:mm a"
@@ -52,6 +61,7 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
             }
           }}
           slotProps={{
+            clearIcon: <Iconify icon="mingcute:close-line" />,
             textField: {
               fullWidth: true,
               error: !!error,
