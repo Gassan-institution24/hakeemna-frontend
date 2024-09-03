@@ -5,13 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Link from '@mui/material/Link';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
+import { Link, Alert, Stack, Hidden, IconButton, Typography, InputAdornment } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -24,6 +19,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
+import Language from 'src/layouts/common/language-popover';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -106,6 +102,19 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
+      <Hidden mdUp>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <Language />
+        </div>
+      </Hidden>
+
       <Typography variant="h4">{t('Login')}</Typography>
 
       <Stack direction="row" alignItems="flex-end" spacing={0.5}>
