@@ -33,7 +33,6 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
             minutes: renderTimeViewClock,
             seconds: renderTimeViewClock,
           }}
-          // ampmInClock
           slots={{
             actionBar: ({ onClear, onCancel }) => (
               <Button sx={{ position: 'absolute' }} onClick={() => {
@@ -47,9 +46,14 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           }}
           minutesStep={5}
           format="hh:mm a"
+          ampm={false}
           value={myunitTime(field.value)}
           InputLabelProps={{ shrink: true }}
           onChange={(newValue) => {
+            if (newValue == null) {
+              field.onChange(null)
+              return
+            }
             const selectedTime = zonedTimeToUtc(
               newValue,
               user?.employee?.employee_engagements?.[user?.employee.selected_engagement]

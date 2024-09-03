@@ -38,7 +38,7 @@ export default function Insuranceinfo() {
   const { currentLang } = useLocales();
   const { insuranseCosData } = useGetActiveInsuranceCos();
   const { insuranseTypesData } = useGetInsuranceTypes();
-console.log(insuranseCosData);
+  console.log(insuranseCosData);
 
   const curLangAr = currentLang.value === 'ar';
   const [checkChange, setCheckChange] = useState(false);
@@ -50,7 +50,7 @@ console.log(insuranseCosData);
     insurance: Yup.string().required(),
     insurance_client_num: Yup.string(),
     agree: Yup.boolean().required(),
-    insurance_expiry_time: Yup.date().required('Date is required'),
+    insurance_expiry_time: Yup.mixed().required('Date is required'),
   });
 
   const defaultValues = {

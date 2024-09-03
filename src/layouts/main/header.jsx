@@ -52,7 +52,7 @@ export default function Header() {
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         > */}
 
-        <Logo sx={{ width: { xs: 120, md: 200 }, height: { xs: 50, md: 100 } }} />
+        <Logo sx={{ width: { xs: 120, md: 200 }, height: { xs: 50, md: 120 } }} />
         {/* </Container> */}
         {mdUp && (
           <Stack width={1}>

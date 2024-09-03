@@ -45,9 +45,9 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
     patient: Yup.string(),
     description: Yup.string(),
     unit_services: Yup.string(),
-    Medical_sick_leave_start: Yup.date(),
+    Medical_sick_leave_start: Yup.mixed(),
     entrance_mangament: Yup.string(),
-    Medical_sick_leave_end: Yup.date(),
+    Medical_sick_leave_end: Yup.mixed(),
   });
   const defaultValues = {
     employee: user?.employee?._id,

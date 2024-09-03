@@ -63,8 +63,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const NewConfigSchema = Yup.object().shape({
     weekend: Yup.array(),
-    start_date: Yup.date().nullable(),
-    end_date: Yup.date().nullable(),
+    start_date: Yup.mixed().nullable(),
+    end_date: Yup.mixed().nullable(),
     appointment_time: Yup.number()
       .required(t('required field'))
       .min(5, 'Appointment Time must be at least 5')
@@ -76,8 +76,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     holidays: Yup.array(),
     long_holidays: Yup.array().of(
       Yup.object().shape({
-        start_date: Yup.date().nullable(),
-        end_date: Yup.date().nullable(),
+        start_date: Yup.mixed().nullable(),
+        end_date: Yup.mixed().nullable(),
         // .when(
         //   'start_date',
         //   (startDate, schema) =>
@@ -91,8 +91,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required(t('required field')),
-        work_start_time: Yup.date().nullable().required(t('required field')),
-        work_end_time: Yup.date().nullable().required(t('required field')),
+        work_start_time: Yup.mixed().nullable().required(t('required field')),
+        work_end_time: Yup.mixed().nullable().required(t('required field')),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),

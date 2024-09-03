@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetAppointments() {
-  const URL = endpoints.appointments.all;
+export function useGetAppointments(params) {
+  const URL = [endpoints.appointments.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

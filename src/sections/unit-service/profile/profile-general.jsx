@@ -84,8 +84,8 @@ export default function AccountGeneral({ unitServiceData }) {
     address: Yup.string(),
     web_page: Yup.string(),
     work_days: Yup.array(),
-    work_start_time: Yup.date(),
-    work_end_time: Yup.date(),
+    work_start_time: Yup.mixed(),
+    work_end_time: Yup.mixed(),
     phone: Yup.string()
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),

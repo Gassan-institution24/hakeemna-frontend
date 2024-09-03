@@ -57,7 +57,7 @@ export default function EditPatient({ patient }) {
     is_on_eating_diet: Yup.string().nullable(),
     country: Yup.string().nullable(),
     gender: Yup.string().nullable(),
-    birth_date: Yup.date().nullable(),
+    birth_date: Yup.mixed().nullable(),
     city: Yup.string().nullable(),
     address: Yup.string(),
     sport_exercises: Yup.string(),
