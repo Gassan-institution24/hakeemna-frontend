@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
-import { Hidden, Typography } from '@mui/material/';
+import { Typography } from '@mui/material/';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -11,7 +11,7 @@ import LoginAr from './loginAr.mp4';
 import LoginEn from './loginEn.mp4';
 import VideoAr from './clinicAr.mp4';
 import VideoEn from './clinicEn.mp4';
-import Language from '../common/language-home-page';
+import Language from '../common/language-popover';
 
 // ----------------------------------------------------------------------
 
@@ -48,11 +48,7 @@ export default function AuthClassicLayout({ children, title }) {
         bgcolor: '#FFFFFF',
       }}
     >
-      <Hidden smUp>
-        <span>
           <Language />
-        </span>
-      </Hidden>
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
         {t(title)}
       </Typography>
