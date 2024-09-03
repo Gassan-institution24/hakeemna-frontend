@@ -98,7 +98,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     gender: Yup.string().required(t('required field')),
-    birth_date: Yup.date()
+    birth_date: Yup.mixed()
       .required(t('required field'))
       .test('is-adult', t('You must be at least 18 years old'), (value) => {
         const oldage = new Date();

@@ -47,8 +47,8 @@ export default function PrescriptionPage() {
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
-    Start_time: Yup.date(),
-    End_time: Yup.date(),
+    Start_time: Yup.mixed(),
+    End_time: Yup.mixed(),
     file: Yup.array(),
     Frequency_per_day: Yup.string(),
     entrance_mangament: Yup.string(),
@@ -56,8 +56,8 @@ export default function PrescriptionPage() {
     department: Yup.string(),
     Drugs_report: Yup.string(),
     medical_report: Yup.string(),
-    Medical_sick_leave_start: Yup.date(),
-    Medical_sick_leave_end: Yup.date(),
+    Medical_sick_leave_start: Yup.mixed(),
+    Medical_sick_leave_end: Yup.mixed(),
   });
 
   const defaultValues = {

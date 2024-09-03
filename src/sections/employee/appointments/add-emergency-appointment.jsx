@@ -13,7 +13,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -60,7 +60,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     work_group: Yup.string().required(t('required field')),
     service_types: Yup.array(),
     appointment_type: Yup.string().required(t('required field')),
-    start_time: Yup.date().required(t('required field')),
+    start_time: Yup.mixed().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -179,8 +179,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
               <Controller
                 name="start_time"
                 render={({ field, fieldState: { error } }) => (
-                  <MobileDateTimePicker
-                    ampmInClock
+                  <DateTimePicker
                     label={`${t('start date')} *`}
                     sx={{ width: '30vw', minWidth: '300px' }}
                     onChange={(newValue) => {

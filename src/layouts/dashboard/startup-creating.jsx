@@ -76,40 +76,31 @@ export default function StartupCreating({ open, onClose }) {
           name_arabic: `فريق عمل ${user.employee?.name_arabic || ''}`,
         });
       }
-      if (tables.includes('rooms')) {
-        await axiosInstance.post(endpoints.rooms.all, {
-          unit_service: USData?._id,
-          name_english: `room 1`,
-          name_arabic: `غرفة 1`,
-        });
-        await axiosInstance.post(endpoints.rooms.all, {
-          unit_service: USData?._id,
-          name_english: `room 2`,
-          name_arabic: `غرفة 2`,
-        });
-      }
-      if (tables.includes('activities')) {
-        await axiosInstance.post(endpoints.activities.all, {
-          unit_service: USData?._id,
-          name_english: `accounting`,
-          name_arabic: `المحاسبة`,
-        });
-        await axiosInstance.post(endpoints.activities.all, {
+      if (tables.includes('rooms and activities')) {
+        const { data: consultanstActivity } = await axiosInstance.post(endpoints.activities.all, {
           unit_service: USData?._id,
           name_english: `consultant`,
           name_arabic: `استشارة`,
         });
-        await axiosInstance.post(endpoints.activities.all, {
+        const { data: accountingActivity } = await axiosInstance.post(endpoints.activities.all, {
           unit_service: USData?._id,
-          name_english: `vital sign monotoring`,
-          name_arabic: `فحص العلامات الحيوية`,
+          name_english: `accounting`,
+          name_arabic: `المحاسبة`,
         });
-        await axiosInstance.post(endpoints.activities.all, {
+        await axiosInstance.post(endpoints.rooms.all, {
           unit_service: USData?._id,
-          name_english: `diagnosis`,
-          name_arabic: `تشخيص`,
+          name_english: `consultation room`,
+          name_arabic: `غرفة الاستشارات`,
+          activities: consultanstActivity?._id
+        });
+        await axiosInstance.post(endpoints.rooms.all, {
+          unit_service: USData?._id,
+          name_english: `accounting room`,
+          name_arabic: `غرفة المحاسبة`,
+          activities: accountingActivity?._id
         });
       }
+
       loading.onFalse();
       onClose();
       window.location.reload();
@@ -228,36 +219,17 @@ export default function StartupCreating({ open, onClose }) {
           <Stack direction="row">
             <Checkbox
               disabled={roomsData.length > 1}
-              checked={tables.includes('rooms')}
+              checked={tables.includes('rooms and activities')}
               onChange={() =>
-                tables.includes('rooms')
-                  ? setTables(tables.filter((one) => one !== 'rooms'))
-                  : setTables((prev) => [...prev, 'rooms'])
+                tables.includes('rooms and activities')
+                  ? setTables(tables.filter((one) => one !== 'rooms and activities'))
+                  : setTables((prev) => [...prev, 'rooms and activities'])
               }
             />
             <Typography variant="subtitle2" alignSelf="center">
-              {t('rooms')}
+              {t('rooms and activities')}
             </Typography>
             {roomsData.length > 1 && (
-              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
-                {t('already created')}
-              </Typography>
-            )}
-          </Stack>
-          <Stack direction="row">
-            <Checkbox
-              disabled={activitiesData.length > 1}
-              checked={tables.includes('activities')}
-              onChange={() =>
-                tables.includes('activities')
-                  ? setTables(tables.filter((one) => one !== 'activities'))
-                  : setTables((prev) => [...prev, 'activities'])
-              }
-            />
-            <Typography variant="subtitle2" alignSelf="center">
-              {t('activities')}
-            </Typography>
-            {activitiesData.length > 1 && (
               <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
                 {t('already created')}
               </Typography>

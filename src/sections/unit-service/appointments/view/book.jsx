@@ -336,7 +336,6 @@ export default function TableCreateView() {
                 </Select>
               </FormControl>
               <TimePicker
-                // ampmInClock
                 closeOnSelect
                 viewRenderers={{
                   hours: renderTimeViewClock,
@@ -346,6 +345,8 @@ export default function TableCreateView() {
                 slots={{
                   actionBar: 'cancel',
                 }}
+                ampm={false}
+                format="hh:mm a"
                 minutesStep={5}
                 label={t('from time')}
                 value={myunitTime(filters.startTime)}
@@ -376,6 +377,8 @@ export default function TableCreateView() {
                   const selectedTime = myunitTime(newValue);
                   setFilters((prev) => ({ ...prev, endTime: selectedTime }));
                 }}
+                ampm={false}
+                format="hh:mm a"
                 slotProps={{
                   textField: {
                     fullWidth: true,

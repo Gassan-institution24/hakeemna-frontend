@@ -43,8 +43,8 @@ export default function TableNewEditForm({ licenseMovementData, stakeholderData 
     Payment_method: Yup.string().required('Payment method is required'),
     Payment_frequency: Yup.string().required('Payment frequency is required'),
     note: Yup.string(),
-    Start_date: Yup.date().required('Start date is required'),
-    End_date: Yup.date().required('End date is required'),
+    Start_date: Yup.mixed().required('Start date is required'),
+    End_date: Yup.mixed().required('End date is required'),
     Users_num: Yup.number().required('Number of users is required'),
     price: Yup.number().required('Price is required'),
   });

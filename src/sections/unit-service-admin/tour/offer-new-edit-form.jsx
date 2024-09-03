@@ -50,8 +50,8 @@ export default function TourNewEditForm({ currentTour }) {
     //
     // tourGuides: Yup.array().min(1, 'Must have at least 1 guide'),
     Stakeholder: Yup.string().nullable(),
-    Offer_start_date: Yup.date().required('Start date is required'),
-    Offer_end_date: Yup.date().required('End date is required'),
+    Offer_start_date: Yup.mixed().required('Start date is required'),
+    Offer_end_date: Yup.mixed().required('End date is required'),
   });
 
   const defaultValues = useMemo(
