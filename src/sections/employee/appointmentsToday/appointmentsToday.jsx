@@ -127,12 +127,15 @@ export default function AppointmentsToday() {
         Last_activity_atended: info?.Last_activity_atended,
         Arrival_time: info?.created_at,
       });
-      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
+      const dataToUpdate = {
         started: true,
         entrance: entranceData?.data?._id,
         arrived: true,
-        identification_num: addingId,
-      });
+      };
+      if (addingId) {
+        dataToUpdate.identification_num = addingId;
+      }
+      await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, dataToUpdate);
       refetch();
       enqueueSnackbar('Appointment started successfully', {
         variant: 'success',
