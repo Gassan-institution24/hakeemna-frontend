@@ -36,7 +36,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function Prescription({ Entrance }) {
   const { user } = useAuthContext();
-  // const [DoctorComment, setDoctorComment] = useState();
   const router = useRouter();
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
@@ -145,7 +144,6 @@ export default function Prescription({ Entrance }) {
     formState: { isSubmitting },
   } = methods;
 
-
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
 
@@ -154,10 +152,10 @@ export default function Prescription({ Entrance }) {
     reset();
   };
 
-  const watchStartTimes = watch('prescriptions').map((_, index) =>
+  const watchStartTimes = watch('prescriptions')?.map((_, index) =>
     watch(`prescriptions[${index}].Start_time`)
   );
-  const watchEndTimes = watch('prescriptions').map((_, index) =>
+  const watchEndTimes = watch('prescriptions')?.map((_, index) =>
     watch(`prescriptions[${index}].End_time`)
   );
 
@@ -222,6 +220,7 @@ export default function Prescription({ Entrance }) {
         prescriptionDialog.onFalse();
         refetch();
         reset();
+        setPrescriptions();
       }
     } catch (error) {
       console.error(error.message);
@@ -252,14 +251,11 @@ export default function Prescription({ Entrance }) {
             <ul
               style={{
                 listStyleType: 'none',
-                marginBottom: '20px',
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
-              <li key={index}>
-                {medicineName?.medicines?.trade_name}
-              </li>
+              <li key={index}>{medicineName?.medicines?.trade_name}</li>
             </ul>
           ))}
 
@@ -285,7 +281,7 @@ export default function Prescription({ Entrance }) {
             {curLangAr ? 'اضافة وصفة طبية' : 'add prescription'}
           </DialogTitle>
           <DialogContent>
-            {prescriptions.map((prescription, index) => (
+            {prescriptions?.map((prescription, index) => (
               <div key={prescription.id}>
                 <Autocomplete
                   sx={{ minWidth: 300, flex: 1, my: 2 }}
