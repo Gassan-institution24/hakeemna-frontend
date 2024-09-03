@@ -52,7 +52,7 @@ export default function Prescription({ Entrance }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const [prescriptions, setPrescriptions] = useState([{ id: 0 }]); 
+  const [prescriptions, setPrescriptions] = useState([{ id: 0 }]);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -142,10 +142,9 @@ export default function Prescription({ Entrance }) {
     control,
     watch,
     setValue,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
-  console.log('errorsssss', errors);
 
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
@@ -250,10 +249,18 @@ export default function Prescription({ Entrance }) {
           key={i}
         >
           {info?.medicines?.map((medicineName, index) => (
-            <span key={index}>
-              {medicineName?.medicines?.trade_name}
-              {index < info.medicines.length - 1 && <mark> - </mark>}
-            </span>
+            <ul
+              style={{
+                listStyleType: 'none',
+                marginBottom: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <li key={index}>
+                {medicineName?.medicines?.trade_name}
+              </li>
+            </ul>
           ))}
 
           <br />
