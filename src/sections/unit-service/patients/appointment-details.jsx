@@ -58,7 +58,7 @@ export default function AppointmentDetails({ onClose, refetch, ...other }) {
     work_group: Yup.string().required(t('required field')),
     service_types: Yup.array(),
     appointment_type: Yup.string().required(t('required field')),
-    start_time: Yup.date().required(t('required field')),
+    start_time: Yup.mixed().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -147,7 +147,8 @@ export default function AppointmentDetails({ onClose, refetch, ...other }) {
               name="start_time"
               render={({ field, fieldState: { error } }) => (
                 <MobileDateTimePicker
-                  ampmInClock
+                  ampm={false}
+                  format="hh:mm a"
                   label={`${t('start date')} *`}
                   sx={{ width: '30vw', minWidth: '300px' }}
                   onChange={(newValue) => {

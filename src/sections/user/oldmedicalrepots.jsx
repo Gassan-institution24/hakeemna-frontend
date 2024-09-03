@@ -100,7 +100,7 @@ export default function OldMedicalReports() {
     }
   };
   const oldMedicalReportsSchema = Yup.object().shape({
-    date: Yup.date().required('Date is required'),
+    date: Yup.mixed().required('Date is required'),
     file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
     note: Yup.string().nullable(),
@@ -409,17 +409,17 @@ export default function OldMedicalReports() {
               variant="outlined"
               onDrop={handleDrop}
               multiple
-              // onRemove={(inputFile) => {
-              //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
-              //     shouldValidate: true,
-              //   });
-              //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
-              // }}
-              // onRemoveAll={() => {
-              //   setValue('files', [], { shouldValidate: true });
-              //   setUploadedFiles([]);
-              // }}
-              // onUpload={onSubmit}
+            // onRemove={(inputFile) => {
+            //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
+            //     shouldValidate: true,
+            //   });
+            //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
+            // }}
+            // onRemoveAll={() => {
+            //   setValue('files', [], { shouldValidate: true });
+            //   setUploadedFiles([]);
+            // }}
+            // onUpload={onSubmit}
             />
 
             <RHFTextField name="note" label={t('More information')} />

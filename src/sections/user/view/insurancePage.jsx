@@ -48,7 +48,7 @@ export default function InsurancePage({ patientId }) {
     patient: Yup.string().required('Patient is required'),
     insurance: Yup.string().required('Insurance is required'),
     insurance_client_num: Yup.string().required('Card number is required'),
-    insurance_expiry_time: Yup.date().required('Date is required'),
+    insurance_expiry_time: Yup.mixed().required('Date is required'),
   });
 
   const defaultValues = {

@@ -138,7 +138,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     mobile_num: Yup.string(),
     speciality: Yup.string().nullable(),
     gender: Yup.string().required(t('required field')),
-    birth_date: Yup.date().required(t('required field')),
+    birth_date: Yup.mixed().required(t('required field')),
     Bachelor_year_graduation: Yup.number(),
     University_graduation_Bachelor: Yup.string(),
     University_graduation_Specialty: Yup.string(),

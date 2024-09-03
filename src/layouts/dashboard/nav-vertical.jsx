@@ -372,7 +372,14 @@ export default function NavVertical({ openNav, onCloseNav }) {
             open={ticketDialog}
             onClose={() => setTicketDialog(false)}
           />
-          <StartupCreating open={dialog} onClose={() => setDialog(false)} />
+          <StartupCreating open={dialog} onClose={() => {
+            setDialog(false)
+            setRunningTour(true);
+            setTimeout(() => {
+              walktour.setRun(true);
+              setRunningTour(false);
+            }, 200);
+          }} />
         </Box>
       )}
     </>

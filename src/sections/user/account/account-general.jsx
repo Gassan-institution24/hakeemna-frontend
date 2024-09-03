@@ -72,7 +72,7 @@ export default function AccountGeneral({ data, refetch }) {
     is_on_eating_diet: Yup.string().nullable(),
     country: Yup.string(),
     gender: Yup.string(),
-    birth_date: Yup.date(),
+    birth_date: Yup.mixed(),
     city: Yup.string(),
     address: Yup.string(),
     sport_exercises: Yup.string(),

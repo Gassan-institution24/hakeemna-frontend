@@ -34,7 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
     appointment_type: Yup.string().required(t('required field')),
     service_types: Yup.array().required(t('required field')),
     online_available: Yup.bool().required(t('required field')),
-    start_time: Yup.date().required(t('required field')),
+    start_time: Yup.mixed().required(t('required field')),
   });
   const defaultValues = useMemo(
     () => ({

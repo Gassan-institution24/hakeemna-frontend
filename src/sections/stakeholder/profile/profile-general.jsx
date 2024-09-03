@@ -54,7 +54,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     mobile_num: Yup.string(),
     // gender: Yup.string().required(t('required field')),
-    // birth_date: Yup.date().required(t('required field')),
+    // birth_date: Yup.mixed().required(t('required field')),
   });
 
   const defaultValues = {

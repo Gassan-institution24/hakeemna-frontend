@@ -344,15 +344,15 @@ export default function TableCreateView() {
                 </Select>
               </FormControl>
               <TimePicker
-                // ampmInClock
                 viewRenderers={{
                   hours: renderTimeViewClock,
                   minutes: renderTimeViewClock,
                   seconds: renderTimeViewClock,
                 }}
+                ampm={false}
+                format="hh:mm a"
                 closeOnSelect
                 slots={{
-                  // toolbar:false,
                   actionBar: 'cancel',
                 }}
                 minutesStep={5}
@@ -369,15 +369,15 @@ export default function TableCreateView() {
               />
 
               <TimePicker
-                // ampmInClock
                 viewRenderers={{
                   hours: renderTimeViewClock,
                   minutes: renderTimeViewClock,
                   seconds: renderTimeViewClock,
                 }}
+                ampm={false}
+                format="hh:mm a"
                 closeOnSelect
                 slots={{
-                  // toolbar:false,
                   actionBar: 'cancel',
                 }}
                 minutesStep={5}
