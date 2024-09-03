@@ -45,7 +45,7 @@ export default function TableNewEditForm({ currentTable }) {
     city: Yup.string().nullable(),
     US_type: Yup.string().nullable(),
     speciality: Yup.string().nullable(),
-    offer_date: Yup.date().nullable(),
+    offer_date: Yup.mixed().nullable(),
     period_in_months: Yup.number(),
     concept: Yup.string(),
     general: Yup.string(),

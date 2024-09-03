@@ -140,8 +140,9 @@ export default function TableNewEditForm({ currentTable }) {
                   minutes: renderTimeViewClock,
                   seconds: renderTimeViewClock,
                 }}
+                ampm={false}
+                format="hh:mm a"
                 onChange={(date) => methods.setValue('start_time', date, { shouldValidate: true })}
-                // Parse the UTC date string to a JavaScript Date object
                 value={
                   methods.getValues('start_time') ? new Date(methods.getValues('start_time')) : null
                 }
@@ -154,8 +155,9 @@ export default function TableNewEditForm({ currentTable }) {
                   minutes: renderTimeViewClock,
                   seconds: renderTimeViewClock,
                 }}
+                ampm={false}
+                format="hh:mm a"
                 onChange={(date) => methods.setValue('end_time', date, { shouldValidate: true })}
-                // Parse the UTC date string to a JavaScript Date object
                 value={
                   methods.getValues('end_time') ? new Date(methods.getValues('end_time')) : null
                 }

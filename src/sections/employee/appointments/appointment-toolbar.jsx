@@ -214,15 +214,16 @@ export default function AppointmentToolbar({
           }}
         />
         <TimePicker
-          // // ampmInClock
+          // // ampm={false}
+          format="hh:mm a"
           viewRenderers={{
             hours: renderTimeViewClock,
             minutes: renderTimeViewClock,
             seconds: renderTimeViewClock,
           }}
+          ampm={false}
           closeOnSelect
           slots={{
-            // toolbar:false,
             actionBar: 'cancel',
           }}
           minutesStep={5}
@@ -248,10 +249,10 @@ export default function AppointmentToolbar({
             minutes: renderTimeViewClock,
             seconds: renderTimeViewClock,
           }}
-          // ampmInClock
+          ampm={false}
+          format="hh:mm a"
           closeOnSelect
           slots={{
-            // toolbar:false,
             actionBar: 'cancel',
           }}
           minutesStep={5}

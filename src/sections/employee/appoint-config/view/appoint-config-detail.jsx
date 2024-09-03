@@ -70,6 +70,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              <br />
+              {t('(1) The start date and expiry date of these settings, as from that date it will create appointments according to those settings and will stop creating new appointments on the expiry date you specified.')}
+              <br />
+            </Typography>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               {t(
                 "(2) In addition to the above, you must specify for which 'work shift' and for which 'work group' you want to create these appointments. Remember that in the work group you have linked all employees and workers in that group, and therefore creating 'Automated Appointment Settings' will be appointments for all members of that work group."
               )}{' '}
@@ -145,8 +150,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const NewConfigSchema = Yup.object().shape({
     weekend: Yup.array(),
-    start_date: Yup.date().nullable(),
-    end_date: Yup.date().nullable(),
+    start_date: Yup.mixed().nullable(),
+    end_date: Yup.mixed().nullable(),
     appointment_time: Yup.number()
       .required(t('required field'))
       .min(5, `${t('must be at least')} 5`)
@@ -158,8 +163,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     holidays: Yup.array(),
     long_holidays: Yup.array().of(
       Yup.object().shape({
-        start_date: Yup.date().nullable(),
-        end_date: Yup.date().nullable(),
+        start_date: Yup.mixed().nullable(),
+        end_date: Yup.mixed().nullable(),
         description: Yup.string().nullable(),
       })
     ),
@@ -168,8 +173,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required(t('required field')),
-        work_start_time: Yup.date().nullable().required(t('required field')),
-        work_end_time: Yup.date().nullable().required(t('required field')),
+        work_start_time: Yup.mixed().nullable().required(t('required field')),
+        work_end_time: Yup.mixed().nullable().required(t('required field')),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
@@ -363,7 +368,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

@@ -44,7 +44,7 @@ export default function Create() {
       .oneOf([Yup.ref('password'), t('must be exactly as password')], 'Passwords must match')
       .min(8, `${t('must be at least')} 8`),
     identification_num: Yup.string().required('Identification number is required'),
-    birth_date: Yup.date().required('birth_date is required'),
+    birth_date: Yup.mixed().required('birth_date is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
     nationality: Yup.string().required('Nationality is required'),

@@ -85,7 +85,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     work_group: Yup.string().required(t('required field')),
     service_types: Yup.array(),
     appointment_type: Yup.string().required(t('required field')),
-    start_time: Yup.date().required(t('required field')),
+    start_time: Yup.mixed().required(t('required field')),
   });
 
   const defaultValues = useMemo(

@@ -131,7 +131,7 @@ export default function Footer() {
           }}
         >
           <Grid xs={8} md={3}>
-            <Logo sx={{ mb: 3, width: 200, height: 100 }} />
+            <Logo sx={{ mb: 3, width: 170, height: 150 }} />
             <Typography
               variant="body2"
               sx={{

@@ -37,8 +37,8 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
-    start_time: Yup.date().required(t('required field')),
-    end_time: Yup.date().required(t('required field')),
+    start_time: Yup.mixed().required(t('required field')),
+    end_time: Yup.mixed().required(t('required field')),
   });
 
   const defaultValues = useMemo(
