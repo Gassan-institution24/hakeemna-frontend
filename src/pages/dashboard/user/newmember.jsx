@@ -25,6 +25,8 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+import Family from './imges/family.png';
+
 export default function Create() {
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { register } = useAuthContext();
@@ -33,7 +35,6 @@ export default function Create() {
   const curLangAr = currentLang.value === 'ar';
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState('');
-  const { user } = useAuthContext();
   const password = useBoolean();
   const RegisterSchema = Yup.object().shape({
     name_english: Yup.string().required('english name required'),
@@ -56,7 +57,6 @@ export default function Create() {
     name_arabic: '',
     email: '',
     nationality: '',
-    family_members: user?.patient?._id,
     password: '',
     confirmPassword: '',
     birth_date: '',
@@ -114,7 +114,7 @@ export default function Create() {
       await register?.({ userName: `${data.name_english}`, ...data });
       router.push(paths.dashboard.user.exist);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
@@ -238,11 +238,11 @@ export default function Create() {
             {t('create account')}
           </LoadingButton>
         </Stack>
-        <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 10, mt: 5 }}>
+        <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 4, mt: 5 }}>
           <Typography variant="h3" sx={{ textAlign: 'center' }}>
             {t('Add Account')}
           </Typography>
-          <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp" />
+          <Image src={Family} />
         </Stack>
       </Box>
     </FormProvider>

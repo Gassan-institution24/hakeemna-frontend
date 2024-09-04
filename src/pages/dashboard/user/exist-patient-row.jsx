@@ -35,7 +35,7 @@ export default function ExistPatientRow({ row, selected }) {
 
   const renderIdentificationNum = (identificationNum) => {
     // Check if the identificationNum has at least 3 characters
-    if (identificationNum.length >= 3) {
+    if (identificationNum?.length >= 3) {
       const lastThreeChars = identificationNum.slice(-3); // Get the last 3 characters
       const firstChars = identificationNum.slice(0, -3); // Get all characters except the last 3
       const maskedChars = lastThreeChars.replace(/./g, '*'); // Replace each character with *
@@ -98,7 +98,7 @@ export default function ExistPatientRow({ row, selected }) {
         </DialogContent>
       </Dialog>
       <TableRow selected={selected}>
-        <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
+        <TableCell align="center">{renderIdentificationNum(row?.identification_num)}</TableCell>
         <TableCell align="center"> {curLangAr ? name_arabic : name_english}</TableCell>
         <TableCell align="center">{name_arabic}</TableCell>
 
@@ -125,25 +125,25 @@ export default function ExistPatientRow({ row, selected }) {
     </>
   );
 
-  return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
-    renderPrimary
-  ) : (
-    <EmptyContent
-      filled
-      title={t('No Data')}
-      sx={{
-        py: 10,
-        width: {
-          sm: '250%',
-          xs: '200%',
-          md: '300%',
-          lg: '300%',
-          xl: '300%',
-        },
-      }}
-    />
-  );
-  // return <> {renderPrimary} </>
+  // return row?.family_members?.length === 0 && row?._id !== user?.patient?._id ? (
+  //   renderPrimary
+  // ) : (
+  //   <EmptyContent
+  //     filled
+  //     title={t('No Data')}
+  //     sx={{
+  //       py: 10,
+  //       width: {
+  //         sm: '250%',
+  //         xs: '200%',
+  //         md: '300%',
+  //         lg: '300%',
+  //         xl: '300%',
+  //       },
+  //     }}
+  //   />
+  // );
+  return <> {renderPrimary} </>
 }
 
 ExistPatientRow.propTypes = {

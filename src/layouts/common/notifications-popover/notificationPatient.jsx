@@ -41,14 +41,14 @@ export default function NotificationItem({ notification, handleClick }) {
         family_members: [
           { patient: notification?.sender },
           { RelativeRelation: notification?.members },
-          { isendit: 'yes' },
+          { isendit: 'no' },
         ],
       });
       await axios.patch(endpoints.patients.one(notification?.sender), {
         family_members: [
           { patient: notification?.patient },
           { RelativeRelation: notification?.members },
-          { isendit: 'no' },
+          { isendit: 'yes' },
         ],
       });
       await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
