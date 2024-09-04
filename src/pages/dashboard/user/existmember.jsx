@@ -102,7 +102,7 @@ export default function Exist() {
         <TableHeadCustom
           headLabel={TABLE_HEAD}
           //   rowCount={tableData.length}
-          numSelected={selected.length}
+          numSelected={selected?.length}
         />
 
         <TableBody>
@@ -113,7 +113,7 @@ export default function Exist() {
             ))}
 
           <TableNoData
-            notFound={existPatient.length === 0}
+            notFound={existPatient?.length === 0}
             sx={{
               m: -2,
               borderRadius: 1.5,

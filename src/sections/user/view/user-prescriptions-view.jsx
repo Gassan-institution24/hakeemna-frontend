@@ -7,14 +7,14 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetPatient } from 'src/api';
+// import { useGetPatient } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import Pharmaces from '../pharmacies';
+// import Pharmaces from '../pharmacies';
 import Prescriptions from '../prescriptions';
 // ----------------------------------------------------------------------
 
@@ -22,18 +22,18 @@ export default function UserCardList() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const [currentTab, setCurrentTab] = useState('Prescriptions');
-  const { data } = useGetPatient(user?.patient._id);
+  // const { data } = useGetPatient(user?.patient._id);
   const TABS = [
     {
       value: 'Prescriptions',
       label: t('Prescriptions'),
       icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
     },
-    {
-      value: 'Pharmaces',
-      label: t('Pharmacies Near Me'),
-      icon: <Iconify icon="healthicons:pharmacy-outline" width={24} />,
-    },
+    // {
+    //   value: 'Pharmaces',
+    //   label: t('Pharmacies Near Me'),
+    //   icon: <Iconify icon="healthicons:pharmacy-outline" width={24} />,
+    // },
   ];
 
   const handleChangeTab = useCallback((event, newValue) => {
@@ -78,7 +78,7 @@ export default function UserCardList() {
         </Box>
       )}
 
-      {currentTab === 'Pharmaces' && <Pharmaces patientData={data} />}
+      {/* {currentTab === 'Pharmaces' && <Pharmaces patientData={data} />} */}
     </Container>
   );
 }
