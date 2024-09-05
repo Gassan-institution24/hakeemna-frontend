@@ -61,6 +61,7 @@ export default function ExistPatientRow({ row, selected }) {
       dialog.onFalse();
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
+      
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -98,7 +99,7 @@ export default function ExistPatientRow({ row, selected }) {
         </DialogContent>
       </Dialog>
       <TableRow selected={selected}>
-        <TableCell align="center">{renderIdentificationNum(row?.identification_num)}</TableCell>
+        <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
         <TableCell align="center"> {curLangAr ? name_arabic : name_english}</TableCell>
         <TableCell align="center">{name_arabic}</TableCell>
 
