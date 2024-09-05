@@ -1,8 +1,8 @@
 import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import { DialogContent, IconButton, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 
@@ -12,7 +12,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
 
-// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 // ----------------------------------------------------------------------
@@ -26,7 +25,6 @@ import Familymem from '../familymem';
 export default function Family() {
   const dialog = useBoolean(false);
 
-  // const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth="xl">
@@ -51,11 +49,18 @@ export default function Family() {
       />
 
       <Dialog open={dialog.value} onClose={dialog.onTrue}>
-        <IconButton onClick={dialog.onFalse} sx={{ width: '12%', ml: 'auto', mt: 2 }}>
-          <Iconify width={25} icon="iconoir:cancel" sx={{}} />
+        <IconButton onClick={dialog.onFalse} sx={{ ml: 'auto', mt: 2 }}>
+          <Iconify width={25} icon="iconoir:cancel" />
         </IconButton>
 
-        <DialogTitle>{t('Does the user have an account?')}</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h4">{t('Does the user have an account?')}</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <ul>
+            <li style={{opacity:'50%'}}>{t("Search or add a user on the Hakimna platform to become a family member")}</li>
+          </ul>
+        </DialogContent>
         <DialogActions>
           <Button
             href={paths.dashboard.user.exist}

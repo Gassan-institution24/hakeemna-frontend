@@ -18,22 +18,26 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+
+import Family from './imges/family.png';
 
 export default function Create() {
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { register } = useAuthContext();
   const { t } = useTranslate();
+  const [identification, setIdentification] = useState();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState('');
-  const { user } = useAuthContext();
   const password = useBoolean();
   const RegisterSchema = Yup.object().shape({
     name_english: Yup.string().required('english name required'),
@@ -43,6 +47,7 @@ export default function Create() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), t('must be exactly as password')], 'Passwords must match')
       .min(8, `${t('must be at least')} 8`),
+    scanned_identification: Yup.mixed().required(t('required field')),
     identification_num: Yup.string().required('Identification number is required'),
     birth_date: Yup.mixed().required('birth_date is required'),
     gender: Yup.string().required('Gender is required'),
@@ -56,9 +61,9 @@ export default function Create() {
     name_arabic: '',
     email: '',
     nationality: '',
-    family_members: user?.patient?._id,
     password: '',
     confirmPassword: '',
+    scanned_identification: null,
     birth_date: '',
     identification_num: '',
     gender: '',
@@ -73,8 +78,8 @@ export default function Create() {
   });
 
   const {
-    reset,
     watch,
+    setValue,
     control,
     handleSubmit,
     formState: { isSubmitting },
@@ -108,14 +113,35 @@ export default function Create() {
     const selectedCountryId = event.target.value;
     methods.setValue('nationality', selectedCountryId, { shouldValidate: true });
   };
-
+  const handleDrop = (acceptedFiles) => {
+    setIdentification(acceptedFiles);
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      const newFile = Object.assign(acceptedFiles[0], {
+        preview: URL.createObjectURL(acceptedFiles[0]),
+      });
+      setValue('scanned_identification', newFile);
+    }
+  };
   const onSubmit = handleSubmit(async (data) => {
     try {
+      data.email = data.email?.toLowerCase();
+      const formData = new FormData();
+      formData.append('identification', identification[0]);
+      Object.keys(data).forEach((key) => {
+        if (key !== 'scanned_identification') {
+          if (Array.isArray(data[key])) {
+            data[key].forEach((item, index) => {
+              formData.append(`${key}[${index}]`, item);
+            });
+          } else {
+            formData.append(key, data[key]);
+          }
+        }
+      });
       await register?.({ userName: `${data.name_english}`, ...data });
-      router.push(paths.dashboard.user.exist);
+      router.push(paths.auth.verify(data.email) || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
-      reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
@@ -145,6 +171,14 @@ export default function Create() {
           </Stack>
 
           <RHFTextField name="identification_num" label={t('Identification number')} />
+          <Stack gap={1}>
+            <Typography variant="caption" sx={{color:'warning.main'}}>{t('upload the photo with the identification number in the proof document')}</Typography>
+            <RHFUpload
+              name="scanned_identification"
+              onDrop={handleDrop}
+             
+            />
+          </Stack>
           <Controller
             name="birth_date"
             control={control}
@@ -238,11 +272,11 @@ export default function Create() {
             {t('create account')}
           </LoadingButton>
         </Stack>
-        <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 10, mt: 5 }}>
+        <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 4, mt: 5 }}>
           <Typography variant="h3" sx={{ textAlign: 'center' }}>
             {t('Add Account')}
           </Typography>
-          <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp" />
+          <Image src={Family} />
         </Stack>
       </Box>
     </FormProvider>

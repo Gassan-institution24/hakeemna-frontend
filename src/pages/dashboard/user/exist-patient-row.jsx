@@ -35,7 +35,7 @@ export default function ExistPatientRow({ row, selected }) {
 
   const renderIdentificationNum = (identificationNum) => {
     // Check if the identificationNum has at least 3 characters
-    if (identificationNum.length >= 3) {
+    if (identificationNum?.length >= 3) {
       const lastThreeChars = identificationNum.slice(-3); // Get the last 3 characters
       const firstChars = identificationNum.slice(0, -3); // Get all characters except the last 3
       const maskedChars = lastThreeChars.replace(/./g, '*'); // Replace each character with *
@@ -61,6 +61,7 @@ export default function ExistPatientRow({ row, selected }) {
       dialog.onFalse();
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
+      
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -125,25 +126,25 @@ export default function ExistPatientRow({ row, selected }) {
     </>
   );
 
-  return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
-    renderPrimary
-  ) : (
-    <EmptyContent
-      filled
-      title={t('No Data')}
-      sx={{
-        py: 10,
-        width: {
-          sm: '250%',
-          xs: '200%',
-          md: '300%',
-          lg: '300%',
-          xl: '300%',
-        },
-      }}
-    />
-  );
-  // return <> {renderPrimary} </>
+  // return row?.family_members?.length === 0 && row?._id !== user?.patient?._id ? (
+  //   renderPrimary
+  // ) : (
+  //   <EmptyContent
+  //     filled
+  //     title={t('No Data')}
+  //     sx={{
+  //       py: 10,
+  //       width: {
+  //         sm: '250%',
+  //         xs: '200%',
+  //         md: '300%',
+  //         lg: '300%',
+  //         xl: '300%',
+  //       },
+  //     }}
+  //   />
+  // );
+  return <> {renderPrimary} </>
 }
 
 ExistPatientRow.propTypes = {
