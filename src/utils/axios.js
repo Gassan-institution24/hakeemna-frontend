@@ -397,10 +397,8 @@ export const endpoints = {
     find: `/api/patient/find`,
     employee: (id) => (!id ? null : `/api/patient/employee/${id}`),
     unitservice: (id) => (!id ? null : `/api/patient/unitservice/${id}`),
-    // find: ({ identification_num, email, mobile_num1 }) =>
-    //   `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
-    findPatient: ({ identification_num, mobile_num1, name_english, name_arabic }) =>
-      `/api/patient/findpatient?id=${identification_num}&&mobile_num1=${mobile_num1}&&name_english=${name_english}&&name_arabic=${name_arabic}`,
+    findPatient: ({ identification_num, name_english, name_arabic }) =>
+      `/api/patient/findpatient?id=${identification_num}&&name_english=${name_english}&&name_arabic=${name_arabic}`,
     family: (id) => (!id ? null : `/api/patient/myfamily/${id}`),
     familyType: '/api/family',
     onefamilyType: (id) => (!id ? null : `/api/family/${id}`),

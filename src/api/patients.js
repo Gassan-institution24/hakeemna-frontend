@@ -111,10 +111,9 @@ export function useFindPatient({
   return { ...memoizedValue, refetch };
 }
 
-export function useFindPatients({ identification_num, mobile_num1, name_english, name_arabic }) {
+export function useFindPatients({ identification_num, name_english, name_arabic }) {
   const URL = endpoints.patients.findPatient({
     identification_num,
-    mobile_num1,
     name_english,
     name_arabic,
   });

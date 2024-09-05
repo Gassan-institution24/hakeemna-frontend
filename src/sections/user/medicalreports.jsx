@@ -12,7 +12,7 @@ import {
   Image as PdfImage,
 } from '@react-pdf/renderer';
 
-import { Box, Card, Stack, Avatar, Tooltip, Divider, Typography, Link } from '@mui/material';
+import { Box, Card, Stack, Avatar, Tooltip, Divider, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
