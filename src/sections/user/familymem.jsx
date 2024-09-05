@@ -23,7 +23,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
-  const { Data } = useGetPatientFamily(user?.patient?._id);
+  const { Data, refetch } = useGetPatientFamily(user?.patient?._id);
   const popover = usePopover();
   const confirm = useBoolean();
   const showPassword = useBoolean();
@@ -86,12 +86,8 @@ export default function FamilyMembers() {
     try {
       await axios.patch(endpoints.patients.deleteFamilyMember(patientId));
       await axios.patch(endpoints.patients.deleteFamilyMember(test));
-
-      enqueueSnackbar('Family member deleted successfully', { variant: 'success' });
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      enqueueSnackbar(t('Family member deleted successfully'), { variant: 'success' });
+      refetch();
     } catch (error) {
       console.error(error);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -102,11 +98,11 @@ export default function FamilyMembers() {
       sx={{
         display: 'flex',
         flexDirection: { md: 'row', xs: 'column' },
-        gap:5
+        gap: 5,
       }}
     >
       {Data?.map((info, index) => (
-        <Card key={index} sx={{ width: {md:'350px',xs:'300px'} ,mb:5, }}>
+        <Card key={index} sx={{ width: { md: '350px', xs: '300px' }, mb: 5 }}>
           {age > 18 ? (
             <IconButton
               onClick={(event) => {
