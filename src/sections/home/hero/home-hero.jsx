@@ -1,256 +1,149 @@
 import { m } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-import { Button } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-
-import { useResponsive } from 'src/hooks/use-responsive';
+import { Stack, Button, Typography } from '@mui/material';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import PatientsHero from './patients-hero';
-import UnitServiceHero from './unit-service-hero';
+import TestV from './726.mp4';
 
 // ----------------------------------------------------------------------
 
 export default function HomeHero() {
-  const xlUp = useResponsive('up', 'xl');
-  const mdUp = useResponsive('up', 'md');
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex2, setCurrentIndex2] = useState(0);
 
-  const [currentPage, setCurrentPage] = useState('home');
-
+  const texts = [
+    'A Comprehensive Electronic Health System for Seamless Coordination Between Medical Service Providers (Doctors, Laboratories, Medical Centers, Radiology Clinics) and Society. Offering Digital Solutions for Personal Medical Record Management and Integrated Healthcare Institution Administration.',
+    'It provides integrated services to patients in terms of storing data and medical information and managing them in a flexible manner, thus facilitating the mechanism of accessing information, medical history and other data at any time and in communicating with the medical staff in an efficient manner.',
+    'It enables medical service providers to deal with patient records electronically and manage their institutions effectively and easily with the aim of raising productivity and improving performance, which leads to enriching the patient experience and paves the way for focusing on the most important matters in your work to raise the degree of excellence and increase competitiveness.',
+  ];
+  const title = ['Today', 'as beneficiaries', 'as unit of service'];
   useEffect(() => {
-    const handleScroll = () => {
-      if (currentPage === 'home') setCurrentPage('users');
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [currentPage]);
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex === texts.length - 1 ? 0 : prevIndex + 1));
+    }, 3000);
 
-  const renderDescription = (
-    <>
+    return () => clearInterval(interval);
+  }, [texts.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex2((prevIndex) => (prevIndex === title.length - 1 ? 0 : prevIndex + 1));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [title.length]);
+
+  return (
+    <Stack
+      sx={{
+        my: { xs: 5, md: 2 },
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        position: 'relative',
+        minHeight: '75vh',
+      }}
+    >
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{
+          position: 'absolute',
+          top: 30,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
+        }}
+      >
+        <source src={TestV} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <div />
       <Stack
         alignItems="center"
         justifyContent="center"
         sx={{
           height: 1,
           maxWidth: 600,
-          zIndex: 2,
+          zIndex: 1,
+          position: 'relative',
           px: 3,
+          ml: 5,
+          mt: 5,
         }}
       >
         <m.div variants={varFade().in}>
           <Typography
-            variant="h3"
+            variant="h2"
             sx={{
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
-              fontSize: { xs: 35, md: 50 },
-              // textShadow: '5px 5px 5px black',
+              fontSize: { xs: 35, md: 40 },
+              display: 'inline-block', // Changed from inline to inline-block
               mb: 3,
             }}
             id="#"
           >
-            {t('It is time for digital transformation')}
+            {t('Start Your Digital Transformation Journey')}
+            <br />
+
+            <m.span
+              key={currentIndex2}
+              initial={{ opacity: 0, y: -510 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{
+                duration: 1.5, // Smoother transition by increasing duration
+                ease: [0.43, 0.13, 0.23, 0.96], // Custom ease function for smooth easing
+              }}
+              style={{
+                color: '#00A76F',
+                fontWeight: 700,
+                fontSize: 'inherit',
+              }}
+            >
+              {t(title[currentIndex2])}
+            </m.span>
           </Typography>
         </m.div>
 
-        <m.div variants={varFade().in}>
+        <m.div
+          key={currentIndex}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 0 }}
+          transition={{
+            duration: 1.5, // Smoother transition by increasing duration
+            ease: [0.43, 0.13, 0.23, 0.96], // Custom ease function for smooth easing
+          }}
+        >
           <Typography
             variant="subtitle1"
             sx={{
               textAlign: 'center',
               textTransform: 'none',
-              //  textShadow: '5px 5px 5px black'
+              mb: 3,
             }}
           >
-            {t(
-              'An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
-            )}
+            {t(texts[currentIndex])}
           </Typography>
         </m.div>
 
-        <br />
+        <Button color="primary" variant="contained">
+          Start For free
+        </Button>
       </Stack>
-      {!mdUp && (
-        <Stack direction="row" width={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
-            onClick={() => setCurrentPage('users')}
-          >
-            {t('beneficiary')}
-          </Button>
-          <Button
-            variant="contained"
-            color="info"
-            sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
-            onClick={() => setCurrentPage('doctors')}
-          >
-            {t('unit of serivce')}
-          </Button>
-        </Stack>
-      )}
-    </>
-  );
-
-  return (
-    <Stack
-      sx={{
-        overflowX: 'hidden',
-        height: '100vh',
-      }}
-    >
-      {currentPage === 'home' && (
-        <Stack justifyContent="center" alignItems="center" width={1} height={1}>
-          {renderDescription}
-        </Stack>
-      )}
-      <PatientsHero currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <UnitServiceHero currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      {mdUp && (
-        <>
-          <div
-            onClick={() =>
-              currentPage === 'users' ? setCurrentPage('home') : setCurrentPage('users')
-            }
-            role="button"
-            tabIndex={0}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                setCurrentPage('users');
-              }
-            }}
-            style={{
-              position: 'absolute',
-              right: 10,
-              bottom: 10,
-              padding: 3,
-              cursor: 'pointer',
-              zIndex: 2,
-            }}
-          >
-            <Iconify
-              sx={{
-                position: 'absolute',
-                bottom: xlUp ? 300 : 200,
-                right: curLangAr ? -40 : 300,
-                rotate: '-45deg',
-                animation: 'moveUpRight 1s infinite alternate',
-                '@keyframes moveUpRight': {
-                  '0%': {
-                    transform: 'translate(0, 0)',
-                  },
-                  '100%': {
-                    transform: 'translate(0px, 5px)',
-                  },
-                },
-              }}
-              icon="solar:double-alt-arrow-up-line-duotone"
-              width={40}
-            />
-            <img src="/assets/images/home/hero/users.png" width={xlUp ? 300 : 200} alt="users" />
-            <div style={{ position: 'absolute', top: -200, right: curLangAr ? 50 : 70 }}>
-              <Typography
-                variant={xlUp ? 'h4' : 'h5'}
-                sx={{
-                  fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-                }}
-              >
-                {t('beneficiary')}
-              </Typography>
-              <img
-                src="/assets/images/home/hero/arrow.png"
-                style={{ rotate: '10deg' }}
-                width={xlUp ? 100 : 70}
-                alt="arrow"
-              />
-            </div>
-          </div>
-
-          <div
-            onClick={() =>
-              currentPage === 'doctors' ? setCurrentPage('home') : setCurrentPage('doctors')
-            }
-            role="button"
-            tabIndex={0}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                setCurrentPage('doctors');
-              }
-            }}
-            style={{
-              position: 'absolute',
-              cursor: 'pointer',
-              left: 10,
-              bottom: 10,
-              padding: 3,
-              zIndex: 2,
-            }}
-          >
-            <img
-              src="/assets/images/home/hero/doctors.png"
-              width={xlUp ? 350 : 250}
-              alt="doctors"
-            />
-            <Iconify
-              sx={{
-                position: 'absolute',
-                bottom: xlUp ? 260 : 200,
-                left: curLangAr ? 0 : 350,
-                rotate: '45deg',
-                animation: 'moveUpRight 1s infinite alternate',
-                '@keyframes moveUpRight': {
-                  '0%': {
-                    transform: 'translate(0, 0)',
-                  },
-                  '100%': {
-                    transform: 'translate(0px, 5px)',
-                  },
-                },
-              }}
-              icon="solar:double-alt-arrow-up-line-duotone"
-              width={40}
-            />
-            <div style={{ position: 'absolute', top: -100, right: 80 }}>
-              <Typography
-                variant={xlUp ? 'h4' : 'h5'}
-                sx={{
-                  position: 'absolute',
-                  top: -80,
-                  right: curLangAr ? 90 : -60,
-                  fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-                }}
-              >
-                {t('unit of service')}
-              </Typography>
-              <img
-                src="/assets/images/home/hero/arrow2.png"
-                style={{ rotate: '-50deg' }}
-                width={xlUp ? 200 : 150}
-                alt="arrow"
-              />
-            </div>
-          </div>
-          <img
-            src="/assets/images/home/hero/stethoscope.png"
-            style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
-            width={200}
-            alt="stethoscope"
-          />
-        </>
-      )}
     </Stack>
   );
 }
