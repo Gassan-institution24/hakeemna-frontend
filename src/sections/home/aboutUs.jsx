@@ -51,7 +51,6 @@ export default function Whydoc() {
     >
       <div style={{ position: 'relative' }}>
         <Typography variant="h6" sx={{ textAlign: 'center', textTransform: 'none' }}>
-          {' '}
           {t(
             'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.'
           )}
@@ -111,7 +110,7 @@ export default function Whydoc() {
           alignItems: 'center',
         }}
       >
-        <Image sx={{ width: { sx: '100%', md: '70%' } }} src={curLangAr ? knowlegmapAR : Knowleg} />
+        <Image alt="medical services" sx={{ width: { sx: '100%', md: '70%' } }} src={curLangAr ? knowlegmapAR : Knowleg} />
       </Stack>
       {/* </Box>
           </div>

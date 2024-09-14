@@ -41,7 +41,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
       >
         <m.div variants={varFade().in}>
           <Typography
-            variant="h3"
+            variant="h1"
             sx={{
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
