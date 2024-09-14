@@ -169,7 +169,12 @@ export default function WhoAreWe() {
                   }}
                 />
                 <Stack flex={1} sx={{ backgroundColor: card.color, p: 2 }}>
-                  <Typography variant="h1" textAlign="center" sx={{ fontSize: { xs: 35, md: 35 } }}>
+                  <Typography
+                    variant="h1"
+                    component="h1"
+                    textAlign="center"
+                    sx={{ fontSize: { xs: 35, md: 35 } }}
+                  >
                     {card.title}
                   </Typography>
                   <Typography
