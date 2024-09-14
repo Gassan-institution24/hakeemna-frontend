@@ -51,6 +51,7 @@ export default function HomeHero() {
         <m.div variants={varFade().in}>
           <Typography
             variant="h2"
+            component="h1"
             sx={{
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
@@ -201,8 +202,9 @@ export default function HomeHero() {
           >
             <img
               src="/assets/images/home/hero/doctors.png"
-              width={xlUp ? 350 : 250}
+              width={xlUp ? 380 : 250}
               alt="doctors"
+              style={{ transform: 'rotate(-1deg)' }}
             />
             <Iconify
               sx={{
