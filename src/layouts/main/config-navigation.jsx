@@ -33,12 +33,12 @@ export const navConfig = [
   //   path: 'https://front-pi-eight.vercel.app',
   //   sectionId: 'home',
   // },
-  // {
-  //   title: 'suppliers',
-  //   icon: <Iconify icon="iconoir:community" />,
-  //   path: paths.auth.stakeholderRegister,
-  //   sectionId: 'home',
-  // },
+  {
+    title: 'Blogs',
+    icon: <Iconify icon="iconoir:community" />,
+    path: paths.pages.blogs,
+    sectionId: 'blogs',
+  },
   {
     title: 'Training',
     icon: <Iconify icon="oui:training" />,

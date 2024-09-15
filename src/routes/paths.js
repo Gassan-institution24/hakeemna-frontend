@@ -54,6 +54,8 @@ export const paths = {
     UsPricing: `/UsPricing`,
     About: `/about`,
     Training: `/training`,
+    Faq: `/faq`,
+    blogs: `/blogs`,
     Termsandcondition: `/termsandcondition`,
     Privacypolicy: `/privacypolicy`,
     book: `/book`,
