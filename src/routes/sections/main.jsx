@@ -20,6 +20,8 @@ const Patientsservices = lazy(() => import('src/pages/home/patients'));
 const Unitservices = lazy(() => import('src/pages/home/unit'));
 const ServiceUnitPage = lazy(() => import('src/pages/home/service-unit'));
 const Training = lazy(() => import('src/sections/home/training'));
+const FAQ = lazy(() => import('src/sections/home/FAQ'));
+const Blogs = lazy(() => import('src/sections/home/Blogs'));
 const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
 
@@ -43,6 +45,8 @@ export const mainRoutes = [
       { path: 'about', element: <AboutUs /> },
       { path: 'about', element: <AboutUs /> },
       { path: 'training', element: <Training /> },
+      { path: 'faq', element: <FAQ /> },
+      { path: 'blogs', element: <Blogs /> },
       { path: 'book', element: <BookAppointment /> },
       { path: 'doctor/:name', element: <DoctorPage /> },
       { path: 'serviceunit/:id', element: <ServiceUnitPage /> },

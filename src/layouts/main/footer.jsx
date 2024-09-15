@@ -27,6 +27,7 @@ const LINKS = [
       { name: 'beneficiaries', href: paths.pages.patients },
       { name: 'units of service', href: paths.pages.unit },
       { name: 'Training', href: paths.pages.Training },
+      { name: 'FAQ', href: paths.pages.Faq },
     ],
   },
   {
@@ -38,7 +39,7 @@ const LINKS = [
   },
   {
     headline: 'contact',
-    children: [{ name: 'info@hakeemna.com', href: '#' }],
+    children: [{ name: 'info@hakeemna.com', href: 'mailto:info@hakeemna.com' }],
   },
 ];
 
