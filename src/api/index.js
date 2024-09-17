@@ -26,6 +26,7 @@ export * from './added_value_tax_GD';
 export * from './analyses';
 export * from './appointment_types';
 export * from './cities';
+export * from './blogs';
 export * from './countries';
 export * from './currencies';
 export * from './prescription';
