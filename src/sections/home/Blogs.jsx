@@ -1,23 +1,33 @@
+import * as Yup from 'yup';
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { enqueueSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Card, Grid, Stack, Button, TextField, Typography, Link } from '@mui/material';
+import { Box, Card, Grid, Link, Stack, Button, Typography } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+
+import axiosInstance from 'src/utils/axios';
+import { fDateAndTime } from 'src/utils/format-time';
+
+import { useGetBlogs } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
+import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+import FormProvider from 'src/components/hook-form/form-provider';
+import { RHFUpload, RHFTextField, RHFEditor } from 'src/components/hook-form';
+
+import BlogImage from './images/blog.png';
 
 export default function Blogs() {
   const { t } = useTranslate();
+  const { user } = useAuthContext();
+  const { data, refetch } = useGetBlogs();
 
-  const blogs = [
-    {
-      title: 'Blog 1',
-      topic:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis quod vero odio ab debitis optio at sequi suscipit vitae obcaecati nobis, corrupti eaque beatae, odit possimus ex quaerat similique? Ad.',
-      link: 'www.dfdf;dfdfdfgergeg.com',
-      date: '20/11/2024',
-    },
-  ];
+  console.log(data);
 
   const [hoveredIndex, setHoveredIndex] = React.useState(null);
 
@@ -28,9 +38,131 @@ export default function Blogs() {
   const handleMouseLeave = () => {
     setHoveredIndex(null);
   };
+
+  const BlogsSchema = Yup.object().shape({
+    title: Yup.string(),
+    topic: Yup.string(),
+    link: Yup.string(),
+    file: Yup.array(),
+  });
+
+  const defaultValues = {
+    file: [],
+    user: user?._id,
+  };
+  const methods = useForm({
+    mode: 'all',
+    resolver: yupResolver(BlogsSchema),
+    defaultValues,
+  });
+  const {
+    reset,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
+  const values = watch();
+  const fuser = (fuserSize) => {
+    const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
+
+    const isValidFile = (fileName) => {
+      const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+      const isExtensionAllowed = allowedExtensions.includes(fileExtension);
+      return isExtensionAllowed;
+    };
+
+    const isValidSize = (fileSize) => fileSize <= 3145728;
+
+    return {
+      validateFile: isValidFile,
+      validateSize: isValidSize,
+    };
+  };
+
+  const handleDrop = (acceptedFiles) => {
+    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
+
+    const isValidFiles = acceptedFiles.every(
+      (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+    );
+
+    if (isValidFiles) {
+      const newFiles = acceptedFiles;
+
+      setValue('file', [...values.file, ...newFiles]);
+    } else {
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
+    }
+  };
+
+  const handleRemoveFile = React.useCallback(
+    (inputFile) => {
+      const filtered = values.file.filter((file) => file !== inputFile);
+      setValue('file', filtered);
+    },
+    [setValue, values.file]
+  );
+
+  const handleRemoveAllFiles = React.useCallback(() => {
+    setValue('file', []);
+  }, [setValue]);
+
+  const onSubmit = async (submitdata) => {
+    try {
+      const formData = new FormData();
+
+      Object.keys(submitdata).forEach((key) => {
+        if (Array.isArray(submitdata[key])) {
+          submitdata[key].forEach((item, index) => {
+            formData.append(`${key}[${index}]`, item);
+          });
+        } else {
+          formData.append(key, submitdata[key]);
+        }
+      });
+
+      await axiosInstance.post('/api/blogs', formData);
+
+      enqueueSnackbar('blog uploaded successfully', { variant: 'success' });
+      refetch();
+      reset();
+    } catch (error) {
+      if (error?.response?.status !== 401) {
+        enqueueSnackbar(
+          <div>
+            you dont have permssion to do this action. Please{' '}
+            <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
+              <strong>login</strong>
+            </a>{' '}
+            first
+          </div>,
+          { variant: 'error' }
+        );
+      }
+    }
+  };
+  const formatTextWithLineBreaks = (text, id, limit = 20) => {
+    if (!text) return '';
+
+    const chunks = [];
+
+    for (let i = 0; i < text.length; i += 100) {
+      chunks.push(text.slice(i, i + 100));
+    }
+
+    let formattedText = chunks.join('<br />');
+
+    if (text.length > limit) {
+      formattedText = `${text.slice(0, limit)}...`;
+    }
+
+    return formattedText;
+  };
+
   return (
     <Stack sx={{ p: 5 }}>
-      <Card sx={{ display: { md: 'grid', gridTemplateColumns: '1fr 1fr' } }}>
+      <Card sx={{ display: { md: 'grid' }, gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
         <Box
           sx={{
             p: 5,
@@ -41,15 +173,36 @@ export default function Blogs() {
           <Typography variant="h3" sx={{ mb: 3 }}>
             {t('Have something to write about ?')}
           </Typography>
-          <Box>
-            <TextField placeholder={t('title')} sx={{ mb: 2 }} />
-            <TextField placeholder={t('topic')} sx={{ mb: 2, display: 'block' }} />
-            <Button
-              variant="contained"
-              sx={{ bgcolor: 'success.main', color: 'white', display: 'block' }}
-            >
-              {t('blog')}
-            </Button>
+          <Box sx={{ width: '100%' }}>
+            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <RHFTextField name="title" placeholder={t('title')} sx={{ mb: 2 }} />
+              <RHFTextField
+                name="link"
+                placeholder={t('Add link')}
+                sx={{ mb: 2, display: 'block' }}
+              />
+              <RHFEditor
+                lang="en"
+                name="topic"
+                label={t('topic')}
+                sx={{ mb: 2, mt: 2, textTransform: 'lowercase' }}
+              />
+
+              <RHFUpload
+                multiple
+                autoFocus
+                name="file"
+                margin="dense"
+                sx={{ mb: 2 }}
+                variant="outlined"
+                onDrop={handleDrop}
+                onRemove={handleRemoveFile}
+                onRemoveAll={handleRemoveAllFiles}
+              />
+              <Button type="submit" loading={isSubmitting} variant="contained">
+                {t('blog')}
+              </Button>
+            </FormProvider>
           </Box>
         </Box>
 
@@ -60,22 +213,22 @@ export default function Blogs() {
 
           <Box
             sx={{
-              maxHeight: blogs.length > 6 ? '400px' : 'auto',
-              overflowY: blogs.length > 6 ? 'auto' : 'visible',
+              maxHeight: data?.length > 6 ? '400px' : 'auto',
+              overflowY: data?.length > 6 ? 'auto' : 'visible',
             }}
           >
             <Grid
               sx={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
+                gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
                 gap: 2,
               }}
             >
-              {blogs.map((blog, index) => (
+              {data?.map((blog, index) => (
                 <Card
                   key={index}
                   sx={{
-                    mb: 4,
+                    mb: 3,
                     position: 'relative',
                     overflow: 'hidden',
                     transform: hoveredIndex === index ? 'scale(1.05)' : 'scale(1)',
@@ -87,10 +240,7 @@ export default function Blogs() {
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <Image
-                    src="https://pbwebdev.co.uk/wp-content/uploads/2018/12/blogs.jpg"
-                    alt={blog.title}
-                  />
+                  <Image src={blog?.user?.picture || BlogImage} alt={blog.title} />
                   <Box
                     sx={{
                       p: 2,
@@ -99,7 +249,7 @@ export default function Blogs() {
                     }}
                   >
                     <Typography sx={{ color: 'gray' }}>{blog.title}</Typography>
-                    <Typography
+                    {/* <Typography
                       sx={{
                         mb: 3,
                         mt: 3,
@@ -108,23 +258,38 @@ export default function Blogs() {
                         opacity: hoveredIndex === index ? 0 : 1,
                       }}
                     >
-                      {blog.topic.length > 50 ? `${blog.topic.substring(0, 50)}... ` : blog.topic}
-                    </Typography>
+                      {blog.topic?.length > 50 ? `${blog.topic.substring(0, 50)}... ` : blog.topic}
+                    </Typography> */}
                     <Typography
+                      dangerouslySetInnerHTML={{
+                        __html: formatTextWithLineBreaks(blog.topic),
+                      }}
                       sx={{
-                        color: 'gray',
-                        mb: 5,
+                        mb: 3,
+                        mt: 3,
+                        fontWeight: 'bold',
                         transition: 'all 0.5s ease-in-out',
                         opacity: hoveredIndex === index ? 0 : 1,
                       }}
+                    />
+
+                    <Link
+                      href={blog.link}
+                      sx={{
+                        transition: 'all 0.5s ease-in-out',
+                        opacity: hoveredIndex === index ? 0 : 1,
+                        fontSize: 13,
+                      }}
                     >
-                      <Link onClick={() => alert('Coming soon')}>{blog.link}</Link>
-                    </Typography>
-                    <Typography sx={{ color: 'gray', opacity: hoveredIndex === index ? 0 : 1 }}>
-                      {blog.date}
+                      {blog.link}
+                    </Link>
+
+                    <Typography
+                      sx={{ color: 'gray', opacity: hoveredIndex === index ? 0 : 1, mt: 2 }}
+                    >
+                      {fDateAndTime(blog.created_at)}
                     </Typography>
                   </Box>
-                  {/* This box appears when hovered */}
                   {hoveredIndex === index && (
                     <Box
                       sx={{
@@ -135,17 +300,54 @@ export default function Blogs() {
                         height: '100%',
                         bgcolor: 'rgba(0, 0, 0, 0.7)',
                         color: 'white',
-                        display: 'block',
+                        display: 'flex',
+
                         alignItems: 'center',
                         justifyContent: 'center',
                         p: 2,
                         transition: 'all 0.5s ease-in-out',
+                        flexDirection: 'column',
                       }}
                     >
-                      <Typography sx={{ mt: 5, mb: 2 }}>{blog.topic}</Typography>
-
-                      <Link sx={{ cursor: 'pointer' }} onClick={() => alert('Coming soon')}>
-                        {blog.link}
+                      <Link
+                        sx={{
+                          cursor: 'pointer',
+                          borderRadius: 1,
+                          p: 1,
+                          color: 'white',
+                          bgcolor: 'success.main',
+                          width: '90px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          mb: 3,
+                        }}
+                        title={blog.link}
+                        href={blog.link}
+                        target="_blank"
+                      >
+                        {t('View')} <Iconify icon="mingcute:link-line" sx={{ ml: '1px' }} />
+                      </Link>
+                      <Link
+                        sx={{
+                          cursor: 'pointer',
+                          borderRadius: 1,
+                          p: 1,
+                          color: 'white',
+                          bgcolor: 'success.main',
+                          width: '90px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        title={blog.user?.employee?.name_english}
+                        href={paths.pages.doctor(
+                          blog.user?.employee?.employee_engagements?.[
+                            user.employee.selected_engagement
+                          ]?._id
+                        )}
+                      >
+                        {t('profile')} <Iconify icon="iconamoon:profile-fill" sx={{ ml: '1px' }} />
                       </Link>
                     </Box>
                   )}

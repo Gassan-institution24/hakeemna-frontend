@@ -52,6 +52,9 @@ export const endpoints = {
     many: '/api/productcategories/many',
     one: (id) => (!id ? null : `/api/productcategories/${id}`),
   },
+  blogs: {
+    all: '/api/blogs/',
+  },
   currency: {
     all: '/api/currency/',
     many: '/api/currency/many',
