@@ -24,7 +24,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -86,6 +86,7 @@ export default function AccountChangePassword() {
       } else {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
+      await logout()
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
