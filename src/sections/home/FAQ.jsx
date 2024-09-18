@@ -43,13 +43,25 @@ export default function FAQ() {
                 aria-controls="panel1-content"
                 id="panel1-header"
               >
-                <Typography>Q 1</Typography>
+                <Typography>ما هي الغايات من طلب معلوماتي الشخصية</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-                  lacus ex, sit amet blandit leo lobortis eget.
+                  في حكيمنا هدفنا هو توفير جميع سب الراحة من خلال تسهيل كامل الاجرائاء الطبية لذلك
+                  توفيرها من قبل المستخدم يساعدنا في تحقي هذا الهدف
                 </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon sx={{ color: 'success.main' }} />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                <Typography>test</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>test</Typography>
               </AccordionDetails>
             </Accordion>
           </Card>
@@ -77,7 +89,7 @@ export default function FAQ() {
             />
           </Box>
           <Box>
-            <TextField placeholder={t("your question")} sx={{ mb: 2 }} />
+            <TextField placeholder={t('your question')} sx={{ mb: 2 }} />
             <Button
               variant="contaained"
               sx={{ bgcolor: 'success.main', color: 'white', display: 'block' }}
