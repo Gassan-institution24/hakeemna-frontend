@@ -24,8 +24,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetUSRooms,
   useGeEntrancePrescription,
@@ -51,11 +51,11 @@ const formatTextWithLineBreaks = (text) => {
 export default function Rooms() {
   const [noteContent, setNoteContent] = useState('');
   const [Confirmdroomsdata, setConfirmRoomsdata] = useState('');
-  const { fullWidth } = useState(false);
-  const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const [selectedValue] = useState('');
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
@@ -66,6 +66,7 @@ export default function Rooms() {
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log(Confirmdroomsdata);
 
   const { medicalreportsdata } = useGetEntranceExaminationReports(id);
   const { doctorreportsdata } = useGetEntranceDoctorReports(id);
@@ -152,7 +153,7 @@ export default function Rooms() {
 
   return (
     <>
-      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+      <Dialog open={dialog.value} maxWidth="md"  onClose={dialog.onTrue}>
         <div
           style={{
             display: 'flex',
@@ -160,6 +161,7 @@ export default function Rooms() {
             alignItems: 'center',
             textAlign: 'center',
             margin: '10px',
+            width: curLangAr ? '250px' : '400px'
           }}
         >
           <DialogTitle>{t('Are you sure')}</DialogTitle>
@@ -174,7 +176,8 @@ export default function Rooms() {
         </div>
         <DialogContent>
           <Typography sx={{ mb: 1, fontSize: 15 }}>
-            {t('please confirm moving the patient to another room')}
+            {t('please confirm moving the patient to ')}{' '}
+            {curLangAr ? Confirmdroomsdata?.name_arabic : Confirmdroomsdata?.name_english}
           </Typography>
         </DialogContent>
         <DialogActions>

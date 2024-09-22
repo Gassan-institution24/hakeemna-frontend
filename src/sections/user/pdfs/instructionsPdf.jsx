@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Page, View, Text, Font, Document, StyleSheet } from '@react-pdf/renderer';
 
+import { fDmPdf } from 'src/utils/format-time';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
@@ -91,7 +93,9 @@ export default function InstructionsPdf({ Instructions }) {
           <Text style={[styles.h3]}>{Instructions?.adjustable_documents?.topic} </Text>
         </View>
         <View style={[styles.footer, styles.mb40]}>
-          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>iiiiiii</Text>
+          <Text style={[styles.subtitle1, styles.mb8, styles.tableRow]}>
+            {fDmPdf(Instructions?.created_at)}
+          </Text>
         </View>
       </Page>
     </Document>

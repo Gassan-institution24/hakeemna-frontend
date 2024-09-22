@@ -177,6 +177,10 @@ export const endpoints = {
       active: (id) => (!id ? null : `/api/rooms/unitservice/${id}/active`),
       byactivity: (id, acId) => `/api/rooms/unitservice/${id}/activity/${acId}`,
     },
+    employee: {
+      all: (id) => (!id ? null : `/api/rooms/unitserviceemployee/${id}`),
+    
+    },
     department: {
       all: (id) => (!id ? null : `/api/rooms/department/${id}`),
       active: (id) => (!id ? null : `/api/rooms/department/${id}/active`),

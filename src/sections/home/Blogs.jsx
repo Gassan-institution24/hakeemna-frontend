@@ -12,13 +12,13 @@ import axiosInstance from 'src/utils/axios';
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetBlogs } from 'src/api';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFUpload, RHFTextField, RHFEditor } from 'src/components/hook-form';
+import { RHFUpload, RHFEditor, RHFTextField } from 'src/components/hook-form';
 
 import BlogImage from './images/blog.png';
 
@@ -27,7 +27,8 @@ export default function Blogs() {
   const { user } = useAuthContext();
   const { data, refetch } = useGetBlogs();
 
-  console.log(data);
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [hoveredIndex, setHoveredIndex] = React.useState(null);
 
@@ -130,13 +131,23 @@ export default function Blogs() {
     } catch (error) {
       if (error?.response?.status !== 401) {
         enqueueSnackbar(
-          <div>
-            you dont have permssion to do this action. Please{' '}
+          curLangAr ? (
+            <div>
+             ليس لديك الإذن للقيام بهذا الإجراء. من فضلك{' '}
+              <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
+                <strong>سجل الدخول</strong>
+              </a>{' '}
+              اولا
+            </div>
+          ) : (
+            <div>
+            you dont have permission to do this action. Please{' '}
             <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
               <strong>login</strong>
             </a>{' '}
             first
-          </div>,
+          </div>
+          ),
           { variant: 'error' }
         );
       }
