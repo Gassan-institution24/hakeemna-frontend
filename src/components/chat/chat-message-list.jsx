@@ -56,7 +56,7 @@ export default function ChatMessageList({ messages = [], refetchLenght, particip
               key={message._id}
               id={message._id}
               ref={(el) => {
-                if (el && message.isUnRead && message?.senderId !== user?._id) {
+                if (el && message.isUnRead && message?.user !== user?._id) {
                   observer?.current?.observe(el);
                 }
               }}

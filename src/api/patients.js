@@ -68,27 +68,12 @@ export function useGetPatient(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useFindPatient({
-  sequence_number,
-  name_english,
-  name_arabic,
-  email,
-  identification_num,
-  mobile_num1,
-  mobile_num2,
-}) {
+export function useFindPatient(params) {
+  console.log('params',params)
   const URL = [
     endpoints.patients.find,
     {
-      params: {
-        name_english,
-        name_arabic,
-        email,
-        identification_num,
-        mobile_num1,
-        mobile_num2,
-        sequence_number,
-      },
+      params
     },
   ];
 

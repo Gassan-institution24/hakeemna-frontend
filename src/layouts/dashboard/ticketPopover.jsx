@@ -92,8 +92,8 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
     : [];
 
   useEffect(() => {
-    socket.on('message', (id) => {
-      if (id === chatId || messagesLength.some((one) => one._id === id)) {
+    socket.on('message', (message) => {
+      if (message.chat === chatId || messagesLength.some((one) => one._id === message.user)) {
         refetchLenght();
         refetch();
       }
