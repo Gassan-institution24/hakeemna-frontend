@@ -65,7 +65,7 @@ export default function EmployeeCard({ employee }) {
     // setTimeListItem(newValue);
   };
 
-  const handleEmployment = async () => {
+  const handleBook = async () => {
     setSubmitting(true);
     try {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
@@ -279,7 +279,7 @@ export default function EmployeeCard({ employee }) {
             variant="contained"
             color="info"
             loading={submitting}
-            onClick={handleEmployment}
+            onClick={handleBook}
           >
             {t('confirm')}
           </LoadingButton>

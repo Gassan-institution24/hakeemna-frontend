@@ -20,6 +20,7 @@ import {
   useFindUSPatient,
   useGetUSAppointments,
   useGetEmployeeActiveWorkGroups,
+  useGetAppointment,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -109,7 +110,9 @@ export default function TableCreateView() {
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
-
+  const { data: selectedAppointData } = useGetAppointment(selected, { select: 'work_group' })
+  console.log('selectedAppointData', selected)
+  console.log('selectedAppointData', selectedAppointData)
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -197,6 +200,7 @@ export default function TableCreateView() {
 
   const { foundPatients } = useFindUSPatient({
     ...debouncedQuery,
+    work_group: selectedAppointData?.work_group,
     select:
       'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality birth_date',
   });
