@@ -25,6 +25,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
     participants,
   });
 
+  console.log(message)
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 

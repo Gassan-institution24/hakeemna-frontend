@@ -244,7 +244,7 @@ export default function DoctorPage({ employeeData }) {
               <>
                 <Stack direction="row">
                   <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                    {t('other')}:
+                    {t('other (researchs, books, and conferences)')}:
                   </Typography>
                 </Stack>
                 <Stack px={3} gap={1}>
