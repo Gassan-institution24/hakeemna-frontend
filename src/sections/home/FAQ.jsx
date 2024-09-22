@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
@@ -13,6 +14,8 @@ import {
   AccordionDetails,
 } from '@mui/material';
 
+import axiosInstance from 'src/utils/axios';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image/image';
@@ -24,6 +27,23 @@ export default function FAQ() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const [data, setData] = React.useState('');
+  console.log(data);
+
+  const onSubmit = async () => {
+    try {
+      await axiosInstance.post('/api/faq', { body: data });
+
+      enqueueSnackbar('Hakeemna is always here to help you, thanks for your efforts', {
+        variant: 'success',
+      });
+    } catch (error) {
+      if (error?.response?.status !== 401) {
+        enqueueSnackbar('Something went wrong, please try again later', { variant: 'error' });
+      }
+    }
+  };
+
   return (
     <Stack sx={{ p: 5 }}>
       <Card sx={{ display: { md: 'flex', xs: 'block' } }}>
@@ -47,8 +67,8 @@ export default function FAQ() {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  في حكيمنا هدفنا هو توفير جميع سب الراحة من خلال تسهيل كامل الاجرائاء الطبية لذلك
-                  توفيرها من قبل المستخدم يساعدنا في تحقي هذا الهدف
+                  في حكيمنا هدفنا هو توفير جميع سبل الراحة من خلال تسهيل كامل الاجرائات الطبية, لذلك
+                  توفيرها من قبل المستخدم يساعدنا في تحقيق هذا الهدف
                 </Typography>
               </AccordionDetails>
             </Accordion>
@@ -69,7 +89,7 @@ export default function FAQ() {
 
         <Box sx={{ width: { md: '35%', xs: '100%' }, p: 3, order: { xs: 2, md: 1 } }}>
           <Typography variant="h4" sx={{ color: 'lightgray', fontWeight: 100 }}>
-            {t('cant find what are you looking for ?')}
+            {t('cant find what you are looking for?')}
           </Typography>
           <Box sx={{ display: 'inline-flex' }}>
             <Typography
@@ -89,10 +109,17 @@ export default function FAQ() {
             />
           </Box>
           <Box>
-            <TextField placeholder={t('your question')} sx={{ mb: 2 }} />
+            <TextField
+              onChange={(e) => setData(e.target.value)}
+              name="body"
+              placeholder={t('your question')}
+              sx={{ mb: 2 }}
+            />
             <Button
-              variant="contaained"
+              variant="contained"
               sx={{ bgcolor: 'success.main', color: 'white', display: 'block' }}
+              type="submit"
+              onClick={onSubmit}
             >
               {t('SEND')}
             </Button>
