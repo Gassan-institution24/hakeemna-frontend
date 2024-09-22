@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import { useState,useEffect,  } from 'react';
 
 import {
   Box,
@@ -24,7 +24,12 @@ import { fTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetRoom, useGetUSRooms, useGetEntranceManagementByActivity } from 'src/api';
+import {
+  useGetRoom,
+  useGetUSRooms,
+  useGetEmployeeRooms,
+  useGetEntranceManagementByActivity,
+} from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -41,17 +46,24 @@ export default function WaitingRoom() {
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  const { employeeRoomsData } = useGetEmployeeRooms(user.employee._id);
 
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
   );
 
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedTitle, setSelectedTitle] = useState();
   const { data } = useGetRoom(selectedTitle);
   const { EntranceByActivity } = useGetEntranceManagementByActivity(
     data?.activities,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log('employeeRoomsData', employeeRoomsData);
+
+  useEffect(() => {
+    setSelectedTitle(employeeRoomsData?._id);
+  }, [employeeRoomsData]);
+
   const goToProcessingPage = async (entrance) => {
     try {
       await axiosInstance.patch(`/api/entrance/${entrance?._id}`, {
@@ -120,20 +132,28 @@ export default function WaitingRoom() {
             width: 150,
             height: 35,
           }}
-          value={selectedTitle}
+          value={selectedTitle || ''} // Ensure value is not null or undefined
           displayEmpty
-          onChange={(e) => setSelectedTitle(e.target.value)}
+          onChange={(e) => {
+            const selectedRoomId = e.target.value;
+            setSelectedTitle(selectedRoomId);
+            updateRoom(selectedRoomId); // Update the room based on selection
+          }}
         >
           <MenuItem disabled value="" sx={{ display: 'none' }}>
             {t('Select Room')}
           </MenuItem>
-          {roomsData.map((activity, index) =>
-            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
-              <MenuItem key={index} value={activity?._id} onClick={() => updateRoom(activity?._id)}>
-                {curLangAr ? activity?.name_arabic : activity?.name_english}
-              </MenuItem>
-            ) : null
-          )}
+          {roomsData.map((activity, index) => {
+            const roomName = curLangAr ? activity?.name_arabic : activity?.name_english;
+            return (
+              activity?.activities?.name_english !==
+                receptionActivity?.activities?.name_english && (
+                <MenuItem key={index} value={activity?._id}>
+                  {roomName}
+                </MenuItem>
+              )
+            );
+          })}
         </Select>
 
         <Box>
