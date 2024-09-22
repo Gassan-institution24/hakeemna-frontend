@@ -22,8 +22,8 @@ export default function OrderDetailsItems({ ticket }) {
     : [];
 
   useEffect(() => {
-    socket.on('message', (id) => {
-      if (id === ticket.chat) refetch();
+    socket.on('message', (message) => {
+      if (message.chat === ticket.chat) refetch();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -79,7 +79,7 @@ export default function OrderDetailsItems({ ticket }) {
               // //
               selectedConversationId={ticket.chat}
               refetch={refetch}
-              // disabled={!recipients.length && !selectedConversationId}
+            // disabled={!recipients.length && !selectedConversationId}
             />
           </Stack>
         </Stack>

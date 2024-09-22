@@ -20,7 +20,7 @@ export default function useGetNavItem({ currentUserId, conversation }) {
   let displayText = '';
 
   if (lastMessage) {
-    const sender = lastMessage.senderId === currentUserId ? 'You: ' : '';
+    const sender = lastMessage.user === currentUserId ? 'You: ' : '';
 
     const message = lastMessage.contentType === 'image' ? 'Sent a photo' : lastMessage.body;
 

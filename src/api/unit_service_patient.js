@@ -25,28 +25,10 @@ export function useGetUSPatients(id, params) {
   return { ...memoizedValue, refetch };
 }
 
-export function useFindUSPatient({
-  sequence_number,
-  name_english,
-  name_arabic,
-  email,
-  identification_num,
-  mobile_num1,
-  mobile_num2,
-}) {
+export function useFindUSPatient(params) {
   const URL = [
     endpoints.usPatients.find,
-    {
-      params: {
-        name_english,
-        name_arabic,
-        email,
-        identification_num,
-        mobile_num1,
-        mobile_num2,
-        sequence_number,
-      },
-    },
+    { params }
   ];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

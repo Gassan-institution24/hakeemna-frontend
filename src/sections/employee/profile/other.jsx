@@ -45,7 +45,7 @@ export default function Others() {
         variant="body2"
         sx={{ color: 'text.secondary', my: 2, fontWeight: '700', textTransform: 'capitalize' }}
       >
-        {t('other')}:
+        {t('other (researchs, books, and conferences)')}:
       </Typography>
 
       <Stack

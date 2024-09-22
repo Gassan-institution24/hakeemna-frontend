@@ -81,6 +81,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         enqueueSnackbar('appointment booked successfully');
         onSignin();
         refetch();
+        router.push(paths.dashboard.user.patientsappointments);
       } else {
         router.push(returnTo || PATH_AFTER_LOGIN);
       }

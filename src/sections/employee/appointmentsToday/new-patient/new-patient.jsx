@@ -28,6 +28,7 @@ import {
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
   useGetUSActiveWorkShifts,
+  useGetAppointment,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -193,6 +194,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     // identification_num: values.identification_num,
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
+    work_group: values.work_group,
   });
 
   const { existPatients } = useFindPatient({
