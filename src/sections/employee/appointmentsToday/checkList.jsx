@@ -98,7 +98,13 @@ export default function CheckList() {
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ width: '70%', p: 2 }}>
           <Box sx={{ height: '400px', overflowY: 'auto' }}>
-            <Box sx={{ display: 'flex' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                maxWidth: 400, // Set the maximum width to 300px
+                overflowX: 'auto', // Enable horizontal scrolling if content exceeds maxWidth
+              }}
+            >
               {CheckListData?.map((info, index) => (
                 <Button key={index} sx={{ mt: 2, ml: 2 }} onClick={() => setTheId(info?._id)}>
                   {info?.title}{' '}

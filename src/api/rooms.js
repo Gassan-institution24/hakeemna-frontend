@@ -67,6 +67,27 @@ export function useGetUSRooms(id) {
 
   return { ...memoizedValue, refetch };
 }
+export function useGetEmployeeRooms(id) {
+  const URL = endpoints.rooms.employee.all(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      employeeRoomsData: data ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
 
 export function useGetDepartmentRooms(id) {
   const URL = endpoints.rooms.department.all(id);
