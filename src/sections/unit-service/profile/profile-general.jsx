@@ -40,6 +40,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFEditor,
 } from 'src/components/hook-form';
+import { decode } from 'he';
 
 // ----------------------------------------------------------------------
 
@@ -132,8 +133,8 @@ export default function AccountGeneral({ unitServiceData }) {
     work_end_time: data?.work_end_time || null,
     phone: data?.phone || '',
     mobile_num: data?.mobile_num || '',
-    introduction_letter: data?.introduction_letter || '',
-    arabic_introduction_letter: data?.arabic_introduction_letter || '',
+    introduction_letter: decode(data?.introduction_letter) || '',
+    arabic_introduction_letter: decode(data?.arabic_introduction_letter) || '',
     location_gps: data?.location_gps || '',
     company_logo: data?.company_logo || '',
     facebook: data?.facebook || '',
