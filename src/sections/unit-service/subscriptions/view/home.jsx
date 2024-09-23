@@ -87,7 +87,7 @@ export default function UnitServicesAccountingView() {
   const router = useRouter();
 
   const { licenseMovements, loading } = useGetUSLicenseMovement(
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -277,8 +277,8 @@ export default function UnitServicesAccountingView() {
                       filters={filters}
                       setFilters={setFilters}
                       // selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
+                      onSelectRow={() => table.onSelectRow(row?._id)}
+                      onEditRow={() => handleEditRow(row?._id)}
                     />
                   ))}
 
