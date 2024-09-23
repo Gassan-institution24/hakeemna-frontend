@@ -59,6 +59,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
           {!homePage && (
             <Typography
               variant="subtitle1"
+              component="p"
               sx={{
                 textAlign: 'center',
                 textTransform: 'none',
@@ -87,6 +88,7 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
           {homePage && (
             <Typography
               variant="subtitle1"
+              component="p"
               sx={{
                 textAlign: 'center',
                 textTransform: 'none',

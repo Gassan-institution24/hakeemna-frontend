@@ -58,6 +58,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
           {homePage && (
             <Typography
               variant="subtitle1"
+              component="p"
               sx={{
                 textAlign: 'center',
                 textTransform: 'none',
@@ -73,6 +74,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
             <>
               <Typography
                 variant="subtitle1"
+                component="p"
                 sx={{
                   textAlign: 'center',
                   textTransform: 'none',
@@ -85,6 +87,7 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
               </Typography>
               <Typography
                 variant="subtitle1"
+                component="p"
                 sx={{
                   textAlign: 'center',
                   textTransform: 'none',
