@@ -151,7 +151,7 @@ export default function UnitServicePage({ USData }) {
   const renderHead = (
     <Stack>
       <Stack direction="row" sx={{ mb: 3 }}>
-        <Typography variant="h4" sx={{ flexGrow: 1 }}>
+        <Typography variant="h4" sx={{ flexGrow: 1 }} component="h1">
           {curLangAr ? name_arabic : name_english}
         </Typography>
       </Stack>
@@ -177,8 +177,9 @@ export default function UnitServicePage({ USData }) {
             cursor: location_gps ? 'pointer' : '',
             textDecoration: location_gps ? 'underline' : '',
           }}
+          component="h3"
         >
-          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />
+          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }}  />
           {curLangAr ? country?.name_arabic : country?.name_english},{' '}
           {curLangAr ? city?.name_arabic : city?.name_english}
         </Stack>
