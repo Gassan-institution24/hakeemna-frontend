@@ -92,8 +92,18 @@ export default function PatientsHero({ currentPage, setCurrentPage }) {
                 textTransform: 'none',
               }}
             >
+              <Typography
+                component="h1"
+                sx={{
+                  display: 'inline',
+                  fontSize: 'inherit', // Keeps the size consistent with the rest of the text
+                  fontWeight: 'bold', // Optional: makes the "h1" more prominent
+                }}
+              >
+                {t('hakeemna')} &nbsp;
+              </Typography>
               {t(
-                'It provides integrated services to patients in terms of storing data and medical information and managing them in a flexible manner, thus facilitating the mechanism of accessing information, medical history and other data at any time and in communicating with the medical staff in an efficient manner.'
+                'provides integrated services to patients in terms of storing data and medical information and managing them in a flexible manner, thus facilitating the mechanism of accessing information, medical history and other data at any time and in communicating with the medical staff in an efficient manner.'
               )}
             </Typography>
           )}

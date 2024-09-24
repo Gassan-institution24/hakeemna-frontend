@@ -51,7 +51,7 @@ export default function HomeHero() {
         <m.div variants={varFade().in}>
           <Typography
             variant="h2"
-            component="h1"
+            component="h2"
             sx={{
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
@@ -62,7 +62,7 @@ export default function HomeHero() {
             }}
             id="#"
           >
-            {t('It is time for digital transformation')}
+            {t('Electronic innovation for a healthier future')}
           </Typography>
         </m.div>
 
@@ -72,11 +72,20 @@ export default function HomeHero() {
             sx={{
               textAlign: 'center',
               textTransform: 'none',
-              //  textShadow: '5px 5px 5px black'
             }}
           >
+            <Typography
+              component="h1"
+              sx={{
+                display: 'inline',
+                fontSize: 'inherit', // Keeps the size consistent
+                fontWeight: 'bold', // Optional: adds emphasis like an h1
+              }}
+            >
+              {t('Hakeemna')} &nbsp;
+            </Typography>
             {t(
-              'An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
+              'is An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
             )}
           </Typography>
         </m.div>
