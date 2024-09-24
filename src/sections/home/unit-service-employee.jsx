@@ -93,6 +93,7 @@ function EmployeeCard({ employee, selected, onSelected }) {
 
       <Stack spacing={2} flexGrow={1}>
         <ListItemText
+          component="h2"
           primary={curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
           secondary={
             <Stack direction="row" alignItems="center" spacing={0.5}>

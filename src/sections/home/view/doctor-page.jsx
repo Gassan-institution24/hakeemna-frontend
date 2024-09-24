@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { Stack, Dialog, Rating, Typography } from '@mui/material';
+import { Stack, Dialog, Rating, Typography, Box } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
@@ -36,7 +36,7 @@ export default function DoctorPage({ employeeData }) {
       startDate: selectedDate,
     }
   );
-
+  console.log('employeeData', employeeData)
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     setSignupDialog(true);
@@ -63,17 +63,17 @@ export default function DoctorPage({ employeeData }) {
           >
             <Image sx={{ width: 300, height: 300 }} src={employeeData.employee?.picture} />
             <Stack mb={3}>
-              <Typography variant="h6" mr={5}>
+              <Typography variant="h6" component="h1" mr={5}>
                 {curLangAr
                   ? employeeData?.employee?.name_arabic
                   : employeeData?.employee?.name_english}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="h2" >
                 {curLangAr
                   ? employeeData?.employee?.speciality?.name_arabic
                   : employeeData?.employee?.speciality?.name_english}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="h2">
                 {curLangAr
                   ? employeeData?.unit_service?.name_arabic
                   : employeeData?.unit_service?.name_english}
@@ -160,6 +160,7 @@ export default function DoctorPage({ employeeData }) {
                   <Typography
                     variant="subtitle2"
                     sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
+                    component="h3"
                   >
                     {t('phone number')}:
                   </Typography>
@@ -174,11 +175,11 @@ export default function DoctorPage({ employeeData }) {
             {employeeData?.employee?.email && (
               <>
                 <Stack direction="row">
-                  <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
+                  <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }} >
                     {t('email')}:
                   </Typography>
                 </Stack>
-                <Typography variant="body2" sx={{ px: 3 }}>
+                <Typography variant="body2" sx={{ px: 3 }} component="h3">
                   {employeeData?.employee?.email}
                 </Typography>
               </>
@@ -190,7 +191,7 @@ export default function DoctorPage({ employeeData }) {
             </Stack>
             <Stack>
               {employeeData?.unit_service?.insurance?.map((one) => (
-                <Typography variant="body2" sx={{ px: 3 }}>
+                <Typography variant="body2" sx={{ px: 3 }} component="h3">
                   {curLangAr ? one.name_arabic : one.name_english}
                 </Typography>
               ))}
@@ -213,8 +214,8 @@ export default function DoctorPage({ employeeData }) {
                 if (one.name && one.year) {
                   return (
                     <Stack direction="row" gap={{ md: 1, xs: 1 }}>
-                      <Typography variant="body2">{one.name}</Typography>,
-                      <Typography variant="body2">{one.institution}</Typography>,
+                      <Typography variant="body2" component="h3">{one.name}</Typography>,
+                      <Typography variant="body2" component="h3">{one.institution}</Typography>,
                       <Typography variant="body2">{fDate(new Date(one.year), 'yyyy')}</Typography>
                     </Stack>
                   );
@@ -232,8 +233,8 @@ export default function DoctorPage({ employeeData }) {
                 if (one.name && one.institution) {
                   return (
                     <Stack direction="row" gap={1}>
-                      <Typography variant="body2">{one.name}</Typography>,
-                      <Typography variant="body2">{one.institution}</Typography>
+                      <Typography variant="body2" component="h3">{one.name}</Typography>,
+                      <Typography variant="body2" component="h3">{one.institution}</Typography>
                     </Stack>
                   );
                 }
@@ -252,8 +253,8 @@ export default function DoctorPage({ employeeData }) {
                     if (one.kind && one.name) {
                       return (
                         <Stack direction="row" gap={1}>
-                          <Typography variant="body2">{one.name}</Typography>,
-                          <Typography variant="body2">{t(one.kind)}</Typography>
+                          <Typography variant="body2" component="h4">{one.name}</Typography>,
+                          <Typography variant="body2" component="h4">{t(one.kind)}</Typography>
                         </Stack>
                       );
                     }
@@ -265,6 +266,30 @@ export default function DoctorPage({ employeeData }) {
           </Stack>
           <Stack gap={1} flex={1}>
             <FeedbackSection employee={employeeData} />
+          </Stack>
+          <Stack direction='row' gap={1} flexWrap='wrap'>
+            {employeeData.employee?.keywords?.map((one, index) => (
+              <>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
+                <Typography variant='caption' component='h3'>{one}</Typography>
+              </Box>
+              </>
+            ))}
           </Stack>
         </Stack>
       </Stack>
