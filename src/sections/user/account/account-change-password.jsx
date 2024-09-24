@@ -17,9 +17,11 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
+  const { logout } = useAuthContext()
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -72,6 +74,7 @@ export default function AccountChangePassword() {
       } else {
         enqueueSnackbar(response.data || `${t('Password update failed!')}`, { variant: 'error' });
       }
+      await logout()
     } catch (error) {
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,

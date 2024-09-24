@@ -132,6 +132,7 @@ export default function HomeHero() {
         >
           <Typography
             variant="subtitle1"
+            component="p"
             sx={{
               textAlign: 'center',
               textTransform: 'none',

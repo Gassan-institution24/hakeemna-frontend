@@ -68,6 +68,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           Details:
         </Typography> */}
         <Stack
+          id="appointmentSettingDuration"
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
           sx={{ p: 3, width: { xs: '100%', md: 'auto' } }}
@@ -215,26 +216,28 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               ),
             }}
           />
-          <RHFTextField
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'لبعد' : 'for the next'}</Box>
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'أيام' : 'days'}</Box>
-                </InputAdornment>
-              ),
-            }}
-            name="config_frequency"
-            label={t('configuration frequency')}
-            type="number"
-            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
-            InputLabelProps={{ shrink: true }}
-          />
+          <div id="appointmentSettingAvailableForBooking" style={{width:'100%'}}>
+            <RHFTextField
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'لبعد' : 'for the next'}</Box>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'أيام' : 'days'}</Box>
+                  </InputAdornment>
+                ),
+              }}
+              name="config_frequency"
+              label={t('available for booking')}
+              type="number"
+              inputProps={{ min: 0, max: 30, textAlign: 'center' }}
+              InputLabelProps={{ shrink: true }}
+            />
+          </div>
         </Stack>
         <Typography
           variant="p"
