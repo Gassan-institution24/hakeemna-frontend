@@ -92,6 +92,38 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ),
       },
       {
+        target: '#appointmentSettingDuration',
+        title: t('Step Two (2) of “Automated Appointment Settings”'),
+        disableBeacon: true,
+        content: (
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
+            )}
+            <br />
+            {t(
+              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+            )}
+          </Typography>
+        ),
+      },
+      {
+        target: '#appointmentSettingAvailableForBooking',
+        title: t('Step Two (2) of “Automated Appointment Settings”'),
+        disableBeacon: true,
+        content: (
+          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+            {t(
+              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
+            )}
+            <br />
+            {t(
+              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+            )}
+          </Typography>
+        ),
+      },
+      {
         target: '#currEMNewEditDaysDetails',
         title: t('Step Two (2) of “Automated Appointment Settings”'),
         disableBeacon: true,
