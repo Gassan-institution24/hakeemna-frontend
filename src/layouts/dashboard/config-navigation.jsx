@@ -27,8 +27,8 @@ export function useNavData() {
   const { messages, refetch } = useGetUnreadMsgs(user?._id);
 
   useEffect(() => {
-    socket.on('message', (id) => {
-      if (messages.some((one) => one._id === id)) {
+    socket.on('message', (message) => {
+      if (messages.some((one) => one._id === message.user)) {
         refetch();
       }
     });

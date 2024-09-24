@@ -128,13 +128,29 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USServicesNav',
-        title: t('creating services'),
+        title: t('Adding the services provided'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              'We also recommend adding the services you provide in this step in order to improve your experience and facilitate the use of the platform.'
+              'We also recommend in this step to add the services you provide and their pricing, in order to activate patient accounting.'
             )}
+            <br />
+            <br />
+            {t(
+              'Example: Clinic check-up / consultation, and the price of this check-up / consultation is 20 dinars.'
+            )}
+            <br />
+            <br />
+            {t(
+              'The financial part (paying the visit fee and creating an invoice) is activated at the end of the appointment, and here you must specify the type of service provided that you added at this stage.'
+            )}
+            <br />
+            <br />
+            {t(
+              'Note: You can add new services at any time later.'
+            )}
+
           </Typography>
         ),
       },
@@ -157,7 +173,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              "We also recommend adding 'Activities' information to organize the daily and administrative work of your organization."
+              "Usually, a visit (appointment) within a service unit (facility) consists of several different activities, for example: clinical examination, accounting..."
+            )}
+            <br />
+            <br />
+            {t(
+              "Note: You can add new services at any time later."
             )}
           </Typography>
         ),

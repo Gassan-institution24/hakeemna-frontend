@@ -37,6 +37,7 @@ import FormProvider, {
   RHFAutocomplete,
   RHFEditor,
 } from 'src/components/hook-form';
+import { decode } from 'he';
 
 import Others from './other';
 import Certifications from './certifications';
@@ -179,8 +180,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
     signature: employeeData?.signature || null,
     stamp: employeeData?.stamp || null,
     picture: employeeData?.picture || null,
-    about_me: employeeData?.about_me || '',
-    arabic_about_me: employeeData?.arabic_about_me || '',
+    about_me: decode(employeeData?.about_me) || '',
+    arabic_about_me: decode(employeeData?.arabic_about_me) || '',
     languages: employeeData?.languages || [],
     arabic_keywords: employeeData?.arabic_keywords || [],
     keywords: employeeData?.keywords || [],

@@ -69,6 +69,7 @@ export default function HomeHero() {
         <m.div variants={varFade().in}>
           <Typography
             variant="subtitle1"
+            component="p"
             sx={{
               textAlign: 'center',
               textTransform: 'none',
