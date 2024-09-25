@@ -189,7 +189,7 @@ export function useNavData() {
           subcategory: 'management_tables',
           acl: 'read',
         }),
-        title: t('services'),
+        title: t('services and pricing'),
         path: paths.unitservice.tables.services.root,
         navItemId: 'USServicesNav',
       },
