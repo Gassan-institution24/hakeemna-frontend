@@ -56,13 +56,15 @@ export default function HomeHero() {
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
-              fontSize: { xs: 35, md: 50 },
-              // textShadow: '5px 5px 5px black',
+              fontSize: { xs: 35, md: 45 },
+              // textShadow: '1px 1px 1px black',
               mb: 3,
             }}
             id="#"
           >
-            {t('Electronic innovation for a healthier future')}
+            {t('Electronic innovation for ')}
+            <br/>
+            {t('a healthier future')}
           </Typography>
         </m.div>
 
