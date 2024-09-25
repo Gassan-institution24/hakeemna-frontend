@@ -41,9 +41,8 @@ export default function Blogs() {
   };
 
   const BlogsSchema = Yup.object().shape({
-    title: Yup.string(),
-    topic: Yup.string(),
-    link: Yup.string(),
+    title: Yup.string().required(),
+    topic: Yup.string().required(),
     file: Yup.array(),
   });
 
@@ -133,7 +132,7 @@ export default function Blogs() {
         enqueueSnackbar(
           curLangAr ? (
             <div>
-             ليس لديك الإذن للقيام بهذا الإجراء. من فضلك{' '}
+              ليس لديك الإذن للقيام بهذا الإجراء. من فضلك{' '}
               <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
                 <strong>سجل الدخول</strong>
               </a>{' '}
@@ -141,12 +140,12 @@ export default function Blogs() {
             </div>
           ) : (
             <div>
-            you dont have permission to do this action. Please{' '}
-            <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
-              <strong>login</strong>
-            </a>{' '}
-            first
-          </div>
+              you dont have permission to do this action. Please{' '}
+              <a href={paths.auth.login} style={{ color: '#5BE49B' }}>
+                <strong>login</strong>
+              </a>{' '}
+              first
+            </div>
           ),
           { variant: 'error' }
         );
@@ -187,11 +186,7 @@ export default function Blogs() {
           <Box sx={{ width: '100%' }}>
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <RHFTextField name="title" placeholder={t('title')} sx={{ mb: 2 }} />
-              <RHFTextField
-                name="link"
-                placeholder={t('Add link')}
-                sx={{ mb: 2, display: 'block' }}
-              />
+
               <RHFEditor
                 lang="en"
                 name="topic"
@@ -260,17 +255,7 @@ export default function Blogs() {
                     }}
                   >
                     <Typography sx={{ color: 'gray' }}>{blog.title}</Typography>
-                    {/* <Typography
-                      sx={{
-                        mb: 3,
-                        mt: 3,
-                        fontWeight: 'bold',
-                        transition: 'all 0.5s ease-in-out',
-                        opacity: hoveredIndex === index ? 0 : 1,
-                      }}
-                    >
-                      {blog.topic?.length > 50 ? `${blog.topic.substring(0, 50)}... ` : blog.topic}
-                    </Typography> */}
+
                     <Typography
                       dangerouslySetInnerHTML={{
                         __html: formatTextWithLineBreaks(blog.topic),
@@ -283,17 +268,6 @@ export default function Blogs() {
                         opacity: hoveredIndex === index ? 0 : 1,
                       }}
                     />
-
-                    <Link
-                      href={blog.link}
-                      sx={{
-                        transition: 'all 0.5s ease-in-out',
-                        opacity: hoveredIndex === index ? 0 : 1,
-                        fontSize: 13,
-                      }}
-                    >
-                      {blog.link}
-                    </Link>
 
                     <Typography
                       sx={{ color: 'gray', opacity: hoveredIndex === index ? 0 : 1, mt: 2 }}
@@ -320,6 +294,7 @@ export default function Blogs() {
                         flexDirection: 'column',
                       }}
                     >
+                      {/* here */}
                       <Link
                         sx={{
                           cursor: 'pointer',
