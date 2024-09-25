@@ -53,8 +53,8 @@ export default function ChatMessageList({ messages = [], refetchLenght, particip
         <Box>
           {messages.map((message) => (
             <div
-              key={message._id}
-              id={message._id}
+              key={message?._id}
+              id={message?._id}
               ref={(el) => {
                 if (el && message.isUnRead && message?.user !== user?._id) {
                   observer?.current?.observe(el);
