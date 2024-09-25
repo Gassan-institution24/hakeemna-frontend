@@ -256,7 +256,7 @@ export default function AppointmentsToday() {
                 key={index}
                 value={activity?.activities?._id}
                 onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-                disabled={info?.activityhappend}
+                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
