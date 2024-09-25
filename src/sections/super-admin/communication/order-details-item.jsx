@@ -18,7 +18,7 @@ export default function OrderDetailsItems({ ticket }) {
   const { conversation, refetch } = useGetConversation(ticket.chat);
 
   const participants = conversation
-    ? conversation.participants?.filter((participant) => participant._id !== user._id)
+    ? conversation.participants?.filter((participant) => participant?._id !== user?._id)
     : [];
 
   useEffect(() => {

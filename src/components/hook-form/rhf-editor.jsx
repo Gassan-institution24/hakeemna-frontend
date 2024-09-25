@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import FormHelperText from '@mui/material/FormHelperText';
+import { Stack, Typography } from '@mui/material';
 
 import Editor from '../editor';
 
 // ----------------------------------------------------------------------
 
-export default function RHFEditor({ name, helperText, ...other }) {
+export default function RHFEditor({ name, helperText, label, sx, ...other }) {
   const {
     control,
     watch,
@@ -31,20 +32,23 @@ export default function RHFEditor({ name, helperText, ...other }) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <Editor
-          id={name}
-          value={field.value}
-          onChange={field.onChange}
-          error={!!error}
-          helperText={
-            (!!error || helperText) && (
-              <FormHelperText error={!!error} sx={{ px: 2 }}>
-                {error ? error?.message : helperText}
-              </FormHelperText>
-            )
-          }
-          {...other}
-        />
+        <Stack sx={sx}>
+          <Typography mb={0.3} textTransform='capitalize' variant='subtitle2'>{label}</Typography>
+          <Editor
+            id={name}
+            value={field.value}
+            onChange={field.onChange}
+            error={!!error}
+            helperText={
+              (!!error || helperText) && (
+                <FormHelperText error={!!error} sx={{ px: 2 }}>
+                  {error ? error?.message : helperText}
+                </FormHelperText>
+              )
+            }
+            {...other}
+          />
+        </Stack>
       )}
     />
   );
@@ -53,4 +57,6 @@ export default function RHFEditor({ name, helperText, ...other }) {
 RHFEditor.propTypes = {
   helperText: PropTypes.string,
   name: PropTypes.string,
+  label: PropTypes.string,
+  sx: PropTypes.object,
 };

@@ -31,7 +31,7 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   const { user } = useAuthContext();
 
   const { ticketsData, loading } = useGetTickets({
-    user_creation: user._id,
+    user_creation: user?._id,
     status: "{ $in: ['pending', 'processing', 'waiting'] }",
   });
 
@@ -88,12 +88,12 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   }, [loading, ticketsData, open]);
 
   const participants = conversation
-    ? conversation.participants?.filter((participant) => participant._id !== user._id)
+    ? conversation.participants?.filter((participant) => participant?._id !== user?._id)
     : [];
 
   useEffect(() => {
     socket.on('message', (message) => {
-      if (message.chat === chatId || messagesLength.some((one) => one._id === message.user)) {
+      if (message.chat === chatId || messagesLength.some((one) => one?._id === message.user)) {
         refetchLenght();
         refetch();
       }
@@ -123,7 +123,7 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
                 <Typography variant="subtitle2">{t('category')}</Typography>
                 <RHFSelect size="small" name="category">
                   {ticketCategoriesData.map((one, idx) => (
-                    <MenuItem lang="ar" key={idx} value={one._id}>
+                    <MenuItem lang="ar" key={idx} value={one?._id}>
                       {curLangAr ? one.name_arabic : one?.name_english}
                     </MenuItem>
                   ))}
@@ -201,7 +201,7 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
           </Typography>
           <Divider sx={{ mb: 1 }} />
           {ticketsData.map((one, idx) => {
-            const currLength = messagesLength.find((chat) => chat._id === one.chat);
+            const currLength = messagesLength.find((chat) => chat?._id === one.chat);
             return (
               <MenuItem
                 onClick={() => {

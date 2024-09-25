@@ -29,6 +29,7 @@ export function RHFSelect({
   PaperPropsSx,
   ...other
 }) {
+  const { t } = useTranslate()
   const { control } = useFormContext();
 
   return (
@@ -59,6 +60,13 @@ export function RHFSelect({
           helperText={error ? error?.message : helperText}
           {...other}
         >
+          {field.value &&
+            <MenuItem value={null}>
+              {t('clear')}
+            </MenuItem>}
+          {field.value &&
+            < Divider />
+          }
           {children}
         </TextField>
       )}

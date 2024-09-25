@@ -112,6 +112,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required(t('required field')),
     email: Yup.string().required(t('required field')),
+    title:Yup.string(),
     name_english: Yup.string()
       .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
@@ -349,7 +350,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="name_english"
                 onChange={handleEnglishInputChange}
-                label={`${t('Full name in English')} *`}
+                label={t('Full name in English')}
               />
               <RHFTextField
                 variant="filled"
@@ -360,7 +361,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <RHFSelect
                 disabled
                 variant="filled"
-                label={`${t('nationality')} *`}
+                label={t('nationality')}
                 fullWidth
                 name="nationality"
                 InputLabelProps={{ shrink: true }}
@@ -500,7 +501,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
               <RHFAutocomplete
                 name="speciality"
-                label={`${t('speciality')} *`}
+                label={t('speciality')}
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
@@ -518,7 +519,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 )}
               />
               <RHFSelect
-                label={`${t('gender')} *`}
+                label={t('gender')}
                 fullWidth
                 name="gender"
                 InputLabelProps={{ shrink: true }}
@@ -575,7 +576,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
             <RHFAutocomplete
               sx={{ mt: 3 }}
               name="languages"
-              label={`${t('languages')} *`}
+              label={t('languages')}
               multiple
               disableCloseOnSelect
               options={languages.filter(
