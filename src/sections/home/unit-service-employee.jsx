@@ -19,9 +19,10 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceEmployees({ employees }) {
+  const { t } = useTranslate()
   const router = useRouter();
-  const handleClick = (id) => {
-    router.push(paths.pages.doctor(id));
+  const handleClick = (employee) => {
+    router.push(paths.pages.doctor(`${employee?._id}_${employee.employee?.[t('name_english')]?.replace(/ /g, "-")}`));
   };
   return (
     <Box
@@ -41,7 +42,7 @@ export default function UnitServiceEmployees({ employees }) {
             key={employee._id}
             employee={employee}
             // selected={approved.includes(employee._id)}
-            onSelected={() => handleClick(employee._id)}
+            onSelected={() => handleClick(employee)}
           />
         ))}
     </Box>

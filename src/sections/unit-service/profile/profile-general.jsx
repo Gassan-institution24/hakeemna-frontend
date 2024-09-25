@@ -285,13 +285,13 @@ export default function AccountGeneral({ unitServiceData }) {
                 variant="filled"
                 name="identification_num"
                 value={values.identification_num}
-                label={`${t('ID number')}* :`}
+                label={`${t('ID number')} :`}
               />
               <TextField
                 variant="filled"
                 name="name_english"
                 value={values.name_english}
-                label={`${t('name english')}* :`}
+                label={`${t('name english')} :`}
               />
               <TextField
                 variant="filled"
@@ -303,7 +303,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 type="email"
                 variant="filled"
                 name="email"
-                label={`${t('institution email')}* :`}
+                label={`${t('institution email')} :`}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Divider />
@@ -343,7 +343,7 @@ export default function AccountGeneral({ unitServiceData }) {
             >
               <TextField
                 select
-                label={`${t('country')} *`}
+                label={t('country')}
                 disabled
                 fullWidth
                 name="country"
@@ -361,7 +361,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <TextField
                 select
-                label={`${t('city')} *`}
+                label={t('city')}
                 disabled
                 fullWidth
                 name="city"
@@ -378,7 +378,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <TextField
                 select
-                label={`${t('unit of service type')} *`}
+                label={t('unit of service type')}
                 fullWidth
                 disabled
                 name="US_type"
@@ -444,7 +444,7 @@ export default function AccountGeneral({ unitServiceData }) {
             <RHFAutocomplete
               sx={{ mt: 3 }}
               name="work_days"
-              label={`${t('work days')} *`}
+              label={t('work days')}
               multiple
               disableCloseOnSelect
               options={daysOfWeek.filter(

@@ -23,12 +23,12 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
 
   const [note, setNote] = useState(ticket.note);
   const [priority, setPriority] = useState(ticket.priority);
-  const [category, setCategory] = useState(ticket.category._id);
+  const [category, setCategory] = useState(ticket.category?._id);
   const [assignedTo, setAssignedTo] = useState(ticket.assigned_to?._id);
 
   const handleCategoryChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value });
+      axiosInstance.patch(endpoints.tickets.one(ticket?._id), { category: e.target.value });
       setCategory(e.target.value);
       enqueueSnackbar('changed successfully!');
       refetch();
@@ -39,7 +39,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
   };
   const handlePriorityChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value });
+      axiosInstance.patch(endpoints.tickets.one(ticket?._id), { priority: e.target.value });
       setPriority(e.target.value);
       enqueueSnackbar('changed successfully!');
       refetch();
@@ -50,7 +50,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
   };
   const handleAssignedToChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value });
+      axiosInstance.patch(endpoints.tickets.one(ticket?._id), { assigned_to: e.target.value });
       setAssignedTo(e.target.value);
       enqueueSnackbar('changed successfully!');
       refetch();
@@ -61,7 +61,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
   };
   const handleSendNote = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { note });
+      axiosInstance.patch(endpoints.tickets.one(ticket?._id), { note });
       enqueueSnackbar('changed successfully!');
       refetch();
     } catch (error) {
@@ -96,7 +96,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
                   onChange={handleCategoryChange}
                 >
                   {ticketCategoriesData.map((one, idx) => (
-                    <MenuItem key={idx} value={one._id}>
+                    <MenuItem key={idx} value={one?._id}>
                       {one.name_english}
                     </MenuItem>
                   ))}
@@ -143,7 +143,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
                   onChange={handleAssignedToChange}
                 >
                   {usersData.map((one, idx) => (
-                    <MenuItem key={idx} value={one._id}>
+                    <MenuItem key={idx} value={one?._id}>
                       {one.email}
                     </MenuItem>
                   ))}

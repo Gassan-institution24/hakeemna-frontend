@@ -131,13 +131,13 @@ export default function DoctorPage({ employeeData }) {
                     variant="subtitle2"
                     sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
                   >
-                    {t('about me')}:
+                    {t('Introductory text')}:
                   </Typography>
                 </Stack>
                 <Typography variant="body2" sx={{ px: 3 }}>
                   {curLangAr
-                    ? ConvertToHTML(employeeData?.employee?.arabic_about_me)
-                    : ConvertToHTML(employeeData?.employee?.about_me)}
+                    ? ConvertToHTML(employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me)
+                    : ConvertToHTML(employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me)}
                 </Typography>
               </>
             )}
@@ -269,26 +269,9 @@ export default function DoctorPage({ employeeData }) {
           </Stack>
           <Stack direction='row' gap={1} flexWrap='wrap'>
             {employeeData.employee?.keywords?.map((one, index) => (
-              <>
               <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
                 <Typography variant='caption' component='h3'>{one}</Typography>
               </Box>
-              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
-                <Typography variant='caption' component='h3'>{one}</Typography>
-              </Box>
-              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
-                <Typography variant='caption' component='h3'>{one}</Typography>
-              </Box>
-              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
-                <Typography variant='caption' component='h3'>{one}</Typography>
-              </Box>
-              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
-                <Typography variant='caption' component='h3'>{one}</Typography>
-              </Box>
-              <Box sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2, }} key={index}>
-                <Typography variant='caption' component='h3'>{one}</Typography>
-              </Box>
-              </>
             ))}
           </Stack>
         </Stack>
