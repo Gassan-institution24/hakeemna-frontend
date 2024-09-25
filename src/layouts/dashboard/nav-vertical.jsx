@@ -80,7 +80,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USDepartmentNav',
-        title: t('creating departments'),
+        title: t('departments'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
@@ -92,7 +92,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USEmployeesNav',
-        title: t('adding employees'),
+        title: t('employees'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
@@ -104,7 +104,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USWorkShiftNav',
-        title: t('creating work shifts'),
+        title: t('work shifts'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
@@ -116,41 +116,45 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USWorkGroupNav',
-        title: t('creating work groups'),
+        title: t('work groups'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              "Next, you must enter the information of the work team/teams in the organization you work for, this information has administrative importance and is necessary to make 'appointment settings for each work team'. Note that creating a 'work group' in the appointment settings will show in the work schedule (calendar) that appointment for each member of the work group in that team (such as in the surgeon's calendar, also that appointment will appear in the calendar and work schedule of an anesthesiologist, and the same applies to the nurse)."
+              "It is a team of other doctors involved in providing medical service in the field."
+            )}
+            <br />
+            <br />
+            {t(
+              "You must enter the staff information of the organization you work for. This information has administrative importance and is necessary to make 'appointment settings'."
+            )}
+            <br />
+            <br />
+            {t(
+              "Note: You can add a new team at any time later."
             )}
           </Typography>
         ),
       },
       {
         target: '#USServicesNav',
-        title: t('Adding the services provided'),
+        title: t('services and pricing'),
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              'We also recommend in this step to add the services you provide and their pricing, in order to activate patient accounting.'
+              'At the end of the appointment, the financial part of the platform is activated, which is paying the visit fee and creating an invoice. Here, you must choose the service provided (you choose from the services you added at this stage).'
             )}
             <br />
             <br />
             {t(
-              'Example: Clinic check-up / consultation, and the price of this check-up / consultation is 20 dinars.'
-            )}
-            <br />
-            <br />
-            {t(
-              'The financial part (paying the visit fee and creating an invoice) is activated at the end of the appointment, and here you must specify the type of service provided that you added at this stage.'
+              'Example: A check-up at the clinic/consultation at the clinic, and the price of this check-up/consultation is 20 dinars.'
             )}
             <br />
             <br />
             {t(
               'Note: You can add new services at any time later.'
             )}
-
           </Typography>
         ),
       },
@@ -161,8 +165,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              "We also recommend adding room names - or numbers - to your system in order to organize your organization's management and to later activate the work system in managing daily appointments."
+              "We also recommend adding room names - or their numbers/codes - to your system in order to organize your organization's management and later to activate the work system in managing daily appointments."
             )}
+            <br />
+            <br />
+            {t("Example: initial examination room, waiting room...")}
+            <br />
+            <br />
+            {t("You can also later specify in each room what activity is being carried out in it (such as a specialist examination or blood pressure check), and this is useful in organizing the movement of patients between rooms in an automated and organized manner (you can benefit from it in: managing daily appointments).")}
+            <br />
+            <br />
+            {t("Note: You can add new rooms at any time later.")}
           </Typography>
         ),
       },
@@ -173,12 +186,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              "Usually, a visit (appointment) within a service unit (facility) consists of several different activities, for example: clinical examination, accounting..."
+              "A visit (appointment) at your institution consists of several different activities, for example: clinical examination, accounting..."
             )}
             <br />
             <br />
             {t(
-              "Note: You can add new services at any time later."
+              "These activities are best added to make your daily work easier."
+            )}
+            <br />
+            <br />
+            {t(
+              "Note: You can add new activities at any time later."
             )}
           </Typography>
         ),

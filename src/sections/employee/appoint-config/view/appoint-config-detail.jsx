@@ -55,74 +55,79 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     steps: [
       {
         target: '#currEMNewEditDetails',
-        title: t('Step One (1) of “Automated Appointment Settings”'),
+        title: t("Step One (1) of “Automated Appointment Settings”"),
         disableBeacon: true,
         content: (
           <>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               {t(
-                "General information about creating 'Automated Appointment Settings', as these settings will create the appointments available for booking for each day automatically and automatically according to the conditions that you have previously specified, you should know that you can make 'Automated Appointment Settings' flexibly and independently according to each work group and according to each work shift."
+                "General information about creating 'Automated Appointment Configuration'"
               )}
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t('In this part of the screen you must enter the following information:')}
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               <br />
-              {t('(1) The start date and expiry date of these settings, as from that date it will create appointments according to those settings and will stop creating new appointments on the expiry date you specified.')}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               {t(
-                "(2) In addition to the above, you must specify for which 'work shift' and for which 'work group' you want to create these appointments. Remember that in the work group you have linked all employees and workers in that group, and therefore creating 'Automated Appointment Settings' will be appointments for all members of that work group."
+                "(1) The start date and expiration date of these settings, as from the “start date” it will create appointments automatically and will stop creating new appointments at the “end date” you specified."
+              )}
+              <br />
+            </Typography>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              <br />
+              {t('(2) The work shift and the work team for whom you want to create these appointments.')}
+              <br />
+            </Typography>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              <br />
+              {t('(3) The duration of each appointment.')}
+              <br />
+            </Typography>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              <br />
+              {t(
+                "(4) The number of days that appointments will be available on the platform for booking by patients."
               )}{' '}
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              {t('(3) You must specify the time period for each appointment.')}
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              {t(
-                '(4) Very important: Remember to write the number of days you want appointments to be available for, for example, if you write 30 days, the patient will be able to book an appointment on any day of the 30 days following today’s date (of course according to the settings conditions that you will write in this step.'
-              )}
+              <br />
+              {t('Note: The “Settings” are designed to create booking appointments for each day automatically and automatically according to the work team and shift.')}
             </Typography>
           </>
         ),
       },
-      {
-        target: '#appointmentSettingDuration',
-        title: t('Step Two (2) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
-            )}
-            <br />
-            {t(
-              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
-            )}
-          </Typography>
-        ),
-      },
-      {
-        target: '#appointmentSettingAvailableForBooking',
-        title: t('Step Two (2) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
-            )}
-            <br />
-            {t(
-              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
-            )}
-          </Typography>
-        ),
-      },
+      // {
+      //   target: '#appointmentSettingDuration',
+      //   title: t('Step Two (2) of “Automated Appointment Settings”'),
+      //   disableBeacon: true,
+      //   content: (
+      //     <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+      //       {t(
+      //         'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
+      //       )}
+      //       <br />
+      //       {t(
+      //         "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+      //       )}
+      //     </Typography>
+      //   ),
+      // },
+      // {
+      //   target: '#appointmentSettingAvailableForBooking',
+      //   title: t('Step Two (2) of “Automated Appointment Settings”'),
+      //   disableBeacon: true,
+      //   content: (
+      //     <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+      //       {t(
+      //         'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
+      //       )}
+      //       <br />
+      //       {t(
+      //         "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+      //       )}
+      //     </Typography>
+      //   ),
+      // },
       {
         target: '#currEMNewEditDaysDetails',
         title: t('Step Two (2) of “Automated Appointment Settings”'),
@@ -130,11 +135,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
-            )}
-            <br />
-            {t(
-              "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
+              'In this section of “Settings”: You must detail your work pattern (daily routine) for each working day of the week, and specify the number of appointments and their details for each day.'
             )}
           </Typography>
         ),

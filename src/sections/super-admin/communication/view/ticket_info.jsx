@@ -32,7 +32,7 @@ export default function OrderDetailsView({ ticket, refetch }) {
   const handleChangeStatus = useCallback(
     (newValue) => {
       try {
-        axiosInstance.patch(endpoints.tickets.one(ticket._id), { status: newValue });
+        axiosInstance.patch(endpoints.tickets.one(ticket?._id), { status: newValue });
         setStatus(newValue);
         enqueueSnackbar('changed successfully!');
         refetch();
@@ -41,7 +41,7 @@ export default function OrderDetailsView({ ticket, refetch }) {
         refetch();
       }
     },
-    [ticket._id, enqueueSnackbar, refetch]
+    [ticket?._id, enqueueSnackbar, refetch]
   );
 
   return (
