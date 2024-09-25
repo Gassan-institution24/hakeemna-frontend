@@ -7,10 +7,10 @@ export default function useGetMessage({ message, participants }) {
   const { user } = useAuthContext();
   const { data } = useGetUserByQuery({ role: 'superadmin' });
 
-  const superAdminSender = data?.find((one) => one._id === message.user._id);
-  const sender = participants.find((participant) => participant._id === message.user);
+  const superAdminSender = data?.find((one) => one?._id === message.user?._id);
+  const sender = participants.find((participant) => participant?._id === message.user);
   const senderDetails =
-    message.user._id === user._id || (user.role === 'superadmin' && superAdminSender)
+    message.user?._id === user?._id || (user.role === 'superadmin' && superAdminSender)
       ? {
         type: 'me',
         firstName: superAdminSender?.userName?.split(' ')[0],
