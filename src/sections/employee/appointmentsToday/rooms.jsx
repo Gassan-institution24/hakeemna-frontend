@@ -58,7 +58,6 @@ export default function WaitingRoom() {
     data?.activities,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log('employeeRoomsData', employeeRoomsData);
 
   useEffect(() => {
     setSelectedTitle(employeeRoomsData?._id);
