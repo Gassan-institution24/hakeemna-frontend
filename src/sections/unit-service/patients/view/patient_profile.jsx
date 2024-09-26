@@ -127,7 +127,9 @@ export default function PatientProfile() {
               {patientGeneralData?.map((one, idx) => (
                 <Typography key={idx} variant="body2">
                   <span style={{ fontWeight: 650, color: '#637381' }}>{t(one?.title)}</span>:{' '}
-                  <span dir={one.title === 'phone' ? 'ltr' : ''}>{t(one.value)} {one.unit}</span>
+                  <span dir={one.title === 'phone' ? 'ltr' : ''}>
+                    {t(one.value)} {one.unit}
+                  </span>
                 </Typography>
               ))}
             </Box>

@@ -69,11 +69,10 @@ export function useGetPatient(id) {
 }
 
 export function useFindPatient(params) {
-  console.log('params',params)
   const URL = [
     endpoints.patients.find,
     {
-      params
+      params,
     },
   ];
 

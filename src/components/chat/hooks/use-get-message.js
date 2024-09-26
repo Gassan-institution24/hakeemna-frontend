@@ -12,13 +12,13 @@ export default function useGetMessage({ message, participants }) {
   const senderDetails =
     message.user?._id === user?._id || (user.role === 'superadmin' && superAdminSender)
       ? {
-        type: 'me',
-        firstName: superAdminSender?.userName?.split(' ')[0],
-      }
+          type: 'me',
+          firstName: superAdminSender?.userName?.split(' ')[0],
+        }
       : {
-        avatarUrl: sender?.avatarUrl,
-        firstName: sender?.userName.split(' ')[0],
-      };
+          avatarUrl: sender?.avatarUrl,
+          firstName: sender?.userName.split(' ')[0],
+        };
 
   const me = senderDetails.type === 'me';
 

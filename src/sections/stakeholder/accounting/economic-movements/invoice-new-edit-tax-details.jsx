@@ -106,8 +106,6 @@ export default function InvoiceNewEditDetails() {
       })),
     [deductionSums]
   );
-  console.log('summedTaxes', summedTaxes);
-  console.log('summedTaxes', summedDeductions);
 
   // useEffect(() => { setValue('taxSums', taxSums) }, [taxSums, setValue])
   // useEffect(() => { setValue('deductionSums', deductionSums) }, [deductionSums, setValue])

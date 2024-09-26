@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { decode } from 'he';
 import PropTypes from 'prop-types';
 import { useEffect, useCallback } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
@@ -30,14 +31,13 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
+  RHFEditor,
   RHFTextField,
   RHFUploadBox,
   RHFPhoneNumber,
   RHFUploadAvatar,
   RHFAutocomplete,
-  RHFEditor,
 } from 'src/components/hook-form';
-import { decode } from 'he';
 
 import Others from './other';
 import Certifications from './certifications';
@@ -112,7 +112,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required(t('required field')),
     email: Yup.string().required(t('required field')),
-    title:Yup.string(),
+    title: Yup.string(),
     name_english: Yup.string()
       .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
@@ -193,12 +193,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
     certifications: employeeData?.certifications?.length
       ? employeeData?.certifications
       : [
-        {
-          name: '',
-          institution: '',
-          year: null,
-        },
-      ],
+          {
+            name: '',
+            institution: '',
+            year: null,
+          },
+        ],
     fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
     // currency:
     //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
@@ -351,12 +351,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 name="name_english"
                 onChange={handleEnglishInputChange}
                 label={t('Full name in English')}
+                helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFTextField
                 variant="filled"
                 name="name_arabic"
                 onChange={handleArabicInputChange}
                 label={t('Full name in Arabic')}
+                helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFSelect
                 disabled
@@ -385,7 +387,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-              // value={values.profrssion_practice_num}
+                // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -505,14 +507,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -538,14 +540,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

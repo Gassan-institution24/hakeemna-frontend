@@ -152,7 +152,7 @@ export default function Rooms() {
 
   return (
     <>
-      <Dialog open={dialog.value} maxWidth="md"  onClose={dialog.onTrue}>
+      <Dialog open={dialog.value} maxWidth="md" onClose={dialog.onTrue}>
         <div
           style={{
             display: 'flex',
@@ -160,7 +160,7 @@ export default function Rooms() {
             alignItems: 'center',
             textAlign: 'center',
             margin: '10px',
-            width: curLangAr ? '250px' : '400px'
+            width: curLangAr ? '250px' : '400px',
           }}
         >
           <DialogTitle>{t('Are you sure')}</DialogTitle>

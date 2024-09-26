@@ -1,16 +1,15 @@
 import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
-import { useTranslate } from 'src/locales';
 
-import { Button, InputAdornment, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { IconButton } from 'yet-another-react-lightbox';
-import Iconify from '../iconify';
+import { Button, Typography } from '@mui/material';
+
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function RHFDatePicker({ name, helperText, type, views, ...other }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { control } = useFormContext();
 
   return (
@@ -23,7 +22,6 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
             {...field}
             // fullWidth
             type={type}
-
             value={field.value ? new Date(field.value) : null}
             views={views}
             onChange={(newValue) => {
@@ -32,10 +30,12 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
             InputLabelProps={{ shrink: true }}
             slots={{
               actionBar: ({ onClear, onCancel }) => (
-                <Button onClick={() => {
-                  field.onChange(null);
-                  onClear();
-                }}>
+                <Button
+                  onClick={() => {
+                    field.onChange(null);
+                    onClear();
+                  }}
+                >
                   {t('clear')}
                 </Button>
               ),

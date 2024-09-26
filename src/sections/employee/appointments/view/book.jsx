@@ -18,9 +18,9 @@ import {
   useFindPatient,
   useGetCountries,
   useFindUSPatient,
+  useGetAppointment,
   useGetEmployeeAppointments,
   useGetEmployeeActiveWorkGroups,
-  useGetAppointment,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -107,7 +107,7 @@ export default function TableCreateView() {
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
 
-  const { data: selectedAppointData } = useGetAppointment(selected, { select: 'work_group' })
+  const { data: selectedAppointData } = useGetAppointment(selected, { select: 'work_group' });
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -312,10 +312,10 @@ export default function TableCreateView() {
               rowGap={3}
               columnGap={2}
               display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+              // gridTemplateColumns={{
+              //   xs: 'repeat(1, 1fr)',
+              //   sm: 'repeat(3, 1fr)',
+              // }}
             >
               <FormControl
                 sx={{
@@ -331,14 +331,14 @@ export default function TableCreateView() {
                   }
                   size="small"
                   input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
+                  // renderValue={(selected) =>
+                  //   selected
+                  // }
+                  // MenuProps={{
+                  //   PaperProps: {
+                  //     sx: { maxHeight: 240 },
+                  //   },
+                  // }}
                 >
                   {workGroupsData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -420,7 +420,7 @@ export default function TableCreateView() {
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 list={appointmentsData}
-              // sx={{ mt: SPACING }}
+                // sx={{ mt: SPACING }}
               />
             )}
             {selected && (

@@ -18,9 +18,9 @@ import {
   useFindPatient,
   useGetCountries,
   useFindUSPatient,
+  useGetAppointment,
   useGetUSAppointments,
   useGetEmployeeActiveWorkGroups,
-  useGetAppointment,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -110,9 +110,7 @@ export default function TableCreateView() {
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id
   );
-  const { data: selectedAppointData } = useGetAppointment(selected, { select: 'work_group' })
-  console.log('selectedAppointData', selected)
-  console.log('selectedAppointData', selectedAppointData)
+  const { data: selectedAppointData } = useGetAppointment(selected, { select: 'work_group' });
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -312,10 +310,10 @@ export default function TableCreateView() {
               rowGap={3}
               columnGap={2}
               display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+              // gridTemplateColumns={{
+              //   xs: 'repeat(1, 1fr)',
+              //   sm: 'repeat(3, 1fr)',
+              // }}
             >
               <FormControl
                 sx={{

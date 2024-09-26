@@ -218,11 +218,13 @@ export default function TableNewEditForm({ currentTable }) {
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={t('Full name in English')}
+                helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFTextField
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label={t('Full name in Arabic')}
+                helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
 
@@ -265,14 +267,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -284,14 +286,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

@@ -86,7 +86,7 @@ export default function AccountChangePassword() {
       } else {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
-      await logout()
+      await logout();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

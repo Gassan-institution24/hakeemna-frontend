@@ -120,9 +120,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         disableBeacon: true,
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              "It is a team of other doctors involved in providing medical service in the field."
-            )}
+            {t('It is a team of other doctors involved in providing medical service in the field.')}
             <br />
             <br />
             {t(
@@ -130,9 +128,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             )}
             <br />
             <br />
-            {t(
-              "Note: You can add a new team at any time later."
-            )}
+            {t('Note: You can add a new team at any time later.')}
           </Typography>
         ),
       },
@@ -152,9 +148,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             )}
             <br />
             <br />
-            {t(
-              'Note: You can add new services at any time later.'
-            )}
+            {t('Note: You can add new services at any time later.')}
           </Typography>
         ),
       },
@@ -169,13 +163,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
             )}
             <br />
             <br />
-            {t("Example: initial examination room, waiting room...")}
+            {t('Example: initial examination room, waiting room...')}
             <br />
             <br />
-            {t("You can also later specify in each room what activity is being carried out in it (such as a specialist examination or blood pressure check), and this is useful in organizing the movement of patients between rooms in an automated and organized manner (you can benefit from it in: managing daily appointments).")}
+            {t(
+              'You can also later specify in each room what activity is being carried out in it (such as a specialist examination or blood pressure check), and this is useful in organizing the movement of patients between rooms in an automated and organized manner (you can benefit from it in: managing daily appointments).'
+            )}
             <br />
             <br />
-            {t("Note: You can add new rooms at any time later.")}
+            {t('Note: You can add new rooms at any time later.')}
           </Typography>
         ),
       },
@@ -186,18 +182,14 @@ export default function NavVertical({ openNav, onCloseNav }) {
         content: (
           <Typography lang="ar" sx={{ color: 'text.secondary' }}>
             {t(
-              "A visit (appointment) at your institution consists of several different activities, for example: clinical examination, accounting..."
+              'A visit (appointment) at your institution consists of several different activities, for example: clinical examination, accounting...'
             )}
             <br />
             <br />
-            {t(
-              "These activities are best added to make your daily work easier."
-            )}
+            {t('These activities are best added to make your daily work easier.')}
             <br />
             <br />
-            {t(
-              "Note: You can add new activities at any time later."
-            )}
+            {t('Note: You can add new activities at any time later.')}
           </Typography>
         ),
       },
@@ -252,7 +244,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           run={walktour.run}
           callback={walktour.onCallback}
           getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+          // scrollDuration={500}
         />
       )}
       {isEmployee && (
@@ -357,17 +349,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
+            >
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box
@@ -411,14 +403,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
             open={ticketDialog}
             onClose={() => setTicketDialog(false)}
           />
-          <StartupCreating open={dialog} onClose={() => {
-            setDialog(false)
-            setRunningTour(true);
-            setTimeout(() => {
-              walktour.setRun(true);
-              setRunningTour(false);
-            }, 200);
-          }} />
+          <StartupCreating
+            open={dialog}
+            onClose={() => {
+              setDialog(false);
+              setRunningTour(true);
+              setTimeout(() => {
+                walktour.setRun(true);
+                setRunningTour(false);
+              }, 200);
+            }}
+          />
         </Box>
       )}
     </>

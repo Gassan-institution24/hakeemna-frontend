@@ -38,7 +38,6 @@ export default function Insuranceinfo() {
   const { currentLang } = useLocales();
   const { insuranseCosData } = useGetActiveInsuranceCos();
   const { insuranseTypesData } = useGetInsuranceTypes();
-  console.log(insuranseCosData);
 
   const curLangAr = currentLang.value === 'ar';
   const [checkChange, setCheckChange] = useState(false);

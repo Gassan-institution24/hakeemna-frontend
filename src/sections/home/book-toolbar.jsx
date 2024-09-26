@@ -51,7 +51,10 @@ export default function BookToolbar({ filters, filterChange }) {
     rowPerPage: 10,
   });
   const { keywordsData } = useGetKeywords({ name: nameSearch });
-  const { specialtiesData } = useGetSpecialties({ select: '_id name_arabic name_english', name: nameSearch });
+  const { specialtiesData } = useGetSpecialties({
+    select: '_id name_arabic name_english',
+    name: nameSearch,
+  });
   const { countriesData } = useGetCountries({ select: '_id name_arabic name_english' });
   const { tableData } = useGetCountryCities(country, { select: '_id name_arabic name_english' });
   const { insuranseCosData } = useGetActiveInsuranceCos({ select: '_id name_arabic name_english' });

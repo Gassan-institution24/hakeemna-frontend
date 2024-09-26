@@ -50,7 +50,6 @@ export default function MdicalreportPage() {
   const defaultValues = {
     description: '',
   };
-  console.log(data, 'data');
   const methods = useForm({
     mode: 'all',
     resolver: yupResolver(medicalReportSchema),

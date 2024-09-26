@@ -128,7 +128,6 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           render={({ field }) => (
             <MobileDateTimePicker
               ampm={false}
-              format="hh:mm a"
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {
@@ -153,7 +152,6 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           render={({ field }) => (
             <MobileDateTimePicker
               ampm={false}
-              format="hh:mm a"
               {...field}
               value={new Date(field.value)}
               onChange={(newValue) => {
