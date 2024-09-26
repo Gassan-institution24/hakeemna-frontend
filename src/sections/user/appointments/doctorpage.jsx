@@ -187,6 +187,8 @@ export default function Doctorpage() {
       );
     }
   };
+  console.log(data);
+
   const renderHead = (
     <CardHeader
       disableTypography
@@ -267,16 +269,12 @@ export default function Doctorpage() {
       <CardHeader title={t('about')} />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        {data?.employee?.description ? (
-          <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
-        ) : (
-          ''
-        )}
+        {data?.employee?.description ? <Box>{data?.employee?.description}</Box> : ''}
         {data?.unit_service?.name_english ? (
           <Stack direction="row" spacing={2}>
             <Iconify icon="ic:round-business-center" width={24} />
 
-            <Box sx={{ typography: 'body2' }}>
+            <Box>
               {t(`Work at: `)}
               <Link variant="subtitle2" color="inherit">
                 {curLangAr ? data?.unit_service?.name_arabic : data?.unit_service?.name_english}
@@ -290,7 +288,7 @@ export default function Doctorpage() {
         <Stack direction="row" spacing={2}>
           <Iconify icon="mdi:location" width={24} />
 
-          <Box sx={{ typography: 'body2' }}>
+          <Box>
             {t(`Location: `)}
             <Link variant="subtitle2" color="inherit">
               {curLangAr
@@ -308,13 +306,77 @@ export default function Doctorpage() {
         <Stack direction="row" spacing={2}>
           <Iconify icon="typcn:phone" width={24} />
 
-          <Box sx={{ typography: 'body2' }}>
+          <Box>
             {t(`For booking: `)}
             <Link dir="ltr" variant="subtitle2" color="inherit">
               {data?.unit_service?.phone}
             </Link>
           </Box>
         </Stack>
+
+        {data?.fees && (
+          <Stack direction="row" spacing={2}>
+            <Iconify icon="mdi:cash" width={24} sx={{ color: 'success.main' }} />
+
+            <Box>
+              {t(`fees: `)}
+              <Link variant="subtitle2" color="inherit">
+                {data?.fees}
+              </Link>
+            </Box>
+          </Stack>
+        )}
+
+        {data?.employee?.certifications && (
+          <Stack direction="row" spacing={2}>
+            <Iconify icon="carbon:user-certification" width={24} />
+
+            <Box>
+              {t(`certifications: `)}
+              {data?.employee?.certifications?.map((info, i) => (
+                <Link variant="subtitle2" color="inherit">
+                  <ul>
+                    <li>
+                      {' '}
+                      {info?.name}{' '}
+                      <span style={{ color: 'lightgray' }}> ({fDateAndTime(info?.year)}) </span>
+                    </li>
+                  </ul>
+                </Link>
+              ))}
+            </Box>
+          </Stack>
+        )}
+        {/* {data?.employee?.languages && (
+          <Stack  >
+            <Iconify icon="lucide:languages" width={24} /> 
+
+            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+              {t(`languages: `)}
+
+              {data?.employee?.languages?.map((info, i) => (
+                <Link  color="inherit">
+                  <ul
+                    style={{
+                      marginTop: 50,
+                      listStyleType: 'none',
+                    }}
+                  >
+                    <li
+                      style={{
+                        border: '1px lightgray solid',
+                        borderRadius: 20,
+                        padding: 5,
+                      }}
+                    >
+                      {info}
+                    </li>
+                  </ul>
+                </Link>
+              ))}
+            </Box>
+          </Stack>
+        )} */}
       </Stack>
     </Card>
   );
