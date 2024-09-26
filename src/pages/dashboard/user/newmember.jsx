@@ -172,12 +172,10 @@ export default function Create() {
 
           <RHFTextField name="identification_num" label={t('Identification number')} />
           <Stack gap={1}>
-            <Typography variant="caption" sx={{color:'warning.main'}}>{t('upload the photo with the identification number in the proof document')}</Typography>
-            <RHFUpload
-              name="scanned_identification"
-              onDrop={handleDrop}
-             
-            />
+            <Typography variant="caption" sx={{ color: 'warning.main' }}>
+              {t('upload the photo with the identification number in the proof document')}
+            </Typography>
+            <RHFUpload name="scanned_identification" onDrop={handleDrop} />
           </Stack>
           <Controller
             name="birth_date"

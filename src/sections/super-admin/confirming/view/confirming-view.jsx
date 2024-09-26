@@ -12,7 +12,6 @@ export default function ConfirmingView() {
     select: 'name_english identification_num email scanned_identification',
     populate: { path: 'nationality', select: 'name_english' },
   });
-  console.log('patientsData', patientsData);
   const handleActivate = async (id) => {
     try {
       await axiosInstance.patch(endpoints.patients.one(id), { confirmed_id: true });

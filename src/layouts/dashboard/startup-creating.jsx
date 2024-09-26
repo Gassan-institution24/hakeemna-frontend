@@ -16,7 +16,6 @@ import {
   useGetUSRooms,
   useGetUSWorkGroups,
   useGetUSWorkShifts,
-  useGetUSActivities,
   useGetUSDepartments,
 } from 'src/api';
 
@@ -39,7 +38,6 @@ export default function StartupCreating({ open, onClose }) {
   const { workGroupsData } = useGetUSWorkGroups(USData?._id);
   const { workShiftsData } = useGetUSWorkShifts(USData?._id);
   const { roomsData } = useGetUSRooms(USData?._id);
-  const { activitiesData } = useGetUSActivities(USData?._id);
 
   const [tables, setTables] = useState([]);
 
@@ -91,13 +89,13 @@ export default function StartupCreating({ open, onClose }) {
           unit_service: USData?._id,
           name_english: `consultation room`,
           name_arabic: `غرفة الاستشارات`,
-          activities: consultanstActivity?._id
+          activities: consultanstActivity?._id,
         });
         await axiosInstance.post(endpoints.rooms.all, {
           unit_service: USData?._id,
           name_english: `accounting room`,
           name_arabic: `غرفة المحاسبة`,
-          activities: accountingActivity?._id
+          activities: accountingActivity?._id,
         });
       }
 
@@ -106,12 +104,9 @@ export default function StartupCreating({ open, onClose }) {
       window.location.reload();
     } catch (error) {
       loading.onFalse();
-      enqueueSnackbar(
-        curLangAr ? error.arabic_message || error.message : error.message,
-        {
-          variant: 'error',
-        }
-      );
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       onclose();
     }
   };

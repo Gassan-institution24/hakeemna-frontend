@@ -161,11 +161,7 @@ export default function EditPatient({ patient }) {
                   methods.setValue('mobile_num2', newPhone2);
                 }}
               />
-              <RHFTextField
-                name="email"
-                label={t('Email Address')}
-                disabled
-              />
+              <RHFTextField name="email" label={t('Email Address')} disabled />
 
               <RHFSelect
                 label={t('residence country')}

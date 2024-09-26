@@ -26,7 +26,6 @@ export default function RecordPage() {
     Entrance?.patient?._id,
     Entrance?.unit_service_patient
   );
-  console.log(medRecord);
   return (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

@@ -10,7 +10,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import EmptyContent from 'src/components/empty-content/empty-content';
 // import socket from 'src/socket';
 // import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -61,7 +60,7 @@ export default function ExistPatientRow({ row, selected }) {
       dialog.onFalse();
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
-      
+
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -144,7 +143,7 @@ export default function ExistPatientRow({ row, selected }) {
   //     }}
   //   />
   // );
-  return <> {renderPrimary} </>
+  return <> {renderPrimary} </>;
 }
 
 ExistPatientRow.propTypes = {

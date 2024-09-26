@@ -110,39 +110,40 @@ export default function TableDetailsRow({
       >
         {status === 'active'
           ? checkAcl({
-            category: 'department',
-            subcategory: 'management_tables',
-            acl: 'delete',
-          }) && name_english !== 'Reception' && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onInactivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="ic:baseline-pause" />
-              {t('inactivate')}
-            </MenuItem>
-          )
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'delete',
+            }) &&
+            name_english !== 'Reception' && (
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                {t('inactivate')}
+              </MenuItem>
+            )
           : checkAcl({
-            category: 'department',
-            subcategory: 'management_tables',
-            acl: 'update',
-          }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onActivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'success.main' }}
-            >
-              <Iconify icon="bi:play-fill" />
-              {t('activate')}
-            </MenuItem>
-          )}
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'update',
+            }) && (
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                {t('activate')}
+              </MenuItem>
+            )}
 
         {checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'update' }) && (
           <MenuItem

@@ -55,26 +55,26 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     steps: [
       {
         target: '#currEMNewEditDetails',
-        title: t("Step One (1) of “Automated Appointment Settings”"),
+        title: t('Step One (1) of “Automated Appointment Settings”'),
         disableBeacon: true,
         content: (
           <>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              {t("General information about creating 'Automated Appointment Configuration'")}
+              <br />
+            </Typography>
+            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
+              <br />
               {t(
-                "General information about creating 'Automated Appointment Configuration'"
+                '(1) The start date and expiration date of these settings, as from the “start date” it will create appointments automatically and will stop creating new appointments at the “end date” you specified.'
               )}
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               <br />
               {t(
-                "(1) The start date and expiration date of these settings, as from the “start date” it will create appointments automatically and will stop creating new appointments at the “end date” you specified."
+                '(2) The work shift and the work team for whom you want to create these appointments.'
               )}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t('(2) The work shift and the work team for whom you want to create these appointments.')}
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
@@ -85,13 +85,15 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               <br />
               {t(
-                "(4) The number of days that appointments will be available on the platform for booking by patients."
+                '(4) The number of days that appointments will be available on the platform for booking by patients.'
               )}{' '}
               <br />
             </Typography>
             <Typography lang="ar" sx={{ color: 'text.secondary' }}>
               <br />
-              {t('Note: The “Settings” are designed to create booking appointments for each day automatically and automatically according to the work team and shift.')}
+              {t(
+                'Note: The “Settings” are designed to create booking appointments for each day automatically and automatically according to the work team and shift.'
+              )}
             </Typography>
           </>
         ),
@@ -401,7 +403,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

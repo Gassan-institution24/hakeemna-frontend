@@ -19,7 +19,6 @@ export default function OldmedicalrepotView() {
   const params = useParams();
   const { id } = params;
   const { prescriptionData } = useGePrescription(id);
-  console.log(prescriptionData, 'prescriptionData');
 
   const handleViewClick = () => {
     router.push(paths.dashboard.user.prescriptions);
