@@ -66,7 +66,6 @@ export default function Rooms() {
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log(Confirmdroomsdata);
 
   const { medicalreportsdata } = useGetEntranceExaminationReports(id);
   const { doctorreportsdata } = useGetEntranceDoctorReports(id);

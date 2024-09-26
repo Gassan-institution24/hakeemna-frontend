@@ -100,15 +100,20 @@ export default function CheckList() {
           <Box sx={{ height: '400px', overflowY: 'auto' }}>
             <Box
               sx={{
-                display: 'flex',
-                maxWidth: 400, // Set the maximum width to 300px
-                overflowX: 'auto', // Enable horizontal scrolling if content exceeds maxWidth
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                // maxWidth: 500, // Set the maximum width to 300px
+                // overflowX: 'auto', // Enable horizontal scrolling if content exceeds maxWidth
               }}
             >
               {CheckListData?.map((info, index) => (
-                <Button key={index} sx={{ mt: 2, ml: 2 }} onClick={() => setTheId(info?._id)}>
+                <Button
+                  key={index}
+                  sx={{ mt: 2, ml: 2, bgcolor: '#EDEFF2' }}
+                  onClick={() => setTheId(info?._id)}
+                >
                   {info?.title}{' '}
-                  <Iconify icon="lets-icons:arhive-import" sx={{ ml: 2 }} width={21} />
+                  {/* <Iconify icon="lets-icons:arhive-import" sx={{ ml: 2 }} width={21} /> */}
                 </Button>
               ))}
             </Box>
@@ -118,9 +123,7 @@ export default function CheckList() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2, mb: 2 }}>
                   <Typography>{data?.title}</Typography>
                   {data && (
-                    <Typography
-                      sx={{ p: 1, bgcolor: 'lightgray', color: 'white', width: '100%', mt: 2 }}
-                    >
+                    <Typography sx={{ p: 1, bgcolor: '#EDEFF2', width: '100%', mt: 2 }}>
                       {data?.description}
                     </Typography>
                   )}
