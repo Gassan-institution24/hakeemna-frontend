@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import { Container } from '@mui/system';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -86,28 +86,28 @@ export default function AppointmentsToday() {
     (activity) => activity?.activities?.name_english === 'Reception'
   );
   const TABS = [
-    {
+    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) && {
       value: 'one',
       label: t('Appointments Today'),
       color: 'info',
       count: appointmentsData?.length,
       data: appointmentsData,
     },
-    {
+    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) && {
       value: 'two',
       label: t('Rooms'),
       color: 'warning',
       count: entrance?.length,
       data: entrance,
     },
-    {
+    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' }) && {
       value: 'three',
       label: t('Finished'),
       color: 'error',
       count: finishedAppointmentsData?.length,
       data: finishedAppointmentsData,
     },
-  ];
+  ].filter(Boolean);
 
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
@@ -207,6 +207,11 @@ export default function AppointmentsToday() {
     }
   };
 
+  useEffect(() => {
+    setCurrentTab(TABS[0].value)
+    // eslint-disable-next-line
+  }, [])
+
   const renderOptions = (info) => {
     if (currentTab === 'three') {
       return (
@@ -256,7 +261,7 @@ export default function AppointmentsToday() {
                 key={index}
                 value={activity?.activities?._id}
                 onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-                // disabled={info?.activityhappend}
+              // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -469,7 +474,7 @@ export default function AppointmentsToday() {
                                   ) : (
                                     <>
                                       {info?.unit_service_patient?.identification_num ||
-                                      info?.patient?.identification_num ? (
+                                        info?.patient?.identification_num ? (
                                         <Button
                                           sx={{ p: 2 }}
                                           onClick={() => startAppointment(info)}
