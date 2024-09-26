@@ -3,11 +3,11 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { TimePicker, renderTimeViewClock } from '@mui/x-date-pickers'; // Import English locale
-import { Button, IconButton, InputAdornment } from '@mui/material';
+import { Button } from '@mui/material';
 
 import { useUnitTime } from 'src/utils/format-time';
-import { useTranslate } from 'src/locales';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from '../iconify/iconify';
@@ -15,7 +15,7 @@ import Iconify from '../iconify/iconify';
 // ----------------------------------------------------------------------
 
 export default function RHFTimePicker({ name, helperText, type, onChange, ...other }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { control } = useFormContext();
   const { user } = useAuthContext();
   const { myunitTime } = useUnitTime();
@@ -35,11 +35,13 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           }}
           slots={{
             actionBar: ({ onClear, onCancel }) => (
-              <Button sx={{ position: 'absolute' }} onClick={() => {
-                field.onChange(null);
-                onClear();
-              }}>
-
+              <Button
+                sx={{ position: 'absolute' }}
+                onClick={() => {
+                  field.onChange(null);
+                  onClear();
+                }}
+              >
                 {t('clear')}
               </Button>
             ),
@@ -51,8 +53,8 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           InputLabelProps={{ shrink: true }}
           onChange={(newValue) => {
             if (newValue == null) {
-              field.onChange(null)
-              return
+              field.onChange(null);
+              return;
             }
             const selectedTime = zonedTimeToUtc(
               newValue,

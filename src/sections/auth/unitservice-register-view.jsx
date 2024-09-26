@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect, useMemo } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -141,34 +141,37 @@ export default function JwtRegisterView() {
       .min(8, `${t('must be at least')} 8`),
   });
 
-  const defaultValues = useMemo(() => ({
-    employees_number: '',
-    us_name_arabic: '',
-    us_name_english: '',
-    // us_email: '',
-    us_identification_num: '',
-    us_country: '',
-    us_city: '',
-    US_type: '',
-    // us_speciality: null,
-    us_sector_type: '',
-    // us_phone: '',
-    em_name_english: '',
-    em_name_arabic: '',
-    em_nationality: '',
-    em_identification_num: '',
-    em_profrssion_practice_num: '',
-    em_type: employeeTypesData?.[0]?._id,
-    em_gender: '',
-    em_phone: '',
-    em_speciality: null,
-    visibility_US_page: false,
-    visibility_online_appointment: false,
+  const defaultValues = useMemo(
+    () => ({
+      employees_number: '',
+      us_name_arabic: '',
+      us_name_english: '',
+      // us_email: '',
+      us_identification_num: '',
+      us_country: '',
+      us_city: '',
+      US_type: '',
+      // us_speciality: null,
+      us_sector_type: '',
+      // us_phone: '',
+      em_name_english: '',
+      em_name_arabic: '',
+      em_nationality: '',
+      em_identification_num: '',
+      em_profrssion_practice_num: '',
+      em_type: employeeTypesData?.[0]?._id,
+      em_gender: '',
+      em_phone: '',
+      em_speciality: null,
+      visibility_US_page: false,
+      visibility_online_appointment: false,
 
-    email: '',
-    password: '',
-    confirmPassword: '',
-  }), [employeeTypesData]);
+      email: '',
+      password: '',
+      confirmPassword: '',
+    }),
+    [employeeTypesData]
+  );
 
   const methods = useForm({
     mode: 'all',
@@ -239,8 +242,8 @@ export default function JwtRegisterView() {
   });
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   useEffect(() => {
     setErrorMsg();
@@ -334,7 +337,7 @@ export default function JwtRegisterView() {
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of unit of service')}
-        // placeholder="عيادة الدكتور أحمد"
+          // placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
@@ -343,7 +346,7 @@ export default function JwtRegisterView() {
         onChange={handleEnglishInputChange}
         name="us_name_english"
         label={t('English name of unit of service')}
-      // placeholder="Dr.Ahmad Clinic"
+        // placeholder="Dr.Ahmad Clinic"
       />
       {/* </Tooltip> */}
       {!curLangAr && (
@@ -352,7 +355,7 @@ export default function JwtRegisterView() {
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of unit of service')}
-        // placeholder="عيادة الدكتور أحمد"
+          // placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
@@ -495,7 +498,7 @@ export default function JwtRegisterView() {
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
-          // placeholder="أحمد سالم القناص"
+            // placeholder="أحمد سالم القناص"
           />
           // {/* </Tooltip> */}
         )}
@@ -504,7 +507,8 @@ export default function JwtRegisterView() {
           onChange={handleEnglishInputChange}
           name="em_name_english"
           label={t('Manager full name in English')}
-        // placeholder="Ahmad Salem Al-kanas"
+          helperText={t('should include title like : doctor, specialist,...')}
+          // placeholder="Ahmad Salem Al-kanas"
         />
         {/* </Tooltip> */}
         {!curLangAr && (
@@ -513,7 +517,8 @@ export default function JwtRegisterView() {
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
-          // placeholder="ا"
+            helperText={t('should include title like : doctor, specialist,...')}
+            // placeholder="ا"
           />
           // </Tooltip>
         )}
@@ -531,14 +536,14 @@ export default function JwtRegisterView() {
           options={employeeTypesData.map((one) => one._id)}
           getOptionLabel={(option) =>
             employeeTypesData.find((one) => one._id === option)?.[
-            curLangAr ? 'name_arabic' : 'name_english'
+              curLangAr ? 'name_arabic' : 'name_english'
             ]
           }
           renderOption={(props, option, idx) => (
             <li lang="ar" {...props} key={idx} value={option}>
               {
                 employeeTypesData.find((one) => one._id === option)?.[
-                curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                 ]
               }
             </li>
@@ -547,28 +552,28 @@ export default function JwtRegisterView() {
         {employeeTypesData
           .find((type) => type._id === values.em_type)
           ?.name_english?.toLowerCase() === 'doctor' && (
-            // <Tooltip placement="top" title="speciality of admin">
-            <RHFAutocomplete
-              name="em_speciality"
-              label={t('speciality')}
-              options={specialtiesData.map((speciality) => speciality._id)}
-              getOptionLabel={(option) =>
-                specialtiesData.find((one) => one._id === option)?.[
+          // <Tooltip placement="top" title="speciality of admin">
+          <RHFAutocomplete
+            name="em_speciality"
+            label={t('speciality')}
+            options={specialtiesData.map((speciality) => speciality._id)}
+            getOptionLabel={(option) =>
+              specialtiesData.find((one) => one._id === option)?.[
                 curLangAr ? 'name_arabic' : 'name_english'
-                ]
-              }
-              renderOption={(props, option, idx) => (
-                <li lang="ar" {...props} key={idx} value={option}>
-                  {
-                    specialtiesData.find((one) => one._id === option)?.[
+              ]
+            }
+            renderOption={(props, option, idx) => (
+              <li lang="ar" {...props} key={idx} value={option}>
+                {
+                  specialtiesData.find((one) => one._id === option)?.[
                     curLangAr ? 'name_arabic' : 'name_english'
-                    ]
-                  }
-                </li>
-              )}
-            />
-            // </Tooltip>
-          )}
+                  ]
+                }
+              </li>
+            )}
+          />
+          // </Tooltip>
+        )}
       </Box>
       <Box
         rowGap={3}
@@ -601,10 +606,10 @@ export default function JwtRegisterView() {
         {employeeTypesData
           .find((type) => type._id === values.em_type)
           ?.name_english?.toLowerCase() === 'doctor' && (
-            // <Tooltip placement="top" title="admin proffession practice number">
-            <RHFTextField name="em_profrssion_practice_num" label={t('profession practice number')} />
-            // </Tooltip>
-          )}
+          // <Tooltip placement="top" title="admin proffession practice number">
+          <RHFTextField name="em_profrssion_practice_num" label={t('profession practice number')} />
+          // </Tooltip>
+        )}
         {/* <Tooltip placement="top" title="admin phone number"> */}
         <RHFPhoneNumber name="em_phone" label={t('phone number')} />
         <div>

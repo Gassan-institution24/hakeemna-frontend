@@ -26,10 +26,7 @@ export function useGetUSPatients(id, params) {
 }
 
 export function useFindUSPatient(params) {
-  const URL = [
-    endpoints.usPatients.find,
-    { params }
-  ];
+  const URL = [endpoints.usPatients.find, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

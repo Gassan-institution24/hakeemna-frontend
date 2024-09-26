@@ -11,9 +11,9 @@ import { LoadingButton } from '@mui/lab';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { DateTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';

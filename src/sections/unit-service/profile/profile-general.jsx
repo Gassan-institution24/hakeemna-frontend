@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { decode } from 'he';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { matchIsValidTel } from 'mui-tel-input';
@@ -31,6 +32,7 @@ import {
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
+  RHFEditor,
   RHFCheckbox,
   // RHFSelect,
   RHFTextField,
@@ -38,9 +40,7 @@ import FormProvider, {
   RHFPhoneNumber,
   RHFAutocomplete,
   RHFUploadAvatar,
-  RHFEditor,
 } from 'src/components/hook-form';
-import { decode } from 'he';
 
 // ----------------------------------------------------------------------
 
@@ -228,23 +228,23 @@ export default function AccountGeneral({ unitServiceData }) {
     }
   });
 
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+  // const handleEnglishInputChange = (event) => {
+  //   // Validate the input based on English language rules
+  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (englishRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -281,7 +281,6 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <TextField
-                // disabled
                 variant="filled"
                 name="identification_num"
                 value={values.identification_num}
@@ -350,7 +349,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-              // onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>

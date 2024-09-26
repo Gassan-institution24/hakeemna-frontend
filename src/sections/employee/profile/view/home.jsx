@@ -78,7 +78,12 @@ export default function AccountView() {
         action={
           <Button
             component={RouterLink}
-            href={paths.pages.doctor(`${employeeEng}_${user?.employee?.[t('name_english')]?.replace(/ /g, "-")}_${user?.employee?.speciality?.[t('name_english')]?.replace(/ /g, "-")}`)}
+            href={paths.pages.doctor(
+              `${employeeEng}_${user?.employee?.[t('name_english')]?.replace(
+                / /g,
+                '-'
+              )}_${user?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+            )}
             variant="contained"
             target="_blank"
             startIcon={<Iconify icon="icomoon-free:new-tab" />}

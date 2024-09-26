@@ -83,7 +83,7 @@ export default function AccountChangePassword() {
       if (response.status === 201) {
         reset();
         enqueueSnackbar(t('Password updated successfully!'), { variant: 'success' });
-        await logout()
+        await logout();
       } else {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }

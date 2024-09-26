@@ -28,7 +28,6 @@ import {
   useGetAppointmentTypes,
   useGetUSActiveWorkGroups,
   useGetUSActiveWorkShifts,
-  useGetAppointment,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';

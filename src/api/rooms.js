@@ -73,7 +73,7 @@ export function useGetEmployeeRooms(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      employeeRoomsData: data ,
+      employeeRoomsData: data,
       loading: isLoading,
       error,
       validating: isValidating,

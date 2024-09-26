@@ -110,7 +110,11 @@ export default function Whydoc() {
           alignItems: 'center',
         }}
       >
-        <Image alt="medical services" sx={{ width: { sx: '100%', md: '70%' } }} src={curLangAr ? knowlegmapAR : Knowleg} />
+        <Image
+          alt="medical services"
+          sx={{ width: { sx: '100%', md: '70%' } }}
+          src={curLangAr ? knowlegmapAR : Knowleg}
+        />
       </Stack>
       {/* </Box>
           </div>

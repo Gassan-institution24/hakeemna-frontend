@@ -79,7 +79,7 @@ export default function OrderDetailsItems({ ticket }) {
               // //
               selectedConversationId={ticket.chat}
               refetch={refetch}
-            // disabled={!recipients.length && !selectedConversationId}
+              // disabled={!recipients.length && !selectedConversationId}
             />
           </Stack>
         </Stack>

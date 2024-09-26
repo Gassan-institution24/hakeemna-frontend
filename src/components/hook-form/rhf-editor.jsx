@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import FormHelperText from '@mui/material/FormHelperText';
 import { Stack, Typography } from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import Editor from '../editor';
 
@@ -33,7 +33,9 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <Stack sx={sx}>
-          <Typography mb={0.3} textTransform='capitalize' variant='subtitle2'>{label}</Typography>
+          <Typography mb={0.3} textTransform="capitalize" variant="subtitle2">
+            {label}
+          </Typography>
           <Editor
             id={name}
             value={field.value}

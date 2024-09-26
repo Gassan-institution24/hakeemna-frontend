@@ -1,10 +1,10 @@
 import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { DialogContent, IconButton, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
+import { IconButton, Typography, DialogContent } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -58,7 +58,9 @@ export default function Family() {
         </DialogTitle>
         <DialogContent>
           <ul>
-            <li style={{opacity:'50%'}}>{t("Search or add a user on the Hakimna platform to become a family member")}</li>
+            <li style={{ opacity: '50%' }}>
+              {t('Search or add a user on the Hakimna platform to become a family member')}
+            </li>
           </ul>
         </DialogContent>
         <DialogActions>

@@ -15,15 +15,15 @@ import { fTime } from 'src/utils/format-time';
 
 import { useParams } from 'src/routes/hooks';
 
+import { ConvertToHTML } from 'src/utils/convert-to-html';
+
 import { useGetUSActiveEmployeeEngs } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-import Markdown from 'src/components/markdown';
 import { varTranHover } from 'src/components/animate';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
-import { ConvertToHTML } from 'src/utils/convert-to-html';
 
 import UnitServiceEmployees from '../unit-service-employee';
 
@@ -104,10 +104,10 @@ export default function UnitServicePage({ USData }) {
             work_start_time === work_end_time
               ? t('24 hours')
               : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                work_end_time,
-                'p',
-                curLangAr
-              )}`,
+                  work_end_time,
+                  'p',
+                  curLangAr
+                )}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
@@ -179,7 +179,7 @@ export default function UnitServicePage({ USData }) {
           }}
           component="h3"
         >
-          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }}  />
+          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />
           {curLangAr ? country?.name_arabic : country?.name_english},{' '}
           {curLangAr ? city?.name_arabic : city?.name_english}
         </Stack>

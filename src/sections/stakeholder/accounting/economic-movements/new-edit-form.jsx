@@ -168,7 +168,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     formState: { isSubmitting },
   } = methods;
   const values = watch();
-  console.log('valuessss', values.products);
 
   useEffect(() => {
     reset(defaultValues);

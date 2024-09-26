@@ -23,7 +23,7 @@ export default function Instructions() {
   const { data } = useGetPatientInstructionsData(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
- 
+
   return data?.map((info, index) => (
     <Box key={index}>
       <Card

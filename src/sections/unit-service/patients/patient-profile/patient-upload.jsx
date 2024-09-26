@@ -89,11 +89,11 @@ export default function PatientUpload({ patient }) {
   };
 
   const removeDrug = (index) => {
-    setLoading(true)
+    setLoading(true);
     remove(index);
     setTimeout(() => {
-      setLoading(false)
-    }, 100)
+      setLoading(false);
+    }, 100);
   };
 
   const handleDrop = (acceptedFile, name) => {
@@ -172,10 +172,10 @@ export default function PatientUpload({ patient }) {
         setValue('end_date', null);
         setValue('sick_leave_description', null);
       } else if (table === 'prescription') {
-        setLoading(true)
+        setLoading(true);
         await axiosInstance.post(endpoints.prescription.all, values.drugs);
         setValue('drugs', [defaultDrug]);
-        setLoading(false)
+        setLoading(false);
       }
       // eslint-disable-next-line
       enqueueSnackbar(t(table.replace(/_/g, ' ')) + ' ' + t('added successfully'));
@@ -192,64 +192,65 @@ export default function PatientUpload({ patient }) {
         {!isMedLab && (
           <Card sx={{ p: 2, mb: 4 }}>
             <Typography variant="subtitle1">{t('prescription')}</Typography>
-            {!loading && fields.map((one, index) => (
-              <Stack
-                direction="row"
-                flexWrap="wrap"
-                alignItems="center"
-                rowGap={2}
-                columnGap={1}
-                mt={2}
-              >
-                <Autocomplete
-                  sx={{ minWidth: 300, flex: 1 }}
-                  options={medicinesData}
-                  onBlur={() => setMedSerach()}
-                  onChange={(event, newValue) =>
-                    setValue(`drugs[${index}].medicines`, newValue?._id)
-                  }
-                  getOptionLabel={(option) => option.trade_name || ''}
-                  onInputChange={(event, newInputValue) => {
-                    setMedSerach(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('medicine')} variant="outlined" />
-                  )}
-                />
-                <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
-                  name={`drugs[${index}].Frequency_per_day`}
-                  label={t('frequency')}
-                />
-                <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
-                  name={`drugs[${index}].Start_time`}
-                  label={t('start date')}
-                />
-                <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
-                  shouldDisableDate={(date) => (
-                    date < new Date(watch(`drugs[${index}].Start_time`))
-                  )}
-                  name={`drugs[${index}].End_time`}
-                  label={t('end date')}
-                />
-                <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
-                  name={`drugs[${index}].Doctor_Comments`}
-                  label={t('doctor comment')}
-                />
-                <RHFCheckbox
-                  onChange={() => chronicChange(index)}
-                  sx={{ minWidth: 300, flex: 1 }}
-                  name={`drugs[${index}].chronic`}
-                  label={t('chronic')}
-                />
-                <IconButton color="error" onClick={() => removeDrug(index)}>
-                  <Iconify width={25} icon="mi:delete" />
-                </IconButton>
-              </Stack>
-            ))}
+            {!loading &&
+              fields.map((one, index) => (
+                <Stack
+                  direction="row"
+                  flexWrap="wrap"
+                  alignItems="center"
+                  rowGap={2}
+                  columnGap={1}
+                  mt={2}
+                >
+                  <Autocomplete
+                    sx={{ minWidth: 300, flex: 1 }}
+                    options={medicinesData}
+                    onBlur={() => setMedSerach()}
+                    onChange={(event, newValue) =>
+                      setValue(`drugs[${index}].medicines`, newValue?._id)
+                    }
+                    getOptionLabel={(option) => option.trade_name || ''}
+                    onInputChange={(event, newInputValue) => {
+                      setMedSerach(newInputValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label={t('medicine')} variant="outlined" />
+                    )}
+                  />
+                  <RHFTextField
+                    sx={{ minWidth: 350, flex: 1 }}
+                    name={`drugs[${index}].Frequency_per_day`}
+                    label={t('frequency')}
+                  />
+                  <RHFDatePicker
+                    sx={{ minWidth: 200, flex: 1 }}
+                    name={`drugs[${index}].Start_time`}
+                    label={t('start date')}
+                  />
+                  <RHFDatePicker
+                    sx={{ minWidth: 200, flex: 1 }}
+                    shouldDisableDate={(date) =>
+                      date < new Date(watch(`drugs[${index}].Start_time`))
+                    }
+                    name={`drugs[${index}].End_time`}
+                    label={t('end date')}
+                  />
+                  <RHFTextField
+                    sx={{ minWidth: 350, flex: 1 }}
+                    name={`drugs[${index}].Doctor_Comments`}
+                    label={t('doctor comment')}
+                  />
+                  <RHFCheckbox
+                    onChange={() => chronicChange(index)}
+                    sx={{ minWidth: 300, flex: 1 }}
+                    name={`drugs[${index}].chronic`}
+                    label={t('chronic')}
+                  />
+                  <IconButton color="error" onClick={() => removeDrug(index)}>
+                    <Iconify width={25} icon="mi:delete" />
+                  </IconButton>
+                </Stack>
+              ))}
             <Divider sx={{ mt: 2 }} />
             <Button color="success" onClick={appendDrug}>
               <Iconify width={20} icon="ri:add-line" />

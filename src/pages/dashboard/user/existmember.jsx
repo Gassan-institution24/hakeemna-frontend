@@ -40,14 +40,13 @@ export default function Exist() {
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules (exclude English letters)
-    const arabicRegex =  /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters, numbers, and special symbols
-  
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters, numbers, and special symbols
+
     if (arabicRegex.test(event.target.value)) {
       setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
     }
   };
-  
-  
+
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces

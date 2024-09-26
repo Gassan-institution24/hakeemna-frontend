@@ -33,7 +33,6 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import Back from './imges/back.png';
 import Doclogo from '../../components/logo/doc.png';
 
-
 const styles = StyleSheet.create({
   page: {
     padding: 20,
@@ -197,8 +196,8 @@ export default function SickLeaves() {
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {ConvertToHTML(info?.description)}
           </Stack>
-          </Stack>
-          <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
+        </Stack>
+        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink
             style={styles.pdf}
             document={<SickLeavePDF report={info} />}
@@ -212,8 +211,7 @@ export default function SickLeaves() {
               />
             </Tooltip>
           </PDFDownloadLink>
-          </Stack>
-     
+        </Stack>
 
         <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
 

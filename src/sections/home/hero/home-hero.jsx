@@ -63,7 +63,7 @@ export default function HomeHero() {
             id="#"
           >
             {t('Electronic innovation for ')}
-            <br/>
+            <br />
             {t('a healthier future')}
           </Typography>
         </m.div>

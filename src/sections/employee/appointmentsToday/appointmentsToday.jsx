@@ -1,5 +1,5 @@
 import { useSnackbar } from 'notistack';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Container } from '@mui/system';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -208,9 +208,9 @@ export default function AppointmentsToday() {
   };
 
   useEffect(() => {
-    setCurrentTab(TABS[0].value)
+    setCurrentTab(TABS[0].value);
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   const renderOptions = (info) => {
     if (currentTab === 'three') {
@@ -261,7 +261,7 @@ export default function AppointmentsToday() {
                 key={index}
                 value={activity?.activities?._id}
                 onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-              // disabled={info?.activityhappend}
+                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -474,7 +474,7 @@ export default function AppointmentsToday() {
                                   ) : (
                                     <>
                                       {info?.unit_service_patient?.identification_num ||
-                                        info?.patient?.identification_num ? (
+                                      info?.patient?.identification_num ? (
                                         <Button
                                           sx={{ p: 2 }}
                                           onClick={() => startAppointment(info)}
