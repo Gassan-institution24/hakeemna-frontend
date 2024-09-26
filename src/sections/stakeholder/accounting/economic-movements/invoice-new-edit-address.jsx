@@ -55,14 +55,14 @@ export default function InvoiceNewEditAddress() {
                     options={patientsData.map((speciality) => speciality._id)}
                     getOptionLabel={(option) =>
                       patientsData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                     renderOption={(props, option, idx) => (
                       <li lang="ar" {...props} key={idx} value={option}>
                         {
                           patientsData.find((one) => one._id === option)?.[
-                          curLangAr ? 'name_arabic' : 'name_english'
+                            curLangAr ? 'name_arabic' : 'name_english'
                           ]
                         }
                       </li>
@@ -79,14 +79,14 @@ export default function InvoiceNewEditAddress() {
                     options={unitservicesData.map((speciality) => speciality._id)}
                     getOptionLabel={(option) =>
                       unitservicesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                     renderOption={(props, option, idx) => (
                       <li lang="ar" {...props} key={idx} value={option}>
                         {
                           unitservicesData.find((one) => one._id === option)?.[
-                          curLangAr ? 'name_arabic' : 'name_english'
+                            curLangAr ? 'name_arabic' : 'name_english'
                           ]
                         }
                       </li>

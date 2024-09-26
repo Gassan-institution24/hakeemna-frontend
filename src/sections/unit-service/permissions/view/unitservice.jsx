@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Grid, Card, Container, Typography, CardHeader, Divider } from '@mui/material';
+import { Grid, Card, Container, Typography, CardHeader } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
@@ -59,7 +59,7 @@ export default function TableNewEditForm() {
     quality_control: Yup.array(),
     unit_service_info: Yup.array(),
     old_patient: Yup.array(),
-    entrance: Yup.array()
+    entrance: Yup.array(),
   });
 
   const defaultValues = useMemo(
@@ -75,7 +75,7 @@ export default function TableNewEditForm() {
       unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
       old_patient: data?.acl?.unit_service?.old_patient || [],
       permissions: data?.acl?.unit_service?.old_patient || [],
-      entrance: data?.acl?.unit_service?.entrance || []
+      entrance: data?.acl?.unit_service?.entrance || [],
     }),
     [data]
   );
@@ -229,11 +229,16 @@ export default function TableNewEditForm() {
               <Typography textTransform="capitalize" variant="subtitle2">
                 {t('entrance management')}
               </Typography>
-              <RHFMultiCheckbox row spacing={4} name="entrance" options={[
-                { label: t('appointment'), value: 'appointment' },
-                { label: t('rooms'), value: 'rooms' },
-                { label: t('finished'), value: 'finished' },
-              ]} />
+              <RHFMultiCheckbox
+                row
+                spacing={4}
+                name="entrance"
+                options={[
+                  { label: t('appointment'), value: 'appointment' },
+                  { label: t('rooms'), value: 'rooms' },
+                  { label: t('finished'), value: 'finished' },
+                ]}
+              />
             </Stack>
           </Stack>
         </Card>

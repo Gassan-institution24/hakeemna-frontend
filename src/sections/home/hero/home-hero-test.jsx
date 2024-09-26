@@ -7,10 +7,10 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import { varFade } from 'src/components/animate';
 
-import TestV from './test.mp4'
+import TestV from './test.mp4';
 
 // ----------------------------------------------------------------------
- 
+
 export default function HomeHero() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -86,7 +86,6 @@ export default function HomeHero() {
         <m.div variants={varFade().in}>
           <Typography
             variant="h2"
-            
             sx={{
               textAlign: 'center',
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',

@@ -7,6 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControlLabel from '@mui/material/FormControlLabel';
+
 import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
@@ -20,7 +21,7 @@ export default function RHFRadioGroup({
   helperText,
   ...other
 }) {
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { control } = useFormContext();
 
   const labelledby = label ? `${name}-${label}` : '';

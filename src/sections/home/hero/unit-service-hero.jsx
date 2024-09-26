@@ -56,28 +56,27 @@ export default function UnitServiceHero({ currentPage, setCurrentPage }) {
 
         <m.div variants={varFade().in}>
           {homePage && (
-           <Typography
-           variant="subtitle1"
-           sx={{
-             textAlign: 'center',
-             textTransform: 'none',
-           }}
-         >
-           <Typography
-             component="h1"
-             sx={{
-               display: 'inline',
-               fontSize: 'inherit', // Keeps the font size consistent with the rest of the text
-               fontWeight: 'bold', // Optional: to give emphasis similar to an h1
-             }}
-           >
-             {t("hakeemna")}
-           </Typography>
-           {t(
-             'enables medical service providers to deal with patient records electronically and manage their institutions effectively and easily with the aim of raising productivity and improving performance, which leads to enriching the patient experience and paves the way for focusing on the most important matters in your work to raise the degree of excellence and increase competitiveness.'
-           )}
-         </Typography>
-         
+            <Typography
+              variant="subtitle1"
+              sx={{
+                textAlign: 'center',
+                textTransform: 'none',
+              }}
+            >
+              <Typography
+                component="h1"
+                sx={{
+                  display: 'inline',
+                  fontSize: 'inherit', // Keeps the font size consistent with the rest of the text
+                  fontWeight: 'bold', // Optional: to give emphasis similar to an h1
+                }}
+              >
+                {t('hakeemna')}
+              </Typography>
+              {t(
+                'enables medical service providers to deal with patient records electronically and manage their institutions effectively and easily with the aim of raising productivity and improving performance, which leads to enriching the patient experience and paves the way for focusing on the most important matters in your work to raise the degree of excellence and increase competitiveness.'
+              )}
+            </Typography>
           )}
           {!homePage && (
             <>

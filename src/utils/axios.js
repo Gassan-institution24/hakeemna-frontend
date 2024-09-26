@@ -179,7 +179,6 @@ export const endpoints = {
     },
     employee: {
       all: (id) => (!id ? null : `/api/rooms/unitserviceemployee/${id}`),
-    
     },
     department: {
       all: (id) => (!id ? null : `/api/rooms/department/${id}`),

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
 // import { paths } from 'src/routes/paths';
-import { useRouter, usePathname } from 'src/routes/hooks';
+import { usePathname } from 'src/routes/hooks';
 
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 
 import Footer from './footer';
 import Header from './header';
@@ -19,7 +19,7 @@ export default function MainLayout({ children }) {
 
   const homePage = pathname === '/';
   // const loginPage = pathname === '/login';
-  const { authenticated } = useAuthContext();
+  // const { authenticated } = useAuthContext();
 
   // useEffect(() => {
   //   if (authenticated && (loginPage || homePage)) {

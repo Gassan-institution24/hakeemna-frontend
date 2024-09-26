@@ -459,22 +459,24 @@ export function useNavData() {
       },
     ];
     const employeeItems = [
+      // {
+      //   show:
+      //     checkAcl({
+      //       category: 'work_group',
+      //       subcategory: 'entrance_management',
+      //       acl: 'read',
+      //     }) && !isMedLab,
+      //   title: t('entrance management'),
+      //   path: paths.employee.entrancemanagement.root,
+      //   icon: <Iconify icon="oi:timer" />,
+      //   navItemId: 'EMEntranceNav',
+      // },
       {
         show:
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'entrance_management',
-            acl: 'read',
-          }) && !isMedLab,
-        title: t('entrance management'),
-        path: paths.employee.entrancemanagement.root,
-        icon: <Iconify icon="oi:timer" />,
-        navItemId: 'EMEntranceNav',
-      },
-      {
-        show: (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
-          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
-          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) && !isMedLab,
+          (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
+            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
+            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) &&
+          !isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,

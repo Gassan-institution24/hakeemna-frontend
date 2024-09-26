@@ -29,7 +29,6 @@ import {
   useGetOneEntranceManagement,
 } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function CheckList() {

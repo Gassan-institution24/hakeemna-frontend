@@ -28,7 +28,6 @@ export default function FAQ() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [data, setData] = React.useState('');
-  console.log(data);
 
   const onSubmit = async () => {
     try {

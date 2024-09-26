@@ -109,7 +109,16 @@ export default function EmployeeCard({ employee }) {
           gap={{ md: 10 }}
         >
           <Image
-            onClick={() => router.push(paths.pages.doctor(`${employee._id}_${employee?.employee?.[t('name_english')]?.replace(/ /g, "-")}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, "-")}`))}
+            onClick={() =>
+              router.push(
+                paths.pages.doctor(
+                  `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
+                    / /g,
+                    '-'
+                  )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+                )
+              )
+            }
             sx={{ width: 150, height: 150, cursor: 'pointer' }}
             src={employee.employee?.picture}
           />
@@ -117,7 +126,19 @@ export default function EmployeeCard({ employee }) {
             <Stack mb={3}>
               <Stack direction="row" alignItems="flex-end">
                 <Typography
-                  onClick={() => router.push(paths.pages.doctor(`${employee._id}_${employee?.employee?.[t('name_english')]?.replace(/ /g, "-")}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, "-")}`))}
+                  onClick={() =>
+                    router.push(
+                      paths.pages.doctor(
+                        `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
+                          / /g,
+                          '-'
+                        )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(
+                          / /g,
+                          '-'
+                        )}`
+                      )
+                    )
+                  }
                   variant="h6"
                   mr={5}
                   sx={{ cursor: 'pointer' }}
@@ -180,17 +201,17 @@ export default function EmployeeCard({ employee }) {
                 <Stack>
                   {employee?.unit_service?.insurance?.length > 5
                     ? employee?.unit_service?.insurance
-                      ?.filter((one, index) => index <= 5)
-                      .map((one) => (
+                        ?.filter((one, index) => index <= 5)
+                        .map((one) => (
+                          <Typography variant="body2">
+                            {curLangAr ? one.name_arabic : one.name_english}
+                          </Typography>
+                        ))
+                    : employee?.unit_service?.insurance?.map((one) => (
                         <Typography variant="body2">
                           {curLangAr ? one.name_arabic : one.name_english}
                         </Typography>
-                      ))
-                    : employee?.unit_service?.insurance?.map((one) => (
-                      <Typography variant="body2">
-                        {curLangAr ? one.name_arabic : one.name_english}
-                      </Typography>
-                    ))}
+                      ))}
                   {employee?.unit_service?.insurance?.length > 5 &&
                     `+${employee.unit_service.insurance.length - 5}`}
                 </Stack>
@@ -275,12 +296,7 @@ export default function EmployeeCard({ employee }) {
           </>
         }
         action={
-          <LoadingButton
-            variant="contained"
-            color="info"
-            loading={submitting}
-            onClick={handleBook}
-          >
+          <LoadingButton variant="contained" color="info" loading={submitting} onClick={handleBook}>
             {t('confirm')}
           </LoadingButton>
         }

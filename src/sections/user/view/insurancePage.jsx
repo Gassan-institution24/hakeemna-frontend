@@ -78,8 +78,6 @@ export default function InsurancePage({ patientId }) {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Submitting data:', data);
-
       await axios.patch(`/api/insurance/data/${Insuranse}`, data);
       enqueueSnackbar('Insurance updated successfully', { variant: 'success' });
       dialog.onFalse();

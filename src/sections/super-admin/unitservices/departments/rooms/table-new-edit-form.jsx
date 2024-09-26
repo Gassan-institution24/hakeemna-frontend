@@ -99,10 +99,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
-          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${departmentData.name_english
-            }</strong> department`,
-          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> داخل قسم <strong>${departmentData.name_arabic
-            }</strong>`,
+          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${
+            departmentData.name_english
+          }</strong> department`,
+          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> داخل قسم <strong>${
+            departmentData.name_arabic
+          }</strong>`,
         });
       }
       reset();

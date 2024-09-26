@@ -48,7 +48,7 @@ export default function AuthClassicLayout({ children, title }) {
         bgcolor: '#FFFFFF',
       }}
     >
-          <Language />
+      <Language />
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
         {t(title)}
       </Typography>

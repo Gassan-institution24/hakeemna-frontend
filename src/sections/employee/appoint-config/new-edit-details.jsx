@@ -216,7 +216,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               ),
             }}
           />
-          <div id="appointmentSettingAvailableForBooking" style={{width:'100%'}}>
+          <div id="appointmentSettingAvailableForBooking" style={{ width: '100%' }}>
             <RHFTextField
               size="small"
               InputProps={{
