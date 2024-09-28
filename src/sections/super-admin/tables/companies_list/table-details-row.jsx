@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { ListItemText } from '@mui/material';
+import { InputAdornment, ListItemText, Select, TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -11,10 +11,13 @@ import { fDate } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useSnackbar } from 'notistack';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow }) {
+export default function TableDetailsRow({ row, index, selected, onEditRow, showAll, onSelectRow }) {
   const {
     code,
     unit_service_type,
@@ -33,6 +36,8 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
     constitution_objective,
     type_of_specialty_1,
     type_of_specialty_2,
+    status,
+    com_note,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -42,11 +47,30 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
     modifications_nums,
   } = row;
 
+  const { enqueueSnackbar } = useSnackbar()
+  const [text, setText] = useState(com_note)
   const popover = usePopover();
   const DDL = usePopover();
 
+  const handleChangeStatus = async (event) => {
+    try {
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { status: event.target.value })
+      enqueueSnackbar('done')
+    } catch (e) {
+      enqueueSnackbar('error', { variant: 'error' })
+    }
+  }
+  const handleSubmitText = async () => {
+    try {
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text })
+      enqueueSnackbar('done')
+    } catch (e) {
+      enqueueSnackbar('error', { variant: 'error' })
+    }
+  }
+
   const renderPrimary = (
-    <TableRow hover selected={selected}>
+    <TableRow hover index={index} sx={{ backgroundColor: index % 2 ? 'background.lightgray' : '' }} selected={selected}>
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
@@ -54,18 +78,36 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
       <TableCell align="center">{country}</TableCell>
       <TableCell align="center">{city}</TableCell>
       <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{insurance}</TableCell>
-      <TableCell align="center">{info}</TableCell>
       <TableCell align="center">{sector}</TableCell>
       <TableCell align="center">{commercial_name}</TableCell>
       <TableCell align="center">{province}</TableCell>
       <TableCell align="center">{address}</TableCell>
       <TableCell align="center">{phone_number_1}</TableCell>
       <TableCell align="center">{Phone_number_2}</TableCell>
-      <TableCell align="center">{work_shift}</TableCell>
-      <TableCell align="center">{constitution_objective}</TableCell>
-      <TableCell align="center">{type_of_specialty_1}</TableCell>
-      <TableCell align="center">{type_of_specialty_2}</TableCell>
+      <TableCell align="center"><TextField select fullWidth value={status} onChange={handleChangeStatus}>
+        <MenuItem value='not contact'>لم يتم التواصل</MenuItem>
+        <MenuItem value='agreed'>قبول</MenuItem>
+        <MenuItem value='refused'>رفض</MenuItem>
+        <MenuItem value='no number'>لا يوجد رقم للتواصل</MenuItem>
+        <MenuItem value='wrong number'>الرقم خاطئ</MenuItem>
+      </TextField></TableCell>
+      <TableCell align="center">
+        <TextField fullWidth multiline value={text} onChange={(e) => setText(e.target.value)} InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleSubmitText} edge="end">
+                <Iconify icon='icon-park-solid:correct' />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }} />
+      </TableCell>
+      {showAll && <><TableCell align="center">{insurance}</TableCell>
+        <TableCell align="center">{info}</TableCell>
+        <TableCell align="center">{work_shift}</TableCell>
+        <TableCell align="center">{constitution_objective}</TableCell>
+        <TableCell align="center">{type_of_specialty_1}</TableCell>
+        <TableCell align="center">{type_of_specialty_2}</TableCell></>}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -156,4 +198,6 @@ TableDetailsRow.propTypes = {
   onEditRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  showAll: PropTypes.bool,
+  index: PropTypes.number,
 };
