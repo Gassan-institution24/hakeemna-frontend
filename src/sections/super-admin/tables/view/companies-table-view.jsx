@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import { Select, MenuItem, TableRow, TableCell } from '@mui/material';
+import { Select, MenuItem, TableRow, TableCell, Radio, Checkbox } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -35,30 +35,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'code' },
-  { id: 'unit_service_type', label: 'unit_service_type' },
-  { id: 'country', label: 'country' },
-  { id: 'city', label: 'city' },
-  { id: 'email', label: 'email' },
-  { id: 'insurance', label: 'insurance' },
-  { id: 'info', label: 'info' },
-  { id: 'sector', label: 'sector' },
-  { id: 'commercial_name', label: 'commercial_name' },
-  { id: 'province', label: 'province' },
-  { id: 'address', label: 'address' },
-  { id: 'phone_number_1', label: 'phone_number_1' },
-  { id: 'Phone_number_2', label: 'Phone_number_2' },
-  { id: 'work_shift', label: 'work_shift' },
-  { id: 'constitution_objective', label: 'constitution_objective' },
-  { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
-  { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
-  { id: 'subscribe_to', label: 'subscribe_to' },
-  { id: 'social_network', label: 'social_network' },
-  { id: 'notes', label: 'notes' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -75,7 +51,35 @@ const defaultFilters = {
 
 export default function CompaniesTableView() {
   /// edit
+  const [showAll, setShowAll] = useState(false)
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: 'code' },
+    { id: 'unit_service_type', label: 'unit_service_type' },
+    { id: 'country', label: 'country' },
+    { id: 'city', label: 'city' },
+    { id: 'email', label: 'email' },
+    { id: 'sector', label: 'sector' },
+    { id: 'commercial_name', label: 'commercial_name' },
+    { id: 'province', label: 'province' },
+    { id: 'address', label: 'address' },
+    { id: 'phone_number_1', label: 'phone_number_1' },
+    { id: 'Phone_number_2', label: 'Phone_number_2' },
+    { id: 'status', label: 'status',width: 120 },
+    { id: 'com_note', label: 'com_note',width:200 },
+    showAll && { id: 'insurance', label: 'insurance' },
+    showAll && { id: 'info', label: 'info' },
+    showAll && { id: 'work_shift', label: 'work_shift' },
+    showAll && { id: 'constitution_objective', label: 'constitution_objective' },
+    showAll && { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
+    showAll && { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
+    showAll && { id: 'subscribe_to', label: 'subscribe_to' },
+    showAll && { id: 'social_network', label: 'social_network' },
+    showAll && { id: 'notes', label: 'notes' },
+    { id: '', width: 50 },
+  ].filter(Boolean);
   const table = useTable({ defaultOrderBy: 'code' });
+
 
   const componentRef = useRef();
 
@@ -173,11 +177,11 @@ export default function CompaniesTableView() {
   const uniqueCities = [...new Set(dataFiltered.map((one) => one.city))];
   const uniqueSectors = [...new Set(dataFiltered.map((one) => one.sector))];
   const uniqueProvince = [...new Set(dataFiltered.map((one) => one.province))];
-  const uniqueSpecialities1 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_1))];
-  const uniqueSpecialities2 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_2))];
+  // const uniqueSpecialities1 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_1))];
+  // const uniqueSpecialities2 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_2))];
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="">
       <CustomBreadcrumbs
         heading="companies" /// edit
         links={[
@@ -216,7 +220,7 @@ export default function CompaniesTableView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
-
+        <Checkbox checked={showAll} onChange={() => setShowAll(!showAll)} />show all
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
@@ -283,8 +287,6 @@ export default function CompaniesTableView() {
                     </Select>
                   </TableCell>
                   <TableCell />
-                  <TableCell />
-                  <TableCell />
                   <TableCell>
                     <Select
                       fullWidth
@@ -327,42 +329,18 @@ export default function CompaniesTableView() {
                   <TableCell />
                   <TableCell />
                   <TableCell />
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.speciality1}
-                      onChange={(e) => handleFilters('speciality1', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueSpecialities1.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.speciality2}
-                      onChange={(e) => handleFilters('speciality2', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueSpecialities2.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
+                  <TableCell />
+                  {showAll && <>
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                  </>}
                 </TableRow>
                 {dataFiltered
                   .slice(
@@ -372,7 +350,9 @@ export default function CompaniesTableView() {
                   .map((row, idx) => (
                     <TableDetailRow
                       key={idx}
+                      index={idx}
                       row={row}
+                      showAll={showAll}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
                       onEditRow={() => handleEditRow(row._id)}
