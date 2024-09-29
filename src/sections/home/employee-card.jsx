@@ -178,14 +178,14 @@ export default function EmployeeCard({ employee }) {
             {employee?.unit_service?.address && (
               <Stack direction="row" gap={1}>
                 <Typography variant="body2">{t('address')}:</Typography>
-                <Typography variant="body2">{employee?.unit_service?.address}</Typography>
+                <Typography variant="body2" >{employee?.unit_service?.address}</Typography>
               </Stack>
             )}
             {employee?.employee?.phone && (
               <Stack direction="row" gap={1}>
                 {/* <Iconify width={16} icon='solar:phone-bold' /> */}
                 <Typography variant="body2">{t('phone number')}:</Typography>
-                <Typography variant="body2">{employee?.employee?.phone}</Typography>
+                <Typography variant="body2" sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>{employee?.employee?.phone}</Typography>
               </Stack>
             )}
             {employee?.employee?.email && (
@@ -201,17 +201,17 @@ export default function EmployeeCard({ employee }) {
                 <Stack>
                   {employee?.unit_service?.insurance?.length > 5
                     ? employee?.unit_service?.insurance
-                        ?.filter((one, index) => index <= 5)
-                        .map((one) => (
-                          <Typography variant="body2">
-                            {curLangAr ? one.name_arabic : one.name_english}
-                          </Typography>
-                        ))
-                    : employee?.unit_service?.insurance?.map((one) => (
+                      ?.filter((one, index) => index <= 5)
+                      .map((one) => (
                         <Typography variant="body2">
                           {curLangAr ? one.name_arabic : one.name_english}
                         </Typography>
-                      ))}
+                      ))
+                    : employee?.unit_service?.insurance?.map((one) => (
+                      <Typography variant="body2">
+                        {curLangAr ? one.name_arabic : one.name_english}
+                      </Typography>
+                    ))}
                   {employee?.unit_service?.insurance?.length > 5 &&
                     `+${employee.unit_service.insurance.length - 5}`}
                 </Stack>

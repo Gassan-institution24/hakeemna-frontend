@@ -549,6 +549,11 @@ export function useNavData() {
             title: t('adjustable documents'),
             path: paths.employee.documents.adjustable.root,
           },
+          // {
+          //   show: true,
+          //   title: t('blogs'),
+          //   path: paths.employee.documents.blogs.root,
+          // },
         ].filter((one) => one.show),
       },
       {
