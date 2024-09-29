@@ -426,7 +426,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
   if (USType) {
     inputData = inputData.filter(
-      (data) => data.USType?.toLowerCase().indexOf(USType.toLowerCase()) !== -1
+      (data) => data.unit_service_type?.toLowerCase().indexOf(USType.toLowerCase()) !== -1
     );
   }
   if (city) {

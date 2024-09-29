@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Hakeemna medical community 360 - مجتمع حكيمنا الطبي </title>
+        <title>Hakeemna 360 - Comprehensive medical platform : المنصة الطبية الشاملة - حكيمنا 360 </title>
         <meta
           name="description"
           content={t(
