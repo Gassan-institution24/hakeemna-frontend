@@ -140,7 +140,7 @@ export default function Footer() {
                 mx: { xs: 'auto', md: 'unset' },
               }}
             >
-              {t('It is time for digital transformation')}
+              {t('Electronic innovation for a healthier future')}
             </Typography>
 
             <Stack

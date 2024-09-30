@@ -33,6 +33,7 @@ export * from './prescription';
 export * from './deduction_config';
 export * from './departments';
 export * from './doctor_report';
+export * from './Blog_category';
 export * from './diets';
 export * from './diseases';
 export * from './employee_types';
