@@ -6,7 +6,7 @@ import Link from '@mui/material/Link';
 
 import { RouterLink } from 'src/routes/components';
 
-import Doclogo from './doc.png';
+
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -23,7 +23,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       }}
       {...other}
     >
-      <img src={Doclogo} alt="logo" />
+      <img decoding="async" loading='lazy' src='/logo/doc.webp' alt="logo" />
     </Box>
   );
 
