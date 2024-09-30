@@ -185,6 +185,8 @@ export const endpoints = {
       active: (id) => (!id ? null : `/api/rooms/department/${id}/active`),
     },
   },
+  blogcategory: { all: '/api/blogcategory' },
+
   employee_types: {
     all: '/api/employeetypes/',
     active: '/api/employeetypes/active',

@@ -565,6 +565,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/hospital_list/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/hospital_list/${id}/edit`,
       },
+      BlogCategory: {
+        root: `${ROOTS.SUPERADMIN}/tables/Blog_category`,
+        new: `${ROOTS.SUPERADMIN}/tables/Blog_category/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/Blog_category/${id}/edit`,
+      },
       deductionconfig: {
         root: `${ROOTS.SUPERADMIN}/tables/deduction_config`,
         new: `${ROOTS.SUPERADMIN}/tables/deduction_config/new`,

@@ -80,6 +80,7 @@ export default function TablesListView() {
       // { tableName: 'service_types', documents: [] },
       { tableName: 'measurement_types', documents: [] },
       { tableName: 'hospital_list', documents: [] },
+      { tableName: 'Blog_category', documents: [] },
       { tableName: 'deduction_config', documents: [] },
       // { tableName: 'rooms', documents: [] },
       { tableName: 'specialities', documents: [] }, //
