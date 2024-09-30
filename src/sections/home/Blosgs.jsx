@@ -328,9 +328,9 @@ export default function UploadBlogs() {
                         }}
                         title={blog.user?.employee?.name_english}
                         href={paths.pages.doctor(
-                          blog.user?.employee?.employee_engagements?.[
+                          `${blog.user?.employee?.employee_engagements?.[
                             user.employee.selected_engagement
-                          ]?._id
+                          ]?._id}_${blog.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
                         {t('profile')} <Iconify icon="iconamoon:profile-fill" sx={{ ml: '1px' }} />
