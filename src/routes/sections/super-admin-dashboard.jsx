@@ -192,6 +192,13 @@ const MeasurmentTypeCreatePage = lazy(() =>
 const MeasurmentTypeEditPage = lazy(() =>
   import('src/pages/super-admin/tables/measurement_types/edit')
 );
+// Blog_category LIST
+const BlogCategoryTablePage = lazy(() =>
+  import('src/pages/super-admin/tables/Blog category/table')
+);
+const BlogCategoryCreatePage = lazy(() => import('src/pages/super-admin/tables/Blog category/new'));
+const BlogCategoryEditPage = lazy(() => import('src/pages/super-admin/tables/Blog category/edit'));
+
 // HOSPITAL LIST
 const HospitalListTablePage = lazy(() =>
   import('src/pages/super-admin/tables/hospital_list/table')
@@ -1022,6 +1029,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <HospitalListTablePage /> },
               { path: 'new', element: <HospitalListCreatePage /> },
               { path: ':id/edit', element: <HospitalListEditPage /> },
+            ],
+          },
+          {
+            path: 'Blog_category',
+            children: [
+              { element: <BlogCategoryTablePage />, index: true },
+              { path: 'list', element: <BlogCategoryTablePage /> },
+              { path: 'new', element: <BlogCategoryCreatePage /> },
+              { path: ':id/edit', element: <BlogCategoryEditPage /> },
             ],
           },
           {

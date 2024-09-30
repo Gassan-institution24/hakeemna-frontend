@@ -149,7 +149,7 @@ export default function Header() {
                   sx={{ borderRadius: 0 }}
                   onClick={() => router.push(paths.pages.book)}
                 >
-                  {t('book appointment now')}
+                  {t('book appointments now')}
                 </Button>
                 <Box sx={{ flexGrow: 0.3 }} />
                 <Language />
