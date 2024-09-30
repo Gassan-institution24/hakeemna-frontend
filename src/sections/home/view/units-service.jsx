@@ -19,14 +19,14 @@ export default function HomeView() {
         }}
       >
         <UnitServiceHero currentPage="doctors" />
-        {mdUp && (
-          <img
-            src="/assets/images/home/hero/stethoscope.png"
+        {/* {mdUp && (
+          <img decoding="async" loading='lazy'
+            src="/assets/images/home/hero/stethoscope.webp"
             style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
             width={200}
             alt="stethoscope"
           />
-        )}
+        )} */}
       </Stack>
       <Box
         sx={{

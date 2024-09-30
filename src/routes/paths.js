@@ -835,6 +835,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/documents/adjustable/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/documents/adjustable/${id}/edit`,
       },
+      blogs: {
+        root: `${ROOTS.SUPERADMIN}/documents/blogs`,
+        new: `${ROOTS.SUPERADMIN}/documents/blogs/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/documents/blogs/${id}/edit`,
+      },
     },
     workGroups: {
       root: `${ROOTS.SUPERADMIN}/profile/wgroups`,
