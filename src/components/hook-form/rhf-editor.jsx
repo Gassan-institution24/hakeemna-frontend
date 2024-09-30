@@ -33,7 +33,7 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <Stack sx={sx}>
-          <Typography mb={0.3} textTransform="capitalize" variant="subtitle2">
+          <Typography mb={0.3} textTransform="capitalize" variant="body2">
             {label}
           </Typography>
           <Editor

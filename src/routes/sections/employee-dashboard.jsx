@@ -97,6 +97,11 @@ const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit')
 const AdjustPage = lazy(() => import('src/pages/employee/adjustable-doc/table'));
 const AdjustNewPage = lazy(() => import('src/pages/employee/adjustable-doc/new'));
 const AdjustEditPage = lazy(() => import('src/pages/employee/adjustable-doc/edit'));
+
+// BLOGS
+const BlogsPage = lazy(() => import('src/pages/employee/blogs/table'));
+const BlogsNewPage = lazy(() => import('src/pages/employee/blogs/new'));
+const BlogsEditPage = lazy(() => import('src/pages/employee/blogs/edit'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -132,6 +137,15 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: 'list', element: <AdjustPage /> },
           { path: 'new', element: <AdjustNewPage /> },
           { path: ':id/edit', element: <AdjustEditPage /> },
+        ],
+      },
+      {
+        path: 'documents/blogs',
+        children: [
+          { element: <BlogsPage />, index: true },
+          { path: 'list', element: <BlogsPage /> },
+          { path: 'new', element: <BlogsNewPage /> },
+          { path: ':id/edit', element: <BlogsEditPage /> },
         ],
       },
       {
