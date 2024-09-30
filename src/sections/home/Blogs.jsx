@@ -1,18 +1,27 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Box, Card, Grid, Stack, MenuItem, TextField, Typography } from '@mui/material';
+
+import { Box, Card, Grid, Stack, MenuItem, TextField, Typography, Link } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
+
 import { fDateAndTime } from 'src/utils/format-time';
-import { useGetBlogs } from 'src/api';
+
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetBlogs, useGetBlog_category } from 'src/api';
+
 import Image from 'src/components/image/image';
-import BlogImage from './images/blog.png';
 
 export default function Blogs() {
   const { t } = useTranslate();
   const { data } = useGetBlogs();
+  const { Data } = useGetBlog_category();
+  const { user } = useAuthContext();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState('');
+
 
   const formatTextWithLineBreaks = (text, limit = 20) => {
     if (!text) return '';
@@ -45,9 +54,9 @@ export default function Blogs() {
 
   return (
     <Stack sx={{ p: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Card sx={{ width: '80%' }}>
+      <Card sx={{ width: '70%' }}>
         <Box sx={{ p: 5, textAlign: 'start' }}>
-          <Typography variant="h2" component="h2" sx={{ mb: 5, textAlign: 'center' }}>
+          <Typography variant="h2" component="h2" sx={{ mb: 10, textAlign: 'center' }}>
             {t('hakeemna medical blog')}
           </Typography>
 
@@ -62,15 +71,15 @@ export default function Blogs() {
             />
             <TextField
               select
-              label={t('Filter by Author')}
+              label={t('Filter by category')}
               value={filterBy}
               onChange={(e) => setFilterBy(e.target.value)}
               sx={{ width: '25%' }}
             >
-              <MenuItem value="">{t('All Authors')}</MenuItem>
-              {data?.map((blog, index) => (
-                <MenuItem key={index} value={blog.user?.employee?.name_english}>
-                  {blog.user?.employee?.name_english}
+              <MenuItem value="">{t('All categorys')}</MenuItem>
+              {Data?.map((category, index) => (
+                <MenuItem key={index} value={category?.name_english}>
+                  {category.name_english}
                 </MenuItem>
               ))}
             </TextField>
@@ -102,11 +111,23 @@ export default function Blogs() {
                 }}
               >
                 <Image
-                  src={blog?.user?.picture || BlogImage}
+                  src={blog?.file}
                   alt={blog.title}
                   sx={{ width: '100%', height: '150px', objectFit: 'cover' }}
                 />
                 <Box sx={{ p: 2 }}>
+                  <Link
+                    sx={{ color: 'gray' }}
+                    href={paths.pages.doctor(
+                      `${
+                        blog.user?.employee?.employee_engagements?.[
+                          user.employee.selected_engagement
+                        ]?._id
+                      }_${blog.user?.employee?.name_english?.replace(/ /g, '_')}`
+                    )}
+                  >
+                    {blog.user?.employee?.name_english}
+                  </Link>
                   <Typography sx={{ color: 'gray' }}>{blog.title}</Typography>
                   <Typography
                     dangerouslySetInnerHTML={{
