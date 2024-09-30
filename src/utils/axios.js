@@ -54,6 +54,7 @@ export const endpoints = {
   },
   blogs: {
     all: '/api/blogs/',
+    user: (id) => `/api/blogs/user/${id}`,
   },
   currency: {
     all: '/api/currency/',
