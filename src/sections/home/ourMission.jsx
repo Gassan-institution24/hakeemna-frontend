@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
@@ -21,7 +22,7 @@ export default function WhoAreWe() {
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
-  const CARDS = [
+  const CARDS = useMemo(() => [
     {
       icon: MedicalHub,
       title: t('Electronic Medical Hub'),
@@ -70,7 +71,7 @@ export default function WhoAreWe() {
       ),
       color: '#bcd4e6',
     },
-  ];
+  ], [t]);
 
   return (
     <Container
@@ -168,6 +169,16 @@ export default function WhoAreWe() {
                     backgroundPosition,
                   }}
                 />
+                {/* <img
+                  decoding="async" loading='lazy'
+                  src={card.icon}
+                  alt={card.title}
+                  width={200}
+                  height={card.icon === Friendly ? 130 : 170}
+                  style={{
+                    objectFit: 'cover',
+                  }}
+                /> */}
                 <Stack flex={1} sx={{ backgroundColor: card.color, p: 2 }}>
                   <Typography
                     variant="h1"

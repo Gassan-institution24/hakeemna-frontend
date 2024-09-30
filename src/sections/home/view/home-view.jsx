@@ -10,7 +10,7 @@ export default function HomeView() {
   return (
     <>
       <HomeHero id="home" />
-      <Box
+      {/* <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
@@ -18,7 +18,7 @@ export default function HomeView() {
         }}
       >
         <Whydoc />
-      </Box>
+      </Box> */}
       <OurMission />
       <Box
         sx={{
