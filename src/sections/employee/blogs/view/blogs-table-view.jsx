@@ -61,16 +61,17 @@ export default function BlogsTableView() {
 
   const { user } = useAuthContext();
 
+  const [filters, setFilters] = useState(defaultFilters);
+
   const { blogsData, length, loading } = useGetUserBlogs(user?._id, {
     page: table.page,
     order: table.order,
     sortBy: table.sortBy,
-    rowsPerPage: table.rowsPerPage
+    rowsPerPage: table.rowsPerPage,
+    name: filters.name,
+    populate: { path: 'category', select: 'name_english name_arabic' }
   });
 
-  const [filters, setFilters] = useState(defaultFilters);
-
-  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;
 
@@ -89,7 +90,7 @@ export default function BlogsTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.employee.documents.adjustable.edit(id));
+      router.push(paths.employee.documents.blogs.edit(id));
     },
     [router]
   );
@@ -105,13 +106,13 @@ export default function BlogsTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('blogs')} /// edit
+        heading={t('my blogs')} /// edit
         links={[
           {
             name: t('dashboard'),
             href: paths.employee.root,
           },
-          { name: t('blogs') },
+          { name: t('my blogs') },
         ]}
         action={
           <Button

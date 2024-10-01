@@ -15,17 +15,17 @@ export default function TableCreateView() {
   return (
     <Container maxWidth="lg">
       <CustomBreadcrumbs
-        heading={t('update checklist')}
+        heading={t('create blog')}
         links={[
           {
             name: t('dashboard'),
             href: paths.employee.root,
           },
           {
-            name: t('checklists'),
-            href: paths.employee.checklist.root,
+            name: t('blogs'),
+            href: paths.employee.documents.blogs.root,
           },
-          { name: t('update') },
+          { name: t('create') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

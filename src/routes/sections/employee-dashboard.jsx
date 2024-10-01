@@ -102,6 +102,8 @@ const AdjustEditPage = lazy(() => import('src/pages/employee/adjustable-doc/edit
 const BlogsPage = lazy(() => import('src/pages/employee/blogs/table'));
 const BlogsNewPage = lazy(() => import('src/pages/employee/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/employee/blogs/edit'));
+
+const BrowseBlogs = lazy(() => import('src/pages/employee/blogs/browse-blogs'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -139,6 +141,7 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: ':id/edit', element: <AdjustEditPage /> },
         ],
       },
+      { path: 'blogs', element: <BrowseBlogs /> },
       {
         path: 'documents/blogs',
         children: [
