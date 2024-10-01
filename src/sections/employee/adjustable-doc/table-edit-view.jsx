@@ -32,7 +32,7 @@ export default function TableEditView() {
           },
           {
             name: t('adjustable documents'),
-            href: paths.employee.checklist.root,
+            href: paths.employee.documents.adjustable.root,
           },
           { name: t('update') },
         ]}
