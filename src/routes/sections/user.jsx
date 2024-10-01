@@ -44,6 +44,8 @@ const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
 const SickLeave = lazy(() => import('src/sections/user/view/user-sickLeave-view'));
 
+const Blogs = lazy(() => import('src/sections/user/view/user-blogs-view'));
+
 // ORDERS
 const OrdersPage = lazy(() => import('src/pages/dashboard/user/orders/list'));
 const OrdersDetailsPage = lazy(() => import('src/pages/dashboard/user/orders/details'));
@@ -86,37 +88,38 @@ export const userRoutes = [
         ),
         children: [
           { element: <UserProfilePage />, index: true },
-          { path: 'profile', element: <UserProfilePage /> },
+          { path: 'profile/profile', element: <UserProfilePage /> },
           { path: 'Sidebar', element: <Sidebar /> },
           { path: 'oldmedicalreportsview/:id', element: <OldmedicalrepotView /> },
           { path: 'prescriptionview/:id', element: <PrescriptionView /> },
           { path: 'medicalreportsview/:id', element: <MedicalrepotView /> },
           { path: 'myprofile/:id', element: <ProfileQr /> },
-          { path: 'medicalreports', element: <Medicalreports /> },
+          { path: 'documents/medicalreports', element: <Medicalreports /> },
           { path: 'emergency', element: <Emergency /> },
           { path: 'watingroom', element: <Watingroom /> },
-          { path: 'prescriptions', element: <PatientPrescriptions /> },
+          { path: 'documents/prescriptions', element: <PatientPrescriptions /> },
           { path: 'bmi', element: <BMI /> },
           { path: 'myhealth', element: <Myhealth /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'bookappointment/:id', element: <Booking /> },
           { path: 'doctorpage/:id', element: <Doctorpage /> },
-          { path: 'insurance', element: <Insurance /> },
+          { path: 'profile/insurance', element: <Insurance /> },
           { path: 'specialities', element: <Specialities /> },
           { path: 'exist', element: <Exist /> },
           { path: 'create', element: <Create /> },
           { path: 'contactus', element: <ContactUS /> },
-          { path: 'account', element: <UserAccountPage /> },
+          { path: 'profile/account', element: <UserAccountPage /> },
           { path: 'share', element: <Share /> },
-          { path: 'history', element: <History /> },
+          { path: 'profile/history', element: <History /> },
           { path: 'historyinfo/:id', element: <HistoryInfo /> },
-          { path: 'financilmovment', element: <FinancilMovment /> },
+          { path: 'financial/financilmovment', element: <FinancilMovment /> },
           { path: 'financilmovment/:id', element: <FinancilMovmentInfo /> },
           { path: 'family', element: <Family /> },
-          { path: 'sickLeave', element: <SickLeave /> },
+          { path: 'blogs', element: <Blogs /> },
+          { path: 'documents/sickLeave', element: <SickLeave /> },
           {
-            path: 'products',
+            path: 'financial/products',
             children: [
               { element: <AllProductsPage />, index: true },
               { path: 'all', element: <AllProductsPage /> },
@@ -127,7 +130,7 @@ export const userRoutes = [
             ],
           },
           {
-            path: 'orders',
+            path: 'financial/orders',
             children: [
               { element: <OrdersPage />, index: true },
               { path: ':id/details', element: <OrdersDetailsPage /> },

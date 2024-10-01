@@ -307,7 +307,7 @@ export default function AccountGeneral({ unitServiceData }) {
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Divider />
               <Stack alignItems="flex-start" gap={1}>
-                <Typography variant="subtitle1">{t('finantial information')}</Typography>
+                <Typography variant="subtitle1">{t('financial information')}</Typography>
                 <RHFCheckbox
                   name="has_tax"
                   onChange={() => setValue('has_tax', !values.has_tax)}

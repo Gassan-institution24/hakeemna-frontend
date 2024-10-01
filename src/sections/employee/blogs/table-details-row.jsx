@@ -18,9 +18,9 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TableDetailsRow({ row, selected, onEditRow }) {
   const {
-    sequence_number,
+    code,
     title,
-    applied,
+    category,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -38,11 +38,11 @@ export default function TableDetailsRow({ row, selected, onEditRow }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        <Box>{sequence_number}</Box>
+        <Box>{code}</Box>
       </TableCell>
 
       <TableCell align="center">{title}</TableCell>
-      <TableCell align="center">{t(applied)}</TableCell>
+      <TableCell align="center">{category?.[t('name_english')]}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

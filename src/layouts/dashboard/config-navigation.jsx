@@ -551,7 +551,7 @@ export function useNavData() {
           },
           {
             show: true,
-            title: t('blogs'),
+            title: t('my blogs'),
             path: paths.employee.documents.blogs.root,
           },
         ].filter((one) => one.show),
@@ -600,6 +600,13 @@ export function useNavData() {
         icon: <Iconify icon="simple-line-icons:calender" />,
         navItemId: 'EMCalenderNav',
       },
+      {
+        show: true,
+        title: t('browse blogs'),
+        path: paths.employee.blogs,
+        icon: <Iconify icon="ic:outline-library-books" />,
+        navItemId: 'EMBlogsNav',
+      },
     ];
     const employeeDashboard = [
       {
@@ -610,38 +617,23 @@ export function useNavData() {
 
     const userItems = [
       {
-        subheader: t('user'),
+        subheader: t('dashboard'),
         items: [
           // USER
-          {
-            title: t('my profile'),
-            path: paths.dashboard.user.profile,
-            icon: <Iconify icon="iconamoon:profile-bold" />,
-          },
-          {
-            title: t('settings'),
-            path: paths.dashboard.user.account,
-            icon: <Iconify icon="solar:settings-bold-duotone" />,
-          },
-          {
-            title: t('my appointments'),
-            path: paths.dashboard.user.patientsappointments,
-            icon: <Iconify icon="ph:calendar-duotone" />,
-          },
           {
             title: t('book appointment'),
             path: paths.dashboard.user.specialities,
             icon: <Iconify icon="icon-park-outline:medicine-chest" />,
           },
           {
-            title: t('my health'),
-            path: paths.dashboard.user.health,
-            icon: <Iconify icon="solar:health-bold" sx={{ color: '#E73E7A' }} />,
-          },
-          {
             title: t('wating room'),
             path: paths.dashboard.user.watingroom,
             icon: <Iconify icon="medical-icon:i-waiting-area" />,
+          },
+          {
+            title: t('my appointments'),
+            path: paths.dashboard.user.patientsappointments,
+            icon: <Iconify icon="ph:calendar-duotone" />,
           },
           // {
           //   title: t('emergency'),
@@ -649,54 +641,96 @@ export function useNavData() {
           //   icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
           // },
           {
-            title: t('my medical reports'),
-            path: paths.dashboard.user.medicalreports,
+            title: t('my documents'),
+            path: '/dashboard/user/documents',
             icon: <Iconify icon="tabler:report-medical" />,
+            children: [
+              {
+                title: t('medical reports'),
+                path: paths.dashboard.user.medicalreports,
+                // icon: <Iconify icon="tabler:report-medical" />,
+              },
+              {
+                title: t('sick Leave'),
+                path: paths.dashboard.user.sickLeave,
+                // icon: <Iconify icon="covid:graph-document-infected-report" />,
+              },
+              {
+                title: t('prescriptions'),
+                path: paths.dashboard.user.prescriptions,
+                // icon: <Iconify icon="material-symbols:prescriptions-outline" />,
+              },
+            ]
           },
           {
-            title: t('sick Leave'),
-            path: paths.dashboard.user.sickLeave,
-            icon: <Iconify icon="covid:graph-document-infected-report" />,
+            title: t('my health'),
+            path: paths.dashboard.user.health,
+            icon: <Iconify icon="solar:health-bold" sx={{ color: '#E73E7A' }} />,
           },
-          {
-            title: t('my prescriptions'),
-            path: paths.dashboard.user.prescriptions,
-            icon: <Iconify icon="material-symbols:prescriptions-outline" />,
-          },
+
           {
             title: t('my family'),
             path: paths.dashboard.user.family,
             icon: <Iconify icon="icon-park-twotone:family" />,
           },
           {
-            title: t('my insurance'),
-            path: paths.dashboard.user.insurance,
-            icon: <Iconify icon="streamline:insurance-hand" />,
-          },
-          {
-            title: t('my History'),
-            path: paths.dashboard.user.history,
-            icon: <Iconify icon="material-symbols:history" />,
-          },
-          {
-            title: t('Financial movements'),
-            path: paths.dashboard.user.financilmovment,
+            title: t('Financial'),
+            path: '/dashboard/user/financial',
             icon: <Iconify icon="material-symbols:finance-rounded" />,
+            children: [
+              {
+                title: t('Financial movements'),
+                path: paths.dashboard.user.financilmovment,
+                // icon: <Iconify icon="material-symbols:finance-rounded" />,
+              },
+              {
+                title: t('my offers'),
+                path: paths.dashboard.user.products.root,
+                // icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+              },
+              {
+                title: t('my orders'),
+                path: paths.dashboard.user.orders.root,
+                // icon: <Iconify icon="fluent-mdl2:product" />,
+              },
+            ]
           },
           {
-            title: t('my offers'),
-            path: paths.dashboard.user.products.root,
-            icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
+            title: t('my profile'),
+            path: '/dashboard/user/profile',
+            icon: <Iconify icon="iconamoon:profile-bold" />,
+            children: [
+              {
+                title: t('profile'),
+                path: paths.dashboard.user.profile,
+                // icon: <Iconify icon="iconamoon:profile-bold" />,
+              },
+              {
+                title: t('settings'),
+                path: paths.dashboard.user.account,
+                // icon: <Iconify icon="solar:settings-bold-duotone" />,
+              },
+              {
+                title: t('insurance'),
+                path: paths.dashboard.user.insurance,
+                // icon: <Iconify icon="streamline:insurance-hand" />,
+              },
+              {
+                title: t('History'),
+                path: paths.dashboard.user.history,
+                // icon: <Iconify icon="material-symbols:history" />,
+              },
+            ]
           },
+          // {
+          //   title: t('contact us'),
+          //   path: paths.dashboard.user.edit,
+          //   icon: <Iconify icon="ic:round-contact-support" />,
+          // },
           {
-            title: t('my orders'),
-            path: paths.dashboard.user.orders.root,
-            icon: <Iconify icon="fluent-mdl2:product" />,
-          },
-          {
-            title: t('contact us'),
-            path: paths.dashboard.user.edit,
-            icon: <Iconify icon="ic:round-contact-support" />,
+            title: t('browse blogs'),
+            path: paths.dashboard.user.blogs,
+            icon: <Iconify icon="ic:outline-library-books" />,
           },
           {
             title: t('share hakeemna'),
