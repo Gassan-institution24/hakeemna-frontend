@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,7 +18,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFUpload, RHFEditor, RHFTextField, RHFSelect } from 'src/components/hook-form';
 
 
-export default function UploadBlogs() {
+export default function UploadBlogs({ currentRow }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { Data, refetch } = useGetBlog_category();
@@ -26,13 +27,18 @@ export default function UploadBlogs() {
 
   const BlogsSchema = Yup.object().shape({
     title: Yup.string().required(),
+    category: Yup.string().required(),
     topic: Yup.string().required(),
     file: Yup.mixed().nullable(),
+    user: Yup.string().required(),
   });
 
   const defaultValues = {
-    file: null,
-    user: user?._id,
+    title: currentRow?.title || '',
+    category: currentRow?.category || null,
+    topic: currentRow?.topic || '',
+    file: currentRow?.file || null,
+    user: currentRow?.user || user?._id,
   };
   const methods = useForm({
     mode: 'all',
@@ -60,7 +66,6 @@ export default function UploadBlogs() {
     },
     [setValue]
   );
-
 
   const onSubmit = async (submitdata) => {
     try {
@@ -99,9 +104,8 @@ export default function UploadBlogs() {
               <MenuItem key={index} value={one._id}>{one?.[t('name_english')]}</MenuItem>
             ))}
           </RHFSelect>
-          <Typography variant='body2'>{t('images')}</Typography>
+          <Typography variant='body2'>{t('image')}</Typography>
           <RHFUpload
-            multiple
             autoFocus
             name="file"
             margin="dense"
@@ -126,3 +130,7 @@ export default function UploadBlogs() {
     </Card>
   );
 }
+
+UploadBlogs.propTypes = {
+  currentRow: PropTypes.object,
+};

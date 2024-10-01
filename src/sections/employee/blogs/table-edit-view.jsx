@@ -5,7 +5,7 @@ import { useParams } from 'src/routes/hooks';
 
 // import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
-import { useGetAdjustabledDocument } from 'src/api/adjustabledocument';
+import { useGetBlog } from 'src/api';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -17,22 +17,22 @@ export default function TableEditView() {
   // const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { adjustabledocument } = useGetAdjustabledDocument(id);
+  const { data } = useGetBlog(id);
 
   const { t } = useTranslate();
 
   return (
     <Container maxWidth="lg">
       <CustomBreadcrumbs
-        heading={t('update adjustable document')}
+        heading={t('update Blog')}
         links={[
           {
             name: t('dashboard'),
             href: paths.employee.root,
           },
           {
-            name: t('adjustable documents'),
-            href: paths.employee.checklist.root,
+            name: t('Blogs'),
+            href: paths.employee.documents.blogs.root,
           },
           { name: t('update') },
         ]}
@@ -40,7 +40,7 @@ export default function TableEditView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {adjustabledocument && <TableNewEditForm currentRow={adjustabledocument} />}
+      {data && <TableNewEditForm currentRow={data} />}
     </Container>
   );
 }
