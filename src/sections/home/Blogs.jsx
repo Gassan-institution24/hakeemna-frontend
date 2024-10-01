@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { Box, Card, Grid, Stack, MenuItem, TextField, Typography, Link } from '@mui/material';
+import {
+  Box,
+  Card,
+  Grid,
+  Stack,
+  MenuItem,
+  TextField,
+  Typography,
+  Link,
+  Button,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -12,16 +22,18 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
 import Image from 'src/components/image/image';
+import { useRouter } from 'src/routes/hooks';
+import Iconify from 'src/components/iconify';
 
 export default function Blogs() {
   const { t } = useTranslate();
   const { data } = useGetBlogs();
   const { Data } = useGetBlog_category();
   const { user } = useAuthContext();
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState('');
-
 
   const formatTextWithLineBreaks = (text, limit = 20) => {
     if (!text) return '';
@@ -113,7 +125,7 @@ export default function Blogs() {
                 <Image
                   src={blog?.file}
                   alt={blog.title}
-                  sx={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                  sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <Box sx={{ p: 2 }}>
                   <Link
@@ -144,9 +156,28 @@ export default function Blogs() {
                     {fDateAndTime(blog.created_at)}
                   </Typography>
                 </Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    bgcolor: 'success.main',
+                    mt: 3,
+                  }}
+                  onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
+                >
+                  {t('View')}
+                </Button>
               </Card>
             ))}
           </Grid>
+          <Stack alignItems="center" sx={{ mt: 8, mb: { xs: 10, md: 15 } }}>
+          <Button
+            size="large"
+            variant="outlined"
+            startIcon={<Iconify icon="svg-spinners:12-dots-scale-rotate" width={24} />}
+          >
+            Load More
+          </Button>
+        </Stack>
         </Box>
       </Card>
     </Stack>

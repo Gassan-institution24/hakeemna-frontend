@@ -24,6 +24,27 @@ export function useGetBlogs() {
 
   return { ...memoizedValue, refetch };
 }
+export function useGetOneBlogs(id) {
+  const URL = endpoints.blogs.one(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      data,
+      length: data?.length,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
 
 export function useGetBlog(id) {
   const URL = endpoints.blogs.one(id);

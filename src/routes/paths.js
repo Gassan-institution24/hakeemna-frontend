@@ -56,6 +56,7 @@ export const paths = {
     Training: `/training`,
     Faq: `/faq`,
     blogs: `/blogs`,
+    BlogsView: (id) => `/blogs/${id}`,
     Termsandcondition: `/termsandcondition`,
     Privacypolicy: `/privacypolicy`,
     book: `/book`,
