@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import React, { lazy, Suspense } from 'react';
 
 import MainLayout from 'src/layouts/main';
@@ -63,6 +63,7 @@ export default function Router() {
     ...userRoutes,
 
     // No match 404
-    { path: '*', element: <Page404 /> },
+    { path: '/404', element: <Page404 /> },
+    { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
