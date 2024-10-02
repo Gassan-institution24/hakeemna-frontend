@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 
 import { LoadingButton } from '@mui/lab';
@@ -43,7 +43,7 @@ export default function EmployeeCard({ employee }) {
   const [signupDialog, setSignupDialog] = useState(false);
   const [patientId, setPatientId] = useState();
   const [selected, setSelected] = useState();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState();
   const [submitting, setSubmitting] = useState(false);
 
   const { appointmentsData, AppointDates, loading, refetch } = useGetEmployeeAppointments(
@@ -55,6 +55,11 @@ export default function EmployeeCard({ employee }) {
       online_available: true,
     }
   );
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(AppointDates[0])
+    }
+  }, [AppointDates,selectedDate])
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     if (authenticated) {
