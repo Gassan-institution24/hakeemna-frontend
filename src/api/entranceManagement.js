@@ -29,7 +29,8 @@ export function useGetWatingPatient(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      entranceData: data,
+      entranceData: data?.entranceManagement,
+      peopleInWaiting: data?.peopleInWaiting,
       loading: isLoading,
       error,
       validating: isValidating,
