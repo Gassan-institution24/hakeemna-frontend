@@ -75,7 +75,7 @@ export default function EmployeePatientToggel() {
 
   return (
     <>
-      <LoadingButton
+      {!user?.strict_employee && <LoadingButton
         component={m.button}
         loading={loading}
         whileTap="tap"
@@ -96,7 +96,7 @@ export default function EmployeePatientToggel() {
             {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
           </Typography>
         )}
-      </LoadingButton>
+      </LoadingButton>}
       <ConfirmDialog
         open={showDialog}
         onClose={() => setShowDialog(false)}

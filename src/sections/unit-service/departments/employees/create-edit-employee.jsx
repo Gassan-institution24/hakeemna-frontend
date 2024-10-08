@@ -67,6 +67,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     speciality: Yup.string(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.string(),
+    strict_employee: Yup.bool(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
     password: Yup.string().required(t('required field')),
@@ -91,6 +92,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
       birth_date: currentTable?.birth_date || '',
+      strict_employee: currentTable?.strict_employee || false,
       visibility_US_page: currentTable?.visibility_US_page || false,
       visibility_online_appointment: currentTable?.visibility_online_appointment || false,
       password: currentTable?.password || '',
@@ -172,9 +174,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         router.push(
           submit.data?.engagement?._id
             ? paths.unitservice.departments.employees.acl(
-                departmentData._id,
-                submit.data?.engagement?._id
-              )
+              departmentData._id,
+              submit.data?.engagement?._id
+            )
             : paths.unitservice.departments.employees.root(departmentData._id)
         );
       }
@@ -250,14 +252,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -271,6 +273,12 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                   {t('female')}
                 </MenuItem>
               </RHFSelect>
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="strict_employee"
+                onChange={() => methods.setValue('strict_employee', !methods.watch('strict_employee'))}
+                label={<Typography sx={{ fontSize: 12 }}>{t('strict account - only for my unit of service')}</Typography>}
+              />
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_US_page"
