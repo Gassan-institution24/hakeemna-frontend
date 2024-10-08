@@ -82,6 +82,7 @@ export default function TableNewEditForm({ currentTable }) {
     speciality: Yup.string().nullable(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.string(),
+    strict_employee: Yup.bool(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
     password: Yup.string().min(8, `${t('must be at least')} 8`),
@@ -106,6 +107,7 @@ export default function TableNewEditForm({ currentTable }) {
       phone: currentTable?.phone || '',
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
+      strict_employee: currentTable?.strict_employee || false,
       visibility_US_page: currentTable?.visibility_US_page || false,
       visibility_online_appointment: currentTable?.visibility_online_appointment || false,
       birth_date: currentTable?.birth_date || '',
@@ -307,6 +309,12 @@ export default function TableNewEditForm({ currentTable }) {
                   {t('female')}
                 </MenuItem>
               </RHFSelect>
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="strict_employee"
+                onChange={() => setValue('strict_employee', !watch('strict_employee'))}
+                label={<Typography sx={{ fontSize: 12 }}>{t('strict account - only for my unit of service')}</Typography>}
+              />
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_US_page"
