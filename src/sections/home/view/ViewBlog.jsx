@@ -1,23 +1,38 @@
-import { useParams } from 'react-router';
+import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
-import { Box, Card, Grid, Stack, Typography } from '@mui/material';
+import { Box, Card, Grid, Stack, Button, Typography } from '@mui/material';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
-import { useGetOneBlogs } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
+import Iconify from 'src/components/iconify';
 
-export default function ViewBlog() {
-  const params = useParams();
-  const { id } = params;
-  const { data } = useGetOneBlogs(id);
-  console.log(data);
+export default function ViewBlog({ data }) {
+  const { t } = useTranslate()
+  const { enqueueSnackbar } = useSnackbar()
 
+  const handleCopyLink = () => {
+    const currentUrl = window.location.href
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      enqueueSnackbar(t('Link copied to clipboard'));
+    }).catch(err => {
+      enqueueSnackbar(t('Failed to copy'), { variant: 'error' });
+    });
+  };
   return (
     <Stack sx={{ p: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card sx={{ width: '70%' }}>
         <Box sx={{ p: 5, textAlign: 'start' }}>
+          <Stack direction='row' justifyContent='flex-end'>
+            <Button onClick={handleCopyLink}>
+              <Iconify icon='icon-park-outline:copy-link' />
+              {'  '}
+              {t("Copy link")}
+            </Button>
+          </Stack>
           <Typography variant="h2" component="h2" sx={{ mb: 10, textAlign: 'center' }}>
             {data?.title}
           </Typography>
@@ -53,8 +68,14 @@ export default function ViewBlog() {
               />
             </Box>
           </Grid>
+          <Stack direction='row' justifyContent='flex-end'>
+            <Typography variant='caption'>{t('read times')}{' : '}{data?.show_number}</Typography>
+          </Stack>
         </Box>
       </Card>
     </Stack>
   );
 }
+ViewBlog.propTypes = {
+  data: PropTypes.object,
+};

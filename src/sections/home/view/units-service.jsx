@@ -1,14 +1,14 @@
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
 
-import { useResponsive } from 'src/hooks/use-responsive';
+// import { useResponsive } from 'src/hooks/use-responsive';
 
 import USServices from '../usservices';
 import UnitServiceHero from '../hero/unit-service-hero';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const mdUp = useResponsive('up', 'md');
+  // const mdUp = useResponsive('up', 'md');
 
   return (
     <>

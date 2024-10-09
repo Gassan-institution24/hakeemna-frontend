@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 
-import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
 import HomeHero from '../hero/home-hero';
 import OurPartners from '../our-partners';
