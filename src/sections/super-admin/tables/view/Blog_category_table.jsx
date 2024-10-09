@@ -126,7 +126,7 @@ export default function HospitalsTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.hospitallist.edit(id));
+      router.push(paths.superadmin.tables.BlogCategory.edit(id));
     },
     [router]
   );

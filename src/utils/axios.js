@@ -187,7 +187,10 @@ export const endpoints = {
       active: (id) => (!id ? null : `/api/rooms/department/${id}/active`),
     },
   },
-  blogcategory: { all: '/api/blogcategory' },
+  blogcategory: {
+    all: '/api/blogcategory',
+    one: (id) => (!id ? null : `/api/blogcategory/${id}`),
+  },
 
   employee_types: {
     all: '/api/employeetypes/',

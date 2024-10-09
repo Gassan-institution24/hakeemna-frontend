@@ -5,17 +5,16 @@ import { useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Card, Stack, Button, Typography, MenuItem } from '@mui/material';
-
+import { Box, Card, Stack, Button, MenuItem, Typography } from '@mui/material';
 
 import axiosInstance from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useGetBlog_category } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFUpload, RHFEditor, RHFTextField, RHFSelect } from 'src/components/hook-form';
+import { RHFUpload, RHFEditor, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 
 export default function UploadBlogs({ currentRow }) {
@@ -80,10 +79,13 @@ export default function UploadBlogs({ currentRow }) {
           formData.append(key, submitdata[key]);
         }
       });
+      if (currentRow) {
+        await axiosInstance.patch(`/api/blogs/${currentRow._id}`, formData);
+      } else {
+        await axiosInstance.post('/api/blogs', formData);
+      }
 
-      await axiosInstance.post('/api/blogs', formData);
-
-      enqueueSnackbar('blog uploaded successfully');
+      enqueueSnackbar(currentRow ? t('updated successfully') : t('created successfully'));
       refetch();
       reset();
     } catch (error) {
@@ -122,7 +124,7 @@ export default function UploadBlogs({ currentRow }) {
           />
           <Stack direction='row' justifyContent='flex-end'>
             <Button type="submit" loading={isSubmitting} variant="contained">
-              {t('create')}
+              {currentRow ? t('update') : t('create')}
             </Button>
           </Stack>
         </FormProvider>

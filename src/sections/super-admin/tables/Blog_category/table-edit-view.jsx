@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetHospital } from 'src/api';
+import { useGetBlog } from 'src/api';
 
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -17,11 +17,11 @@ export default function TableEditView() {
 
   const params = useParams();
   const { id } = params;
-  const { data } = useGetHospital(id);
+  const { data } = useGetBlog(id);
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Update Hospital"
+        heading="Update blog category"
         links={[
           {
             name: 'dashboard',
@@ -32,10 +32,10 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Hospital List',
-            href: paths.superadmin.tables.hospitallist.root,
+            name: 'Blog categories',
+            href: paths.superadmin.tables.BlogCategory.root,
           },
-          { name: 'Update Hospital' },
+          { name: 'Update' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
