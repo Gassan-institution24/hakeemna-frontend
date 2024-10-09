@@ -10,7 +10,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import Image from 'src/components/image';
 import { varFade } from 'src/components/animate';
 
 import Knowleg from './images/knowlegmap.png';

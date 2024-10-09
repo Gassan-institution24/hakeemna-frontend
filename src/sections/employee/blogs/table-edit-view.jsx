@@ -3,9 +3,9 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
+import { useGetBlog } from 'src/api';
 // import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
-import { useGetBlog } from 'src/api';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 

@@ -1,5 +1,5 @@
-import { Navigate, useRoutes } from 'react-router-dom';
 import React, { lazy, Suspense } from 'react';
+import { Navigate, useRoutes } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
 

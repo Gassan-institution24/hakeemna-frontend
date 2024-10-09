@@ -1,6 +1,3 @@
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
@@ -16,20 +13,16 @@ import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  getComparator,
-  TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useGetUserBlogs } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUserBlogs } from 'src/api';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -63,7 +56,7 @@ export default function BlogsTableView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { blogsData, length, loading } = useGetUserBlogs(user?._id, {
+  const { blogsData, length } = useGetUserBlogs(user?._id, {
     page: table.page,
     order: table.order,
     sortBy: table.sortBy,
