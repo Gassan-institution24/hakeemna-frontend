@@ -5,15 +5,16 @@ import {
   Box,
   Card,
   Grid,
+  Link,
   Stack,
+  Button,
   MenuItem,
   TextField,
   Typography,
-  Link,
-  Button,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
@@ -22,8 +23,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
 import Image from 'src/components/image/image';
-import { useRouter } from 'src/routes/hooks';
-import Iconify from 'src/components/iconify';
 
 export default function Blogs() {
   const { t } = useTranslate();
@@ -33,7 +32,7 @@ export default function Blogs() {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterBy, setFilterBy] = useState('');
+  const [filterBy, setFilterBy] = useState();
 
   const formatTextWithLineBreaks = (text, limit = 20) => {
     if (!text) return '';
@@ -54,14 +53,16 @@ export default function Blogs() {
   };
 
   // Handle search and filter
+  console.log(data)
+  console.log(filterBy)
   const filteredBlogs = data?.filter((blog) => {
     const matchesSearch =
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.topic.toLowerCase().includes(searchTerm.toLowerCase());
+      (blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        blog.topic.toLowerCase().includes(searchTerm.toLowerCase())) && (
+        filterBy ? blog.category === filterBy : true
+      )
 
-    const matchesFilter = filterBy ? blog.user?.employee?.name_english === filterBy : true;
-
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   return (
@@ -90,8 +91,8 @@ export default function Blogs() {
             >
               <MenuItem value="">{t('All categorys')}</MenuItem>
               {Data?.map((category, index) => (
-                <MenuItem key={index} value={category?.name_english}>
-                  {category.name_english}
+                <MenuItem key={index} value={category?._id}>
+                  {category?.[t("name_english")]}
                 </MenuItem>
               ))}
             </TextField>
@@ -127,14 +128,13 @@ export default function Blogs() {
                   alt={blog.title}
                   sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
-                <Box sx={{ p: 2 }}>
+                <Box sx={{ p: 2,maxHeight:150 }}>
                   <Link
                     sx={{ color: 'gray' }}
                     href={paths.pages.doctor(
-                      `${
-                        blog.user?.employee?.employee_engagements?.[
-                          user.employee.selected_engagement
-                        ]?._id
+                      `${blog.user?.employee?.employee_engagements?.[
+                        user?.employee?.selected_engagement
+                      ]?._id
                       }_${blog.user?.employee?.name_english?.replace(/ /g, '_')}`
                     )}
                   >
@@ -170,14 +170,14 @@ export default function Blogs() {
             ))}
           </Grid>
           <Stack alignItems="center" sx={{ mt: 8, mb: { xs: 10, md: 15 } }}>
-          <Button
+            {/* <Button
             size="large"
             variant="outlined"
             startIcon={<Iconify icon="svg-spinners:12-dots-scale-rotate" width={24} />}
           >
             Load More
-          </Button>
-        </Stack>
+          </Button> */}
+          </Stack>
         </Box>
       </Card>
     </Stack>

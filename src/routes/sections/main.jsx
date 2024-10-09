@@ -24,7 +24,7 @@ const FAQ = lazy(() => import('src/sections/home/FAQ'));
 const Blogs = lazy(() => import('src/sections/home/Blogs'));
 const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
-const ViewBlogs = lazy(() => import('src/sections/home/ViewBlog'));
+const ViewBlogs = lazy(() => import('src/pages/home/view-blog'));
 
 // ----------------------------------------------------------------------
 

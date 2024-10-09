@@ -14,12 +14,11 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected, onEditRow, onInactivate, onActivate }) {
+export default function TableDetailsRow({ row, selected, onEditRow }) {
   const {
     code,
     name_english,
     name_arabic,
-    status,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -59,32 +58,6 @@ export default function TableDetailsRow({ row, selected, onEditRow, onInactivate
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
-          <MenuItem
-            lang="ar"
-            onClick={() => {
-              onInactivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            lang="ar"
-            onClick={() => {
-              onActivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
-          </MenuItem>
-        )}
-
         <MenuItem
           lang="ar"
           onClick={() => {
@@ -152,8 +125,6 @@ export default function TableDetailsRow({ row, selected, onEditRow, onInactivate
 }
 
 TableDetailsRow.propTypes = {
-  onInactivate: PropTypes.func,
-  onActivate: PropTypes.func,
   onEditRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
