@@ -49,14 +49,14 @@ const _socials = [
     name: 'FaceBook',
     icon: 'eva:facebook-fill',
     color: '#1877F2',
-    path: 'https://www.facebook.com/hakeemna',
+    path: 'https://www.facebook.com/people/Hakeemna-360/61566588266707/',
   },
   {
     value: 'instagram',
     name: 'Instagram',
     icon: 'ant-design:instagram-filled',
     color: '#E02D69',
-    path: 'https://www.instagram.com/hakeemna',
+    path: 'https://www.instagram.com/hakeemna360',
   },
   {
     value: 'linkedin',

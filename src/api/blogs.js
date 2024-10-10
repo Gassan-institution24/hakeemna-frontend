@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetBlogs() {
-  const URL = endpoints.blogs.all;
+export function useGetBlogs(params) {
+  const URL = [endpoints.blogs.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

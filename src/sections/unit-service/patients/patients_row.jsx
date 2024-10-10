@@ -14,6 +14,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useSnackbar } from 'notistack';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +26,18 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const curLangAr = currentLang.value === 'ar';
 
   const router = useRouter();
+  const checkAcl = useAclGuard();
+  const { enqueueSnackbar } = useSnackbar()
   const confirm = useBoolean();
   const popover = usePopover();
+
+  const clickHandler = () => {
+    if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
+      router.push(paths.employee.patients.info(_id))
+    } else {
+      enqueueSnackbar(t('permission denide'), { variant: 'warning' })
+    }
+  }
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -38,7 +50,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
           cursor: 'pointer',
           color: '#3F54EB',
         }}
-        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        onClick={clickHandler}
         align="center"
       >
         {name_english || patient?.name_english}
@@ -48,7 +60,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
           cursor: 'pointer',
           color: '#3F54EB',
         }}
-        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        onClick={clickHandler}
         align="center"
       >
         {name_arabic || patient?.name_arabic}
@@ -58,7 +70,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
           cursor: 'pointer',
           color: '#3F54EB',
         }}
-        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        onClick={clickHandler}
         align="center"
       >
         {curLangAr ? work_group?.name_arabic : work_group?.name_english}
@@ -68,7 +80,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
           cursor: 'pointer',
           color: '#3F54EB',
         }}
-        onClick={() => router.push(paths.unitservice.patients.info(_id))}
+        onClick={clickHandler}
         align="center"
       >
         {file_code}

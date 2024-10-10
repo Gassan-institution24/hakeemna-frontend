@@ -14,7 +14,11 @@ export default function BlogPage() {
     <>
       <Helmet>
         <title>Hakeemna 360 - {data?.title ? data?.title : ''} </title>
-        <meta name="description" content={data?.title} />
+        <meta property="og:title" content={data?.title} />
+        <meta property="og:description" content={data?.topic} />
+        <meta property="og:url" content="http://localhost:3006/blogs/67064128a641c72e14fc4820" />
+        <meta property="og:image" content={data?.file} />
+        <meta name="description" content={data?.topic} />
       </Helmet>
 
       {data && <BlogView data={data} />}
