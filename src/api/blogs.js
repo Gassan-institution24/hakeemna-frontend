@@ -24,8 +24,8 @@ export function useGetBlogs(params) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetOneBlogs(id) {
-  const URL = endpoints.blogs.one(id);
+export function useGetOneBlogs(id, params) {
+  const URL = [endpoints.blogs.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
