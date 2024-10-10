@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetBlogs() {
-  const URL = endpoints.blogs.all;
+export function useGetBlogs(params) {
+  const URL = [endpoints.blogs.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -24,8 +24,8 @@ export function useGetBlogs() {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetOneBlogs(id) {
-  const URL = endpoints.blogs.one(id);
+export function useGetOneBlogs(id, params) {
+  const URL = [endpoints.blogs.one(id), { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

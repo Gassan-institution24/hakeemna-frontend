@@ -52,10 +52,6 @@ export default function Family() {
         <IconButton onClick={dialog.onFalse} sx={{ ml: 'auto', mt: 2 }}>
           <Iconify width={25} icon="iconoir:cancel" />
         </IconButton>
-
-        <DialogTitle>
-          <Typography variant="h4">{t('Does the user have an account?')}</Typography>
-        </DialogTitle>
         <DialogContent>
           <ul>
             <li style={{ opacity: '50%' }}>
@@ -63,6 +59,10 @@ export default function Family() {
             </li>
           </ul>
         </DialogContent>
+        <DialogTitle>
+          <Typography variant="h4">{t('Does the user have an account?')}</Typography>
+        </DialogTitle>
+
         <DialogActions>
           <Button
             href={paths.dashboard.user.exist}
