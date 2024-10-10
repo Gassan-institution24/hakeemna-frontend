@@ -104,10 +104,10 @@ export default function UnitServicePage({ USData }) {
             work_start_time === work_end_time
               ? t('24 hours')
               : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                  work_end_time,
-                  'p',
-                  curLangAr
-                )}`,
+                work_end_time,
+                'p',
+                curLangAr
+              )}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
@@ -285,16 +285,16 @@ export default function UnitServicePage({ USData }) {
         ))}
       </Box>
       <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
-      <Typography sx={{ mt: 2 }} variant="h6">
+      {/* <Typography sx={{ mt: 2 }} variant="h6">
         {t('Employees')}
-      </Typography>
+      </Typography> */}
       <UnitServiceEmployees employees={employeesData} />
       {/* </Stack> */}
     </Stack>
   );
 
   return (
-    <Stack sx={{ m: { md: 10 } }}>
+    <Stack sx={{ m: { md: 10, xs: 2 } }}>
       {renderGallery}
 
       <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
