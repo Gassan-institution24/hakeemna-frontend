@@ -1,17 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { Box, Stack, Dialog, Rating, Typography } from '@mui/material';
+import { Box, Stack, Dialog, Rating, Typography, Button, Card, Grid } from '@mui/material';
 
-import { fDate } from 'src/utils/format-time';
+import { fDate, fDateAndTime } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 import { ConvertToHTML } from 'src/utils/convert-to-html';
 
-import { useGetEmployeeAppointments } from 'src/api';
+import { useGetBlogs, useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
 import FeedbackSection from '../feedback-section';
@@ -22,6 +24,7 @@ export default function DoctorPage({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const router = useRouter()
 
   const [page, setPage] = useState(1);
   const [signupDialog, setSignupDialog] = useState(false);
@@ -36,10 +39,29 @@ export default function DoctorPage({ employeeData }) {
       startDate: selectedDate,
     }
   );
+  const { data } = useGetBlogs({ employee: employeeData?.employee?._id })
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     setSignupDialog(true);
     // setTimeListItem(newValue);
+  };
+
+  const formatTextWithLineBreaks = (text, limit = 20) => {
+    if (!text) return '';
+
+    const chunks = [];
+
+    for (let i = 0; i < text.length; i += 100) {
+      chunks.push(text.slice(i, i + 100));
+    }
+
+    let formattedText = chunks.join('<br />');
+
+    if (text.length > limit) {
+      formattedText = `${text.slice(0, limit)}...`;
+    }
+
+    return formattedText;
   };
 
   return (
@@ -49,14 +71,14 @@ export default function DoctorPage({ employeeData }) {
           gap={3}
           direction={{ lg: 'row' }}
           justifyContent="space-between"
-          margin={5}
-          padding={3}
+          margin={{ md: 5 }}
+          padding={{ md: 3 }}
         >
           <Stack
             direction={{ md: 'row' }}
             alignItems="center"
             justifyContent="center"
-            gap={{ md: 10 }}
+            gap={{ md: 10, xs: 3 }}
           >
             <Image sx={{ width: 300, height: 300 }} src={employeeData.employee?.picture} />
             <Stack mb={3}>
@@ -119,7 +141,7 @@ export default function DoctorPage({ employeeData }) {
             )}
           </Stack>
         </Stack>
-        <Stack gap={3} marginX={5} padding={3}>
+        <Stack gap={3} marginX={{ md: 5 }} padding={{ md: 3 }}>
           <Stack gap={1} flex={1}>
             {(employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me) && (
               <>
@@ -131,14 +153,14 @@ export default function DoctorPage({ employeeData }) {
                     {t('Introductory text')}:
                   </Typography>
                 </Stack>
-                <Typography variant="body2" sx={{ px: 3 }}>
+                <Typography variant="body2" sx={{ px: { md: 3 } }}>
                   {curLangAr
                     ? ConvertToHTML(
-                        employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
-                      )
+                      employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
+                    )
                     : ConvertToHTML(
-                        employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
-                      )}
+                      employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
+                    )}
                 </Typography>
               </>
             )}
@@ -150,7 +172,7 @@ export default function DoctorPage({ employeeData }) {
                 >
                   {t('address')}:
                 </Typography>
-                <Typography variant="body2" sx={{ px: 3 }}>
+                <Typography variant="body2" sx={{ px: { md: 3 } }}>
                   {employeeData?.unit_service?.address}
                 </Typography>
               </>
@@ -167,7 +189,7 @@ export default function DoctorPage({ employeeData }) {
                   </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="left">
-                  <Typography variant="body2" dir="ltr" sx={{ px: 3 }}>
+                  <Typography variant="body2" dir="ltr" sx={{ px: { md: 3 } }}>
                     {employeeData?.employee?.phone}
                   </Typography>
                 </Stack>
@@ -180,7 +202,7 @@ export default function DoctorPage({ employeeData }) {
                     {t('email')}:
                   </Typography>
                 </Stack>
-                <Typography variant="body2" sx={{ px: 3 }} component="h3">
+                <Typography variant="body2" sx={{ px: { md: 3 } }} component="h3">
                   {employeeData?.employee?.email}
                 </Typography>
               </>
@@ -192,7 +214,7 @@ export default function DoctorPage({ employeeData }) {
             </Stack>
             <Stack>
               {employeeData?.unit_service?.insurance?.map((one) => (
-                <Typography variant="body2" sx={{ px: 3 }} component="h3">
+                <Typography variant="body2" sx={{ px: { md: 3 } }} component="h3">
                   {curLangAr ? one.name_arabic : one.name_english}
                 </Typography>
               ))}
@@ -202,7 +224,7 @@ export default function DoctorPage({ employeeData }) {
                 {t('languages')}:
               </Typography>
             </Stack>
-            <Typography variant="body2" sx={{ px: 3 }}>
+            <Typography variant="body2" sx={{ px: { md: 3 } }}>
               {employeeData?.employee?.languages?.map((one) => one).join(', ')}
             </Typography>
             <Stack direction="row">
@@ -210,7 +232,7 @@ export default function DoctorPage({ employeeData }) {
                 {t('certifications')}:
               </Typography>
             </Stack>
-            <Stack px={3} gap={1}>
+            <Stack px={{ md: 3 }} gap={1}>
               {employeeData?.employee?.certifications?.map((one) => {
                 if (one.name && one.year) {
                   return (
@@ -234,7 +256,7 @@ export default function DoctorPage({ employeeData }) {
                 {t('memberships')}:
               </Typography>
             </Stack>
-            <Stack px={3} gap={1}>
+            <Stack px={{ md: 3 }} gap={1}>
               {employeeData?.employee?.memberships?.map((one) => {
                 if (one.name && one.institution) {
                   return (
@@ -259,7 +281,7 @@ export default function DoctorPage({ employeeData }) {
                     {t('other (researchs, books, and conferences)')}:
                   </Typography>
                 </Stack>
-                <Stack px={3} gap={1}>
+                <Stack px={{ md: 3 }} gap={1}>
                   {employeeData?.employee?.other?.map((one) => {
                     if (one.kind && one.name) {
                       return (
@@ -283,6 +305,53 @@ export default function DoctorPage({ employeeData }) {
           <Stack gap={1} flex={1}>
             <FeedbackSection employee={employeeData} />
           </Stack>
+          {data?.length > 0 && <Stack direction="row">
+            <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
+              {t('Blogs')}:
+            </Typography>
+          </Stack>}
+          <Grid
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+              lg: 'repeat(4, 1fr)',
+            }}
+          >
+            {data?.map((blog, index) => (
+              <Card
+                key={index}
+                sx={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  mb: 3,
+                  // width: '75%',
+                  height: '200px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer'
+                }}
+                onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
+              >
+                <Image
+                  src={blog?.file}
+                  alt={blog.title}
+                  sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <Box sx={{ p: 2, maxHeight: 150 }}>
+                  <Typography >{blog.title}</Typography>
+
+                  <Typography variant='body2' sx={{ color: 'gray', mt: 1 }}>
+                    {fDateAndTime(blog.created_at)}
+                  </Typography>
+                </Box>
+              </Card>
+            ))}
+          </Grid>
           <Stack direction="row" gap={1} flexWrap="wrap">
             {employeeData.employee?.keywords?.map((one, index) => (
               <Box
@@ -298,7 +367,7 @@ export default function DoctorPage({ employeeData }) {
         </Stack>
       </Stack>
       <Dialog fullWidth open={signupDialog} minWidth="lg" onClose={() => setSignupDialog(false)}>
-        <Stack sx={{ p: 4 }}>
+        <Stack sx={{ p: { md: 4 } }}>
           {page === 1 && (
             <JwtRegisterView
               afterSignUp={() => setPage(2)}

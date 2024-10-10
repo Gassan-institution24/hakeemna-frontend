@@ -1,35 +1,46 @@
-// import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useResponsive } from 'src/hooks/use-responsive';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
-
-// import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
-
-// import { useAuthContext } from 'src/auth/hooks';
-
-import Footer from './footer';
+import Footer from './footer'; 
 import Header from './header';
 
 // ----------------------------------------------------------------------
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
-  // const router = useRouter();
-
   const homePage = pathname === '/';
-  // const loginPage = pathname === '/login';
-  // const { authenticated } = useAuthContext();
+  const mdUp = useResponsive('up', 'md');
 
-  // useEffect(() => {
-  //   if (authenticated && (loginPage || homePage)) {
-  //     router.push(paths.dashboard.root);
-  //   }
-  // });
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+    if (!mdUp) {
+      if (currentScrollY > lastScrollY) {
+        setShowHeader(false);
+      } else {
+        setShowHeader(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    }
+  }, [lastScrollY, mdUp]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY, handleScroll]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-      <Header />
+      {/* Toggle header visibility based on scroll direction */}
+      {showHeader && <Header />}
 
       <Box
         component="main"

@@ -14,14 +14,16 @@ export default function ViewBlog({ data }) {
   const { t } = useTranslate()
   const { enqueueSnackbar } = useSnackbar()
 
-  const handleCopyLink = () => {
-    const currentUrl = window.location.href
-    navigator.clipboard.writeText(currentUrl).then(() => {
+  const handleCopyLink = async () => {
+    try {
+      const currentUrl = window.location.href;
+      await navigator.clipboard.writeText(currentUrl);
       enqueueSnackbar(t('Link copied to clipboard'));
-    }).catch(err => {
+    } catch (err) {
       enqueueSnackbar(t('Failed to copy'), { variant: 'error' });
-    });
+    }
   };
+
   return (
     <Stack sx={{ p: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card sx={{ width: '70%' }}>
