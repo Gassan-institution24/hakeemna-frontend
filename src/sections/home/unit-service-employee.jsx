@@ -96,7 +96,7 @@ function EmployeeCard({ employee, selected, onSelected }) {
         sx={{ width: 48, height: 48 }}
       />
 
-      <Stack spacing={2} flexGrow={1}>
+      <Stack spacing={{md:2,xs:1}} flexGrow={1}>
         <ListItemText
           component="h2"
           primary={curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
@@ -167,7 +167,7 @@ function EmployeeCard({ employee, selected, onSelected }) {
         </Stack>
       </Stack>
 
-      <Button size="small" variant="outlined" color="inherit" onClick={onSelected}>
+      <Button sx={{width:100}} size="small" variant="outlined" color="inherit" onClick={onSelected}>
         {t('visit profile')}
       </Button>
     </Stack>
