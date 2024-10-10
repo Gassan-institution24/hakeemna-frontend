@@ -52,9 +52,6 @@ export default function Blogs() {
     return formattedText;
   };
 
-  // Handle search and filter
-  console.log(data)
-  console.log(filterBy)
   const filteredBlogs = data?.filter((blog) => {
     const matchesSearch =
       (blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
