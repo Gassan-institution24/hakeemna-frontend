@@ -9,7 +9,14 @@ import BlogView from 'src/sections/home/view/ViewBlog';
 export default function BlogPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetOneBlogs(id);
+  const { data } = useGetOneBlogs(id, {
+    populate: {
+      path: 'user',
+      select: 'employee',
+      populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
+    },
+  });
+
   return (
     <>
       <Helmet>
