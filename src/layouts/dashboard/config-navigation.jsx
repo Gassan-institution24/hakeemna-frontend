@@ -226,7 +226,9 @@ export function useNavData() {
     ];
     const unitServiceItems = [
       {
-        show: isMedLab,
+        show: (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
+          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
+          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) && isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
