@@ -1,0 +1,46 @@
+import Container from '@mui/material/Container';
+
+import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
+
+import { useGetBlog } from 'src/api';
+// import { useSettingsContext } from 'src/components/settings';
+import { useTranslate } from 'src/locales';
+
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
+import TableNewEditForm from './table-new-edit-form';
+
+// ----------------------------------------------------------------------
+
+export default function TableEditView() {
+  // const settings = useSettingsContext();
+  const params = useParams();
+  const { id } = params;
+  const { data } = useGetBlog(id);
+
+  const { t } = useTranslate();
+
+  return (
+    <Container maxWidth="lg">
+      <CustomBreadcrumbs
+        heading={t('update Blog')}
+        links={[
+          {
+            name: t('dashboard'),
+            href: paths.superadmin.root,
+          },
+          {
+            name: t('Blogs'),
+            href: paths.superadmin.blogs.root,
+          },
+          { name: t('update') },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+      {data && <TableNewEditForm currentRow={data} />}
+    </Container>
+  );
+}

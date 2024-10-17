@@ -482,6 +482,13 @@ const ProductCatEditPage = lazy(() =>
   import('src/pages/super-admin/tables/product_categories/edit')
 );
 
+// BLOGS
+const BlogsPage = lazy(() => import('src/pages/super-admin/blogs/table'));
+const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
+const BlogsEditPage = lazy(() =>
+  import('src/pages/super-admin/blogs/edit')
+);
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -605,6 +612,15 @@ export const dashboardRoutes = [
             ],
           },
           // { path: 'list', element: <UnitservicesPage /> },
+        ],
+      },
+      {
+        path: 'blogs',
+        children: [
+          { element: <BlogsPage />, index: true },
+          { path: 'list', element: <BlogsPage /> },
+          { path: 'new', element: <BlogsNewPage /> },
+          { path: ':id/edit', element: <BlogsEditPage /> },
         ],
       },
       {
