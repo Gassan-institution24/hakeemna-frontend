@@ -440,6 +440,13 @@ export const endpoints = {
     all: '/api/localCL',
     one: (id) => (!id ? null : `/api/localCL/${id}`),
   },
+  attendence: {
+    all: '/api/attendence',
+    leave: '/api/attendence/leave',
+    lastAttendance: '/api/attendence/mylast',
+    one: (id) => (!id ? null : `/api/attendence/${id}`),
+    employee: (id) => (!id ? null : `/api/attendence/employee/${id}`),
+  },
   answers: {
     all: '/api/answersandquestiones',
     one: (id) => (!id ? null : `/api/answersandquestiones/${id}`),
