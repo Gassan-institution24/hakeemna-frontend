@@ -12,7 +12,7 @@ export default function BlogPage() {
   const { data } = useGetOneBlogs(id, {
     populate: {
       path: 'user',
-      select: 'employee',
+      select: 'employee role',
       populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
     },
   });
