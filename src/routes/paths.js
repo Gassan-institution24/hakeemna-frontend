@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import { hr } from "date-fns/locale";
+
 const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth-demo',
@@ -408,6 +410,11 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/info`,
     },
+    blogs: {
+      root: `${ROOTS.SUPERADMIN}/blogs`,
+      new: `${ROOTS.SUPERADMIN}/blogs/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/blogs/${id}/edit`,
+    },
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
       list: `${ROOTS.SUPERADMIN}/tables/list`,
@@ -598,11 +605,16 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/product_categories/${id}/edit`,
       },
     },
+
   },
 
   // unit of service
   unitservice: {
     root: `${ROOTS.SUPERADMIN}/us`,
+    hr: {
+      root: `${ROOTS.SUPERADMIN}/us/hr`,
+      employee: (id) => `${ROOTS.SUPERADMIN}/us/hr/${id}`,
+    },
     acl: {
       root: `${ROOTS.SUPERADMIN}/us/acl`,
       unitservice: `${ROOTS.SUPERADMIN}/us/acl/unitservice`,
