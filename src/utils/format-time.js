@@ -4,6 +4,7 @@ import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 import { useLocales } from 'src/locales';
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
@@ -109,6 +110,11 @@ export function isBetween(inputDate, startDate, endDate) {
 export function isAfter(startDate, endDate) {
   const results =
     startDate && endDate ? new Date(startDate).getTime() > new Date(endDate).getTime() : false;
+
+  return results;
+}
+export function fHourMin(time, endDate) {
+  const results = <Typography variant='body2' sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>{(Math.floor(time / 60)).toString().padStart(2, '0')} : {(time % 60).toString().padStart(2, '0')}</Typography>
 
   return results;
 }
