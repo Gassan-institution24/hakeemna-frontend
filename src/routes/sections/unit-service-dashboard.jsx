@@ -229,6 +229,13 @@ const EmployeeDepartmentPermission = lazy(() =>
 const EmployeeWGPermission = lazy(() =>
   import('src/pages/unit-service/permissions/employee-workgroup-permissions')
 );
+
+// HR
+const HRPage = lazy(() => import('src/pages/unit-service/hr/home'));
+const HREmployeePage = lazy(() => import('src/pages/unit-service/hr/employee'));
+// const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
+// const PatientNewPage = lazy(() => import('src/pages/unit-service/patients/new-patient'));
+
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -360,6 +367,14 @@ export const unitServiceDashboardRoutes = [
           { path: 'list', element: <AppointmentsHomePage /> },
           { path: ':id/edit', element: <AppointmentsEditPage /> },
           { path: 'book', element: <AppointmentsBookPage /> },
+        ],
+      },
+      {
+        path: 'hr',
+        children: [
+          { element: <HRPage />, index: true },
+          { path: 'list', element: <HRPage /> },
+          { path: ':id', element: <HREmployeePage /> },
         ],
       },
       {

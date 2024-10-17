@@ -144,6 +144,11 @@ export function useNavData() {
             path: paths.superadmin.adjustableServices.root,
             icon: <Iconify icon="ic:sharp-published-with-changes" />,
           },
+          {
+            title: t('my blogs'),
+            path: paths.superadmin.blogs.root,
+            icon: <Iconify icon="ic:outline-library-books" />,
+          },
         ],
       },
     ];
@@ -347,6 +352,14 @@ export function useNavData() {
           { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
           { title: t('employee permission'), path: paths.unitservice.acl.employees },
         ],
+      },
+      {
+        show:
+          // checkAcl({ category: 'unit_service', subcategory: 'hr', acl: 'read' }) &&
+          true,
+        title: t('human resource'),
+        path: paths.unitservice.hr.root,
+        icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),

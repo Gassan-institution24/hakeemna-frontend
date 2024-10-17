@@ -1,0 +1,166 @@
+import PropTypes from 'prop-types';
+
+import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+
+
+import { useTranslate } from 'src/locales';
+import { fDate, fTime } from 'src/utils/format-time';
+
+import Iconify from 'src/components/iconify';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+// import UploadAnalysis from '../upload-analysis';
+
+// ----------------------------------------------------------------------
+
+export default function AttendanceRow({
+  row,
+  selected,
+  refetch,
+  onSelectRow,
+  onViewRow,
+  onCancelRow,
+  onDeleteRow,
+}) {
+  const {
+    date,
+    check_in_time,
+    check_out_time,
+    leave_start,
+    leave_end,
+    late,
+    early_leave,
+    leaveTime,
+    workTime,
+    created_at,
+    user_creation,
+    ip_address_user_creation,
+    updated_at,
+    user_modification,
+    ip_address_user_modification,
+    modifications_nums,
+  } = row;
+  const { t } = useTranslate();
+  const weekDays = [
+    t('Sat'),
+    t('Sun'),
+    t('Mon'),
+    t('Tue'),
+    t('Wed'),
+    t('Thu'),
+    t('Fri'),
+  ];
+
+  const popover = usePopover();
+  const DDL = usePopover();
+
+  return (
+    <>
+      <TableRow hover selected={selected}>
+        <TableCell align="center">
+          {weekDays[new Date(date).getDay() + 1]}{' '}{fDate(date, 'dd MMM')}
+        </TableCell>
+        <TableCell align="center">
+          {fTime(check_in_time)}
+        </TableCell>
+        <TableCell align="center">
+          {fTime(check_out_time)}
+        </TableCell>
+        <TableCell align="center">
+          {leaveTime > 60 ? `${Math.floor(leaveTime / 60)} : ${(leaveTime % 60).toString().padStart(2, '0')} hr` : `${leaveTime} min`}
+        </TableCell>
+        <TableCell align="center">
+          {late > 60 ? `${Math.floor(late / 60)} : ${(late % 60).toString().padStart(2, '0')} hr` : `${late} min`}
+        </TableCell>
+        <TableCell align="center">
+          {early_leave > 60 ? `${Math.floor(early_leave / 60)} : ${(early_leave % 60).toString().padStart(2, '0')} hr` : `${early_leave} min`}
+        </TableCell>
+        <TableCell align="center">
+          {workTime > 60 ? `${Math.floor(workTime / 60)} : ${(workTime % 60).toString().padStart(2, '0')} hr` : `${workTime} min`}
+        </TableCell>
+
+
+        <TableCell align="right" sx={{ px: 1 }}>
+          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+      >
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          {t('DDL')}
+        </MenuItem>
+      </CustomPopover>
+
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
+      </CustomPopover>
+    </>
+  );
+}
+
+AttendanceRow.propTypes = {
+  onDeleteRow: PropTypes.func,
+  onCancelRow: PropTypes.func,
+  onSelectRow: PropTypes.func,
+  onViewRow: PropTypes.func,
+  refetch: PropTypes.func,
+  row: PropTypes.object,
+  selected: PropTypes.bool,
+};
