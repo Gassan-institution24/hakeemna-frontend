@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 
 import { useTranslate } from 'src/locales';
-import { fDate, fTime } from 'src/utils/format-time';
+import { fDate, fHourMin, fTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -47,13 +47,13 @@ export default function AttendanceRow({
   } = row;
   const { t } = useTranslate();
   const weekDays = [
-    t('Sat'),
-    t('Sun'),
-    t('Mon'),
-    t('Tue'),
-    t('Wed'),
-    t('Thu'),
-    t('Fri'),
+    t('Saturday'),
+    t('Sunday'),
+    t('Monday'),
+    t('Tuesday'),
+    t('Wednesday'),
+    t('Thursday'),
+    t('Friday'),
   ];
 
   const popover = usePopover();
@@ -63,7 +63,7 @@ export default function AttendanceRow({
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">
-          {weekDays[new Date(date).getDay() + 1]}{' '}{fDate(date, 'dd MMM')}
+          {weekDays[new Date(date).getDay() + 1]}{' '}{fDate(date, 'dd MMMMMMM')}
         </TableCell>
         <TableCell align="center">
           {fTime(check_in_time)}
@@ -72,16 +72,16 @@ export default function AttendanceRow({
           {fTime(check_out_time)}
         </TableCell>
         <TableCell align="center">
-          {leaveTime > 60 ? `${Math.floor(leaveTime / 60)} : ${(leaveTime % 60).toString().padStart(2, '0')} hr` : `${leaveTime} min`}
+          {fHourMin(leaveTime)}
         </TableCell>
         <TableCell align="center">
-          {late > 60 ? `${Math.floor(late / 60)} : ${(late % 60).toString().padStart(2, '0')} hr` : `${late} min`}
+          {fHourMin(late)}
         </TableCell>
         <TableCell align="center">
-          {early_leave > 60 ? `${Math.floor(early_leave / 60)} : ${(early_leave % 60).toString().padStart(2, '0')} hr` : `${early_leave} min`}
+          {fHourMin(early_leave)}
         </TableCell>
         <TableCell align="center">
-          {workTime > 60 ? `${Math.floor(workTime / 60)} : ${(workTime % 60).toString().padStart(2, '0')} hr` : `${workTime} min`}
+          {fHourMin(workTime)}
         </TableCell>
 
 
