@@ -28,7 +28,7 @@ export default function ViewBlog({ data }) {
         enqueueSnackbar(t('Failed to copy'), { variant: 'error' });
       });
   };
-  console.log(data);
+console.log(data);
 
   // Function to detect if the title is in Arabic
   const isArabic = (text) => {
@@ -131,22 +131,26 @@ export default function ViewBlog({ data }) {
               <Iconify width={20} icon="lucide:eye" />
             </Typography>
 
-            <Typography
-              dir={isArabic(data?.title) ? 'rtl' : 'ltr'}
-              sx={{
-                cursor: 'pointer',
-                display: 'flex', // Aligns icon with the text
-                alignItems: 'center',
-                '&:hover': {
-                  color: 'green', // Change text color to green on hover
-                },
-              }}
-              onClick={handleNavigateToDoctor} // Navigate when clicked
-            >
-              {data?.user?.employee?.name_english}
-              &nbsp;
-              <Iconify width={20} icon="mdi:user" />
-            </Typography>
+            {data?.user?.role === 'superadmin' ? (
+              ''
+            ) : (
+              <Typography
+                dir={isArabic(data?.title) ? 'rtl' : 'ltr'}
+                sx={{
+                  cursor: 'pointer',
+                  display: 'flex', // Aligns icon with the text
+                  alignItems: 'center',
+                  '&:hover': {
+                    color: 'green', // Change text color to green on hover
+                  },
+                }}
+                onClick={handleNavigateToDoctor} // Navigate when clicked
+              >
+                {data?.user?.employee?.name_english}
+                &nbsp;
+                <Iconify width={20} icon="mdi:user" />
+              </Typography>
+            )}
 
             <Typography
               dir={isArabic(data?.title) ? 'rtl' : 'ltr'}
