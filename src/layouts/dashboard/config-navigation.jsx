@@ -231,9 +231,11 @@ export function useNavData() {
     ];
     const unitServiceItems = [
       {
-        show: (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
-          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
-          checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) && isMedLab,
+        show:
+          (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
+            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
+            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) &&
+          isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
@@ -675,7 +677,7 @@ export function useNavData() {
                 path: paths.dashboard.user.prescriptions,
                 // icon: <Iconify icon="material-symbols:prescriptions-outline" />,
               },
-            ]
+            ],
           },
           {
             title: t('my health'),
@@ -708,7 +710,7 @@ export function useNavData() {
                 path: paths.dashboard.user.orders.root,
                 // icon: <Iconify icon="fluent-mdl2:product" />,
               },
-            ]
+            ],
           },
           {
             title: t('my profile'),
@@ -735,7 +737,7 @@ export function useNavData() {
                 path: paths.dashboard.user.history,
                 // icon: <Iconify icon="material-symbols:history" />,
               },
-            ]
+            ],
           },
           // {
           //   title: t('contact us'),

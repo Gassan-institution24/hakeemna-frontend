@@ -114,7 +114,9 @@ export default function Whydoc() {
           loading="lazy"
           alt="medical services"
           src={curLangAr ? knowlegmapAR : Knowleg}
-          srcSet={`${curLangAr ? knowlegmapAR : Knowleg} 300w, ${curLangAr ? knowlegmapAR : Knowleg} 600w`}
+          srcSet={`${curLangAr ? knowlegmapAR : Knowleg} 300w, ${
+            curLangAr ? knowlegmapAR : Knowleg
+          } 600w`}
           style={{
             width: '100%',
             maxWidth: '600px',

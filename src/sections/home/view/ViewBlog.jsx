@@ -28,7 +28,7 @@ export default function ViewBlog({ data }) {
         enqueueSnackbar(t('Failed to copy'), { variant: 'error' });
       });
   };
-console.log(data);
+  console.log(data);
 
   // Function to detect if the title is in Arabic
   const isArabic = (text) => {

@@ -47,7 +47,7 @@ export function useGetOneBlogs(id, params) {
 }
 
 export function useGetBlog(id) {
-  const URL = endpoints.blogcategory.one(id);
+  const URL = endpoints.blogs.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

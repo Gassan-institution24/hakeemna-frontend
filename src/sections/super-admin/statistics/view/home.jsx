@@ -52,7 +52,14 @@ export default function OverviewAnalyticsView() {
             title="total users"
             total={usersNumber}
             color="error"
-            icon={<img decoding="async" loading='lazy' alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+            icon={
+              <img
+                decoding="async"
+                loading="lazy"
+                alt="icon"
+                src="/assets/icons/glass/ic_glass_message.png"
+              />
+            }
           />
         </Grid>
 
@@ -60,7 +67,14 @@ export default function OverviewAnalyticsView() {
           <AnalyticsWidgetSummary
             title="units of service"
             total={unitServicesNumber}
-            icon={<img decoding="async" loading='lazy' alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+            icon={
+              <img
+                decoding="async"
+                loading="lazy"
+                alt="icon"
+                src="/assets/icons/glass/ic_glass_bag.png"
+              />
+            }
           />
         </Grid>
 
@@ -69,7 +83,14 @@ export default function OverviewAnalyticsView() {
             title="employees"
             total={employeesNumber}
             color="warning"
-            icon={<img decoding="async" loading='lazy' alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+            icon={
+              <img
+                decoding="async"
+                loading="lazy"
+                alt="icon"
+                src="/assets/icons/glass/ic_glass_buy.png"
+              />
+            }
           />
         </Grid>
 
@@ -78,7 +99,14 @@ export default function OverviewAnalyticsView() {
             title="patients"
             total={patientsNumber}
             color="info"
-            icon={<img decoding="async" loading='lazy' alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+            icon={
+              <img
+                decoding="async"
+                loading="lazy"
+                alt="icon"
+                src="/assets/icons/glass/ic_glass_users.png"
+              />
+            }
           />
         </Grid>
         <Grid xs={12}>

@@ -84,7 +84,8 @@ export default function ServiceUnitPopover() {
 
   return (
     <>
-      {!user?.strict_employee && ['employee', 'admin'].includes(user?.role) &&
+      {!user?.strict_employee &&
+        ['employee', 'admin'].includes(user?.role) &&
         user?.employee?.employee_engagements?.length > 1 && (
           <IconButton
             component={m.button}

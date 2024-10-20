@@ -35,7 +35,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-
 const defaultFilters = {
   name: '',
   USType: '',
@@ -51,7 +50,7 @@ const defaultFilters = {
 
 export default function CompaniesTableView() {
   /// edit
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(false);
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: 'code' },
@@ -65,8 +64,8 @@ export default function CompaniesTableView() {
     { id: 'address', label: 'address' },
     { id: 'phone_number_1', label: 'phone_number_1' },
     { id: 'Phone_number_2', label: 'Phone_number_2' },
-    { id: 'status', label: 'status',width: 120 },
-    { id: 'com_note', label: 'com_note',width:200 },
+    { id: 'status', label: 'status', width: 120 },
+    { id: 'com_note', label: 'com_note', width: 200 },
     showAll && { id: 'insurance', label: 'insurance' },
     showAll && { id: 'info', label: 'info' },
     showAll && { id: 'work_shift', label: 'work_shift' },
@@ -79,7 +78,6 @@ export default function CompaniesTableView() {
     { id: '', width: 50 },
   ].filter(Boolean);
   const table = useTable({ defaultOrderBy: 'code' });
-
 
   const componentRef = useRef();
 
@@ -220,7 +218,8 @@ export default function CompaniesTableView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
-        <Checkbox checked={showAll} onChange={() => setShowAll(!showAll)} />show all
+        <Checkbox checked={showAll} onChange={() => setShowAll(!showAll)} />
+        show all
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
@@ -232,7 +231,6 @@ export default function CompaniesTableView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
-
         <TableContainer>
           <Scrollbar sx={{ height: '60vh', position: 'relative' }}>
             <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
@@ -330,17 +328,19 @@ export default function CompaniesTableView() {
                   <TableCell />
                   <TableCell />
                   <TableCell />
-                  {showAll && <>
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
-                  </>}
+                  {showAll && (
+                    <>
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                    </>
+                  )}
                 </TableRow>
                 {dataFiltered
                   .slice(
@@ -364,7 +364,6 @@ export default function CompaniesTableView() {
             </Table>
           </Scrollbar>
         </TableContainer>
-
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
