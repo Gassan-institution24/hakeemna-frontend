@@ -111,11 +111,25 @@ export default function DoctorPage({ employeeData }) {
                 </Typography>
               </Stack>
               {employeeData?.fees && (
-                <Stack direction="row" gap={1} mt={2}>
+                <Stack direction="row" gap={1} mb={2}>
                   <Typography variant="body2">{t('fees')}:</Typography>
-                  <Typography variant="body2">
+                  {employeeData?.fees_after_discount ? <>
+                    <Typography sx={{
+                      textDecoration: 'line-through',
+                      textDecorationColor: 'red',
+                      textDecorationThickness: '2px',
+                    }} variant="body2">
+                      {fCurrency(employeeData?.fees, employeeData.currency?.symbol)}
+                    </Typography>
+                    <Typography variant="body2">
+                      {fCurrency(employeeData?.fees_after_discount, employeeData.currency?.symbol)}
+                    </Typography>
+                    <Typography color='primary.main' variant="caption">
+                      {t('special offer for Hakeemna users')}
+                    </Typography>
+                  </> : <Typography variant="body2">
                     {fCurrency(employeeData?.fees, employeeData.currency?.symbol)}
-                  </Typography>
+                  </Typography>}
                 </Stack>
               )}
             </Stack>
@@ -157,11 +171,11 @@ export default function DoctorPage({ employeeData }) {
                 <Typography variant="body2" sx={{ px: { md: 3 } }}>
                   {curLangAr
                     ? ConvertToHTML(
-                        employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
-                      )
+                      employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
+                    )
                     : ConvertToHTML(
-                        employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
-                      )}
+                      employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
+                    )}
                 </Typography>
               </>
             )}
