@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 
 import HREmployeeView from 'src/sections/unit-service/hr/view/employee';

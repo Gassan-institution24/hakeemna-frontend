@@ -2,16 +2,11 @@ import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSActiveWorkGroups, useGetUSActiveWorkShifts } from 'src/api';
+// import { useAuthContext } from 'src/auth/hooks';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -28,9 +23,9 @@ export default function AttendanceToolbar({
   options,
 }) {
   const { t } = useTranslate();
-  const { user } = useAuthContext();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { user } = useAuthContext();
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const popover = usePopover();
 

@@ -13,7 +13,6 @@ import { fDate, fTime } from 'src/utils/format-time';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -37,7 +36,7 @@ export default function UnitServiceEmployeesRow({
     salary,
     start_time,
     end_time,
-    adjust_schedual,
+    // adjust_schedual,
     status,
     created_at,
     user_creation,

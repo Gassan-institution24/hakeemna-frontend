@@ -3,10 +3,11 @@ import React, { useState, useCallback } from 'react';
 
 import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui/material';
 
+import { fTime } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+
 import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
-import { fCurrency } from 'src/utils/format-number';
-import { fTime } from 'src/utils/format-time';
 
 import EditEmployee from '../employee-profile/employee-edit';
 import EmployeeAttendence from '../employee-profile/employee-attendence';
