@@ -7,9 +7,9 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
+import { fDate, fTime, fHourMin } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { fDate, fHourMin, fTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -31,8 +31,8 @@ export default function AttendanceRow({
     date,
     check_in_time,
     check_out_time,
-    leave_start,
-    leave_end,
+    // leave_start,
+    // leave_end,
     late,
     early_leave,
     leaveTime,

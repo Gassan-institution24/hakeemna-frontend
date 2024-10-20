@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,17 +20,11 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
-import { useGetMyLastAttendence } from 'src/api';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { fTime } from 'src/utils/format-time';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useTranslate } from 'src/locales';
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
+import EmployeeAttendence from './EmployeeAttendence';
 import AccountPopover from '../common/account-popover';
-// import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
 import ServiceUnitPopover from '../common/service-unit-popover';
 import NotificationsPopover from '../common/notifications-popover';
@@ -41,10 +35,8 @@ import NotificationsPopoverPatient from '../common/notifications-popover/indexPa
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
   const router = useRouter();
-  const { t } = useTranslate()
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const { attendence, refetch } = useGetMyLastAttendence()
   const parentToken = localStorage.getItem('parentToken');
   const switchBack = () => {
     localStorage.setItem('accessToken', parentToken);
@@ -52,8 +44,7 @@ export default function Header({ onOpenNav }) {
     router.push(PATH_AFTER_LOGIN);
     window.location.reload();
   };
-  const hasAttendenceToday = new Date(attendence?.date).getFullYear() === new Date().getFullYear() && new Date(attendence?.date).getMonth() === new Date().getMonth() && new Date(attendence?.date).getDay() === new Date().getDay()
-  const changingAttendence = usePopover()
+
 
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
@@ -65,44 +56,7 @@ export default function Header({ onOpenNav }) {
 
   const offsetTop = offset && !isNavHorizontal;
 
-  const getCoordinates = () => (new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const coordinates = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          resolve(coordinates);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-        }
-      );
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-  }))
 
-  const handleAttendence = async () => {
-    try {
-      const coordinates = await getCoordinates();
-      await axiosInstance.post(endpoints.attendence.all, { coordinates })
-      changingAttendence.onClose()
-      refetch()
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const handleLeave = async () => {
-    try {
-      await axiosInstance.post(endpoints.attendence.leave)
-      changingAttendence.onClose()
-      refetch()
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const renderContent = (
     <>
@@ -113,10 +67,11 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <Searchbar />
-      {['employee', 'admin'].includes(user?.role) && ((!attendence || attendence?.check_out_time) ?
+      {['employee', 'admin'].includes(user?.role) && <EmployeeAttendence />}
+      {/* {['employee', 'admin'].includes(user?.role) && ((!attendence || attendence?.check_out_time) ?
         (!hasAttendenceToday && <Button variant='contained' color='primary' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check in")}</Button>) :
         <Button variant='contained' color='warning' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check out")}</Button>)
-      }
+      } */}
 
       {/* <TimeOutInActive /> */}
       <Stack
@@ -145,20 +100,6 @@ export default function Header({ onOpenNav }) {
 
         <AccountPopover />
       </Stack>
-      <CustomPopover open={changingAttendence.open} onClose={changingAttendence.onClose}>
-        <Stack alignItems='center' p={1}>
-          <Typography variant='h6'>{fTime(new Date())}</Typography>
-          {(!attendence || attendence?.check_out_time) ?
-            <Button variant='contained' color='primary' onClick={handleAttendence} sx={{ mt: 2 }}>{t("check in")}</Button> :
-            <>
-              {!attendence?.leave_end && (attendence?.leave_start ?
-                <Button variant='contained' color='error' onClick={handleLeave} sx={{ mt: 2 }}>{t("end leave")}</Button> :
-                <Button variant='contained' color='primary' onClick={handleLeave} sx={{ mt: 2 }}>{t("start leave")}</Button>)}
-              <Button variant='contained' color='warning' onClick={handleAttendence} sx={{ mt: 2 }}>{t("check out")}</Button>
-            </>
-          }
-        </Stack>
-      </CustomPopover>
 
     </>
   );

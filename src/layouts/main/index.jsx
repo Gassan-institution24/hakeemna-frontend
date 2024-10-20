@@ -1,8 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useResponsive } from 'src/hooks/use-responsive';
 import PropTypes from 'prop-types';
+import { useState, useEffect, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
+
 import { usePathname } from 'src/routes/hooks';
+
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import Footer from './footer'; 
 import Header from './header';
 

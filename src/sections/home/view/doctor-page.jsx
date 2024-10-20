@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { Box, Stack, Dialog, Rating, Typography, Button, Card, Grid } from '@mui/material';
+import { Box, Card, Grid, Stack, Dialog, Rating, Typography } from '@mui/material';
 
-import { fDate, fDateAndTime } from 'src/utils/format-time';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { fCurrency } from 'src/utils/format-number';
 import { ConvertToHTML } from 'src/utils/convert-to-html';
+import { fDate, fDateAndTime } from 'src/utils/format-time';
 
-import { useGetBlogs, useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetBlogs, useGetEmployeeAppointments } from 'src/api';
 
 import Image from 'src/components/image';
 
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
 import FeedbackSection from '../feedback-section';
@@ -46,23 +47,23 @@ export default function DoctorPage({ employeeData }) {
     // setTimeListItem(newValue);
   };
 
-  const formatTextWithLineBreaks = (text, limit = 20) => {
-    if (!text) return '';
+  // const formatTextWithLineBreaks = (text, limit = 20) => {
+  //   if (!text) return '';
 
-    const chunks = [];
+  //   const chunks = [];
 
-    for (let i = 0; i < text.length; i += 100) {
-      chunks.push(text.slice(i, i + 100));
-    }
+  //   for (let i = 0; i < text.length; i += 100) {
+  //     chunks.push(text.slice(i, i + 100));
+  //   }
 
-    let formattedText = chunks.join('<br />');
+  //   let formattedText = chunks.join('<br />');
 
-    if (text.length > limit) {
-      formattedText = `${text.slice(0, limit)}...`;
-    }
+  //   if (text.length > limit) {
+  //     formattedText = `${text.slice(0, limit)}...`;
+  //   }
 
-    return formattedText;
-  };
+  //   return formattedText;
+  // };
 
   return (
     <>

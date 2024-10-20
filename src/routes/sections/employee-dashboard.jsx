@@ -141,7 +141,7 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: ':id/edit', element: <AdjustEditPage /> },
         ],
       },
-      { path: 'blogs', element: <BrowseBlogs /> },
+      { path: 'browzeblogs', element: <BrowseBlogs /> },
       {
         path: 'documents/blogs',
         children: [

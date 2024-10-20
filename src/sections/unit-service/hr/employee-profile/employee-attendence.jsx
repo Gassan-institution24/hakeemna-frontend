@@ -3,27 +3,19 @@ import { useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
-
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAttendence } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import {
   useTable,
   emptyRows,

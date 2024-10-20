@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -10,12 +11,11 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useSnackbar } from 'notistack';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 

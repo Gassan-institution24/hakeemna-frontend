@@ -1,10 +1,11 @@
 import ar from 'date-fns/locale/ar-SA';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
+import { Typography } from '@mui/material';
+
 import { useLocales } from 'src/locales';
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
