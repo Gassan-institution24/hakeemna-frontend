@@ -77,10 +77,20 @@ export default function FAQ() {
                 aria-controls="panel1-content"
                 id="panel1-header"
               >
-                <Typography>test</Typography>
+                <Typography>
+                  ما هي المعلومات الطبية التي يمكنني رفعها وتخزينها على منصة حكيمنا؟
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>test</Typography>
+                <Typography>
+                  على منصة حكيمنا، يمكنك رفع وتخزين جميع معلوماتك الطبية المهمة، بما في ذلك:
+                  <br /> الصور الطبية مثل الأشعة السينية أو الرنين المغناطيسي. <br />
+                  نتائج التحاليل والفحوصات الطبية.
+                  <br />
+                  التقارير الطبية من الأطباء والمستشفيات.
+                  <br />
+                  أي مستندات أخرى تتعلق بتاريخك الصحي.
+                </Typography>
               </AccordionDetails>
             </Accordion>
           </Card>
