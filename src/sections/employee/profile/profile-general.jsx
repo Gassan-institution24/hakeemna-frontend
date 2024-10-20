@@ -157,6 +157,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     keywords: Yup.array(),
     arabic_keywords: Yup.array(),
     fees: Yup.number().required(t('required field')),
+    fees_after_discount: Yup.number(),
     // currency: Yup.string().required(t('required field')),
   });
 
@@ -193,13 +194,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
     certifications: employeeData?.certifications?.length
       ? employeeData?.certifications
       : [
-          {
-            name: '',
-            institution: '',
-            year: null,
-          },
-        ],
+        {
+          name: '',
+          institution: '',
+          year: null,
+        },
+      ],
     fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
+    fees_after_discount: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees_after_discount || 0,
     // currency:
     //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
     //   currencies?.[0]?._id,
@@ -277,7 +279,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
         endpoints.employee_engagements.one(
           user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
-        { fees: data.fees, currency: data?.currency }
+        { fees: data.fees, fees_after_discount: data.fees_after_discount, currency: data?.currency }
       );
       enqueueSnackbar(t('updated successfully!'));
       refetch();
@@ -387,7 +389,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-                // value={values.profrssion_practice_num}
+              // value={values.profrssion_practice_num}
               />
               <TextField
                 // disabled
@@ -485,6 +487,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
                 }}
               />
+              <RHFTextField
+                type="number"
+                name="fees_after_discount"
+                label={t('fees after discount')}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
+                }}
+              />
             </Box>
           </Card>
         </Grid>
@@ -507,14 +517,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -540,14 +550,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
