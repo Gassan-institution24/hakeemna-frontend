@@ -1,10 +1,11 @@
 import ar from 'date-fns/locale/ar-SA';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
+import { Typography } from '@mui/material';
+
 import { useLocales } from 'src/locales';
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
@@ -114,7 +115,14 @@ export function isAfter(startDate, endDate) {
   return results;
 }
 export function fHourMin(time, endDate) {
-  const results = <Typography variant='body2' sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>{(Math.floor(time / 60)).toString().padStart(2, '0')} : {(time % 60).toString().padStart(2, '0')}</Typography>
+  const results = (
+    <Typography variant="body2" sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>
+      {Math.floor(time / 60)
+        .toString()
+        .padStart(2, '0')}{' '}
+      : {(time % 60).toString().padStart(2, '0')}
+    </Typography>
+  );
 
   return results;
 }

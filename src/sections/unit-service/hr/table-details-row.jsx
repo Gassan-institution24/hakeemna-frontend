@@ -13,7 +13,6 @@ import { fDate, fTime } from 'src/utils/format-time';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -37,7 +36,7 @@ export default function UnitServiceEmployeesRow({
     salary,
     start_time,
     end_time,
-    adjust_schedual,
+    // adjust_schedual,
     status,
     created_at,
     user_creation,
@@ -96,15 +95,9 @@ export default function UnitServiceEmployeesRow({
       <TableCell sx={{ textTransform: 'lowercase' }} align="center">
         {fDate(created_at)}
       </TableCell>
-      <TableCell align="center">
-        {salary}
-      </TableCell>
-      <TableCell align="center">
-        {fTime(start_time)}
-      </TableCell>
-      <TableCell align="center">
-        {fTime(end_time)}
-      </TableCell>
+      <TableCell align="center">{salary}</TableCell>
+      <TableCell align="center">{fTime(start_time)}</TableCell>
+      <TableCell align="center">{fTime(end_time)}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -126,31 +119,31 @@ export default function UnitServiceEmployeesRow({
       >
         {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onInactivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="ic:baseline-pause" />
-              {t('inactivate')}
-            </MenuItem>
-          )
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                {t('inactivate')}
+              </MenuItem>
+            )
           : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onActivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'success.main' }}
-            >
-              <Iconify icon="bi:play-fill" />
-              {t('activate')}
-            </MenuItem>
-          )}
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                {t('activate')}
+              </MenuItem>
+            )}
         <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}

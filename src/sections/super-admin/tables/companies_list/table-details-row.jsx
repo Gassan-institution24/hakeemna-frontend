@@ -47,30 +47,35 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
     modifications_nums,
   } = row;
 
-  const { enqueueSnackbar } = useSnackbar()
-  const [text, setText] = useState(com_note)
+  const { enqueueSnackbar } = useSnackbar();
+  const [text, setText] = useState(com_note);
   const popover = usePopover();
   const DDL = usePopover();
 
   const handleChangeStatus = async (event) => {
     try {
-      await axiosInstance.patch(endpoints.companies.one(row?._id), { status: event.target.value })
-      enqueueSnackbar('done')
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { status: event.target.value });
+      enqueueSnackbar('done');
     } catch (e) {
-      enqueueSnackbar('error', { variant: 'error' })
+      enqueueSnackbar('error', { variant: 'error' });
     }
-  }
+  };
   const handleSubmitText = async () => {
     try {
-      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text })
-      enqueueSnackbar('done')
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text });
+      enqueueSnackbar('done');
     } catch (e) {
-      enqueueSnackbar('error', { variant: 'error' })
+      enqueueSnackbar('error', { variant: 'error' });
     }
-  }
+  };
 
   const renderPrimary = (
-    <TableRow hover index={index} sx={{ backgroundColor: index % 2 ? 'background.lightgray' : '' }} selected={selected}>
+    <TableRow
+      hover
+      index={index}
+      sx={{ backgroundColor: index % 2 ? 'background.lightgray' : '' }}
+      selected={selected}
+    >
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
@@ -84,30 +89,42 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
       <TableCell align="center">{address}</TableCell>
       <TableCell align="center">{phone_number_1}</TableCell>
       <TableCell align="center">{Phone_number_2}</TableCell>
-      <TableCell align="center"><TextField select fullWidth value={status} onChange={handleChangeStatus}>
-        <MenuItem value='not contact'>لم يتم التواصل</MenuItem>
-        <MenuItem value='agreed'>قبول</MenuItem>
-        <MenuItem value='refused'>رفض</MenuItem>
-        <MenuItem value='no number'>لا يوجد رقم للتواصل</MenuItem>
-        <MenuItem value='wrong number'>الرقم خاطئ</MenuItem>
-      </TextField></TableCell>
       <TableCell align="center">
-        <TextField fullWidth multiline value={text} onChange={(e) => setText(e.target.value)} InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleSubmitText} edge="end">
-                <Iconify icon='icon-park-solid:correct' />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }} />
+        <TextField select fullWidth value={status} onChange={handleChangeStatus}>
+          <MenuItem value="not contact">لم يتم التواصل</MenuItem>
+          <MenuItem value="agreed">قبول</MenuItem>
+          <MenuItem value="refused">رفض</MenuItem>
+          <MenuItem value="no number">لا يوجد رقم للتواصل</MenuItem>
+          <MenuItem value="wrong number">الرقم خاطئ</MenuItem>
+        </TextField>
       </TableCell>
-      {showAll && <><TableCell align="center">{insurance}</TableCell>
-        <TableCell align="center">{info}</TableCell>
-        <TableCell align="center">{work_shift}</TableCell>
-        <TableCell align="center">{constitution_objective}</TableCell>
-        <TableCell align="center">{type_of_specialty_1}</TableCell>
-        <TableCell align="center">{type_of_specialty_2}</TableCell></>}
+      <TableCell align="center">
+        <TextField
+          fullWidth
+          multiline
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleSubmitText} edge="end">
+                  <Iconify icon="icon-park-solid:correct" />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </TableCell>
+      {showAll && (
+        <>
+          <TableCell align="center">{insurance}</TableCell>
+          <TableCell align="center">{info}</TableCell>
+          <TableCell align="center">{work_shift}</TableCell>
+          <TableCell align="center">{constitution_objective}</TableCell>
+          <TableCell align="center">{type_of_specialty_1}</TableCell>
+          <TableCell align="center">{type_of_specialty_2}</TableCell>
+        </>
+      )}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

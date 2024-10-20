@@ -22,56 +22,59 @@ export default function WhoAreWe() {
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
-  const CARDS = useMemo(() => [
-    {
-      icon: MedicalHub,
-      title: t('Electronic Medical Hub'),
-      description: t(
-        'A platform that brings together providers and providers of medical and health care services (institutions, doctors, and others) with users of those services at one conglomeration point, with the goal being for everyone to benefit from this alliance in the new and distinctive Arab world.'
-      ),
-      color: '#fff1e6',
-    },
-    {
-      icon: Autonomy,
-      title: t('Autonomy'),
-      description: t(
-        'The currently available electronic health records platforms cannot be used or benefited from them if you are not a subscriber as a beneficiary (patient) in health insurance coverage. Likewise, if you are a provider and provider of medical services or health care, you will not be able to use the platforms available in the market if you are not a member of one of them. Healthcare service management organizations. Therefore, the Hakeemna platform allows everyone (patient and medical service provider) to join our family and benefit from all the benefits independently without the requirement of joining one of the “health care services management” institutions or subscribing to an insurance company.'
-      ),
-      color: '#c5dedd',
-    },
-    {
-      icon: Credibility,
-      title: t('Credibility and transparency'),
-      description: t(
-        'Using our platform enables all categories of users (service providers and users of those services, such as patients) to communicate electronically in a convenient and transparent manner, which helps in expressing opinions and evaluating each party for the other, which increases awareness and raises credibility and transparency. This helps in the continuous development of the services provided and raises loyalty. Users of this distinguished medical group.'
-      ),
-      color: '#f1e4f3',
-    },
-    {
-      icon: ResearchDevelopment,
-      title: t('Research and Development'),
-      description: t(
-        'We seek to support and participate in scientific research in all relevant fields and development aimed at raising the level of performance and excellence in institutions in the Arab and Islamic world. Joining this platform contributes to supporting scientific research, development, and transfer of expertise and knowledge (knowledge transfer) from academic institutions to institutions operating in the private and government sectors.'
-      ),
-      color: '#dbe7e4',
-    },
-    {
-      icon: GreenManagement,
-      title: t('Green Management'),
-      description: t(
-        'This platform is designed to be a gateway towards sustainability and management committed to protecting the environment. Joining this platform makes you partners in efforts to preserve the environment and combat desertification by raising awareness and reducing activities that pollute the environment.'
-      ),
-      color: '#eddcd2',
-    },
-    {
-      icon: Friendly,
-      title: t('User Friendly And Flexible'),
-      description: t(
-        'Easy to use and flexible: The platform is designed to be easy to learn and use. A free training program is also available for service providers to familiarize themselves with all aspects of this platform.'
-      ),
-      color: '#bcd4e6',
-    },
-  ], [t]);
+  const CARDS = useMemo(
+    () => [
+      {
+        icon: MedicalHub,
+        title: t('Electronic Medical Hub'),
+        description: t(
+          'A platform that brings together providers and providers of medical and health care services (institutions, doctors, and others) with users of those services at one conglomeration point, with the goal being for everyone to benefit from this alliance in the new and distinctive Arab world.'
+        ),
+        color: '#fff1e6',
+      },
+      {
+        icon: Autonomy,
+        title: t('Autonomy'),
+        description: t(
+          'The currently available electronic health records platforms cannot be used or benefited from them if you are not a subscriber as a beneficiary (patient) in health insurance coverage. Likewise, if you are a provider and provider of medical services or health care, you will not be able to use the platforms available in the market if you are not a member of one of them. Healthcare service management organizations. Therefore, the Hakeemna platform allows everyone (patient and medical service provider) to join our family and benefit from all the benefits independently without the requirement of joining one of the “health care services management” institutions or subscribing to an insurance company.'
+        ),
+        color: '#c5dedd',
+      },
+      {
+        icon: Credibility,
+        title: t('Credibility and transparency'),
+        description: t(
+          'Using our platform enables all categories of users (service providers and users of those services, such as patients) to communicate electronically in a convenient and transparent manner, which helps in expressing opinions and evaluating each party for the other, which increases awareness and raises credibility and transparency. This helps in the continuous development of the services provided and raises loyalty. Users of this distinguished medical group.'
+        ),
+        color: '#f1e4f3',
+      },
+      {
+        icon: ResearchDevelopment,
+        title: t('Research and Development'),
+        description: t(
+          'We seek to support and participate in scientific research in all relevant fields and development aimed at raising the level of performance and excellence in institutions in the Arab and Islamic world. Joining this platform contributes to supporting scientific research, development, and transfer of expertise and knowledge (knowledge transfer) from academic institutions to institutions operating in the private and government sectors.'
+        ),
+        color: '#dbe7e4',
+      },
+      {
+        icon: GreenManagement,
+        title: t('Green Management'),
+        description: t(
+          'This platform is designed to be a gateway towards sustainability and management committed to protecting the environment. Joining this platform makes you partners in efforts to preserve the environment and combat desertification by raising awareness and reducing activities that pollute the environment.'
+        ),
+        color: '#eddcd2',
+      },
+      {
+        icon: Friendly,
+        title: t('User Friendly And Flexible'),
+        description: t(
+          'Easy to use and flexible: The platform is designed to be easy to learn and use. A free training program is also available for service providers to familiarize themselves with all aspects of this platform.'
+        ),
+        color: '#bcd4e6',
+      },
+    ],
+    [t]
+  );
 
   return (
     <Container

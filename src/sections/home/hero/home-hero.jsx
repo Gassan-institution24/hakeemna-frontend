@@ -173,7 +173,13 @@ export default function HomeHero() {
               icon="solar:double-alt-arrow-up-line-duotone"
               width={40}
             />
-            <img decoding="async" loading='lazy' src="/assets/images/home/hero/users.webp"  width={xlUp ? 300 : 200} alt="users" />
+            <img
+              decoding="async"
+              loading="lazy"
+              src="/assets/images/home/hero/users.webp"
+              width={xlUp ? 300 : 200}
+              alt="users"
+            />
             <div style={{ position: 'absolute', top: -200, right: curLangAr ? 50 : 70 }}>
               <Typography
                 variant={xlUp ? 'h4' : 'h5'}
@@ -183,7 +189,9 @@ export default function HomeHero() {
               >
                 {t('beneficiary')}
               </Typography>
-              <img decoding="async" loading='lazy'
+              <img
+                decoding="async"
+                loading="lazy"
                 src="/assets/images/home/hero/arrow.webp"
                 style={{ rotate: '10deg' }}
                 width={xlUp ? 100 : 70}
@@ -212,7 +220,9 @@ export default function HomeHero() {
               zIndex: 2,
             }}
           >
-            <img decoding="async" loading='lazy'
+            <img
+              decoding="async"
+              loading="lazy"
               src="/assets/images/home/hero/doctors.webp"
               width={xlUp ? 380 : 250}
               alt="doctors"
@@ -249,7 +259,9 @@ export default function HomeHero() {
               >
                 {t('unit of service')}
               </Typography>
-              <img decoding="async" loading='lazy'
+              <img
+                decoding="async"
+                loading="lazy"
                 src="/assets/images/home/hero/arrow2.webp"
                 style={{ rotate: '-50deg' }}
                 width={xlUp ? 200 : 150}
@@ -257,7 +269,9 @@ export default function HomeHero() {
               />
             </div>
           </div>
-          <img decoding="async" loading='lazy'
+          <img
+            decoding="async"
+            loading="lazy"
             src="/assets/images/home/hero/stethoscope.webp"
             style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
             width={200}

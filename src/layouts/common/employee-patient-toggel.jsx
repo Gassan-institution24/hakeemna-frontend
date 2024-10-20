@@ -75,28 +75,34 @@ export default function EmployeePatientToggel() {
 
   return (
     <>
-      {!user?.strict_employee && <LoadingButton
-        component={m.button}
-        loading={loading}
-        whileTap="tap"
-        whileHover="hover"
-        loadingIndicator="Loading…"
-        variants={varHover(1.05)}
-        onClick={handleChangeRole}
-        sx={{
-          p: 0,
-          m: 2,
-          // width: 40,
-          // height: 40,
-        }}
-      >
-        <Iconify icon="mage:exchange-b" />
-        {lgUp && (
-          <Typography variant="body2" textTransform="lowercase" sx={{ textAlign: 'center', ml: 1 }}>
-            {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
-          </Typography>
-        )}
-      </LoadingButton>}
+      {!user?.strict_employee && (
+        <LoadingButton
+          component={m.button}
+          loading={loading}
+          whileTap="tap"
+          whileHover="hover"
+          loadingIndicator="Loading…"
+          variants={varHover(1.05)}
+          onClick={handleChangeRole}
+          sx={{
+            p: 0,
+            m: 2,
+            // width: 40,
+            // height: 40,
+          }}
+        >
+          <Iconify icon="mage:exchange-b" />
+          {lgUp && (
+            <Typography
+              variant="body2"
+              textTransform="lowercase"
+              sx={{ textAlign: 'center', ml: 1 }}
+            >
+              {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
+            </Typography>
+          )}
+        </LoadingButton>
+      )}
       <ConfirmDialog
         open={showDialog}
         onClose={() => setShowDialog(false)}

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -10,12 +11,11 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useSnackbar } from 'notistack';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -27,17 +27,17 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
 
   const router = useRouter();
   const checkAcl = useAclGuard();
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
   const confirm = useBoolean();
   const popover = usePopover();
 
   const clickHandler = () => {
     if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
-      router.push(paths.employee.patients.info(_id))
+      router.push(paths.employee.patients.info(_id));
     } else {
-      enqueueSnackbar(t('permission denide'), { variant: 'warning' })
+      enqueueSnackbar(t('permission denide'), { variant: 'warning' });
     }
-  }
+  };
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

@@ -16,13 +16,10 @@ import { useAuthContext } from 'src/auth/hooks';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFUpload, RHFEditor, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-
 export default function UploadBlogs({ currentRow }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { Data, refetch } = useGetBlog_category();
-
-
 
   const BlogsSchema = Yup.object().shape({
     title: Yup.string().required(),
@@ -89,24 +86,23 @@ export default function UploadBlogs({ currentRow }) {
       refetch();
       reset();
     } catch (error) {
-      enqueueSnackbar(
-        error.message,
-        { variant: 'error' }
-      );
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
-  }
+  };
 
   return (
     <Card sx={{ p: 5 }}>
       <Box sx={{ width: '100%' }}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <RHFTextField name="title" label={t('title')} sx={{ mb: 2 }} />
-          <RHFSelect name='category' label={t('category')} sx={{ mb: 2 }}>
+          <RHFSelect name="category" label={t('category')} sx={{ mb: 2 }}>
             {Data?.map((one, index) => (
-              <MenuItem key={index} value={one._id}>{one?.[t('name_english')]}</MenuItem>
+              <MenuItem key={index} value={one._id}>
+                {one?.[t('name_english')]}
+              </MenuItem>
             ))}
           </RHFSelect>
-          <Typography variant='body2'>{t('image')}</Typography>
+          <Typography variant="body2">{t('image')}</Typography>
           <RHFUpload
             autoFocus
             name="file"
@@ -122,7 +118,7 @@ export default function UploadBlogs({ currentRow }) {
             label={t('content')}
             sx={{ mb: 2, mt: 2, textTransform: 'lowercase' }}
           />
-          <Stack direction='row' justifyContent='flex-end'>
+          <Stack direction="row" justifyContent="flex-end">
             <Button type="submit" loading={isSubmitting} variant="contained">
               {currentRow ? t('update') : t('create')}
             </Button>
