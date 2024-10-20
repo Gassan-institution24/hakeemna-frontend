@@ -113,9 +113,9 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <Searchbar />
-      {(!attendence || attendence?.check_out_time) ?
+      {['employee', 'admin'].includes(user?.role) && ((!attendence || attendence?.check_out_time) ?
         (!hasAttendenceToday && <Button variant='contained' color='primary' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check in")}</Button>) :
-        <Button variant='contained' color='warning' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check out")}</Button>
+        <Button variant='contained' color='warning' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check out")}</Button>)
       }
 
       {/* <TimeOutInActive /> */}
