@@ -101,9 +101,7 @@ function Group({ subheader, walktourRun, items, slotProps }) {
           <Collapse in={open}>{renderContent}</Collapse>
         </>
       ) : (
-        <Stack mt={7}>
-          {renderContent}
-        </Stack>
+        <Stack mt={7}>{renderContent}</Stack>
       )}
     </Stack>
   );

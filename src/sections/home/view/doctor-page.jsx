@@ -25,7 +25,7 @@ export default function DoctorPage({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const router = useRouter()
+  const router = useRouter();
 
   const [page, setPage] = useState(1);
   const [signupDialog, setSignupDialog] = useState(false);
@@ -40,7 +40,7 @@ export default function DoctorPage({ employeeData }) {
       startDate: selectedDate,
     }
   );
-  const { data } = useGetBlogs({ employee: employeeData?.employee?._id })
+  const { data } = useGetBlogs({ employee: employeeData?.employee?._id });
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     setSignupDialog(true);
@@ -157,11 +157,11 @@ export default function DoctorPage({ employeeData }) {
                 <Typography variant="body2" sx={{ px: { md: 3 } }}>
                   {curLangAr
                     ? ConvertToHTML(
-                      employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
-                    )
+                        employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
+                      )
                     : ConvertToHTML(
-                      employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
-                    )}
+                        employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
+                      )}
                 </Typography>
               </>
             )}
@@ -306,11 +306,13 @@ export default function DoctorPage({ employeeData }) {
           <Stack gap={1} flex={1}>
             <FeedbackSection employee={employeeData} />
           </Stack>
-          {data?.length > 0 && <Stack direction="row">
-            <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-              {t('Blogs')}:
-            </Typography>
-          </Stack>}
+          {data?.length > 0 && (
+            <Stack direction="row">
+              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
+                {t('Blogs')}:
+              </Typography>
+            </Stack>
+          )}
           <Grid
             rowGap={3}
             columnGap={2}
@@ -334,7 +336,7 @@ export default function DoctorPage({ employeeData }) {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
               >
@@ -344,9 +346,9 @@ export default function DoctorPage({ employeeData }) {
                   sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 <Box sx={{ p: 2, maxHeight: 150 }}>
-                  <Typography >{blog.title}</Typography>
+                  <Typography>{blog.title}</Typography>
 
-                  <Typography variant='body2' sx={{ color: 'gray', mt: 1 }}>
+                  <Typography variant="body2" sx={{ color: 'gray', mt: 1 }}>
                     {fDateAndTime(blog.created_at)}
                   </Typography>
                 </Box>

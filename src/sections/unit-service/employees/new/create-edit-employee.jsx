@@ -313,7 +313,11 @@ export default function TableNewEditForm({ currentTable }) {
                 sx={{ px: 2 }}
                 name="strict_employee"
                 onChange={() => setValue('strict_employee', !watch('strict_employee'))}
-                label={<Typography sx={{ fontSize: 12 }}>{t('strict account - only for my unit of service')}</Typography>}
+                label={
+                  <Typography sx={{ fontSize: 12 }}>
+                    {t('strict account - only for my unit of service')}
+                  </Typography>
+                }
               />
               <RHFCheckbox
                 sx={{ px: 2 }}

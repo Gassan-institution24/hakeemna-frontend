@@ -142,7 +142,6 @@ export default function AccountPopover() {
               {option.label}
             </MenuItem>
           ))}
-
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
         {(user?.role === 'admin' ||

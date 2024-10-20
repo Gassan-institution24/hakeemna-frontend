@@ -64,9 +64,8 @@ export default function EmployeeAttendence({ employee }) {
     rowsPerPage: table.rowsPerPage,
     order: table.order,
     sortBy: table.orderBy,
-    ...filters
+    ...filters,
   });
-
 
   const dateError =
     filters.startDate && filters.endDate
@@ -75,8 +74,7 @@ export default function EmployeeAttendence({ employee }) {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    (!!filters.startDate && !!filters.endDate);
+  const canReset = !!filters.startDate && !!filters.endDate;
 
   const notFound = (!attendence.length && canReset) || !attendence.length;
 
@@ -92,13 +90,12 @@ export default function EmployeeAttendence({ employee }) {
   );
 
   const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters)
-  }, [])
+    setFilters(defaultFilters);
+  }, []);
 
   return (
     <Container maxWidth="xl">
       <Card>
-
         <EmployeeAttendanceToolbar
           hours={hours}
           filters={filters}
@@ -146,11 +143,7 @@ export default function EmployeeAttendence({ employee }) {
 
               <TableBody>
                 {attendence.map((row, idx) => (
-                  <EmployeeAttendenceRow
-                    key={idx}
-                    row={row}
-                    refetch={refetch}
-                  />
+                  <EmployeeAttendenceRow key={idx} row={row} refetch={refetch} />
                 ))}
 
                 <TableEmptyRows

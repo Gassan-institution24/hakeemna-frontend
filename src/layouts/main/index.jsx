@@ -7,7 +7,7 @@ import { usePathname } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import Footer from './footer'; 
+import Footer from './footer';
 import Header from './header';
 
 // ----------------------------------------------------------------------

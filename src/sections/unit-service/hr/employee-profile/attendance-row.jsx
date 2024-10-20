@@ -63,27 +63,14 @@ export default function AttendanceRow({
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">
-          {weekDays[new Date(date).getDay() + 1]}{' '}{fDate(date, 'dd MMMMMMM')}
+          {weekDays[new Date(date).getDay() + 1]} {fDate(date, 'dd MMMMMMM')}
         </TableCell>
-        <TableCell align="center">
-          {fTime(check_in_time)}
-        </TableCell>
-        <TableCell align="center">
-          {fTime(check_out_time)}
-        </TableCell>
-        <TableCell align="center">
-          {fHourMin(leaveTime)}
-        </TableCell>
-        <TableCell align="center">
-          {fHourMin(late)}
-        </TableCell>
-        <TableCell align="center">
-          {fHourMin(early_leave)}
-        </TableCell>
-        <TableCell align="center">
-          {fHourMin(workTime)}
-        </TableCell>
-
+        <TableCell align="center">{fTime(check_in_time)}</TableCell>
+        <TableCell align="center">{fTime(check_out_time)}</TableCell>
+        <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
+        <TableCell align="center">{fHourMin(late)}</TableCell>
+        <TableCell align="center">{fHourMin(early_leave)}</TableCell>
+        <TableCell align="center">{fHourMin(workTime)}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -92,11 +79,7 @@ export default function AttendanceRow({
         </TableCell>
       </TableRow>
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-      >
+      <CustomPopover open={popover.open} onClose={popover.onClose} arrow="right-top">
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

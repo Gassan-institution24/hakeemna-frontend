@@ -374,7 +374,11 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
               ))}
             </RHFSelect>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <RHFSelect onChange={handleCountryChange} name="country" label={t('Region ( country )')}>
+              <RHFSelect
+                onChange={handleCountryChange}
+                name="country"
+                label={t('Region ( country )')}
+              >
                 {countriesData?.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country?._id}>
                     {curLangAr ? country?.name_arabic : country?.name_english}

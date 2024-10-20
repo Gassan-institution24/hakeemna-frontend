@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------
 
-
 const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth-demo',
@@ -604,7 +603,6 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/product_categories/${id}/edit`,
       },
     },
-
   },
 
   // unit of service

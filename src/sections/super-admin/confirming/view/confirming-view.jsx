@@ -27,7 +27,13 @@ export default function ConfirmingView() {
         {patientsData?.map((one, idx) => (
           <Card sx={{ p: 3, minWidth: '60vw' }}>
             <Stack direction={{ md: 'row' }} justifyContent="space-between" alignItems="center">
-              <img decoding="async" loading='lazy' width={600} src={one.scanned_identification} alt="scanned_id" />
+              <img
+                decoding="async"
+                loading="lazy"
+                width={600}
+                src={one.scanned_identification}
+                alt="scanned_id"
+              />
               <Stack minWidth="40%" gap={1}>
                 <Typography variant="subtitle2"> ID : {one?.identification_num}</Typography>
                 <Typography variant="subtitle2">name : {one?.name_english}</Typography>
