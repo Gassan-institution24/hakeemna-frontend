@@ -45,7 +45,6 @@ export default function Header({ onOpenNav }) {
     window.location.reload();
   };
 
-
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
   const isNavMini = settings.themeLayout === 'mini';
@@ -55,8 +54,6 @@ export default function Header({ onOpenNav }) {
   const offset = useOffSetTop(HEADER.H_DESKTOP);
 
   const offsetTop = offset && !isNavHorizontal;
-
-
 
   const renderContent = (
     <>
@@ -93,14 +90,12 @@ export default function Header({ onOpenNav }) {
 
         {user?.role === 'patient' ? <NotificationsPopoverPatient /> : <NotificationsPopover />}
 
-
         {/* <ContactsPopover /> */}
 
         {/* <SettingsButton /> */}
 
         <AccountPopover />
       </Stack>
-
     </>
   );
 

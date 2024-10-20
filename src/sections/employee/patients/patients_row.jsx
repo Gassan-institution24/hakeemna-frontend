@@ -24,7 +24,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
 
   const { t } = useTranslate();
   const checkAcl = useAclGuard();
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -33,11 +33,11 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const popover = usePopover();
   const clickHandler = () => {
     if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
-      router.push(paths.employee.patients.info(_id))
+      router.push(paths.employee.patients.info(_id));
     } else {
-      enqueueSnackbar(t('permission denide'), { variant: 'error' })
+      enqueueSnackbar(t('permission denide'), { variant: 'error' });
     }
-  }
+  };
   return (
     <>
       <TableRow hover selected={selected}>

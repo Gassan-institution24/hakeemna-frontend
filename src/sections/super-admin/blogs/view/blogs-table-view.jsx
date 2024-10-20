@@ -62,9 +62,8 @@ export default function BlogsTableView() {
     sortBy: table.sortBy,
     rowsPerPage: table.rowsPerPage,
     name: filters.name,
-    populate: { path: 'category', select: 'name_english name_arabic' }
+    populate: { path: 'category', select: 'name_english name_arabic' },
   });
-
 
   const canReset = !!filters?.name;
 

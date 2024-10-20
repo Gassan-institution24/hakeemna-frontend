@@ -485,9 +485,7 @@ const ProductCatEditPage = lazy(() =>
 // BLOGS
 const BlogsPage = lazy(() => import('src/pages/super-admin/blogs/table'));
 const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
-const BlogsEditPage = lazy(() =>
-  import('src/pages/super-admin/blogs/edit')
-);
+const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
 
 // ----------------------------------------------------------------------
 

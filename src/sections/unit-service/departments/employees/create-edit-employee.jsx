@@ -174,9 +174,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         router.push(
           submit.data?.engagement?._id
             ? paths.unitservice.departments.employees.acl(
-              departmentData._id,
-              submit.data?.engagement?._id
-            )
+                departmentData._id,
+                submit.data?.engagement?._id
+              )
             : paths.unitservice.departments.employees.root(departmentData._id)
         );
       }
@@ -252,14 +252,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -276,8 +276,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="strict_employee"
-                onChange={() => methods.setValue('strict_employee', !methods.watch('strict_employee'))}
-                label={<Typography sx={{ fontSize: 12 }}>{t('strict account - only for my unit of service')}</Typography>}
+                onChange={() =>
+                  methods.setValue('strict_employee', !methods.watch('strict_employee'))
+                }
+                label={
+                  <Typography sx={{ fontSize: 12 }}>
+                    {t('strict account - only for my unit of service')}
+                  </Typography>
+                }
               />
               <RHFCheckbox
                 sx={{ px: 2 }}

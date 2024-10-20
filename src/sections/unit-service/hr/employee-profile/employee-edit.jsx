@@ -50,7 +50,7 @@ export default function EditEmployee({ employee, refetch }) {
     try {
       await axios.patch(`${endpoints.employee_engagements.one(employee?._id)}`, profileData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
-      refetch()
+      refetch();
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
@@ -70,18 +70,10 @@ export default function EditEmployee({ employee, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTimePicker name='start_time' label={t('work start time')} />
-              <RHFTimePicker name='end_time' label={t('work end time')} />
-              <RHFTextField
-                type='number'
-                name="salary"
-                label={t('salary')}
-              />
-              <RHFTextField
-                type='number'
-                name="monthly_hours"
-                label={t('work hours / month')}
-              />
+              <RHFTimePicker name="start_time" label={t('work start time')} />
+              <RHFTimePicker name="end_time" label={t('work end time')} />
+              <RHFTextField type="number" name="salary" label={t('salary')} />
+              <RHFTextField type="number" name="monthly_hours" label={t('work hours / month')} />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

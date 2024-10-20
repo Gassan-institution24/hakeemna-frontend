@@ -142,7 +142,7 @@ export default function Blogs() {
                           }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
-                     {curLangAr ? 'حكيمنا ٣٦٠': ' hakeemna 390'}  
+                        {curLangAr ? 'حكيمنا ٣٦٠' : ' hakeemna 390'}
                         {/* here */}
                       </Typography>
                     ) : (

@@ -115,7 +115,14 @@ export function isAfter(startDate, endDate) {
   return results;
 }
 export function fHourMin(time, endDate) {
-  const results = <Typography variant='body2' sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>{(Math.floor(time / 60)).toString().padStart(2, '0')} : {(time % 60).toString().padStart(2, '0')}</Typography>
+  const results = (
+    <Typography variant="body2" sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>
+      {Math.floor(time / 60)
+        .toString()
+        .padStart(2, '0')}{' '}
+      : {(time % 60).toString().padStart(2, '0')}
+    </Typography>
+  );
 
   return results;
 }

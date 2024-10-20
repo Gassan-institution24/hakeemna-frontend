@@ -134,7 +134,9 @@ export default function AccountGeneral({ unitServiceData }) {
     phone: data?.phone || '',
     mobile_num: data?.mobile_num || '',
     introduction_letter: data?.introduction_letter ? decode(data?.introduction_letter) : '',
-    arabic_introduction_letter: data?.arabic_introduction_letter ? decode(data?.arabic_introduction_letter) : '',
+    arabic_introduction_letter: data?.arabic_introduction_letter
+      ? decode(data?.arabic_introduction_letter)
+      : '',
     location_gps: data?.location_gps || '',
     company_logo: data?.company_logo || '',
     facebook: data?.facebook || '',
@@ -349,7 +351,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-              // onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>

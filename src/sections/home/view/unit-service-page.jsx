@@ -104,10 +104,10 @@ export default function UnitServicePage({ USData }) {
             work_start_time === work_end_time
               ? t('24 hours')
               : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                work_end_time,
-                'p',
-                curLangAr
-              )}`,
+                  work_end_time,
+                  'p',
+                  curLangAr
+                )}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {

@@ -27,17 +27,17 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
 
   const router = useRouter();
   const checkAcl = useAclGuard();
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
   const confirm = useBoolean();
   const popover = usePopover();
 
   const clickHandler = () => {
     if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
-      router.push(paths.employee.patients.info(_id))
+      router.push(paths.employee.patients.info(_id));
     } else {
-      enqueueSnackbar(t('permission denide'), { variant: 'warning' })
+      enqueueSnackbar(t('permission denide'), { variant: 'warning' });
     }
-  }
+  };
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
