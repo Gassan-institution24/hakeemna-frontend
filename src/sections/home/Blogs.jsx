@@ -18,17 +18,19 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
 import Image from 'src/components/image/image';
 
 export default function Blogs() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { data } = useGetBlogs({
     populate: {
       path: 'user',
-      select: 'employee',
+      select: 'role employee',
       populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
     },
   });
@@ -131,16 +133,32 @@ export default function Blogs() {
                     sx={{ width: '100%', height: '200px', objectFit: 'cover' }}
                   />
                   <Box sx={{ p: 2 }}>
-                    <Link
-                      sx={{ color: 'gray' }}
-                      href={paths.pages.doctor(
-                        `${
-                          blog?.user?.employee?.employee_engagements[0]
-                        }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
-                      )}
-                    >
-                      {blog.user?.employee?.name_english}
-                    </Link>
+                    {blog?.user?.role === 'superadmin' ? (
+                      <Typography
+                        sx={{ color: 'gray' }}
+                        href={paths.pages.doctor(
+                          `${
+                            blog?.user?.employee?.employee_engagements[0]
+                          }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
+                        )}
+                      >
+                     {curLangAr ? 'حكيمنا ٣٦٠': ' hakeemna 390'}  
+                        {/* here */}
+                      </Typography>
+                    ) : (
+                      <Link
+                        sx={{ color: 'gray' }}
+                        href={paths.pages.doctor(
+                          `${
+                            blog?.user?.employee?.employee_engagements[0]
+                          }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
+                        )}
+                      >
+                        {blog.user?.employee?.name_english}
+                        {/* here */}
+                      </Link>
+                    )}
+
                     <Typography sx={{ color: 'gray', fontWeight: 'bold', mt: 1 }}>
                       {blog.title}
                     </Typography>
