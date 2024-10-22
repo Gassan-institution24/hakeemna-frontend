@@ -137,8 +137,7 @@ export default function Blogs() {
                       <Typography
                         sx={{ color: 'gray' }}
                         href={paths.pages.doctor(
-                          `${
-                            blog?.user?.employee?.employee_engagements[0]
+                          `${blog?.user?.employee?.employee_engagements[0]
                           }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
@@ -149,8 +148,7 @@ export default function Blogs() {
                       <Link
                         sx={{ color: 'gray' }}
                         href={paths.pages.doctor(
-                          `${
-                            blog?.user?.employee?.employee_engagements[0]
+                          `${blog?.user?.employee?.employee_engagements[0]
                           }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
@@ -175,7 +173,7 @@ export default function Blogs() {
                   <Button
                     variant="contained"
                     sx={{ bgcolor: 'success.main', mx: 2, mb: 2 }}
-                    onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
+                    onClick={() => router.push(`${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(/ /g, '-')}}&writer=${blog?.user?.role === 'superadmin' ? 'hakeemna 360' : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')}`)}
                   >
                     {t('View')}
                   </Button>
