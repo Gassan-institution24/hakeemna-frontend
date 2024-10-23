@@ -43,7 +43,7 @@ export default function EmployeeAttendence({ employee }) {
   const { t } = useTranslate();
 
   const TABLE_HEAD = [
-    { id: 'date', label: t('day') },
+    { id: 'date', label: t('Day') },
     { id: 'check_in_time', label: t('check in') },
     { id: 'check_out_time', label: t('check out') },
     { id: 'leave', label: t('leave time') },
