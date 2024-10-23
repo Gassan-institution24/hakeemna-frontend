@@ -11,6 +11,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  Checkbox,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -22,6 +23,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
 import Image from 'src/components/image/image';
+import { useAuthContext } from 'src/auth/hooks';
 
 export default function Blogs() {
   const { t } = useTranslate();
@@ -30,15 +32,18 @@ export default function Blogs() {
   const { data } = useGetBlogs({
     populate: {
       path: 'user',
-      select: 'role employee',
+      select: 'role employee _id',
       populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
     },
   });
+
+  const { user } = useAuthContext()
   const { Data } = useGetBlog_category();
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState();
+  const [myBlogs, setMyBlogs] = useState(false);
 
   const formatTextWithLineBreaks = (text, limit = 20) => {
     if (!text) return '';
@@ -63,15 +68,18 @@ export default function Blogs() {
       (blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.topic.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterBy ? blog.category === filterBy : true);
-
-    return matchesSearch;
+    let filterMyBlogs = true
+    if (myBlogs) {
+      filterMyBlogs = blog.user?._id === user?._id
+    }
+    return matchesSearch && filterMyBlogs;
   });
 
   return (
     <Stack
       sx={{ p: { xs: 2, md: 5 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
-      <Card sx={{ width: { xs: '100%', md: '70%' }, mx: 'auto' }}>
+      <Card sx={{ width: { xs: '100%', md: '90%' }, mx: 'auto' }}>
         <Box sx={{ p: { xs: 2, md: 5 }, textAlign: 'start' }}>
           <Typography
             variant="h2"
@@ -104,6 +112,11 @@ export default function Blogs() {
                 </MenuItem>
               ))}
             </TextField>
+            {user?._id && data?.some((one) => one.user?._id === user?._id) &&
+              <Stack ml={5} direction='row' alignItems='center'>
+                <Checkbox checked={myBlogs} onClick={() => setMyBlogs(!myBlogs)} />
+                <Typography>{t('my blogs')}</Typography>
+              </Stack>}
           </Box>
 
           {/* Blog Cards */}

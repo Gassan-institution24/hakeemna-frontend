@@ -36,13 +36,12 @@ export default function DoctorPage() {
     <>
       <Helmet>
         <title>{curLangAr ? data?.employee?.name_arabic : data?.employee?.name_english}</title>
+        {/* eslint-disable-next-line */}
         <meta
           name="description"
-          content={
-            curLangAr
-              ? stripHtmlTags(data?.employee?.arabic_about_me)
-              : stripHtmlTags(data?.employee?.about_me)
-          }
+          content={`${curLangAr ? stripHtmlTags(data?.employee?.arabic_about_me) : stripHtmlTags(data?.employee?.about_me)} ${curLangAr ? 'تكلفة الموعد بعد الخصم' : 'appointment price after discount'}
+           ${data?.fees_after_discount ? data?.fees_after_discount : data?.fees}
+            ${curLangAr ? 'دينار' : 'JOD'}`}
         />
       </Helmet>
 
