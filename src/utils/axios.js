@@ -813,6 +813,7 @@ export const endpoints = {
     user: (id) => (!id ? null : `/api/auth/${id}`),
     patientUser: (id) => (!id ? null : `/api/auth/patient/${id}`),
     users: '/api/auth',
+    deletMe: '/api/auth/deletMe',
     me: '/api/auth/me',
     login: '/api/auth/login',
     resendActivation: `/api/auth/resendactivate`,
