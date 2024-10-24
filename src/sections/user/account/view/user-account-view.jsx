@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -14,6 +15,9 @@ import Iconify from 'src/components/iconify';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { LoadingButton } from '@mui/lab';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import AccountGeneral from '../account-general';
 // import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
@@ -21,7 +25,13 @@ import AccountChangePassword from '../account-change-password';
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
+  const { logout } = useAuthContext()
   const { t } = useTranslate();
+  const [showDialog, setShowDialog] = useState(false)
+  const handleDeleteAccount = async () => {
+    await axiosInstance.delete(endpoints.auth.deletMe)
+    logout()
+  }
 
   const TABS = [
     {
@@ -52,32 +62,54 @@ export default function AccountView() {
   }, []);
 
   return (
-    <Container maxWidth="xl">
-      <CustomBreadcrumbs
-        heading={t('Account')}
-        links={[
-          { name: t('dashboard'), href: paths.dashboard.root },
-          { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('Account') },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
-      <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        {TABS.map((tab, idx) => (
-          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
-        ))}
-      </Tabs>
-      {currentTab === 'general' && !loading && <AccountGeneral data={data} refetch={refetch} />}
-      {/* {currentTab === 'notifications' && <AccountNotifications />} */}
-      {currentTab === 'security' && <AccountChangePassword />}
-    </Container>
+    <>
+      <Container maxWidth="xl">
+        <CustomBreadcrumbs
+          heading={t('Account')}
+          links={[
+            { name: t('dashboard'), href: paths.dashboard.root },
+            { name: t('user'), href: paths.dashboard.user.root },
+            { name: t('Account') },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+          <Tabs
+            value={currentTab}
+            onChange={handleChangeTab}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          >
+            {TABS.map((tab, idx) => (
+              <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
+            ))}
+          </Tabs>
+          <Stack justifyContent='center'>
+            <Button variant='contained' color='error' onClick={() => setShowDialog(true)} >{t('delete my account')}</Button>
+          </Stack>
+        </Stack>
+        {currentTab === 'general' && !loading && <AccountGeneral data={data} refetch={refetch} />}
+        {/* {currentTab === 'notifications' && <AccountNotifications />} */}
+        {currentTab === 'security' && <AccountChangePassword />}
+      </Container>
+
+      <ConfirmDialog open={showDialog}
+        onClose={() => setShowDialog(false)}
+        title={t('delete my account')}
+        content={<Typography>{t('You will not be able to undelete after you did it, are you sure you want to delete your account with its information?')}</Typography>}
+        action={
+          <LoadingButton
+            variant="contained"
+            color="error"
+            loading={loading}
+            onClick={handleDeleteAccount}
+          >
+            {t('submit')}
+          </LoadingButton>
+        } />
+    </>
   );
 }
