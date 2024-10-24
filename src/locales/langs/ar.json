@@ -144,6 +144,8 @@
   "institution": "المؤسسة",
   "invitation sent!": "تم إرسال الدعوة",
   "year": "السنة",
+  "You will not be able to undelete after you did it, are you sure you want to delete your account with its information?": "لن تسطيع الغاء حذف حسابك بعد تأكيد حذفه, هل أنت متأكد من حذف حسابك؟",
+  "delete my account": "حذف حسابي",
   "add patient ID number": "ادخل الرقم الوطني للمريض",
   "cetificate": "الشهادة",
   "keywords": "الكلمات المفتاحية للبحث",
