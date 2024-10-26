@@ -43,7 +43,6 @@ export default function FamilyMembers() {
   const [password, setPassword] = useState();
   const [selectedIndex, setSelectedIndex] = useState();
   const [errorMsg, setErrorMsg] = useState();
-
   const handleCheckPassword = async () => {
     try {
       await axios.post(endpoints.auth.checkPassword, {
