@@ -73,7 +73,7 @@ const Image = forwardRef(
         sx={{
           width: 1,
           height: 1,
-          objectFit: 'cover',
+          objectFit: 'contain',
           verticalAlign: 'bottom',
           ...(!!ratio && {
             top: 0,
