@@ -532,6 +532,26 @@ export default function Privacypolicy() {
         <Typography paragraph>
           The platform and its applications do not provide any medical consulting or advice, and do not sell any commodity. In the case that there is content or opinion, it is the responsibility of the user who published it, and the platform is not obligated to prosecute any damage caused to one of the affected parties from content, consultation or others.
         </Typography>
+        <Typography variant="h4" textAlign='right' >
+          تاسعا: حذف الحساب والبيانات
+        </Typography>
+        <Typography variant="h4" mb={2}>
+          Ninth: Delete the account and data
+        </Typography>
+        <Typography paragraph textAlign='right'>
+          المستخدم يستطيع حذف حسابه من المنصة وذلك بالدخول الى قسم &quot;ملفي التعريفي&quot; ومن ثم الدخول الى قسم &quot;الاعدادات&quot; و النقر على &quot;حذف الحسابي&quot;، وبهذه الطريقة يقوم المستخدم بحذف الحساب من كامل المنصة، كذلك لديه الامكانية لحذف جزء من المعلومات التي يشاء.
+
+          <br/>
+          على سبيل المثال: يستطيع حذف المعلومات الطبية و التقارير الطبية التي قام المستخدم بتخزينها بنفسه في المنصة، في هذه الحالة عليها التوجه الى قسم &quot;ملفاتي&quot; ثم النقر على &quot;التقارير الطبية&quot; ومن بعدها اختيار &quot;التقارير الطبية القديمة&quot; والتي من خلالها يستطيع تحديد ما يريد حذفه من المنصة
+          {'\n'}
+        </Typography>
+        <Typography paragraph>
+          The user can delete his account from the platform by entering to “My Profile” section, then entering to “Settings” section and clicking on “Delete My Account”. By this way, the user deletes the account from the entire platform. He also has the ability to delete part of his information that he wants.
+          <br/>
+          {'\n'}
+
+          For example: The user can delete medical information and medical reports that he has stored himself on the platform. In this case, he should go to the “My Files” section, then click on “Medical Reports” and then choose “Old Medical Reports” , then he can specify which documents he want delete from the platform.
+        </Typography>
 
         <Typography paragraph>
           Legal prosecution, payment of its costs and commitment to damages are outside the scope of responsibility of the platform and its owners.

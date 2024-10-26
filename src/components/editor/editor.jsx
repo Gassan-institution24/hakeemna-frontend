@@ -26,6 +26,7 @@ export default function Editor({
       ['bold', 'italic', 'underline'],
       [{ color: [] }, { background: [] }],
       [{ align: [] }],
+      ['link', 'image', 'video'],
       ['clean'],
       // [{ container: `#${id}` }],
     ],
