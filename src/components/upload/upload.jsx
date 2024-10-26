@@ -153,7 +153,7 @@ export default function Upload({
             bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
           }),
           ...(hasFile && {
-            padding: '24% 0',
+            padding: '9% 0',
           }),
         }}
       >

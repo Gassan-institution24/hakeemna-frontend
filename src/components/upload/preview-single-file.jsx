@@ -25,6 +25,7 @@ export default function SingleFilePreview({ imgUrl = '' }) {
           width: 1,
           height: 1,
           borderRadius: 1,
+          objectFit: 'contain',
         }}
       />
     </Box>

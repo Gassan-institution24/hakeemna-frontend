@@ -1,33 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Box, Card, Stack, Container, Typography } from '@mui/material';
+import { Box, Card, Stack, Container, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetPrescription } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'notistack';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 export default function PatientPrescriptions({ patient }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { enqueueSnackbar } = useSnackbar()
 
   const { user } = useAuthContext();
-  const { prescriptionData } = useGetPrescription({
+  const { prescriptionData, refetch } = useGetPrescription({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     patient: patient?.patient?._id,
     unit_service_patient: patient?._id,
     populate: { path: 'medicines', populate: 'medicines' },
   });
+
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(endpoints.prescription.one(id))
+      enqueueSnackbar(`${t('prescription')} ${t('deleted successfully')}`);
+      refetch()
+    } catch (e) {
+      enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
+        variant: 'error',
+      });
+    }
+  }
   return (
     <Container maxWidth="xl">
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
-          <Stack direction="row" justifyContent="flex-end">
+          <Stack direction="row" justifyContent="flex-end" alignItems='center'>
             <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
+            <IconButton color='error' onClick={() => handleDelete(one?._id)}><Iconify icon='mdi:delete-outline' /></IconButton>
           </Stack>
-          {/* <Typography variant='subtitle2'>{t('prescription')}:</Typography> */}
           <Box
             mt={1}
             ml={1}
