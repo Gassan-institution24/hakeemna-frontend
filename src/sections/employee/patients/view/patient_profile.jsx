@@ -92,9 +92,10 @@ export default function PatientProfile() {
 
   const patientGeneralData = [
     { title: 'age', value: calculateAge(patientData?.birth_date) },
-    { title: 'gender', value: patientData?.gender },
+    // { title: 'gender', value: patientData?.gender },
     { title: 'phone', value: patientData?.mobile_num1 },
     { title: 'email', value: patientData?.email },
+    { title: 'file code', value: patientData?.file_code },
     { title: 'height', value: patientData?.height, unit: 'cm' },
     { title: 'weight', value: patientData?.weight, unit: 'kg' },
     { title: 'smoking', value: patientData?.smoking },

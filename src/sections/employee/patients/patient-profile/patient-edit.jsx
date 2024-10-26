@@ -52,6 +52,7 @@ export default function EditPatient({ patient }) {
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
     is_on_eating_diet: Yup.string().nullable(),
+    nationality: Yup.string().nullable(),
     country: Yup.string().nullable(),
     gender: Yup.string().nullable(),
     birth_date: Yup.mixed().nullable(),
@@ -74,8 +75,9 @@ export default function EditPatient({ patient }) {
     weight: patient?.weight || '',
     mobile_num1: patient?.mobile_num1 || '',
     mobile_num2: patient?.mobile_num2 || '',
-    country: patient?.country?._id || null,
-    city: patient?.city?._id || null,
+    nationality: patient?.nationality?._id || patient?.nationality || null,
+    country: patient?.country?._id || patient?.country || null,
+    city: patient?.city?._id || patient?.city || null,
     address: patient?.address || '',
     sport_exercises: patient?.sport_exercises || '',
     smoking: patient?.smoking || '',
@@ -164,7 +166,19 @@ export default function EditPatient({ patient }) {
                 // onChange={handleArabicInputChange}
                 disabled
               />
-
+              <RHFSelect
+                label={t('nationality')}
+                fullWidth
+                name="nationality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {countriesData.map((country, idx) => (
+                  <MenuItem lang="ar" key={idx} value={country._id}>
+                    {country.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
               <RHFSelect
                 label={t('residence country')}
                 fullWidth

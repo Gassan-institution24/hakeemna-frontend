@@ -19,6 +19,7 @@ export default function RHFPhoneNumber({ name, helperText, type, ...other }) {
           defaultCountry="JO"
           placeholder="7 XXXX XXXX"
           value={field.value}
+          excludedCountries={['IL']}
           onChange={(newPhone) => {
             field.onChange(newPhone);
           }}
