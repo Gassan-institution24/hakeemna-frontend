@@ -41,14 +41,15 @@ export default function RatingRoomDialog() {
   });
   const [rating, setRating] = useState();
   const [bodyState, setBodyState] = useState();
+  const [selectedValue, setSelectedValue] = useState(null);
 
   const { user } = useAuthContext();
   const { feedbackData, refetch } = useGetPatientFeedbacks(user?.patient?._id);
+  console.log(selectedValue);
+
   const skipfunction = async () => {
     try {
-      await axios.patch(`api/feedback/${feedbackData?._id}`, {
-        skip: true,
-      });
+      await axios.patch(`api/feedback/${feedbackData?._id}`, { skip: true });
       dialog.onFalse();
     } catch (error) {
       console.error(error.message);
@@ -58,7 +59,10 @@ export default function RatingRoomDialog() {
   const handleRatingClick = (e) => {
     setRating(parseFloat(e.target.value));
   };
-  const [selectedValue, setSelectedValue] = React.useState(undefined);
+
+  const toggleSelection = (option) => {
+    setSelectedValue((prev) => (prev === option ? null : option));
+  };
 
   const defaultValues = {
     Body: '',
@@ -72,24 +76,18 @@ export default function RatingRoomDialog() {
     defaultValues,
   });
   const {
-    // register,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
   const dialog = useBoolean(true);
 
-  const RATEELEMENTS = ['Neglectful treatment', 'Employee Behavior', 'Cleanliness', 'Price'];
-  const controlProps = (item) => ({
-    checked: selectedValue === item,
-    onChange: (e) => handleChange(e, item),
-    value: item,
-    name: 'color-radio-button-demo',
-    inputProps: { 'aria-label': item },
-  });
-
-  const handleChange = (event, item) => {
-    setSelectedValue(item);
-  };
+  const RATEELEMENTS = [
+    'Negligence in treatment',
+    'Staff behavior',
+    'Cleanliness',
+    'Price',
+    'None of the above',
+  ];
 
   const onSubmit = async (dataSubmit) => {
     try {
@@ -106,9 +104,7 @@ export default function RatingRoomDialog() {
       console.error(error.message);
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        { variant: 'error' }
       );
     }
   };
@@ -130,7 +126,7 @@ export default function RatingRoomDialog() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            textalign: 'center',
+            textAlign: 'center',
             margin: '20px',
             gap: '10px',
           }}
@@ -162,7 +158,7 @@ export default function RatingRoomDialog() {
           />
         </div>
 
-        {rating < 5 ? (
+        {rating < 4 ? (
           <DialogContent>
             <Box component="form" noValidate>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
@@ -174,8 +170,12 @@ export default function RatingRoomDialog() {
                         fontWeight: { md: '400', xs: 'bolder' },
                       }}
                     >
-                      <Radio {...controlProps(infotwo)} name="Selection" />
-                      {infotwo}
+                      <Radio
+                        checked={selectedValue === infotwo}
+                        onChange={() => toggleSelection(infotwo)}
+                        name="Selection"
+                      />
+                      {t(infotwo)}
                     </Box>
                   </div>
                 ))}
@@ -193,7 +193,7 @@ export default function RatingRoomDialog() {
             </Typography>
             <Box component="form" noValidate>
               <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                <InputLabel htmlFor="max-width">{t('Other')}</InputLabel>
+                <InputLabel htmlFor="max-width">{t('Leave a comment')}</InputLabel>
                 <Input id="max-width" name="Body" onChange={(e) => setBodyState(e.target.value)} />
               </FormControl>
             </Box>
