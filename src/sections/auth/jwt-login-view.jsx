@@ -86,7 +86,6 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         router.push(returnTo || PATH_AFTER_LOGIN);
       }
     } catch (error) {
-      console.error(error);
       // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
       if (error === 'Your account is inactive!') {
@@ -154,7 +153,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
       {!!errorMsg && (
         <Alert severity="error">
           {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div dangerouslySetInnerHTML={{ __html: t(errorMsg) }} />
           {email && (
             <Link component={RouterLink} href={paths.auth.verify(email)} variant="subtitle2">
               {t('verify your account')}
@@ -163,11 +162,12 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         </Alert>
       )}
 
-      <RHFTextField name="email" label={t('email address')} />
+      <RHFTextField name="email" data-test='email-input' label={t('email address')} />
 
       <RHFTextField
         name="password"
         label={t('password')}
+        data-test='password-input'
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -195,6 +195,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
 
       <LoadingButton
         fullWidth
+        data-test='login-button'
         color="inherit"
         size="large"
         type="submit"
@@ -218,8 +219,8 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack justifyContent="center" width={1} height="70vh">
+    <FormProvider data-test='login-form' methods={methods} onSubmit={onSubmit}>
+      <Stack data-test='login-form' justifyContent="center" width={1} height="70vh">
         {renderHead}
         {renderForm}
       </Stack>

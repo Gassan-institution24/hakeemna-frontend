@@ -49,6 +49,7 @@ export default function NavList({ data, walktourRun, depth, slotProps }) {
         disabled={data.disabled}
         logout={data.onClick}
         navItemId={data.navItemId}
+        dataTest={data['data-test']}
         //
         depth={depth}
         hasChild={!!data.children}

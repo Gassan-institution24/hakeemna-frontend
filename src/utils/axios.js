@@ -121,6 +121,12 @@ export const endpoints = {
     onee: (id) => (!id ? null : `/api/sickleave/${id}`),
     entrance: (id) => (!id ? null : `/api/sickleave/entrancesickleave/${id}`),
   },
+  uspcommunication: {
+    all: '/api/uspcommunication/',
+    one: (id) => (!id ? null : `/api/uspcommunication/patient/${id}`),
+    onee: (id) => (!id ? null : `/api/uspcommunication/${id}`),
+    entrance: (id) => (!id ? null : `/api/uspcommunication/entrance/${id}`),
+  },
   drugs: {
     all: '/api/drugs/',
     one: (id) => (!id ? null : `/api/drugs/${id}`),
