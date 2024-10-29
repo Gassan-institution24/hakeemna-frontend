@@ -20,6 +20,7 @@ const NavItem = forwardRef(
       path,
       icon,
       navItemId,
+      dataTest,
       info,
       disabled,
       caption,
@@ -48,6 +49,7 @@ const NavItem = forwardRef(
         onClick={logout}
         {...other}
         id={navItemId}
+        data-test={dataTest}
         lang="ar"
       >
         {!subItem && icon && (
@@ -152,6 +154,7 @@ NavItem.propTypes = {
   info: PropTypes.element,
   title: PropTypes.string,
   navItemId: PropTypes.string,
+  dataTest: PropTypes.string,
   disabled: PropTypes.bool,
   hasChild: PropTypes.bool,
   caption: PropTypes.string,

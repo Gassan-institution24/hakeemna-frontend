@@ -88,6 +88,8 @@
   "edit department": "تعديل معلومات القسم",
   "edit room": "تعديل معلومات الغرفة",
   "name_english": "name_arabic",
+  "email or password invalied": "خطأ في البريد الالكتروني أو كلمة المرور",
+  "Your account is inactive!": "الحساب غير فعال",
   "General information about creating 'Automated Appointment Configuration'": "معلومات عامة حول انشاء 'اعدادات المواعيد المؤتمتة'، ",
   "(1) The start date and expiration date of these settings, as from the “start date” it will create appointments automatically and will stop creating new appointments at the “end date” you specified.": "(1)  تاريخ بداية وتاريخ نهاية صلاحية هذه الاعدادات، حيث انه اعتباراً من ' تاريخ البداية'  سيقوم بانشاء المواعيد بشكل مؤتمت وسوف يتوقف عن انشاء مواعيد جديدة عند 'تاريخ النهاية' الذي قمت بتحديده ",
   "(2) The work shift and the work team for whom you want to create these appointments.": "(2)وردية العمل و فريق العمل الذي تريد انشاء تلك المواعيد لهم. ",

@@ -149,21 +149,21 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         ).getTime();
         let break_start = currentDay.break_start_time
           ? new Date(
-              now.getFullYear(),
-              now.getMonth(),
-              now.getDate(),
-              new Date(currentDay.break_start_time).getHours(),
-              new Date(currentDay.break_start_time).getMinutes()
-            ).getTime()
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            new Date(currentDay.break_start_time).getHours(),
+            new Date(currentDay.break_start_time).getMinutes()
+          ).getTime()
           : null;
         let break_end = currentDay.break_end_time
           ? new Date(
-              now.getFullYear(),
-              now.getMonth(),
-              now.getDate(),
-              new Date(currentDay.break_end_time).getHours(),
-              new Date(currentDay.break_end_time).getMinutes()
-            ).getTime()
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            new Date(currentDay.break_end_time).getHours(),
+            new Date(currentDay.break_end_time).getMinutes()
+          ).getTime()
           : null;
 
         if (work_start >= work_end) {
@@ -323,6 +323,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       size="small"
                       InputLabelProps={{ shrink: true }}
                       name={`days_details[${index}].appointment_type`}
+                      data-test={`select-appointment-type-${index}`}
                       onChange={(e) => {
                         setValue(`days_details[${index}].appointment_type`, e.target.value);
                         processDayDetails(index);
@@ -347,10 +348,12 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                   <Stack
                     direction={{ xs: 'column', md: 'row' }}
                     spacing={2}
+                    data-test={`work-inputs-${index}`}
                     sx={{ width: '100%', mt: 2 }}
                   >
                     <RHFTimePicker
                       name={`days_details[${index}].work_start_time`}
+                      data-test={`work-start-input-${index}`}
                       label={t('work start time')}
                       slotProps={{
                         textField: {
@@ -365,6 +368,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     />
                     <RHFTimePicker
                       name={`days_details[${index}].work_end_time`}
+                      data-test={`work-end-input-${index}`}
                       label={t('work end time')}
                       slotProps={{
                         textField: {
@@ -471,10 +475,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             <Button
               size="small"
               color="primary"
+              data-test='add-new-day-button'
               startIcon={<Iconify icon="tdesign:plus" />}
               sx={{ padding: 1 }}
               onClick={handleAdd}
-              // sx={{ flexShrink: 0 }}
+            // sx={{ flexShrink: 0 }}
             >
               {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
             </Button>
