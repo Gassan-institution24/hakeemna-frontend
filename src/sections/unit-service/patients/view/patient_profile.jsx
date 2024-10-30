@@ -6,15 +6,20 @@ import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui
 import { useGetOneUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
+import PatientPrescriptions from 'src/sections/employee/patients/patient-profile/patient-prescriptions';
+import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
+import PatientMedicalReports from 'src/sections/employee/patients/patient-profile/patient-medical-reports';
+import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
 import PatientAbout from '../patient-profile/patient-about';
-import PatientUpload from '../patient-profile/patient-upload';
+// import PatientUpload from '../patient-profile/patient-upload';
 import AppointmentsHistory from '../patient-profile/appoint-history';
-import PatientSickLeaves from '../patient-profile/patient-sick-leave';
-import PatientPrescriptions from '../patient-profile/patient-prescriptions';
-import PatientMedicalReports from '../patient-profile/patient-medical-reports';
+// import PatientSickLeaves from '../patient-profile/patient-sick-leave';
+// import PatientPrescriptions from '../patient-profile/patient-prescriptions';
+// import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +51,10 @@ export default function PatientProfile() {
     //   value: 'about',
     //   label: t('about'),
     // },
+    {
+      value: 'communication',
+      label: t('communication'),
+    },
     !isMedLab && {
       value: 'file',
       label: t('file'),
@@ -148,6 +157,7 @@ export default function PatientProfile() {
         ))}
       </Tabs>
       {currentTab === 'about' && <PatientAbout patient={usPatientData} />}
+      {currentTab === 'communication' && <PatientCommunication patient={usPatientData} />}
       {currentTab === 'file' && <PatientFile patient={usPatientData} />}
       {currentTab === 'prescriptions' && <PatientPrescriptions patient={usPatientData} />}
       {currentTab === 'sick_leave' && <PatientSickLeaves patient={usPatientData} />}

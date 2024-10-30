@@ -168,6 +168,21 @@ export default function PatientUpload({ patient }) {
         setValue('start_date', null);
         setValue('end_date', null);
         setValue('sick_leave_description', null);
+      } else if (table === 'communication') {
+        if (!values.date || !values.description) {
+          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          return;
+        }
+        await axiosInstance.post(endpoints.uspcommunication.all, {
+          patient: patient?.patient?._id,
+          unit_service_patient: patient?._id,
+          unit_services: employee?.unit_service?._id,
+          employee: user?.employee?._id,
+          date: values.date,
+          description: values.description,
+        });
+        setValue('date', null);
+        setValue('description', null);
       } else if (table === 'prescription') {
         setloading(true);
         await axiosInstance.post(endpoints.prescription.all, values.drugs);
@@ -325,6 +340,24 @@ export default function PatientUpload({ patient }) {
               />
               <Stack direction="row" justifyContent="flex-end">
                 <Button variant="contained" onClick={() => handleSubmit('sick_leave')}>
+                  {t('save')}
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+
+          <Card sx={{ p: 2 }}>
+            <Stack gap={2}>
+              <Typography variant="subtitle1">{t('communication')}</Typography>
+              <RHFDatePicker name="date" label={t('date')} />
+              <RHFEditor
+                lang="en"
+                name="description"
+                label={t('description')}
+                sx={{ textTransform: 'lowercase' }}
+              />
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained" onClick={() => handleSubmit('communication')}>
                   {t('save')}
                 </Button>
               </Stack>

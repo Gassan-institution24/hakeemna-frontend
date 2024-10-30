@@ -169,6 +169,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const onSubmit = handleSubmit(async (data) => {
     try {
       data.email = data.email?.toLowerCase();
+      data.userName = data.name_english;
       const formData = new FormData();
       formData.append('identification', identification[0]);
       Object.keys(data).forEach((key) => {

@@ -137,6 +137,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             size="small"
             name="work_shift"
             label={t('work shift')}
+            data-test='select-ws'
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -166,6 +167,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           </RHFSelect>
           <RHFSelect
             size="small"
+            data-test='select-wg'
             name="work_group"
             label={t('work group')}
             InputLabelProps={{ shrink: true }}
@@ -200,6 +202,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             fullWidth
             step="5"
             name="appointment_time"
+            data-test='duration-time'
             label={t('appointment duration time')}
             type="number"
             onBlur={(event) => {
@@ -233,6 +236,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               }}
               name="config_frequency"
               label={t('available for booking')}
+              data-test='avalabitity-input'
               type="number"
               inputProps={{ min: 0, max: 30, textAlign: 'center' }}
               InputLabelProps={{ shrink: true }}
