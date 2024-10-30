@@ -45,7 +45,6 @@ export default function RatingRoomDialog() {
 
   const { user } = useAuthContext();
   const { feedbackData, refetch } = useGetPatientFeedbacks(user?.patient?._id);
-  console.log(selectedValue);
 
   const skipfunction = async () => {
     try {
