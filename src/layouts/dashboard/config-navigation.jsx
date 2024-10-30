@@ -161,12 +161,14 @@ export function useNavData() {
           false,
         title: t('departments'),
         path: paths.unitservice.departments.root,
+        'data-test': 'us-nav-item-departments'
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
         title: t('employees'),
         path: paths.unitservice.employees.root,
         navItemId: 'USEmployeesNav',
+        'data-test': 'us-nav-item-employees'
       },
       {
         show: checkAcl({
@@ -177,6 +179,7 @@ export function useNavData() {
         title: t('work shifts'),
         path: paths.unitservice.tables.workshifts.root,
         navItemId: 'USWorkShiftNav',
+        'data-test': 'us-nav-item-workshifts'
       },
       {
         show: checkAcl({
@@ -187,6 +190,7 @@ export function useNavData() {
         title: t('work groups'),
         path: paths.unitservice.tables.workgroups.root,
         navItemId: 'USWorkGroupNav',
+        'data-test': 'us-nav-item-workgroups'
       },
       {
         show: checkAcl({
@@ -197,6 +201,7 @@ export function useNavData() {
         title: t('services and pricing'),
         path: paths.unitservice.tables.services.root,
         navItemId: 'USServicesNav',
+        'data-test': 'us-nav-item-services'
       },
       {
         show:
@@ -208,6 +213,7 @@ export function useNavData() {
         title: t('rooms'),
         path: paths.unitservice.tables.rooms.root,
         navItemId: 'USRoomsNav',
+        'data-test': 'us-nav-item-rooms'
       },
       {
         show:
@@ -219,6 +225,7 @@ export function useNavData() {
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
+        'data-test': 'us-nav-item-activities'
       },
       {
         show:
@@ -227,6 +234,7 @@ export function useNavData() {
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,
         navItemId: 'USOldPatientsNav',
+        'data-test': 'us-nav-item-oldpatient'
       },
     ];
     const unitServiceItems = [
@@ -239,6 +247,7 @@ export function useNavData() {
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
+        'data-test': 'us-nav-item-appointmenttoday'
       },
       {
         show:
@@ -256,6 +265,7 @@ export function useNavData() {
         title: t('appointments'),
         path: paths.unitservice.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        'data-test': 'us-nav-item-appointments',
         navItemId: 'USAppointmentsNav',
         children: [
           {
@@ -263,6 +273,7 @@ export function useNavData() {
             title: t('appointments'),
             path: paths.unitservice.appointments.root,
             navItemId: 'USAppointmentsNav',
+            'data-test': 'us-nav-item-appointments-appointments',
           },
           {
             show: checkAcl({
@@ -272,6 +283,7 @@ export function useNavData() {
             }),
             title: t('book appointments'),
             path: paths.unitservice.appointments.book,
+            'data-test': 'us-nav-item-appointments-book',
           },
         ].filter((one) => one.show),
       },
@@ -283,6 +295,7 @@ export function useNavData() {
         path: paths.employee.appointmentconfiguration.root,
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
         navItemId: 'EMAppointConfigNav',
+        'data-test': 'us-nav-item-appointments-configuration',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
@@ -290,26 +303,31 @@ export function useNavData() {
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
         navItemId: 'USAccountingNav',
+        'data-test': 'us-nav-item-accounting',
         children: [
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('invoicing'),
             path: paths.unitservice.accounting.invoicing,
+            'data-test': 'us-nav-item-accounting-invoicing',
           },
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('economic movements'),
             path: paths.unitservice.accounting.economicmovements.root,
+            'data-test': 'us-nav-item-accounting-economic',
           },
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('payment control'),
             path: paths.unitservice.accounting.paymentcontrol.root,
+            'data-test': 'us-nav-item-accounting-payment',
           },
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('reciepts'),
             path: paths.unitservice.accounting.reciepts.root,
+            'data-test': 'us-nav-item-accounting-reciepts',
           },
         ].filter((one) => one.show),
       },
@@ -318,6 +336,7 @@ export function useNavData() {
         title: t("institution's patients"),
         path: paths.unitservice.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
+        'data-test': 'us-nav-item-patients',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
@@ -326,6 +345,7 @@ export function useNavData() {
         icon: <Iconify icon="icon-park-twotone:data" />,
         navItemId: 'USTablesNav',
         children: unitServiceManagementTables.filter((item) => item.show),
+        'data-test': 'us-nav-item-tables',
       },
       {
         show:
@@ -334,11 +354,24 @@ export function useNavData() {
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         icon: <Iconify icon="mdi:account-secure" />,
+        'data-test': 'us-nav-item-permissions',
         children: [
-          { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
-          { title: t('departments level'), path: paths.unitservice.acl.department },
-          { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
-          { title: t('employee permission'), path: paths.unitservice.acl.employees },
+          {
+            title: t('unit of service level'), path: paths.unitservice.acl.unitservice,
+            'data-test': 'us-nav-item-permissions-us',
+          },
+          {
+            title: t('departments level'), path: paths.unitservice.acl.department,
+            'data-test': 'us-nav-item-permissions-department',
+          },
+          {
+            title: t('work groups level'), path: paths.unitservice.acl.workgroups,
+            'data-test': 'us-nav-item-permissions-wg',
+          },
+          {
+            title: t('employee permission'), path: paths.unitservice.acl.employees,
+            'data-test': 'us-nav-item-permissions-ws',
+          },
         ],
       },
       {
@@ -347,6 +380,7 @@ export function useNavData() {
           isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
+        'data-test': 'lab-nav-item-permissions',
         icon: <Iconify icon="mdi:account-secure" />,
         children: [
           { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
@@ -362,6 +396,7 @@ export function useNavData() {
         title: t('human resource'),
         path: paths.unitservice.hr.root,
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
+        'data-test': 'us-nav-item-hr',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
@@ -369,6 +404,7 @@ export function useNavData() {
         path: paths.unitservice.products.root,
         icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
         navItemId: 'USProductsNav',
+        'data-test': 'us-nav-item-products',
         children: [
           {
             show: checkAcl({
@@ -378,6 +414,7 @@ export function useNavData() {
             }),
             title: t('all products'),
             path: paths.unitservice.products.all,
+            'data-test': 'us-nav-item-products-all',
           },
           {
             show: checkAcl({
@@ -387,6 +424,7 @@ export function useNavData() {
             }),
             title: t('suppliers'),
             path: paths.unitservice.products.stakeholder.root,
+            'data-test': 'us-nav-item-products-suppliers',
           },
           {
             show: checkAcl({
@@ -397,6 +435,7 @@ export function useNavData() {
             title: t('orders'),
             path: paths.unitservice.orders.root,
             navItemId: 'USInsuranceNav',
+            'data-test': 'us-nav-item-products-orders',
           },
         ].filter((one) => one.show),
       },
@@ -410,6 +449,7 @@ export function useNavData() {
         path: paths.unitservice.profile.parent,
         icon: <Iconify icon="fa-solid:clinic-medical" />,
         navItemId: 'USInfoNav',
+        'data-test': 'us-nav-item-info',
         children: [
           {
             show: checkAcl({
@@ -420,6 +460,7 @@ export function useNavData() {
             title: t('profile'),
             path: paths.unitservice.profile.root,
             navItemId: 'USInfoNav',
+            'data-test': 'us-nav-item-info-profile',
           },
           {
             show: checkAcl({
@@ -430,6 +471,7 @@ export function useNavData() {
             title: t('Insurance'),
             path: paths.unitservice.insurance.root,
             navItemId: 'USInsuranceNav',
+            'data-test': 'us-nav-item-info-insurance',
           },
           {
             show:
@@ -438,6 +480,7 @@ export function useNavData() {
             title: t('communication'),
             path: paths.unitservice.communication.root,
             navItemId: 'USCommunicationNav',
+            'data-test': 'us-nav-item-info-communication',
           },
           {
             show: checkAcl({
@@ -448,6 +491,7 @@ export function useNavData() {
             title: t('quality control'),
             path: paths.unitservice.qualityControl.root,
             navItemId: 'USQualityControlNav',
+            'data-test': 'us-nav-item-info-qc',
           },
           {
             show: checkAcl({
@@ -458,6 +502,7 @@ export function useNavData() {
             title: t('subscriptions'),
             path: paths.unitservice.subscriptions.root,
             navItemId: 'USSubscriptionsNav',
+            'data-test': 'us-nav-item-info-subscriptions',
           },
         ].filter((one) => one.show),
       },
@@ -467,6 +512,7 @@ export function useNavData() {
         path: paths.employee.profile.root,
         icon: <Iconify icon="iconamoon:profile-bold" />,
         navItemId: 'EMProfileNav',
+        'data-test': 'us-nav-item-myprofile',
       },
     ];
     const unitServicesDashboars = [
@@ -497,6 +543,7 @@ export function useNavData() {
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
+        'data-test': 'employee-nav-item-appointmenttoday',
       },
       {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
@@ -504,12 +551,14 @@ export function useNavData() {
         path: paths.employee.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
         navItemId: 'EMAppointmentsNav',
+        'data-test': 'employee-nav-item-appointments',
         children: [
           {
             show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
             title: t('my appointments'),
             path: paths.employee.appointments.root,
             navItemId: 'EMAppointmentsNav',
+            'data-test': 'employee-nav-item-appointments-my',
           },
           {
             show:
@@ -519,6 +568,7 @@ export function useNavData() {
             path: paths.employee.appointments.book,
             // icon: <Iconify icon="material-symbols:add-ad" />,
             navItemId: 'EMAppointmentsNav',
+            'data-test': 'employee-nav-item-appointments-book',
           },
           {
             show: checkAcl({
@@ -530,6 +580,7 @@ export function useNavData() {
             path: paths.employee.appointmentconfiguration.root,
             // icon: <Iconify icon="fluent:content-settings-16-regular" />,
             navItemId: 'EMAppointConfigNav',
+            'data-test': 'employee-nav-item-appointments-config',
           },
         ],
       },
@@ -539,6 +590,7 @@ export function useNavData() {
         title: t('my patients'),
         path: paths.employee.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
+        'data-test': 'employee-nav-item-patients',
       },
       {
         show: false,
@@ -546,12 +598,14 @@ export function useNavData() {
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
         navItemId: 'EMAccountingNav',
+        'data-test': 'employee-nav-item-accounting',
       },
       {
         show: true,
         title: t('documents'),
         path: paths.employee.documents.parent,
         icon: <Iconify icon="ic:outline-folder" />,
+        'data-test': 'employee-nav-item-documents',
         children: [
           {
             show:
@@ -560,16 +614,19 @@ export function useNavData() {
             title: t('checklist'),
             path: paths.employee.checklist.root,
             navItemId: 'EMChecklistNav',
+            'data-test': 'employee-nav-item-documents-checklist',
           },
           {
             show: true,
             title: t('adjustable documents'),
             path: paths.employee.documents.adjustable.root,
+            'data-test': 'employee-nav-item-documents-adjustable',
           },
           {
             show: true,
             title: t('my blogs'),
             path: paths.employee.documents.blogs.root,
+            'data-test': 'employee-nav-item-documents-blogs',
           },
         ].filter((one) => one.show),
       },
@@ -579,6 +636,7 @@ export function useNavData() {
         path: paths.employee.profile.parent,
         icon: <Iconify icon="iconamoon:profile-bold" />,
         navItemId: 'EMProfileNav',
+        'data-test': 'employee-nav-item-profile',
         children: [
           {
             show: true,
@@ -586,6 +644,7 @@ export function useNavData() {
             path: paths.employee.profile.root,
             // icon: <Iconify icon="iconamoon:profile-bold" />,
             navItemId: 'EMProfileNav',
+            'data-test': 'employee-nav-item-profile-settings',
           },
           {
             show: true,
@@ -593,6 +652,7 @@ export function useNavData() {
             path: paths.employee.workGroups.root,
             // icon: <Iconify icon="heroicons:user-group-solid" />,
             navItemId: 'EMWorkGroupsNav',
+            'data-test': 'employee-nav-item-profile-wg',
           },
           {
             show: false,
@@ -600,6 +660,7 @@ export function useNavData() {
             path: paths.employee.communication.root,
             // icon: <Iconify icon="solar:call-chat-bold" />,
             navItemId: 'EMCommunicationNav',
+            'data-test': 'employee-nav-item-profile-communication',
           },
           {
             show: true,
@@ -607,6 +668,7 @@ export function useNavData() {
             path: paths.employee.qualityControl.root,
             // icon: <Iconify icon="healthicons:world-care" />,
             navItemId: 'EMQualityControlNav',
+            'data-test': 'employee-nav-item-profile-qc',
           },
         ].filter((one) => one.show),
       },
@@ -616,6 +678,7 @@ export function useNavData() {
         path: paths.employee.calender,
         icon: <Iconify icon="simple-line-icons:calender" />,
         navItemId: 'EMCalenderNav',
+        'data-test': 'employee-nav-item-calender',
       },
       {
         show: true,
@@ -623,6 +686,7 @@ export function useNavData() {
         path: paths.employee.blogs,
         icon: <Iconify icon="ic:outline-library-books" />,
         navItemId: 'EMBlogsNav',
+        'data-test': 'employee-nav-item-browzeblogs',
       },
     ];
     const employeeDashboard = [

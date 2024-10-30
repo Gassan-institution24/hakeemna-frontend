@@ -244,7 +244,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           run={walktour.run}
           callback={walktour.onCallback}
           getHelpers={walktour.setHelpers}
-          // scrollDuration={500}
+        // scrollDuration={500}
         />
       )}
       {isEmployee && (
@@ -313,6 +313,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Scrollbar>
         ) : (
           <Drawer
+            data-test='nav-drawer'
             open={openNav}
             onClose={onCloseNav}
             PaperProps={{
@@ -349,17 +350,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-          <>
-            <Divider />
-            <MenuItem
-              lang="ar"
-              sx={{ fontSize: 13, color: 'secondary.dark' }}
-              onClick={() => setDialog(true)}
-            >
-              {t('create first time tables')}
-            </MenuItem>
-          </>
-        )}
+            <>
+              <Divider />
+              <MenuItem
+                lang="ar"
+                sx={{ fontSize: 13, color: 'secondary.dark' }}
+                onClick={() => setDialog(true)}
+              >
+                {t('create first time tables')}
+              </MenuItem>
+            </>
+          )}
       </CustomPopover>
       {user.role !== 'superadmin' && (
         <Box
