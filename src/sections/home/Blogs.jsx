@@ -9,9 +9,9 @@ import {
   Stack,
   Button,
   MenuItem,
+  Checkbox,
   TextField,
   Typography,
-  Checkbox,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -19,11 +19,9 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
-
-import Image from 'src/components/image/image';
-import { useAuthContext } from 'src/auth/hooks';
 
 export default function Blogs() {
   const { t } = useTranslate();
@@ -140,11 +138,7 @@ export default function Blogs() {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Image
-                    src={blog?.file}
-                    alt={blog.title}
-                    sx={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                  />
+        
                   <Box sx={{ p: 2 }}>
                     {blog?.user?.role === 'superadmin' ? (
                       <Typography
@@ -174,10 +168,11 @@ export default function Blogs() {
                       {blog.title}
                     </Typography>
                     <Typography
+                    variant='caption'
                       dangerouslySetInnerHTML={{
                         __html: formatTextWithLineBreaks(blog.topic),
                       }}
-                      sx={{ mt: 1, transition: 'all 0.5s ease-in-out' }}
+                      sx={{ mt: 1 }}
                     />
                     <Typography sx={{ color: 'gray', mt: 2 }}>
                       {fDateAndTime(blog.created_at)}
