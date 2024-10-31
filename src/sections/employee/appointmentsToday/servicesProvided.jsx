@@ -34,7 +34,7 @@ export default function ServicesProvided() {
       await axiosInstance.patch(`/api/entrance/${id}`, {
         Service_types: services,
       });
-      enqueueSnackbar('Sick leave created successfully', { variant: 'success' });
+      enqueueSnackbar(t('Services provided added successfully'), { variant: 'success' });
     } catch (error) {
       console.error(error.message);
     }

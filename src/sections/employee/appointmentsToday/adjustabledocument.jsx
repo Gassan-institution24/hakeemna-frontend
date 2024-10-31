@@ -17,8 +17,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
   const dialog = useBoolean();
   const { user } = useAuthContext();
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
-  const [adjustabledocumentId, setadjustabledocumentId] = useState();
-  const [clickedButtonId, setClickedButtonId] = useState(null);
+  const [adjustabledocumentId, setadjustabledocumentId] = useState(null);
 
   const onSubmit = async () => {
     try {
@@ -35,8 +34,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
   };
 
   const handleButtonClick = (id) => {
-    setClickedButtonId(id);
-    setadjustabledocumentId(id);
+    setadjustabledocumentId((prevId) => (prevId === id ? null : id));
   };
 
   return (
@@ -51,8 +49,8 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
             sx={{
               m: 1,
               backgroundColor:
-                clickedButtonId === adjustabledocumentdata?._id ? 'info.main' : 'initial',
-              color: clickedButtonId === adjustabledocumentdata?._id ? 'white' : 'initial',
+                adjustabledocumentId === adjustabledocumentdata?._id ? 'info.main' : 'initial',
+              color: adjustabledocumentId === adjustabledocumentdata?._id ? 'white' : 'initial',
             }}
             key={i}
           >
@@ -61,7 +59,13 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
         ))}
       </Box>
 
-      <Button type="submit" variant="contained" onClick={onSubmit} sx={{ m: 2 }}>
+      <Button
+        type="submit"
+        variant="contained"
+        onClick={onSubmit}
+        disabled={!adjustabledocumentId} 
+        sx={{ m: 2 }}
+      >
         {t('Upload')}
       </Button>
     </Card>
