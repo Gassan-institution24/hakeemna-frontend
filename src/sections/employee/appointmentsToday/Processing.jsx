@@ -147,7 +147,7 @@ export default function Processing() {
       ),
       icon: <Iconify icon="mingcute:document-fill" width={24} />,
     },
-    serviceTypesData && {
+    serviceTypesData  > 0 && {
       key: 6,
       title: (
         <>

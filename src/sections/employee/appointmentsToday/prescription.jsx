@@ -147,7 +147,7 @@ export default function Prescription({ Entrance }) {
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
 
-    enqueueSnackbar('Field removed successfully', { variant: 'success' });
+    enqueueSnackbar(t('Field removed successfully'), { variant: 'success' });
     refetch();
     reset();
   };
@@ -171,6 +171,41 @@ export default function Prescription({ Entrance }) {
     });
   }, [watchStartTimes, watchEndTimes, setValue]);
 
+  const onSubmit = async (submitData) => {
+    try {
+      const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
+        ...prescription,
+      }));
+  
+      if (prescriptionDialog.value) {
+        await axiosInstance.post(endpoints.history.all, {
+          patient: Entrance?.patient?._id,
+          unit_service_patient: Entrance?.unit_service_patient,
+          name_english: 'a prescription has been added',
+          name_arabic: 'تم ارفاق وصفة طبية',
+          sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
+          sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
+          actual_date: Entrance?.created_at,
+          title: 'prescription',
+          service_unit: Entrance?.service_unit?._id,
+        });
+  
+        await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
+        await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
+          Drugs_report_status: true,
+        });
+        enqueueSnackbar(t('Prescription uploaded successfully'), { variant: 'success' });
+        prescriptionDialog.onFalse();
+        refetch();
+        reset();
+        setPrescriptions([{ id: 0 }]); // Reset prescriptions to initial state
+      }
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Error uploading data', { variant: 'error' });
+    }
+  };
+  
   useEffect(() => {
     reset({
       prescriptions: [
@@ -192,41 +227,7 @@ export default function Prescription({ Entrance }) {
       ],
     });
   }, [user, Entrance, reset]);
-
-  const onSubmit = async (submitData) => {
-    try {
-      const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
-        ...prescription,
-      }));
-
-      if (prescriptionDialog.value) {
-        await axiosInstance.post(endpoints.history.all, {
-          patient: Entrance?.patient?._id,
-          unit_service_patient: Entrance?.unit_service_patient,
-          name_english: 'a prescription has been added',
-          name_arabic: 'تم ارفاق وصفة طبية',
-          sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
-          actual_date: Entrance?.created_at,
-          title: 'prescription',
-          service_unit: Entrance?.service_unit?._id,
-        });
-
-        await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
-        await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
-          Drugs_report_status: true,
-        });
-        enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
-        prescriptionDialog.onFalse();
-        refetch();
-        reset();
-        setPrescriptions();
-      }
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar('Error uploading data', { variant: 'error' });
-    }
-  };
+  
 
   return (
     <>
