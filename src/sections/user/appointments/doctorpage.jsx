@@ -173,7 +173,7 @@ export default function Doctorpage() {
 
       refetch();
       dialog.onFalse();
-      enqueueSnackbar('Appointment booked successfully', { variant: 'success' });
+      enqueueSnackbar(t('Appointment booked successfully'), { variant: 'success' });
       setTimeout(() => {
         router.push(paths.dashboard.user.patientsappointments);
       }, 1000);

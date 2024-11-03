@@ -108,7 +108,7 @@ const PrescriptionPDF = ({ report }) => (
     <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
-        <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
+        {/* <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} /> */}
         <View>
           <Text style={styles.headerText}>Drug Report</Text>
           <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
