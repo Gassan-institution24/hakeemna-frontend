@@ -19,7 +19,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFEditor, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -107,7 +107,10 @@ export default function NewEditForm({ currentRow }) {
               ))}
             </RHFSelect>
           </Box>
-          <RHFTextField name="topic" multiline rows={5} label={t('topic')} />
+          <RHFEditor
+            name="topic"
+            label={t('content')}
+          />
         </Card>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>

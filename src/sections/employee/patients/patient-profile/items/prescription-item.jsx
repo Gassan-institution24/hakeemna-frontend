@@ -1,21 +1,20 @@
-import * as Yup from 'yup';
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useForm, useFieldArray } from 'react-hook-form';
 
-import { Card, Stack, Typography, IconButton, Button, Box, Autocomplete, TextField, Divider } from '@mui/material';
+import { Box, Card, Stack, Button, Divider, TextField, Typography, IconButton, Autocomplete } from '@mui/material';
+
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import { fDate } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useGetMedicines } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useFieldArray, useForm } from 'react-hook-form';
-import FormProvider, { RHFCheckbox, RHFDatePicker, RHFEditor, RHFTextField } from 'src/components/hook-form';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
-import { useDebounce } from 'src/hooks/use-debounce';
-import { useGetMedicines } from 'src/api';
+import FormProvider, { RHFCheckbox, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
 
 export default function PrescriptionItem({ one, refetch }) {
     const { t } = useTranslate();

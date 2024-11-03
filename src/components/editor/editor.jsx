@@ -22,6 +22,7 @@ export default function Editor({
   const modules = {
     toolbar: [
       [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: ['small', 'normal', 'large', 'huge'] }],
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['bold', 'italic', 'underline'],
       [{ color: [] }, { background: [] }],
@@ -52,6 +53,7 @@ export default function Editor({
             },
           }),
           ...sx,
+          textTransform: 'unset',
         }}
       >
         {/* <Toolbar id={id} simple={simple} /> */}

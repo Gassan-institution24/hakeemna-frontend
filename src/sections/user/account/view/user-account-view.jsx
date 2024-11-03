@@ -2,22 +2,23 @@ import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import Container from '@mui/material/Container';
+import { Stack, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetPatient } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { LoadingButton } from '@mui/lab';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import AccountGeneral from '../account-general';
 // import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';

@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 import { Box, Card, Stack, Container, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useGetPrescription } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'notistack';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 
 export default function PatientPrescriptions({ patient }) {
   const { t } = useTranslate();
