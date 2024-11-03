@@ -129,6 +129,7 @@ export const endpoints = {
   },
   drugs: {
     all: '/api/drugs/',
+    taken: '/api/drugs/taken',
     one: (id) => (!id ? null : `/api/drugs/${id}`),
     patient: (id) => (!id ? null : `/api/drugs/patient/${id}`),
   },
