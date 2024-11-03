@@ -3,7 +3,7 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetmedicalreports({ params }) {
+export function useGetmedicalreports(params) {
   const URL = [endpoints.medicalreports.all, { params }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

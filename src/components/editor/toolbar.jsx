@@ -13,6 +13,7 @@ export const formats = [
   'background',
   'blockquote',
   'bold',
+  'size',
   'bullet',
   'code',
   'code-block',
