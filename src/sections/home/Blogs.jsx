@@ -23,8 +23,11 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
+<<<<<<< HEAD
 import Image from 'src/components/image/image';
 
+=======
+>>>>>>> master
 export default function Blogs() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -140,11 +143,7 @@ export default function Blogs() {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Image
-                    src={blog?.file}
-                    alt={blog.title}
-                    sx={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                  />
+        
                   <Box sx={{ p: 2 }}>
                     {blog?.user?.role === 'superadmin' ? (
                       <Typography
@@ -174,10 +173,11 @@ export default function Blogs() {
                       {blog.title}
                     </Typography>
                     <Typography
+                    variant='caption'
                       dangerouslySetInnerHTML={{
                         __html: formatTextWithLineBreaks(blog.topic),
                       }}
-                      sx={{ mt: 1, transition: 'all 0.5s ease-in-out' }}
+                      sx={{ mt: 1 }}
                     />
                     <Typography sx={{ color: 'gray', mt: 2 }}>
                       {fDateAndTime(blog.created_at)}
