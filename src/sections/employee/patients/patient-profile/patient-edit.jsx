@@ -24,6 +24,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 // ----------------------------------------------------------------------
 
 export default function EditPatient({ patient }) {
+  console.log('patient', patient)
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
@@ -51,7 +52,6 @@ export default function EditPatient({ patient }) {
     weight: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
-    is_on_eating_diet: Yup.string().nullable(),
     nationality: Yup.string().nullable(),
     country: Yup.string().nullable(),
     gender: Yup.string().nullable(),
@@ -63,7 +63,6 @@ export default function EditPatient({ patient }) {
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
-  const THERDDATAFORMAP = ['Yes', 'No'];
 
   const defaultValues = {
     name_english: patient?.name_english || '',
@@ -104,9 +103,6 @@ export default function EditPatient({ patient }) {
     try {
       await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
@@ -265,19 +261,6 @@ export default function EditPatient({ patient }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {SECDATAFORMAP.map((test, idx) => (
-                  <MenuItem lang="ar" value={test} key={idx}>
-                    {t(test)}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect
-                label={t('On Diet')}
-                fullWidth
-                name="is_on_eating_diet"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {THERDDATAFORMAP.map((test, idx) => (
                   <MenuItem lang="ar" value={test} key={idx}>
                     {t(test)}
                   </MenuItem>

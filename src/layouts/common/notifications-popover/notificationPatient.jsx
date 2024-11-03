@@ -15,7 +15,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
-
 // ----------------------------------------------------------------------
 
 export default function NotificationItem({ notification, handleClick }) {
@@ -116,6 +115,26 @@ export default function NotificationItem({ notification, handleClick }) {
       </Button>
     </Stack>
   );
+  const medicineTaken = (
+    <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+      <Button
+        size="small"
+        variant="contained"
+        onClick={async () => {
+          try {
+            await axios.post(endpoints.drugs.taken, notification?.onAccept?.body)
+          } catch (e) {
+            console.log(e)
+          }
+        }}
+      >
+        {t('took')}
+      </Button>
+      <Button size="small" variant="outlined">
+        {t('skip')}
+      </Button>
+    </Stack>
+  );
   const confirmation = (
     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
       {notification?.content?.map((info, i) => (
@@ -212,10 +231,16 @@ export default function NotificationItem({ notification, handleClick }) {
       {renderUnReadBadge}
 
       {renderAvatar}
+      {/* eslint-disable-next-line */}
       {notification.type === 'invite' ? (
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
           {renderText}
           {notification?.isUnRead === true ? beAmember : ''}
+        </Stack>
+      ) : notification.type === 'took' ? (
+        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
+          {renderText}
+          {notification?.isUnRead === true ? medicineTaken : ''}
         </Stack>
       ) : (
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>

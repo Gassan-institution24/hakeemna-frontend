@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
+import { HTMLToText } from 'src/utils/convert-to-html';
+
 import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -18,10 +20,7 @@ export default function DoctorPage() {
   const { onChangeLang } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const stripHtmlTags = (html) => {
-    if (!html) return '';
-    return html.replace(/<\/?[^>]+(>|$)/g, '');
-  };
+
   useEffect(() => {
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
     if (arabicRegex.test(doctor.replace(/-/g, ''))) {
@@ -32,6 +31,9 @@ export default function DoctorPage() {
       onChangeLang('en');
     }
   }, [doctor, curLangAr, onChangeLang]);
+  const { text: about_me } = HTMLToText(data?.employee?.about_me)
+  const { text: arabic_about_me } = HTMLToText(data?.employee?.arabic_about_me)
+  console.log(about_me)
   return (
     <>
       <Helmet>
@@ -39,7 +41,7 @@ export default function DoctorPage() {
         {/* eslint-disable-next-line */}
         <meta
           name="description"
-          content={`${curLangAr ? stripHtmlTags(data?.employee?.arabic_about_me) : stripHtmlTags(data?.employee?.about_me)} ${curLangAr ? 'تكلفة الموعد بعد الخصم' : 'appointment price after discount'}
+          content={`${curLangAr ? arabic_about_me : about_me} ${curLangAr ? 'تكلفة الموعد بعد الخصم' : 'appointment price after discount'}
            ${data?.fees_after_discount ? data?.fees_after_discount : data?.fees}
             ${curLangAr ? 'دينار' : 'JOD'}`}
         />

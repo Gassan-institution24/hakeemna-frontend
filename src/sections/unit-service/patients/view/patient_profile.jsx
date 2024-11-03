@@ -6,11 +6,12 @@ import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui
 import { useGetOneUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+
+import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
+import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
 import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
 import PatientPrescriptions from 'src/sections/employee/patients/patient-profile/patient-prescriptions';
-import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
 import PatientMedicalReports from 'src/sections/employee/patients/patient-profile/patient-medical-reports';
-import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
