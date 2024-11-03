@@ -23,11 +23,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
-<<<<<<< HEAD
-import Image from 'src/components/image/image';
-
-=======
->>>>>>> master
 export default function Blogs() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
