@@ -5,6 +5,7 @@ import { convert } from 'html-to-text';
 import {
   Page,
   Text,
+  Font,
   View,
   Document,
   StyleSheet,
@@ -20,7 +21,6 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { ConvertToHTML } from 'src/utils/convert-to-html';
 import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -32,6 +32,11 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back.png';
 import Doclogo from '../../components/logo/doc.png';
+
+Font.register({
+  family: 'ArabicFont',
+  src: '/fonts/IBMPlexSansArabic-Regular.ttf',
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -69,6 +74,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 13,
     marginBottom: 6,
+  },
+  textAR: {
+    fontSize: 13,
+    marginBottom: 6,
+    fontFamily: 'ArabicFont',
   },
   largeText: {
     fontSize: 15,
@@ -136,7 +146,7 @@ const SickLeavePDF = ({ report }) => {
             {fDmPdf(report?.Medical_sick_leave_end)}
           </Text>
           <Text style={styles.largeText}>Report Details</Text>
-          <Text style={styles.text}>{result}</Text>
+          <Text style={styles.textAR}>{result}</Text>
         </View>
         {/* Footer */}
         <Text style={styles.footer}>Made by hakeemna</Text>
@@ -181,7 +191,7 @@ export default function SickLeaves() {
           mb: 2,
         }}
       >
-        <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+        <Stack sx={{ p: 2, pb: 1, height: 120 }}>
           <Avatar
             alt={info?.name_english}
             src={user?.patient?.profile_picture}
@@ -193,9 +203,9 @@ export default function SickLeaves() {
             {t('From')} {fDateAndTime(info?.Medical_sick_leave_start)} {t('To')}
             {fDateAndTime(info?.Medical_sick_leave_end)}
           </Stack>
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+          {/* <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
             {ConvertToHTML(info?.description)}
-          </Stack>
+          </Stack> */}
         </Stack>
         <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
           <PDFDownloadLink

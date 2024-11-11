@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Font,
   Page,
   Text,
   View,
@@ -33,6 +34,12 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import Back from './imges/back3.png';
 import Doclogo from '../../components/logo/doc.png';
 
+Font.register({
+  family: 'ArabicFont',
+  src: '/fonts/IBMPlexSansArabic-Regular.ttf',
+});
+
+// Define the styles with the new font
 const styles = StyleSheet.create({
   page: {
     padding: 20,
@@ -75,6 +82,11 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     fontWeight: 'bold',
   },
+  arabicText: {
+    fontFamily: 'ArabicFont', // Apply Arabic font here
+    fontSize: 13,
+    marginBottom: 6,
+  },
   image: {
     marginTop: 20,
     display: 'flex',
@@ -82,16 +94,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  insideImage: {
-    width: '100%', // Make the image full width
-    height: 'auto', // Maintain the aspect ratio
-  },
   watermark: {
     position: 'absolute',
-    top: '30%', // Adjust the vertical position as needed
-    left: '25%', // Adjust the horizontal position as needed
-    width: '50%', // Adjust width for desired size
-    opacity: 0.2, // Set opacity to 30%
+    top: '30%',
+    left: '25%',
+    width: '50%',
+    opacity: 0.2,
     zIndex: -1,
   },
   table: {
@@ -108,7 +116,6 @@ const PrescriptionPDF = ({ report }) => (
     <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
-        {/* <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} /> */}
         <View>
           <Text style={styles.headerText}>Drug Report</Text>
           <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
@@ -130,28 +137,58 @@ const PrescriptionPDF = ({ report }) => (
         {report?.medicines?.map((info, i) => (
           <View key={i} style={styles.table}>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>Medicines</Text>
-              <Text style={styles.largeText}>{info?.medicines?.trade_name}</Text>
+              {info?.medicines?.trade_name && (
+                <>
+                  <Text>Medicines</Text>
+                  <Text style={styles.largeText}>{info.medicines.trade_name}</Text>
+                  <Text style={{ borderBottom: '1px solid gray' }} />
+                </>
+              )}
             </View>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>Start Time</Text>
-              <Text style={styles.largeText}>{fDmPdf(info?.Start_time)}</Text>
+              {info?.Start_time && (
+                <>
+                  <Text>Start Time</Text>
+                  <Text style={styles.largeText}>{fDmPdf(info.Start_time)}</Text>
+                  <Text style={{ borderBottom: '1px solid gray' }} />
+                </>
+              )}
             </View>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>End Time</Text>
-              <Text style={styles.largeText}>{fDmPdf(info?.End_time)}</Text>
+              {info?.End_time && (
+                <>
+                  <Text>End Time</Text>
+                  <Text style={styles.largeText}>{fDmPdf(info.End_time)}</Text>
+                  <Text style={{ borderBottom: '1px solid gray' }} />
+                </>
+              )}
             </View>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>Num Days</Text>
-              <Text style={styles.largeText}>{info?.Num_days}</Text>
+              {info?.Num_days && (
+                <>
+                  <Text>Num Days</Text>
+                  <Text style={styles.largeText}>{info.Num_days}</Text>
+                  <Text style={{ borderBottom: '1px solid gray' }} />
+                </>
+              )}
             </View>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>Frequency/Day</Text>
-              <Text style={styles.largeText}>{info?.Frequency_per_day}</Text>
+              {info?.Frequency_per_day && (
+                <>
+                  <Text>Frequency/Day</Text>
+                  <Text style={styles.largeText}>{info.Frequency_per_day}</Text>
+                  <Text style={{ borderBottom: '1px solid gray' }} />
+                </>
+              )}
             </View>
             <View style={styles.insideTable}>
-              <Text style={{ borderBottom: '1px solid gray' }}>Doctor Comments</Text>
-              <Text style={styles.largeText}>{info?.Doctor_Comments}</Text>
+              {info?.Doctor_Comments && (
+                <>
+                  <Text>Doctor Comments</Text>
+                  <Text style={styles.arabicText}>{info.Doctor_Comments}</Text>
+                  {/* Apply Arabic font style here */}
+                </>
+              )}
             </View>
           </View>
         ))}
@@ -166,6 +203,8 @@ const PrescriptionPDF = ({ report }) => (
 PrescriptionPDF.propTypes = {
   report: PropTypes.object,
 };
+
+
 export default function Prescriptions() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -197,7 +236,7 @@ export default function Prescriptions() {
           backgroundBlendMode: 'lighten',
         }}
       >
-        <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+        <Stack sx={{ p: 2, pb: 1, height: 110 }}>
           <Avatar
             alt={info?.name_english}
             src={user?.patient?.profile_picture}

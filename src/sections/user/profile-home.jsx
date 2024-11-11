@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetPatientFeedbacks,
   useGetPatientInsurance,
   useGetCurrentPatientMedicines,
 } from 'src/api';
@@ -16,7 +15,6 @@ import {
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-import RatingRoomDialog from './ratingDialog';
 import patientCard from '../home/images/cardimage.png';
 import patientCardAr from '../home/images/cardimagear.png';
 // ----------------------------------------------------------------------
@@ -25,7 +23,6 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
-  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
   const { prescriptionData } = useGetCurrentPatientMedicines(user?.patient?._id);
 
   const { currentLang } = useLocales();
@@ -474,7 +471,7 @@ export default function ProfileHome() {
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
-        {feedbackData ? <RatingRoomDialog /> : ''}
+      
 
         {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
