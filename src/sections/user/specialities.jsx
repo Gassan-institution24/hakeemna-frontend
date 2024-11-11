@@ -6,10 +6,13 @@ import { Button, TextField, Typography } from '@mui/material';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetSpecialties } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetSpecialties, useGetPatientFeedbacks } from 'src/api';
 
 import Image from 'src/components/image/image';
+
+import RatingRoomDialog from './ratingDialog';
 
 export default function Specialities() {
   const router = useRouter();
@@ -17,6 +20,7 @@ export default function Specialities() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { specialtiesData } = useGetSpecialties();
+  const { user } = useAuthContext();
 
   const handleViewRow = (id) => {
     router.push(paths.dashboard.user.bookappointment(id));
@@ -28,6 +32,7 @@ export default function Specialities() {
     inputData: specialtiesData,
     filterforspecialties,
   });
+  const { feedbackData } = useGetPatientFeedbacks(user?.patient?._id);
 
   return (
     <>
@@ -60,6 +65,7 @@ export default function Specialities() {
         }}
         placeholder="Search..."
       />
+      {feedbackData ? <RatingRoomDialog /> : ''}
       <Box
         gap={{
           xs: 0,
