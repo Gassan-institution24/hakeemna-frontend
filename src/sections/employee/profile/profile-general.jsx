@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { decode } from 'he';
 import PropTypes from 'prop-types';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -98,7 +98,6 @@ const languages = [
 
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
-
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
@@ -161,7 +160,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     // currency: Yup.string().required(t('required field')),
   });
 
-  const defaultValues = {
+  const defaultValues = useMemo(() => ({
     employee_type: employeeData?.employee_type?._id || null,
     email: employeeData?.email || '',
     name_english: employeeData?.name_english || '',
@@ -205,13 +204,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
     // currency:
     //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
     //   currencies?.[0]?._id,
-  };
+  }), [user?.employee, employeeData]);
+  
   const methods = useForm({
     mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
   const {
+    reset,
     watch,
     setValue,
     handleSubmit,
@@ -226,6 +227,10 @@ export default function AccountGeneral({ employeeData, refetch }) {
       );
     }
   }, [errors, enqueueSnackbar]);
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
 
   const values = watch();
 

@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import { useState } from 'react';
 import { m } from 'framer-motion';
 
@@ -18,6 +19,9 @@ import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 // ----------------------------------------------------------------------
 
@@ -29,16 +33,49 @@ export default function EmployeePatientToggel() {
   const { user } = useAuthContext();
   const [loading, setLoading] = useState();
   const [showDialog, setShowDialog] = useState(false);
-  const [formData, setFormData] = useState({ name_english: '', name_arabic: '' });
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const RegisterSchema = Yup.object().shape({
+    name_english: Yup.string()
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
+    name_arabic: Yup.string()
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
+  });
+
+  const defaultValues = {
+    name_english: '',
+    name_arabic: '',
+  };
+
+  const methods = useForm({
+    mode: 'all',
+    resolver: yupResolver(RegisterSchema),
+    defaultValues,
+  });
+
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = methods;
+
   const handleArabicInputChange = (event) => {
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
     if (arabicRegex.test(event.target.value)) {
-      setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+      setValue(event.target.name, event.target.value);
     }
   };
 
@@ -46,19 +83,21 @@ export default function EmployeePatientToggel() {
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
 
     if (englishRegex.test(event.target.value)) {
-      setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+      setValue(event.target.name, event.target.value);
     }
   };
 
+
   const handleChangeRole = async () => {
     try {
+      if (Object.keys(errors).length) return
       setLoading(true);
-      if (!user.patient && (!formData.name_english || !formData.name_arabic)) {
+      if (!user.patient && (!watch('name_english') || !watch("name_arabic"))) {
         setShowDialog(true);
         setLoading(false);
         return;
       }
-      await axios.patch(endpoints.auth.toggleRole, formData);
+      await axios.patch(endpoints.auth.toggleRole, watch());
       setLoading(false);
       window.location.href = paths.dashboard.root;
     } catch (error) {
@@ -108,22 +147,22 @@ export default function EmployeePatientToggel() {
         onClose={() => setShowDialog(false)}
         title={t('patient account details')}
         content={
-          <Stack gap={2} sx={{ m: 2 }}>
-            <TextField
-              name="name_english"
-              label={t('patient name in english')}
-              value={formData.name_english}
-              sx={{ width: '100%' }}
-              onChange={handleEnglishInputChange}
-            />
-            <TextField
-              name="name_arabic"
-              label={t('patient name in arabic')}
-              value={formData.name_arabic}
-              sx={{ width: '100%' }}
-              onChange={handleArabicInputChange}
-            />
-          </Stack>
+          <FormProvider methods={methods}>
+            <Stack gap={2} sx={{ m: 2 }}>
+              <RHFTextField
+                name="name_english"
+                label={t('patient name in english')}
+                sx={{ width: '100%' }}
+                onChange={handleEnglishInputChange}
+              />
+              <RHFTextField
+                name="name_arabic"
+                label={t('patient name in arabic')}
+                sx={{ width: '100%' }}
+                onChange={handleArabicInputChange}
+              />
+            </Stack>
+          </FormProvider>
         }
         action={
           <LoadingButton
