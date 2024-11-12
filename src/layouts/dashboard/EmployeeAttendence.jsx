@@ -32,9 +32,11 @@ function EmployeeAttendence() {
           },
           (error) => {
             console.error('Error getting location:', error);
+            resolve({ lat: 0, lng: 0 })
           }
         );
       } else {
+        resolve({ lat: 0, lng: 0 })
         console.log('Geolocation is not supported by this browser.');
       }
     });
