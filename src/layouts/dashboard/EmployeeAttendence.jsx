@@ -13,7 +13,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 function EmployeeAttendence() {
   const { t } = useTranslate();
   const { attendence, refetch } = useGetMyLastAttendence();
-  const hasAttendenceToday =
+  const hasAttendenceToday = attendence?.date &&
     new Date(attendence?.date).getFullYear() === new Date().getFullYear() &&
     new Date(attendence?.date).getMonth() === new Date().getMonth() &&
     new Date(attendence?.date).getDay() === new Date().getDay();

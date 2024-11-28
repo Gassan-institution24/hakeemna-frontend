@@ -398,12 +398,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
             </IconButton>
           </Badge>
 
-          <TicketPopover
+          {ticketDialog && <TicketPopover
             messagesLength={messages}
             refetchLenght={refetch}
             open={ticketDialog}
             onClose={() => setTicketDialog(false)}
-          />
+          />}
           <StartupCreating
             open={dialog}
             onClose={() => {

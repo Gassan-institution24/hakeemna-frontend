@@ -57,12 +57,16 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   const { handleSubmit } = methods;
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log('data', data)
       const Submitted = await axios.post(endpoints.tickets.all, {
         ...data,
         URL: window.location.pathname,
       });
       setChatId(Submitted.data?.chat);
       setPage(1);
+      refetch()
+      refetchLenght()
+      methods.reset()
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -200,25 +204,27 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
             {t('Select one')}
           </Typography>
           <Divider sx={{ mb: 1 }} />
-          {ticketsData.map((one, idx) => {
-            const currLength = messagesLength.find((chat) => chat?._id === one.chat);
-            return (
-              <MenuItem
-                onClick={() => {
-                  setChatId(one.chat);
-                  setPage(1);
-                }}
-                key={idx}
-              >
-                {one.subject}
-                {currLength?.messages?.length && (
-                  <Label sx={{ ml: 3 }} color="info">
-                    {currLength?.messages?.length}
-                  </Label>
-                )}
-              </MenuItem>
-            );
-          })}
+          <Stack sx={{ overflow: 'auto', maxHeight: 200 }}>
+            {ticketsData.map((one, idx) => {
+              const currLength = messagesLength.find((chat) => chat?._id === one.chat);
+              return (
+                <MenuItem
+                  onClick={() => {
+                    setChatId(one.chat);
+                    setPage(1);
+                  }}
+                  key={idx}
+                >
+                  {one.subject}
+                  {currLength?.messages?.length > 0 && (
+                    <Label sx={{ ml: 3 }} color="info">
+                      {currLength?.messages?.length}
+                    </Label>
+                  )}
+                </MenuItem>
+              );
+            })}
+          </Stack>
           <Divider />
           <MenuItem
             lang="ar"
