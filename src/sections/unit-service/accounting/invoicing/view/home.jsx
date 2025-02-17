@@ -37,7 +37,7 @@ import HistoryFiltersResult from '../appointment-filters-result';
 const defaultFilters = {
   name: '',
   status: 'finished processing',
-  types: '',
+  appointype: '',
   shift: '',
   group: '',
   startDate: null,

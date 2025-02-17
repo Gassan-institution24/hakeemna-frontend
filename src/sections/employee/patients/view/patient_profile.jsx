@@ -15,6 +15,7 @@ import PatientSickLeaves from '../patient-profile/patient-sick-leave';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
+import PatientInstructions from '../patient-profile/patient-instructions';
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +71,10 @@ export default function PatientProfile() {
     {
       value: 'appointments',
       label: t('appointments'),
+    },
+    {
+      value: 'instructions',
+      label: t('instructions'),
     },
     {
       value: 'upload',
@@ -160,6 +165,7 @@ export default function PatientProfile() {
       {currentTab === 'medical_reports' && usPatientData && <PatientMedicalReports patient={usPatientData} />}
       {currentTab === 'prescriptions' && usPatientData && <PatientPrescriptions patient={usPatientData} />}
       {currentTab === 'appointments' && usPatientData && <AppointmentsHistory patient={usPatientData} />}
+      {currentTab === 'instructions' && usPatientData && <PatientInstructions patient={usPatientData} />}
       {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
       {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
     </Container>

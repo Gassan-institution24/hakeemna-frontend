@@ -8,6 +8,7 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetOrder } from 'src/api';
+import { useTranslate } from 'src/locales';
 // import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -20,18 +21,18 @@ import OrderDetailsToolbar from '../order-details-toolbar';
 
 // ----------------------------------------------------------------------
 
-const ORDER_STATUS_OPTIONS = [
-  // { value: 'pending', label: 'Pending' },
-  // { value: 'processing', label: 'processing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
-];
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView() {
   const { id } = useParams();
   const { orderData, refetch } = useGetOrder(id);
   const settings = useSettingsContext();
+  const { t } = useTranslate()
+  
+  const ORDER_STATUS_OPTIONS = [
+    { value: 'completed', label: t('Completed') },
+    { value: 'cancelled', label: t('Cancelled') },
+  ];
 
   const handleChangeStatus = useCallback(
     async (newValue) => {
@@ -87,9 +88,9 @@ export default function OrderDetailsView() {
           <OrderDetailsInfo
             customer={orderData?.stakeholder}
             note={orderData?.note}
-            // delivery={orderData?.delivery}
-            // payment={orderData?.payment}
-            // shippingAddress={orderData?.shippingAddress}
+          // delivery={orderData?.delivery}
+          // payment={orderData?.payment}
+          // shippingAddress={orderData?.shippingAddress}
           />
         </Grid>
       </Grid>

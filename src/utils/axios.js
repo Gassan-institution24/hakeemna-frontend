@@ -432,6 +432,7 @@ export const endpoints = {
   },
   Instructions: {
     all: '/api/instructions',
+    one: (id) => `/api/instructions/${id}`,
     patient: (id) => (!id ? null : `/api/instructions/patient/${id}`),
   },
   generalCheckList: {

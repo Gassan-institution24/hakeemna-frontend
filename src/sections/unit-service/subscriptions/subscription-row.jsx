@@ -85,11 +85,11 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
       <TableCell  align="center">
         {note}
       </TableCell> */}
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 

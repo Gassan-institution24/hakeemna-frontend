@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { fCurrency } from 'src/utils/format-number';
 
 import Scrollbar from 'src/components/scrollbar';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,9 @@ export default function OrderDetailsItems({
   totalAmount,
 }) {
   const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0);
-
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const renderTotal = (
     <Stack
       spacing={2}
@@ -31,7 +34,7 @@ export default function OrderDetailsItems({
       sx={{ my: 3, textAlign: 'right', typography: 'body2' }}
     >
       <Stack direction="row" sx={{ typography: 'subtitle1' }}>
-        <Box>Total</Box>
+        <Box>{t('Total')}</Box>
         <Box sx={{ width: 160 }}>{fCurrency(total, items?.[0].currency?.symbol) || '-'}</Box>
       </Stack>
     </Stack>
@@ -39,7 +42,7 @@ export default function OrderDetailsItems({
 
   return (
     <Card>
-      <CardHeader title="Details" />
+      <CardHeader title={t("Details")} />
 
       <Stack
         sx={{
@@ -65,8 +68,8 @@ export default function OrderDetailsItems({
               />
 
               <ListItemText
-                primary={item?.product?.name_english}
-                secondary={item?.product?.category?.name_english}
+                primary={curLangAr ? item?.product?.name_arabic : item?.product?.name_english}
+                secondary={curLangAr ? item?.product?.category?.name_arabic : item?.product?.category?.name_english}
                 primaryTypographyProps={{
                   typography: 'body2',
                 }}

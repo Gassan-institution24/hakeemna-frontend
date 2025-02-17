@@ -60,7 +60,7 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 const defaultFilters = {
   name: '',
   status: 'booked',
-  types: '',
+  appointype: '',
   shift: '',
   group: '',
   startDate: null,
