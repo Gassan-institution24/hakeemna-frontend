@@ -48,7 +48,7 @@ export default function AppointmentToolbar({
 
   const handleFilterTypes = useCallback(
     (event) => {
-      onFilters('types', event.target.value);
+      onFilters('appointype', event.target.value);
     },
     [onFilters]
   );
@@ -115,7 +115,7 @@ export default function AppointmentToolbar({
           <InputLabel>{`${t('appointment type')}`}</InputLabel>
 
           <Select
-            value={filters.types}
+            value={filters.appointype}
             onChange={handleFilterTypes}
             input={<OutlinedInput label={t('appointment type')} />}
             // renderValue={(selected) =>

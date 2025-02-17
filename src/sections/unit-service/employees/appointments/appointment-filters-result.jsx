@@ -60,7 +60,7 @@ export default function InvoiceTableFiltersResult({
             <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>
         )}
-        {filters.types !== '' && (
+        {filters.appointype !== '' && (
           // <Block>
           <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
           // </Block>

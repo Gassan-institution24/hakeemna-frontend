@@ -86,7 +86,7 @@ export default function AppointmentsView() {
     status: filters.status || null,
     priority: filters.priority || null,
     category: filters.category || null,
-    populate: 'category user_creation user_modification',
+    populate: 'category assigned_to user_creation user_modification',
   });
 
   const dateError =

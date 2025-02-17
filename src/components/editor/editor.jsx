@@ -56,11 +56,10 @@ export default function Editor({
           textTransform: 'unset',
         }}
       >
-        {/* <Toolbar id={id} simple={simple} /> */}
-
         <ReactQuill
           modules={modules}
           formats={formats}
+
           // placeholder="Write something awesome..."
           {...other}
         />

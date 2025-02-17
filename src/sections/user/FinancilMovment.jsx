@@ -176,10 +176,10 @@ export default function InvoiceListView() {
                   <InvoiceTableRow
                     key={row.id}
                     row={row}
-                    selected={table.selected.includes(row.id)}
-                    onSelectRow={() => table.onSelectRow(row.id)}
-                    onViewRow={() => handleViewRow(row.id)}
-                    // onEditRow={() => handleEditRow(row.id)}
+                    selected={table.selected.includes(row._id)}
+                    onSelectRow={() => table.onSelectRow(row._id)}
+                    onViewRow={() => handleViewRow(row._id)}
+                  // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
 

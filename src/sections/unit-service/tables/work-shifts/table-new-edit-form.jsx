@@ -20,11 +20,12 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFTimePicker } from 'src/components/hook-form';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { user } = useAuthContext();
 
@@ -100,6 +101,7 @@ export default function TableNewEditForm({ currentTable }) {
           link: paths.unitservice.tables.workshifts.root,
           msg: `updated a work shift <strong>${data.name_english || ''}</strong>`,
         });
+        router.push(paths.unitservice.tables.workshifts.root);
       } else {
         await axiosInstance.post(endpoints.work_shifts.all, data);
         socket.emit('created', {
@@ -110,7 +112,6 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.tables.workshifts.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

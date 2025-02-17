@@ -16,6 +16,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -75,133 +76,137 @@ export default function InvoiceTableToolbar({
 
   return (
     <>
-      <Stack
-        spacing={2}
-        alignItems={{ xs: 'flex-end', md: 'center' }}
-        direction={{
-          xs: 'column',
-          md: 'row',
-        }}
-        sx={{
-          p: 2.5,
-          pr: { xs: 2.5, md: 1 },
-        }}
-      >
-        <DatePicker
-          label={t('start date')}
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
-
-        <DatePicker
-          label={t('end date')}
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-              helperText: dateError && t('End date must be later than start date'),
-            },
+      <Scrollbar>
+        <Stack
+          spacing={2}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+          direction={{
+            xs: 'column',
+            md: 'row',
           }}
           sx={{
-            maxWidth: { md: 180 },
-            [`& .${formHelperTextClasses.root}`]: {
-              position: { md: 'absolute' },
-              bottom: { md: -40 },
-            },
-          }}
-        />
-
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
+            p: 2.5,
+            pr: { xs: 2.5, md: 1 },
           }}
         >
-          <InputLabel>{t('patient')}</InputLabel>
+          <DatePicker
+            label={t('start date')}
+            value={filters.startDate}
+            onChange={handleFilterStartDate}
+            slotProps={{ textField: { fullWidth: true } }}
+            sx={{
+              maxWidth: { md: 180 },
+              minWidth: 150,
+            }}
+          />
 
-          <Select
-            onChange={handleFilterPatient}
-            input={<OutlinedInput label="patient" />}
-            sx={{ textTransform: 'capitalize' }}
-            value={filters.patient}
+          <DatePicker
+            label={t('end date')}
+            value={filters.endDate}
+            onChange={handleFilterEndDate}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: dateError,
+                helperText: dateError && t('End date must be later than start date'),
+              },
+            }}
+            sx={{
+              maxWidth: { md: 180 },
+              minWidth: 150,
+              [`& .${formHelperTextClasses.root}`]: {
+                position: { md: 'absolute' },
+                bottom: { md: -40 },
+              },
+            }}
+          />
+
+          <FormControl
+            sx={{
+              flexShrink: 0,
+              width: { xs: 1, md: 180 },
+            }}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
-            {patients?.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
-                {curLangAr ? option.name_arabic : option.name_english}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <InputLabel>{t('patient')}</InputLabel>
 
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>{t('stakeholder')}</InputLabel>
+            <Select
+              onChange={handleFilterPatient}
+              input={<OutlinedInput label="patient" />}
+              sx={{ textTransform: 'capitalize' }}
+              value={filters.patient}
+            >
+              <MenuItem value="">{t('all')}</MenuItem>
+              <Divider />
+              {patients?.map((option) => (
+                <MenuItem key={option._id} value={option._id}>
+                  {curLangAr ? option.name_arabic : option.name_english}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Select
-            onChange={handleFilterStakeholder}
-            input={<OutlinedInput label="stakeholder" />}
-            sx={{ textTransform: 'capitalize' }}
-            value={filters.stakeholder}
+          <FormControl
+            sx={{
+              flexShrink: 0,
+              width: { xs: 1, md: 180 },
+            }}
           >
-            <MenuItem value={null}>{t('all')}</MenuItem>
-            <Divider />
-            {stakeholders?.map((option) => (
-              <MenuItem key={option._id} value={option?._id}>
-                {curLangAr ? option.name_arabic : option.name_english}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <InputLabel>{t('stakeholder')}</InputLabel>
 
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>{t('type')}</InputLabel>
+            <Select
+              onChange={handleFilterStakeholder}
+              input={<OutlinedInput label="stakeholder" />}
+              sx={{ textTransform: 'capitalize' }}
+              value={filters.stakeholder}
+            >
+              <MenuItem value={null}>{t('all')}</MenuItem>
+              <Divider />
+              {stakeholders?.map((option) => (
+                <MenuItem key={option._id} value={option?._id}>
+                  {curLangAr ? option.name_arabic : option.name_english}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Select
-            onChange={handleFilterType}
-            input={<OutlinedInput label="type" />}
-            sx={{ textTransform: 'capitalize' }}
-            value={filters.service}
+          <FormControl
+            sx={{
+              flexShrink: 0,
+              width: { xs: 1, md: 180 },
+            }}
           >
-            <MenuItem value="">{t('all')}</MenuItem>
-            <Divider />
-            {['income', 'expences']?.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
-                {t(option)}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <InputLabel>{t('type')}</InputLabel>
 
-        <TextField
-          onChange={handleFilterMovement}
-          // value={filters.movement}
-          label={t('economic movement')}
-          sx={{ textTransform: 'capitalize' }}
-        />
+            <Select
+              onChange={handleFilterType}
+              input={<OutlinedInput label="type" />}
+              sx={{ textTransform: 'capitalize' }}
+              value={filters.service}
+            >
+              <MenuItem value="">{t('all')}</MenuItem>
+              <Divider />
+              {['income', 'expences']?.map((option, idx) => (
+                <MenuItem key={idx} value={option}>
+                  {t(option)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+          <TextField
+            onChange={handleFilterMovement}
+            // value={filters.movement}
+            label={t('economic movement')}
+            sx={{ textTransform: 'capitalize', minWidth: 180, }}
+          />
+
+          {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton> 
       </Stack> */}
-      </Stack>
+        </Stack>
+      </Scrollbar>
 
       <CustomPopover
         open={popover.open}

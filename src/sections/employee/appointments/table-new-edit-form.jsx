@@ -38,7 +38,7 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       appointment_type: currentTable?.appointment_type?._id || null,
       start_time: currentTable?.start_time || null,
-      online_available: currentTable?.online_available || true,
+      online_available: currentTable?.online_available || false,
       service_types: currentTable?.service_types?.map((one) => one?._id) || [],
     }),
     [currentTable]
@@ -53,6 +53,7 @@ export default function TableNewEditForm({ currentTable }) {
   });
 
   const {
+    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -116,6 +117,7 @@ export default function TableNewEditForm({ currentTable }) {
             <RHFCheckbox
               sx={{ ml: 3, mt: 1 }}
               name="online_available"
+              onChange={(e) => setValue('online_available', e.target.checked)}
               label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
             />
           </Box>

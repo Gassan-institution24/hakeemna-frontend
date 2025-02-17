@@ -92,7 +92,7 @@ export default function AppointmentsTableToolbar({
 
           <Select
             multiple
-            value={filters.types}
+            value={filters.appointype}
             onChange={handleFilterTypes}
             input={<OutlinedInput label={t('appointment type')} />}
             renderValue={(selected) =>
@@ -112,7 +112,7 @@ export default function AppointmentsTableToolbar({
                 <Checkbox
                   disableRipple
                   size="small"
-                  checked={filters.types?.includes(option._id)}
+                  checked={filters.appointype?.includes(option._id)}
                 />
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>

@@ -104,6 +104,7 @@ const BlogsNewPage = lazy(() => import('src/pages/employee/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/employee/blogs/edit'));
 
 const BrowseBlogs = lazy(() => import('src/pages/employee/blogs/browse-blogs'));
+const PreviewBlogs = lazy(() => import('src/pages/employee/blogs/preview-blogs'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -142,6 +143,7 @@ export const unitServiceEmployeeDashboardRoutes = [
         ],
       },
       { path: 'browzeblogs', element: <BrowseBlogs /> },
+      { path: 'browzeblogs/:id', element: <PreviewBlogs /> },
       {
         path: 'documents/blogs',
         children: [

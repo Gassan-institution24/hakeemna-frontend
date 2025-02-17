@@ -114,7 +114,7 @@ export const userRoutes = [
           { path: 'profile/history', element: <History /> },
           { path: 'historyinfo/:id', element: <HistoryInfo /> },
           { path: 'financial/financilmovment', element: <FinancilMovment /> },
-          { path: 'financilmovment/:id', element: <FinancilMovmentInfo /> },
+          { path: 'financial/financilmovment/:id', element: <FinancilMovmentInfo /> },
           { path: 'family', element: <Family /> },
           { path: 'blogs', element: <Blogs /> },
           { path: 'documents/sickLeave', element: <SickLeave /> },
