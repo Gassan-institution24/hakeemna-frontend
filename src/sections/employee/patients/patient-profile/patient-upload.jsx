@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useForm, useFieldArray } from 'react-hook-form';
+import React, { useMemo, useState, useEffect } from 'react';
 
 import {
   Box,
   Card,
   Stack,
+  Radio,
   Button,
   Divider,
   Container,
@@ -14,8 +15,6 @@ import {
   IconButton,
   Typography,
   Autocomplete,
-  Checkbox,
-  Radio,
 } from '@mui/material';
 
 import { useDebounce } from 'src/hooks/use-debounce';
@@ -25,6 +24,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetMedicines } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -35,8 +35,6 @@ import {
   RHFTextField,
   RHFDatePicker,
 } from 'src/components/hook-form';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
-import Scrollbar from 'src/components/scrollbar';
 
 export default function PatientUpload({ patient }) {
   const { t } = useTranslate();

@@ -1,4 +1,5 @@
 export { default as JwtVerifyView } from './verify-email';
+export { default as ChangeIDView } from './change-id-view';
 export { default as JwtLoginView } from './jwt-login-view';
 export { default as JwtRegisterView } from './jwt-register-view';
 export { default as JwtActivationView } from './activation-view';

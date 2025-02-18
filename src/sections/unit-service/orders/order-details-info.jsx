@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------

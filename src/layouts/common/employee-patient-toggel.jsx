@@ -1,10 +1,12 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { m } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Stack } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
-import { TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -20,8 +22,6 @@ import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 // ----------------------------------------------------------------------
 

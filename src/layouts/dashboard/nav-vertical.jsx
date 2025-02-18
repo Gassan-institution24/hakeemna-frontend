@@ -10,6 +10,8 @@ import { usePathname } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
@@ -21,7 +23,6 @@ import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
