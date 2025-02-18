@@ -26,10 +26,10 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -104,7 +104,7 @@ export default function UnitServicesAccountingView() {
     dateError,
   });
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -256,12 +256,12 @@ export default function UnitServicesAccountingView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered.map((row, idx)  => row._id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     dataFiltered.map((row, idx)  => row._id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -281,12 +281,6 @@ export default function UnitServicesAccountingView() {
                       onEditRow={() => handleEditRow(row?._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
-                />
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>
@@ -328,7 +322,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         (data?.free_subscription?.name_english &&
           data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.free_subscription?.name_arabic &&
           data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.subscription?.name_english &&

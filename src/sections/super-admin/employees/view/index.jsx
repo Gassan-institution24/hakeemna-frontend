@@ -384,11 +384,6 @@ export default function UsersTableView() {
                       />
                     ))}
 
-                  {/* <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
-                  /> */}
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>

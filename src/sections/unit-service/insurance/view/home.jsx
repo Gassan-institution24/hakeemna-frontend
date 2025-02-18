@@ -32,10 +32,10 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -115,7 +115,7 @@ export default function UnitServicesInsuranceView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name;
 
@@ -345,12 +345,12 @@ export default function UnitServicesInsuranceView() {
                   rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered?.map((row, idx)  => row._id)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered?.map((row, idx)  => row._id)
+                //   )
+                // }
                 />
 
                 <TableBody>
@@ -370,12 +370,6 @@ export default function UnitServicesInsuranceView() {
                         onDeleteRow={() => handleDeleteRow(row?._id)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, data?.insurance.length)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>

@@ -26,10 +26,10 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -96,7 +96,7 @@ export default function EconomicMovementsView({ patientData }) {
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset =
     !!filters.name ||
@@ -368,12 +368,12 @@ export default function EconomicMovementsView({ patientData }) {
                   rowCount={economecMovementsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     economecMovementsData.map((row, idx)  => row.id)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     economecMovementsData.map((row, idx)  => row.id)
+                //   )
+                // }
                 />
 
                 <TableBody>
@@ -390,18 +390,9 @@ export default function EconomicMovementsView({ patientData }) {
                         // onSelectRow={() => table.onSelectRow(row.id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
-                        // onDeleteRow={() => handleDeleteRow(row.id)}
+                      // onDeleteRow={() => handleDeleteRow(row.id)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      economecMovementsData.length
-                    )}
-                  />
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

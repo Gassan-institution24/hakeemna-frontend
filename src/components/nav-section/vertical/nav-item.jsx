@@ -9,6 +9,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { RouterLink } from 'src/routes/components';
 
+import { useLocales } from 'src/locales';
+
 import Iconify from '../../iconify';
 
 // ----------------------------------------------------------------------
@@ -37,6 +39,8 @@ const NavItem = forwardRef(
     },
     ref
   ) => {
+    const { currentLang } = useLocales()
+    const curLangAr = currentLang.value === 'ar';
     const subItem = depth !== 1;
     const renderContent = (
       <StyledNavItem
@@ -92,7 +96,8 @@ const NavItem = forwardRef(
           <Iconify
             width={16}
             className="arrow"
-            icon={open ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-forward-fill'}
+            // eslint-disable-next-line
+            icon={open ? 'eva:arrow-ios-downward-fill' : curLangAr ? 'eva:arrow-ios-back-fill' : 'eva:arrow-ios-forward-fill'}
           />
         )}
       </StyledNavItem>

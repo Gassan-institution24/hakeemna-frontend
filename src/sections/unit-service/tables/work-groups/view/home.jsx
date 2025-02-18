@@ -38,10 +38,10 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -116,7 +116,7 @@ export default function WorkGroupsTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -451,9 +451,9 @@ export default function WorkGroupsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
@@ -494,12 +494,6 @@ export default function WorkGroupsTableView() {
                         onView={() => handleViewRow(row._id)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, workGroupsData.length)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>
