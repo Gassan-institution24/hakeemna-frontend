@@ -141,7 +141,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     filters.status !== 'pending' ||
     !!filters.startDate ||
     !!filters.endDate ||
-    filters.types.length > 0;
+    filters.appointype.length > 0;
 
   const notFound = (!appointmentsData.length && canReset) || !appointmentsData.length;
 

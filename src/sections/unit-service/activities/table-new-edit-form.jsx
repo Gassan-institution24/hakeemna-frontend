@@ -199,17 +199,23 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 </RHFSelect>
               )}
-              <RHFTextField
-                onChange={handleEnglishInputChange}
-                name="details"
-                label={t('details')}
-              />
-              <RHFTextField
-                onChange={handleArabicInputChange}
-                name="details_arabic"
-                label={t('details arabic')}
-              />
             </Box>
+            <RHFTextField
+              onChange={handleEnglishInputChange}
+              multiline
+              rows={2}
+              name="details"
+              label={t('details')}
+              sx={{ mt: 2 }}
+            />
+            <RHFTextField
+              onChange={handleArabicInputChange}
+              multiline
+              rows={2}
+              name="details_arabic"
+              label={t('details arabic')}
+              sx={{ mt: 2 }}
+            />
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

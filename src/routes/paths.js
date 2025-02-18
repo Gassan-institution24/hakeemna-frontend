@@ -915,6 +915,7 @@ export const paths = {
     },
     calender: `${ROOTS.SUPERADMIN}/calender`,
     blogs: `${ROOTS.SUPERADMIN}/browzeblogs`,
+    previewBlog: (id) => `${ROOTS.SUPERADMIN}/browzeblogs/${id}`,
     appointmentsToday: `${ROOTS.SUPERADMIN}/appointmentsToday`,
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,

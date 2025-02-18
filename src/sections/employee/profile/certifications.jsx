@@ -60,13 +60,13 @@ export default function Certifications() {
                 size="small"
                 name={`certifications[${index}].name`}
                 label={t('cetificate')}
-                sx={{ flex: 0.5 }}
+                sx={{ flex: 5 }}
               />
               <RHFTextField
                 size="small"
                 name={`certifications[${index}].institution`}
                 label={t('institution')}
-                sx={{ flex: 0.3 }}
+                sx={{ flex: 3 }}
               />
               <RHFDatePicker
                 size="small"
@@ -74,9 +74,9 @@ export default function Certifications() {
                 placeholder={t('year')}
                 name={`certifications[${index}].year`}
                 views={['year']}
-                sx={{ flex: 0.2 }}
+                sx={{ maxWidth:180 }}
               />
-              <Box sx={{ flex: 0.1 }}>
+              <Box sx={{ flex: 1 }}>
                 {values.certifications.length !== 1 && (
                   <IconButton
                     // sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}

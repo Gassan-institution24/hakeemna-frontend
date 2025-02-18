@@ -14,6 +14,8 @@ import {
   IconButton,
   Typography,
   Autocomplete,
+  Checkbox,
+  Radio,
 } from '@mui/material';
 
 import { useDebounce } from 'src/hooks/use-debounce';
@@ -33,6 +35,8 @@ import {
   RHFTextField,
   RHFDatePicker,
 } from 'src/components/hook-form';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import Scrollbar from 'src/components/scrollbar';
 
 export default function PatientUpload({ patient }) {
   const { t } = useTranslate();
@@ -45,6 +49,7 @@ export default function PatientUpload({ patient }) {
 
   const [medSerach, setMedSerach] = useState();
   const [loading, setloading] = useState(false);
+  const [selectedInstruction, setSelectedInstruction] = useState('');
 
   const debouncedQuery = useDebounce(medSerach);
 
@@ -52,6 +57,8 @@ export default function PatientUpload({ patient }) {
     select: 'trade_name concentration',
     search: debouncedQuery,
   });
+
+  const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
 
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
@@ -130,6 +137,18 @@ export default function PatientUpload({ patient }) {
         await axiosInstance.post(endpoints.medicalreports.all, formData);
         setValue('medical_report_file', null);
         setValue('medical_report_description', null);
+      } else if (table === 'instructions') {
+        if (!selectedInstruction) {
+          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          return;
+        }
+        await axiosInstance.post(`/api/instructions`, {
+          patient: patient?._id,
+          unit_service_patient: patient?._id,
+          adjustable_documents: selectedInstruction,
+          unit_service: employee?.unit_service?._id,
+        });
+        setSelectedInstruction('')
       } else if (table === 'patient_record') {
         if (!values.patient_record_description && !values.patient_record_file) {
           enqueueSnackbar(t('no data submitted'), { variant: 'error' });
@@ -330,24 +349,6 @@ export default function PatientUpload({ patient }) {
             </Stack>
           </Card>
 
-          <Card sx={{ p: 2 }}>
-            <Stack gap={2}>
-              <Typography variant="subtitle1">{t('sick leave')}</Typography>
-              <RHFDatePicker name="start_date" label={t('start date')} />
-              <RHFDatePicker name="end_date" label={t('end date')} />
-              <RHFEditor
-                lang="en"
-                name="sick_leave_description"
-                label={t('description')}
-                sx={{ textTransform: 'lowercase' }}
-              />
-              <Stack direction="row" justifyContent="flex-end">
-                <Button variant="contained" onClick={() => handleSubmit('sick_leave')}>
-                  {t('save')}
-                </Button>
-              </Stack>
-            </Stack>
-          </Card>
 
           <Card sx={{ p: 2 }}>
             <Stack gap={2}>
@@ -361,6 +362,49 @@ export default function PatientUpload({ patient }) {
               />
               <Stack direction="row" justifyContent="flex-end">
                 <Button variant="contained" onClick={() => handleSubmit('communication')}>
+                  {t('save')}
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+
+          <Card sx={{ p: 2 }}>
+            <Stack gap={2} height='100%'>
+              <Typography variant="subtitle1">{t('Instructions')}</Typography>
+              <Stack gap={1} sx={{ maxHeight: 300, overflow: 'auto' }}>
+                {adjustabledocument?.map((document) => (
+                  <Box key={document?._id} onClick={() => setSelectedInstruction(document?._id)} sx={{ cursor: 'pointer' }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems='center'
+                      sx={{ backgroundColor: 'primary.lighter', paddingX: 4, paddingY: 1, borderRadius: 2, border: selectedInstruction === document?._id ? '1px solid #00A76F' : '' }}
+                    >
+                      <Typography>{document?.title}</Typography>
+                      <Typography>{document?.applied}</Typography>
+                      <Radio checked={selectedInstruction === document?._id} value={document?._id} onChange={() => setSelectedInstruction(document?._id)} />
+                    </Stack>
+                  </Box>
+                ))}
+              </Stack>
+              <div style={{ flex: 1 }} />
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained" onClick={() => handleSubmit('instructions')}>
+                  {t('save')}
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+          <Card sx={{ p: 2 }}>
+            <Stack gap={2}>
+              <Typography variant="subtitle1">{t('sick leave')}</Typography>
+              <RHFDatePicker name="start_date" label={t('start date')} />
+              <RHFDatePicker name="end_date" label={t('end date')} />
+              <RHFEditor
+                lang="en"
+                name="sick_leave_description"
+                label={t('description')}
+                sx={{ textTransform: 'lowercase' }}
+              />
+              <Stack direction="row" justifyContent="flex-end">
+                <Button variant="contained" onClick={() => handleSubmit('sick_leave')}>
                   {t('save')}
                 </Button>
               </Stack>
