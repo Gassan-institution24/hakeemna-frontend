@@ -1,12 +1,13 @@
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 
+import { Stack, Typography } from '@mui/material';
+
+import { useTranslate } from 'src/locales';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 
 import DepartmentPermissionsView from 'src/sections/unit-service/permissions/view/department-permission';
-import { Stack, Typography } from '@mui/material';
-import { useTranslate } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function DepartmentPermissionsPage() {

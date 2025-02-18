@@ -33,7 +33,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFCheckbox, RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
