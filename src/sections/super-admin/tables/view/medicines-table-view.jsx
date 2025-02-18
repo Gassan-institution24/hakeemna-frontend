@@ -32,9 +32,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -112,7 +112,7 @@ export default function MedicinesTableView() {
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -372,12 +372,6 @@ export default function MedicinesTableView() {
                       onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.AllCount)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>

@@ -227,12 +227,6 @@ export default function PatientTableView() {
                     onDeleteRow={() => handleDeleteRow(row._id)}
                   />
                 ))}
-
-                {/* <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, patientsData.length)}
-                /> */}
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

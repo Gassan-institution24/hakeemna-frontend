@@ -20,10 +20,10 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -112,7 +112,7 @@ export default function TablesListView() {
     dateError,
   });
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters.name;
 
@@ -207,11 +207,6 @@ export default function TablesListView() {
                         onViewRow={() => handleViewRow(row.tableName)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
-                  />
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

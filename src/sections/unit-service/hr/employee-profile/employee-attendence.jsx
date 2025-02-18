@@ -18,9 +18,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -71,8 +69,6 @@ export default function EmployeeAttendence({ employee }) {
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
-
-  const denseHeight = table.dense ? 56 : 76;
 
   const canReset = !!filters.startDate && !!filters.endDate;
 
@@ -145,11 +141,6 @@ export default function EmployeeAttendence({ employee }) {
                 {attendence.map((row, idx) => (
                   <EmployeeAttendenceRow key={idx} row={row} refetch={refetch} />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, attendence.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

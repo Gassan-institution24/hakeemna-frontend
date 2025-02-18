@@ -21,9 +21,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -104,7 +104,7 @@ export default function AppointmentsView() {
 
   const dataFiltered = appointmentsData;
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -186,12 +186,6 @@ export default function AppointmentsView() {
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
-                />
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

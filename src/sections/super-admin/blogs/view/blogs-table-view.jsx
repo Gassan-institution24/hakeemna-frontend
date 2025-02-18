@@ -170,11 +170,6 @@ export default function BlogsTableView() {
                     />
                   ))}
 
-                {/* <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, blogsData?.length)}
-                /> */}
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

@@ -65,10 +65,10 @@ export default function ConfirmingView() {
                     </Typography>
                   </Stack>
                 </Stack>
+                <Button variant="contained" color="primary" sx={{ flex: 3 }} onClick={() => handleActivate(one._id)}>
+                  Activate
+                </Button>
                 <Stack direction='row' gap={1}>
-                  <Button variant="contained" color="primary" sx={{ flex: 3 }} onClick={() => handleActivate(one._id)}>
-                    Activate
-                  </Button>
                   <Button variant="contained" disabled={one?.wating_to_resend_id} sx={{ flex: 2 }} onClick={() => handleResendID(one._id)}>
                     {one.wating_to_resend_id ? 'waiting to resend' : 'Resend Id Image'}
                   </Button>

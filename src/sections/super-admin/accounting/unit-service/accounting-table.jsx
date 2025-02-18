@@ -24,10 +24,10 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -94,7 +94,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset =
     !!filters.name ||
@@ -231,9 +231,8 @@ export default function USlicenseMovementView({ unitServiceData }) {
               href: paths.superadmin.accounting.root,
             },
             {
-              name: `${
-                (unitServiceData && unitServiceData.name_english) || 'unit of service'
-              } Accounting`,
+              name: `${(unitServiceData && unitServiceData.name_english) || 'unit of service'
+                } Accounting`,
             },
           ]}
           action={
@@ -285,7 +284,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
+          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
           />
 
           {canReset && (
@@ -349,12 +348,12 @@ export default function USlicenseMovementView({ unitServiceData }) {
                   rowCount={licenseMovements.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     licenseMovements.map((row, idx)  => row.id)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     licenseMovements.map((row, idx)  => row.id)
+                //   )
+                // }
                 />
 
                 <TableBody>
@@ -371,14 +370,11 @@ export default function USlicenseMovementView({ unitServiceData }) {
                         // onSelectRow={() => table.onSelectRow(row.id)}
                         onViewRow={() => handleViewRow(row?._id)}
                         onEditRow={() => handleEditRow(row?._id)}
-                        // onDeleteRow={() => handleDeleteRow(row.id)}
+                      // onDeleteRow={() => handleDeleteRow(row.id)}
                       />
                     ))}
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
-                  />
+
 
                   <TableNoData notFound={notFound} />
                 </TableBody>
