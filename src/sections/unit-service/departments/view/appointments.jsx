@@ -41,9 +41,9 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -140,7 +140,7 @@ export default function AppointmentsView({ departmentData }) {
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -570,12 +570,6 @@ export default function AppointmentsView({ departmentData }) {
                       onUnCancelRow={() => handleUnCancelRow(row)}
                     />
                   ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>

@@ -40,9 +40,9 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -129,7 +129,7 @@ export default function AppointmentsView({ employeeData }) {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -540,9 +540,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }
@@ -578,11 +578,6 @@ export default function AppointmentsView({ employeeData }) {
                       onUnCancelRow={() => handleUnCancelRow(row)}
                     />
                   ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, lengths?.length)}
-                  />
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

@@ -8,7 +8,6 @@ import Stack from '@mui/material/Stack';
 import { Tooltip } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import { useTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Dialog, { dialogClasses } from '@mui/material/Dialog';
 
@@ -115,9 +114,9 @@ function Searchbar() {
 
   const renderButton = (
     <Stack direction="row" alignItems="center">
-      <IconButton onClick={search.onTrue}>
+      {/* <IconButton onClick={search.onTrue}>
         <Iconify icon="eva:search-fill" />
-      </IconButton>
+      </IconButton> */}
 
       {lgUp && user?.role === 'patient' && (
         <Label sx={{ backgroundColor: 'none' }}>

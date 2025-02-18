@@ -29,10 +29,10 @@
 // import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 // import {
 //   useTable,
-//   emptyRows,
+//   
 //   TableNoData,
 //   getComparator,
-//   TableEmptyRows,
+//   
 //   TableHeadCustom,
 //   TableSelectedAction,
 //   TablePaginationCustom,
@@ -87,7 +87,7 @@
 //     table.page * table.rowsPerPage + table.rowsPerPage
 //   );
 
-//   const denseHeight = table.dense ? 52 : 72;
+//   
 
 //   const canReset = !isEqual(defaultFilters, filters);
 
@@ -283,12 +283,6 @@
 //                         onEditRow={() => handleEditRow(row.id)}
 //                       />
 //                     ))}
-
-//                   <TableEmptyRows
-//                     height={denseHeight}
-//                     emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-//                   />
-
 //                   <TableNoData notFound={notFound} />
 //                 </TableBody>
 //               </Table>

@@ -1323,6 +1323,7 @@
   "item_external_link": "رابط خارجي للعنصر",
   "only_admin_can_see_this_item": "يمكن للمسؤول فقط رؤية هذا العنصر",
   "upgrade_to_pro": "الترقية إلى Pro",
+  "eva:arrow-ios-forward-fill": "eva:arrow-ios-back-fill",
   "Select department and employee to show and change permissions": "اختر قسم وموظف لرؤية وتغيير الصلاحيات",
   "demo": {
     "title": "Arabic"

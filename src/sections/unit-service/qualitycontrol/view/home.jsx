@@ -25,10 +25,10 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -91,7 +91,7 @@ export default function UnitServicesFeedbackView() {
     dateError,
   });
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'unread' || filters.rate.length > 0;
 
@@ -228,12 +228,12 @@ export default function UnitServicesFeedbackView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered.map((row, idx)  => row._id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     dataFiltered.map((row, idx)  => row._id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -250,15 +250,9 @@ export default function UnitServicesFeedbackView() {
                       setFilters={setFilters}
                       // selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
-                      // onEditRow={() => handleEditRow(row._id)}
+                    // onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, feedbackData.length)}
-                />
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

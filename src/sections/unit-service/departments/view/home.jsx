@@ -37,10 +37,10 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -119,7 +119,7 @@ export default function UnitServicesTableView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -489,12 +489,6 @@ export default function UnitServicesTableView() {
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, departmentsData.length)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>
