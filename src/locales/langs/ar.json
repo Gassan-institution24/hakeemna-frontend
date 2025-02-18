@@ -1317,6 +1317,7 @@
   "Cancelled": "ملغي",
   "items?": "عناصر؟",
   "Are you sure want to cancel": "هل أنت متأكد من الغاء",
+  "sent successfully!": "تم الارسال بنجاح",
   "item_disabled": "العنصر معطل",
   "item_by_roles": "العنصر حسب الأدوار",
   "item_external_link": "رابط خارجي للعنصر",

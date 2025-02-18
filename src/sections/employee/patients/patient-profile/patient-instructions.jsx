@@ -6,7 +6,6 @@ import { Container } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetInstructions } from 'src/api/Instructions';
 
-import MedicalReportItem from './items/medical-report-item';
 import InstructionItem from './items/instruction-item';
 
 export default function PatientInstructions({ patient }) {

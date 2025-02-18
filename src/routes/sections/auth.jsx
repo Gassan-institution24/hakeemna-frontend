@@ -10,6 +10,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // JWT
 const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
+const ChangeIdPage = lazy(() => import('src/pages/auth/change-id'));
 const JwtRegisterPage = lazy(() => import('src/pages/auth/register'));
 const JwtUSRegisterPage = lazy(() => import('src/pages/auth/unit-service-register'));
 const JwtStakeholderRegisterPage = lazy(() => import('src/pages/auth/stakeholder-register'));
@@ -28,6 +29,16 @@ export const authRoutes = [
       <Suspense fallback={<LoadingScreen />}>
         <AuthClassicLayout title="Happy to see you again">
           <JwtLoginPage />
+        </AuthClassicLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: 'change-id-image',
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <AuthClassicLayout title="Upload real image of your ID">
+          <ChangeIdPage />
         </AuthClassicLayout>
       </Suspense>
     ),

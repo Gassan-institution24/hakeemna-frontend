@@ -423,6 +423,7 @@ export const endpoints = {
     familyType: '/api/family',
     onefamilyType: (id) => (!id ? null : `/api/family/${id}`),
     one: (id) => (!id ? null : `/api/patient/${id}`),
+    resend: (id) => (!id ? null : `/api/patient/resend_id/${id}`),
   },
   history: {
     all: '/api/history',
@@ -824,6 +825,7 @@ export const endpoints = {
     deletMe: '/api/auth/deletMe',
     me: '/api/auth/me',
     login: '/api/auth/login',
+    changeId: '/api/auth/changeid',
     resendActivation: `/api/auth/resendactivate`,
     activate: `/api/auth/activate`,
     register: '/api/auth/signup',

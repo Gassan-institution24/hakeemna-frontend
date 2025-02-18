@@ -40,9 +40,9 @@ export default function Sidebar() {
   };
   const stickySidebarStyle = {
     display: 'flex',
-
     zIndex: 1,
-    height: '35vh',
+    overflow: 'hidden',
+    // height: '35vh',
     width: 'auto',
     margin: 3,
     position: 'fixed',

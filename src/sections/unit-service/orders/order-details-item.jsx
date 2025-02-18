@@ -9,8 +9,9 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import Scrollbar from 'src/components/scrollbar';
 import { useLocales, useTranslate } from 'src/locales';
+
+import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
