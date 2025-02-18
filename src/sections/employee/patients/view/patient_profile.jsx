@@ -12,10 +12,10 @@ import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
+import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
-import PatientInstructions from '../patient-profile/patient-instructions';
 
 // ----------------------------------------------------------------------
 
