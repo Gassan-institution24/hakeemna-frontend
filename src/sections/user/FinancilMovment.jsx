@@ -21,9 +21,9 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -75,7 +75,7 @@ export default function InvoiceListView() {
     ...filters,
   });
 
-  const denseHeight = table.dense ? 56 : 56 + 20;
+
 
   const canReset = !!filters.startDate || !!filters.endDate;
 
@@ -182,12 +182,6 @@ export default function InvoiceListView() {
                   // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, lengths.length)}
-                />
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

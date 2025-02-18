@@ -41,7 +41,6 @@ export default function Sidebar() {
   const stickySidebarStyle = {
     display: 'flex',
     zIndex: 1,
-    overflow: 'hidden',
     // height: '35vh',
     width: 'auto',
     margin: 3,
@@ -55,6 +54,18 @@ export default function Sidebar() {
   const insidestickySidebar = {
     transform: 'translate(2%, 2%)',
   };
+  let icon
+  if (hide) {
+    if (curLangAr) {
+      icon = 'eva:arrow-ios-forward-fill'
+    } else {
+      icon = 'eva:arrow-ios-back-fill'
+    }
+  } else if (curLangAr) {
+    icon = 'eva:arrow-ios-back-fill'
+  } else {
+    icon = 'eva:arrow-ios-forward-fill'
+  }
   return (
     <Box style={hide ? hideStyle : stickySidebarStyle}>
       <Box style={insidestickySidebar}>
@@ -141,17 +152,17 @@ export default function Sidebar() {
       <IconButton
         sx={{
           position: 'absolute',
-          left: hide ? -45 : -28,
+          left: hide ? -60 : -28,
           bottom: 10,
-          borderRadius: 0,
+          borderRadius: '10px 0px 0px 10px',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
           boxShadow: '-2px 4px 6px rgba(0, 0, 0, 0.4)',
-          p: 0.5,
+          p: hide ? 1 : 0.5,
         }}
         onClick={() => setHide((prev) => !prev)}
       >
         <Iconify
-          icon={hide || curLangAr ? 'ic:baseline-arrow-back-ios' : 'ic:baseline-arrow-forward-ios'}
+          icon={icon}
         />
       </IconButton>
     </Box>

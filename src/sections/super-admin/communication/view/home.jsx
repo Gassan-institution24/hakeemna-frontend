@@ -36,6 +36,7 @@ import HistoryFiltersResult from '../ticket-filters-result';
 const defaultFilters = {
   name: '',
   status: 'pending',
+  assigned_to: null,
   priority: null,
   category: null,
 };
@@ -86,6 +87,7 @@ export default function AppointmentsView() {
     status: filters.status || null,
     priority: filters.priority || null,
     category: filters.category || null,
+    assigned_to: filters.assigned_to || null,
     populate: 'category assigned_to user_creation user_modification',
   });
 
@@ -95,7 +97,7 @@ export default function AppointmentsView() {
       : false;
 
   const canReset =
-    filters.priority !== defaultFilters.priority || filters.category !== defaultFilters.category;
+    filters.priority !== defaultFilters.priority || filters.category !== defaultFilters.category || filters.assigned_to !== defaultFilters.assigned_to;
 
   const notFound = (!ticketsData.length && canReset) || !ticketsData.length;
 

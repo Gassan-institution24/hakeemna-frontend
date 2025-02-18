@@ -32,10 +32,10 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -110,7 +110,7 @@ export default function ActivitesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -394,11 +394,6 @@ export default function ActivitesTableView() {
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, activitiesData.length)}
-                  />
 
                   <TableNoData notFound={notFound} />
                 </TableBody>

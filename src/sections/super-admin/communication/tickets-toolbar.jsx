@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { TextField, InputAdornment } from '@mui/material';
 
-import { useGetTicketCategories } from 'src/api';
+import { useGetUsers, useGetTicketCategories } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -18,6 +18,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TicketsToolbar({ filters, onFilters }) {
   const { ticketCategoriesData } = useGetTicketCategories({ select: 'name_english _id' });
+  const { usersData } = useGetUsers({ role: 'superadmin', select: 'email' })
 
   const popover = usePopover();
 
@@ -30,6 +31,12 @@ export default function TicketsToolbar({ filters, onFilters }) {
   const handleFilterPriority = useCallback(
     (event) => {
       onFilters('priority', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterAssigned = useCallback(
+    (event) => {
+      onFilters('assigned_to', event.target.value);
     },
     [onFilters]
   );
@@ -73,6 +80,30 @@ export default function TicketsToolbar({ filters, onFilters }) {
             {ticketCategoriesData.map((option, idx) => (
               <MenuItem sx={{ textTransform: 'capitalize' }} lang="ar" key={idx} value={option._id}>
                 {option?.name_english}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl
+          sx={{
+            width: { xs: 1, md: 300 },
+          }}
+        >
+          <InputLabel>Assigned to</InputLabel>
+
+          <Select
+            value={filters.assigned_to}
+            onChange={handleFilterAssigned}
+            input={<OutlinedInput label="Assigned to" />}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {usersData.map((option, idx) => (
+              <MenuItem sx={{ textTransform: 'capitalize' }} lang="ar" key={idx} value={option._id}>
+                {option?.email}
               </MenuItem>
             ))}
           </Select>

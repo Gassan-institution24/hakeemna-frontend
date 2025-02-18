@@ -20,10 +20,10 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
   getComparator,
-  TableEmptyRows,
+
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -88,7 +88,7 @@ export default function DoctornaSystemErrorsView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
+
 
   const codeOptions = Array.from(new Set(systemErrorsData.map((data, idx) => data.error_code)));
 
@@ -239,12 +239,12 @@ export default function DoctornaSystemErrorsView() {
                 rowCount={dataFiltered?.length}
                 numSelected={table.selected?.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered.map((row, idx)  => row._id)
-                //   )
-                // }
+              // onSelectAllRows={(checked) =>
+              //   table.onSelectAllRows(
+              //     checked,
+              //     dataFiltered.map((row, idx)  => row._id)
+              //   )
+              // }
               />
 
               <TableBody>
@@ -263,14 +263,9 @@ export default function DoctornaSystemErrorsView() {
                       onUnread={() => handleUnread(row._id)}
                       // selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
-                      // onEditRow={() => handleEditRow(row._id)}
+                    // onEditRow={() => handleEditRow(row._id)}
                     />
                   ))}
-
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, systemErrorsData?.length)}
-                />
 
                 <TableNoData notFound={notFound} />
               </TableBody>

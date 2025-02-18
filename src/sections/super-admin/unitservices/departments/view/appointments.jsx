@@ -37,9 +37,9 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-  emptyRows,
+
   TableNoData,
-  TableEmptyRows,
+
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -134,7 +134,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 56 : 76;
+
 
   const canReset =
     !!filters.name ||
@@ -577,12 +577,6 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
                         onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
-                  />
-
                   <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>
