@@ -18,6 +18,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
   const { user } = useAuthContext();
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const [adjustabledocumentId, setadjustabledocumentId] = useState(null);
+  const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
   const onSubmit = async () => {
     try {
@@ -25,6 +26,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
         patient: patient?._id,
         unit_service_patient,
         adjustable_documents: adjustabledocumentId,
+        unit_service: employee?.unit_service?._id,
       });
       enqueueSnackbar('adjustable document sent successfully', { variant: 'success' });
       dialog.onFalse();
@@ -63,7 +65,7 @@ export default function Adjustabledocument({ patient, unit_service_patient }) {
         type="submit"
         variant="contained"
         onClick={onSubmit}
-        disabled={!adjustabledocumentId} 
+        disabled={!adjustabledocumentId}
         sx={{ m: 2 }}
       >
         {t('Upload')}

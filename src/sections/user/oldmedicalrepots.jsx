@@ -27,6 +27,7 @@ import {
   TextField,
   Typography,
   TableContainer,
+  Stack,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -425,35 +426,34 @@ export default function OldMedicalReports() {
 
             <RHFTextField name="note" label={t('More information')} />
           </DialogContent>
-          <Checkbox
-            size="small"
-            name="agree"
-            color="success"
-            sx={{ position: 'relative', top: 5, left: 25 }}
-            onChange={() => {
-              setCheckChange(!checkChange);
-            }}
-          />
-          <Typography
-            sx={{
-              color: 'text.secondary',
-              mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -7.5, xs: 4 },
-              typography: 'caption',
-              textAlign: 'center',
-              fontSize: { md: 12, xs: 10 },
-            }}
-          >
-            {t('I have read and agreed to these ')}&nbsp;
-            <Link underline="always" color="text.primary">
-              {t('Terms of Service ')}&nbsp;
-            </Link>
-            {t('And the ')}&nbsp;
-            <Link underline="always" color="text.primary">
-              {t('Privacy Policy')}
-            </Link>
-            .
-          </Typography>
+          <Stack direction='row' gap={1} alignItems='center' sx={{ mx: 4 }}>
+            <Checkbox
+              size="small"
+              name="agree"
+              color="success"
+              onChange={() => {
+                setCheckChange(!checkChange);
+              }}
+            />
+            <Typography
+              sx={{
+                color: 'text.secondary',
+                typography: 'caption',
+                textAlign: 'center',
+                fontSize: { md: 12, xs: 10 },
+              }}
+            >
+              {t('I have read and agreed to these ')}&nbsp;
+              <Link underline="always" color="text.primary">
+                {t('Terms of Service ')}&nbsp;
+              </Link>
+              {t('And the ')}&nbsp;
+              <Link underline="always" color="text.primary">
+                {t('Privacy Policy')}
+              </Link>
+              .
+            </Typography>
+          </Stack>
           <DialogActions>
             <Button onClick={closing} variant="outlined" color="inherit">
               {t('Cancel')}

@@ -70,7 +70,7 @@ export default function UnitServicesAccountingView() {
     // { id: 'Payment_method', label: t('payment method') },
     // { id: 'Payment_frequency', label: t('payment frequency') },
     // { id: 'notes', label: t('notes') },
-    { id: '', width: 88 },
+    // { id: '', width: 88 },
   ];
 
   const { STATUS_OPTIONS } = StatusOptions();

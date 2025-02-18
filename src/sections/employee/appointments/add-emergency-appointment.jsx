@@ -33,7 +33,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +61,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     service_types: Yup.array(),
     appointment_type: Yup.string().required(t('required field')),
     start_time: Yup.mixed().required(t('required field')),
+    online_available: Yup.bool().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -69,6 +70,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           ._id,
       start_time: new Date(),
+      online_available: false,
       appointment_type: appointmenttypesData?.[0]?._id,
       work_group: workGroupsData?.[0]?._id,
       work_shift: workShiftsData.filter((one) => {
@@ -269,6 +271,12 @@ export default function BookManually({ onClose, refetch, ...other }) {
                     <Iconify icon="material-symbols:new-window-sharp" />
                   </MenuItem>
                 </RHFSelect>
+                <RHFCheckbox
+                  sx={{ ml: 3, mt: 1 }}
+                  name="online_available"
+                  onChange={(e) => setValue('online_available', e.target.checked)}
+                  label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
+                />
               </Box>
             </Box>
           </Stack>

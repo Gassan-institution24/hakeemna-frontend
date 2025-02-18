@@ -436,6 +436,8 @@
   "start time": "وقت البداية",
   "end time": "وقت النهاية",
   "details": "التفاصيل",
+  "Details": "التفاصيل",
+  "Order": "الطلب",
   "department employees": "موظفي القسم",
   "department feedbacks": "تقييمات القسم",
   "department rooms": "غرف القسم",
@@ -1310,11 +1312,17 @@
   "menu_level_2b": "مستوى القائمة 2b",
   "menu_level_3a": "مستوى القائمة 3a",
   "menu_level_3b": "مستوى القائمة 4b",
+  "Total": "المجموع",
+  "Completed": "مكتمل",
+  "Cancelled": "ملغي",
+  "items?": "عناصر؟",
+  "Are you sure want to cancel": "هل أنت متأكد من الغاء",
   "item_disabled": "العنصر معطل",
   "item_by_roles": "العنصر حسب الأدوار",
   "item_external_link": "رابط خارجي للعنصر",
   "only_admin_can_see_this_item": "يمكن للمسؤول فقط رؤية هذا العنصر",
   "upgrade_to_pro": "الترقية إلى Pro",
+  "Select department and employee to show and change permissions": "اختر قسم وموظف لرؤية وتغيير الصلاحيات",
   "demo": {
     "title": "Arabic"
   }

@@ -59,7 +59,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 const defaultFilters = {
   name: '',
   status: 'pending',
-  types: '',
+  appointype: '',
   shift: '',
   group: '',
   startDate: null,

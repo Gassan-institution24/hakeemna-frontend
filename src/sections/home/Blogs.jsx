@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -23,7 +24,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
-export default function Blogs() {
+export default function Blogs({ onPreview }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -132,13 +133,12 @@ export default function Blogs() {
                   sx={{
                     position: 'relative',
                     overflow: 'hidden',
-                    height: '400px',
+                    height: '280px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                   }}
                 >
-        
                   <Box sx={{ p: 2 }}>
                     {blog?.user?.role === 'superadmin' ? (
                       <Typography
@@ -168,7 +168,7 @@ export default function Blogs() {
                       {blog.title}
                     </Typography>
                     <Typography
-                    variant='caption'
+                      variant='caption'
                       dangerouslySetInnerHTML={{
                         __html: formatTextWithLineBreaks(blog.topic),
                       }}
@@ -181,7 +181,14 @@ export default function Blogs() {
                   <Button
                     variant="contained"
                     sx={{ bgcolor: 'success.main', mx: 2, mb: 2 }}
-                    onClick={() => router.push(`${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(/ /g, '-')}}&writer=${blog?.user?.role === 'superadmin' ? 'hakeemna 360' : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')}`)}
+                    onClick={() => {
+                      if (onPreview) {
+                        onPreview(blog?._id);
+                      } else {
+                        router.push(`${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(/ /g, '-')}}&writer=${blog?.user?.role === 'superadmin' ? 'hakeemna 360' : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')}`)
+                      }
+                    }
+                    }
                   >
                     {t('View')}
                   </Button>
@@ -199,3 +206,6 @@ export default function Blogs() {
     </Stack>
   );
 }
+Blogs.propTypes = {
+  onPreview: PropTypes.func,
+};

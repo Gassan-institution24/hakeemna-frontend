@@ -11,7 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { Button, MenuItem, Typography } from '@mui/material';
+import { Button, MenuItem, Stack, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -167,35 +167,38 @@ export default function Insuranceinfo() {
               ))}
             </RHFSelect>
           </DialogContent>
-          <Checkbox
-            size="small"
-            name="agree"
-            color="success"
-            sx={{ position: 'relative', top: 5, left: 25 }}
-            onChange={() => {
-              setCheckChange(!checkChange);
-            }}
-          />
-          <Typography
-            sx={{
-              color: 'text.secondary',
-              mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -30, xs: -5 } : { md: -18, xs: 4 },
-              typography: 'caption',
-              textAlign: 'center',
-              fontSize: { md: 12, xs: 10 },
-            }}
-          >
-            {t('I reed the ')}
-            <Link underline="always" color="text.primary">
-              {t(' Privacy Policy ')}
-            </Link>
-            {t('And agree to ')}
-            <Link underline="always" color="text.primary">
-              {t(' Terms of Service ')}
-            </Link>
-            .
-          </Typography>
+          <Stack direction='row' gap={1} alignItems='center' sx={{mx:4}}>
+            <Checkbox
+              size="small"
+              name="agree"
+              color="success"
+              // sx={{ position: 'relative', top: 5, left: 25 }}
+              onChange={() => {
+                setCheckChange(!checkChange);
+              }}
+            />
+            <Typography
+              sx={{
+                color: 'text.secondary',
+                // mt: { md: -2.5, xs: -2.3 },
+                // ml: 2,
+                // mr: 2,
+                typography: 'caption',
+                textAlign: 'center',
+                fontSize: { md: 12, xs: 10 },
+              }}
+            >
+              {t('I reed the ')}
+              <Link underline="always" color="text.primary">
+                {t(' Privacy Policy ')}
+              </Link>
+              {t('And agree to ')}
+              <Link underline="always" color="text.primary">
+                {t(' Terms of Service ')}
+              </Link>
+              .
+            </Typography>
+          </Stack>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
               {t('Cancel')}

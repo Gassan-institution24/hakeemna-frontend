@@ -66,7 +66,7 @@ export default function AppointmentsToday() {
   const router = useRouter();
   const [selectedTitle, setSelectedTitle] = useState('');
   const [pateintInfo, setPatientInfo] = useState('');
-  const [addingId, setAddingId] = useState();
+  const [addingId, setAddingId] = useState('');
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
@@ -77,6 +77,7 @@ export default function AppointmentsToday() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
 
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(unitServiceId);
+
   const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
 
   const { roomsData } = useGetUSRooms(unitServiceId);
@@ -261,7 +262,7 @@ export default function AppointmentsToday() {
                 key={index}
                 value={activity?.activities?._id}
                 onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-                // disabled={info?.activityhappend}
+              // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -412,7 +413,7 @@ export default function AppointmentsToday() {
                 <TableBody>
                   {currentTabData?.data?.map((info, index) => {
                     let patientName;
-                    if (info?.patient) {
+                    if (info?.patient?.name_english) {
                       patientName = curLangAr
                         ? info?.patient?.name_arabic
                         : info?.patient?.name_english;
@@ -474,7 +475,7 @@ export default function AppointmentsToday() {
                                   ) : (
                                     <>
                                       {info?.unit_service_patient?.identification_num ||
-                                      info?.patient?.identification_num ? (
+                                        info?.patient?.identification_num ? (
                                         <Button
                                           sx={{ p: 2 }}
                                           onClick={() => startAppointment(info)}
@@ -531,8 +532,14 @@ export default function AppointmentsToday() {
                                 bgcolor: 'info.dark',
                               }}
                               onClick={() => {
-                                iddialog.onFalse();
-                                startAppointment(info);
+                                if (addingId) {
+                                  iddialog.onFalse();
+                                  startAppointment(info);
+                                } else {
+                                  enqueueSnackbar(t('Please enter the patient national number'), {
+                                    variant: 'error'
+                                  });
+                                }
                               }}
                             >
                               {t('add')}

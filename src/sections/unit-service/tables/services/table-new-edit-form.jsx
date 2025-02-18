@@ -245,20 +245,7 @@ export default function TableNewEditForm({ currentTable }) {
                   {t('online')}
                 </MenuItem>
               </RHFSelect>
-              <RHFTextField
-                multiline
-                rows={2}
-                onChange={handleEnglishInputChange}
-                name="description_english"
-                label={t('english description')}
-              />
-              <RHFTextField
-                multiline
-                rows={2}
-                onChange={handleArabicInputChange}
-                name="description_arabic"
-                label={t('arabic description')}
-              />
+
               {myUS?.has_tax && (
                 <FormControlLabel
                   sx={{ ml: 2 }}
@@ -293,7 +280,22 @@ export default function TableNewEditForm({ currentTable }) {
                 </RHFSelect>
               )}
             </Box>
-
+            <RHFTextField
+              multiline
+              rows={2}
+              onChange={handleEnglishInputChange}
+              name="description_english"
+              label={t('english description')}
+              sx={{ mt: 3 }}
+            />
+            <RHFTextField
+              multiline
+              rows={2}
+              onChange={handleArabicInputChange}
+              name="description_arabic"
+              label={t('arabic description')}
+              sx={{ mt: 3 }}
+            />
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {!currentTable ? t('create') : t('save changes')}

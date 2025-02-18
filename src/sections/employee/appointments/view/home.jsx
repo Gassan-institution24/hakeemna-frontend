@@ -59,7 +59,7 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 const defaultFilters = {
   name: '',
   status: 'booked',
-  types: '',
+  appointype: '',
   shift: '',
   group: '',
   startDate: null,
@@ -550,9 +550,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

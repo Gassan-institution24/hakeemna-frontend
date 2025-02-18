@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -21,6 +21,7 @@ import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
@@ -208,13 +209,18 @@ export default function NavVertical({ openNav, onCloseNav }) {
     ],
   });
 
+  const setLastOnline = useCallback(async () => {
+    await axiosInstance.patch(endpoints.auth.user(user._id), { last_online: new Date() })
+  }, [user._id]);
+
   useEffect(() => {
     const createdAtValid =
       user.created_at &&
       new Date(user.created_at).getTime() + 2 * 24 * 60 * 60 * 1000 >= new Date().getTime();
     const shouldShowDialog = !loading && isEmployee && createdAtValid && !user.last_online;
     setDialog(shouldShowDialog);
-  }, [user.created_at, user.last_online, loading, isEmployee]);
+    setLastOnline()
+  }, [user.created_at, user.last_online, loading, isEmployee, setLastOnline]);
 
   useEffect(() => {
     if (openNav) {
