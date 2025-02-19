@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -13,6 +14,8 @@ import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import AttendanceEdit from './attendance-edit';
 
 // import UploadAnalysis from '../upload-analysis';
 
@@ -46,6 +49,7 @@ export default function AttendanceRow({
     modifications_nums,
   } = row;
   const { t } = useTranslate();
+  const [open, setOpen] = useState(false)
   const weekDays = [
     t('Saturday'),
     t('Sunday'),
@@ -83,6 +87,10 @@ export default function AttendanceRow({
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
+        </MenuItem>
+        <MenuItem lang="ar" onClick={() => setOpen(true)}>
+          <Iconify icon="fluent:edit-32-filled" />
+          {t('Edit')}
         </MenuItem>
       </CustomPopover>
 
@@ -134,6 +142,9 @@ export default function AttendanceRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
+
+      <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
+
     </>
   );
 }

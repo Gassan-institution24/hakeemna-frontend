@@ -31,10 +31,13 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
             slots={{
               actionBar: ({ onClear, onCancel }) => (
                 <Button
+                  variant='contained'
+                  color='error'
                   onClick={() => {
                     field.onChange(null);
                     onClear();
                   }}
+                  sx={{ position: 'absolute', bottom: 0, right: 0,padding:0.4 }}
                 >
                   {t('clear')}
                 </Button>
