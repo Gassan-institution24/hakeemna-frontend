@@ -47,6 +47,7 @@ export default function AppointmentsTableRow({
     note,
     appoint_number,
     unit_service,
+    unit_service_patient,
     work_group,
     // work_shift,
     appointment_type,
@@ -119,7 +120,9 @@ export default function AppointmentsTableRow({
             cursor: 'pointer',
             color: '#3F54EB',
           }}
-          onClick={() => router.push(paths.employee.patients.info(patient?._id))}
+          onClick={() => {
+            if (unit_service_patient) router.push(paths.employee.patients.info(unit_service_patient?._id))
+          }}
         >
           {patient?.name_english}
         </TableCell>
