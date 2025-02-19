@@ -1,17 +1,22 @@
 import React from 'react';
+import { useSnackbar } from 'notistack';
 
 import { Stack, Button, Typography } from '@mui/material';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
 import { useGetMyLastAttendence } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 function EmployeeAttendence() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { enqueueSnackbar } = useSnackbar()
+
   const { attendence, refetch } = useGetMyLastAttendence();
   const hasAttendenceToday = attendence?.date &&
     new Date(attendence?.date).getFullYear() === new Date().getFullYear() &&
@@ -47,8 +52,10 @@ function EmployeeAttendence() {
       await axiosInstance.post(endpoints.attendence.all, { coordinates });
       changingAttendence.onClose();
       refetch();
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
     }
   };
   const handleLeave = async () => {

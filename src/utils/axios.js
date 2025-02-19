@@ -451,6 +451,7 @@ export const endpoints = {
   },
   attendence: {
     all: '/api/attendence',
+    create: '/api/attendence/create',
     leave: '/api/attendence/leave',
     lastAttendance: '/api/attendence/mylast',
     one: (id) => (!id ? null : `/api/attendence/${id}`),
