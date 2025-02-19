@@ -105,7 +105,7 @@ export default function TableNewEditForm({ currentTable }) {
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
       phone: currentTable?.phone || '',
-      speciality: currentTable?.speciality || '',
+      speciality: currentTable?.speciality || null,
       gender: currentTable?.gender || '',
       strict_employee: currentTable?.strict_employee || false,
       visibility_US_page: currentTable?.visibility_US_page || false,
@@ -269,14 +269,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -288,14 +288,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
+                  curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
+                      curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
