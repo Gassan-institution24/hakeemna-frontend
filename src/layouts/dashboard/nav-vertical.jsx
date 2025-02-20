@@ -417,7 +417,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
               setDialog(false);
               setRunningTour(true);
               setTimeout(() => {
-                walktour.setRun(true);
                 setRunningTour(false);
               }, 200);
             }}
