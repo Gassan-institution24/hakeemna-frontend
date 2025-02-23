@@ -128,10 +128,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       }),
     nationality: Yup.string().required(t('required field')),
     profrssion_practice_num: Yup.string(),
-    identification_num: Yup.string()
-      .required(t('required field'))
-      .min(8, `${t('must be at least')} 8`)
-      .max(15, `${t('must be at most')} 15`),
+    identification_num: Yup.string(),
     tax_num: Yup.string(),
     phone: Yup.string()
       .required(t('required field'))
@@ -160,52 +157,57 @@ export default function AccountGeneral({ employeeData, refetch }) {
     // currency: Yup.string().required(t('required field')),
   });
 
-  const defaultValues = useMemo(() => ({
-    employee_type: employeeData?.employee_type?._id || null,
-    email: employeeData?.email || '',
-    name_english: employeeData?.name_english || '',
-    name_arabic: employeeData?.name_arabic || '',
-    nationality: employeeData?.nationality?._id || '',
-    profrssion_practice_num: employeeData?.profrssion_practice_num || '',
-    identification_num: employeeData?.identification_num || '',
-    tax_num: employeeData?.tax_num || '',
-    phone: employeeData?.phone || '',
-    mobile_num: employeeData?.mobile_num || '',
-    speciality: employeeData?.speciality?._id || null,
-    gender: employeeData?.gender || '',
-    birth_date: employeeData?.birth_date || null,
-    // Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
-    // University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
-    // University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
-    scanned_identity: employeeData?.scanned_identity || null,
-    signature: employeeData?.signature || null,
-    stamp: employeeData?.stamp || null,
-    picture: employeeData?.picture || null,
-    about_me: employeeData?.about_me ? decode(employeeData?.about_me) : '',
-    arabic_about_me: employeeData?.arabic_about_me ? decode(employeeData?.arabic_about_me) : '',
-    languages: employeeData?.languages || [],
-    arabic_keywords: employeeData?.arabic_keywords || [],
-    keywords: employeeData?.keywords || [],
-    memberships: employeeData?.memberships?.length
-      ? employeeData?.memberships
-      : [{ name: '', institution: '' }],
-    other: employeeData?.other?.length ? employeeData?.other : [{ kind: '', name: '' }],
-    certifications: employeeData?.certifications?.length
-      ? employeeData?.certifications
-      : [
-        {
-          name: '',
-          institution: '',
-          year: null,
-        },
-      ],
-    fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
-    fees_after_discount: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees_after_discount || 0,
-    // currency:
-    //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
-    //   currencies?.[0]?._id,
-  }), [user?.employee, employeeData]);
-  
+  const defaultValues = useMemo(
+    () => ({
+      employee_type: employeeData?.employee_type?._id || null,
+      email: employeeData?.email || '',
+      name_english: employeeData?.name_english || '',
+      name_arabic: employeeData?.name_arabic || '',
+      nationality: employeeData?.nationality?._id || '',
+      profrssion_practice_num: employeeData?.profrssion_practice_num || '',
+      identification_num: employeeData?.identification_num || '',
+      tax_num: employeeData?.tax_num || '',
+      phone: employeeData?.phone || '',
+      mobile_num: employeeData?.mobile_num || '',
+      speciality: employeeData?.speciality?._id || null,
+      gender: employeeData?.gender || '',
+      birth_date: employeeData?.birth_date || null,
+      // Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
+      // University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
+      // University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
+      scanned_identity: employeeData?.scanned_identity || null,
+      signature: employeeData?.signature || null,
+      stamp: employeeData?.stamp || null,
+      picture: employeeData?.picture || null,
+      about_me: employeeData?.about_me ? decode(employeeData?.about_me) : '',
+      arabic_about_me: employeeData?.arabic_about_me ? decode(employeeData?.arabic_about_me) : '',
+      languages: employeeData?.languages || [],
+      arabic_keywords: employeeData?.arabic_keywords || [],
+      keywords: employeeData?.keywords || [],
+      memberships: employeeData?.memberships?.length
+        ? employeeData?.memberships
+        : [{ name: '', institution: '' }],
+      other: employeeData?.other?.length ? employeeData?.other : [{ kind: '', name: '' }],
+      certifications: employeeData?.certifications?.length
+        ? employeeData?.certifications
+        : [
+            {
+              name: '',
+              institution: '',
+              year: null,
+            },
+          ],
+      fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
+      fees_after_discount:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]
+          ?.fees_after_discount || 0,
+      // currency:
+      //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
+      //   currencies?.[0]?._id,
+    }),
+    [user?.employee, employeeData]
+  );
+
   const methods = useForm({
     mode: 'all',
     resolver: yupResolver(UpdateUserSchema),
@@ -229,8 +231,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
   }, [errors, enqueueSnackbar]);
 
   useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   const values = watch();
 
@@ -382,28 +384,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <TextField
-                // disabled
+              <RHFTextField
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')} :`}
-                value={values.identification_num}
               />
-              <TextField
-                // disabled
+              <RHFTextField
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
-              // value={values.profrssion_practice_num}
               />
-              <TextField
-                // disabled
-                type="email"
-                variant="filled"
-                name="email"
-                label={`${t('email')} :`}
-                value={values.email}
-              />
+              <RHFTextField type="email" variant="filled" name="email" label={`${t('email')} :`} />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Box
                 rowGap={3}
@@ -522,14 +513,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -555,14 +546,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

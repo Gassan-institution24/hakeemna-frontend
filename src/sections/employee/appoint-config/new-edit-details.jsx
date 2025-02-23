@@ -21,7 +21,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -29,16 +29,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const weekDays = [
-    { value: 'saturday', label: t('Saturday') },
-    { value: 'sunday', label: t('Sunday') },
-    { value: 'monday', label: t('Monday') },
-    { value: 'tuesday', label: t('Tuesday') },
-    { value: 'wednesday', label: t('Wednesday') },
-    { value: 'thursday', label: t('Thursday') },
-    { value: 'friday', label: t('Friday') },
-  ];
 
   const { control, watch, trigger } = useFormContext();
 
@@ -59,19 +49,23 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   return (
     <>
-      <Divider flexItem sx={{ borderStyle: 'solid' }} />
-      <Stack sx={{ p: 3 }}>
+      {/* <Divider flexItem sx={{ borderStyle: 'solid' }} /> */}
+      <Stack sx={{ p: 3, pt: 1 }}>
         {/* <Typography
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
           Details:
         </Typography> */}
-        <Stack
+        <Box
           id="appointmentSettingDuration"
-          spacing={2}
-          direction={{ xs: 'column', sm: 'row' }}
-          sx={{ p: 3, width: { xs: '100%', md: 'auto' } }}
+          rowGap={3}
+          columnGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+          }}
         >
           <Controller
             name="start_date"
@@ -127,18 +121,16 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               />
             )}
           />
-        </Stack>
+          {/* </Stack>
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
           sx={{ px: 3, pb: 3, width: { xs: '100%', md: 'auto' } }}
-        >
+        > */}
           <RHFSelect
-            size="small"
             name="work_shift"
             label={t('work shift')}
-            data-test='select-ws'
-            InputLabelProps={{ shrink: true }}
+            data-test="select-ws"
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
@@ -166,11 +158,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             </MenuItem>
           </RHFSelect>
           <RHFSelect
-            size="small"
-            data-test='select-wg'
+            data-test="select-wg"
             name="work_group"
             label={t('work group')}
-            InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
@@ -202,15 +192,13 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             fullWidth
             step="5"
             name="appointment_time"
-            data-test='duration-time'
+            data-test="duration-time"
             label={t('appointment duration time')}
             type="number"
             onBlur={(event) => {
               trigger('appointment_time');
               setAppointTime(event.target.value);
             }}
-            size="small"
-            InputLabelProps={{ shrink: true }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -221,7 +209,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           />
           <div id="appointmentSettingAvailableForBooking" style={{ width: '100%' }}>
             <RHFTextField
-              size="small"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -236,34 +223,12 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               }}
               name="config_frequency"
               label={t('available for booking')}
-              data-test='avalabitity-input'
+              data-test="avalabitity-input"
               type="number"
               inputProps={{ min: 0, max: 30, textAlign: 'center' }}
-              InputLabelProps={{ shrink: true }}
             />
           </div>
-        </Stack>
-        <Typography
-          variant="p"
-          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
-        >
-          {curLangAr ? 'العطل الأسبوعية' : 'Weekly Days Off'}:
-        </Typography>
-        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ p: 3 }}>
-          <RHFMultiCheckbox
-            size="small"
-            name="weekend"
-            options={weekDays}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                md: 'repeat(7, 1fr)',
-                sm: 'repeat(4, 1fr)',
-                xs: 'repeat(2, 1fr)',
-              },
-            }}
-          />
-        </Stack>
+        </Box>
       </Stack>
     </>
   );

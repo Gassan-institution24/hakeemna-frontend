@@ -1,22 +1,15 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import Typewriter from 'typewriter-effect';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
-import {
-  Box,
-  Alert,
-  Typography,
-  CircularProgress,
-  BottomNavigation,
-  BottomNavigationAction,
-} from '@mui/material';
+import { Box, Alert, Typography, CircularProgress, Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -33,8 +26,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import PageSelector from 'src/components/pageSelector';
 
 import NewEditDetails from '../new-edit-details';
 import NewEditHolidays from '../new-edit-holidays';
@@ -56,128 +49,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   ).data;
 
-  const walktour = useWalktour({
-    defaultRun: true,
-    showProgress: true,
-    steps: [
-      {
-        target: '#currEMNewEditDetails',
-        title: t('Step One (1) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              {t("General information about creating 'Automated Appointment Configuration'")}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t(
-                '(1) The start date and expiration date of these settings, as from the “start date” it will create appointments automatically and will stop creating new appointments at the “end date” you specified.'
-              )}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t(
-                '(2) The work shift and the work team for whom you want to create these appointments.'
-              )}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t('(3) The duration of each appointment.')}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t(
-                '(4) The number of days that appointments will be available on the platform for booking by patients.'
-              )}{' '}
-              <br />
-            </Typography>
-            <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-              <br />
-              {t(
-                'Note: The “Settings” are designed to create booking appointments for each day automatically and automatically according to the work team and shift.'
-              )}
-            </Typography>
-          </>
-        ),
-      },
-      // {
-      //   target: '#appointmentSettingDuration',
-      //   title: t('Step Two (2) of “Automated Appointment Settings”'),
-      //   disableBeacon: true,
-      //   content: (
-      //     <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-      //       {t(
-      //         'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
-      //       )}
-      //       <br />
-      //       {t(
-      //         "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
-      //       )}
-      //     </Typography>
-      //   ),
-      // },
-      // {
-      //   target: '#appointmentSettingAvailableForBooking',
-      //   title: t('Step Two (2) of “Automated Appointment Settings”'),
-      //   disableBeacon: true,
-      //   content: (
-      //     <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-      //       {t(
-      //         'In this part of the settings, you should be able to detail your work pattern (daily routine) for each shift of the week, and these settings for each day of the week will determine the detail and number of appointments for each shift.'
-      //       )}
-      //       <br />
-      //       {t(
-      //         "Remember: choose 'morning' or 'evening' when specifying the time so that we can configure the automated appointments correctly."
-      //       )}
-      //     </Typography>
-      //   ),
-      // },
-      {
-        target: '#currEMNewEditDaysDetails',
-        title: t('Step Two (2) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              'In this section of “Settings”: You must detail your work pattern (daily routine) for each working day of the week, and specify the number of appointments and their details for each day.'
-            )}
-          </Typography>
-        ),
-      },
-      {
-        target: '#currEMNewEditHolidays',
-        title: t('Step Three (3) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              'Here you can add holidays that last only one day (eg Labor Day / Independence Day)'
-            )}
-          </Typography>
-        ),
-      },
-      {
-        target: '#currEMNewEditLongHolidays',
-        title: t('Step Four (4) of “Automated Appointment Settings”'),
-        disableBeacon: true,
-        content: (
-          <Typography lang="ar" sx={{ color: 'text.secondary' }}>
-            {t(
-              "Here you can add holidays that last more than one day, for example 'Eid al-Adha' or 'Annual Holiday'."
-            )}
-          </Typography>
-        ),
-      },
-    ],
-  });
-
   const [appointTime, setAppointTime] = useState(0);
-  const [value, setValue] = useState('appointment');
+  const [value, setValue] = useState('details');
+
+  const pages = [
+    { label: t('Information'), active: value === 'details' },
+    { label: t('Holidays'), active: value === 'holidays' },
+    { label: t('Details'), active: value === 'days' },
+  ];
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
   const [errorMsg, setErrorMsg] = useState();
@@ -256,19 +135,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
       online_available: appointmentConfigData?.online_available || true,
-      days_details: appointmentConfigData?.days_details || [
-        {
-          day: 'saturday',
-          work_start_time: null,
-          work_end_time: null,
-          break_start_time: null,
-          break_end_time: null,
-          appointments: [],
-          service_types: [],
-          appointment_type: null,
-          online_available: true,
-        },
-      ],
+      days_details: appointmentConfigData?.days_details || [],
     }),
     [appointmentConfigData, user?.employee, employeeInfo?.department]
   );
@@ -279,10 +146,88 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   const {
+    control,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
+
+  const { append, remove } = useFieldArray({
+    control,
+    name: 'days_details',
+  });
+
+  const handleAdd = useCallback((dayToCreate) => {
+    const defaultItem = {
+      day: '',
+      work_start_time: null,
+      work_end_time: null,
+      break_start_time: null,
+      break_end_time: null,
+      appointments: [],
+      service_types: [],
+      appointment_type: null,
+      online_available: true,
+    };
+    const newItem = {
+      ...defaultItem,
+      day: dayToCreate,
+    };
+    append(newItem);
+
+    // eslint-disable-next-line
+  }, []);
+
+  const handleBack = () => {
+    if (value === 'holidays') setValue('details');
+    if (value === 'days') setValue('holidays');
+  };
+  const handleNext = async () => {
+    let valid = true;
+    if (value === 'details') {
+      valid = (await methods.trigger('start_date')) && valid;
+      valid = (await methods.trigger('end_date')) && valid;
+      valid = (await methods.trigger('work_group')) && valid;
+      valid = (await methods.trigger('work_shift')) && valid;
+      valid = (await methods.trigger('appointment_time')) && valid;
+      valid = (await methods.trigger('config_frequency')) && valid;
+    } else if (value === 'holidays') {
+      valid = (await methods.trigger('weekend')) && valid;
+      valid = (await methods.trigger('holidays')) && valid;
+      valid = (await methods.trigger('long_holidays')) && valid;
+    }
+    if (value === 'holidays') {
+      const daysCreated = methods.getValues('days_details');
+      const weekendDays = methods.getValues('weekend');
+      const workingDays = [
+        'saturday',
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+      ].filter(
+        (one) => !weekendDays.includes(one) && !daysCreated.some((detail) => detail.day === one)
+      );
+      const daysToRemove = daysCreated.map((detail, index) => {
+        if (weekendDays.includes(detail.day)) return index;
+        return null;
+      });
+      daysToRemove.forEach((day) => {
+        if (typeof day === 'number') remove(day);
+      });
+      workingDays.forEach((day) => {
+        handleAdd(day);
+      });
+    }
+
+    if (!valid) {
+      return;
+    }
+    if (value === 'details') setValue('holidays');
+    if (value === 'holidays') setValue('days');
+  };
 
   const handleSaving = async () => {
     saving.onTrue();
@@ -369,15 +314,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         router.push(paths.employee.appointmentconfiguration.root);
         enqueueSnackbar(t('added successfully!'));
       }
-      // reset();
       loadingSend.onFalse();
-      console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      // setErrorMsg(typeof error === 'string' ? error : error.message);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error(error);
       updating.onFalse();
-      // error emitted in backend
       loadingSend.onFalse();
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
@@ -402,17 +342,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   return (
     <>
-      <Walktour
-        continuous
-        showProgress
-        showSkipButton
-        disableOverlayClose
-        steps={walktour.steps}
-        run={walktour.run}
-        callback={walktour.onCallback}
-        getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
-      />
       <Container maxWidth="lg">
         <CustomBreadcrumbs
           heading={t('appointment configuration')}
@@ -434,31 +363,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                 </Alert>
               )}
 
-              <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-                sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
-              >
-                <BottomNavigationAction
-                  sx={{ flex: 1, width: '100%' }}
-                  label="Appointment Details"
-                  value="appointment"
-                />
-                <BottomNavigationAction
-                  sx={{ flex: 1, width: '100%' }}
-                  label="Days Off Details"
-                  value="daysOff"
-                />
-                <BottomNavigationAction
-                  sx={{ flex: 1, width: '100%' }}
-                  label="Patient Details"
-                  value="patient"
-                />
-              </BottomNavigation>
-              {value === 'appointment' && (
+              <PageSelector pages={pages} />
+              {value === 'details' && (
                 <div id="currEMNewEditDetails">
                   <NewEditDetails
                     setAppointTime={setAppointTime}
@@ -466,7 +372,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   />
                 </div>
               )}
-              {value === 'daysOff' && (
+              {value === 'holidays' && (
                 <>
                   <div id="currEMNewEditHolidays">
                     <NewEditHolidays />
@@ -476,7 +382,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   </div>
                 </>
               )}
-              {value === 'patient' && (
+              {value === 'days' && (
                 <div id="currEMNewEditDaysDetails">
                   <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
                 </div>
@@ -485,13 +391,25 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           )}
 
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-            <LoadingButton
-              variant="contained"
-              loading={isSubmitting || saving.value || updating.value}
-              onClick={handleSave}
-            >
-              {t('save')}
-            </LoadingButton>
+            {value !== 'details' && (
+              <Button variant="contained" color="warning" onClick={handleBack}>
+                {t('Back')}
+              </Button>
+            )}
+            {value !== 'days' && (
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                {t('Next')}
+              </Button>
+            )}
+            {value === 'days' && (
+              <LoadingButton
+                variant="contained"
+                loading={isSubmitting || saving.value || updating.value}
+                onClick={handleSave}
+              >
+                {t('save')}
+              </LoadingButton>
+            )}
           </Stack>
         </FormProvider>
       </Container>
@@ -527,11 +445,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             </>
           ) : (
             <>
-              {/* <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
-                {curLangAr
-                  ? 'هل تريد تغيير المواعيد المنشأة مسبقا؟'
-                  : 'Do you want to change your existance appointments?'}
-              </Typography> */}
               {curLangAr ? (
                 <>
                   <Typography variant="body1" component="p" sx={{ color: 'info.dark' }}>
