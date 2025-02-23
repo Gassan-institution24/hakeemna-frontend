@@ -151,12 +151,13 @@ export default function NewEditLongHolidays() {
           ))}
         </Stack>
 
-        <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
+        {/* <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} /> */}
 
         <Stack
           spacing={1}
           direction={{ xs: 'column', md: 'row' }}
           alignItems={{ xs: 'flex-end', md: 'center' }}
+          mt={3}
         >
           <Button
             size="small"

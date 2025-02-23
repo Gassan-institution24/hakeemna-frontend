@@ -108,6 +108,7 @@ export default function NewEditDayAppointmentsDetails({
                 </RHFSelect>
                 <RHFTimePicker
                   name={`days_details[${ParentIndex}].appointments[${index}].start_time`}
+                  minutesStep={1}
                   label={t('start time')}
                   slotProps={{
                     textField: {

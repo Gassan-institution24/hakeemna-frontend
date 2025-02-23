@@ -29,7 +29,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const curLangAr = currentLang.value === 'ar';
 
   const proccessing = useBoolean();
+  const [showField, setShowField] = useState(true);
   const [show, setShow] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -56,55 +58,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
 
-  const handleAdd = useCallback(() => {
-    try {
-      const dayToCreate = weekDays.filter(
-        (option) =>
-          !values.weekend.includes(option.value) &&
-          !values.days_details.some((detail) => detail.day === option.value)
-      )[0]?.value;
-      if (!dayToCreate) {
-        throw Error(t('No valid date to create'));
-      }
-      const defaultItem = {
-        day: '',
-        work_start_time: null,
-        work_end_time: null,
-        break_start_time: null,
-        break_end_time: null,
-        appointments: [],
-        service_types: [],
-        appointment_type: null,
-        online_available: true,
-      };
-      const existingData = values.days_details
-        ? values.days_details[values.days_details.length - 1]
-        : [];
-      const newItem = {
-        ...defaultItem,
-        ...existingData,
-        day: dayToCreate,
-      };
-      append(newItem);
-    } catch (e) {
-      console.error(e);
-      // setErrorMsg(e.message);
-      enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
-        variant: 'error',
-      });
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values]);
-
-  const handleRemove = (index) => {
-    remove(index);
-    setShow(false);
-    setTimeout(() => {
-      setShow(true);
-    }, 100);
-  };
-
   const processDayDetails = useCallback(
     (index) => {
       try {
@@ -117,13 +70,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           proccessing.onFalse();
           return;
         }
-        if (!values.days_details[index].work_start_time) {
+        if (!values.days_details[index]?.work_start_time) {
           setValue(`days_details[${index}].appointments`, []);
           // setError(`days_details[${index}].work_start_time`);
           proccessing.onFalse();
           return;
         }
-        if (!values.days_details[index].work_end_time) {
+        if (!values.days_details[index]?.work_end_time) {
           setValue(`days_details[${index}].appointments`, []);
           // setError(`days_details[${index}].work_end_time`);
           proccessing.onFalse();
@@ -137,33 +90,33 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           now.getFullYear(),
           now.getMonth(),
           now.getDate(),
-          new Date(currentDay.work_start_time).getHours(),
-          new Date(currentDay.work_start_time).getMinutes()
+          new Date(currentDay?.work_start_time).getHours(),
+          new Date(currentDay?.work_start_time).getMinutes()
         ).getTime();
         let work_end = new Date(
           now.getFullYear(),
           now.getMonth(),
           now.getDate(),
-          new Date(currentDay.work_end_time).getHours(),
-          new Date(currentDay.work_end_time).getMinutes()
+          new Date(currentDay?.work_end_time).getHours(),
+          new Date(currentDay?.work_end_time).getMinutes()
         ).getTime();
         let break_start = currentDay.break_start_time
           ? new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            new Date(currentDay.break_start_time).getHours(),
-            new Date(currentDay.break_start_time).getMinutes()
-          ).getTime()
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate(),
+              new Date(currentDay.break_start_time).getHours(),
+              new Date(currentDay.break_start_time).getMinutes()
+            ).getTime()
           : null;
         let break_end = currentDay.break_end_time
           ? new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            new Date(currentDay.break_end_time).getHours(),
-            new Date(currentDay.break_end_time).getMinutes()
-          ).getTime()
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate(),
+              new Date(currentDay.break_end_time).getHours(),
+              new Date(currentDay.break_end_time).getMinutes()
+            ).getTime()
           : null;
 
         if (work_start >= work_end) {
@@ -219,10 +172,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         return currentDay?.appointments.length;
       }
       const appointment_time = values.appointment_time * 60 * 1000;
-      const work_start = new Date(currentDay.work_start_time).getTime();
-      let work_end = new Date(currentDay.work_end_time).getTime();
-      let break_start = new Date(currentDay.break_start_time).getTime();
-      let break_end = new Date(currentDay.break_end_time).getTime();
+      const work_start = new Date(currentDay?.work_start_time).getTime();
+      let work_end = new Date(currentDay?.work_end_time).getTime();
+      let break_start = new Date(currentDay?.break_start_time).getTime();
+      let break_end = new Date(currentDay?.break_end_time).getTime();
       if (work_start > work_end) {
         work_end += 24 * 60 * 60 * 1000;
       }
@@ -271,218 +224,240 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   // }
   return (
     <>
-      <Divider flexItem sx={{ borderStyle: 'solid' }} />
       {show && (
         <Box sx={{ p: 3 }}>
           <Typography
             variant="p"
-            sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
+            sx={{
+              color: 'text.secondary',
+              mb: 3,
+              px: 3,
+              fontWeight: '700',
+              textTransform: 'capitalize',
+            }}
           >
             {curLangAr ? 'تفاصيل اليوم' : 'Days Details'}:
           </Typography>
 
           <Stack
-            sx={{ mt: 3 }}
-            divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
-            spacing={3}
+            direction="row"
+            sx={{ mt: 3, flex: 1 }}
+            spacing={2}
+            divider={<div style={{ width: '1px', backgroundColor: '#ccc' }} />}
           >
-            {fields.map((item, index) => (
-              <Stack
-                key={index}
-                // alignItems="flex-start"
-                // flexWrap="wrap"
-                spacing={1.5}
-                sx={{ width: '100%' }}
-              >
+            <Stack spacing={1.5} px={1}>
+              {fields.map((item, index) => (
+                <Button
+                  key={index}
+                  onClick={() => {
+                    setShowField(false);
+                    setSelectedIndex(index);
+                    setTimeout(() => {
+                      setShowField(true);
+                    }, 100);
+                  }}
+                  variant="text"
+                  sx={{
+                    p: 1,
+                    cursor: 'pointer',
+                    borderBottom: index === selectedIndex ? 2 : 0,
+                    borderColor: 'primary.main',
+                  }}
+                >
+                  {t(item.day)}
+                  {'  '}
+                  {watch(`days_details[${index}].work_start_time`) &&
+                    watch(`days_details[${index}].work_end_time`) && (
+                      <Iconify
+                        sx={{ color: 'success.main', ml: 1 }}
+                        icon="material-symbols:check-circle-outline"
+                      />
+                    )}
+                </Button>
+              ))}
+            </Stack>
+            <Stack direction="column" spacing={1.5} sx={{ width: '100%', flex: 1 }}>
+              {showField && (
                 <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
+                  // alignItems="flex-start"
+                  // flexWrap="wrap"
+                  spacing={1.5}
+                  sx={{ width: '100%' }}
                 >
                   <Stack
-                    direction={{ xs: 'column', md: 'row' }}
+                    direction={{ xs: 'column', md: 'column' }}
                     spacing={2}
                     sx={{ width: '100%', mt: 2 }}
                   >
-                    <RHFSelect
-                      disabled={!values?.weekend?.includes(values.days_details[index]?.day)}
-                      InputLabelProps={{ shrink: true }}
-                      size="small"
-                      name={`days_details[${index}].day`}
-                      label={t('day')}
+                    <Stack
+                      direction={{ xs: 'column', md: 'row' }}
+                      spacing={2}
+                      sx={{ width: '100%', mt: 2 }}
                     >
-                      {weekDays
-                        .filter((option) => !values.weekend.includes(option.value))
-                        .map((option, idx) => (
-                          <MenuItem lang="ar" key={idx} value={option.value}>
-                            {option.label}
+                      <RHFSelect
+                        disabled={
+                          !values?.weekend?.includes(values.days_details[selectedIndex]?.day)
+                        }
+                        InputLabelProps={{ shrink: true }}
+                        size="small"
+                        name={`days_details[${selectedIndex}].day`}
+                        label={t('day')}
+                      >
+                        {weekDays
+                          .filter((option) => !values.weekend.includes(option.value))
+                          .map((option, idx) => (
+                            <MenuItem lang="ar" key={idx} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                      </RHFSelect>
+                      <RHFSelect
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        name={`days_details[${selectedIndex}].appointment_type`}
+                        data-test={`select-appointment-type-${selectedIndex}`}
+                        onChange={(e) => {
+                          setValue(
+                            `days_details[${selectedIndex}].appointment_type`,
+                            e.target.value
+                          );
+                          processDayDetails(selectedIndex);
+                        }}
+                        label={t('appointment type')}
+                      >
+                        {appointmenttypesData?.map((option, idx) => (
+                          <MenuItem lang="ar" key={idx} value={option._id}>
+                            {curLangAr ? option?.name_arabic : option?.name_english}
                           </MenuItem>
                         ))}
-                    </RHFSelect>
-                    <RHFSelect
-                      size="small"
-                      InputLabelProps={{ shrink: true }}
-                      name={`days_details[${index}].appointment_type`}
-                      data-test={`select-appointment-type-${index}`}
-                      onChange={(e) => {
-                        setValue(`days_details[${index}].appointment_type`, e.target.value);
-                        processDayDetails(index);
-                      }}
-                      label={t('appointment type')}
+                      </RHFSelect>
+                      <RHFTextField
+                        disabled
+                        size="small"
+                        name={`days_details[${selectedIndex}].appointment_number`}
+                        label={t('appointments number')}
+                        InputLabelProps={{ shrink: true }}
+                        value={appointmentsNum[selectedIndex] || appointEstimatedNum(selectedIndex)}
+                      />
+                    </Stack>
+                    <Stack
+                      direction={{ xs: 'column', md: 'row' }}
+                      spacing={2}
+                      data-test={`work-inputs-${selectedIndex}`}
+                      sx={{ width: '100%', mt: 2 }}
                     >
-                      {appointmenttypesData?.map((option, idx) => (
-                        <MenuItem lang="ar" key={idx} value={option._id}>
-                          {curLangAr ? option?.name_arabic : option?.name_english}
-                        </MenuItem>
-                      ))}
-                    </RHFSelect>
-                    <RHFTextField
-                      disabled
-                      size="small"
-                      name={`days_details[${index}].appointment_number`}
-                      label={t('appointments number')}
-                      InputLabelProps={{ shrink: true }}
-                      value={appointmentsNum[index] || appointEstimatedNum(index)}
-                    />
-                  </Stack>
-                  <Stack
-                    direction={{ xs: 'column', md: 'row' }}
-                    spacing={2}
-                    data-test={`work-inputs-${index}`}
-                    sx={{ width: '100%', mt: 2 }}
-                  >
-                    <RHFTimePicker
-                      name={`days_details[${index}].work_start_time`}
-                      data-test={`work-start-input-${index}`}
-                      label={t('work start time')}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                        },
-                      }}
-                      onChange={() => {
-                        setValue(`days_details[${index}].work_end_time`, null);
-                        processDayDetails(index);
-                      }}
-                    />
-                    <RHFTimePicker
-                      name={`days_details[${index}].work_end_time`}
-                      data-test={`work-end-input-${index}`}
-                      label={t('work end time')}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                        },
-                      }}
-                      onChange={() => {
-                        processDayDetails(index);
-                      }}
-                    />
-                    <RHFTimePicker
-                      name={`days_details[${index}].break_start_time`}
-                      label={t('break start time')}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                        },
-                      }}
-                      onChange={() => {
-                        setValue(`days_details[${index}].break_end_time`, null);
-                        processDayDetails(index);
-                      }}
-                    />
-                    <RHFTimePicker
-                      name={`days_details[${index}].break_end_time`}
-                      label={t('break end time')}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                        },
-                      }}
-                      onChange={() => {
-                        processDayDetails(index);
-                      }}
-                    />
-                  </Stack>
-                  <Stack display="flex" alignItems="flex-end">
-                    <RHFCheckbox
-                      size="small"
-                      InputLabelProps={{ shrink: true }}
-                      name={`days_details[${index}].online_available`}
-                      onChange={(e) => {
-                        setValue(
-                          `days_details[${index}].online_available`,
-                          !values.days_details[index].online_available
-                        );
-                        processDayDetails(index);
-                      }}
-                      label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
-                    />
-                  </Stack>
-                  <Stack
-                    direction={{ xs: 'column', md: 'row' }}
-                    spacing={0.2}
-                    sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
-                  >
-                    <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
-                      <Iconify icon="solar:trash-bin-trash-bold" />
-                    </IconButton>
-                    <IconButton size="small" onClick={() => processDayDetails(index)}>
-                      <Iconify icon="zondicons:refresh" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() =>
-                        setShowAppointments({
-                          [index]: !showAppointments[index],
-                        })
-                      }
-                    >
-                      <Iconify
-                        icon={
-                          showAppointments[index]
-                            ? 'eva:arrow-ios-upward-fill'
-                            : 'eva:arrow-ios-downward-fill'
+                      <RHFTimePicker
+                        name={`days_details[${selectedIndex}].work_start_time`}
+                        data-test={`work-start-input-${selectedIndex}`}
+                        label={t('work start time')}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                          },
+                        }}
+                        onChange={() => {
+                          setValue(`days_details[${selectedIndex}].work_end_time`, null);
+                          processDayDetails(selectedIndex);
+                        }}
+                      />
+                      <RHFTimePicker
+                        name={`days_details[${selectedIndex}].work_end_time`}
+                        data-test={`work-end-input-${selectedIndex}`}
+                        label={t('work end time')}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                          },
+                        }}
+                        onChange={() => {
+                          processDayDetails(selectedIndex);
+                        }}
+                      />
+                      <RHFTimePicker
+                        name={`days_details[${selectedIndex}].break_start_time`}
+                        label={t('break start time')}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                          },
+                        }}
+                        onChange={() => {
+                          setValue(`days_details[${selectedIndex}].break_end_time`, null);
+                          processDayDetails(selectedIndex);
+                        }}
+                      />
+                      <RHFTimePicker
+                        name={`days_details[${selectedIndex}].break_end_time`}
+                        label={t('break end time')}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                          },
+                        }}
+                        onChange={() => {
+                          processDayDetails(selectedIndex);
+                        }}
+                      />
+                    </Stack>
+                    <Stack display="flex" alignItems="flex-end">
+                      <RHFCheckbox
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        name={`days_details[${selectedIndex}].online_available`}
+                        onChange={(e) => {
+                          setValue(
+                            `days_details[${selectedIndex}].online_available`,
+                            !values.days_details[selectedIndex].online_available
+                          );
+                          processDayDetails(selectedIndex);
+                        }}
+                        label={
+                          <Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>
                         }
                       />
-                    </IconButton>
+                    </Stack>
+                    <Stack
+                      direction={{ xs: 'column', md: 'row' }}
+                      spacing={0.2}
+                      sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
+                    >
+                      <IconButton size="small" onClick={() => processDayDetails(selectedIndex)}>
+                        <Iconify icon="zondicons:refresh" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          setShowAppointments({
+                            [selectedIndex]: !showAppointments[selectedIndex],
+                          })
+                        }
+                      >
+                        <Iconify
+                          icon={
+                            showAppointments[selectedIndex]
+                              ? 'eva:arrow-ios-upward-fill'
+                              : 'eva:arrow-ios-downward-fill'
+                          }
+                        />
+                      </IconButton>
+                    </Stack>
                   </Stack>
+                  {showAppointments[selectedIndex] && (
+                    <NewEditDayAppointmentsDetails
+                      setAppointmentsNum={setAppointmentsNum}
+                      appointmenttypesData={appointmenttypesData}
+                      open={showAppointments[selectedIndex]}
+                      ParentIndex={selectedIndex}
+                      unmountOnExit
+                    />
+                  )}
                 </Stack>
-                {showAppointments[index] && (
-                  <NewEditDayAppointmentsDetails
-                    setAppointmentsNum={setAppointmentsNum}
-                    appointmenttypesData={appointmenttypesData}
-                    open={showAppointments[index]}
-                    ParentIndex={index}
-                    unmountOnExit
-                  />
-                )}
-              </Stack>
-            ))}
-          </Stack>
-
-          <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
-
-          <Stack
-            spacing={3}
-            direction={{ xs: 'column', md: 'row' }}
-            alignItems={{ xs: 'flex-end', md: 'center' }}
-          >
-            <Button
-              size="small"
-              color="primary"
-              data-test='add-new-day-button'
-              startIcon={<Iconify icon="tdesign:plus" />}
-              sx={{ padding: 1 }}
-              onClick={handleAdd}
-            // sx={{ flexShrink: 0 }}
-            >
-              {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
-            </Button>
+              )}
+            </Stack>
           </Stack>
         </Box>
       )}
