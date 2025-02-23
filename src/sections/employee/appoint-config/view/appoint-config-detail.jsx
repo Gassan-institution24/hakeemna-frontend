@@ -9,7 +9,14 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Alert, Typography, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Alert,
+  Typography,
+  CircularProgress,
+  BottomNavigation,
+  BottomNavigationAction,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -170,6 +177,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   });
 
   const [appointTime, setAppointTime] = useState(0);
+  const [value, setValue] = useState('appointment');
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
   const [errorMsg, setErrorMsg] = useState();
@@ -425,21 +433,54 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
                 </Alert>
               )}
-              <div id="currEMNewEditDetails">
-                <NewEditDetails
-                  setAppointTime={setAppointTime}
-                  appointmentConfigData={appointmentConfigData}
+
+              <BottomNavigation
+                showLabels
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+                sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+              >
+                <BottomNavigationAction
+                  sx={{ flex: 1, width: '100%' }}
+                  label="Appointment Details"
+                  value="appointment"
                 />
-              </div>
-              <div id="currEMNewEditDaysDetails">
-                <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
-              </div>
-              <div id="currEMNewEditHolidays">
-                <NewEditHolidays />
-              </div>
-              <div id="currEMNewEditLongHolidays">
-                <NewEditLongHolidays />
-              </div>
+                <BottomNavigationAction
+                  sx={{ flex: 1, width: '100%' }}
+                  label="Days Off Details"
+                  value="daysOff"
+                />
+                <BottomNavigationAction
+                  sx={{ flex: 1, width: '100%' }}
+                  label="Patient Details"
+                  value="patient"
+                />
+              </BottomNavigation>
+              {value === 'appointment' && (
+                <div id="currEMNewEditDetails">
+                  <NewEditDetails
+                    setAppointTime={setAppointTime}
+                    appointmentConfigData={appointmentConfigData}
+                  />
+                </div>
+              )}
+              {value === 'daysOff' && (
+                <>
+                  <div id="currEMNewEditHolidays">
+                    <NewEditHolidays />
+                  </div>
+                  <div id="currEMNewEditLongHolidays">
+                    <NewEditLongHolidays />
+                  </div>
+                </>
+              )}
+              {value === 'patient' && (
+                <div id="currEMNewEditDaysDetails">
+                  <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
+                </div>
+              )}
             </Card>
           )}
 
