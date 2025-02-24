@@ -57,7 +57,7 @@ export default function Others() {
           <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: '100%' }}>
               <RHFSelect
-                size="small"
+                // size="small"
                 name={`other[${index}].kind`}
                 label={t('type')}
                 sx={{ flex: 0.4 }}
@@ -67,19 +67,27 @@ export default function Others() {
                 <MenuItem value="published research">{t('published research')}</MenuItem>
               </RHFSelect>
               <RHFTextField
-                size="small"
+                // size="small"
                 name={`other[${index}].name`}
                 label={t('name')}
                 sx={{ flex: 0.6 }}
               />
               <Box sx={{ flex: 0.1 }}>
                 {values.other.length !== 1 && (
-                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
+                  <IconButton
+                    //  size="small"
+                    color="error"
+                    onClick={() => handleRemove(index)}
+                  >
                     <Iconify icon="tdesign:minus" />
                   </IconButton>
                 )}
                 {(index === values.other.length - 1 || values.other.length <= 1) && (
-                  <IconButton size="small" color="primary" onClick={handleAdd}>
+                  <IconButton
+                    //  size="small"
+                    color="primary"
+                    onClick={handleAdd}
+                  >
                     <Iconify icon="tdesign:plus" />
                   </IconButton>
                 )}
@@ -88,7 +96,6 @@ export default function Others() {
           </Stack>
         ))}
       </Stack>
-      <Divider flexItem sx={{ borderStyle: 'solid', pt: 2 }} />
     </Box>
     // </>
   );

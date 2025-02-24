@@ -41,6 +41,7 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
             value={field.value}
             onChange={field.onChange}
             error={!!error}
+            sx={{ textAlign: 'right' }}
             helperText={
               (!!error || helperText) && (
                 <FormHelperText error={!!error} sx={{ px: 2 }}>

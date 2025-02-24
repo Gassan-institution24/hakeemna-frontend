@@ -56,13 +56,13 @@ export default function ProfessionalMembership() {
           <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: '100%' }}>
               <RHFTextField
-                size="small"
+                // size="small"
                 name={`memberships[${index}].name`}
                 label={t('name')}
                 sx={{ flex: 0.6 }}
               />
               <RHFTextField
-                size="small"
+                // size="small"
                 name={`memberships[${index}].institution`}
                 label={t('institution')}
                 sx={{ flex: 0.4 }}
@@ -79,7 +79,7 @@ export default function ProfessionalMembership() {
                 {values.memberships.length !== 1 && (
                   <IconButton
                     // sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
-                    size="small"
+                    // size="small"
                     color="error"
                     onClick={() => handleRemove(index)}
                   >
@@ -89,7 +89,7 @@ export default function ProfessionalMembership() {
                 {index === values.memberships.length - 1 && (
                   <IconButton
                     // sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
-                    size="small"
+                    // size="small"
                     color="primary"
                     onClick={handleAdd}
                   >

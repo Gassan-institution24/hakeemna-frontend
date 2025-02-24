@@ -57,19 +57,19 @@ export default function Certifications() {
           <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: '100%' }}>
               <RHFTextField
-                size="small"
+                // size="small"
                 name={`certifications[${index}].name`}
                 label={t('cetificate')}
                 sx={{ flex: 5 }}
               />
               <RHFTextField
-                size="small"
+                // size="small"
                 name={`certifications[${index}].institution`}
                 label={t('institution')}
                 sx={{ flex: 3 }}
               />
               <RHFDatePicker
-                size="small"
+                // size="small"
                 label={t('year')}
                 placeholder={t('year')}
                 name={`certifications[${index}].year`}
@@ -80,7 +80,7 @@ export default function Certifications() {
                 {values.certifications.length !== 1 && (
                   <IconButton
                     // sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
-                    size="small"
+                    // size="small"
                     color="error"
                     onClick={() => handleRemove(index)}
                   >
@@ -90,7 +90,7 @@ export default function Certifications() {
                 {index === values.certifications.length - 1 && (
                   <IconButton
                     // sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
-                    size="small"
+                    // size="small"
                     color="primary"
                     onClick={handleAdd}
                   >

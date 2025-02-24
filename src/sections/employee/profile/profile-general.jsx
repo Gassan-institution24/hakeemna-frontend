@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { matchIsValidTel } from 'mui-tel-input';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useMemo, useEffect, useCallback, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Chip, MenuItem, Typography, InputAdornment } from '@mui/material';
+import { Chip, MenuItem, Typography, InputAdornment, Button, Divider } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -37,6 +37,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+import PageSelector from 'src/components/pageSelector';
 
 import Others from './other';
 import Certifications from './certifications';
@@ -98,6 +99,7 @@ const languages = [
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
+  const [page, setPage] = useState('information');
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
@@ -106,6 +108,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const pages = [
+    { label: t('General Information'), active: page === 'information' },
+    { label: t('Profession Practice Profile'), active: page === 'profile' },
+    { label: t('Verification Document'), active: page === 'verification' },
+  ];
 
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required(t('required field')),
@@ -318,28 +326,35 @@ export default function AccountGeneral({ employeeData, refetch }) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
+  const handleBack = () => {
+    if (page === 'profile') setPage('information');
+    if (page === 'verification') setPage('profile');
+  };
+  const handleNext = async () => {
+    if (page === 'information') {
+      setPage('profile');
+    }
+    if (page === 'profile') {
+      setPage('verification');
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        {/* img */}
-        <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
+      <Card sx={{ p: 3 }}>
+        <PageSelector pages={pages} />
+        <br />
+        {page === 'information' && (
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(3, 1fr)',
+            }}
+          >
             <RHFUploadAvatar
-              // helperText={
-              //   <Typography
-              //     variant="caption"
-              //     sx={{
-              //       mt: 3,
-              //       mx: 'auto',
-              //       display: 'block',
-              //       textAlign: 'center',
-              //       color: 'text.disabled',
-              //     }}
-              //   >
-              //     max size of {fData(3145728)}
-              //   </Typography>
-              // }
               maxSize={3145728}
               name="picture"
               onDrop={(acceptedFiles) => handleDrop('picture', acceptedFiles)}
@@ -369,163 +384,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFSelect
-                disabled
-                variant="filled"
-                label={t('nationality')}
-                fullWidth
-                name="nationality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {countriesData.map((country, idx) => (
-                  <MenuItem lang="ar" key={idx} value={country._id}>
-                    {curLangAr ? country.name_arabic : country.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField
-                variant="filled"
-                name="identification_num"
-                label={`${t('ID number')} :`}
-              />
-              <RHFTextField
-                variant="filled"
-                name="profrssion_practice_num"
-                label={`${t('profrssion practice number')} :`}
-              />
-              <RHFTextField type="email" variant="filled" name="email" label={`${t('email')} :`} />
-              <RHFPhoneNumber name="phone" label={t('phone number')} />
-              <Box
-                rowGap={3}
-                columnGap={2}
-                display="grid"
-                gridTemplateColumns={{
-                  xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(3, 1fr)',
-                }}
-              >
-                <Box>
-                  <RHFUploadBox
-                    sx={{
-                      mx: 'auto',
-                    }}
-                    name="scanned_identity"
-                    label={t('scanned ID')}
-                    onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mx: 'auto',
-                      mb: 1,
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    {t('scanned ID')}
-                  </Typography>
-                  {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
-                </Box>
-                <Box>
-                  <RHFUploadBox
-                    sx={{
-                      mx: 'auto',
-                    }}
-                    name="signature"
-                    label={t('signature')}
-                    onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mx: 'auto',
-                      mb: 1,
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    {t('signature')}
-                  </Typography>
-                  {values.signature && <Iconify icon="flat-color-icons:ok" />}
-                </Box>
-                <Box>
-                  <RHFUploadBox
-                    sx={{
-                      mx: 'auto',
-                    }}
-                    name="stamp"
-                    label={t('stamp')}
-                    onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}
-                  />
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mx: 'auto',
-                      mb: 1,
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    {t('stamp')}
-                  </Typography>
-                  {values.stamp && <Iconify icon="flat-color-icons:ok" />}
-                </Box>
-              </Box>
-              <RHFTextField
-                type="number"
-                name="fees"
-                label={t('fees')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
-                }}
-              />
-              <RHFTextField
-                type="number"
-                name="fees_after_discount"
-                label={t('fees after discount')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
-                }}
-              />
-            </Box>
-          </Card>
-        </Grid>
-        <Grid xs={12} md={8}>
-          <Card sx={{ p: 3, pt: 5 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFTextField type="number" name="tax_num" label={t('tax number')} />
-              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
-              <RHFAutocomplete
-                name="speciality"
-                label={t('speciality')}
-                options={specialtiesData.map((speciality) => speciality._id)}
-                getOptionLabel={(option) =>
-                  specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
-                  ]
-                }
-                renderOption={(props, option, idx) => (
-                  <li lang="ar" {...props} key={idx} value={option}>
-                    {
-                      specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
-                      ]
-                    }
-                  </li>
-                )}
-              />
-              <RHFSelect
                 label={t('gender')}
                 fullWidth
                 name="gender"
@@ -539,25 +397,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   {t('female')}
                 </MenuItem>
               </RHFSelect>
-              <RHFAutocomplete
-                name="employee_type"
-                label={t('employee type')}
-                options={employeeTypesData.map((one) => one._id)}
-                getOptionLabel={(option) =>
-                  employeeTypesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
-                  ]
-                }
-                renderOption={(props, option, idx) => (
-                  <li lang="ar" {...props} key={idx} value={option}>
-                    {
-                      employeeTypesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
-                      ]
-                    }
-                  </li>
-                )}
-              />
               <Controller
                 name="birth_date"
                 control={control}
@@ -578,6 +417,108 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     }}
                   />
                 )}
+              />
+              <RHFSelect
+                disabled
+                variant="filled"
+                label={t('nationality')}
+                fullWidth
+                name="nationality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {countriesData.map((country, idx) => (
+                  <MenuItem lang="ar" key={idx} value={country._id}>
+                    {curLangAr ? country.name_arabic : country.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFTextField type="email" variant="filled" name="email" label={`${t('email')} :`} />
+              <RHFPhoneNumber name="phone" label={t('phone number')} />
+              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
+              <RHFTextField
+                variant="filled"
+                name="identification_num"
+                label={`${t('ID number')} :`}
+              />
+              <RHFTextField
+                variant="filled"
+                name="profrssion_practice_num"
+                label={`${t('profrssion practice number')} :`}
+              />
+              <RHFTextField type="number" name="tax_num" label={t('tax number')} />
+              <RHFAutocomplete
+                name="employee_type"
+                label={t('employee type')}
+                options={employeeTypesData.map((one) => one._id)}
+                getOptionLabel={(option) =>
+                  employeeTypesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li lang="ar" {...props} key={idx} value={option}>
+                    {
+                      employeeTypesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
+            </Box>
+          </Box>
+        )}
+        {page === 'profile' && (
+          <>
+            <Typography variant="h6">{t('Professional definition elements')}</Typography>
+            <Typography variant="body1">
+              {t("This information will appear in your profile on the platform's home page.")}
+            </Typography>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              sx={{ mt: 2 }}
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(3, 1fr)',
+              }}
+            >
+              <RHFAutocomplete
+                name="speciality"
+                label={t('speciality')}
+                options={specialtiesData.map((speciality) => speciality._id)}
+                getOptionLabel={(option) =>
+                  specialtiesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li lang="ar" {...props} key={idx} value={option}>
+                    {
+                      specialtiesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
+              <RHFTextField
+                type="number"
+                name="fees"
+                label={t('fees')}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
+                }}
+              />
+              <RHFTextField
+                type="number"
+                name="fees_after_discount"
+                label={t('fees after discount')}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
+                }}
               />
             </Box>
             <RHFAutocomplete
@@ -608,7 +549,10 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))
               }
             />
-            {/* <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} /> */}
+            <Divider flexItem sx={{ borderStyle: 'solid', pt: 2 }} />
+            <Typography sx={{ my: 2 }} variant="h6">
+              {t('Introduction')}
+            </Typography>
             <RHFEditor
               lang="en"
               name="about_me"
@@ -616,32 +560,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
               sx={{ mt: 2, textTransform: 'lowercase' }}
             />
             <RHFEditor
-              lang="en"
+              lang="ar"
               name="arabic_about_me"
               label={t('arabic about me')}
               sx={{ mt: 2, textTransform: 'lowercase' }}
             />
-            {/* <RHFTextField
-              multiline
-              sx={{ mt: 3 }}
-              rows={3}
-              name="about_me"
-              label={t('english about me')}
-              onChange={handleEnglishInputChange}
-            />
-            <RHFTextField
-              multiline
-              sx={{ mt: 3 }}
-              rows={3}
-              name="arabic_about_me"
-              label={t('arabic about me')}
-              onChange={handleArabicInputChange}
-            /> */}
 
             <Certifications />
             <ProfessionalMembership />
             <Others />
-
             <RHFAutocomplete
               sx={{ mb: 3 }}
               name="keywords"
@@ -672,43 +599,108 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))
               }
             />
-            {/* <RHFAutocomplete
-              sx={{ mb: 3 }}
-              name="arabic_keywords"
-              label={t('arabic keywords')}
-              multiple
-              freeSolo
-              disableCloseOnSelect
-              options={arabicKeywordsData.filter(
-                (option) => !values.keywords.some((item) => option === item)
-              )}
-              getOptionLabel={(option) => option}
-              renderOption={(props, option, idx) => (
-                <li lang='ar' {...props} key={idx} value={option}>
-                  {option}
-                </li>
-              )}
-              renderTags={(selected, getTagProps) =>
-                selected.map((option, index) => (
-                  <Chip
-                    {...getTagProps({ index })}
-                    key={index}
-                    label={option}
-                    size="small"
-                    color="info"
-                    variant="soft"
-                  />
-                ))
-              }
-            /> */}
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-                {t('save changes')}
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-      </Grid>
+          </>
+        )}
+        {page === 'verification' && (
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(3, 1fr)',
+            }}
+          >
+            <Box>
+              <RHFUploadBox
+                sx={{
+                  mx: 'auto',
+                }}
+                name="scanned_identity"
+                label={t('scanned ID')}
+                onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  mx: 'auto',
+                  mb: 1,
+                  display: 'block',
+                  textAlign: 'center',
+                  color: 'text.disabled',
+                }}
+              >
+                {t('scanned ID')}
+              </Typography>
+              {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
+            </Box>
+            <Box>
+              <RHFUploadBox
+                sx={{
+                  mx: 'auto',
+                }}
+                name="signature"
+                label={t('signature')}
+                onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  mx: 'auto',
+                  mb: 1,
+                  display: 'block',
+                  textAlign: 'center',
+                  color: 'text.disabled',
+                }}
+              >
+                {t('signature')}
+              </Typography>
+              {values.signature && <Iconify icon="flat-color-icons:ok" />}
+            </Box>
+            <Box>
+              <RHFUploadBox
+                sx={{
+                  mx: 'auto',
+                }}
+                name="stamp"
+                label={t('stamp')}
+                onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  mx: 'auto',
+                  mb: 1,
+                  display: 'block',
+                  textAlign: 'center',
+                  color: 'text.disabled',
+                }}
+              >
+                {t('stamp')}
+              </Typography>
+              {values.stamp && <Iconify icon="flat-color-icons:ok" />}
+            </Box>
+          </Box>
+        )}
+
+        <Stack spacing={3} direction="row" justifyContent="flex-end" gap={2} sx={{ mt: 3 }}>
+          {page !== 'information' && (
+            <Button variant="contained" color="warning" onClick={handleBack}>
+              {t('Back')}
+            </Button>
+          )}
+          {page !== 'verification' && (
+            <Button variant="contained" color="primary" onClick={handleNext}>
+              {t('Next')}
+            </Button>
+          )}
+          {page === 'verification' && (
+            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+              {t('save changes')}
+            </LoadingButton>
+          )}
+        </Stack>
+      </Card>
     </FormProvider>
   );
 }
