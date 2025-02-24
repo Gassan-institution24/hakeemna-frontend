@@ -49,6 +49,8 @@ export default function Editor({
           ...(error && {
             border: (theme) => `solid 1px ${theme.palette.error.main}`,
             '& .ql-editor': {
+              position: 'relative',
+              zIndex: 10,
               bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
             },
           }),
@@ -59,7 +61,6 @@ export default function Editor({
         <ReactQuill
           modules={modules}
           formats={formats}
-
           // placeholder="Write something awesome..."
           {...other}
         />

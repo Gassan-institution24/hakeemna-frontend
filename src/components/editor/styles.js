@@ -52,13 +52,13 @@ export const StyledEditor = styled(Box)(({ theme }) => ({
       maxWidth: '100%',      // Images will scale to 100% of the editor width
       height: 'auto',
       display: 'block',      // Ensures the image is block-level
-      margin: '0 auto',      // Centers the image
+      margin: '4 auto',      // Centers the image
     },
     '& iframe': {
       width: '100%',         // Videos will scale to 100% of the editor width
       height: 'auto',        // Maintain aspect ratio based on content
       display: 'block',
-      margin: '0 auto',
+      margin: '4 auto',
     },
   },
 }));
@@ -124,14 +124,14 @@ export const StyledEditorToolbar = styled('div')(({ theme }) => {
         },
       },
       '& .ql-picker-label svg': {
-        ...(isRTL && {
-          right: 'auto !important',
-          left: 'auto !important',
-        }),
+        // ...(isRTL && {
+          right: '2 !important',
+          left: '2 !important',
+        // }),
       },
       '& .ql-color,& .ql-background,& .ql-align ': {
         '& .ql-picker-label': {
-          padding: 0,
+          padding: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -146,7 +146,7 @@ export const StyledEditorToolbar = styled('div')(({ theme }) => {
           '& .ql-stroke': { stroke: theme.palette.text.disabled },
         },
         '& .ql-picker-options': {
-          padding: 0,
+          padding: 2,
           marginTop: 4,
           border: 'none',
           maxHeight: 200,
