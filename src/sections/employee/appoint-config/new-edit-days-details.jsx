@@ -5,7 +5,6 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -30,7 +29,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const proccessing = useBoolean();
   const [showField, setShowField] = useState(true);
-  const [show, setShow] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -47,7 +45,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const { control, setValue, watch, clearErrors } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: 'days_details',
   });
@@ -223,8 +221,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   //   return <LoadingScreen />;
   // }
   return (
-    <>
-      {show && (
         <Box sx={{ p: 3 }}>
           <Typography
             variant="p"
@@ -460,8 +456,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             </Stack>
           </Stack>
         </Box>
-      )}
-    </>
   );
 }
 NewEditDayDetails.propTypes = {

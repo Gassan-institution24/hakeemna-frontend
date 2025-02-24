@@ -1,6 +1,7 @@
-import { Box, Stack } from '@mui/material';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import { Box, Stack } from '@mui/material';
 
 function PageSelector({ pages }) {
   return (
@@ -15,14 +16,14 @@ function PageSelector({ pages }) {
           m: 2,
           display: 'inline-flex',
           overflow: 'hidden',
-          width: 'fit-content', 
+          width: 'fit-content',
         }}
       >
         {pages.map((page) => (
           <Box
             key={page.label}
             sx={{
-              display: 'flex', 
+              display: 'flex',
               flex: 1,
               minWidth: 0,
               p: 1.5,
@@ -30,8 +31,9 @@ function PageSelector({ pages }) {
               backgroundColor: page.active ? 'info.darker' : 'transparent',
               color: page.active ? 'common.white' : 'info.darker',
               textAlign: 'center',
-              justifyContent: 'center', 
-              alignItems: 'center', 
+              justifyContent: 'center',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
             }}
           >
             {page.label}

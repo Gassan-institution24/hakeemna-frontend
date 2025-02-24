@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Table from '@mui/material/Table';
@@ -6,18 +7,13 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useSnackbar } from 'src/components/snackbar';
-
-// import { useRouter } from 'src/routes/hooks';
-
-import { useState } from 'react';
-
 import { addToCalendar } from 'src/utils/calender';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 import {
   useTable,
   TableNoData,
@@ -26,8 +22,6 @@ import {
 } from 'src/components/table';
 
 import PatientFoundRow from './patients-found-row';
-
-// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -43,21 +37,12 @@ export default function PatientsFound({
   const curLangAr = currentLang.value === 'ar';
 
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
     { id: 'mobile_num1', label: t('mobile number') },
-    { id: 'mobile_num2', label: t('alternative mobile number') },
-    // { id: 'email', label: t('email') },
-    { id: 'identification_num', label: t('ID number') },
     { id: 'nationality', label: t('nationality') },
-    { id: 'birth_date', label: t('birth date') },
     { id: 'book', width: 88 },
-    // { id: 'files', label: t('files number') },
-    // { id: '', width: 88 },
   ];
-
-  // const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -85,9 +70,7 @@ export default function PatientsFound({
       enqueueSnackbar(t('booked successfully!'));
       reset();
       window.location.reload();
-      // router.back();
     } catch (error) {
-      // error emitted in backend
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -104,9 +87,6 @@ export default function PatientsFound({
     order,
     orderBy,
     rowsPerPage,
-    //
-    // selected,
-    //
     onSort,
     onChangeDense,
     onChangePage,
@@ -126,8 +106,6 @@ export default function PatientsFound({
           order={order}
           orderBy={orderBy}
           headLabel={TABLE_HEAD}
-          //   rowCount={tableData.length}
-          // numSelected={selected.length}
           onSort={onSort}
           sx={{
             [`& .${tableCellClasses.head}`]: {

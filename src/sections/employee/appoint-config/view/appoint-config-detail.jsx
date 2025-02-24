@@ -1,15 +1,15 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useFieldArray, useForm } from 'react-hook-form';
 import Typewriter from 'typewriter-effect';
-import { useMemo, useState, useEffect, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Alert, Typography, CircularProgress, Button } from '@mui/material';
+import { Box, Alert, Button, Typography, CircularProgress } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -25,9 +25,9 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import PageSelector from 'src/components/pageSelector';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import PageSelector from 'src/components/pageSelector';
 
 import NewEditDetails from '../new-edit-details';
 import NewEditHolidays from '../new-edit-holidays';

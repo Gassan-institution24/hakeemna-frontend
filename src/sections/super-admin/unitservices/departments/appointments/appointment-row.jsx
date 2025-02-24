@@ -13,9 +13,6 @@ import { TextField, Typography } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
@@ -62,7 +59,6 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
-  const router = useRouter();
 
   const { t } = useTranslate();
 
