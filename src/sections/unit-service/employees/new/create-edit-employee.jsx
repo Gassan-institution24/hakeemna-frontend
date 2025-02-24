@@ -82,6 +82,7 @@ export default function TableNewEditForm({ currentTable }) {
     speciality: Yup.string().nullable(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.string(),
+    identification_num: Yup.string(),
     strict_employee: Yup.bool(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
@@ -102,6 +103,7 @@ export default function TableNewEditForm({ currentTable }) {
       email: currentTable?.email || '',
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
+      identification_num: currentTable?.identification_num || '',
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
       phone: currentTable?.phone || '',
@@ -227,6 +229,10 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label={t('Full name in Arabic')}
                 helperText={t('should include title like : doctor, specialist,...')}
+              />
+              <RHFTextField
+                name="identification_num"
+                label={t('National ID number')}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
 

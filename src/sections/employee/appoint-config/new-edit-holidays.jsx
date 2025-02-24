@@ -15,7 +15,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { RHFMultiCheckbox, RHFTextField } from 'src/components/hook-form';
+import { RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

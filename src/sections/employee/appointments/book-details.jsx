@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import { MenuItem, TextField } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
@@ -31,6 +30,7 @@ export default function BookDetails({
   setSelectedDate,
   list,
   loading,
+  hideSelect,
 }) {
   const { t } = useTranslate();
 
@@ -74,58 +74,65 @@ export default function BookDetails({
   return (
     // <Card {...other}>
     <>
-      <Stack direction={mdUp ? 'row' : 'column'} justifyContent="space-around">
-        <StaticDatePicker
-          localeText={false}
-          sx={{ width: '100%', flexGrow: 1, flexShrink: 0.4 }}
-          orientation={mdUp ? 'landscape' : ''}
-          shouldDisableDate={(day) =>
-            !AppointDates.some((date) => {
-              const appointDate = new Date(date);
-              const currentDate = new Date(day);
-              return (
-                appointDate.getFullYear() === currentDate.getFullYear() &&
-                appointDate.getMonth() === currentDate.getMonth() &&
-                appointDate.getDate() === currentDate.getDate()
-              );
-            })
-          }
-          slots={{ toolbar: 'test' }}
-          slotProps={{ actionBar: { actions: [] } }}
-          value={new Date(selectedDate)}
-          onChange={(newValue) =>
-            setSelectedDate(
-              new Date(newValue.getFullYear(), newValue.getMonth(), newValue.getDate(), 12, 0, 0)
-            )
-          }
-        />
-        <Stack
-          sx={{
-            width: '100%',
-            height: '100%',
-            flexGrow: 1,
-            flexShrink: 0.6,
-            // py: 8,
-            px: 3,
-          }}
-        >
-          <TimeList list={list} onChange={timeListChangeHandler} value={timeListItem} />
-        </Stack>
-      </Stack>
-      <Divider sx={{ borderStyle: 'dashed' }} />
-      {selected && (
-        <CardHeader
-          title={
-            <Typography
-              sx={{ py: 2, fontWeight: 700 }}
-              variant="caption"
-              color="text.secondary"
-              textTransform="uppercase"
+      {!hideSelect && (
+        <>
+          <Stack direction={mdUp ? 'row' : 'column'} justifyContent="space-around">
+            <StaticDatePicker
+              localeText={false}
+              sx={{ width: '100%', flexGrow: 1, flexShrink: 0.4 }}
+              orientation={mdUp ? 'landscape' : ''}
+              shouldDisableDate={(day) =>
+                !AppointDates.some((date) => {
+                  const appointDate = new Date(date);
+                  const currentDate = new Date(day);
+                  return (
+                    appointDate.getFullYear() === currentDate.getFullYear() &&
+                    appointDate.getMonth() === currentDate.getMonth() &&
+                    appointDate.getDate() === currentDate.getDate()
+                  );
+                })
+              }
+              slots={{ toolbar: 'test' }}
+              slotProps={{ actionBar: { actions: [] } }}
+              value={new Date(selectedDate)}
+              onChange={(newValue) =>
+                setSelectedDate(
+                  new Date(
+                    newValue.getFullYear(),
+                    newValue.getMonth(),
+                    newValue.getDate(),
+                    12,
+                    0,
+                    0
+                  )
+                )
+              }
+            />
+            <Stack
+              sx={{
+                width: '100%',
+                height: '100%',
+                flexGrow: 1,
+                flexShrink: 0.6,
+                // py: 8,
+                px: 3,
+              }}
             >
-              {t('Appointment details')}
-            </Typography>
-          }
-        />
+              <TimeList list={list} onChange={timeListChangeHandler} value={timeListItem} />
+            </Stack>
+          </Stack>
+          <Divider sx={{ borderStyle: 'dashed' }} />
+        </>
+      )}
+      {selected && (
+        <Typography
+          sx={{ py: 2, px: 0, fontWeight: 700 }}
+          variant="caption"
+          color="text.secondary"
+          textTransform="uppercase"
+        >
+          {t('Appointment details')}
+        </Typography>
       )}
       {data && <ReviewItem item={data} />}
       <Divider sx={{ borderStyle: 'dashed', mb: 3 }} />
@@ -139,6 +146,7 @@ BookDetails.propTypes = {
   AppointDates: PropTypes.array,
   list: PropTypes.array,
   loading: PropTypes.bool,
+  hideSelect: PropTypes.bool,
   setSelected: PropTypes.func,
   setSelectedDate: PropTypes.func,
 };
@@ -181,6 +189,7 @@ function ReviewItem({ item }) {
       spacing={2}
       sx={{
         p: 3,
+        pt: 2,
         position: 'relative',
       }}
     >
