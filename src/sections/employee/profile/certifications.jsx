@@ -52,10 +52,11 @@ export default function Certifications() {
         sx={{ mt: 3 }}
         divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
         spacing={2}
+        alignItems="center"
       >
         {fields.map((item, index) => (
-          <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: '100%' }}>
+          <Stack key={index} alignItems="center" spacing={1.5} sx={{ width: '100%' }}>
+            <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={2} sx={{ width: '100%' }}>
               <RHFTextField
                 // size="small"
                 name={`certifications[${index}].name`}
@@ -74,7 +75,7 @@ export default function Certifications() {
                 placeholder={t('year')}
                 name={`certifications[${index}].year`}
                 views={['year']}
-                sx={{ maxWidth:180 }}
+                sx={{ maxWidth: 180 }}
               />
               <Box sx={{ flex: 1 }}>
                 {values.certifications.length !== 1 && (

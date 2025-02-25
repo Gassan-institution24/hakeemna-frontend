@@ -33,7 +33,7 @@ function PageSelector({ pages }) {
               textAlign: 'center',
               justifyContent: 'center',
               alignItems: 'center',
-              whiteSpace: 'nowrap',
+              whiteSpace: { md: 'nowrap' },
             }}
           >
             {page.label}

@@ -55,7 +55,7 @@ export default function Others() {
       >
         {fields.map((item, index) => (
           <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: '100%' }}>
+            <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={2} sx={{ width: '100%' }}>
               <RHFSelect
                 // size="small"
                 name={`other[${index}].kind`}
