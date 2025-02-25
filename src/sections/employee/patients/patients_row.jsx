@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { Button, MenuItem, IconButton } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -85,11 +85,11 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
         >
           {file_code}
         </TableCell>
-        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       <CustomPopover
         open={popover.open}
