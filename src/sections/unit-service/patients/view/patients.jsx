@@ -63,7 +63,6 @@ export default function PatientTableView() {
     { id: 'name_arabic', label: t('name in arabic') },
     { id: 'work_group', label: t('work group') },
     { id: 'file_code', label: t('file code') },
-    { id: '' },
   ];
 
   const checkAcl = useAclGuard();

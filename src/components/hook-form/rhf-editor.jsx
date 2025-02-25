@@ -5,6 +5,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Stack, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 
+import { useLocales } from 'src/locales';
+
 import Editor from '../editor';
 
 // ----------------------------------------------------------------------
@@ -18,6 +20,8 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
   } = useFormContext();
 
   const values = watch();
+  const { currentLang } = useLocales()
+  const isRTL = currentLang.value === 'ar';
 
   useEffect(() => {
     if (values[name] === '<p><br></p>') {
@@ -41,7 +45,7 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
             value={field.value}
             onChange={field.onChange}
             error={!!error}
-            sx={{ textAlign: 'right' }}
+            sx={{ textAlign: isRTL ? 'right' : '' }}
             helperText={
               (!!error || helperText) && (
                 <FormHelperText error={!!error} sx={{ px: 2 }}>
