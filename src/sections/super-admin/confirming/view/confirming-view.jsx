@@ -9,6 +9,7 @@ import { useGetPatients } from 'src/api';
 export default function ConfirmingView() {
   const { patientsData, refetch } = useGetPatients({
     confirmed_id: false,
+    email: 'notExist',
     select: 'name_english identification_num email scanned_identification mobile_num1 wating_to_resend_id',
     populate: { path: 'nationality', select: 'name_english' },
   });
@@ -41,17 +42,17 @@ export default function ConfirmingView() {
       <Typography variant="subtitle1">{patientsData?.length} result found</Typography>
       <Stack sx={{ justifyContent: 'center', alignItems: 'center', gap: 5, mt: 5 }}>
         {patientsData?.map((one, idx) => (
-          <Card sx={{ p: 3, minWidth: '60vw' }}>
-            <Stack direction={{ md: 'row' }} justifyContent="space-between" alignItems="center">
+          <Card key={idx} sx={{ p: 3, width: '100%' }}>
+            <Stack direction={{ md: 'row' }} justifyContent="space-between" gap={4} alignItems="center">
               <img
                 decoding="async"
                 loading="lazy"
-                width={600}
+                width={400}
                 src={one.scanned_identification}
                 alt="scanned_id"
               />
-              <Stack minWidth="60%" gap={1}>
-                <Stack direction='row' justifyContent='space-between' paddingLeft={3} paddingRight={3} gap={1}>
+              <Stack gap={1}>
+                <Stack direction='row' justifyContent='space-between' paddingLeft={3} paddingRight={3} gap={4}>
                   <Stack gap={1}>
                     <Typography variant="subtitle2"> ID : {one?.identification_num}</Typography>
                     <Typography variant="subtitle2">name : {one?.name_english}</Typography>
