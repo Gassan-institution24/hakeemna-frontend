@@ -116,7 +116,7 @@ export default function PatientUpload({ patient }) {
     try {
       if (table === 'medical_report') {
         if (!values.medical_report_description && !values.medical_report_file) {
-          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
         const formData = new FormData();
@@ -137,7 +137,7 @@ export default function PatientUpload({ patient }) {
         setValue('medical_report_description', null);
       } else if (table === 'instructions') {
         if (!selectedInstruction) {
-          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
         await axiosInstance.post(`/api/instructions`, {
@@ -149,7 +149,7 @@ export default function PatientUpload({ patient }) {
         setSelectedInstruction('')
       } else if (table === 'patient_record') {
         if (!values.patient_record_description && !values.patient_record_file) {
-          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
         const formData = new FormData();
@@ -170,7 +170,7 @@ export default function PatientUpload({ patient }) {
         setValue('patient_record_description', null);
       } else if (table === 'sick_leave') {
         if (!values.start_date || !values.end_date) {
-          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
         await axiosInstance.post(endpoints.sickleave.all, {
@@ -187,7 +187,7 @@ export default function PatientUpload({ patient }) {
         setValue('sick_leave_description', null);
       } else if (table === 'communication') {
         if (!values.date || !values.description) {
-          enqueueSnackbar(t('no data submitted'), { variant: 'error' });
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
         await axiosInstance.post(endpoints.uspcommunication.all, {
@@ -201,6 +201,10 @@ export default function PatientUpload({ patient }) {
         setValue('date', null);
         setValue('description', null);
       } else if (table === 'prescription') {
+        if (!values.drugs?.length || values.drugs.some((one) => !one.medicines)) {
+          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
+          return
+        }
         setloading(true);
         await axiosInstance.post(endpoints.prescription.all, values.drugs);
         setValue('drugs', [defaultDrug]);
@@ -366,7 +370,7 @@ export default function PatientUpload({ patient }) {
             </Stack>
           </Card>
 
-          <Card sx={{ p: 2 }}>
+          {adjustabledocument?.length > 0 && <Card sx={{ p: 2 }}>
             <Stack gap={2} height='100%'>
               <Typography variant="subtitle1">{t('Instructions')}</Typography>
               <Stack gap={1} sx={{ maxHeight: 300, overflow: 'auto' }}>
@@ -389,7 +393,7 @@ export default function PatientUpload({ patient }) {
                 </Button>
               </Stack>
             </Stack>
-          </Card>
+          </Card>}
           <Card sx={{ p: 2 }}>
             <Stack gap={2}>
               <Typography variant="subtitle1">{t('sick leave')}</Typography>
