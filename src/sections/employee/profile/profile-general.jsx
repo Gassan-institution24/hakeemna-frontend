@@ -704,7 +704,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
             </Button>
           )}
           {page !== 'verification' && (
-            <Button variant="contained" color="primary" onClick={handleNext}>
+            <Button variant="contained" color="secondary" onClick={handleNext}>
               {t('Next')}
             </Button>
           )}

@@ -397,7 +397,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               </Button>
             )}
             {value !== 'days' && (
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button variant="contained" color="secondary" onClick={handleNext}>
                 {t('Next')}
               </Button>
             )}

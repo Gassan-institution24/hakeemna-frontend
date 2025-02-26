@@ -584,7 +584,7 @@ export default function TableCreateView() {
                 <Button
                   disabled={!selected}
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={() => setPage(2)}
                 >
                   {t('Next')}
