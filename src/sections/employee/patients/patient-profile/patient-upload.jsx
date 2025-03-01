@@ -140,8 +140,9 @@ export default function PatientUpload({ patient }) {
           enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
+        console.log('patient?.patient?._id', patient)
         await axiosInstance.post(`/api/instructions`, {
-          patient: patient?._id,
+          patient: patient?.patient?._id,
           unit_service_patient: patient?._id,
           adjustable_documents: selectedInstruction,
           unit_service: employee?.unit_service?._id,
@@ -170,7 +171,7 @@ export default function PatientUpload({ patient }) {
         setValue('patient_record_description', null);
       } else if (table === 'sick_leave') {
         if (!values.start_date || !values.end_date) {
-          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
+          enqueueSnackbar(t('please select start and end date'), { variant: 'error' });
           return;
         }
         await axiosInstance.post(endpoints.sickleave.all, {
@@ -202,7 +203,7 @@ export default function PatientUpload({ patient }) {
         setValue('description', null);
       } else if (table === 'prescription') {
         if (!values.drugs?.length || values.drugs.some((one) => !one.medicines)) {
-          enqueueSnackbar(t('no data to submit'), { variant: 'error' });
+          enqueueSnackbar(t('please choose medicine'), { variant: 'error' });
           return
         }
         setloading(true);
