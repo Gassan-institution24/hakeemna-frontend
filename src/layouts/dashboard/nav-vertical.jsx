@@ -369,7 +369,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
             </>
           )}
       </CustomPopover>
-      {user.role !== 'superadmin' && (
         <Box
           sx={{
             position: 'fixed',
@@ -422,7 +421,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
             }}
           />
         </Box>
-      )}
     </>
   );
 }

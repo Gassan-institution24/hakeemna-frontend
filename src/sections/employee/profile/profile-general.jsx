@@ -13,6 +13,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Chip, Button, Divider, Tooltip, MenuItem, Typography, InputAdornment } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -97,6 +100,7 @@ const languages = [
 
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter()
   const { user } = useAuthContext();
   const [page, setPage] = useState('information');
   const employeeEng =
@@ -298,6 +302,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
         { fees: data.fees, fees_after_discount: data.fees_after_discount, currency: data?.currency }
       );
       enqueueSnackbar(t('updated successfully!'));
+      router.push(paths.employee.appointmentsToday)
       refetch();
     } catch (error) {
       // error emitted in backend
@@ -377,15 +382,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     name="name_english"
                     onChange={handleEnglishInputChange}
                     label={t('Full name in English')}
-                    helperText={`${t('example')}: Doctor Ahmad Khaled`}
                   />
                   <RHFTextField
                     name="name_arabic"
                     onChange={handleArabicInputChange}
                     label={t('Full name in Arabic')}
-                    helperText={`${t('example')}: الدكتور أحمد خالد`}
                   />
                 </Box >
+                <Typography variant='caption' sx={{ fontSize: 11 }} color='primary.main'>
+                  {t('If you want your name to appear with a title (such as: Doctor, Consultant, etc.), in this case you must write the title and then your full name (for example: Consultant Muhammad Ahmad Ali).')}
+                </Typography>
                 <Box
                   rowGap={3}
                   columnGap={2}
