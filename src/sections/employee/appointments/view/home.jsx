@@ -258,6 +258,28 @@ export default function AppointmentsView({ employeeData }) {
     },
     [dataInPage.length, table, refetch, enqueueSnackbar, t, curLangAr]
   );
+  const handleEndRow = useCallback(
+    async (row) => {
+      try {
+        await axiosInstance.patch(endpoints.appointments.one(row._id), {
+          finished_or_not: 1,
+        });
+        enqueueSnackbar(t('ended successfully!'));
+      } catch (error) {
+        // error emitted in backend
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
+        console.error(error);
+      }
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, curLangAr]
+  );
 
   const handleDelayRow = useCallback(
     async (row, min) => {
@@ -590,6 +612,7 @@ export default function AppointmentsView({ employeeData }) {
                         onDelayRow={handleDelayRow}
                         onCancelRow={() => handleCancelRow(row)}
                         onBookAppoint={() => handleBookRow(row)}
+                        onEndAppoint={() => handleEndRow(row)}
                         onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}

@@ -367,6 +367,7 @@ export default function AppointmentsToday() {
                   component={RouterLink}
                   onClick={() => setNewDialog(true)}
                   variant="contained"
+                  color="primary"
                   startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                   {t('create & book appointment')}
