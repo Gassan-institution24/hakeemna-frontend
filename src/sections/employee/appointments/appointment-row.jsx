@@ -42,6 +42,7 @@ export default function AppointmentsTableRow({
   onCancelRow,
   onUnCancelRow,
   onDeleteRow,
+  onEndAppoint,
 }) {
   const {
     _id,
@@ -250,6 +251,20 @@ export default function AppointmentsTableRow({
               {t('cancel')}
             </MenuItem>
           )}
+        {status === 'processing' &&
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onEndAppoint();
+                popover.onClose();
+              }}
+              sx={{ color: 'success.main' }}
+            >
+              <Iconify icon="mdi:done" />
+              {t('end')}
+            </MenuItem>
+          )}
 
         {status === 'canceled' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
@@ -392,6 +407,7 @@ AppointmentsTableRow.propTypes = {
   onBookAppoint: PropTypes.func,
   onViewRow: PropTypes.func,
   onDelayRow: PropTypes.func,
+  onEndAppoint: PropTypes.func,
   refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

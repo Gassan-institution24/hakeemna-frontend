@@ -19,17 +19,17 @@ import { useGetDiseases } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
 
   TableNoData,
-  getComparator,
 
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useDebounce } from 'src/hooks/use-debounce';
+
 import TableDetailRow from '../diseases/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -63,9 +63,17 @@ export default function DiseasesTableView() {
 
   const router = useRouter();
 
-  const { tableData, loading } = useGetDiseases();
 
   const [filters, setFilters] = useState(defaultFilters);
+  const searchName = useDebounce(filters.name);
+
+  const { tableData } = useGetDiseases({
+    orderBy: table.orderBy,
+    order: table.order,
+    page: table.page,
+    rowsPerPage: table.rowsPerPage,
+    name: searchName
+  });
 
   const searchParams = useSearchParams();
 
@@ -77,30 +85,18 @@ export default function DiseasesTableView() {
     }
   }, [upload_record]);
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
-
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
-
 
 
   const canReset = !!filters?.name;
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!tableData.length && canReset) || !tableData.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
 
   const handleDownload = () => {
-    const excelBody = dataFiltered.reduce((acc, data) => {
+    const excelBody = tableData.reduce((acc, data) => {
       acc.push({
         code: data.code,
         name: data.name_english,
@@ -147,10 +143,6 @@ export default function DiseasesTableView() {
   //   },
   //   [router]
   // );
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <Container maxWidth="xl">
@@ -200,7 +192,7 @@ export default function DiseasesTableView() {
             //
             onResetFilters={handleResetFilters}
             //
-            results={dataFiltered.length}
+            results={tableData.length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
@@ -250,13 +242,13 @@ export default function DiseasesTableView() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
+                rowCount={tableData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
               />
 
               <TableBody>
-                {dataFiltered
+                {tableData
                   .slice(
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
@@ -272,7 +264,7 @@ export default function DiseasesTableView() {
         </TableContainer>
 
         <TablePaginationCustom
-          count={dataFiltered.length}
+          count={tableData.length}
           page={table.page}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
@@ -284,49 +276,4 @@ export default function DiseasesTableView() {
       </Card>
     </Container>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name } = filters;
-
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el, idx) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.category?.name_english &&
-          data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.symptoms[0] &&
-          data?.symptoms?.some(
-            (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
-        (data?.symptoms[0] &&
-          data?.symptoms?.some(
-            (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
-        data?._id === name ||
-        data?.upload_record === name ||
-        JSON.stringify(data.code) === name
-    );
-  }
-
-  // if (status !== 'all') {
-  //   inputData = inputData.filter((order) => order.status === status);
-  // }
-
-  return inputData;
 }
