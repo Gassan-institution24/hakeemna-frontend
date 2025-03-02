@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
@@ -7,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import { Box, MenuItem } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,6 +19,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider, {
+    RHFSelect,
+    RHFCheckbox,
     RHFDatePicker,
     RHFTimePicker,
 } from 'src/components/hook-form';
@@ -31,18 +35,24 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     const attendanceSchema = Yup.object().shape({
         date: Yup.date().nullable(),
         check_in_time: Yup.date().nullable(),
+        off: Yup.boolean().nullable(),
         check_out_time: Yup.date().nullable(),
         leave_end: Yup.date().nullable(),
         leave_start: Yup.date().nullable(),
         employee_engagement: Yup.string().nullable(),
+        leave: Yup.string().required(t('required field')),
+        work_type: Yup.string().nullable(),
     });
 
     const defaultValues = {
         date: row?.date || null,
         check_in_time: row?.check_in_time || null,
+        off: row?.off || false,
         check_out_time: row?.check_out_time || null,
         leave_end: row?.leave_end || null,
         leave_start: row?.leave_start || null,
+        leave: row?.leave || '',
+        work_type: row?.work_type || '',
         employee_engagement: employeeId || ''
     };
 
@@ -52,9 +62,12 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     });
 
     const {
+        watch,
         handleSubmit,
         formState: { isSubmitting },
     } = methods;
+    const leaveValue = watch('leave')
+    const offValues = watch('off')
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -76,18 +89,54 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
         }
     });
 
+    useEffect(() => {
+        if (leaveValue) {
+            methods.setValue('check_in_time', null)
+            methods.setValue('check_out_time', null)
+            methods.setValue('leave_start', null)
+            methods.setValue('leave_end', null)
+            methods.setValue('work_type', '')
+        } else {
+            methods.setValue('leave', '')
+        }
+        // eslint-disable-next-line
+    }, [leaveValue])
+
     return (
-        <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+        <Dialog fullWidth maxWidth="sm" open={open} onClose={() => {
+            methods.reset()
+            onClose()
+        }}>
             <FormProvider methods={methods} onSubmit={onSubmit}>
                 <DialogTitle>{row ? t('Edit Attendance details') : t('Create New Attendance')}</DialogTitle>
 
                 <DialogContent dividers>
                     <Stack spacing={3} mt={2}>
-                        <RHFDatePicker name='date' label={t('Date')} />
-                        <RHFTimePicker name='check_in_time' label={t('Check in time')} />
-                        <RHFTimePicker name='check_out_time' label={t('Check out time')} />
-                        <RHFTimePicker name='leave_start' label={t('Leave start')} />
-                        <RHFTimePicker name='leave_end' label={t('Leave end')} />
+                        <Box>
+                            <RHFDatePicker name='date' label={t('Date')} />
+                            <Stack direction='row' justifyContent='flex-end'>
+                                <RHFCheckbox name='off' label={t('leave')} onChange={() =>
+                                    methods.setValue('off', !offValues)
+                                } />
+                            </Stack>
+                        </Box>
+                        {offValues && <RHFSelect name='leave' label={t('Leave')}>
+                            <MenuItem value='annual'>{t('annual')}</MenuItem>
+                            <MenuItem value='sick'>{t('sick')}</MenuItem>
+                            <MenuItem value='unpaid'>{t('unpaid')}</MenuItem>
+                            <MenuItem value='other'>{t('other')}</MenuItem>
+                        </RHFSelect>}
+                        {!offValues && <>
+                            <RHFSelect name='work_type' label={t('Work type')}>
+                                <MenuItem value='online'>{t('online')}</MenuItem>
+                                <MenuItem value='onsite'>{t('onsite')}</MenuItem>
+                                <MenuItem value='hybrid'>{t('hybrid')}</MenuItem>
+                            </RHFSelect>
+                            <RHFTimePicker name='check_in_time' label={t('Check in time')} />
+                            <RHFTimePicker name='check_out_time' label={t('Check out time')} />
+                            <RHFTimePicker name='leave_start' label={t('Leave start')} />
+                            <RHFTimePicker name='leave_end' label={t('Leave end')} />
+                        </>}
                     </Stack>
                 </DialogContent>
 
@@ -95,7 +144,6 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
                     <Button color="inherit" variant="outlined" onClick={onClose}>
                         {t('Cancel')}
                     </Button>
-
                     <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                         {t("Save")}
                     </LoadingButton>

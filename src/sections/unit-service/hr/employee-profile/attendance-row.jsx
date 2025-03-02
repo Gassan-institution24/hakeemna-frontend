@@ -36,8 +36,8 @@ export default function AttendanceRow({
     check_out_time,
     // leave_start,
     // leave_end,
-    late,
-    early_leave,
+    leave,
+    work_type,
     leaveTime,
     workTime,
     created_at,
@@ -72,9 +72,9 @@ export default function AttendanceRow({
         <TableCell align="center">{fTime(check_in_time)}</TableCell>
         <TableCell align="center">{fTime(check_out_time)}</TableCell>
         <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
-        <TableCell align="center">{fHourMin(late)}</TableCell>
-        <TableCell align="center">{fHourMin(early_leave)}</TableCell>
         <TableCell align="center">{fHourMin(workTime)}</TableCell>
+        <TableCell align="center">{t(work_type)}</TableCell>
+        <TableCell align="center">{t(leave)}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

@@ -9,7 +9,7 @@ import { useGetPatients } from 'src/api';
 export default function ConfirmingView() {
   const { patientsData, refetch } = useGetPatients({
     confirmed_id: false,
-    email: 'notExist',
+    email: 'exists',
     select: 'name_english identification_num email scanned_identification mobile_num1 wating_to_resend_id',
     populate: { path: 'nationality', select: 'name_english' },
   });
