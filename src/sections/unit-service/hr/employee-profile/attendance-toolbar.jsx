@@ -81,9 +81,10 @@ export default function AttendanceToolbar({
             width: { xs: 1, md: 200 },
           }}
         />
-        <Stack direction="row" justifyContent="flex-end" flex={1} mr={3}>
+        <Stack direction="row" justifyContent="flex-end" gap={2} flex={1} mr={3} sx={{fontSize:14}}>
+          {t('total working hours')}{'  '}
           {hours > 60
-            ? `${Math.floor(hours / 60)}:${(hours % 60).toString().padStart(2, '0')} hr`
+            ? `${Math.floor(hours / 60)} ${t('hr')} : ${(hours % 60).toString().padStart(2, '0')} ${t('min')}`
             : `${hours} ${t('min')}`}
           {/* <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
