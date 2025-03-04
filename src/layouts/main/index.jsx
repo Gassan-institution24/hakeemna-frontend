@@ -23,7 +23,7 @@ export default function MainLayout({ children }) {
   const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
     if (!mdUp) {
-      if (currentScrollY > lastScrollY) {
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
         setShowHeader(false);
       } else {
         setShowHeader(true);
