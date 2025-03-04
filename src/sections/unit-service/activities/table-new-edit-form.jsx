@@ -38,7 +38,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
   const { departmentsData } = useGetUSActiveDepartments(
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const { enqueueSnackbar } = useSnackbar();
@@ -56,10 +56,9 @@ export default function TableNewEditForm({ currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        currentTable?.unit_service._id ||
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-          ._id,
-      department: currentTable?.department._id || null,
+        currentTable?.unit_service?._id ||
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
+      department: currentTable?.department?._id || null,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       details: currentTable?.details || '',
@@ -109,7 +108,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable?._id)}`, data);
         socket.emit('updated', {
           data,
           user,
@@ -176,7 +175,7 @@ export default function TableNewEditForm({ currentTable }) {
               {employees_number > 3 && (
                 <RHFSelect name="department" label={t('department')}>
                   {departmentsData.map((department, idx) => (
-                    <MenuItem lang="ar" key={idx} value={department._id}>
+                    <MenuItem lang="ar" key={idx} value={department?._id}>
                       {curLangAr ? department.name_arabic : department.name_english}
                     </MenuItem>
                   ))}

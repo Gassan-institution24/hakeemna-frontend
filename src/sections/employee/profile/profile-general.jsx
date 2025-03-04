@@ -18,7 +18,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetKeywords,
@@ -101,12 +100,13 @@ const languages = [
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter()
-  const { user } = useAuthContext();
   const [page, setPage] = useState('information');
   const employeeEng =
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id;
-  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng)
-  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng)
+    employeeData?.employee_engagements?.[employeeData.selected_engagement];
+  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id)
+  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng?._id)
+
+  const { data: employeeEngagementData } = useGetEmployeeEngagement(employeeEng?._id)
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
@@ -210,15 +210,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
             year: null,
           },
         ],
-      fees: user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.fees || 0,
+      fees: employeeEngagementData?.fees || 0,
       fees_after_discount:
-        user?.employee?.employee_engagements?.[user.employee.selected_engagement]
-          ?.fees_after_discount || 0,
+        employeeEngagementData?.fees_after_discount || 0,
       // currency:
       //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
       //   currencies?.[0]?._id,
     }),
-    [user?.employee, employeeData]
+    [employeeEngagementData, employeeData]
   );
 
   const methods = useForm({
@@ -297,13 +296,18 @@ export default function AccountGeneral({ employeeData, refetch }) {
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
       await axios.patch(
         endpoints.employee_engagements.one(
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+          employeeEng?._id
         ),
         { fees: data.fees, fees_after_discount: data.fees_after_discount, currency: data?.currency }
       );
       enqueueSnackbar(t('updated successfully!'));
-      router.push(paths.employee.appointmentsToday)
       refetch();
+      router.push(paths.pages.doctor(
+        `${employeeEng._id}_${employeeData?.[t('name_english')]?.replace(
+          / /g,
+          '-'
+        )}_${employeeData?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+      ));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

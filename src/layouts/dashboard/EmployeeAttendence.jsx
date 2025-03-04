@@ -69,7 +69,7 @@ function EmployeeAttendence() {
   };
   return (
     <>
-      {!attendence || attendence?.check_out_time ? (
+      {!attendence || attendence?.check_out_time || attendence?.leave ? (
         !hasAttendenceToday && (
           <Button
             variant="contained"
