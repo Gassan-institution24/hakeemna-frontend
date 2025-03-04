@@ -40,7 +40,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
         leave_end: Yup.date().nullable(),
         leave_start: Yup.date().nullable(),
         employee_engagement: Yup.string().nullable(),
-        leave: Yup.string().required(t('required field')),
+        leave: Yup.string().nullable(),
         work_type: Yup.string().nullable(),
     });
 

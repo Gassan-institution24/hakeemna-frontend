@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useAuthContext } from 'src/auth/hooks';
+import React, { useRef, useState, useEffect } from 'react';
+
 import socket from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 
 const WebRTCComponent = () => {
   const { user } = useAuthContext();
