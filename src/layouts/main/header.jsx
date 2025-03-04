@@ -2,9 +2,7 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-// dark mode
 import AppBar from '@mui/material/AppBar';
-// import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import { Link, Button, Divider, Typography } from '@mui/material';
@@ -26,130 +24,130 @@ import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
 import Language from '../common/language-home-page';
-// ----------------------------------------------------------------------
 
 export default function Header() {
   const mdUp = useResponsive('up', 'lg');
+  const smDown = useResponsive('down', 'sm'); // Added for small devices
   const { t } = useTranslate();
-
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
   const router = useRouter();
 
   return (
-    <AppBar>
-      <Toolbar
-        disableGutters
+    <AppBar position="sticky" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
+      {/* Top bar with slogan */}
+      <Box
         sx={{
-          backgroundColor: 'white',
+          bgcolor: 'white',
+          py: 1,
+          px: { xs: 2, sm: 5, md: 10 }, // Added responsive padding
+          display: 'flex',
+          alignItems: 'center',
+          textTransform: 'uppercase',
+          justifyContent: 'space-between',
+          flexDirection: smDown ? 'column' : 'row', // Stack items vertically on small screens
         }}
       >
-        {/* <Container
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-        > */}
-
-        <Logo sx={{ width: { xs: 120, md: 200 }, height: { xs: 50, md: 120 } }} />
-        {/* </Container> */}
-        {mdUp && (
-          <Stack width={1}>
-            <Stack direction="row" width={1} flex={0.2} alignItems="center" justifyContent="center">
-              <Container
-                sx={{
-                  width: 1,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  my: 0.5,
-                  letterSpacing: -0.5,
-                  color: 'black',
-                  display: 'flex',
-                  alignItems: 'center',
-                  textTransform: 'uppercase',
-                  justifyContent: 'space-between',
-                  backgroundColor: 'white',
-                }}
-              >
-                <Stack dir="ltr" direction="row">
-                  <Iconify icon="ion:call" width={15} />
-                  <Typography
-                    dir="ltr"
-                    variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, mx: 1 }}
-                  >
-                    +962 780830087
-                  </Typography>
-                  <Iconify icon="clarity:email-solid" width={18} />
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', mx: 1 }}
-                  >
-                    info@hakeemna.com
-                  </Typography>
-                </Stack>
-                <Stack direction="row">
-                  <Link
-                    href={paths.auth.registersu}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as unit of service')}
-                  </Link>
-                  <Link
-                    href={paths.auth.stakeholderRegister}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as supplier')}
-                  </Link>
-                  <Link
-                    href={paths.auth.register}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as user')}
-                  </Link>
-                  <Link href={paths.auth.login} sx={{ py: 0.2, px: 1.5 }}>
-                    {t('login')}
-                  </Link>
-                </Stack>
-              </Container>
-            </Stack>
-            <Divider />
-            <Stack
-              direction="row"
-              width={1}
-              height={80}
-              justifyContent="space-between"
-              alignItems="center"
+        <Stack dir="ltr" direction="row" spacing={1} sx={{ flexWrap: smDown ? 'wrap' : 'nowrap' }}>
+          <Iconify icon="ion:call" width={15} />
+          <Typography dir="ltr" variant="subtitle2" sx={{ fontSize: 13, fontWeight: 500, mx: 1 }}>
+            +962 780830087
+          </Typography>
+          <Iconify icon="clarity:email-solid" width={18} />
+          <Typography
+            variant="subtitle2"
+            sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', mx: 1 }}
+          >
+            info@hakeemna.com
+          </Typography>
+        </Stack>
+        {!smDown && (
+          <Stack
+            dir="ltr"
+            direction="row"
+            spacing={2}
+            sx={{
+              gap: 2,
+              justifyContent: smDown ? 'center' : 'flex-start', // Center on small devices
+              mt: smDown ? 2 : 0, // Add margin on small screens
+            }}
+          >
+            {/* Repeat buttons as necessary */}
+            <Link
+              href={paths.auth.register}
+              sx={{
+                bgcolor: 'navy',
+                borderRadius: '100%',
+                p: '5px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
-              <Container
-                sx={{
-                  width: 1,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <NavDesktop data={navConfig} />
-                <Box sx={{ flexGrow: 1 }} />
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ borderRadius: 0 }}
-                  onClick={() => router.push(paths.pages.book)}
-                >
-                  {t('book appointments now')}
-                </Button>
-                <Box sx={{ flexGrow: 0.3 }} />
-                <Language />
-              </Container>
-            </Stack>
+              <Iconify icon="clarity:email-solid" width={16} sx={{ color: 'white' }} />
+            </Link>
+            <Link
+              href={paths.auth.register}
+              sx={{
+                bgcolor: 'navy',
+                borderRadius: '100%',
+                p: '5px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Iconify icon="clarity:email-solid" width={16} sx={{ color: 'white' }} />
+            </Link>
+            <Link
+              href={paths.auth.register}
+              sx={{
+                bgcolor: 'navy',
+                borderRadius: '100%',
+                p: '5px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Iconify icon="clarity:email-solid" width={16} sx={{ color: 'white' }} />
+            </Link>
+            <Link
+              href={paths.auth.register}
+              sx={{
+                bgcolor: 'navy',
+                borderRadius: '100%',
+                p: '5px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Iconify icon="clarity:email-solid" width={16} sx={{ color: 'white' }} />
+            </Link>
+            {/* Repeat the above <Link> as needed for additional icons */}
           </Stack>
         )}
-        {!mdUp && (
-          <Stack alignItems="center" justifyContent="flex-end" direction="row" width={1}>
+      </Box>
+
+      {/* Main header section */}
+      <Toolbar sx={{ bgcolor: 'transparent', borderBottom: 1, borderColor: 'divider' }}>
+        <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Logo */}
+          <Logo sx={{ width: { xs: 100, sm: 120, md: 120 }, height: 'auto' }} />
+
+          {/* Desktop Navigation */}
+          {mdUp && <NavDesktop data={navConfig} />}
+
+          {/* Right Section */}
+          <Stack direction="row" spacing={2} alignItems="center">
             <Language />
-            <NavMobile data={navConfig} />
+            <Iconify icon="mdi:cart-outline" width={24} />
           </Stack>
-        )}
+
+          {/* Mobile Navigation */}
+          {!mdUp && <NavMobile data={navConfig} />}
+        </Container>
       </Toolbar>
-      <Divider />
 
       {offsetTop && <HeaderShadow />}
     </AppBar>
