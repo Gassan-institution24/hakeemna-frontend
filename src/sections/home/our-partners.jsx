@@ -1,151 +1,191 @@
 import { useState } from 'react';
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import CardContent from '@mui/material/CardContent';
-import { alpha, useTheme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Grid, Paper, Stack, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useResponsive } from 'src/hooks/use-responsive';
-
-import { bgGradient } from 'src/theme/css';
 import { useGetActiveUnitservices } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import { varFade } from 'src/components/animate';
-import TextMaxLine from 'src/components/text-max-line';
-import { CarouselArrows } from 'src/components/carousel';
-
-// ----------------------------------------------------------------------
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function OurPartners() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const mdUp = useResponsive('up', 'md');
-  const lgUp = useResponsive('up', 'xl');
+  const [page] = useState(0);
 
-  const [page, setPage] = useState(0);
-
-  let rowsPerPage;
-  if (lgUp) {
-    rowsPerPage = 5;
-  } else if (mdUp) {
-    rowsPerPage = 3;
-  } else {
-    rowsPerPage = 1;
-  }
-
-  const { unitservicesData, length } = useGetActiveUnitservices({
+  const { unitservicesData } = useGetActiveUnitservices({
     select: 'name_english name_arabic company_logo',
     page,
-    rowsPerPage,
+    rowPerPage: 4,
   });
-  if (unitservicesData.length < 1) {
-    return '';
-  }
-  return (
-    <>
-      <Stack
-        spacing={3}
-        sx={{
-          textAlign: 'center',
-          my: { xs: 5, md: 10 },
-        }}
-      >
-        <m.div variants={varFade().inDown}>
-          <Typography
-            sx={{
-              fontSize: 45,
-              fontWeight: 600,
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-            }}
-          >
-            {t('our partners')}
-          </Typography>
-        </m.div>
-      </Stack>
-      <Stack sx={{ my: 5, position: 'relative' }}>
-        <CarouselArrows
-          filled
-          icon="material-symbols:double-arrow"
-          onNext={() =>
-            setPage((prev) => (prev < Math.ceil(length / rowsPerPage) - 1 ? prev + 1 : 0))
-          }
-          onPrev={() =>
-            setPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(length / rowsPerPage) - 1))
-          }
-        >
-          <Stack direction="row" justifyContent="space-around">
-            {unitservicesData?.map((item, index) => (
-              <Box key={item.id} sx={{ px: 1 }}>
-                <CarouselItem key={item.id} item={item} />
-              </Box>
-            ))}
-          </Stack>
-        </CarouselArrows>
-      </Stack>
-    </>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-function CarouselItem({ item, active }) {
-  const theme = useTheme();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
   const router = useRouter();
 
-  const { _id, company_logo, name_english, name_arabic } = item;
-
+  const testdata = [
+    {
+      name_english: 'name_english',
+      name_arabic: 'name_arabic',
+      company_logo:
+        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
+    },
+    {
+      name_english: 'name_english',
+      name_arabic: 'name_arabic',
+      company_logo:
+        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
+    },
+    {
+      name_english: 'name_english',
+      name_arabic: 'name_arabic',
+      company_logo:
+        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
+    },
+    {
+      name_english: 'name_english',
+      name_arabic: 'name_arabic',
+      company_logo:
+        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
+    },
+  ];
   return (
-    <Paper sx={{ position: 'relative', height: { md: 300 }, width: { md: 300 } }}>
-      <Image
-        dir="ltr"
-        alt={name_english}
-        src={company_logo}
-        sx={{ height: { md: 300, xs: 300 }, width: { md: 300, xs: 300 } }}
-      />
+    <Box
+      component={MotionViewport}
+      sx={{
+        position: 'relative',
+        backgroundColor: '#F2FBF8',
+        py: { xs: 10, md: 10 },
+        transform: 'skewY(-3deg)',
+        mt: '150px',
+        mb: '150px',
+      }}
+    >
+      <Container sx={{ transform: 'skewY(3deg)' }}>
+        <Stack spacing={3} sx={{ textAlign: 'center', mb: 5 }}>
+          <m.div variants={varFade().inDown}>
+            <Typography
+              sx={{
+                fontSize: 45,
+                fontWeight: 600,
+                fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
+              }}
+            >
+              {t('Our Partners')}
+            </Typography>
+          </m.div>
+        </Stack>
 
-      <CardContent
-        sx={{
-          bottom: 0,
-          zIndex: 9,
-          width: '100%',
-          textAlign: 'left',
-          position: 'absolute',
-          color: 'common.white',
-          pb: 10,
-          ...bgGradient({
-            direction: 'to top',
-            startColor: `${theme.palette.grey[900]} 25%`,
-            endColor: `${alpha(theme.palette.grey[900], 0)} 100%`,
-          }),
-        }}
-      >
-        <TextMaxLine
-          variant="h5"
-          onClick={() => router.push(paths.pages.serviceUnit(_id))}
-          sx={{ cursor: 'pointer' }}
-        >
-          {curLangAr ? name_arabic : name_english}
-        </TextMaxLine>
-      </CardContent>
-    </Paper>
+        <Grid container spacing={5} justifyContent="center">
+          {testdata?.map((partner, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              {' '}
+              {/* Now 4 per row on medium screens */}
+              <Paper
+                elevation={3}
+                sx={{
+                  overflow: 'hidden',
+                  borderRadius: 2,
+                  textAlign: 'center',
+                  backgroundColor: 'white',
+                  pb: 5,
+                  position: 'relative',
+                }}
+              >
+                {/* Partner Logo */}
+                <Image
+                  src={partner?.company_logo}
+                  alt={partner?.name_english}
+                  sx={{ width: '100%', height: 200, objectFit: 'cover' }}
+                />
+
+                {/* Silhouette Overlay */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+
+                {/* Text Box */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    backgroundColor: alpha('#000', 0.6), // Dark background for better readability
+                    backgroundImage:
+                      'url(https://i.pinimg.com/474x/31/d0/f8/31d0f8208afa4a9b039791221e1216b1.jpg)', // Replace with your silhouette image
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    mixBlendMode: 'multiply', // Ensures a natural blend with the image
+                    opacity: 0.5, // Adjust transparency as needed
+                    color: 'white',
+                    p: 1,
+                    textAlign: 'center',
+                    borderRadius: '0 0 10px 10px',
+                    
+                  }}
+                >
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                    {curLangAr ? partner.name_arabic : partner.name_english}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        <Stack direction="row" sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+          <Button
+            size="large"
+            id="About"
+            onClick={() => router.push(paths.pages.book)}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '5px',
+              bgcolor: 'transparent',
+              padding: 0,
+              overflow: 'hidden',
+              boxShadow: 'none',
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: 'white',
+                color: 'navy',
+                fontWeight: 'bold',
+                padding: '10px 16px',
+                fontSize: '16px',
+              }}
+            >
+              {t('Read more')}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'navy',
+                padding: '10px 12px',
+              }}
+            >
+              <ArrowForwardIosIcon sx={{ color: 'white', fontSize: '20px' }} />
+            </div>
+          </Button>
+        </Stack>
+      </Container>
+    </Box>
   );
 }
-
-CarouselItem.propTypes = {
-  active: PropTypes.bool,
-  item: PropTypes.object,
-};
