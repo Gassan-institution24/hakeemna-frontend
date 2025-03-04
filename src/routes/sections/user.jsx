@@ -61,6 +61,7 @@ const StakeholderProductsPage = lazy(() =>
 const ProductCheckoutPage = lazy(() => import('src/pages/dashboard/user/products/checkout'));
 const OfferInfoPage = lazy(() => import('src/pages/dashboard/user/products/offer-info'));
 
+const Webrtc = lazy(() => import('src/pages/dashboard/user/webrtc'));
 // ----------------------------------------------------------------------
 
 export const userRoutes = [
@@ -88,6 +89,7 @@ export const userRoutes = [
         ),
         children: [
           { element: <UserProfilePage />, index: true },
+          { path: 'webrtc', element: <Webrtc /> },
           { path: 'profile/profile', element: <UserProfilePage /> },
           { path: 'Sidebar', element: <Sidebar /> },
           { path: 'oldmedicalreportsview/:id', element: <OldmedicalrepotView /> },

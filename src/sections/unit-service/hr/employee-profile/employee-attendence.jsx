@@ -44,7 +44,7 @@ export default function EmployeeAttendence({ employee }) {
     { id: 'date', label: t('Day') },
     { id: 'check_in_time', label: t('check in') },
     { id: 'check_out_time', label: t('check out') },
-    { id: 'leave', label: t('leave time') },
+    { id: 'leave_time', label: t('leave time') },
     { id: 'work_time', label: t('work time') },
     { id: 'work_type', label: t('work type') },
     { id: 'leave', label: t('leave') },
