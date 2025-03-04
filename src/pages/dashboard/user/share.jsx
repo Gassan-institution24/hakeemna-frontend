@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 import { useTranslate } from 'src/locales';
 

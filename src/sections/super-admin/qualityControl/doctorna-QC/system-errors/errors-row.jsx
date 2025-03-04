@@ -41,7 +41,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
       {/* <TableCell align="center">{code}</TableCell> */}
       <TableCell align="center">{error_code}</TableCell>
       <TableCell align="center">{method}</TableCell>
-      <TableCell align="center">{URL.length > 30 ? `${URL.slice(4, 30)}..` : URL}</TableCell>
+      <TableCell align="center">{URL?.length > 30 ? `${URL.slice(4, 30)}..` : URL}</TableCell>
       <TableCell align="center" sx={{ wordWrap: 'break-word' }}>
         {error_msg}
       </TableCell>

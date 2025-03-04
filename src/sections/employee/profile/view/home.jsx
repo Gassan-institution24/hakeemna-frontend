@@ -26,8 +26,6 @@ import AccountChangePassword from '../profile-change-password';
 
 // ----------------------------------------------------------------------
 
-// ----------------------------------------------------------------------
-
 export default function AccountView() {
   // const settings = useSettingsContext();
 
