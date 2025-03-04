@@ -1,109 +1,166 @@
-import React, { useEffect, useRef, useState } from "react";
-import Peer from "simple-peer";
-import socket from "src/socket";
+import React, { useEffect, useRef, useState } from 'react';
+import { useAuthContext } from 'src/auth/hooks';
+import socket from 'src/socket';
 
 const WebRTCComponent = () => {
-    const [stream, setStream] = useState(null);
-    const [receivingCall, setReceivingCall] = useState(false);
-    const [caller, setCaller] = useState("");
-    const [callerSignal, setCallerSignal] = useState(null);
-    const [callAccepted, setCallAccepted] = useState(false);
-    const [peerId, setPeerId] = useState("");
+  const { user } = useAuthContext();
+  const [stream, setStream] = useState(null);
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [caller, setCaller] = useState('');
+  const [callerSignal, setCallerSignal] = useState(null);
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [idToCall, setIdToCall] = useState('');
 
-    const myVideo = useRef();
-    const userVideo = useRef();
-    const connectionRef = useRef();
+  const myVideo = useRef(null);
+  const userVideo = useRef(null);
+  const connectionRef = useRef(null);
 
-    useEffect(() => {
-        navigator.mediaDevices
-            .getUserMedia({ video: true, audio: true })
-            .then((currentStream) => {
-                setStream(currentStream);
-                myVideo.current.srcObject = currentStream;
-            });
+  useEffect(() => {
+    // Get user media (video and audio)
+    navigator?.mediaDevices
+      ?.getUserMedia({ video: true, audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
+      })
+      .catch((err) => console.error('Error accessing media devices:', err));
 
-        socket.on("callUser", ({ from, signal }) => {
-            setReceivingCall(true);
-            setCaller(from);
-            setCallerSignal(signal);
+    // Listen for incoming calls
+    socket.on('callUser', ({ userId, from, signal }) => {
+      if (user?._id === userId) {
+        setReceivingCall(true);
+        setCaller(from);
+        setCallerSignal(signal);
+      }
+    });
+
+    // Listen for call acceptance
+    socket.on('callAccepted', (signal) => {
+      setCallAccepted(true);
+      const peer = connectionRef.current;
+      if (peer) {
+        peer
+          .setRemoteDescription(new RTCSessionDescription(signal))
+          .catch((err) => console.error('Failed to set remote description:', err));
+      }
+    });
+
+    return () => {
+      socket.off('callUser');
+      socket.off('callAccepted');
+    };
+  }, [user?._id]);
+
+  const callUser = (id) => {
+    const peer = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+    });
+
+    if (stream) {
+      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+    }
+
+    peer.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.emit('callUser', {
+          userId: id,
+          signalData: peer.localDescription,
         });
-
-        socket.on("getId", (id) => {
-            setPeerId(id);
-        });
-
-        return () => {
-            socket.off("callUser");
-            socket.off("getId");
-        };
-    }, []);
-
-    const callUser = (id) => {
-        const peer = new Peer({ initiator: true, trickle: false, stream });
-        peer.on("signal", (data) => {
-            socket.emit("callUser", { userToCall: id, signalData: data, from: peerId });
-        });
-
-        peer.on("stream", (currentStream) => {
-            userVideo.current.srcObject = currentStream;
-        });
-
-        socket.on("callAccepted", (signal) => {
-            setCallAccepted(true);
-            peer.signal(signal);
-        });
-
-        connectionRef.current = peer;
+      }
     };
 
-    const answerCall = () => {
-        setCallAccepted(true);
-        const peer = new Peer({ initiator: false, trickle: false, stream });
-
-        peer.on("signal", (data) => {
-            socket.emit("answerCall", { signal: data, to: caller });
-        });
-
-        peer.on("stream", (currentStream) => {
-            userVideo.current.srcObject = currentStream;
-        });
-
-        peer.signal(callerSignal);
-        connectionRef.current = peer;
+    peer.ontrack = (event) => {
+      if (userVideo.current) {
+        userVideo.current.srcObject = event.streams[0];
+      }
     };
 
-    return (
+    peer
+      .createOffer()
+      .then((offer) => peer.setLocalDescription(offer))
+      .then(() => {
+        socket.emit('callUser', {
+          userId: id,
+          signalData: peer.localDescription,
+        });
+      })
+      .catch((err) => console.error('Error creating offer:', err));
+
+    connectionRef.current = peer;
+  };
+
+  const answerCall = () => {
+    setCallAccepted(true);
+    const peer = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+    });
+
+    if (stream) {
+      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+    }
+
+    peer.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.emit('answerCall', { signal: peer.localDescription, to: caller });
+      }
+    };
+
+    peer.ontrack = (event) => {
+      if (userVideo.current) {
+        userVideo.current.srcObject = event.streams[0];
+      }
+    };
+
+    peer
+      .setRemoteDescription(new RTCSessionDescription(callerSignal))
+      .then(() => peer.createAnswer())
+      .then((answer) => peer.setLocalDescription(answer))
+      .then(() => {
+        socket.emit('answerCall', { signal: peer.localDescription, to: caller });
+      })
+      .catch((err) => console.error('Error answering call:', err));
+
+    connectionRef.current = peer;
+  };
+
+  return (
+    <div>
+      {/* Local video */}
+      {/* eslint-disable-next-line */}
+      <video playsInline muted ref={myVideo} autoPlay style={{ width: '300px' }} />
+
+      {/* Remote video */}
+      {callAccepted && (
+        // eslint-disable-next-line
+        <video playsInline ref={userVideo} autoPlay style={{ width: '300px' }} />
+      )}
+
+      {/* Input to enter ID to call */}
+      <input
+        type="text"
+        placeholder="Enter ID to call"
+        value={idToCall}
+        onChange={(e) => setIdToCall(e.target.value)}
+      />
+
+      {/* Button to initiate a call */}
+      <button type="button" onClick={() => callUser(idToCall)}>
+        Call
+      </button>
+
+      {/* Incoming call UI */}
+      {receivingCall && !callAccepted && (
         <div>
-            <h3>Your ID: {peerId}</h3>
-
-            {/* Fix: Disable a11y warning for missing captions */}
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />
-
-            {/* Fix: Disable a11y warning for missing captions */}
-            {callAccepted && (
-                /* eslint-disable-next-line jsx-a11y/media-has-caption */
-                <video playsInline ref={userVideo} autoPlay style={{ width: "300px" }} />
-            )}
-
-            <input
-                type="text"
-                placeholder="Enter ID to call"
-                onChange={(e) => setPeerId(e.target.value)}
-            />
-
-            {/* Fix: Add type="button" to prevent default form behavior */}
-            <button type="button" onClick={() => callUser(peerId)}>Call</button>
-
-            {receivingCall && !callAccepted && (
-                <div>
-                    <h3>Incoming Call...</h3>
-                    {/* Fix: Add type="button" to prevent default form behavior */}
-                    <button type="button" onClick={answerCall}>Answer</button>
-                </div>
-            )}
+          <h3>Incoming Call...</h3>
+          <button type="button" onClick={answerCall}>
+            Answer
+          </button>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default WebRTCComponent;
