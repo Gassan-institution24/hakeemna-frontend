@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 
+import { Box, Stack, Button, Dialog } from '@mui/material';
+
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
+
+import Iconify from '../iconify';
 
 const WebRTCComponent = () => {
   const { user } = useAuthContext();
@@ -11,6 +15,11 @@ const WebRTCComponent = () => {
   const [callerSignal, setCallerSignal] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
   const [idToCall, setIdToCall] = useState('');
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [recordedChunks, setRecordedChunks] = useState([]);
 
   const myVideo = useRef(null);
   const userVideo = useRef(null);
@@ -126,19 +135,80 @@ const WebRTCComponent = () => {
     connectionRef.current = peer;
   };
 
+  const toggleMute = () => {
+    if (stream) {
+      const audioTracks = stream.getAudioTracks();
+      audioTracks.forEach((track) => {
+        track.enabled = !track.enabled;
+      });
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const toggleVideo = () => {
+    if (stream) {
+      const videoTracks = stream.getVideoTracks();
+      videoTracks.forEach((track) => {
+        track.enabled = !track.enabled;
+      });
+      setIsVideoOn(!isVideoOn);
+    }
+  };
+
+  const startRecording = () => {
+    if (stream) {
+      const recorder = new MediaRecorder(stream);
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          setRecordedChunks((prev) => [...prev, event.data]);
+        }
+      };
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const downloadRecording = () => {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recording.webm';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const endCall = () => {
+    if (connectionRef.current) {
+      connectionRef.current.close();
+      connectionRef.current = null;
+    }
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+    setCallAccepted(false);
+    setReceivingCall(false);
+    setCaller('');
+    setCallerSignal(null);
+    setIdToCall('');
+    setIsMuted(false);
+    setIsVideoOn(true);
+    setIsRecording(false);
+    setMediaRecorder(null);
+    setRecordedChunks([]);
+  };
+
   return (
-    <div>
+    <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
       {/* Local video */}
-      {/* eslint-disable-next-line */}
-      <video playsInline muted ref={myVideo} autoPlay style={{ width: '300px' }} />
-
-      {/* Remote video */}
-      {callAccepted && (
-        // eslint-disable-next-line
-        <video playsInline ref={userVideo} autoPlay style={{ width: '300px' }} />
-      )}
-
-      {/* Input to enter ID to call */}
       <input
         type="text"
         placeholder="Enter ID to call"
@@ -160,7 +230,47 @@ const WebRTCComponent = () => {
           </button>
         </div>
       )}
-    </div>
+      <Box sx={{ flex: 1 }}>
+        <Box sx={{ zIndex: 60, position: 'fixed', bottom: 70, right: 5, width: 300, height: 200, borderRadius: '10px', overflow: 'hidden', border: '3px solid #ccc' }}>
+          {/* eslint-disable-next-line */}
+          <video playsInline muted ref={myVideo} autoPlay style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: 'black' }} />
+        </Box>
+
+        {/* Remote video */}
+        {callAccepted && (
+          <Box sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}>
+            {/* eslint-disable-next-line */}
+            <video playsInline ref={userVideo} autoPlay style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: 'black' }} />
+          </Box>
+        )}
+      </Box>
+      <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ zIndex: 100, width: 1, height: 65, backgroundColor: '#212B36', color: '#fff', padding: 1, px: 4 }}>
+        <Stack direction='row' spacing={2}>
+          <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={toggleMute}>
+            <Iconify width={23} icon={isMuted ? "material-symbols:mic-off" : "material-symbols:mic"} />
+            <span>{isMuted ? 'Unmute' : 'Mute'}</span>
+          </Button>
+          <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={toggleVideo}>
+            <Iconify width={23} icon={isVideoOn ? "material-symbols:video-camera-front" : "material-symbols:video-camera-front-off"} />
+            <span>{isVideoOn ? 'Camera Off' : 'Camera On'}</span>
+          </Button>
+          <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={isRecording ? stopRecording : startRecording}>
+            <Iconify width={23} icon={isRecording ? "material-symbols:lens" : "material-symbols:lens-outline"} />
+            <span>{isRecording ? 'Stop Recording' : 'Record'}</span>
+          </Button>
+          {recordedChunks.length > 0 && (
+            <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={downloadRecording}>
+              <Iconify width={23} icon="material-symbols:download" />
+              <span>Download Recording</span>
+            </Button>
+          )}
+        </Stack>
+        <Button variant='contained' color='error' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={endCall}>
+          <Iconify width={23} icon="material-symbols:call-end-sharp" />
+          <span>End Call</span>
+        </Button>
+      </Stack>
+    </Dialog>
   );
 };
 
