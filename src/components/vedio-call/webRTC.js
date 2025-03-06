@@ -1,210 +1,31 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
-
 import Iconify from '../iconify';
+import { useWebRTC } from './use-web-rtc';
 
 const WebRTCComponent = () => {
-  const { user } = useAuthContext();
-  const [stream, setStream] = useState(null);
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [caller, setCaller] = useState('');
-  const [callerSignal, setCallerSignal] = useState(null);
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [idToCall, setIdToCall] = useState('');
-  const [isMuted, setIsMuted] = useState(false);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [recordedChunks, setRecordedChunks] = useState([]);
-
-  const myVideo = useRef(null);
-  const userVideo = useRef(null);
-  const connectionRef = useRef(null);
-
-  useEffect(() => {
-    // Get user media (video and audio)
-    navigator?.mediaDevices
-      ?.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        setStream(currentStream);
-        if (myVideo.current) {
-          myVideo.current.srcObject = currentStream;
-        }
-      })
-      .catch((err) => console.error('Error accessing media devices:', err));
-
-    // Listen for incoming calls
-    socket.on('callUser', ({ userId, from, signal }) => {
-      if (user?._id === userId) {
-        setReceivingCall(true);
-        setCaller(from);
-        setCallerSignal(signal);
-      }
-    });
-
-    // Listen for call acceptance
-    socket.on('callAccepted', (signal) => {
-      setCallAccepted(true);
-      const peer = connectionRef.current;
-      if (peer) {
-        peer
-          .setRemoteDescription(new RTCSessionDescription(signal))
-          .catch((err) => console.error('Failed to set remote description:', err));
-      }
-    });
-
-    return () => {
-      socket.off('callUser');
-      socket.off('callAccepted');
-    };
-  }, [user?._id]);
-
-  const callUser = (id) => {
-    const peer = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
-    });
-
-    if (stream) {
-      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-    }
-
-    peer.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit('callUser', {
-          userId: id,
-          signalData: peer.localDescription,
-        });
-      }
-    };
-
-    peer.ontrack = (event) => {
-      if (userVideo.current) {
-        userVideo.current.srcObject = event.streams[0];
-      }
-    };
-
-    peer
-      .createOffer()
-      .then((offer) => peer.setLocalDescription(offer))
-      .then(() => {
-        socket.emit('callUser', {
-          userId: id,
-          signalData: peer.localDescription,
-        });
-      })
-      .catch((err) => console.error('Error creating offer:', err));
-
-    connectionRef.current = peer;
-  };
-
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
-    });
-
-    if (stream) {
-      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-    }
-
-    peer.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit('answerCall', { signal: peer.localDescription, to: caller });
-      }
-    };
-
-    peer.ontrack = (event) => {
-      if (userVideo.current) {
-        userVideo.current.srcObject = event.streams[0];
-      }
-    };
-
-    peer
-      .setRemoteDescription(new RTCSessionDescription(callerSignal))
-      .then(() => peer.createAnswer())
-      .then((answer) => peer.setLocalDescription(answer))
-      .then(() => {
-        socket.emit('answerCall', { signal: peer.localDescription, to: caller });
-      })
-      .catch((err) => console.error('Error answering call:', err));
-
-    connectionRef.current = peer;
-  };
-
-  const toggleMute = () => {
-    if (stream) {
-      const audioTracks = stream.getAudioTracks();
-      audioTracks.forEach((track) => {
-        track.enabled = !track.enabled;
-      });
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const toggleVideo = () => {
-    if (stream) {
-      const videoTracks = stream.getVideoTracks();
-      videoTracks.forEach((track) => {
-        track.enabled = !track.enabled;
-      });
-      setIsVideoOn(!isVideoOn);
-    }
-  };
-
-  const startRecording = () => {
-    if (stream) {
-      const recorder = new MediaRecorder(stream);
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          setRecordedChunks((prev) => [...prev, event.data]);
-        }
-      };
-      recorder.start();
-      setMediaRecorder(recorder);
-      setIsRecording(true);
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setIsRecording(false);
-    }
-  };
-
-  const downloadRecording = () => {
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recording.webm';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const endCall = () => {
-    if (connectionRef.current) {
-      connectionRef.current.close();
-      connectionRef.current = null;
-    }
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-    }
-    setCallAccepted(false);
-    setReceivingCall(false);
-    setCaller('');
-    setCallerSignal(null);
-    setIdToCall('');
-    setIsMuted(false);
-    setIsVideoOn(true);
-    setIsRecording(false);
-    setMediaRecorder(null);
-    setRecordedChunks([]);
-  };
+  const {
+    receivingCall,
+    callAccepted,
+    idToCall,
+    setIdToCall,
+    isMuted,
+    isVideoOn,
+    isRecording,
+    myVideo,
+    userVideo,
+    callUser,
+    answerCall,
+    toggleMute,
+    toggleVideo,
+    startRecording,
+    stopRecording,
+    endCall,
+    toggleScreenSharing,
+    isScreenSharing
+  } = useWebRTC()
 
   return (
     <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -254,16 +75,21 @@ const WebRTCComponent = () => {
             <Iconify width={23} icon={isVideoOn ? "material-symbols:video-camera-front" : "material-symbols:video-camera-front-off"} />
             <span>{isVideoOn ? 'Camera Off' : 'Camera On'}</span>
           </Button>
+          <Button
+            variant="outlined"
+            sx={{ display: 'flex', gap: 1, padding: 1 }}
+            onClick={toggleScreenSharing}
+          >
+            <Iconify
+              width={23}
+              icon={isScreenSharing ? 'material-symbols:screen-share' : 'material-symbols:screen-share-off'}
+            />
+            <span>{isScreenSharing ? 'Stop Sharing' : 'Share Screen'}</span>
+          </Button>
           <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={isRecording ? stopRecording : startRecording}>
             <Iconify width={23} icon={isRecording ? "material-symbols:lens" : "material-symbols:lens-outline"} />
             <span>{isRecording ? 'Stop Recording' : 'Record'}</span>
           </Button>
-          {recordedChunks.length > 0 && (
-            <Button variant='outlined' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={downloadRecording}>
-              <Iconify width={23} icon="material-symbols:download" />
-              <span>Download Recording</span>
-            </Button>
-          )}
         </Stack>
         <Button variant='contained' color='error' sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={endCall}>
           <Iconify width={23} icon="material-symbols:call-end-sharp" />
