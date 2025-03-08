@@ -11,14 +11,6 @@ export default function HomeView() {
       <HomeHero id="home" />
       <OurMission />
       <Whydoc />
-      {/* <Box
-        sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          bgcolor: 'background.paper',
-        }}
-      > */}
-      {/* </Box> */}
       <OurPartners />
     </>
   );
