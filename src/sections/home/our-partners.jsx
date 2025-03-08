@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
-import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Grid, Paper, Stack, Button, Typography } from '@mui/material';
@@ -20,12 +18,8 @@ export default function OurPartners() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const [page] = useState(0);
-
   const { unitservicesData } = useGetActiveUnitservices({
     select: 'name_english name_arabic company_logo',
-    page,
     rowPerPage: 4,
   });
   const router = useRouter();
@@ -56,13 +50,14 @@ export default function OurPartners() {
         'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
     },
   ];
+
   return (
     <Box
       component={MotionViewport}
       sx={{
         position: 'relative',
         backgroundColor: '#F2FBF8',
-        py: { xs: 10, md: 10 },
+        py: { xs: 6, md: 6 },
         transform: 'skewY(-3deg)',
         mt: '150px',
         mb: '150px',
@@ -84,61 +79,48 @@ export default function OurPartners() {
         </Stack>
 
         <Grid container spacing={5} justifyContent="center">
-          {testdata?.map((partner, index) => (
+          {testdata.map((partner, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              {' '}
-              {/* Now 4 per row on medium screens */}
               <Paper
                 elevation={3}
                 sx={{
                   overflow: 'hidden',
-                  borderRadius: 2,
+                  borderRadius: 3, // More rounded corners
                   textAlign: 'center',
                   backgroundColor: 'white',
-                  pb: 5,
                   position: 'relative',
                 }}
               >
-                {/* Partner Logo */}
+                {/* Partner Image */}
                 <Image
-                  src={partner?.company_logo}
-                  alt={partner?.name_english}
-                  sx={{ width: '100%', height: 200, objectFit: 'cover' }}
-                />
-
-                {/* Silhouette Overlay */}
-                <Box
+                  src={partner.company_logo}
+                  alt={partner.name_english}
                   sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
                     width: '100%',
-                    height: '100%',
+                    height: 200,
+                    objectFit: 'cover',
                   }}
                 />
 
-                {/* Text Box */}
+                {/* Green Overlay at the Bottom */}
                 <Box
                   sx={{
                     position: 'absolute',
                     bottom: 0,
                     left: 0,
                     width: '100%',
-                    backgroundColor: alpha('#000', 0.6), // Dark background for better readability
-                    backgroundImage:
-                      'url(https://i.pinimg.com/474x/31/d0/f8/31d0f8208afa4a9b039791221e1216b1.jpg)', // Replace with your silhouette image
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    mixBlendMode: 'multiply', // Ensures a natural blend with the image
-                    opacity: 0.5, // Adjust transparency as needed
-                    color: 'white',
-                    p: 1,
-                    textAlign: 'center',
-                    borderRadius: '0 0 10px 10px',
-                    
+                    height: '80px',
+                    backgroundColor: '#2EA98D', // Green color
+                    clipPath: 'ellipse(100% 50% at center bottom)', // Curved bottom shape
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 'bold', color: 'white', fontSize: 18,pt:5 }}
+                  >
                     {curLangAr ? partner.name_arabic : partner.name_english}
                   </Typography>
                 </Box>

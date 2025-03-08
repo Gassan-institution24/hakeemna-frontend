@@ -25,15 +25,16 @@ export default function Whydoc() {
 
   return (
     <Stack
-      direction={{ xs: 'column', md: 'row' }}
-      sx={{
-        position: 'relative',
-        bgcolor: '#3CB099',
-        color: 'white',
-        mx: 40,
-        mb: '150px',
-        borderRadius: 4,
-      }}
+    direction={{ xs: 'column', md: 'row' }}
+    sx={{
+      position: 'relative',
+      bgcolor: '#3CB099',
+      color: 'white',
+      mx: { xs: 2, sm: 5, md: 10, lg: 20 },
+      mb: { xs: 5, sm: 10, md: '150px' },
+      borderRadius: 4,
+      p: { xs: 3, sm: 4, md: 6 },
+    }}
     >
       <Stack
         sx={{
