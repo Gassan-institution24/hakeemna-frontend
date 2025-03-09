@@ -92,7 +92,7 @@ export default function Whydoc() {
               <div
                 style={{
                   backgroundColor: 'white',
-                  color: 'navy',
+                  color: '#1F2C5C',
                   fontWeight: 'bold',
                   padding: '10px 16px',
                   fontSize: '16px',
@@ -105,7 +105,7 @@ export default function Whydoc() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'navy',
+                  backgroundColor: '#1F2C5C',
                   padding: '10px 12px',
                 }}
               >

@@ -48,12 +48,7 @@ export default function MainLayout({ children }) {
 
       <Box
         component="main"
-        sx={{
-          flexGrow: 1,
-          ...(!homePage && {
-            pt: { xs: 8, md: 14 },
-          }),
-        }}
+       
       >
         {children}
       </Box>
