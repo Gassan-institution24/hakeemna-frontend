@@ -1,7 +1,7 @@
 import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
+import HomeHero from '../hero/home-hero';
 import OurPartners from '../our-partners';
-import HomeHero from '../hero/home-hero-test';
 // import OurPartners from '../our-partners';
 // ----------------------------------------------------------------------
 
