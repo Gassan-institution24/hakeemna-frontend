@@ -20,6 +20,7 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
+import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
@@ -59,11 +60,12 @@ export default function Header({ onOpenNav }) {
     <>
       {lgUp && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
       {!lgUp && (
-        <IconButton data-test='open-nav-button' onClick={onOpenNav}>
+        <IconButton data-test="open-nav-button" onClick={onOpenNav}>
           <SvgColor src="/assets/icons/navbar/ic_menu_item.svg" />
         </IconButton>
       )}
       <Searchbar />
+      <WebRTCComponent />
       {['employee', 'admin'].includes(user?.role) && <EmployeeAttendence />}
       {/* {['employee', 'admin'].includes(user?.role) && ((!attendence || attendence?.check_out_time) ?
         (!hasAttendenceToday && <Button variant='contained' color='primary' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check in")}</Button>) :
