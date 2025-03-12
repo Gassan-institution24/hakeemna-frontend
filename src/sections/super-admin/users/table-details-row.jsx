@@ -13,6 +13,7 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -44,6 +45,8 @@ export default function CountriesTableRow({
 
   const DDL = usePopover();
   const popover = usePopover();
+
+  const { setIdToCall, callUser } = useWebRTC();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -153,6 +156,16 @@ export default function CountriesTableRow({
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem> */}
+        <MenuItem
+          lang="ar"
+          onClick={() => {
+            setIdToCall(row?._id);
+            callUser(row?._id);
+          }}
+        >
+          <Iconify icon="material-symbols:call-sharp" />
+          Call
+        </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

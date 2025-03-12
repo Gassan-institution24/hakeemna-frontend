@@ -5,7 +5,6 @@ const { useAuthContext } = require('src/auth/hooks');
 const { default: socket } = require('src/socket');
 
 export const useWebRTC = () => {
-    
   const { user } = useAuthContext();
   const [stream, setStream] = useState(null);
   const [screenStream, setScreenStream] = useState(null);
@@ -26,6 +25,9 @@ export const useWebRTC = () => {
   const connectionRef = useRef(null);
 
   const iceServers = [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
     { urls: `stun:${SERVER_IP}:3478` },
     {
       urls: `turn:${SERVER_IP}:3478?transport=udp`,
@@ -130,7 +132,6 @@ export const useWebRTC = () => {
 
     peer.onicecandidate = (event) => {
       if (event.candidate) {
-        console.log('ICE Candidate:', event.candidate);
         socket.emit('callUser', {
           userId: id,
           signalData: peer.localDescription,
@@ -168,7 +169,6 @@ export const useWebRTC = () => {
 
     peer.onicecandidate = (event) => {
       if (event.candidate) {
-        console.log('ICE Candidate:', event.candidate);
         socket.emit('answerCall', { signal: peer.localDescription, to: caller });
       }
     };
@@ -178,21 +178,20 @@ export const useWebRTC = () => {
         userVideo.current.srcObject = event.streams[0];
       }
     };
-
-    peer
-      .setRemoteDescription(new RTCSessionDescription(callerSignal))
-      .then(() => peer.createAnswer())
-      .then((answer) => peer.setLocalDescription(answer))
-      .then(() => {
-        socket.emit('answerCall', { signal: peer.localDescription, to: caller });
-      })
-      .catch((err) => console.error('Error answering call:', err));
-
+    if (callerSignal && callerSignal.type === 'offer') {
+      peer
+        .setRemoteDescription(new RTCSessionDescription(callerSignal))
+        .then(() => peer.createAnswer())
+        .then((answer) => peer.setLocalDescription(answer))
+        .then(() => {
+          socket.emit('answerCall', { signal: peer.localDescription, to: caller });
+        })
+        .catch((err) => console.error('Error answering call:', err));
+    } else console.log('not an offer');
     connectionRef.current = peer;
   };
 
   const toggleMute = () => {
-    console.log('stream', stream);
     if (stream) {
       const audioTracks = stream.getAudioTracks();
       audioTracks.forEach((track) => {
