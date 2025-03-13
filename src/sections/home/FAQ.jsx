@@ -20,8 +20,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image/image';
 
-import Arrow from './test.png';
-import Arrow2 from './test2.png';
+// import Arrow from './test.png';
+// import Arrow2 from './test2.png';
 
 export default function FAQ() {
   const { t } = useTranslate();
@@ -107,15 +107,15 @@ export default function FAQ() {
             >
               {t('we would like to hear from you')}
             </Typography>
-            <Image
-              src={curLangAr ? Arrow2 : Arrow}
+            {/* <Image
+              // src={curLangAr ? Arrow2 : Arrow}
               sx={{
                 zIndex: -1,
                 ml: curLangAr ? -3 : -5,
                 transform: curLangAr ? 'rotate(50deg)' : 'rotate(-17deg)',
                 display: { md: 'block', xs: 'none' },
               }}
-            />
+            /> */}
           </Box>
           <Box>
             <TextField

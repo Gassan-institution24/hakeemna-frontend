@@ -10,18 +10,15 @@ import { Box, Link, Grid, Alert, Stack, Typography } from '@mui/material';
 
 import axiosInstance from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import FormProvider, { RHFTextField, RHFPhoneNumber } from 'src/components/hook-form';
 
-import TrainingVideo from './images/TrainigVideo.mp4';
-import TrainigVideoAr from './images/TrainigVideoAr.mp4';
+import TrainingImage from './images/Video files-bro 1.svg';
 
 export default function Training() {
   const { t } = useTranslate();
   const [errorMsg, setErrorMsg] = useState('');
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const RegisterSchema = Yup.object().shape({
     full_name: Yup.string().required('English name is required'),
     topic: Yup.string().required('Topic name is required'),
@@ -62,26 +59,32 @@ export default function Training() {
   });
 
   const renderHead = (
-    <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4" sx={{ textAlign: 'center' }}>
+    <Stack spacing={2} sx={{ position: 'relative', color: 'white' }}>
+      <Typography variant="h2" sx={{ textAlign: 'center', mb: 5 }}>
         {t('Contact us to register for the training course')}
       </Typography>
-      <Box sx={{ width: '100%', height: 0, paddingBottom: '56.25%', position: 'relative' }}>
-        <video
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-          loop
-          autoPlay
-          muted
-        >
-          <source src={curLangAr ? TrainigVideoAr : TrainingVideo} type="video/mp4" />
-          <track
-            kind="captions"
-            srcLang="en"
-            src="path/to/your/captions.vtt"
-            label="English"
-            default
-          />
-        </video>
+      <Box>
+        <Typography variant="h6">{t('What are the benefits of registering with us?')}</Typography>
+        <Typography variant="h6">{t('Gain new skills')}</Typography>
+        <Typography variant="h6">{t('Get a free certificate')}</Typography>
+      </Box>
+
+      <Box
+        sx={{
+          position: 'relative',
+          height: '200px', // Adjust the height as needed
+        }}
+      >
+        <img
+          src={TrainingImage}
+          alt="Training"
+          style={{
+            position: 'absolute',
+            top: -30,
+            right: 0,
+            maxWidth: '50%', // Adjust the width of the image as needed
+          }}
+        />
       </Box>
     </Stack>
   );
@@ -110,22 +113,54 @@ export default function Training() {
 
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Typography variant="h4" sx={{ mb: 2.5, textAlign: 'center' }}>
+      <Typography variant="h4" sx={{ mb: 2.5, textAlign: 'center', color: '#1F2C5C' }}>
         {t('How would you like to connect')}
       </Typography>
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-        <RHFTextField name="full_name" label={t('Full Name')} />
-        <RHFTextField name="topic" label={t('Topic')} />
-        <RHFTextField name="email" label={t('Email address')} />
-        <RHFPhoneNumber name="mobile_num1" label={t('Mobile number')} />
+        <RHFTextField
+          name="full_name"
+          label={t('Full Name')}
+          InputLabelProps={{
+            style: {
+              color: '#1F2C5C',
+            },
+          }}
+        />
+        <RHFTextField
+          name="topic"
+          label={t('Topic')}
+          InputLabelProps={{
+            style: {
+              color: '#1F2C5C',
+            },
+          }}
+        />
+        <RHFTextField
+          name="email"
+          label={t('Email address')}
+          InputLabelProps={{
+            style: {
+              color: '#1F2C5C',
+            },
+          }}
+        />
+        <RHFPhoneNumber
+          name="mobile_num1"
+          label={t('Mobile number')}
+          InputLabelProps={{
+            style: {
+              color: '#1F2C5C',
+            },
+          }}
+        />
         <LoadingButton
           fullWidth
-          color="inherit"
           size="large"
           type="submit"
           variant="contained"
           loading={isSubmitting}
+          sx={{ bgcolor: '#1F2C5C' }}
         >
           {t('send')}
         </LoadingButton>
@@ -139,7 +174,8 @@ export default function Training() {
       component="main"
       sx={{
         minHeight: '62vh',
-        p: 5,
+        px: 30,
+        py: 5,
       }}
     >
       <Grid
@@ -148,7 +184,7 @@ export default function Training() {
         md={6}
         sx={{
           p: 8,
-          bgcolor: '#F3EFEC',
+          background: 'linear-gradient(to bottom right, #74BCB7, #6EBBB3)',
           borderTopLeftRadius: { md: '20px', xs: 0 },
           borderBottomLeftRadius: { md: '20px', xs: 0 },
           borderColor: '#000',
@@ -162,7 +198,7 @@ export default function Training() {
         md={6}
         sx={{
           p: 8,
-          background: 'linear-gradient(to right, rgba(173, 216, 230, 0.115), #E8EAF6)',
+          background: '#E4F6F2',
           borderTopRightRadius: { md: '20px', xs: 0 },
           borderBottomRightRadius: { md: '20px', xs: 0 },
           borderColor: '#000',

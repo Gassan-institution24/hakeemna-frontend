@@ -56,7 +56,7 @@ export default function OurPartners() {
       component={MotionViewport}
       sx={{
         position: 'relative',
-        backgroundColor: '#F2FBF8',
+        backgroundColor: '#e4f6f2',
         py: { xs: 6, md: 6 },
         transform: 'skewY(-3deg)',
         mt: '150px',
@@ -141,12 +141,15 @@ export default function OurPartners() {
               padding: 0,
               overflow: 'hidden',
               boxShadow: 'none',
+              '&:hover': {
+                bgcolor: 'inherit',
+              }, 
             }}
           >
             <div
               style={{
                 backgroundColor: 'white',
-                color: 'navy',
+                color: '#1F2C5C',
                 fontWeight: 'bold',
                 padding: '10px 16px',
                 fontSize: '16px',
@@ -159,7 +162,7 @@ export default function OurPartners() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: 'navy',
+                backgroundColor: '#1F2C5C',
                 padding: '10px 12px',
               }}
             >
