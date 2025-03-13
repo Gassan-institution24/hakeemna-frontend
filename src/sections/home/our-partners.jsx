@@ -141,6 +141,9 @@ export default function OurPartners() {
               padding: 0,
               overflow: 'hidden',
               boxShadow: 'none',
+              '&:hover': {
+                bgcolor: 'inherit',
+              }, 
             }}
           >
             <div

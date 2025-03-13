@@ -18,6 +18,11 @@ export default function HomeHero() {
   const curLangAr = currentLang.value === 'ar';
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const title = [
+    t('Electronic innovation for a healthier future'),
+    t('beneficiary'),
+    t('unit of service'),
+  ];
   const texts = [
     t(
       'Hakimna 360 platform is an integrated electronic system for work between medical service providers (such as laboratories, laboratories, specialized medical center, center, etc.) and all members of the community, as well as providing various services such as keeping medical records and integrated medical management.'
@@ -91,8 +96,12 @@ export default function HomeHero() {
             fontWeight: 700,
             mb: 3,
           }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 1, ease: 'easeInOut' }}
         >
-          {t('E-Innovation for a Healthier Future')}
+          {title[currentIndex]}
         </Typography>
       </m.div>
 
@@ -120,6 +129,9 @@ export default function HomeHero() {
               padding: 0,
               overflow: 'hidden',
               boxShadow: 'none',
+              '&:hover': {
+                bgcolor: 'inherit',
+              },
             }}
           >
             <div
@@ -132,7 +144,7 @@ export default function HomeHero() {
                 borderRadius: '5px',
               }}
             >
-              {t('Read more')}
+              {t('Read sasasasmore')}
             </div>
             <div
               style={{
