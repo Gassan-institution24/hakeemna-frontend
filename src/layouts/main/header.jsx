@@ -75,7 +75,7 @@ export default function Header() {
             <Link
               href={paths.auth.register}
               sx={{
-                bgcolor: 'navy',
+                bgcolor: '#1F2C5C',
                 borderRadius: '100%',
                 p: '5px',
                 display: 'flex',
@@ -88,7 +88,7 @@ export default function Header() {
             <Link
               href={paths.auth.register}
               sx={{
-                bgcolor: 'navy',
+                bgcolor: '#1F2C5C',
                 borderRadius: '100%',
                 p: '5px',
                 display: 'flex',
@@ -101,7 +101,7 @@ export default function Header() {
             <Link
               href={paths.auth.register}
               sx={{
-                bgcolor: 'navy',
+                bgcolor: '#1F2C5C',
                 borderRadius: '100%',
                 p: '5px',
                 display: 'flex',
@@ -114,7 +114,7 @@ export default function Header() {
             <Link
               href={paths.auth.register}
               sx={{
-                bgcolor: 'navy',
+                bgcolor: '#1F2C5C',
                 borderRadius: '100%',
                 p: '5px',
                 display: 'flex',
@@ -128,9 +128,9 @@ export default function Header() {
           </Stack>
         )}
       </Box>
-
+      {/*  height: HEADER.H_DESKTOP, transition: 'all 0.3s ease-in-out' */}
       {/* Main header section */}
-      <Toolbar sx={{ bgcolor: 'transparent', borderBottom: 1, borderColor: 'divider' }}>
+      <Toolbar sx={{ bgcolor: 'white' }}>
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <Logo sx={{ width: { xs: 100, sm: 120, md: 120 }, height: 'auto' }} />

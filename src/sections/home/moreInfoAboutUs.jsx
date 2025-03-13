@@ -7,7 +7,7 @@ import { useTranslate } from 'src/locales';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 // import MAP from './Group 117.png';
-// import photo from './Untitled design.png';
+import photo from './images/design.png';
 
 export default function MoreInfoAboutUs() {
   const { t } = useTranslate();
@@ -25,8 +25,7 @@ export default function MoreInfoAboutUs() {
           color: 'white',
           mb: { xs: '40px', md: '200px' },
           position: 'relative',
-          // backgroundImage: `url(${photo})`,
-          backgroundImage: '/',
+          backgroundImage: `url(${photo})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -99,7 +98,7 @@ export default function MoreInfoAboutUs() {
             {t('Hakeemna platform is the result of joint cooperation between the health sector...')}
           </Typography>
           <Stack direction="row" sx={{ mt: 2 }}>
-            <Link sx={{ color: 'navy', fontSize: { xs: 14, md: 16 } }}>
+            <Link sx={{ color: '#1F2C5C', fontSize: { xs: 14, md: 16 } }}>
               {t('Download Hakimna 360 app')}
             </Link>
           </Stack>

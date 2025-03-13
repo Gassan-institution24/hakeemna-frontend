@@ -1,183 +1,42 @@
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 
-import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
-import { useRouter, usePathname } from 'src/routes/hooks';
-
-import { useResponsive } from 'src/hooks/use-responsive';
-
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import { varFade } from 'src/components/animate';
 
+import photo from '../images/design.png';
+
 // ----------------------------------------------------------------------
 
-export default function UnitServiceHero({ currentPage, setCurrentPage }) {
-  const mdUp = useResponsive('up', 'md');
+export default function UnitServiceHero() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const router = useRouter();
-
-  const pathname = usePathname();
-  const homePage = pathname === '/';
-
-  const renderDescription = (
-    <>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        sx={{
-          height: 1,
-          maxWidth: homePage ? 600 : 1400,
-          zIndex: 2,
-          pt: { md: 15 },
-          px: 3,
-        }}
-      >
-        <m.div variants={varFade().in}>
-          <Typography
-            variant="h1"
-            sx={{
-              textAlign: 'center',
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-              fontWeight: 700,
-              fontSize: { xs: 35, md: 50 },
-              mb: 3,
-            }}
-          >
-            {t('unit of service')}
-          </Typography>
-        </m.div>
-
-        <m.div variants={varFade().in}>
-          {homePage && (
-            <Typography
-              variant="subtitle1"
-              sx={{
-                textAlign: 'center',
-                textTransform: 'none',
-              }}
-            >
-              <Typography
-                component="h1"
-                sx={{
-                  display: 'inline',
-                  fontSize: 'inherit', // Keeps the font size consistent with the rest of the text
-                  fontWeight: 'bold', // Optional: to give emphasis similar to an h1
-                }}
-              >
-                {t('hakeemna')}
-              </Typography>
-              {t(
-                'enables medical service providers to deal with patient records electronically and manage their institutions effectively and easily with the aim of raising productivity and improving performance, which leads to enriching the patient experience and paves the way for focusing on the most important matters in your work to raise the degree of excellence and increase competitiveness.'
-              )}
-            </Typography>
-          )}
-          {!homePage && (
-            <>
-              <Typography
-                variant="subtitle1"
-                component="p"
-                sx={{
-                  textAlign: 'center',
-                  textTransform: 'none',
-                  //  textShadow: '5px 5px 5px black'
-                }}
-              >
-                {t(
-                  'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.'
-                )}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                component="p"
-                sx={{
-                  textAlign: 'center',
-                  textTransform: 'none',
-                  //  textShadow: '5px 5px 5px black'
-                }}
-              >
-                {t(
-                  'Digital intelligence requires that it cover all aspects of work in different institutions, and the obstacles that prevent the success of this important transition are varied.Therefore, with the help of God Almighty, the Hakeemna platform was designed to take into account those obstacles (financial, tax, training, workability and compatibility with) (systems Different applications and market) to overcome those limitations in the diet of the diet community in one digital platform to provide modern and intelligent care to patients everywhere.'
-                )}
-              </Typography>
-            </>
-          )}
-        </m.div>
-        <br />
-        <Stack direction={{ sx: 'column', md: 'row' }} gap={1}>
-          <Button
-            variant="contained"
-            color="info"
-            sx={{ borderRadius: 0, mx: { md: 2 }, width: 170, py: 1, textTransform: 'uppercase' }}
-            onClick={() => router.push(paths.auth.registersu)}
-          >
-            {t('join now')}
-          </Button>
-          {homePage && (
-            <Button
-              variant="outlined"
-              sx={{ borderRadius: 0, width: 170, py: 1 }}
-              onClick={() => router.push(paths.pages.unit)}
-            >
-              {t('read more')}
-            </Button>
-          )}
-        </Stack>
-        <br />
-      </Stack>
-      {!mdUp && setCurrentPage && (
-        <Stack direction="row" width={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ borderRadius: 0, width: '50%', py: 1.5 }}
-            onClick={() => setCurrentPage('users')}
-          >
-            {t('beneficiary')}
-          </Button>
-          <Button
-            variant="contained"
-            // color="info"
-            sx={{ borderRadius: 0, flex: 1, py: 1.5 }}
-            onClick={() => setCurrentPage('home')}
-          >
-            {t('home')}
-          </Button>
-        </Stack>
-      )}
-    </>
-  );
 
   return (
     <Stack
-      justifyContent="center"
-      alignItems="center"
-      width={1}
-      height={1}
       sx={{
-        position: 'absolute',
-        bottom: 0,
-        ...(curLangAr ? { right: 0 } : { left: 0 }),
-        borderRadius: currentPage === 'doctors' ? 0 : '0 50% 0 0',
-        width: currentPage === 'doctors' ? '100%' : 0,
-        height: currentPage === 'doctors' ? '100%' : 0,
-        transition: 'all 0.5s ease-in-out',
-        zIndex: 1,
-        backgroundColor: { md: '#aee2ff' },
-        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        height: { xs: '40vh', md: '55vh' },
+        color: 'white',
+        mb: { xs: '40px', md: '200px' },
+        position: 'relative',
+        backgroundImage: `url(${photo})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        px: { xs: 2, md: 0 },
       }}
     >
-      {renderDescription}
+      <m.div variants={varFade().inDown}>
+        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
+          {t('Electronic innovation for a healthier future')}
+        </Typography>
+      </m.div>
     </Stack>
   );
 }
-UnitServiceHero.propTypes = {
-  currentPage: PropTypes.string,
-  setCurrentPage: PropTypes.func,
-};

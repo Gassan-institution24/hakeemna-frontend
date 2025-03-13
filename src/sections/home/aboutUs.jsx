@@ -4,14 +4,13 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useLocales, useTranslate } from 'src/locales';
 
+import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
 import HOME from './images/home.jpg';
@@ -25,16 +24,16 @@ export default function Whydoc() {
 
   return (
     <Stack
-    direction={{ xs: 'column', md: 'row' }}
-    sx={{
-      position: 'relative',
-      bgcolor: '#3CB099',
-      color: 'white',
-      mx: { xs: 2, sm: 5, md: 10, lg: 20 },
-      mb: { xs: 5, sm: 10, md: '150px' },
-      borderRadius: 4,
-      p: { xs: 3, sm: 4, md: 6 },
-    }}
+      direction={{ xs: 'column', md: 'row' }}
+      sx={{
+        position: 'relative',
+        bgcolor: '#3CB099',
+        color: 'white',
+        mx: { xs: 2, sm: 5, md: 10, lg: 20 },
+        mb: { xs: 5, sm: 10, md: '150px' },
+        borderRadius: 4,
+        p: { xs: 3, sm: 4, md: 6 },
+      }}
     >
       <Stack
         sx={{
@@ -92,7 +91,7 @@ export default function Whydoc() {
               <div
                 style={{
                   backgroundColor: 'white',
-                  color: 'navy',
+                  color: '#1F2C5C',
                   fontWeight: 'bold',
                   padding: '10px 16px',
                   fontSize: '16px',
@@ -105,11 +104,15 @@ export default function Whydoc() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'navy',
+                  backgroundColor: '#1F2C5C',
                   padding: '10px 12px',
                 }}
               >
-                <ArrowForwardIosIcon sx={{ color: 'white', fontSize: '20px' }} />
+                {curLangAr ? (
+                  <Iconify icon="icon-park-outline:left" width={24} sx={{ color: 'white' }} />
+                ) : (
+                  <Iconify icon="eva:arrow-ios-forward-fill" width={24} sx={{ color: 'white' }} />
+                )}
               </div>
             </Button>
           </Stack>
