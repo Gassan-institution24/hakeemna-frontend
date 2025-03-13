@@ -16,6 +16,7 @@ export const paths = {
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',
+  call: '/call',
   payment: '/payment',
   about: '/about-us',
   contact: '/contact-us',

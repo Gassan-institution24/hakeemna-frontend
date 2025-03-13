@@ -20,7 +20,9 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import { useEffect } from 'react';
+import { paths } from 'src/routes/paths';
+import socket from 'src/socket';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
@@ -56,6 +58,14 @@ export default function Header({ onOpenNav }) {
 
   const offsetTop = offset && !isNavHorizontal;
 
+  useEffect(() => {
+    socket.on('callUser', ({ userId, from, signal }) => {
+      if (user?._id === userId) {
+        router.push(`${paths.call}?caller=${from}&signal=${JSON.stringify(signal)}`);
+      }
+    });
+  }, [user?._id, router]);
+
   const renderContent = (
     <>
       {lgUp && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
@@ -65,7 +75,6 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <Searchbar />
-      <WebRTCComponent />
       {['employee', 'admin'].includes(user?.role) && <EmployeeAttendence />}
       {/* {['employee', 'admin'].includes(user?.role) && ((!attendence || attendence?.check_out_time) ?
         (!hasAttendenceToday && <Button variant='contained' color='primary' onClick={changingAttendence.onOpen} sx={{ m: 2 }}>{t("check in")}</Button>) :
