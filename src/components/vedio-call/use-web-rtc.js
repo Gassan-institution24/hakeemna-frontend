@@ -1,6 +1,8 @@
 import { SERVER_IP } from 'src/config-global';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
-const { useState, useRef, useEffect } = require('react');
+const { useState, useRef, useEffect, useCallback } = require('react');
 const { useAuthContext } = require('src/auth/hooks');
 const { default: socket } = require('src/socket');
 
@@ -20,10 +22,13 @@ export const useWebRTC = () => {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [recordedChunks, setRecordedChunks] = useState([]);
 
+  const router = useRouter();
+
   const myVideo = useRef(null);
   const userVideo = useRef(null);
   const connectionRef = useRef(null);
 
+  const ringtone = new Audio('src/assets/tone/callingTone.mp3');
   const iceServers = [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
@@ -45,83 +50,6 @@ export const useWebRTC = () => {
       credential: 'Hakeemna360',
     },
   ];
-
-  useEffect(() => {
-    navigator.mediaDevices
-      ?.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        setStream(currentStream);
-        if (myVideo.current) {
-          myVideo.current.srcObject = currentStream;
-        }
-      })
-      .catch((err) => {
-        console.error('Error accessing media devices:', err);
-
-        // If both video and audio are denied, try to get only video or only audio
-        if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') {
-          // Try to get video only
-          navigator.mediaDevices
-            ?.getUserMedia({ video: true, audio: false })
-            .then((videoStream) => {
-              setStream(videoStream);
-              if (myVideo.current) {
-                myVideo.current.srcObject = videoStream;
-              }
-            })
-            .catch((videoErr) => {
-              console.error('Error accessing video:', videoErr);
-
-              // If video is denied, try to get audio only
-              navigator.mediaDevices
-                ?.getUserMedia({ video: false, audio: true })
-                .then((audioStream) => {
-                  setStream(audioStream);
-                  if (myVideo.current) {
-                    myVideo.current.srcObject = null; // No video, so clear the video element
-                  }
-                })
-                .catch((audioErr) => {
-                  console.error('Error accessing audio:', audioErr);
-                });
-            });
-        }
-      });
-
-    // Listen for incoming calls
-    socket.on('callUser', ({ userId, from, signal }) => {
-      if (user?._id === userId) {
-        setReceivingCall(true);
-        setCaller(from);
-        setCallerSignal(signal);
-      }
-    });
-
-    // Listen for call acceptance
-    socket.on('callAccepted', ({ signal, from }) => {
-      setCallAccepted(true);
-      setCaller(from);
-      const peer = connectionRef.current;
-      if (peer) {
-        peer
-          .setRemoteDescription(new RTCSessionDescription(signal))
-          .catch((err) => console.error('Failed to set remote description:', err));
-      }
-    });
-
-    // Listen for call end
-    socket.on('endCall', () => {
-      endCall();
-    });
-
-    return () => {
-      endCall();
-      socket.off('callUser');
-      socket.off('callAccepted');
-      socket.off('endCall');
-    };
-    // eslint-disable-next-line
-  }, [user?._id]);
 
   const callUser = (id) => {
     const peer = new RTCPeerConnection(iceServers);
@@ -313,7 +241,7 @@ export const useWebRTC = () => {
     }
   }, [recordedChunks]);
 
-  const endCall = () => {
+  const endCall = useCallback(() => {
     if (connectionRef.current) {
       connectionRef.current.close();
       connectionRef.current = null;
@@ -340,7 +268,91 @@ export const useWebRTC = () => {
     setMediaRecorder(null);
     setRecordedChunks([]);
     setScreenStream(null);
-  };
+    router.push(paths.dashboard.root);
+  }, [caller, stream, screenStream, mediaRecorder, router]);
+
+
+  useEffect(() => {
+    navigator.mediaDevices
+      ?.getUserMedia({ video: true, audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
+      })
+      .catch((err) => {
+        console.error('Error accessing media devices:', err);
+
+        // If both video and audio are denied, try to get only video or only audio
+        if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') {
+          // Try to get video only
+          navigator.mediaDevices
+            ?.getUserMedia({ video: true, audio: false })
+            .then((videoStream) => {
+              setStream(videoStream);
+              if (myVideo.current) {
+                myVideo.current.srcObject = videoStream;
+              }
+            })
+            .catch((videoErr) => {
+              console.error('Error accessing video:', videoErr);
+
+              // If video is denied, try to get audio only
+              navigator.mediaDevices
+                ?.getUserMedia({ video: false, audio: true })
+                .then((audioStream) => {
+                  setStream(audioStream);
+                  if (myVideo.current) {
+                    myVideo.current.srcObject = null; // No video, so clear the video element
+                  }
+                })
+                .catch((audioErr) => {
+                  console.error('Error accessing audio:', audioErr);
+                });
+            });
+        }
+      });
+
+    // Listen for incoming calls
+    socket.on('callUser', ({ userId, from, signal }) => {
+      if (user?._id === userId) {
+        router.push(`${paths.call}?caller=${from}&signal=${JSON.stringify(signal)}`);
+        // ringtone.loop = true;
+        ringtone.play();
+        setReceivingCall(true);
+        setCaller(from);
+        setCallerSignal(signal);
+      }
+    });
+
+    // Listen for call acceptance
+    socket.on('callAccepted', ({ signal, from }) => {
+      setCallAccepted(true);
+      setCaller(from);
+      const peer = connectionRef.current;
+      if (peer) {
+        peer
+          .setRemoteDescription(new RTCSessionDescription(signal))
+          .catch((err) => console.error('Failed to set remote description:', err));
+      }
+    });
+
+    // Listen for call end
+    socket.on('endCall', () => {
+      endCall();
+    });
+
+    return () => {
+      if (callAccepted) {
+        endCall();
+      }
+      socket.off('callUser');
+      socket.off('callAccepted');
+      socket.off('endCall');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?._id]);
 
   return {
     stream,
@@ -364,5 +376,9 @@ export const useWebRTC = () => {
     stopRecording,
     endCall,
     setIdToCall,
+    setReceivingCall,
+    setCaller,
+    setCallerSignal,
+    connectionRef,
   };
 };

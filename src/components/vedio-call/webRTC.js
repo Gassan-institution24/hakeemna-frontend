@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
+import { useSearchParams } from 'src/routes/hooks';
 
 import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
@@ -9,14 +10,13 @@ const WebRTCComponent = () => {
   const {
     receivingCall,
     callAccepted,
-    // idToCall,
-    // setIdToCall,
+    setIdToCall,
     isMuted,
     isVideoOn,
     isRecording,
     myVideo,
     userVideo,
-    // callUser,
+    callUser,
     answerCall,
     toggleMute,
     toggleVideo,
@@ -25,20 +25,37 @@ const WebRTCComponent = () => {
     endCall,
     toggleScreenSharing,
     isScreenSharing,
+    setCaller,
+    setReceivingCall,
+    setCallerSignal,
+    connectionRef,
   } = useWebRTC();
+
+  const searchParams = useSearchParams();
+
+  const userId = searchParams.get('userId');
+  const caller = searchParams.get('caller');
+  const signal = searchParams.get('signal');
+
+  useEffect(() => {
+    if (userId) {
+      setIdToCall(userId);
+      callUser(userId);
+    }
+    if (caller && signal) {
+      setReceivingCall(true);
+      setCaller(caller);
+      setCallerSignal(JSON.parse(signal));
+    }
+    // eslint-disable-next-line
+  }, [userId, caller, signal]);
 
   return (
     <>
-      {/* <input
-        type="text"
-        placeholder="Enter ID to call"
-        value={idToCall}
-        onChange={(e) => setIdToCall(e.target.value)}
-      />
-
-      <button type="button" onClick={() => callUser(idToCall)}>
-        Call
-      </button> */}
+      {connectionRef && !receivingCall && !callAccepted && (
+        // eslint-disable-next-line
+        <audio style={{ display: 'none' }} src="/callingTone.mp3" autoPlay loop />
+      )}
       <Dialog open={callAccepted} fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* Local video */}
         <Box sx={{ flex: 1 }}>
@@ -175,6 +192,11 @@ const WebRTCComponent = () => {
           <button type="button" onClick={answerCall}>
             Answer
           </button>
+        </div>
+      </Dialog>
+      <Dialog open={connectionRef && !receivingCall && !callAccepted}>
+        <div>
+          <h3>Calling...</h3>
         </div>
       </Dialog>
     </>
