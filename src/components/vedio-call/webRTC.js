@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
+
 import { useSearchParams } from 'src/routes/hooks';
 
 import Iconify from '../iconify';
@@ -52,11 +53,11 @@ const WebRTCComponent = () => {
 
   return (
     <>
-      {connectionRef && !receivingCall && !callAccepted && (
+      {receivingCall && !callAccepted && (
         // eslint-disable-next-line
         <audio style={{ display: 'none' }} src="/callingTone.mp3" autoPlay loop />
       )}
-      <Dialog open={callAccepted} fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* Local video */}
         <Box sx={{ flex: 1 }}>
           <Box
@@ -72,7 +73,6 @@ const WebRTCComponent = () => {
               border: '3px solid #ccc',
             }}
           >
-            {/* eslint-disable-next-line */}
             <video
               playsInline
               muted
@@ -87,25 +87,23 @@ const WebRTCComponent = () => {
             />
           </Box>
 
-          {/* Remote video */}
-          {callAccepted && (
-            <Box
-              sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}
-            >
-              {/* eslint-disable-next-line */}
-              <video
-                playsInline
-                ref={userVideo}
-                autoPlay
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  backgroundColor: 'black',
-                }}
-              />
-            </Box>
-          )}
+          <Box
+            sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}
+          >
+            {/* eslint-disable */}
+            <video
+              playsInline
+              ref={userVideo}
+              autoPlay
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                backgroundColor: 'black',
+              }}
+            />
+            {/* eslint-enable */}
+          </Box>
         </Box>
         <Stack
           direction="row"
