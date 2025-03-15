@@ -1,14 +1,14 @@
-import { Stack, Container, Typography } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 
 export default function Privacypolicy() {
   return (
-    <Container>
+    <Box sx={{ bgcolor: '#E4F6F2', my: 10, p: 5, mx: 30, borderRadius: 3, color: '#1F2C5C' }}>
       <Stack gap={1}>
         <Typography variant="h3" sx={{ mt: 4, textAlign: 'right' }}>
-          السياسات المتعلقة بالمستخدمين الباحثين عن الخدمات الطبية (مرضى و العائلات)
+          السياسات المتعلقة بالمستخدمين الباحثين عن الخدمات الطبية <br/> (مرضى و العائلات)
         </Typography>
         <Typography variant="h3" sx={{ mt: 4 }}>
-          Policies related to beneficiaries of medical services (patients and families)
+          Policies related to beneficiaries of medical services <br/> (patients and families) 
         </Typography>
         <Typography paragraph textAlign='right'>
           الرجاء قراءة سياسة الخصوصية  بعناية مع استيعاب كل البنود قبل التوقيع على قبولها و قبل استخدام الموقع أو التطبيقات المرتبطة بها أو الصفحات ذو علاقة بالمنصة.
@@ -558,6 +558,6 @@ export default function Privacypolicy() {
           {'\n'}
         </Typography>
       </Stack>
-    </Container>
+    </Box>
   );
 }
