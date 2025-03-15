@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from '@mui/material';
@@ -7,11 +8,13 @@ import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import socket from 'src/socket';
 import { bgBlur } from 'src/theme/css';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
@@ -20,9 +23,6 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
-import { useEffect } from 'react';
-import { paths } from 'src/routes/paths';
-import socket from 'src/socket';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
