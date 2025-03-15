@@ -12,35 +12,8 @@ export default function HomeView() {
 
   return (
     <>
-      <Stack
-        sx={{
-          overflowX: 'hidden',
-          minHeight: '90vh',
-          backgroundColor: { md: '#d5f7e6' },
-          pt: 5,
-        }}
-      >
-        <PatientsHero currentPage="users" />
-        {/* {mdUp && (
-          <img decoding="async" loading='lazy'
-            src="/assets/images/home/hero/stethoscope.webp"
-            style={{ position: 'absolute', top: 60, right: '20%', rotate: '240deg', zIndex: 2 }}
-            width={200}
-            alt="stethoscope"
-          />
-        )} */}
-      </Stack>
-      <Box
-        sx={{
-          p: 2,
-          overflow: 'hidden',
-          position: 'relative',
-          bgcolor: 'background.paper',
-        }}
-      >
-        <PatientsServices />
-      </Box>
-      {/* <OurMission /> */}
+      <PatientsHero/>
+      <PatientsServices />
     </>
   );
 }
