@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+
 import { Box, Stack, Button, Dialog } from '@mui/material';
+
 import { useSearchParams } from 'src/routes/hooks';
-import { useWebRTC } from './use-web-rtc';
+
+import socket from 'src/socket';
+
 import Iconify from '../iconify';
+import { useWebRTC } from './use-web-rtc';
 
 const WebRTCComponent = () => {
   const {
@@ -11,21 +16,22 @@ const WebRTCComponent = () => {
     setIdToCall,
     isMuted,
     isVideoOn,
-    isRecording,
+    // isRecording,
     myVideo,
     userVideo,
     callUser,
     answerCall,
     toggleMute,
     toggleVideo,
-    startRecording,
-    stopRecording,
+    // startRecording,
+    // stopRecording,
     endCall,
     toggleScreenSharing,
     isScreenSharing,
     setCaller,
     setReceivingCall,
-    connectionRef,
+    setStream,
+    audioTrackRef,
     stream,
   } = useWebRTC();
 
@@ -34,25 +40,54 @@ const WebRTCComponent = () => {
   const userId = searchParams.get('userId');
   const callerParam = searchParams.get('caller');
 
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (stream) {
-      setIsLoading(false); // Stream is ready
-
-      // If userId is provided in URL, initiate a call
       if (userId) {
         setIdToCall(userId);
         callUser(userId);
       }
 
-      // If caller param is provided, set up for receiving a call
       if (callerParam) {
         setReceivingCall(true);
         setCaller(callerParam);
       }
     }
   }, [userId, callerParam, stream, setIdToCall, callUser, setCaller, setReceivingCall]);
+
+  useEffect(() => {
+    navigator.mediaDevices
+      ?.getUserMedia({ video: true, audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+
+        // Store a reference to the audio track
+        const audioTracks = currentStream.getAudioTracks();
+        if (audioTracks.length > 0) {
+          audioTrackRef.current = audioTracks[0];
+        }
+
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
+      })
+      .catch((err) => {
+        console.error("Error accessing media devices:", err);
+      });
+
+    // Listen for call end event from socket
+    socket.on("endCall", () => {
+      endCall();
+    });
+
+    return () => {
+      if (callAccepted) {
+        endCall();
+      }
+      socket.off("endCall");
+    };
+    // eslint-disable-next-line
+  }, [callAccepted]);
 
   return (
     <>
@@ -164,7 +199,7 @@ const WebRTCComponent = () => {
               />
               <span>{isScreenSharing ? 'Stop Sharing' : 'Share Screen'}</span>
             </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{ display: 'flex', gap: 1, padding: 1 }}
               onClick={isRecording ? stopRecording : startRecording}
@@ -174,7 +209,7 @@ const WebRTCComponent = () => {
                 icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'}
               />
               <span>{isRecording ? 'Stop Recording' : 'Record'}</span>
-            </Button>
+            </Button> */}
           </Stack>
           <Button
             variant="contained"

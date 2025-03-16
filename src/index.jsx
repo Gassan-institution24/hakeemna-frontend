@@ -1,6 +1,5 @@
-import * as process from 'process';
-
 import { Suspense } from 'react';
+import * as process from 'process';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
