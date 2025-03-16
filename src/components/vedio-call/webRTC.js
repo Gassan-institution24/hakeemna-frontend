@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Stack, Button, Dialog } from '@mui/material';
 import { useSearchParams } from 'src/routes/hooks';
-import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
+import Iconify from '../iconify';
 
 const WebRTCComponent = () => {
   const {
