@@ -1,11 +1,9 @@
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { SERVER_IP } from 'src/config-global';
-
-const { useState, useRef, useEffect, useCallback } = require('react');
-const { useAuthContext } = require('src/auth/hooks');
-const { default: socket } = require('src/socket');
+import { Peer } from "peerjs";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useAuthContext } from "src/auth/hooks";
+import { useRouter } from "src/routes/hooks";
+import { paths } from "src/routes/paths";
+import socket from "src/socket";
 
 export const useWebRTC = () => {
     const { user } = useAuthContext();
@@ -13,7 +11,6 @@ export const useWebRTC = () => {
     const [screenStream, setScreenStream] = useState(null);
     const [receivingCall, setReceivingCall] = useState(false);
     const [caller, setCaller] = useState('');
-    const [callerSignal, setCallerSignal] = useState(null);
     const [callAccepted, setCallAccepted] = useState(false);
     const [idToCall, setIdToCall] = useState('');
     const [isMuted, setIsMuted] = useState(false);
@@ -22,103 +19,124 @@ export const useWebRTC = () => {
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [recordedChunks, setRecordedChunks] = useState([]);
+    const [peerInstance, setPeerInstance] = useState(null);
 
     const router = useRouter();
 
     const myVideo = useRef(null);
     const userVideo = useRef(null);
-    const connectionRef = useRef(null);
+    const callRef = useRef(null);
 
-    const iceServers = [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: `stun:${SERVER_IP}:3478` },
-        {
-            urls: `turn:${SERVER_IP}:3478?transport=udp`,
-            username: 'hakeemna',
-            credential: 'Hakeemna360',
-        },
-        {
-            urls: `turn:${SERVER_IP}:3478?transport=tcp`,
-            username: 'hakeemna',
-            credential: 'Hakeemna360',
-        },
-        {
-            urls: `turns:${SERVER_IP}:5349?transport=tcp`,
-            username: 'hakeemna',
-            credential: 'Hakeemna360',
-        },
-    ];
+    // Initialize PeerJS instance
+    useEffect(() => {
+        if (user?._id && !peerInstance) {
+            const peer = new Peer(user._id, {
+                // host: '/', // Change to your PeerJS server host
+                // port: '3001', // Change to your PeerJS server port
+                // path: '/peerjs',
+                // debug: 3
+            });
 
-    const callUser = (id) => {
-        const peer = new RTCPeerConnection({ iceServers });
+            peer.on('open', (id) => {
+                // eslint-disable-next-line
+                console.log('My peer ID is: ' + id);
+            });
 
-        if (stream) {
-            stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+            peer.on('error', (err) => {
+                console.error('PeerJS error:', err);
+            });
+
+            // Handle incoming calls
+            peer.on('call', (incomingCall) => {
+                setReceivingCall(true);
+                setCaller(incomingCall.peer);
+
+                // Store the call reference to answer later
+                callRef.current = incomingCall;
+            });
+
+            setPeerInstance(peer);
         }
 
-        peer.onicecandidate = (event) => {
-            if (event.candidate) {
-                socket.emit('callUser', {
-                    userId: id,
-                    signalData: peer.localDescription,
-                });
+        return () => {
+            if (peerInstance) {
+                peerInstance.destroy();
             }
         };
+        // eslint-disable-next-line
+    }, [user?._id]);
 
-        peer.ontrack = (event) => {
-            if (userVideo.current) {
-                userVideo.current.srcObject = event.streams[0];
-            }
-        };
-
-        peer
-            .createOffer()
-            .then((offer) => peer.setLocalDescription(offer))
-            .then(() => {
-                socket.emit('callUser', {
-                    userId: id,
-                    signalData: peer.localDescription,
-                });
+    useEffect(() => {
+        navigator.mediaDevices
+            ?.getUserMedia({ video: true, audio: true })
+            .then((currentStream) => {
+                setStream(currentStream);
+                if (myVideo.current) {
+                    myVideo.current.srcObject = currentStream;
+                }
             })
-            .catch((err) => console.error('Error creating offer:', err));
+            .catch((err) => {
+                console.error("Error accessing media devices:", err);
+            });
+        // Listen for call end event from socket
+        socket.on("endCall", () => {
+            endCall();
+        });
 
-        connectionRef.current = peer;
+
+        return () => {
+            if (callAccepted) {
+                endCall();
+            }
+            socket.off("endCall");
+        };
+        // eslint-disable-next-line
+    }, [callAccepted]);
+
+    const callUser = (id) => {
+        if (!peerInstance || !stream) return;
+
+        // Notify the user about the call via socket
+        socket.emit("callUser", {
+            userId: id,
+            from: user?._id
+        });
+
+        // Make the call with PeerJS
+        const call = peerInstance.call(id, stream);
+
+        call.on('stream', (remoteStream) => {
+            if (userVideo.current) {
+                userVideo.current.srcObject = remoteStream;
+            }
+        });
+
+        call.on('close', () => {
+            endCall();
+        });
+
+        callRef.current = call;
     };
 
     const answerCall = () => {
+        if (!callRef.current || !stream) return;
+
         setCallAccepted(true);
-        const peer = new RTCPeerConnection({ iceServers });
 
-        if (stream) {
-            stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-        }
+        // Answer the call with our media stream
+        callRef.current.answer(stream);
 
-        peer.onicecandidate = (event) => {
-            if (event.candidate) {
-                socket.emit('answerCall', { signal: peer.localDescription, to: caller });
-            }
-        };
-
-        peer.ontrack = (event) => {
+        // Listen for their stream
+        callRef.current.on('stream', (remoteStream) => {
             if (userVideo.current) {
-                userVideo.current.srcObject = event.streams[0];
+                userVideo.current.srcObject = remoteStream;
             }
-        };
+        });
 
-        if (callerSignal) {
-            peer
-                .setRemoteDescription(new RTCSessionDescription(callerSignal))
-                .then(() => peer.createAnswer())
-                .then((answer) => peer.setLocalDescription(answer))
-                .then(() => {
-                    socket.emit('answerCall', { signal: peer.localDescription, to: caller });
-                })
-                .catch((err) => console.error('Error answering call:', err));
-
-            connectionRef.current = peer;
-        }
+        // Notify the caller that we've accepted via socket
+        socket.emit("answerCall", {
+            to: caller,
+        });
     };
 
     const toggleMute = () => {
@@ -146,40 +164,29 @@ export const useWebRTC = () => {
             try {
                 const currScreenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: true,
-                    audio: true, // Ensure audio is also captured if needed
+                    audio: true,
                 });
 
                 setScreenStream(currScreenStream);
                 setIsScreenSharing(true);
 
-                const screenTrack = currScreenStream.getVideoTracks()?.[0];
-                const audioTrack = currScreenStream.getAudioTracks()?.[0];
+                if (callRef.current) {
+                    // Replace the video track with screen sharing track
+                    const videoTrack = currScreenStream.getVideoTracks()[0];
 
-                const peer = connectionRef.current;
-                if (peer) {
-                    const videoSender = peer.getSenders().find((s) => s.track?.kind === 'video');
-                    const audioSender = peer.getSenders().find((s) => s.track?.kind === 'audio');
+                    // Get the current senders
+                    const call = callRef.current;
+                    if (call.peerConnection) {
+                        const senders = call.peerConnection.getSenders();
+                        const videoSender = senders.find((s) => s.track && s.track.kind === "video");
 
-                    if (videoSender) {
-                        await videoSender.replaceTrack(screenTrack);
-                    } else {
-                        peer.addTrack(screenTrack, currScreenStream);
+                        if (videoSender) {
+                            videoSender.replaceTrack(videoTrack);
+                        }
                     }
-
-                    if (audioTrack && audioSender) {
-                        await audioSender.replaceTrack(audioTrack);
-                    } else if (audioTrack) {
-                        peer.addTrack(audioTrack, currScreenStream);
-                    }
-
-                    peer.onnegotiationneeded?.();
                 }
-
-                screenTrack.onended = () => {
-                    toggleScreenSharing();
-                };
             } catch (error) {
-                console.error('Error sharing screen:', error);
+                console.error("Error sharing screen:", error);
             }
         } else {
             if (screenStream) {
@@ -188,20 +195,18 @@ export const useWebRTC = () => {
             setIsScreenSharing(false);
             setScreenStream(null);
 
-            const peer = connectionRef.current;
-            if (peer && stream) {
-                const originalVideoTrack = stream.getVideoTracks()?.[0];
-                const originalAudioTrack = stream.getAudioTracks()?.[0];
+            if (callRef.current && stream) {
+                // Replace back with camera video track
+                const videoTrack = stream.getVideoTracks()[0];
 
-                const videoSender = peer.getSenders().find((s) => s.track?.kind === 'video');
-                const audioSender = peer.getSenders().find((s) => s.track?.kind === 'audio');
+                const call = callRef.current;
+                if (call.peerConnection) {
+                    const senders = call.peerConnection.getSenders();
+                    const videoSender = senders.find((s) => s.track && s.track.kind === "video");
 
-                if (videoSender && originalVideoTrack) {
-                    await videoSender.replaceTrack(originalVideoTrack);
-                }
-
-                if (audioSender && originalAudioTrack) {
-                    await audioSender.replaceTrack(originalAudioTrack);
+                    if (videoSender) {
+                        videoSender.replaceTrack(videoTrack);
+                    }
                 }
             }
         }
@@ -210,7 +215,7 @@ export const useWebRTC = () => {
     const startRecording = async () => {
         try {
             const currScreenStream = await navigator.mediaDevices.getDisplayMedia({
-                video: { mediaSource: 'screen' },
+                video: { mediaSource: "screen" },
                 audio: true,
             });
 
@@ -229,10 +234,8 @@ export const useWebRTC = () => {
             currScreenStream.getVideoTracks()[0].onended = () => {
                 stopRecording();
             };
-
-            setStream(currScreenStream);
         } catch (error) {
-            console.error('Error starting screen recording:', error);
+            console.error("Error starting screen recording:", error);
         }
     };
 
@@ -241,46 +244,49 @@ export const useWebRTC = () => {
             mediaRecorder.stop();
             setIsRecording(false);
         }
-
-        if (stream) {
-            stream.getTracks().forEach((track) => track.stop());
-            setStream(null);
-        }
     };
 
     useEffect(() => {
         if (recordedChunks.length > 0) {
-            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const blob = new Blob(recordedChunks, { type: "video/webm" });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            const a = document.createElement("a");
             a.href = url;
-            a.download = 'screen-recording.webm';
+            a.download = "screen-recording.webm";
             document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            setRecordedChunks([]);
         }
     }, [recordedChunks]);
 
     const endCall = useCallback(() => {
-        if (connectionRef.current) {
-            connectionRef.current.close();
-            connectionRef.current = null;
+        if (callRef.current) {
+            callRef.current.close();
+            callRef.current = null;
         }
+
         if (stream) {
             stream.getTracks().forEach((track) => track.stop());
         }
+
         if (screenStream) {
             screenStream.getTracks().forEach((track) => track.stop());
         }
-        if (mediaRecorder) {
+
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
         }
-        socket.emit('endCall', { to: caller });
+
+        // Notify the other user that call has ended
+        socket.emit("endCall", { to: caller });
+
+        // Reset all states
         setCallAccepted(false);
         setReceivingCall(false);
-        setCaller('');
-        setCallerSignal(null);
-        setIdToCall('');
+        setCaller("");
+        setIdToCall("");
         setIsMuted(false);
         setIsVideoOn(true);
         setIsRecording(false);
@@ -288,61 +294,15 @@ export const useWebRTC = () => {
         setMediaRecorder(null);
         setRecordedChunks([]);
         setScreenStream(null);
+
+        // Redirect to dashboard
         router.push(paths.dashboard.root);
     }, [caller, stream, screenStream, mediaRecorder, router]);
-
-    useEffect(() => {
-        navigator.mediaDevices
-            .getUserMedia({ video: true, audio: true })
-            .then((currentStream) => {
-                setStream(currentStream);
-                if (myVideo.current) {
-                    myVideo.current.srcObject = currentStream;
-                }
-            })
-            .catch((err) => {
-                console.error('Error accessing media devices:', err);
-            });
-
-        socket.on('callUser', ({ userId, from, signal }) => {
-            if (user?._id === userId) {
-                setReceivingCall(true);
-                setCaller(from);
-                setCallerSignal(signal);
-            }
-        });
-
-        socket.on('callAccepted', ({ signal, from }) => {
-            setCallAccepted(true);
-            setCaller(from);
-            const peer = connectionRef.current;
-            if (peer) {
-                peer
-                    .setRemoteDescription(new RTCSessionDescription(signal))
-                    .catch((err) => console.error('Failed to set remote description:', err));
-            }
-        });
-
-        socket.on('endCall', () => {
-            endCall();
-        });
-
-        return () => {
-            if (callAccepted) {
-                endCall();
-            }
-            socket.off('callUser');
-            socket.off('callAccepted');
-            socket.off('endCall');
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user?._id]);
 
     return {
         stream,
         receivingCall,
         caller,
-        callerSignal,
         callAccepted,
         idToCall,
         isMuted,
@@ -362,7 +322,6 @@ export const useWebRTC = () => {
         setIdToCall,
         setReceivingCall,
         setCaller,
-        setCallerSignal,
-        connectionRef,
+        connectionRef: callRef,
     };
 };
