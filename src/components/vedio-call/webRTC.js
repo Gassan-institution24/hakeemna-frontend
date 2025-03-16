@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { Box, Stack, Button, Dialog } from '@mui/material';
-
 import { useSearchParams } from 'src/routes/hooks';
-
 import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
 
@@ -28,28 +25,34 @@ const WebRTCComponent = () => {
     isScreenSharing,
     setCaller,
     setReceivingCall,
-    setCallerSignal,
     connectionRef,
+    stream,
   } = useWebRTC();
 
   const searchParams = useSearchParams();
 
   const userId = searchParams.get('userId');
-  const caller = searchParams.get('caller');
-  const signal = searchParams.get('signal');
+  const callerParam = searchParams.get('caller');
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (userId) {
-      setIdToCall(userId);
-      callUser(userId);
+    if (stream) {
+      setIsLoading(false); // Stream is ready
+
+      // If userId is provided in URL, initiate a call
+      if (userId) {
+        setIdToCall(userId);
+        callUser(userId);
+      }
+
+      // If caller param is provided, set up for receiving a call
+      if (callerParam) {
+        setReceivingCall(true);
+        setCaller(callerParam);
+      }
     }
-    if (caller && signal) {
-      setReceivingCall(true);
-      setCaller(caller);
-      setCallerSignal(JSON.parse(signal));
-    }
-    // eslint-disable-next-line
-  }, [userId, caller, signal]);
+  }, [userId, callerParam, stream, setIdToCall, callUser, setCaller, setReceivingCall]);
 
   return (
     <>
@@ -192,11 +195,11 @@ const WebRTCComponent = () => {
           </button>
         </div>
       </Dialog>
-      <Dialog open={connectionRef && !receivingCall && !callAccepted}>
+      {/* <Dialog open={connectionRef.current && !receivingCall && !callAccepted}>
         <div>
           <h3>Calling...</h3>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
