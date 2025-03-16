@@ -296,8 +296,8 @@ export const useWebRTC = () => {
         setScreenStream(null);
 
         // Redirect to dashboard
-        router.push(paths.dashboard.root);
-    }, [caller, stream, screenStream, mediaRecorder, router]);
+        // router.push(paths.dashboard.root);
+    }, [caller, stream, screenStream, mediaRecorder]);
 
     return {
         stream,
