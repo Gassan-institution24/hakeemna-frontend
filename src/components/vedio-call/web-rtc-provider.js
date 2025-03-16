@@ -53,11 +53,12 @@ export const WebRTCProvider = ({ children }) => {
             // Handle incoming calls
             peer.on('call', (incomingCall) => {
                 console.log('incomingCall', incomingCall);
+                callRef.current = incomingCall;
+                console.log('callRef.current', callRef.current);
                 setReceivingCall(true);
                 setCaller(incomingCall.peer);
 
                 // Store the call reference to answer later
-                callRef.current = incomingCall;
             });
 
             setPeerInstance(peer);
