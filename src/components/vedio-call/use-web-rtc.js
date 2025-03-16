@@ -26,6 +26,7 @@ export const useWebRTC = () => {
     const myVideo = useRef(null);
     const userVideo = useRef(null);
     const callRef = useRef(null);
+    const audioTrackRef = useRef(null);
 
     // Initialize PeerJS instance
     useEffect(() => {
@@ -71,6 +72,13 @@ export const useWebRTC = () => {
             ?.getUserMedia({ video: true, audio: true })
             .then((currentStream) => {
                 setStream(currentStream);
+
+                // Store a reference to the audio track
+                const audioTracks = currentStream.getAudioTracks();
+                if (audioTracks.length > 0) {
+                    audioTrackRef.current = audioTracks[0];
+                }
+
                 if (myVideo.current) {
                     myVideo.current.srcObject = currentStream;
                 }
@@ -78,11 +86,11 @@ export const useWebRTC = () => {
             .catch((err) => {
                 console.error("Error accessing media devices:", err);
             });
+
         // Listen for call end event from socket
         socket.on("endCall", () => {
             endCall();
         });
-
 
         return () => {
             if (callAccepted) {
@@ -142,20 +150,41 @@ export const useWebRTC = () => {
     const toggleMute = () => {
         if (stream) {
             const audioTracks = stream.getAudioTracks();
-            audioTracks.forEach((track) => {
-                track.enabled = !track.enabled;
-            });
-            setIsMuted(!isMuted);
+            if (audioTracks.length > 0) {
+                audioTracks[0].enabled = !audioTracks[0].enabled;
+                setIsMuted(!audioTracks[0].enabled);
+
+                // Ensure the audio track reference is updated
+                audioTrackRef.current = audioTracks[0];
+
+                // If we're in a call, update the track in the connection
+                if (callRef.current && callRef.current.peerConnection) {
+                    const senders = callRef.current.peerConnection.getSenders();
+                    const audioSender = senders.find(s => s.track && s.track.kind === "audio");
+                    if (audioSender && audioSender.track) {
+                        audioSender.track.enabled = audioTracks[0].enabled;
+                    }
+                }
+            }
         }
     };
 
     const toggleVideo = () => {
         if (stream) {
             const videoTracks = stream.getVideoTracks();
-            videoTracks.forEach((track) => {
-                track.enabled = !track.enabled;
-            });
-            setIsVideoOn(!isVideoOn);
+            if (videoTracks.length > 0) {
+                videoTracks[0].enabled = !videoTracks[0].enabled;
+                setIsVideoOn(videoTracks[0].enabled);
+
+                // If we're in a call, update the track in the connection
+                if (callRef.current && callRef.current.peerConnection) {
+                    const senders = callRef.current.peerConnection.getSenders();
+                    const videoSender = senders.find(s => s.track && s.track.kind === "video");
+                    if (videoSender && videoSender.track) {
+                        videoSender.track.enabled = videoTracks[0].enabled;
+                    }
+                }
+            }
         }
     };
 
@@ -169,6 +198,14 @@ export const useWebRTC = () => {
 
                 setScreenStream(currScreenStream);
                 setIsScreenSharing(true);
+
+                // Ensure audio state is preserved when switching to screen sharing
+                if (audioTrackRef.current) {
+                    const audioTracks = currScreenStream.getAudioTracks();
+                    if (audioTracks.length > 0) {
+                        audioTracks[0].enabled = audioTrackRef.current.enabled;
+                    }
+                }
 
                 if (callRef.current) {
                     // Replace the video track with screen sharing track
@@ -296,8 +333,12 @@ export const useWebRTC = () => {
         setScreenStream(null);
 
         // Redirect to dashboard
-        // router.push(paths.dashboard.root);
-    }, [caller, stream, screenStream, mediaRecorder]);
+        if (callRef.current && callRef.current.answered) {
+            router.push(paths.dashboard.root);
+        } else {
+            router.push(paths.dashboard.root);
+        }
+    }, [caller, stream, screenStream, mediaRecorder, router]);
 
     return {
         stream,
