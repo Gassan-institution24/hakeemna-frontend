@@ -16,6 +16,7 @@ import { LocalizationProvider } from 'src/locales';
 import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 import { CheckoutProvider } from './sections/unit-service/checkout/context';
+import { WebRTCProvider } from './components/vedio-call/web-rtc-provider';
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -84,35 +85,38 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <LocalizationProvider>
-        <SettingsProvider
-          defaultSettings={{
-            themeMode: 'light', // 'light' | 'dark'
-            themeDirection: 'ltr', //  'rtl' | 'ltr'
-            themeContrast: 'default', // 'default' | 'bold'
-            themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-            themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-            themeStretch: false,
-          }}
-        >
-          <ThemeProvider>
-            <MotionLazy>
-              <SnackbarProvider>
-                <CheckoutProvider>
-                  <SettingsDrawer />
-                  <ProgressBar />
-                  <div
-                    lang="ar"
-                    style={{ height: '100%', width: '100%', textTransform: 'capitalize' }}
-                  >
-                    <Router />
-                  </div>
-                </CheckoutProvider>
-              </SnackbarProvider>
-            </MotionLazy>
-          </ThemeProvider>
-        </SettingsProvider>
-      </LocalizationProvider>
+      <WebRTCProvider>
+        <LocalizationProvider>
+          <SettingsProvider
+            defaultSettings={{
+              themeMode: 'light', // 'light' | 'dark'
+              themeDirection: 'ltr', //  'rtl' | 'ltr'
+              themeContrast: 'default', // 'default' | 'bold'
+              themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+              themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+              themeStretch: false,
+            }}
+          >
+            <ThemeProvider>
+              <MotionLazy>
+                <SnackbarProvider>
+                  <CheckoutProvider>
+
+                    <SettingsDrawer />
+                    <ProgressBar />
+                    <div
+                      lang="ar"
+                      style={{ height: '100%', width: '100%', textTransform: 'capitalize' }}
+                    >
+                      <Router />
+                    </div>
+                  </CheckoutProvider>
+                </SnackbarProvider>
+              </MotionLazy>
+            </ThemeProvider>
+          </SettingsProvider>
+        </LocalizationProvider>
+      </WebRTCProvider>
     </AuthProvider>
   );
 }
