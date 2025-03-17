@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
 
-import { useSearchParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+
+import { useResponsive } from 'src/hooks/use-responsive';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 
 import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
@@ -23,6 +27,7 @@ const WebRTCComponent = () => {
     answerCall,
     toggleMute,
     toggleVideo,
+    setCallAccepted,
     // startRecording,
     // stopRecording,
     endCall,
@@ -33,12 +38,19 @@ const WebRTCComponent = () => {
     setStream,
     audioTrackRef,
     stream,
+    onCancelCall,
+    isCalling
   } = useWebRTC();
 
+  const router = useRouter()
   const searchParams = useSearchParams();
+
+  const mdUp = useResponsive('up', 'md');
+  const { t } = useTranslate()
 
   const userId = searchParams.get('userId');
   const callerParam = searchParams.get('caller');
+  const userNameParam = searchParams.get('userName');
 
 
   useEffect(() => {
@@ -49,7 +61,7 @@ const WebRTCComponent = () => {
       }
 
       if (callerParam) {
-        setReceivingCall(true);
+        // setReceivingCall(true);
         setCaller(callerParam);
       }
     }
@@ -60,8 +72,6 @@ const WebRTCComponent = () => {
       ?.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-
-        // Store a reference to the audio track
         const audioTracks = currentStream.getAudioTracks();
         if (audioTracks.length > 0) {
           audioTrackRef.current = audioTracks[0];
@@ -72,22 +82,72 @@ const WebRTCComponent = () => {
         }
       })
       .catch((err) => {
-        console.error("Error accessing media devices:", err);
+        navigator.mediaDevices
+          ?.getUserMedia({ video: false, audio: true })
+          .then((currentStream) => {
+            setStream(currentStream);
+
+            // Store a reference to the audio track
+            const audioTracks = currentStream.getAudioTracks();
+            if (audioTracks.length > 0) {
+              audioTrackRef.current = audioTracks[0];
+            }
+
+            if (myVideo.current) {
+              myVideo.current.srcObject = currentStream;
+            }
+          })
+          .catch((erro) => {
+            navigator.mediaDevices
+              ?.getUserMedia({ video: true, audio: false })
+              .then((currentStream) => {
+                setStream(currentStream);
+
+                // Store a reference to the audio track
+                const audioTracks = currentStream.getAudioTracks();
+                if (audioTracks.length > 0) {
+                  audioTrackRef.current = audioTracks[0];
+                }
+
+                if (myVideo.current) {
+                  myVideo.current.srcObject = currentStream;
+                }
+              })
+          })
       });
 
-    // Listen for call end event from socket
     socket.on("endCall", () => {
       endCall();
     });
+    socket.on("cancelCall", () => {
+      endCall();
+      router.replace(paths.dashboard.root)
+    });
+
+    socket.on("callAccepted", ({ from }) => {
+      setCallAccepted(true)
+      setCaller(from);
+    });
 
     return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+
+      socket.off("endCall");
+      socket.off("cancelCall");
+      socket.off("callAccepted");
+
       if (callAccepted) {
         endCall();
       }
-      socket.off("endCall");
     };
     // eslint-disable-next-line
   }, [callAccepted]);
+
+  if (!receivingCall && !isCalling) {
+    return null
+  }
 
   return (
     <>
@@ -104,8 +164,8 @@ const WebRTCComponent = () => {
               position: 'fixed',
               bottom: 70,
               right: 5,
-              width: 300,
-              height: 200,
+              width: mdUp ? 300 : 170,
+              height: mdUp ? 200 : 120,
               borderRadius: '10px',
               overflow: 'hidden',
               border: '3px solid #ccc',
@@ -154,7 +214,7 @@ const WebRTCComponent = () => {
             backgroundColor: '#212B36',
             color: '#fff',
             padding: 1,
-            px: 4,
+            px: mdUp ? 4 : 2,
           }}
         >
           <Stack direction="row" spacing={2}>
@@ -167,7 +227,7 @@ const WebRTCComponent = () => {
                 width={23}
                 icon={isMuted ? 'material-symbols:mic-off' : 'material-symbols:mic'}
               />
-              <span>{isMuted ? 'Unmute' : 'Mute'}</span>
+              {mdUp && <span>{isMuted ? t('Unmute') : t('Mute')}</span>}
             </Button>
             <Button
               variant="outlined"
@@ -182,7 +242,7 @@ const WebRTCComponent = () => {
                     : 'material-symbols:video-camera-front-off'
                 }
               />
-              <span>{isVideoOn ? 'Camera Off' : 'Camera On'}</span>
+              {mdUp && <span>{isVideoOn ? t('Camera Off') : t('Camera On')}</span>}
             </Button>
             <Button
               variant="outlined"
@@ -193,11 +253,11 @@ const WebRTCComponent = () => {
                 width={23}
                 icon={
                   isScreenSharing
-                    ? 'material-symbols:screen-share'
-                    : 'material-symbols:screen-share-off'
+                    ? 'material-symbols:stop-screen-share-outline'
+                    : 'material-symbols:screen-share-outline'
                 }
               />
-              <span>{isScreenSharing ? 'Stop Sharing' : 'Share Screen'}</span>
+              {mdUp && <span>{isScreenSharing ? t('Stop Sharing') : t('Share Screen')}</span>}
             </Button>
             {/* <Button
               variant="outlined"
@@ -208,7 +268,7 @@ const WebRTCComponent = () => {
                 width={23}
                 icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'}
               />
-              <span>{isRecording ? 'Stop Recording' : 'Record'}</span>
+              <span>{isRecording ? t('Stop Recording') : t('Record')}</span>
             </Button> */}
           </Stack>
           <Button
@@ -218,17 +278,22 @@ const WebRTCComponent = () => {
             onClick={endCall}
           >
             <Iconify width={23} icon="material-symbols:call-end-sharp" />
-            <span>End Call</span>
+            {mdUp && <span>{t("End Call")}</span>}
           </Button>
         </Stack>
       </Dialog>
       <Dialog open={receivingCall && !callAccepted}>
-        <div>
-          <h3>Incoming Call...</h3>
-          <button type="button" onClick={answerCall}>
-            Answer
-          </button>
-        </div>
+        <Stack p={3} gap={2}>
+          <h3>{userNameParam} {t("Calling...")}</h3>
+          <Stack gap={1}>
+            <Button variant='contained' color='primary' type="button" onClick={answerCall} sx={{ minWidth: 200 }}>
+              {t("Answer")}
+            </Button>
+            <Button variant='text' type="button" onClick={onCancelCall}>
+              {t("Cancel")}
+            </Button>
+          </Stack>
+        </Stack>
       </Dialog>
       {/* <Dialog open={connectionRef.current && !receivingCall && !callAccepted}>
         <div>
