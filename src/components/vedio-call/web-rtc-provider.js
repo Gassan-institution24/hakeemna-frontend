@@ -19,6 +19,7 @@ export const WebRTCProvider = ({ children }) => {
     const [callAccepted, setCallAccepted] = useState(false);
     const [idToCall, setIdToCall] = useState('');
     const [isMuted, setIsMuted] = useState(false);
+    const [isCalling, setIsCalling] = useState(false);
     const [isVideoOn, setIsVideoOn] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
@@ -40,11 +41,11 @@ export const WebRTCProvider = ({ children }) => {
 
             peer.on('open', (id) => {
                 // eslint-disable-next-line
-                console.log('My peer ID from open is: ' + id);
+                // console.log('My peer ID from open is: ' + id);
             });
 
             peer.on('error', (err) => {
-                console.error('PeerJS error:', err);
+                // console.error('PeerJS error:', err);
             });
 
             peer.on('call', (incomingCall) => {
@@ -88,6 +89,7 @@ export const WebRTCProvider = ({ children }) => {
         // Reset all states
         setCallAccepted(false);
         setReceivingCall(false);
+        setIsCalling(false);
         setCaller("");
         setIdToCall("");
         setIsMuted(false);
@@ -97,20 +99,22 @@ export const WebRTCProvider = ({ children }) => {
         setMediaRecorder(null);
         setRecordedChunks([]);
         setScreenStream(null);
+        setStream(null)
 
         // Redirect to dashboard
-        if (callRef.current && callRef.current.answered) {
-            router.push(paths.dashboard.root);
+        if (callAccepted) {
+            router.replace(paths.dashboard.root);
         }
-    }, [caller, stream, screenStream, mediaRecorder, router]);
+    }, [caller, stream, screenStream, mediaRecorder, router, callAccepted]);
 
     const callUser = useCallback((id) => {
-        if (!peerInstance || !stream) return;
+        if (!peerInstance || !stream || !socket) return;
 
         // Notify the user about the call via socket
         socket.emit("callUser", {
             userId: id,
-            from: user?._id
+            from: user?._id,
+            userName: user?.userName
         });
         // Make the call with PeerJS
         const call = peerInstance.call(`${id}-hakeemna`, stream);
@@ -125,8 +129,10 @@ export const WebRTCProvider = ({ children }) => {
             endCall();
         });
 
+        setIsCalling(true)
+
         callRef.current = call;
-    }, [peerInstance, stream, user?._id, userVideo, endCall]);
+    }, [peerInstance, stream, user?._id, user?.userName, userVideo, endCall]);
 
     const answerCall = useCallback(() => {
         if (!callRef.current || !stream) return;
@@ -215,7 +221,7 @@ export const WebRTCProvider = ({ children }) => {
                     }
                 }
             } catch (error) {
-                console.error("Error sharing screen:", error);
+                // console.error("Error sharing screen:", error);
             }
         } else {
             // TURNING OFF screen sharing - improvements here
@@ -225,7 +231,6 @@ export const WebRTCProvider = ({ children }) => {
 
             // Make sure camera stream exists and is active
             if (!stream || stream.getVideoTracks().length === 0 || !stream.getVideoTracks()[0].enabled) {
-                console.log("Reacquiring camera stream...");
                 try {
                     // Re-acquire camera if needed
                     const newStream = await navigator.mediaDevices.getUserMedia({
@@ -247,11 +252,10 @@ export const WebRTCProvider = ({ children }) => {
 
                         if (videoSender) {
                             await videoSender.replaceTrack(videoTrack);
-                            console.log("Successfully replaced with camera track");
                         }
                     }
                 } catch (err) {
-                    console.error("Error reacquiring camera:", err);
+                    // console.error("Error reacquiring camera:", err);
                 }
             } else {
                 // Camera stream exists and is active
@@ -265,7 +269,6 @@ export const WebRTCProvider = ({ children }) => {
 
                     if (videoSender) {
                         await videoSender.replaceTrack(videoTrack);
-                        console.log("Successfully replaced with camera track");
                     }
                 }
             }
@@ -324,6 +327,13 @@ export const WebRTCProvider = ({ children }) => {
         }
     }, [recordedChunks]);
 
+    const onCancelCall = useCallback(() => {
+        socket.emit('cancelCall', { to: caller });
+        setReceivingCall(false)
+        setIsCalling(false)
+        router.replace(paths.dashboard.root)
+    }, [router, caller])
+
 
     const memoizedValue = useMemo(
         () => ({
@@ -347,11 +357,15 @@ export const WebRTCProvider = ({ children }) => {
             // stopRecording,
             endCall,
             setIdToCall,
+            setCallAccepted,
             setReceivingCall,
             setCaller,
             audioTrackRef,
             setStream,
             connectionRef: callRef,
+            onCancelCall,
+            isCalling,
+            setIsCalling
         }),
         [stream,
             receivingCall,
@@ -369,6 +383,7 @@ export const WebRTCProvider = ({ children }) => {
             toggleMute,
             toggleVideo,
             toggleScreenSharing,
+            setCallAccepted,
             // startRecording,
             // stopRecording,
             endCall,
@@ -378,6 +393,9 @@ export const WebRTCProvider = ({ children }) => {
             audioTrackRef,
             setStream,
             callRef,
+            onCancelCall,
+            isCalling,
+            setIsCalling
         ]
     );
     return <WebRTCContext.Provider value={memoizedValue}>{children}</WebRTCContext.Provider>;
