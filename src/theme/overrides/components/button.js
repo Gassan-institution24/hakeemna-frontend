@@ -28,7 +28,7 @@ export function button(theme) {
     const largeSize = ownerState.size === 'large';
 
     const defaultStyle = {
-      minWidth: 100,
+      // minWidth: 100,
       borderRadius: 3,
       ...(inheritColor && {
         // CONTAINED

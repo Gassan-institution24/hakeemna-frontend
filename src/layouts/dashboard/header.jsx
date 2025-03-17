@@ -23,6 +23,7 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
+import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
@@ -40,6 +41,7 @@ export default function Header({ onOpenNav }) {
   const router = useRouter();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
+  const { setReceivingCall } = useWebRTC()
   const parentToken = localStorage.getItem('parentToken');
   const switchBack = () => {
     localStorage.setItem('accessToken', parentToken);
@@ -59,12 +61,13 @@ export default function Header({ onOpenNav }) {
   const offsetTop = offset && !isNavHorizontal;
 
   useEffect(() => {
-    socket.on('callUser', ({ userId, from, signal }) => {
+    socket.on('callUser', ({ userId, from, signal, userName }) => {
       if (user?._id === userId) {
-        router.push(`${paths.call}?caller=${from}&signal=${JSON.stringify(signal)}`);
+        setReceivingCall(true)
+        router.push(`${paths.call}?caller=${from}&userName=${userName}&signal=${JSON.stringify(signal)}`);
       }
     });
-  }, [user?._id, router]);
+  }, [user?._id, router, setReceivingCall]);
 
   const renderContent = (
     <>
