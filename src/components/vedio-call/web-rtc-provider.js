@@ -119,7 +119,7 @@ export const WebRTCProvider = ({ children }) => {
         // Make the call with PeerJS
         const call = peerInstance.call(`${id}-hakeemna`, stream);
 
-        call.on('stream', (remoteStream) => {
+        call?.on('stream', (remoteStream) => {
             if (userVideo.current) {
                 userVideo.current.srcObject = remoteStream;
             }
