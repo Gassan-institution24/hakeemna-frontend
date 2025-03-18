@@ -57,27 +57,37 @@ export default function BookToolbar({ filters, filterChange }) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-around"
+      justifyContent="center"
       alignItems="center"
       spacing={1}
       px={8}
       py={2}
-      sx={{ backgroundColor: '#E4F6F2', borderRadius: 1 }}
+      sx={{
+        backgroundColor: '#E4F6F2',
+        borderRadius: 1,
+        display: { xs: 'grid', md: 'flex' },
+      }}
     >
       <Autocomplete
         size="small"
         sx={{ minWidth: 180 }}
         options={unitserviceTypesData}
         onChange={(event, newValue) => filterChange('US_type', newValue?._id)}
-        getOptionLabel={(option) => (typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english)}
-        renderInput={(params) => <TextField {...params} label={t('unit of service type')} variant="outlined" />}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => (
+          <TextField {...params} label={t('unit of service type')} variant="outlined" />
+        )}
       />
       <Autocomplete
         size="small"
         sx={{ minWidth: 150 }}
         options={countriesData}
         onChange={(event, newValue) => filterChange(`country`, newValue?._id)}
-        getOptionLabel={(option) => (typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
         renderInput={(params) => <TextField {...params} label={t('country')} variant="outlined" />}
       />
       <Autocomplete
@@ -85,7 +95,9 @@ export default function BookToolbar({ filters, filterChange }) {
         sx={{ minWidth: 150 }}
         options={tableData}
         onChange={(event, newValue) => filterChange(`city`, newValue?._id)}
-        getOptionLabel={(option) => (typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
         renderInput={(params) => <TextField {...params} label={t('city')} variant="outlined" />}
       />
       <Autocomplete
@@ -93,8 +105,12 @@ export default function BookToolbar({ filters, filterChange }) {
         sx={{ minWidth: 180 }}
         options={insuranseCosData}
         onChange={(event, newValue) => filterChange(`insurance`, newValue?._id)}
-        getOptionLabel={(option) => (typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english)}
-        renderInput={(params) => <TextField {...params} label={t('insurance company')} variant="outlined" />}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => (
+          <TextField {...params} label={t('insurance company')} variant="outlined" />
+        )}
       />
       <Autocomplete
         size="small"
@@ -107,7 +123,13 @@ export default function BookToolbar({ filters, filterChange }) {
           if (typeof option === 'string') return option;
           return curLangAr ? option.name_arabic : option.name_english;
         }}
-        renderInput={(params) => <TextField {...params} label={t('search by doctor, specialty or disease')} variant="outlined" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={t('search by doctor, specialty or disease')}
+            variant="outlined"
+          />
+        )}
       />
     </Stack>
   );

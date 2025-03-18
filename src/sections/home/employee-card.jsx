@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Card, Stack, Dialog, Rating, TextField, Typography } from '@mui/material';
+import { Box, Card, Paper, Stack, Dialog, Rating, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -60,6 +60,7 @@ export default function EmployeeCard({ employee }) {
       setSelectedDate(AppointDates[0]);
     }
   }, [AppointDates, selectedDate]);
+
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     if (authenticated) {
@@ -67,7 +68,6 @@ export default function EmployeeCard({ employee }) {
     } else {
       setSignupDialog(true);
     }
-    // setTimeListItem(newValue);
   };
 
   const handleBook = async () => {
@@ -85,7 +85,6 @@ export default function EmployeeCard({ employee }) {
       setNote('');
       refetch();
     } catch (error) {
-      // error emitted in backend
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -103,136 +102,181 @@ export default function EmployeeCard({ employee }) {
     <>
       <Stack
         direction={{ lg: 'row' }}
-        gap={3}
         justifyContent="space-between"
-        padding={3}
-        sx={{ backgroundColor: 'white', borderRadius: 1 }}
+        padding={5}
+        sx={{
+          backgroundColor: '#3CB099',
+          borderRadius: 2,
+          boxShadow: 3,
+          mx: 15,
+        }}
       >
         <Stack
           direction={{ md: 'row' }}
           alignItems={{ sm: 'center', md: 'start' }}
           gap={{ md: 10 }}
         >
-          <Image
-            onClick={() =>
-              router.push(
-                paths.pages.doctor(
-                  `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
-                    / /g,
-                    '-'
-                  )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+          <Box>
+            <Paper
+              elevation={3}
+              sx={{
+                overflow: 'hidden',
+                borderRadius: 3,
+                textAlign: 'center',
+                backgroundColor: 'white',
+                position: 'relative',
+                cursor: 'pointer',
+                mb: 2,
+                width: 250,
+                minHeight: 200,
+              }}
+              onClick={() =>
+                router.push(
+                  paths.pages.doctor(
+                    `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
+                      / /g,
+                      '-'
+                    )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+                  )
                 )
-              )
-            }
-            sx={{ width: 150, height: 150, cursor: 'pointer' }}
-            src={employee.employee?.picture}
-          />
-          <Stack sx={{ gap: 1 }}>
-            <Stack mb={3}>
-              <Stack direction="row" alignItems="flex-end">
+              }
+            >
+              <Image
+                src={employee?.employee?.image}
+                alt={employee.employee?.name_english}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+
+              {/* Green Overlay at the Bottom */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '80px',
+                  backgroundColor: '#2EA98D',
+                  clipPath: 'ellipse(100% 60% at center bottom)', // Curved bottom shape
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <Typography
-                  onClick={() =>
-                    router.push(
-                      paths.pages.doctor(
-                        `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
-                          / /g,
-                          '-'
-                        )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(
-                          / /g,
-                          '-'
-                        )}`
-                      )
-                    )
-                  }
-                  variant="h6"
-                  mr={5}
-                  sx={{ cursor: 'pointer' }}
+                  variant="subtitle1"
+                  sx={{ fontWeight: 'bold', color: 'white', fontSize: 18, pt: 5 }}
                 >
-                  {curLangAr ? employee?.employee?.name_arabic : employee?.employee?.name_english}
+                  {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
                 </Typography>
-                <Rating
-                  size="small"
-                  readOnly
-                  value={employee.employee?.rate}
-                  precision={0.1}
-                  max={5}
-                />
-                <Typography variant="caption" textTransform="lowercase">
-                  ({employee.employee?.rated_times}) {t('people rate')}
-                </Typography>
-              </Stack>
-              <Typography variant="body2">
-                {curLangAr
-                  ? employee?.employee?.speciality?.name_arabic
-                  : employee?.employee?.speciality?.name_english}
-              </Typography>
-              <Typography variant="body2">
-                {curLangAr
-                  ? employee?.unit_service?.name_arabic
-                  : employee?.unit_service?.name_english}
-              </Typography>
-            </Stack>
-            {employee?.fees && (
-              <Stack direction="row" gap={1} mb={2}>
-                <Typography variant="body2">{t('fees')}:</Typography>
-                {employee?.fees_after_discount ? <>
-                  <Typography sx={{
-                    textDecoration: 'line-through',
-                    textDecorationColor: 'red',
-                    textDecorationThickness: '2px',
-                  }} variant="body2">
-                    {fCurrency(employee?.fees, employee.currency?.symbol)}
-                  </Typography>
-                  <Typography variant="body2">
-                    {fCurrency(employee?.fees_after_discount, employee.currency?.symbol)}
-                  </Typography>
-                  <Typography color='primary.main' variant="caption">
-                    {t('special offer for Hakeemna users')}
-                  </Typography>
-                </> : <Typography variant="body2">
-                  {fCurrency(employee?.fees, employee.currency?.symbol)}
-                </Typography>}
-              </Stack>
-            )}
-            {employee?.unit_service?.address && (
-              <Stack direction="row" gap={1}>
-                <Typography variant="body2">{t('address')}:</Typography>
-                <Typography variant="body2">{employee?.unit_service?.address}</Typography>
-              </Stack>
-            )}
+              </Box>
+            </Paper>
             {employee?.employee?.phone && (
               <Stack direction="row" gap={1}>
-                {/* <Iconify width={16} icon='solar:phone-bold' /> */}
-                <Typography variant="body2">{t('phone number')}:</Typography>
-                <Typography variant="body2" sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>
+                <Typography sx={{ color: 'white' }} variant="body2">
+                  {t('phone number')}:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ direction: curLangAr ? 'rtl' : 'ltr', color: 'white' }}
+                >
                   {employee?.employee?.phone}
                 </Typography>
               </Stack>
             )}
             {employee?.employee?.email && (
               <Stack direction="row" gap={1}>
-                {/* <Iconify width={16} icon='ic:outline-alternate-email' /> */}
-                <Typography variant="body2">{t('email')}:</Typography>
-                <Typography variant="body2">{employee?.employee?.email}</Typography>
+                <Typography sx={{ color: 'white' }} variant="body2">
+                  {t('email')}:
+                </Typography>
+                <Typography sx={{ color: '#3C5CD2' }} variant="body2">
+                  {employee?.employee?.email}
+                </Typography>
               </Stack>
             )}
+          </Box>
+
+          <Stack sx={{ gap: 1 }}>
+            <Stack>
+              <Stack direction="row" spacing={1} sx={{ justifyContent: 'start' }}>
+                <Rating
+                  size="small"
+                  readOnly
+                  value={employee.employee?.rate}
+                  max={1}
+                  sx={{
+                    '& .MuiRating-icon': {
+                      color: '#FFD700', // Replace with the color you want
+                    },
+                  }}
+                />
+                <Typography variant="body" sx={{ color: 'white' }}>
+                  {employee.employee?.rated_times}
+                </Typography>
+              </Stack>
+              <Typography variant="body1" mb={1} sx={{ fontWeight: 500, color: 'white' }}>
+                {curLangAr
+                  ? employee?.employee?.speciality?.name_arabic
+                  : employee?.employee?.speciality?.name_english}
+              </Typography>
+              <Typography mb={1} variant="body1" color="white">
+                {curLangAr
+                  ? employee?.unit_service?.name_arabic
+                  : employee?.unit_service?.name_english}
+              </Typography>
+            </Stack>
+            {employee?.fees && (
+              <Stack gap={1} mb={2}>
+                <Stack gap={1} direction="row">
+                  <Typography color="white" variant="body2">
+                    {t('fees')}:
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      textDecoration: 'line-through',
+                      textDecorationColor: 'red',
+                      textDecorationThickness: '2px',
+                      color: 'white',
+                    }}
+                    variant="body2"
+                  >
+                    {fCurrency(employee?.fees, employee.currency?.symbol)}
+                  </Typography>
+                  {employee?.fees_after_discount && (
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>
+                      {fCurrency(employee?.fees_after_discount, employee.currency?.symbol)}
+                    </Typography>
+                  )}
+                </Stack>
+                {employee?.fees_after_discount && (
+                  <Typography color="#1F2C5C" variant="caption" sx={{ display: 'block' }}>
+                    {t('special offer for Hakeemna users')}
+                  </Typography>
+                )}
+              </Stack>
+            )}
+
             {employee?.unit_service?.insurance?.length > 0 && (
-              <Stack direction="row" gap={1}>
+              <Stack gap={1} color="white">
                 <Typography variant="body2">{t('Insurance')}:</Typography>
-                <Stack>
+                <Stack direction="row" gap={1}>
                   {employee?.unit_service?.insurance?.length > 5
                     ? employee?.unit_service?.insurance
-                      ?.filter((one, index) => index <= 5)
-                      .map((one) => (
+                        ?.filter((one, index) => index <= 5)
+                        .map((one) => (
+                          <Typography variant="body2">
+                            {curLangAr ? one.name_arabic : one.name_english}
+                          </Typography>
+                        ))
+                    : employee?.unit_service?.insurance?.map((one) => (
                         <Typography variant="body2">
                           {curLangAr ? one.name_arabic : one.name_english}
                         </Typography>
-                      ))
-                    : employee?.unit_service?.insurance?.map((one) => (
-                      <Typography variant="body2">
-                        {curLangAr ? one.name_arabic : one.name_english}
-                      </Typography>
-                    ))}
+                      ))}
                   {employee?.unit_service?.insurance?.length > 5 &&
                     `+${employee.unit_service.insurance.length - 5}`}
                 </Stack>
@@ -325,6 +369,7 @@ export default function EmployeeCard({ employee }) {
     </>
   );
 }
+
 EmployeeCard.propTypes = {
   employee: PropTypes.object,
 };

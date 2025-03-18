@@ -22,22 +22,20 @@ export default function Language() {
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
-        fontSize: 14,
-        fontWeight: 500,
-       
       }}
+      onClick={() => handleChangeLang(currentLang.value === 'en' ? 'ar' : 'en')}
     >
       {/* Globe Icon */}
-      <LanguageOutlined  onClick={() => handleChangeLang(currentLang.value === 'en' ? 'ar' : 'en')} sx={{ fontSize: 20, color: 'text.primary' }} />
+      <LanguageOutlined sx={{ fontSize: 18, color: '#1F2C5C' }} />
 
       {/* LanguageOutlined Title */}
       <Typography
-        onClick={() => handleChangeLang(currentLang.value === 'en' ? 'ar' : 'en')}
         sx={{
           ml: 1,
-          color: 'text.primary',
+          color: '#1F2C5C',
           cursor: 'pointer',
           fontWeight: 500,
+          fontSize: 15,
         }}
       >
         {currentLang.value === 'en' ? 'عربي' : 'English'}
