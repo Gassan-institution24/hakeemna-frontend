@@ -45,7 +45,7 @@ export default function BookDetails({
     <>
       <StaticDatePicker
         localeText={false}
-        sx={{ mt: { md: 0, xs: 4 } }}
+        sx={{ mt: { md: 0, xs: 4, borderRadius: 10 } }}
         orientation={mdUp ? 'landscape' : ''}
         shouldDisableDate={(day) =>
           !AppointDates.some((date) => {
@@ -71,6 +71,7 @@ export default function BookDetails({
         sx={{
           width: { md: 470 },
           px: { md: 3 },
+          
         }}
       >
         <TimeList list={list} onChange={timeListChangeHandler} value={selected} />
