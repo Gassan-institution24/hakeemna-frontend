@@ -24,19 +24,13 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetBlogs, useGetBlog_category } from 'src/api';
 
+import Iconify from 'src/components/iconify';
+
 export default function Blogs({ onPreview }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { data } = useGetBlogs({
-    populate: {
-      path: 'user',
-      select: 'role employee _id',
-      populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
-    },
-  });
-
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
   const { Data } = useGetBlog_category();
   const router = useRouter();
 
@@ -62,150 +56,191 @@ export default function Blogs({ onPreview }) {
     return formattedText;
   };
 
+  // Static data for blogs
+  const { data } = useGetBlogs({
+    populate: {
+      path: 'user',
+      select: 'role employee _id',
+      populate: { path: 'employee', select: '_id name_english name_arabic employee_engagements' },
+    },
+  });
+
   const filteredBlogs = data?.filter((blog) => {
     const matchesSearch =
       (blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.topic.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterBy ? blog.category === filterBy : true);
-    let filterMyBlogs = true
+    let filterMyBlogs = true;
     if (myBlogs) {
-      filterMyBlogs = blog.user?._id === user?._id
+      filterMyBlogs = blog.user?._id === user?._id;
     }
     return matchesSearch && filterMyBlogs;
   });
 
   return (
-    <Stack
-      sx={{ p: { xs: 2, md: 5 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      <Card sx={{ width: { xs: '100%', md: '90%' }, mx: 'auto' }}>
-        <Box sx={{ p: { xs: 2, md: 5 }, textAlign: 'start' }}>
-          <Typography
-            variant="h2"
-            component="h2"
-            sx={{ mb: { xs: 5, md: 10 }, textAlign: 'center' }}
-          >
-            {t('hakeemna medical blog')}
-          </Typography>
+    <Box sx={{ py: { xs: 2, md: 4 }, px: { xs: 2, md: 30 }, textAlign: 'start' }}>
+      <Typography variant="h2" component="h2" sx={{ mb: { xs: 5, md: 10 }, textAlign: 'center' }}>
+        {t('hakeemna medical blog')}
+      </Typography>
 
-          {/* Search and filter section */}
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, mb: 5 }}>
-            <TextField
-              label={t('Search')}
-              variant="outlined"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              sx={{ width: { xs: '100%', md: '25%' }, mr: { md: 3 }, mb: { xs: 2, md: 0 } }}
-            />
-            <TextField
-              select
-              label={t('Filter by category')}
-              value={filterBy}
-              onChange={(e) => setFilterBy(e.target.value)}
-              sx={{ width: { xs: '100%', md: '25%' } }}
+      {/* Search and filter section */}
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, mb: 5 }}>
+        <TextField
+          label={t('Search')}
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ width: { xs: '100%', md: '100%' }, mr: { md: 3 }, mb: { xs: 2, md: 0 } }}
+        />
+        <TextField
+          select
+          label={t('Filter by category')}
+          value={filterBy}
+          onChange={(e) => setFilterBy(e.target.value)}
+          sx={{ width: { xs: '100%', md: '100%' } }}
+        >
+          <MenuItem value="">{t('All categories')}</MenuItem>
+          {Data?.map((category, index) => (
+            <MenuItem key={index} value={category?._id}>
+              {category?.[t('name_english')]}
+            </MenuItem>
+          ))}
+        </TextField>
+        {user?._id && data?.some((one) => one.user?._id === user?._id) && (
+          <Stack ml={5} direction="row" alignItems="center">
+            <Checkbox checked={myBlogs} onClick={() => setMyBlogs(!myBlogs)} />
+            <Typography>{t('my blogs')}</Typography>
+          </Stack>
+        )}
+      </Box>
+
+      {/* Blog Cards */}
+      <Grid container spacing={2}>
+        {filteredBlogs?.map((blog, index) => (
+          <Grid key={index} item xs={12} sm={6} md={6} lg={6}>
+            <Card
+              sx={{
+                position: 'relative',
+                overflow: 'hidden',
+                height: '250px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                borderRight: '5px solid #3CB099',
+                borderRadius: '15px',
+              }}
             >
-              <MenuItem value="">{t('All categories')}</MenuItem>
-              {Data?.map((category, index) => (
-                <MenuItem key={index} value={category?._id}>
-                  {category?.[t('name_english')]}
-                </MenuItem>
-              ))}
-            </TextField>
-            {user?._id && data?.some((one) => one.user?._id === user?._id) &&
-              <Stack ml={5} direction='row' alignItems='center'>
-                <Checkbox checked={myBlogs} onClick={() => setMyBlogs(!myBlogs)} />
-                <Typography>{t('my blogs')}</Typography>
-              </Stack>}
-          </Box>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ color: '#3CB099', fontWeight: 'bold', mb: 1 }}>
+                  {blog.title}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'gray' }}>
+                  {fDateAndTime(blog.created_at)} dsfsdfsfd
+                </Typography>
+                <Typography
+                  dangerouslySetInnerHTML={{
+                    __html: formatTextWithLineBreaks(blog.topic),
+                  }}
+                  sx={{ mt: 1 }}
+                />
 
-          {/* Blog Cards */}
-          <Grid
-            container
-            spacing={3}
-            sx={{
-              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
-              justifyContent: 'center',
-            }}
-          >
-            {filteredBlogs?.map((blog, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card
+                <Stack sx={{ position: 'absolute', bottom: 60 }}>
+                  {blog?.user?.role === 'superadmin' ? (
+                    <Typography
+                      sx={{ color: '#3CB099' }}
+                      href={paths.pages.doctor(
+                        `${
+                          blog?.user?.employee?.employee_engagements[0]
+                        }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
+                      )}
+                    >
+                      {curLangAr ? 'حكيمنا ٣٦٠' : ' hakeemna 360'}
+                    </Typography>
+                  ) : (
+                    <Link
+                      sx={{ color: 'gray' }}
+                      href={paths.pages.doctor(
+                        `${
+                          blog?.user?.employee?.employee_engagements[0]
+                        }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
+                      )}
+                    >
+                      {blog.user?.employee?.name_english}
+                    </Link>
+                  )}
+                </Stack>
+              </Box>
+
+              <Stack direction="row" sx={{ alignSelf: 'end', mb: 2, mr: 2 }}>
+                <Button
+                  size="large"
+                  onClick={() => {
+                    if (onPreview) {
+                      onPreview(blog?._id);
+                    } else {
+                      router.push(
+                        `${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(
+                          / /g,
+                          '-'
+                        )}}&writer=${
+                          blog?.user?.role === 'superadmin'
+                            ? 'hakeemna 360'
+                            : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')
+                        }`
+                      );
+                    }
+                  }}
+                  id="About"
                   sx={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    height: '280px',
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderRadius: '5px',
+                    bgcolor: 'transparent',
+                    padding: 0,
+                    overflow: 'hidden',
+                    boxShadow: 'none',
                   }}
                 >
-                  <Box sx={{ p: 2 }}>
-                    {blog?.user?.role === 'superadmin' ? (
-                      <Typography
-                        sx={{ color: 'gray' }}
-                        href={paths.pages.doctor(
-                          `${blog?.user?.employee?.employee_engagements[0]
-                          }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
-                        )}
-                      >
-                        {curLangAr ? 'حكيمنا ٣٦٠' : ' hakeemna 360'}
-                        {/* here */}
-                      </Typography>
-                    ) : (
-                      <Link
-                        sx={{ color: 'gray' }}
-                        href={paths.pages.doctor(
-                          `${blog?.user?.employee?.employee_engagements[0]
-                          }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
-                        )}
-                      >
-                        {blog.user?.employee?.name_english}
-                        {/* here */}
-                      </Link>
-                    )}
-
-                    <Typography sx={{ color: 'gray', fontWeight: 'bold', mt: 1 }}>
-                      {blog.title}
-                    </Typography>
-                    <Typography
-                      variant='caption'
-                      dangerouslySetInnerHTML={{
-                        __html: formatTextWithLineBreaks(blog.topic),
-                      }}
-                      sx={{ mt: 1 }}
-                    />
-                    <Typography sx={{ color: 'gray', mt: 2 }}>
-                      {fDateAndTime(blog.created_at)}
-                    </Typography>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    sx={{ bgcolor: 'success.main', mx: 2, mb: 2 }}
-                    onClick={() => {
-                      if (onPreview) {
-                        onPreview(blog?._id);
-                      } else {
-                        router.push(`${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(/ /g, '-')}}&writer=${blog?.user?.role === 'superadmin' ? 'hakeemna 360' : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')}`)
-                      }
-                    }
-                    }
+                  <div
+                    style={{
+                      backgroundColor: 'white',
+                      color: '#1F2C5C',
+                      fontWeight: 'bold',
+                      padding: '6px 12px',
+                      fontSize: '16px',
+                    }}
                   >
-                    {t('View')}
-                  </Button>
-                </Card>
-              </Grid>
-            ))}
+                    {t('Read more')}
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#1F2C5C',
+                      padding: '6px 8px',
+                    }}
+                  >
+                    {curLangAr ? (
+                      <Iconify icon="icon-park-outline:left" width={24} sx={{ color: 'white' }} />
+                    ) : (
+                      <Iconify
+                        icon="eva:arrow-ios-forward-fill"
+                        width={24}
+                        sx={{ color: 'white' }}
+                      />
+                    )}
+                  </div>
+                </Button>
+              </Stack>
+            </Card>
           </Grid>
-
-          {/* Load More Button */}
-          <Stack alignItems="center" sx={{ mt: 8, mb: { xs: 10, md: 15 } }}>
-            {/* Placeholder for Load More button if needed */}
-          </Stack>
-        </Box>
-      </Card>
-    </Stack>
+        ))}
+      </Grid>
+    </Box>
   );
 }
+
 Blogs.propTypes = {
   onPreview: PropTypes.func,
 };
