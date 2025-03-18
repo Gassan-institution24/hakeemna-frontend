@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-
 import { Stack, TextField, Autocomplete } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetKeywords,
@@ -16,9 +13,6 @@ import {
   useGetCountryCities,
   useGetActiveInsuranceCos,
 } from 'src/api';
-
-// import { SelectWithSearch } from 'src/components/input-components/select-with-search';
-// import Iconify from 'src/components/iconify';
 import { useDebounce } from 'src/hooks/use-debounce';
 
 export default function BookToolbar({ filters, filterChange }) {
@@ -39,9 +33,6 @@ export default function BookToolbar({ filters, filterChange }) {
     setSearch({ ...search, [name]: value });
   };
 
-  // const countrySearch = useDebounce(search.country)
-  // const citySearch = useDebounce(search.city)
-  // const insuranceSearch = useDebounce(search.insurance)
   const usTypeSearch = useDebounce(search.usType);
   const nameSearch = useDebounce(search.name);
 
@@ -63,149 +54,87 @@ export default function BookToolbar({ filters, filterChange }) {
     name: nameSearch,
   });
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#ffffff',
-      },
-      // background: {
-      //     paper: '#ffffff',
-      //     default: '#ffffff',
-      // },
-      text: {
-        primary: '#ffffff',
-        secondary: '#ffffff',
-      },
-    },
-  });
-
   return (
     <Stack
-      direction={{ md: 'row' }}
-      justifyContent="space-around"
+      direction="row"
+      justifyContent="center"
       alignItems="center"
-      gap={3}
-      px={5}
-      py={3}
-      bgcolor="primary.darker"
-      sx={{ backgroundColor: 'primary.darker' }}
-      color="white"
-      position={{ md: 'sticky' }}
-      top={112}
-      zIndex={3}
+      spacing={1}
+      px={8}
+      py={2}
+      sx={{
+        backgroundColor: '#E4F6F2',
+        borderRadius: 1,
+        display: { xs: 'grid', md: 'flex' },
+      }}
     >
-      <ThemeProvider theme={darkTheme}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Autocomplete
-            size="small"
-            sx={{ minWidth: 200, flex: 1 }}
-            options={unitserviceTypesData}
-            onChange={(event, newValue) => filterChange('US_type', newValue?._id)}
-            getOptionLabel={(option) => (curLangAr ? option?.name_arabic : option?.name_english)}
-            onInputChange={(event, newInputValue) => {
-              setSearch(newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('unit of service type')} variant="outlined" />
-            )}
+      <Autocomplete
+        size="small"
+        sx={{ minWidth: 180 }}
+        options={unitserviceTypesData}
+        onChange={(event, newValue) => filterChange('US_type', newValue?._id)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => (
+          <TextField {...params} label={t('unit of service type')} variant="outlined" />
+        )}
+      />
+      <Autocomplete
+        size="small"
+        sx={{ minWidth: 150 }}
+        options={countriesData}
+        onChange={(event, newValue) => filterChange(`country`, newValue?._id)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => <TextField {...params} label={t('country')} variant="outlined" />}
+      />
+      <Autocomplete
+        size="small"
+        sx={{ minWidth: 150 }}
+        options={tableData}
+        onChange={(event, newValue) => filterChange(`city`, newValue?._id)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => <TextField {...params} label={t('city')} variant="outlined" />}
+      />
+      <Autocomplete
+        size="small"
+        sx={{ minWidth: 180 }}
+        options={insuranseCosData}
+        onChange={(event, newValue) => filterChange(`insurance`, newValue?._id)}
+        getOptionLabel={(option) =>
+          typeof option === 'object' && curLangAr ? option.name_arabic : option.name_english
+        }
+        renderInput={(params) => (
+          <TextField {...params} label={t('insurance company')} variant="outlined" />
+        )}
+      />
+      <Autocomplete
+        size="small"
+        sx={{ minWidth: 300, flex: 3 }}
+        options={[...specialtiesData, ...employeesData, ...keywordsData]}
+        onChange={(event, newValue) => {
+          filterChange('name', newValue?._id || newValue);
+        }}
+        getOptionLabel={(option) => {
+          if (typeof option === 'string') return option;
+          return curLangAr ? option.name_arabic : option.name_english;
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={t('search by doctor, specialty or disease')}
+            variant="outlined"
           />
-          {/* <SelectWithSearch
-            sx={{ flex: 1 }}
-            filters={filters}
-            name="US_type"
-            label={t('select a unit of service type')}
-            onChange={(e) => filterChange('US_type', e)}
-            options={unitserviceTypesData}
-            /> */}
-          <Autocomplete
-            size="small"
-            sx={{ minWidth: 200, flex: 1 }}
-            options={countriesData}
-            onChange={(event, newValue) => filterChange(`country`, newValue?._id)}
-            getOptionLabel={(option) => (curLangAr ? option?.name_arabic : option?.name_english)}
-            onInputChange={(event, newInputValue) => {
-              changeSearch('country', newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('country')} variant="outlined" />
-            )}
-          />
-          <Autocomplete
-            size="small"
-            sx={{ minWidth: 200, flex: 1 }}
-            options={tableData}
-            onChange={(event, newValue) => filterChange(`city`, newValue?._id)}
-            getOptionLabel={(option) => (curLangAr ? option?.name_arabic : option?.name_english)}
-            onInputChange={(event, newInputValue) => {
-              changeSearch('city', newInputValue);
-            }}
-            renderInput={(params) => <TextField {...params} label={t('city')} variant="outlined" />}
-          />
-          <Autocomplete
-            size="small"
-            sx={{ minWidth: 200, flex: 1 }}
-            options={insuranseCosData}
-            onChange={(event, newValue) => filterChange(`insurance`, newValue?._id)}
-            getOptionLabel={(option) => (curLangAr ? option?.name_arabic : option?.name_english)}
-            onInputChange={(event, newInputValue) => {
-              changeSearch('insurance', newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('insurance company')} variant="outlined" />
-            )}
-          />
-          <Autocomplete
-            size="small"
-            sx={{ minWidth: 300, flex: 3 }}
-            options={[...specialtiesData, ...employeesData, ...keywordsData]}
-            onChange={(event, newValue) => {
-              if (newValue?._id) {
-                filterChange('name', newValue._id);
-              } else {
-                filterChange('name', newValue);
-              }
-            }}
-            getOptionLabel={(option) => {
-              if (option && typeof option === 'object') {
-                return curLangAr ? option?.name_arabic : option?.name_english;
-              }
-              return option;
-            }}
-            onInputChange={(event, newInputValue) => {
-              changeSearch('name', newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('search by doctor, specialty or disease')}
-                variant="outlined"
-              />
-            )}
-          />
-          {/* <TextField
-            size='small'
-            sx={{ flex: 2, maxWidth: 1200 }}
-            fullWidth
-            onChange={(e) => filterChange('name', e.target.value)}
-            placeholder={t('search by doctor, specialty or disease')}
-            InputLabelProps={{
-              style: { color: 'white' },
-            }}
-            InputProps={{
-              style: { color: 'white' },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                </InputAdornment>
-              ),
-            }}
-          /> */}
-        </LocalizationProvider>
-      </ThemeProvider>
+        )}
+      />
     </Stack>
   );
 }
+
 BookToolbar.propTypes = {
   filters: PropTypes.object,
   filterChange: PropTypes.func,
