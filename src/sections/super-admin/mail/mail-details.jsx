@@ -20,8 +20,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
-import Editor from 'src/components/editor';
 import Iconify from 'src/components/iconify';
+import { Editor } from 'src/components/editor';
 import Markdown from 'src/components/markdown';
 import Scrollbar from 'src/components/scrollbar';
 import TextMaxLine from 'src/components/text-max-line';
