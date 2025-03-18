@@ -67,9 +67,11 @@ export default function WhoAreWe() {
   // Dialog state for displaying full description
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState('');
+  const [dialogTitle, setDialogTitle] = useState('');
 
-  const handleDialogOpen = (description) => {
+  const handleDialogOpen = (description,title) => {
     setDialogContent(description);
+    setDialogTitle(title);
     setOpenDialog(true);
   };
 
@@ -119,15 +121,17 @@ export default function WhoAreWe() {
       <Box sx={{ flexGrow: 1, mt: 5 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
           {CARDS.map((card, index) => (
-            <Grid item xs={2} sm={4} md={4} key={index} >
+            <Grid item xs={2} sm={4} md={4} key={index}>
               <Item>
-                <Typography variant="h5" sx={{ mb: 2 }}>{card.title}</Typography>
+                <Typography variant="h5" sx={{ mb: 2 }}>
+                  {card.title}
+                </Typography>
                 <Typography>
                   {card.description.length > 90 ? (
                     <>
                       {card.description.slice(0, 90)}...
                       <Button
-                        onClick={() => handleDialogOpen(card.description)}
+                        onClick={() => handleDialogOpen(card.description,card.title)}
                         sx={{ textTransform: 'none', ml: 1, color: '#3CB099' }}
                       >
                         {t('Read More')}
@@ -145,11 +149,11 @@ export default function WhoAreWe() {
 
       {/* Dialog for full description */}
       <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>{t('Description')}</DialogTitle>
-        <DialogContent>{dialogContent}</DialogContent>
+        <DialogTitle>{t(dialogTitle)}</DialogTitle>
+        <DialogContent>{t(dialogContent)}</DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} color="primary">
-            {t('Close')}
+            {t('close')}
           </Button>
         </DialogActions>
       </Dialog>

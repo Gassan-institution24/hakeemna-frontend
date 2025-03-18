@@ -48,9 +48,20 @@ export default function ViewBlog({ data }) {
 
   return (
     <Stack
-      sx={{ p: { xs: 3, md: 5 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      sx={{
+        p: { xs: 3, md: 5 },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <Card sx={{ width: { xs: '100%', md: '80%', lg: '70%' }, p: { xs: 2, md: 5 } }}>
+      <Card
+        sx={{
+          width: { xs: '100%', md: '80%', lg: '70%' },
+          bgcolor: '#E4F6F2',
+          p: { xs: 2, md: 5 },
+        }}
+      >
         <Box dir="ltr" sx={{ textAlign: 'start', direction: 'ltr' }}>
           <Typography
             variant="h2"
