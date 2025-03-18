@@ -15,8 +15,8 @@ import Typography from '@mui/material/Typography';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import Editor from 'src/components/editor';
 import Iconify from 'src/components/iconify';
+import { Editor } from 'src/components/editor';
 
 // ----------------------------------------------------------------------
 

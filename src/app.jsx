@@ -6,6 +6,7 @@ import 'src/locales/i18n';
 
 // ----------------------------------------------------------------------
 // import React, { useEffect } from 'react';
+import { Buffer } from 'buffer';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import ProgressBar from 'src/components/progress-bar';
@@ -17,6 +18,9 @@ import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 import { CheckoutProvider } from './sections/unit-service/checkout/context';
 import { WebRTCProvider } from './components/vedio-call/web-rtc-provider';
+
+window.Buffer = Buffer; 
+
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';

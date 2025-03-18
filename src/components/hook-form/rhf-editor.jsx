@@ -7,7 +7,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import { useLocales } from 'src/locales';
 
-import Editor from '../editor';
+import {Editor} from '../editor';
 
 // ----------------------------------------------------------------------
 
