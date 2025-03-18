@@ -30,15 +30,16 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
             width: '8px',
           },
           '&::-webkit-scrollbar-track': {
-            background: 'none',
+            background: 'white',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: '#888',
+            background: 'white',
             borderRadius: '4px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: '#555',
+            background: 'white',
           },
+          gap: 1,
         }}
       >
         {list.map((time) => (
@@ -47,13 +48,14 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
             sx={{
               width: 100,
               '&:hover': {
-                backgroundColor: value === time._id ? 'primary.main' : 'hoverColor',
-                color: value === time._id ? 'white' : 'hoverTextColor',
+                bgcolor: 'white',
+                color: 'primary.main',
               },
               fontWeight: value === time._id ? 600 : 500,
               backgroundColor: value === time._id ? 'primary.main' : '',
               color: value === time._id ? 'white' : '',
-              borderRadius: 0,
+              borderRadius: 2,
+              bgcolor: 'white',
             }}
             onClick={() => {
               onChange(time._id);

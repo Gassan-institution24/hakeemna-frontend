@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
-
 import NavList from './nav-list';
+
 
 // ----------------------------------------------------------------------
 
