@@ -13,6 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
+import Iconify from 'src/components/iconify';
 
 export default function OurPartners() {
   const { t } = useTranslate();
@@ -23,33 +24,6 @@ export default function OurPartners() {
     rowPerPage: 4,
   });
   const router = useRouter();
-
-  const testdata = [
-    {
-      name_english: 'name_english',
-      name_arabic: 'name_arabic',
-      company_logo:
-        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
-    },
-    {
-      name_english: 'name_english',
-      name_arabic: 'name_arabic',
-      company_logo:
-        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
-    },
-    {
-      name_english: 'name_english',
-      name_arabic: 'name_arabic',
-      company_logo:
-        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
-    },
-    {
-      name_english: 'name_english',
-      name_arabic: 'name_arabic',
-      company_logo:
-        'https://img.pikbest.com/png-images/20241019/doctor-logo-vector-icon-illustration_10974092.png!bw700',
-    },
-  ];
 
   return (
     <Box
@@ -73,13 +47,13 @@ export default function OurPartners() {
                 fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               }}
             >
-              {t('Our Partners')}
+              {t('our partners')}
             </Typography>
           </m.div>
         </Stack>
 
         <Grid container spacing={5} justifyContent="center">
-          {testdata.map((partner, index) => (
+          {unitservicesData.map((partner, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Paper
                 elevation={3}
@@ -119,7 +93,7 @@ export default function OurPartners() {
                 >
                   <Typography
                     variant="subtitle1"
-                    sx={{ fontWeight: 'bold', color: 'white', fontSize: 18,pt:5 }}
+                    sx={{ fontWeight: 'bold', color: 'white', fontSize: 18, pt: 5 }}
                   >
                     {curLangAr ? partner.name_arabic : partner.name_english}
                   </Typography>
@@ -143,7 +117,7 @@ export default function OurPartners() {
               boxShadow: 'none',
               '&:hover': {
                 bgcolor: 'inherit',
-              }, 
+              },
             }}
           >
             <div
@@ -166,7 +140,11 @@ export default function OurPartners() {
                 padding: '10px 12px',
               }}
             >
-              <ArrowForwardIosIcon sx={{ color: 'white', fontSize: '20px' }} />
+              {curLangAr ? (
+                <Iconify icon="icon-park-outline:left" width={24} sx={{ color: 'white' }} />
+              ) : (
+                <Iconify icon="eva:arrow-ios-forward-fill" width={24} sx={{ color: 'white' }} />
+              )}
             </div>
           </Button>
         </Stack>

@@ -13,7 +13,7 @@ import { useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
 
-import footerPic from './footer.svg';
+import footerPic from './Rectangle.png';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +25,7 @@ const LINKS = [
       { name: 'about us', href: paths.pages.About },
       { name: 'beneficiaries', href: paths.pages.patients },
       { name: 'units of service', href: paths.pages.unit },
+      { name: 'blogs', href: paths.pages.blogs },
       { name: 'Training', href: paths.pages.Training },
       { name: 'FAQ', href: paths.pages.Faq },
     ],
@@ -38,7 +39,10 @@ const LINKS = [
   },
   {
     headline: 'contact',
-    children: [{ name: 'info@hakeemna.com', href: 'mailto:info@hakeemna.com' }],
+    children: [
+      { name: 'info@hakeemna.com', href: 'mailto:info@hakeemna.com' },
+      { name: '+962780830087', href: 'tel:+962780830087' },
+    ],
   },
 ];
 
@@ -61,16 +65,32 @@ export default function Footer() {
         alignItems: 'center',
       }}
     >
-      <Container sx={{ pt: 5, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
+      <Container sx={{ pt: 20, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
         <Grid container justifyContent={{ xs: 'center', md: 'space-between' }} alignItems="center">
           <Grid xs={12} md={4}>
-            <Logo sx={{ mb: 3, width: 170, height: 150 }} />
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 80,
+                left: 250,
+                width: 300,
+                height: '82%',
+                background: 'linear-gradient(100deg,rgba(60, 176, 153, 0.89) , #F4F9F9 ,rgba(60, 176, 153, 0.89)  )',
+                filter: 'blur(15px) brightness(1)',
+                transform: 'skewX(17deg)',
+                zIndex: 0, // Ensures the box stays behind
+                borderRadius: 10,
+              }}
+            />
+            <Logo sx={{ mb: 3, width: 170, height: 150, position: 'relative', zIndex: 1 }} />
             <Typography
               variant="body1"
               sx={{
                 mx: { xs: 'auto', md: 'unset' },
                 color: '#1F2C5C',
                 fontWeight: 700,
+                position: 'relative',
+                zIndex: 1, // Keeps the text above the background
               }}
             >
               {t('Electronic innovation for a healthier future')}
@@ -100,7 +120,7 @@ export default function Footer() {
                       textTransform="lowercase"
                       sx={{
                         '&:hover': {
-                          color:"white",
+                          color: 'white',
                           textDecoration: 'none',
                         },
                       }}

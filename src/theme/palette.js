@@ -121,7 +121,7 @@ export function palette(mode) {
     },
     background: {
       paper: '#FFFFFF',
-      default: grey[100],
+      default: '#FFFFFF',
       neutral: grey[200],
       lightgray: grey[300],
     },

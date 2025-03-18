@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
-import { Link, Button, Divider, Typography, Menu, MenuItem, IconButton } from '@mui/material';
+
+import { ExpandMore } from '@mui/icons-material';
+import { Box, Menu, Link, Stack, Button, AppBar, Toolbar, Divider, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { ExpandMore } from '@mui/icons-material';
+
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -25,7 +22,7 @@ import Language from '../common/language-home-page';
 
 export default function Header() {
   const mdUp = useResponsive('up', 'lg');
-  const smDown = useResponsive('down', 'sm'); // Added for small devices
+  const smDown = useResponsive('down', 'sm');
   const { t } = useTranslate();
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,106 +37,127 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: 'transparent', boxShadow: 'none' }}>
+    <AppBar position="sticky" sx={{ bgcolor: 'white', boxShadow: 'none' }}>
       {/* Top bar with contact information */}
       <Box
         sx={{
           bgcolor: 'white',
-          py: 1,
+          py: 2,
           px: { xs: 2, sm: 5, md: 10 },
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexDirection: smDown ? 'column' : 'row',
-          borderBottom: '1px solid #3CB099', // Changed to gray for divider
+          borderBottom: '1px solid rgba(60, 176, 153, 0.26)',
         }}
       >
+        {/* Left Section */}
         <Stack
           direction="row"
           spacing={1}
-          sx={{
-            justifyContent: smDown ? 'center' : 'flex-start',
-            mt: smDown ? 2 : 0,
-          }}
+          sx={{ justifyContent: smDown ? 'center' : 'flex-start', mb: smDown ? 2 : 0 }}
         >
-          {/* Language dropdown */}
           <Language />
-          {/* Booking link */}
-          <Divider orientation="vertical" sx={{ borderColor: 'gray', height: 20 }} /> {/* Vertical gray divider */}
-          <Link href={paths.booking} sx={{ textDecoration: 'none', color: '#1F2C5C' }}>
+          <Divider orientation="vertical" flexItem />
+          <Link
+            href={paths.pages.book}
+            sx={{ textDecoration: 'none', color: '#1F2C5C', fontWeight: 500, fontSize: 15 }}
+          >
             {t('book appointments now')}
           </Link>
         </Stack>
-        <Stack dir="ltr" direction="row" spacing={1} sx={{ flexWrap: smDown ? 'wrap' : 'nowrap' }}>
+
+        {/* Right Section */}
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
           <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />
-          <Typography dir="ltr" variant="subtitle2" sx={{ fontSize: 13, fontWeight: 500, color: '#1F2C5C' }}>
+          <Link
+            href="tel:+962780830087"
+            sx={{ fontSize: 13, fontWeight: 500, color: '#1F2C5C', textDecoration: 'none' }}
+          >
             +962 780830087
-          </Typography>
+          </Link>
           <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />
-          <Typography
-            variant="subtitle2"
-            sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', color: '#1F2C5C' }}
+          <Link
+            href="mailto:info@hakeemna.com"
+            sx={{ fontSize: 13, fontWeight: 500, color: '#1F2C5C', textDecoration: 'none' }}
           >
             info@hakeemna.com
-          </Typography>
+          </Link>
         </Stack>
       </Box>
 
-      {/* Main header section */}
-      <Toolbar sx={{ bgcolor: 'white' }}>
-        {/* Logo - Aligned left */}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Logo sx={{ width: { xs: 100, sm: 120, md: 100 }, height: 'auto' }} />
-        </Box>
+      {/* Main Header */}
+      <Toolbar
+        sx={{
+          bgcolor: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: { xs: 2, md: 5 },
+        }}
+      >
+        {/* Logo */}
+        <Logo sx={{ width: { xs: 100, sm: 120, md: 110 }, height: 'auto' }} />
 
-        <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {/* Desktop Navigation */}
-          {mdUp && (
-            <Stack component="nav" direction="row" spacing={4} sx={{ ml: 20 }}>
-              <NavDesktop data={navConfig} />{' '}
-            </Stack>
-          )}
+        {/* Desktop Navigation */}
+        {mdUp && (
+          <Stack
+            component="nav"
+            direction="row"
+            spacing={4}
+            sx={{ flexGrow: 1, justifyContent: 'center', color: '#1F2C5C' }}
+          >
+            <NavDesktop data={navConfig} />
+          </Stack>
+        )}
 
-          {/* Right Section */}
-          <Stack direction="row" spacing={2} sx={{ ml: 'auto', alignItems: 'center' }}>
+        {/* Right Section (Signup/Login) */}
+        {!smDown && (
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center', ml: 'auto' }}>
             {/* Sign Up Dropdown */}
             <Button
               aria-controls={open ? 'signup-menu' : undefined}
               aria-haspopup="true"
               onClick={handleClick}
-              sx={{ py: 0.2, px: 1.5, display: 'flex', alignItems: 'center' }}
+              sx={{ color: '#1F2C5C', display: 'flex', alignItems: 'center' }}
             >
-              {t('إنشاء حساب')}
-              <IconButton size="small" sx={{ ml: 1 }}>
-                <ExpandMore />
-              </IconButton>
+              {t('sign up')}
+              <ExpandMore sx={{ ml: 0.5 }} />
             </Button>
             <Menu id="signup-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
               <MenuItem onClick={handleClose}>
-                <Link href={paths.auth.registersu} sx={{ textDecoration: 'none' }}>
-                  {t('انضم كوحدة خدمة')}
+                <Link
+                  href={paths.auth.registersu}
+                  sx={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {t('join as unit of service')}
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link href={paths.auth.stakeholderRegister} sx={{ textDecoration: 'none' }}>
-                  {t('انضم كمورد')}
+                <Link
+                  href={paths.auth.stakeholderRegister}
+                  sx={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {t('join as supplier')}
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link href={paths.auth.register} sx={{ textDecoration: 'none' }}>
-                  {t('انضم كمستخدم')}
+                <Link href={paths.auth.register} sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  {t('join as user')}
                 </Link>
               </MenuItem>
             </Menu>
 
-            {/* Login Link */}
-            <Link href={paths.auth.login} sx={{ py: 0.2, px: 1.5, color: '#1F2C5C' }}>
-              {t('تسجيل الدخول')}
+            <Link
+              href={paths.auth.login}
+              sx={{ textDecoration: 'none', color: '#1F2C5C', fontWeight: 500 }}
+            >
+              {t('login')}
             </Link>
           </Stack>
-          {/* Mobile Navigation */}
-          {!mdUp && <NavMobile data={navConfig} />}
-        </Container>
+        )}
+
+        {/* Mobile Navigation */}
+        {!mdUp && <NavMobile data={navConfig} />}
       </Toolbar>
 
       {offsetTop && <HeaderShadow />}
