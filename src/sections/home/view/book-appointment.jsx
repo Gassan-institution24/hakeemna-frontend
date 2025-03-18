@@ -32,7 +32,6 @@ export default function BookAppointment() {
     name: filters.name,
     page,
   });
-
   useEffect(() => {
     if (employeesData) {
       setEmployees((prevEmployees) => [...prevEmployees, ...employeesData]);
@@ -65,7 +64,7 @@ export default function BookAppointment() {
       <BookToolbar filters={filters} filterChange={filterChange} />
       <Stack m={4} gap={2}>
         {employees.map((one, index) => (
-          <EmployeeCard employee={one} key={index} />
+          <EmployeeCard key={index} employee={one} />
         ))}
       </Stack>
       {!loading && employeesData.length > 0 && hasMore && <div ref={loadMoreRef} />}

@@ -1,8 +1,8 @@
-import { Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 export default function TermsAndCondition() {
   return (
-    <Container>
+    <Box sx={{ bgcolor: '#E4F6F2', my: 10, p: 5, mx: 50, borderRadius: 3, color: '#1F2C5C' }}>
       <ul>
         <Typography variant="h3" gutterBottom sx={{ mt: 4 }}>
           Terms and Conditions of Use (For Medical Service Beneficiaries)
@@ -282,6 +282,6 @@ export default function TermsAndCondition() {
           </Typography>
         </li>
       </ul>
-    </Container>
+    </Box>
   );
 }

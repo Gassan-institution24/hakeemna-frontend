@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 
 import { RouterLink } from 'src/routes/components';
 
+import LogoImg from './3.svg';
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -16,13 +17,15 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       sx={{
         width: { xs: 1, md: 1 },
         height: { xs: 1, md: 1 },
-        p: { xs: 0, md: 2 },
+        // p: { xs: 0, md: 2 },
         display: 'inline-flex',
         ...sx,
       }}
       {...other}
     >
-      <img decoding="async" loading="lazy" src="/logo/doc.webp" alt="logo" />
+      <img decoding="async" loading="lazy" src={LogoImg} alt="hakeemna" />
+
+      {/* <img decoding="async" loading="lazy" src="/logo/doc.webp" alt="logo" /> */}
     </Box>
   );
 
