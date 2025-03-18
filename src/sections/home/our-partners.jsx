@@ -2,7 +2,6 @@ import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Grid, Paper, Stack, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -12,8 +11,8 @@ import { useGetActiveUnitservices } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import { varFade, MotionViewport } from 'src/components/animate';
 import Iconify from 'src/components/iconify';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function OurPartners() {
   const { t } = useTranslate();

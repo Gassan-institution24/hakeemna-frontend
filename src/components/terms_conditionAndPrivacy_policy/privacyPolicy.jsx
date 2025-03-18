@@ -1,4 +1,4 @@
-import { Stack, Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 export default function Privacypolicy() {
   return (
