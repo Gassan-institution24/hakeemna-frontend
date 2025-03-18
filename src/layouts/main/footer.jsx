@@ -1,11 +1,9 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import { alpha, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -14,7 +12,8 @@ import { RouterLink } from 'src/routes/components';
 import { useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
-import Iconify from 'src/components/iconify';
+
+import footerPic from './Rectangle.png';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +25,7 @@ const LINKS = [
       { name: 'about us', href: paths.pages.About },
       { name: 'beneficiaries', href: paths.pages.patients },
       { name: 'units of service', href: paths.pages.unit },
+      { name: 'blogs', href: paths.pages.blogs },
       { name: 'Training', href: paths.pages.Training },
       { name: 'FAQ', href: paths.pages.Faq },
     ],
@@ -39,135 +39,67 @@ const LINKS = [
   },
   {
     headline: 'contact',
-    children: [{ name: 'info@hakeemna.com', href: 'mailto:info@hakeemna.com' }],
+    children: [
+      { name: 'info@hakeemna.com', href: 'mailto:info@hakeemna.com' },
+      { name: '+962780830087', href: 'tel:+962780830087' },
+    ],
   },
 ];
-
-const _socials = [
-  {
-    value: 'facebook',
-    name: 'FaceBook',
-    icon: 'eva:facebook-fill',
-    color: '#1877F2',
-    path: 'https://www.facebook.com/people/Hakeemna-360/61566588266707/',
-  },
-  {
-    value: 'instagram',
-    name: 'Instagram',
-    icon: 'ant-design:instagram-filled',
-    color: '#E02D69',
-    path: 'https://www.instagram.com/hakeemna360',
-  },
-  {
-    value: 'linkedin',
-    name: 'Linkedin',
-    icon: 'eva:linkedin-fill',
-    color: '#007EBB',
-    path: 'https://www.linkedin.com/hakeemna',
-  },
-  {
-    value: 'twitter',
-    name: 'Twitter',
-    icon: 'eva:twitter-fill',
-    color: '#00AAEC',
-    path: 'https://www.twitter.com/hakeemna',
-  },
-];
-
-// ----------------------------------------------------------------------
 
 export default function Footer() {
   const pathname = usePathname();
-
   const homePage = pathname === '/';
-
   const { t } = useTranslate();
 
-  // const simpleFooter = (
-  //   <Box
-  //     component="footer"
-  //     sx={{
-  //       py: 3,
-  //       textAlign: 'center',
-  //       position: 'relative',
-  //       bgcolor: 'primary.lighter',
-  //       // color: 'white',
-  //     }}
-  //   >
-  //     <Stack direction="row" justifyContent="center" alignItems="center">
-  //       {mdUp && <Logo sx={{ width: 150, height: 75, position: 'absolute', left: 10 }} />}
-
-  //       <Typography variant="caption" component="div">
-  //         © All rights reserved
-  //         <br /> made by
-  //         <Link href="/"> Doctorna.online </Link>
-  //       </Typography>
-  //     </Stack>
-  //   </Box>
-  // );
-
-  const mainFooter = (
+  return homePage ? (
     <Box
       component="footer"
       sx={{
         position: 'relative',
-        bgcolor: 'background.neutral',
-        // color: 'white',
+        backgroundImage: `url(${footerPic})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
-      <Divider />
-
-      <Container
-        sx={{
-          pt: 5,
-          pb: 5,
-          textAlign: { xs: 'center', md: 'unset' },
-        }}
-      >
-        <Grid
-          container
-          justifyContent={{
-            xs: 'center',
-            md: 'space-between',
-          }}
-        >
-          <Grid xs={8} md={3}>
-            <Logo sx={{ mb: 3, width: 170, height: 150 }} />
-            <Typography
-              variant="body2"
+      <Container sx={{ pt: 20, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
+        <Grid container justifyContent={{ xs: 'center', md: 'space-between' }} alignItems="center">
+          <Grid xs={12} md={4}>
+            <Box
               sx={{
-                maxWidth: 270,
+                position: 'absolute',
+                top: 80,
+                left: 250,
+                width: 300,
+                height: '82%',
+                background: 'linear-gradient(100deg,rgba(60, 176, 153, 0.89) , #F4F9F9 ,rgba(60, 176, 153, 0.89)  )',
+                filter: 'blur(15px) brightness(1)',
+                transform: 'skewX(17deg)',
+                zIndex: 0, // Ensures the box stays behind
+                borderRadius: 10,
+              }}
+            />
+            <Logo sx={{ mb: 3, width: 170, height: 150, position: 'relative', zIndex: 1 }} />
+            <Typography
+              variant="body1"
+              sx={{
                 mx: { xs: 'auto', md: 'unset' },
+                color: '#1F2C5C',
+                fontWeight: 700,
+                position: 'relative',
+                zIndex: 1, // Keeps the text above the background
               }}
             >
               {t('Electronic innovation for a healthier future')}
             </Typography>
-
-            <Stack
-              direction="row"
-              justifyContent={{ xs: 'center', md: 'flex-start' }}
-              sx={{
-                mt: 3,
-                mb: { xs: 5, md: 0 },
-              }}
-            >
-              {_socials.map((social, idx) => (
-                <IconButton
-                  key={idx}
-                  sx={{
-                    '&:hover': {
-                      bgcolor: alpha(social.color, 0.08),
-                    },
-                  }}
-                >
-                  <Iconify color={social.color} icon={social.icon} />
-                </IconButton>
-              ))}
-            </Stack>
           </Grid>
 
+          {/* Links Section */}
           <Grid xs={12} md={6}>
-            <Stack spacing={5} mt={5} direction={{ xs: 'column', md: 'row' }}>
+            <Stack spacing={5} mt={{ xs: 3, md: 0 }} direction={{ xs: 'column', md: 'row' }}>
               {LINKS.map((list, index) => (
                 <Stack
                   key={index}
@@ -175,18 +107,23 @@ export default function Footer() {
                   alignItems={{ xs: 'center', md: 'flex-start' }}
                   sx={{ width: 1 }}
                 >
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h6" sx={{ color: '#1F2C5C' }}>
                     {t(list.headline)}
                   </Typography>
-
                   {list.children.map((link, idx) => (
                     <Link
                       key={idx}
                       component={RouterLink}
                       href={link.href}
-                      color="inherit"
+                      color="#1F2C5C"
                       variant="subtitle2"
                       textTransform="lowercase"
+                      sx={{
+                        '&:hover': {
+                          color: 'white',
+                          textDecoration: 'none',
+                        },
+                      }}
                     >
                       {t(link.name)}
                     </Link>
@@ -197,12 +134,14 @@ export default function Footer() {
           </Grid>
         </Grid>
 
-        <Typography variant="body2" sx={{ mt: 2, textAlign: { md: 'end', xs: 'center' } }}>
-          {t('© 2024. All rights reserved')}
+        {/* Footer Copyright */}
+        <Typography
+          variant="body1"
+          sx={{ mt: 2, textAlign: { md: 'end', xs: 'center' }, fontWeight: 600, color: 'white' }}
+        >
+          {t(`© ${new Date().getFullYear()}. All rights reserved`)}
         </Typography>
       </Container>
     </Box>
-  );
-
-  return homePage ? mainFooter : mainFooter;
+  ) : null;
 }
