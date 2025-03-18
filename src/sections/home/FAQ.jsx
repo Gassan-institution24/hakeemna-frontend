@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { enqueueSnackbar } from 'notistack';
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Box,
   Card,
-  Stack,
   Button,
   TextField,
   Accordion,
@@ -12,7 +12,9 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@mui/material';
+
 import axiosInstance from 'src/utils/axios';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 export default function FAQ() {

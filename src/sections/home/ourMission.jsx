@@ -1,21 +1,22 @@
-import { useMemo, useState } from 'react';
 import { m } from 'framer-motion';
+import { useMemo, useState } from 'react';
 
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-
-import { useLocales, useTranslate } from 'src/locales';
-import { varFade, MotionViewport } from 'src/components/animate';
-import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import { experimentalStyled as styled } from '@mui/material/styles';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function WhoAreWe() {
   const { currentLang } = useLocales();

@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { m } from 'framer-motion';
 
-import { Box, Card, Stack, Button, Container, Typography } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
+import { Box, Card, Stack, Container, Typography } from '@mui/material';
 
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 import img1 from './Group 115.png';

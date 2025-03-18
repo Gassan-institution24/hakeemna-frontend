@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
 import { Stack, TextField, Autocomplete } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+import { useDebounce } from 'src/hooks/use-debounce';
+
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetKeywords,
@@ -13,7 +15,6 @@ import {
   useGetCountryCities,
   useGetActiveInsuranceCos,
 } from 'src/api';
-import { useDebounce } from 'src/hooks/use-debounce';
 
 export default function BookToolbar({ filters, filterChange }) {
   const { country } = filters;

@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
+
 import { Box, Typography } from '@mui/material';
 import { LanguageOutlined } from '@mui/icons-material';
+
 import { useTranslate, useLocalesHome } from 'src/locales';
 
 // ----------------------------------------------------------------------
