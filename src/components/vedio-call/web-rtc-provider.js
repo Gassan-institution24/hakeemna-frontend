@@ -20,7 +20,7 @@ export const WebRTCProvider = ({ children }) => {
     const [idToCall, setIdToCall] = useState('');
     const [isMuted, setIsMuted] = useState(false);
     const [isCalling, setIsCalling] = useState(false);
-    const [isVideoOn, setIsVideoOn] = useState(true);
+    const [isVideoOn, setIsVideoOn] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -38,7 +38,6 @@ export const WebRTCProvider = ({ children }) => {
     useEffect(() => {
         if (user?._id && !peerInstance) {
             const peer = new Peer(`${user._id}-hakeemna`);
-
             peer.on('open', (id) => {
                 // eslint-disable-next-line
                 // console.log('My peer ID from open is: ' + id);
@@ -85,7 +84,10 @@ export const WebRTCProvider = ({ children }) => {
 
         // Notify the other user that call has ended
         socket.emit("endCall", { to: caller });
-
+        
+        if (callAccepted) {
+            router.replace(paths.dashboard.root);
+        }
         // Reset all states
         setCallAccepted(false);
         setReceivingCall(false);
@@ -102,33 +104,33 @@ export const WebRTCProvider = ({ children }) => {
         setStream(null)
 
         // Redirect to dashboard
-        if (callAccepted) {
-            router.replace(paths.dashboard.root);
-        }
     }, [caller, stream, screenStream, mediaRecorder, router, callAccepted]);
 
     const callUser = useCallback((id) => {
         if (!peerInstance || !stream || !socket) return;
 
+        // Make the call with PeerJS
+        const call = peerInstance.call(`${id}-hakeemna`, stream);
+        
+        if(!call) return
+        
+        call.on('stream', (remoteStream) => {
+            if (userVideo.current) {
+                userVideo.current.srcObject = remoteStream;
+            }
+        });
+        
+        call.on('close', () => {
+            endCall();
+        });
+        
         // Notify the user about the call via socket
         socket.emit("callUser", {
             userId: id,
             from: user?._id,
             userName: user?.userName
         });
-        // Make the call with PeerJS
-        const call = peerInstance.call(`${id}-hakeemna`, stream);
-
-        call?.on('stream', (remoteStream) => {
-            if (userVideo.current) {
-                userVideo.current.srcObject = remoteStream;
-            }
-        });
-
-        call.on('close', () => {
-            endCall();
-        });
-
+        
         setIsCalling(true)
 
         callRef.current = call;
@@ -150,20 +152,31 @@ export const WebRTCProvider = ({ children }) => {
     }, [callRef, stream, userVideo, caller]);
 
     const toggleMute = useCallback(() => {
-        if (stream) {
-            const audioTracks = stream.getAudioTracks();
-            if (audioTracks.length > 0) {
-                audioTracks[0].enabled = !audioTracks[0].enabled;
-                setIsMuted(!audioTracks[0].enabled);
-
-                audioTrackRef.current = audioTracks[0];
-
-                if (callRef.current && callRef.current.peerConnection) {
-                    const senders = callRef.current.peerConnection.getSenders();
-                    const audioSender = senders.find(s => s.track && s.track.kind === "audio");
-                    if (audioSender && audioSender.track) {
-                        audioSender.track.enabled = audioTracks[0].enabled;
-                    }
+        if (!stream) return;
+    
+        const audioTracks = stream.getAudioTracks();
+        if (audioTracks.length === 0) return;
+    
+        const track = audioTracks[0];
+        const currIsMuted = !track.enabled; // Invert the current state
+    
+        // Toggle the enabled state of the track
+        track.enabled = currIsMuted;
+    
+        setIsMuted(!currIsMuted); // Update the mute state in your app UI
+    
+        // If there's an active call, replace the track
+        if (callRef.current?.peerConnection) {
+            const senders = callRef.current.peerConnection.getSenders();
+            const audioSender = senders.find((s) => s.track?.kind === "audio");
+    
+            if (audioSender) {
+                if (currIsMuted) {
+                    // If unmuting, replace the track with the original audio track
+                    audioSender.replaceTrack(track);
+                } else {
+                    // If muting, replace the track with null to stop audio transmission
+                    audioSender.replaceTrack(null);
                 }
             }
         }
@@ -172,6 +185,7 @@ export const WebRTCProvider = ({ children }) => {
     const toggleVideo = useCallback(() => {
         if (stream) {
             const videoTracks = stream.getVideoTracks();
+            myVideo.current.srcObject = stream;
             if (videoTracks.length > 0) {
                 videoTracks[0].enabled = !videoTracks[0].enabled;
                 setIsVideoOn(videoTracks[0].enabled);
@@ -193,7 +207,7 @@ export const WebRTCProvider = ({ children }) => {
             try {
                 const currScreenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: true,
-                    audio: true,
+                    audio: false,
                 });
 
                 myVideo.current.srcObject = currScreenStream;
@@ -312,20 +326,20 @@ export const WebRTCProvider = ({ children }) => {
     //     }
     // }, [setMediaRecorder, setIsRecording, setRecordedChunks, stopRecording]);
 
-    useEffect(() => {
-        if (recordedChunks.length > 0) {
-            const blob = new Blob(recordedChunks, { type: "video/webm" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `${Date.now().toString().slice(0, 10)}-recording.webm`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            setRecordedChunks([]);
-        }
-    }, [recordedChunks]);
+    // useEffect(() => {
+    //     if (recordedChunks.length > 0) {
+    //         const blob = new Blob(recordedChunks, { type: "video/webm" });
+    //         const url = URL.createObjectURL(blob);
+    //         const a = document.createElement("a");
+    //         a.href = url;
+    //         a.download = `${Date.now().toString().slice(0, 10)}-recording.webm`;
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         document.body.removeChild(a);
+    //         URL.revokeObjectURL(url);
+    //         setRecordedChunks([]);
+    //     }
+    // }, [recordedChunks]);
 
     const onCancelCall = useCallback(() => {
         socket.emit('cancelCall', { to: caller });
