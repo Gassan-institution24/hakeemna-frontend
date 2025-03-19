@@ -203,95 +203,82 @@ export const WebRTCProvider = ({ children }) => {
 
     const toggleScreenSharing = useCallback(async () => {
         if (!isScreenSharing) {
-            // Your existing code for turning ON screen sharing works well
             try {
+                // Start screen sharing
                 const currScreenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: true,
                     audio: false,
                 });
-
+    
+                // Listen for the "ended" event on the video track
+                const videoTrack = currScreenStream.getVideoTracks()[0];
+                videoTrack.onended = () => {
+                    // Handle stopping screen sharing
+                    setIsScreenSharing(false);
+                    setScreenStream(null);
+    
+                    // Switch back to the camera stream
+                    if (stream) {
+                        myVideo.current.srcObject = stream;
+    
+                        // Replace the track in the peer connection
+                        if (callRef.current && callRef.current.peerConnection) {
+                            const senders = callRef.current.peerConnection.getSenders();
+                            const videoSender = senders.find((s) => s.track?.kind === "video");
+    
+                            if (videoSender) {
+                                videoSender.replaceTrack(stream.getVideoTracks()[0]);
+                            }
+                        }
+                    }
+                };
+    
+                // Update state and UI
                 myVideo.current.srcObject = currScreenStream;
                 setScreenStream(currScreenStream);
                 setIsScreenSharing(true);
-
-                if (audioTrackRef.current) {
-                    const audioTracks = currScreenStream.getAudioTracks();
-                    if (audioTracks.length > 0) {
-                        audioTracks[0].enabled = audioTrackRef.current.enabled;
-                    }
-                }
-
+    
+                // Replace the video track in the peer connection
                 if (callRef.current) {
-                    const videoTrack = currScreenStream.getVideoTracks()[0];
-
                     const call = callRef.current;
                     if (call.peerConnection) {
                         const senders = call.peerConnection.getSenders();
-                        const videoSender = senders.find((s) => s.track && s.track.kind === "video");
-
+                        const videoSender = senders.find((s) => s.track?.kind === "video");
+    
                         if (videoSender) {
                             videoSender.replaceTrack(videoTrack);
                         }
                     }
                 }
             } catch (error) {
-                // console.error("Error sharing screen:", error);
+                console.error("Error sharing screen:", error);
             }
         } else {
-            // TURNING OFF screen sharing - improvements here
+            // Stop screen sharing manually
             if (screenStream) {
                 screenStream.getTracks().forEach((track) => track.stop());
             }
-
-            // Make sure camera stream exists and is active
-            if (!stream || stream.getVideoTracks().length === 0 || !stream.getVideoTracks()[0].enabled) {
-                try {
-                    // Re-acquire camera if needed
-                    const newStream = await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: true,
-                    });
-
-                    // Update your stream reference
-                    setStream(newStream);
-
-                    // Set the video element source to the camera stream
-                    myVideo.current.srcObject = newStream;
-
-                    // Replace track in peer connection
-                    if (callRef.current && callRef.current.peerConnection) {
-                        const videoTrack = newStream.getVideoTracks()[0];
-                        const senders = callRef.current.peerConnection.getSenders();
-                        const videoSender = senders.find((s) => s.track && s.track.kind === "video");
-
-                        if (videoSender) {
-                            await videoSender.replaceTrack(videoTrack);
-                        }
-                    }
-                } catch (err) {
-                    // console.error("Error reacquiring camera:", err);
-                }
-            } else {
-                // Camera stream exists and is active
+    
+            // Switch back to the camera stream
+            if (stream) {
                 myVideo.current.srcObject = stream;
-
-                // Replace track in peer connection
+    
+                // Replace the track in the peer connection
                 if (callRef.current && callRef.current.peerConnection) {
-                    const videoTrack = stream.getVideoTracks()[0];
                     const senders = callRef.current.peerConnection.getSenders();
-                    const videoSender = senders.find((s) => s.track && s.track.kind === "video");
-
+                    const videoSender = senders.find((s) => s.track?.kind === "video");
+    
                     if (videoSender) {
-                        await videoSender.replaceTrack(videoTrack);
+                        videoSender.replaceTrack(stream.getVideoTracks()[0]);
                     }
                 }
             }
-
+    
             setIsScreenSharing(false);
             setScreenStream(null);
         }
-    }, [isScreenSharing, audioTrackRef, callRef, screenStream, stream]);
-
+    }, [isScreenSharing, screenStream, stream, callRef, myVideo]);
+    
     // const stopRecording = useCallback(() => {
     //     if (mediaRecorder) {
     //         mediaRecorder.stop();
