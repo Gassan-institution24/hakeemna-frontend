@@ -96,13 +96,13 @@ const NavItem = forwardRef(
           <Iconify
             width={16}
             className="arrow"
-            // eslint-disable-next-line
             icon={
+              // eslint-disable-next-line
               open
                 ? 'eva:arrow-ios-downward-fill'
                 : curLangAr
-                ? 'eva:arrow-ios-back-fill'
-                : 'eva:arrow-ios-forward-fill'
+                  ? 'eva:arrow-ios-back-fill'
+                  : 'eva:arrow-ios-forward-fill'
             }
           />
         )}
