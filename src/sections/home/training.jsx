@@ -11,7 +11,7 @@ import { useTheme } from '@mui/material/styles';
 
 import axiosInstance from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider, { RHFTextField, RHFPhoneNumber } from 'src/components/hook-form';
 
@@ -31,7 +31,8 @@ export default function Training() {
       .required('Mobile number is required')
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
   });
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const defaultValues = {
     full_name: '',
     topic: '',
@@ -78,7 +79,12 @@ export default function Training() {
           <img
             src={TrainingImage}
             alt="Training"
-            style={{ position: 'absolute', top: -70, right: 0, maxWidth: '50%' }}
+            style={{
+              position: 'absolute',
+              top: -70,
+              [currentLang ? 'left' : 'right']: 0, // Conditional style
+              maxWidth: '50%',
+            }}
           />
         </Box>
       )}
@@ -86,7 +92,10 @@ export default function Training() {
   );
 
   const renderTerms = (
-    <Typography component="div" sx={{ color: 'text.secondary', mt: 2.5, typography: 'caption', textAlign: 'center' }}>
+    <Typography
+      component="div"
+      sx={{ color: 'text.secondary', mt: 2.5, typography: 'caption', textAlign: 'center' }}
+    >
       {t('By signing up, I agree to ')}
       <Link underline="always" color="text.primary">
         {t('Terms of Service ')}
@@ -106,11 +115,34 @@ export default function Training() {
       </Typography>
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-        <RHFTextField name="full_name" label={t('Full Name')} InputLabelProps={{ style: { color: '#1F2C5C' } }} />
-        <RHFTextField name="topic" label={t('Topic')} InputLabelProps={{ style: { color: '#1F2C5C' } }} />
-        <RHFTextField name="email" label={t('Email address')} InputLabelProps={{ style: { color: '#1F2C5C' } }} />
-        <RHFPhoneNumber name="mobile_num1" label={t('Mobile number')} InputLabelProps={{ style: { color: '#1F2C5C' } }} />
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} sx={{ bgcolor: '#1F2C5C' }}>
+        <RHFTextField
+          name="full_name"
+          label={t('Full Name')}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
+        />
+        <RHFTextField
+          name="topic"
+          label={t('Topic')}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
+        />
+        <RHFTextField
+          name="email"
+          label={t('Email address')}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
+        />
+        <RHFPhoneNumber
+          name="mobile_num1"
+          label={t('Mobile number')}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
+        />
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          loading={isSubmitting}
+          sx={{ bgcolor: '#1F2C5C' }}
+        >
           {t('send')}
         </LoadingButton>
       </Stack>
