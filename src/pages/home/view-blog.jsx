@@ -9,7 +9,7 @@ import BlogView from 'src/sections/home/view/ViewBlog';
 
 export default function BlogPage() {
   const params = useParams();
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { id } = params;
   const { data } = useGetOneBlogs(id, {
     populate: {
@@ -27,7 +27,12 @@ export default function BlogPage() {
   return (
     <>
       <Helmet>
-        <title>Hakeemna 360 - {data?.title ? data?.title : ''} {data?.user?.role === 'superadmin' ? 'hakeemna360' : data?.user?.employee?.[t('name_english')] || ''} </title>
+        <title>
+          Hakeemna 360 - {data?.title ? data?.title : ''}{' '}
+          {data?.user?.role === 'superadmin'
+            ? 'hakeemna360'
+            : data?.user?.employee?.[t('name_english')] || ''}{' '}
+        </title>
         <meta property="og:title" content={data?.title} />
         <meta property="og:description" content={data?.topic} />
         <meta property="og:url" content={`https://hakeemna.com/blogs/${data?._id}`} />

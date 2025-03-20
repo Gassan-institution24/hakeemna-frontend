@@ -31,10 +31,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -102,8 +100,6 @@ export default function AppointHistoryView({ patientData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset =
     !!filters.name || filters.status !== 'pending' || (!!filters.startDate && !!filters.endDate);
@@ -378,10 +374,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (appointment) =>
         (appointment?.unit_service?.name_english &&
           appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (appointment?.unit_service?.name_arabic &&
           appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (appointment?.name_english &&
           appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.name_arabic &&

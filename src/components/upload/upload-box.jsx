@@ -16,14 +16,14 @@ export default function UploadBox({ placeholder, label, error, disabled, files, 
     ...other,
   });
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const hasError = isDragReject || error;
   const handleView = () => {
     const a = document.createElement('a');
     a.href = files;
     a.target = '_blank';
     a.click();
-  }
+  };
   return (
     <Box
       {...getRootProps()}
@@ -69,13 +69,33 @@ export default function UploadBox({ placeholder, label, error, disabled, files, 
       >
         <input {...getInputProps()} />
 
-        {placeholder || <img style={{ paddingBottom: 10 }} src="/assets/illustrations/upload-image.svg" alt="upload" />}
+        {placeholder || (
+          <img
+            style={{ paddingBottom: 10 }}
+            src="/assets/illustrations/upload-image.svg"
+            alt="upload"
+          />
+        )}
       </Box>
-      {files && <Button onClick={handleView} variant='contained' color='primary' direction='row' justifyContent='center' alignItems='center'
-        sx={{ p: 0.5, borderRadius: '0px 0px 5px 5px' }}>
-        {t('View')}
-      </Button>}
-      <Typography variant='subtitle2' sx={{ position: 'absolute', top: -17, p: 0.5, left: 10, backgroundColor: '#fff' }}>{t(label)}</Typography>
+      {files && (
+        <Button
+          onClick={handleView}
+          variant="contained"
+          color="primary"
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ p: 0.5, borderRadius: '0px 0px 5px 5px' }}
+        >
+          {t('View')}
+        </Button>
+      )}
+      <Typography
+        variant="subtitle2"
+        sx={{ position: 'absolute', top: -17, p: 0.5, left: 10, backgroundColor: '#fff' }}
+      >
+        {t(label)}
+      </Typography>
     </Box>
   );
 }

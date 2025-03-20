@@ -34,10 +34,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -120,7 +118,6 @@ export default function ServicesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -455,9 +452,9 @@ export default function ServicesTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

@@ -216,26 +216,26 @@ export default function NewEditForm({ currentRow }) {
                     values.unit_service
                       ? null
                       : user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
-                        ?.unit_service?._id
+                          ?.unit_service?._id
                   )
                 }
               />
               {user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                 ?.department && (
-                  <RHFCheckbox
-                    name="department"
-                    label={t('available for your department employees')}
-                    onChange={() =>
-                      setValue(
-                        'department',
-                        values.department
-                          ? null
-                          : user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                <RHFCheckbox
+                  name="department"
+                  label={t('available for your department employees')}
+                  onChange={() =>
+                    setValue(
+                      'department',
+                      values.department
+                        ? null
+                        : user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
                             ?.department?._id
-                      )
-                    }
-                  />
-                )}
+                    )
+                  }
+                />
+              )}
 
               <RHFSelect
                 size="small"

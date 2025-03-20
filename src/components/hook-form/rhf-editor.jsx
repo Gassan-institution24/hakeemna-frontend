@@ -7,7 +7,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import { useLocales } from 'src/locales';
 
-import {Editor} from '../editor';
+import { Editor } from '../editor';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
   } = useFormContext();
 
   const values = watch();
-  const { currentLang } = useLocales()
+  const { currentLang } = useLocales();
   const isRTL = currentLang.value === 'ar';
 
   useEffect(() => {

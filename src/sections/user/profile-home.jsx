@@ -7,10 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import {
-  useGetPatientInsurance,
-  useGetCurrentPatientMedicines,
-} from 'src/api';
+import { useGetPatientInsurance, useGetCurrentPatientMedicines } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
@@ -471,7 +468,6 @@ export default function ProfileHome() {
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
-      
 
         {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>

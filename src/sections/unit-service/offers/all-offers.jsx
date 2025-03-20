@@ -19,9 +19,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -81,8 +79,6 @@ export default function OffersView({ employeeData }) {
     inputData: offersData,
     filters,
   });
-
-
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -148,8 +144,6 @@ export default function OffersView({ employeeData }) {
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />
                 ))}
-
-
 
                 <TableNoData notFound={notFound} />
               </TableBody>

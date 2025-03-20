@@ -33,10 +33,8 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -111,8 +109,6 @@ export default function PatientInsuranceView({ patientData, refetch }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -302,12 +298,12 @@ export default function PatientInsuranceView({ patientData, refetch }) {
                   rowCount={dataFiltered?.length}
                   numSelected={table.selected?.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered?.map((row, idx)  => row._id)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     dataFiltered?.map((row, idx)  => row._id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

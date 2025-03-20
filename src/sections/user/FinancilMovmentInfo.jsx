@@ -21,9 +21,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -86,8 +84,6 @@ export default function PaymentControlView() {
     ],
     ...filters,
   });
-
-
 
   const canReset = !!filters.startDate || !!filters.endDate;
 

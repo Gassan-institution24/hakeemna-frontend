@@ -20,9 +20,7 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -81,8 +79,6 @@ export default function OrdersView() {
       : false;
 
   const dataFiltered = ordersData;
-
-
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -161,8 +157,6 @@ export default function OrdersView() {
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />
                 ))}
-
-
 
                 <TableNoData notFound={notFound} />
               </TableBody>

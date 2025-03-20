@@ -21,9 +21,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -103,8 +101,6 @@ export default function AppointmentsView() {
       : false;
 
   const dataFiltered = appointmentsData;
-
-
 
   const canReset = !isEqual(filters, defaultFilters);
 

@@ -36,7 +36,7 @@ export default function Blogs({ onPreview }) {
     },
   });
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
   const { Data } = useGetBlog_category();
   const router = useRouter();
 
@@ -67,9 +67,9 @@ export default function Blogs({ onPreview }) {
       (blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.topic.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterBy ? blog.category === filterBy : true);
-    let filterMyBlogs = true
+    let filterMyBlogs = true;
     if (myBlogs) {
-      filterMyBlogs = blog.user?._id === user?._id
+      filterMyBlogs = blog.user?._id === user?._id;
     }
     return matchesSearch && filterMyBlogs;
   });
@@ -111,11 +111,12 @@ export default function Blogs({ onPreview }) {
                 </MenuItem>
               ))}
             </TextField>
-            {user?._id && data?.some((one) => one.user?._id === user?._id) &&
-              <Stack ml={5} direction='row' alignItems='center'>
+            {user?._id && data?.some((one) => one.user?._id === user?._id) && (
+              <Stack ml={5} direction="row" alignItems="center">
                 <Checkbox checked={myBlogs} onClick={() => setMyBlogs(!myBlogs)} />
                 <Typography>{t('my blogs')}</Typography>
-              </Stack>}
+              </Stack>
+            )}
           </Box>
 
           {/* Blog Cards */}
@@ -144,7 +145,8 @@ export default function Blogs({ onPreview }) {
                       <Typography
                         sx={{ color: 'gray' }}
                         href={paths.pages.doctor(
-                          `${blog?.user?.employee?.employee_engagements[0]
+                          `${
+                            blog?.user?.employee?.employee_engagements[0]
                           }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
@@ -155,7 +157,8 @@ export default function Blogs({ onPreview }) {
                       <Link
                         sx={{ color: 'gray' }}
                         href={paths.pages.doctor(
-                          `${blog?.user?.employee?.employee_engagements[0]
+                          `${
+                            blog?.user?.employee?.employee_engagements[0]
                           }_${blog?.user?.employee?.name_english?.replace(/ /g, '_')}`
                         )}
                       >
@@ -168,7 +171,7 @@ export default function Blogs({ onPreview }) {
                       {blog.title}
                     </Typography>
                     <Typography
-                      variant='caption'
+                      variant="caption"
                       dangerouslySetInnerHTML={{
                         __html: formatTextWithLineBreaks(blog.topic),
                       }}
@@ -185,10 +188,18 @@ export default function Blogs({ onPreview }) {
                       if (onPreview) {
                         onPreview(blog?._id);
                       } else {
-                        router.push(`${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(/ /g, '-')}}&writer=${blog?.user?.role === 'superadmin' ? 'hakeemna 360' : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')}`)
+                        router.push(
+                          `${paths.pages.BlogsView(blog?._id)}?title=${blog?.title?.replace(
+                            / /g,
+                            '-'
+                          )}}&writer=${
+                            blog?.user?.role === 'superadmin'
+                              ? 'hakeemna 360'
+                              : blog.user?.employee?.[t('name_english')]?.replace(/ /g, '-')
+                          }`
+                        );
                       }
-                    }
-                    }
+                    }}
                   >
                     {t('View')}
                   </Button>

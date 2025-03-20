@@ -79,7 +79,7 @@ export default function EmployeeProfile() {
           </Stack>
         </Stack>
       </Card>
-      <Stack direction='row' justifyContent='space-between' >
+      <Stack direction="row" justifyContent="space-between">
         <Tabs
           value={currentTab}
           onChange={handleChangeTab}
@@ -91,19 +91,28 @@ export default function EmployeeProfile() {
             <Tab key={idx} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
-        {currentTab === 'attendance' && <Box>
-          <Button onClick={() => setOpen(true)} variant='contained'>{t('Add new')}</Button>
-        </Box>}
+        {currentTab === 'attendance' && (
+          <Box>
+            <Button onClick={() => setOpen(true)} variant="contained">
+              {t('Add new')}
+            </Button>
+          </Box>
+        )}
       </Stack>
 
       {currentTab === 'attendance' && <EmployeeAttendence employee={data} />}
       {currentTab === 'edit' && <EditEmployee employee={data} refetch={refetch} />}
-      <AttendanceEdit employeeId={id} open={open} refetch={() => {
-        setCurrentTab('edit')
-        setTimeout(() => {
-          setCurrentTab('attendance')
-        }, 100)
-      }} onClose={() => setOpen(false)} />
+      <AttendanceEdit
+        employeeId={id}
+        open={open}
+        refetch={() => {
+          setCurrentTab('edit');
+          setTimeout(() => {
+            setCurrentTab('attendance');
+          }, 100);
+        }}
+        onClose={() => setOpen(false)}
+      />
     </Container>
   );
 }

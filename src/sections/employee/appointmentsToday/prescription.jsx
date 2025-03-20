@@ -176,7 +176,7 @@ export default function Prescription({ Entrance }) {
       const prescriptionsToSubmit = submitData.prescriptions.map((prescription) => ({
         ...prescription,
       }));
-  
+
       if (prescriptionDialog.value) {
         await axiosInstance.post(endpoints.history.all, {
           patient: Entrance?.patient?._id,
@@ -189,7 +189,7 @@ export default function Prescription({ Entrance }) {
           title: 'prescription',
           service_unit: Entrance?.service_unit?._id,
         });
-  
+
         await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
         await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
           Drugs_report_status: true,
@@ -205,7 +205,7 @@ export default function Prescription({ Entrance }) {
       enqueueSnackbar('Error uploading data', { variant: 'error' });
     }
   };
-  
+
   useEffect(() => {
     reset({
       prescriptions: [
@@ -227,7 +227,6 @@ export default function Prescription({ Entrance }) {
       ],
     });
   }, [user, Entrance, reset]);
-  
 
   return (
     <>

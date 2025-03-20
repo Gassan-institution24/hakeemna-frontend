@@ -161,14 +161,14 @@ export function useNavData() {
           false,
         title: t('departments'),
         path: paths.unitservice.departments.root,
-        'data-test': 'us-nav-item-departments'
+        'data-test': 'us-nav-item-departments',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
         title: t('employees'),
         path: paths.unitservice.employees.root,
         navItemId: 'USEmployeesNav',
-        'data-test': 'us-nav-item-employees'
+        'data-test': 'us-nav-item-employees',
       },
       {
         show: checkAcl({
@@ -179,7 +179,7 @@ export function useNavData() {
         title: t('work shifts'),
         path: paths.unitservice.tables.workshifts.root,
         navItemId: 'USWorkShiftNav',
-        'data-test': 'us-nav-item-workshifts'
+        'data-test': 'us-nav-item-workshifts',
       },
       {
         show: checkAcl({
@@ -190,7 +190,7 @@ export function useNavData() {
         title: t('work groups'),
         path: paths.unitservice.tables.workgroups.root,
         navItemId: 'USWorkGroupNav',
-        'data-test': 'us-nav-item-workgroups'
+        'data-test': 'us-nav-item-workgroups',
       },
       {
         show: checkAcl({
@@ -201,7 +201,7 @@ export function useNavData() {
         title: t('services and pricing'),
         path: paths.unitservice.tables.services.root,
         navItemId: 'USServicesNav',
-        'data-test': 'us-nav-item-services'
+        'data-test': 'us-nav-item-services',
       },
       {
         show:
@@ -213,7 +213,7 @@ export function useNavData() {
         title: t('rooms'),
         path: paths.unitservice.tables.rooms.root,
         navItemId: 'USRoomsNav',
-        'data-test': 'us-nav-item-rooms'
+        'data-test': 'us-nav-item-rooms',
       },
       {
         show:
@@ -225,7 +225,7 @@ export function useNavData() {
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
-        'data-test': 'us-nav-item-activities'
+        'data-test': 'us-nav-item-activities',
       },
       {
         show:
@@ -234,7 +234,7 @@ export function useNavData() {
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,
         navItemId: 'USOldPatientsNav',
-        'data-test': 'us-nav-item-oldpatient'
+        'data-test': 'us-nav-item-oldpatient',
       },
     ];
     const unitServiceItems = [
@@ -247,7 +247,7 @@ export function useNavData() {
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
-        'data-test': 'us-nav-item-appointmenttoday'
+        'data-test': 'us-nav-item-appointmenttoday',
       },
       {
         show:
@@ -357,19 +357,23 @@ export function useNavData() {
         'data-test': 'us-nav-item-permissions',
         children: [
           {
-            title: t('unit of service level'), path: paths.unitservice.acl.unitservice,
+            title: t('unit of service level'),
+            path: paths.unitservice.acl.unitservice,
             'data-test': 'us-nav-item-permissions-us',
           },
           {
-            title: t('departments level'), path: paths.unitservice.acl.department,
+            title: t('departments level'),
+            path: paths.unitservice.acl.department,
             'data-test': 'us-nav-item-permissions-department',
           },
           {
-            title: t('work groups level'), path: paths.unitservice.acl.workgroups,
+            title: t('work groups level'),
+            path: paths.unitservice.acl.workgroups,
             'data-test': 'us-nav-item-permissions-wg',
           },
           {
-            title: t('employee permission'), path: paths.unitservice.acl.employees,
+            title: t('employee permission'),
+            path: paths.unitservice.acl.employees,
             'data-test': 'us-nav-item-permissions-ws',
           },
         ],

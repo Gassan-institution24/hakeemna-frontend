@@ -39,19 +39,18 @@ const WebRTCComponent = () => {
     audioTrackRef,
     stream,
     onCancelCall,
-    isCalling
+    isCalling,
   } = useWebRTC();
 
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const mdUp = useResponsive('up', 'md');
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const userId = searchParams.get('userId');
   const callerParam = searchParams.get('caller');
   const userNameParam = searchParams.get('userName');
-
 
   useEffect(() => {
     if (stream) {
@@ -121,22 +120,23 @@ const WebRTCComponent = () => {
                 if (myVideo.current) {
                   myVideo.current.srcObject = currentStream;
                 }
-              }).catch(error => {
-                console.log(error);
               })
-          })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
       });
 
-    socket.on("endCall", () => {
+    socket.on('endCall', () => {
       endCall();
     });
-    socket.on("cancelCall", () => {
+    socket.on('cancelCall', () => {
       endCall();
-      router.replace(paths.dashboard.root)
+      router.replace(paths.dashboard.root);
     });
 
-    socket.on("callAccepted", ({ from }) => {
-      setCallAccepted(true)
+    socket.on('callAccepted', ({ from }) => {
+      setCallAccepted(true);
       setCaller(from);
     });
 
@@ -145,9 +145,9 @@ const WebRTCComponent = () => {
         stream.getTracks().forEach((track) => track.stop());
       }
 
-      socket.off("endCall");
-      socket.off("cancelCall");
-      socket.off("callAccepted");
+      socket.off('endCall');
+      socket.off('cancelCall');
+      socket.off('callAccepted');
 
       if (callAccepted) {
         endCall();
@@ -157,7 +157,7 @@ const WebRTCComponent = () => {
   }, []);
 
   if (!receivingCall && !isCalling) {
-    return null
+    return null;
   }
 
   return (
@@ -289,19 +289,27 @@ const WebRTCComponent = () => {
             onClick={endCall}
           >
             <Iconify width={23} icon="material-symbols:call-end-sharp" />
-            {mdUp && <span>{t("End Call")}</span>}
+            {mdUp && <span>{t('End Call')}</span>}
           </Button>
         </Stack>
       </Dialog>
       <Dialog open={receivingCall && !callAccepted}>
         <Stack p={3} gap={2}>
-          <h3>{userNameParam} {t("Calling...")}</h3>
+          <h3>
+            {userNameParam} {t('Calling...')}
+          </h3>
           <Stack gap={1}>
-            <Button variant='contained' color='primary' type="button" onClick={answerCall} sx={{ minWidth: 200 }}>
-              {t("Answer")}
+            <Button
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={answerCall}
+              sx={{ minWidth: 200 }}
+            >
+              {t('Answer')}
             </Button>
-            <Button variant='text' type="button" onClick={onCancelCall}>
-              {t("Cancel")}
+            <Button variant="text" type="button" onClick={onCancelCall}>
+              {t('Cancel')}
             </Button>
           </Stack>
         </Stack>

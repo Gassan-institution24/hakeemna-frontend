@@ -101,13 +101,12 @@ export default function ChangeIDView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-
-      <RHFTextField name="email" data-test='email-input' label={t('email address')} />
+      <RHFTextField name="email" data-test="email-input" label={t('email address')} />
 
       <RHFTextField
         name="password"
         label={t('password')}
-        data-test='password-input'
+        data-test="password-input"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -133,7 +132,7 @@ export default function ChangeIDView() {
 
       <LoadingButton
         fullWidth
-        data-test='login-button'
+        data-test="login-button"
         color="inherit"
         size="large"
         type="submit"
@@ -142,17 +141,15 @@ export default function ChangeIDView() {
       >
         {t('Save')}
       </LoadingButton>
-
     </Stack>
   );
 
   return (
-    <FormProvider data-test='login-form' methods={methods} onSubmit={onSubmit}>
-      <Stack data-test='login-form' justifyContent="center" width={1} height="70vh">
+    <FormProvider data-test="login-form" methods={methods} onSubmit={onSubmit}>
+      <Stack data-test="login-form" justifyContent="center" width={1} height="70vh">
         {renderHead}
         {renderForm}
       </Stack>
     </FormProvider>
   );
 }
-

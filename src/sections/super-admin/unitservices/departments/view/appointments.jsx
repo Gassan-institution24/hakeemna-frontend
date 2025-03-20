@@ -37,9 +37,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -133,8 +131,6 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset =
     !!filters.name ||

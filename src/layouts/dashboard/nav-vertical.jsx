@@ -211,7 +211,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   });
 
   const setLastOnline = useCallback(async () => {
-    await axiosInstance.patch(endpoints.auth.user(user._id), { last_online: new Date() })
+    await axiosInstance.patch(endpoints.auth.user(user._id), { last_online: new Date() });
   }, [user._id]);
 
   useEffect(() => {
@@ -220,7 +220,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       new Date(user.created_at).getTime() + 2 * 24 * 60 * 60 * 1000 >= new Date().getTime();
     const shouldShowDialog = !loading && isEmployee && createdAtValid && !user.last_online;
     setDialog(shouldShowDialog);
-    setLastOnline()
+    setLastOnline();
   }, [user.created_at, user.last_online, loading, isEmployee, setLastOnline]);
 
   useEffect(() => {
@@ -251,7 +251,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           run={walktour.run}
           callback={walktour.onCallback}
           getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+          // scrollDuration={500}
         />
       )}
       {isEmployee && (
@@ -320,7 +320,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Scrollbar>
         ) : (
           <Drawer
-            data-test='nav-drawer'
+            data-test="nav-drawer"
             open={openNav}
             onClose={onCloseNav}
             PaperProps={{
@@ -357,70 +357,72 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
-      </CustomPopover>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: { md: 20, xs: 40 },
-            pb: { md: 0, xs: 2 },
-            right: { md: 20, xs: 'auto' },
-            left: { md: 'auto', xs: 20 },
-            zIndex: 99,
-          }}
-        >
-          <Badge
-            badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
-            color="error"
-            onClick={() => setTicketDialog(true)}
-          >
-            <IconButton
-              sx={{
-                bgcolor: '#22C55E',
-                '&:hover': {
-                  bgcolor: '#22C55E',
-                  border: 'solid 2px #FFAB00',
-                },
-              }}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
             >
-              <Iconify
-                width={35}
-                sx={{
-                  m: 0.5,
-                  color: 'white',
-                }}
-                icon="streamline:chat-bubble-oval-smiley-2"
-              />
-            </IconButton>
-          </Badge>
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
+      </CustomPopover>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: { md: 20, xs: 40 },
+          pb: { md: 0, xs: 2 },
+          right: { md: 20, xs: 'auto' },
+          left: { md: 'auto', xs: 20 },
+          zIndex: 99,
+        }}
+      >
+        <Badge
+          badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
+          color="error"
+          onClick={() => setTicketDialog(true)}
+        >
+          <IconButton
+            sx={{
+              bgcolor: '#22C55E',
+              '&:hover': {
+                bgcolor: '#22C55E',
+                border: 'solid 2px #FFAB00',
+              },
+            }}
+          >
+            <Iconify
+              width={35}
+              sx={{
+                m: 0.5,
+                color: 'white',
+              }}
+              icon="streamline:chat-bubble-oval-smiley-2"
+            />
+          </IconButton>
+        </Badge>
 
-          {ticketDialog && <TicketPopover
+        {ticketDialog && (
+          <TicketPopover
             messagesLength={messages}
             refetchLenght={refetch}
             open={ticketDialog}
             onClose={() => setTicketDialog(false)}
-          />}
-          <StartupCreating
-            open={dialog}
-            onClose={() => {
-              setDialog(false);
-              setRunningTour(true);
-              setTimeout(() => {
-                setRunningTour(false);
-              }, 200);
-            }}
           />
-        </Box>
+        )}
+        <StartupCreating
+          open={dialog}
+          onClose={() => {
+            setDialog(false);
+            setRunningTour(true);
+            setTimeout(() => {
+              setRunningTour(false);
+            }, 200);
+          }}
+        />
+      </Box>
     </>
   );
 }

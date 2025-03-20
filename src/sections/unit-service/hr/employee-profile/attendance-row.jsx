@@ -49,7 +49,7 @@ export default function AttendanceRow({
     modifications_nums,
   } = row;
   const { t } = useTranslate();
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const weekDays = [
     t('Saturday'),
     t('Sunday'),
@@ -144,7 +144,6 @@ export default function AttendanceRow({
       </CustomPopover>
 
       <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
-
     </>
   );
 }

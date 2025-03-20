@@ -20,10 +20,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -111,8 +109,6 @@ export default function TablesListView() {
     filters,
     dateError,
   });
-
-
 
   const canReset = !!filters.name;
 

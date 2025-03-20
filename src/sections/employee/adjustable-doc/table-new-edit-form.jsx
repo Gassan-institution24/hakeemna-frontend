@@ -107,10 +107,7 @@ export default function NewEditForm({ currentRow }) {
               ))}
             </RHFSelect>
           </Box>
-          <RHFEditor
-            name="topic"
-            label={t('content')}
-          />
+          <RHFEditor name="topic" label={t('content')} />
         </Card>
 
         <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>

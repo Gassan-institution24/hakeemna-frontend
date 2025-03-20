@@ -21,9 +21,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -74,8 +72,6 @@ export default function InvoiceListView() {
     ],
     ...filters,
   });
-
-
 
   const canReset = !!filters.startDate || !!filters.endDate;
 
@@ -179,7 +175,7 @@ export default function InvoiceListView() {
                     selected={table.selected.includes(row._id)}
                     onSelectRow={() => table.onSelectRow(row._id)}
                     onViewRow={() => handleViewRow(row._id)}
-                  // onEditRow={() => handleEditRow(row.id)}
+                    // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
                 <TableNoData notFound={notFound} />

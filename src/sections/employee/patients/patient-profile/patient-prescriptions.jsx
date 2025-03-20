@@ -17,7 +17,7 @@ export default function PatientPrescriptions({ patient }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
   const { prescriptionData, refetch } = useGetPrescription({
@@ -30,22 +30,24 @@ export default function PatientPrescriptions({ patient }) {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(endpoints.prescription.one(id))
+      await axiosInstance.delete(endpoints.prescription.one(id));
       enqueueSnackbar(`${t('prescription')} ${t('deleted successfully')}`);
-      refetch()
+      refetch();
     } catch (e) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
         variant: 'error',
       });
     }
-  }
+  };
   return (
     <Container maxWidth="xl">
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
-          <Stack direction="row" justifyContent="flex-end" alignItems='center'>
+          <Stack direction="row" justifyContent="flex-end" alignItems="center">
             <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton color='error' onClick={() => handleDelete(one?._id)}><Iconify icon='mdi:delete-outline' /></IconButton>
+            <IconButton color="error" onClick={() => handleDelete(one?._id)}>
+              <Iconify icon="mdi:delete-outline" />
+            </IconButton>
           </Stack>
           <Box
             mt={1}

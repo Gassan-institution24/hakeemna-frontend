@@ -33,10 +33,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -107,8 +105,6 @@ export default function AppointHistoryView({ patient }) {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-
-
   const canReset =
     !!filters.name || filters.status !== 'pending' || (!!filters.startDate && !!filters.endDate);
 
@@ -119,52 +115,52 @@ export default function AppointHistoryView({ patient }) {
 
   const TABS = isMedLab
     ? [
-      {
-        value: 'pending',
-        label: t('pending'),
-        color: 'secondary',
-        count: getAppointLength('pending'),
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: getAppointLength('finished'),
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: getAppointLength('canceled'),
-      },
-    ]
+        {
+          value: 'pending',
+          label: t('pending'),
+          color: 'secondary',
+          count: getAppointLength('pending'),
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: getAppointLength('finished'),
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'error',
+          count: getAppointLength('canceled'),
+        },
+      ]
     : [
-      // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
-      {
-        value: 'pending',
-        label: t('pending'),
-        color: 'secondary',
-        count: getAppointLength('pending'),
-      },
-      {
-        value: 'processing',
-        label: t('processing'),
-        color: 'info',
-        count: getAppointLength('processing'),
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: getAppointLength('finished'),
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: getAppointLength('canceled'),
-      },
-    ];
+        // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+        {
+          value: 'pending',
+          label: t('pending'),
+          color: 'secondary',
+          count: getAppointLength('pending'),
+        },
+        {
+          value: 'processing',
+          label: t('processing'),
+          color: 'info',
+          count: getAppointLength('processing'),
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: getAppointLength('finished'),
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'error',
+          count: getAppointLength('canceled'),
+        },
+      ];
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -372,10 +368,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (appointment) =>
         (appointment?.unit_service?.name_english &&
           appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (appointment?.unit_service?.name_arabic &&
           appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (appointment?.name_english &&
           appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.name_arabic &&

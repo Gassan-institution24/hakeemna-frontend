@@ -27,8 +27,8 @@ export default function OrderDetailsView() {
   const { id } = useParams();
   const { orderData, refetch } = useGetOrder(id);
   const settings = useSettingsContext();
-  const { t } = useTranslate()
-  
+  const { t } = useTranslate();
+
   const ORDER_STATUS_OPTIONS = [
     { value: 'completed', label: t('Completed') },
     { value: 'cancelled', label: t('Cancelled') },
@@ -88,9 +88,9 @@ export default function OrderDetailsView() {
           <OrderDetailsInfo
             customer={orderData?.stakeholder}
             note={orderData?.note}
-          // delivery={orderData?.delivery}
-          // payment={orderData?.payment}
-          // shippingAddress={orderData?.shippingAddress}
+            // delivery={orderData?.delivery}
+            // payment={orderData?.payment}
+            // shippingAddress={orderData?.shippingAddress}
           />
         </Grid>
       </Grid>

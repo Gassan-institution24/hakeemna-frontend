@@ -204,7 +204,6 @@ PrescriptionPDF.propTypes = {
   report: PropTypes.object,
 };
 
-
 export default function Prescriptions() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();

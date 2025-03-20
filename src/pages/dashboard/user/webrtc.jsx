@@ -7,16 +7,16 @@ import WebRTCComponent from 'src/components/vedio-call/webRTC';
 // ----------------------------------------------------------------------
 
 export default function Sharedoctorna() {
-    const { t } = useTranslate();
+  const { t } = useTranslate();
 
-    return (
-        <>
-            <Helmet>
-                <title> {t('Share')} </title>
-                <meta name="description" content="meta" />
-            </Helmet>
+  return (
+    <>
+      <Helmet>
+        <title> {t('Share')} </title>
+        <meta name="description" content="meta" />
+      </Helmet>
 
-            <WebRTCComponent />
-        </>
-    );
+      <WebRTCComponent />
+    </>
+  );
 }

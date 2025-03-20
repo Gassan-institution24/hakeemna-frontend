@@ -136,7 +136,8 @@ export default function AppointmentsTableRow({
             color: '#3F54EB',
           }}
           onClick={() => {
-            if (unit_service_patient) router.push(paths.employee.patients.info(unit_service_patient?._id))
+            if (unit_service_patient)
+              router.push(paths.employee.patients.info(unit_service_patient?._id));
           }}
         >
           {patientName}

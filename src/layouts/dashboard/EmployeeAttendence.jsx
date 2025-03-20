@@ -15,10 +15,11 @@ function EmployeeAttendence() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const { attendence, refetch } = useGetMyLastAttendence();
-  const hasAttendenceToday = attendence?.date &&
+  const hasAttendenceToday =
+    attendence?.date &&
     new Date(attendence?.date).getFullYear() === new Date().getFullYear() &&
     new Date(attendence?.date).getMonth() === new Date().getMonth() &&
     new Date(attendence?.date).getDay() === new Date().getDay();
@@ -37,11 +38,11 @@ function EmployeeAttendence() {
           },
           (error) => {
             console.error('Error getting location:', error);
-            resolve({ lat: 0, lng: 0 })
+            resolve({ lat: 0, lng: 0 });
           }
         );
       } else {
-        resolve({ lat: 0, lng: 0 })
+        resolve({ lat: 0, lng: 0 });
         console.log('Geolocation is not supported by this browser.');
       }
     });

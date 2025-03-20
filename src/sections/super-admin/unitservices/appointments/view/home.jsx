@@ -36,10 +36,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
-
   TableNoData,
   // getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -134,8 +132,6 @@ export default function AppointmentsView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset =
     !!filters.name ||

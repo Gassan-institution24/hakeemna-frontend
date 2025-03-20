@@ -31,11 +31,11 @@ const WebRTCComponent = () => {
     navigator?.mediaDevices
       ?.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
-        const tracks = currentStream?.getVideoTracks()
+        const tracks = currentStream?.getVideoTracks();
         if (tracks?.length) {
           tracks.forEach((track) => {
-            track.enabled = false
-          })
+            track.enabled = false;
+          });
         }
         setStream(currentStream);
         if (myVideo.current) {
@@ -163,22 +163,22 @@ const WebRTCComponent = () => {
 
   const toggleVideo = async () => {
     if (isVideoOn && stream) {
-      const tracks = stream?.getVideoTracks()
+      const tracks = stream?.getVideoTracks();
       if (tracks?.length) {
         tracks.forEach((track) => {
-          track.enabled = false
-        })
+          track.enabled = false;
+        });
       } else {
-        stream.getTracks()?.forEach(track => {
-          connectionRef.addTrack(track, stream)
-        })
+        stream.getTracks()?.forEach((track) => {
+          connectionRef.addTrack(track, stream);
+        });
       }
     } else {
-      const tracks = stream?.getVideoTracks()
-      console.log('tracks', tracks)
-      tracks?.forEach(track => {
-        track.enabled = true
-      })
+      const tracks = stream?.getVideoTracks();
+      console.log('tracks', tracks);
+      tracks?.forEach((track) => {
+        track.enabled = true;
+      });
     }
     setIsVideoOn(!isVideoOn);
   };
@@ -336,27 +336,93 @@ const WebRTCComponent = () => {
       )}
 
       <Box sx={{ flex: 1 }}>
-        <Box sx={{ zIndex: 60, position: 'fixed', bottom: 70, right: 5, width: 300, height: 200, borderRadius: '10px', overflow: 'hidden', border: '3px solid #ccc' }}>
+        <Box
+          sx={{
+            zIndex: 60,
+            position: 'fixed',
+            bottom: 70,
+            right: 5,
+            width: 300,
+            height: 200,
+            borderRadius: '10px',
+            overflow: 'hidden',
+            border: '3px solid #ccc',
+          }}
+        >
           {/* eslint-disable-next-line */}
-          <video playsInline muted ref={myVideo} autoPlay style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: 'black' }} />
+          <video
+            playsInline
+            muted
+            ref={myVideo}
+            autoPlay
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              backgroundColor: 'black',
+            }}
+          />
         </Box>
 
         {callAccepted && (
-          <Box sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}>
+          <Box
+            sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}
+          >
             {/* eslint-disable-next-line */}
-            <video playsInline ref={userVideo} autoPlay style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: 'black' }} />
+            <video
+              playsInline
+              ref={userVideo}
+              autoPlay
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                backgroundColor: 'black',
+              }}
+            />
           </Box>
         )}
       </Box>
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ zIndex: 100, width: 1, height: 65, backgroundColor: '#212B36', color: '#fff', padding: 1, px: 4 }}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{
+          zIndex: 100,
+          width: 1,
+          height: 65,
+          backgroundColor: '#212B36',
+          color: '#fff',
+          padding: 1,
+          px: 4,
+        }}
+      >
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={toggleMute}>
-            <Iconify width={23} icon={isMuted ? 'material-symbols:mic-off' : 'material-symbols:mic'} />
+          <Button
+            variant="outlined"
+            sx={{ display: 'flex', gap: 1, padding: 1 }}
+            onClick={toggleMute}
+          >
+            <Iconify
+              width={23}
+              icon={isMuted ? 'material-symbols:mic-off' : 'material-symbols:mic'}
+            />
             <span>{isMuted ? 'Unmute' : 'Mute'}</span>
           </Button>
-          <Button variant="outlined" sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={toggleVideo}>
-            <Iconify width={23} icon={isVideoOn ? 'material-symbols:video-camera-front' : 'material-symbols:video-camera-front-off'} />
+          <Button
+            variant="outlined"
+            sx={{ display: 'flex', gap: 1, padding: 1 }}
+            onClick={toggleVideo}
+          >
+            <Iconify
+              width={23}
+              icon={
+                isVideoOn
+                  ? 'material-symbols:video-camera-front'
+                  : 'material-symbols:video-camera-front-off'
+              }
+            />
             <span>{isVideoOn ? 'Camera Off' : 'Camera On'}</span>
           </Button>
           <Button
@@ -366,16 +432,32 @@ const WebRTCComponent = () => {
           >
             <Iconify
               width={23}
-              icon={isScreenSharing ? 'material-symbols:screen-share' : 'material-symbols:screen-share-off'}
+              icon={
+                isScreenSharing
+                  ? 'material-symbols:screen-share'
+                  : 'material-symbols:screen-share-off'
+              }
             />
             <span>{isScreenSharing ? 'Stop Sharing' : 'Share Screen'}</span>
           </Button>
-          <Button variant="outlined" sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={isRecording ? stopRecording : startRecording}>
-            <Iconify width={23} icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'} />
+          <Button
+            variant="outlined"
+            sx={{ display: 'flex', gap: 1, padding: 1 }}
+            onClick={isRecording ? stopRecording : startRecording}
+          >
+            <Iconify
+              width={23}
+              icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'}
+            />
             <span>{isRecording ? 'Stop Recording' : 'Record'}</span>
           </Button>
         </Stack>
-        <Button variant="contained" color="error" sx={{ display: 'flex', gap: 1, padding: 1 }} onClick={endCall}>
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ display: 'flex', gap: 1, padding: 1 }}
+          onClick={endCall}
+        >
           <Iconify width={23} icon="material-symbols:call-end-sharp" />
           <span>End Call</span>
         </Button>

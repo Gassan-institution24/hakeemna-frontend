@@ -33,7 +33,9 @@ export default function PatientProfile() {
         path: 'patient',
         populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet',
       },
-      { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet file_code' },
+      {
+        path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet file_code',
+      },
     ],
   });
 

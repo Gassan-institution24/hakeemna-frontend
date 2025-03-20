@@ -98,7 +98,6 @@ export default function EmployeeAttendence({ employee }) {
           onFilters={handleFilters}
           //
           dateError={dateError}
-
         />
 
         {canReset && (

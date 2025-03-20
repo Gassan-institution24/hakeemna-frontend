@@ -22,9 +22,7 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -63,7 +61,6 @@ export default function DiseasesTableView() {
 
   const router = useRouter();
 
-
   const [filters, setFilters] = useState(defaultFilters);
   const searchName = useDebounce(filters.name);
 
@@ -72,7 +69,7 @@ export default function DiseasesTableView() {
     order: table.order,
     page: table.page,
     rowsPerPage: table.rowsPerPage,
-    name: searchName
+    name: searchName,
   });
 
   const searchParams = useSearchParams();
@@ -84,8 +81,6 @@ export default function DiseasesTableView() {
       setFilters((prev) => ({ ...prev, name: upload_record }));
     }
   }, [upload_record]);
-
-
 
   const canReset = !!filters?.name;
 

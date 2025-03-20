@@ -122,9 +122,9 @@ export default function NotificationItem({ notification, handleClick }) {
         variant="contained"
         onClick={async () => {
           try {
-            await axios.post(endpoints.drugs.taken, notification?.onAccept?.body)
+            await axios.post(endpoints.drugs.taken, notification?.onAccept?.body);
           } catch (e) {
-            console.log(e)
+            console.log(e);
           }
         }}
       >

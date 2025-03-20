@@ -31,9 +31,9 @@ export default function DoctorPage() {
       onChangeLang('en');
     }
   }, [doctor, curLangAr, onChangeLang]);
-  const { text: about_me } = HTMLToText(data?.employee?.about_me)
-  const { text: arabic_about_me } = HTMLToText(data?.employee?.arabic_about_me)
-  console.log(about_me)
+  const { text: about_me } = HTMLToText(data?.employee?.about_me);
+  const { text: arabic_about_me } = HTMLToText(data?.employee?.arabic_about_me);
+  console.log(about_me);
   return (
     <>
       <Helmet>
@@ -41,7 +41,9 @@ export default function DoctorPage() {
         {/* eslint-disable-next-line */}
         <meta
           name="description"
-          content={`${curLangAr ? arabic_about_me : about_me} ${curLangAr ? 'تكلفة الموعد بعد الخصم' : 'appointment price after discount'}
+          content={`${curLangAr ? arabic_about_me : about_me} ${
+            curLangAr ? 'تكلفة الموعد بعد الخصم' : 'appointment price after discount'
+          }
            ${data?.fees_after_discount ? data?.fees_after_discount : data?.fees}
             ${curLangAr ? 'دينار' : 'JOD'}`}
         />

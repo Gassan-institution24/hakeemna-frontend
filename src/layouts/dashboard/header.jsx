@@ -41,7 +41,7 @@ export default function Header({ onOpenNav }) {
   const router = useRouter();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const { setReceivingCall } = useWebRTC()
+  const { setReceivingCall } = useWebRTC();
   const parentToken = localStorage.getItem('parentToken');
   const switchBack = () => {
     localStorage.setItem('accessToken', parentToken);
@@ -63,8 +63,10 @@ export default function Header({ onOpenNav }) {
   useEffect(() => {
     socket.on('callUser', ({ userId, from, signal, userName }) => {
       if (user?._id === userId) {
-        setReceivingCall(true)
-        router.push(`${paths.call}?caller=${from}&userName=${userName}&signal=${JSON.stringify(signal)}`);
+        setReceivingCall(true);
+        router.push(
+          `${paths.call}?caller=${from}&userName=${userName}&signal=${JSON.stringify(signal)}`
+        );
       }
     });
   }, [user?._id, router, setReceivingCall]);
