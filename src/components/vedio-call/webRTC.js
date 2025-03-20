@@ -65,12 +65,17 @@ const WebRTCComponent = () => {
         setCaller(callerParam);
       }
     }
-  }, [userId, callerParam, stream, setIdToCall, callUser, setCaller, setReceivingCall]);
+    // eslint-disable-next-line
+  }, [userId, callerParam, stream]);
 
   useEffect(() => {
     navigator.mediaDevices
       ?.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
+        const videoTracks = currentStream.getVideoTracks();
+        if (videoTracks.length > 0) {
+          videoTracks[0].enabled = false;
+        }
         setStream(currentStream);
         const audioTracks = currentStream.getAudioTracks();
         if (audioTracks.length > 0) {
@@ -101,6 +106,10 @@ const WebRTCComponent = () => {
             navigator.mediaDevices
               ?.getUserMedia({ video: true, audio: false })
               .then((currentStream) => {
+                const videoTracks = currentStream.getVideoTracks();
+                if (videoTracks.length > 0) {
+                  videoTracks[0].enabled = false;
+                }
                 setStream(currentStream);
 
                 // Store a reference to the audio track
@@ -112,6 +121,8 @@ const WebRTCComponent = () => {
                 if (myVideo.current) {
                   myVideo.current.srcObject = currentStream;
                 }
+              }).catch(error => {
+                console.log(error);
               })
           })
       });
@@ -143,7 +154,7 @@ const WebRTCComponent = () => {
       }
     };
     // eslint-disable-next-line
-  }, [callAccepted]);
+  }, []);
 
   if (!receivingCall && !isCalling) {
     return null
