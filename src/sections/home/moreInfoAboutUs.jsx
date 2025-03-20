@@ -7,7 +7,9 @@ import { useTranslate } from 'src/locales';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 // import MAP from './Group 117.png';
+import map from './images/map.png';
 import photo from './images/design.png';
+import devices from './images/devices.png';
 
 export default function MoreInfoAboutUs() {
   const { t } = useTranslate();
@@ -34,7 +36,7 @@ export default function MoreInfoAboutUs() {
       >
         <m.div variants={varFade().inDown}>
           <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
-            {t('Electronic innovation for a healthier future')}
+            {t('The comprehensive medical platform, Hakeemna 360')}
           </Typography>
         </m.div>
       </Stack>
@@ -43,7 +45,7 @@ export default function MoreInfoAboutUs() {
       <Stack spacing={3} sx={{ textAlign: 'center', mb: { xs: 4, md: 2 } }}>
         <m.div variants={varFade().inDown}>
           <Typography sx={{ fontSize: { xs: 32, md: 45 }, fontWeight: 600 }}>
-            {t('about hakeemna')}
+            {t('About hakeemna')}
           </Typography>
         </m.div>
       </Stack>
@@ -59,18 +61,19 @@ export default function MoreInfoAboutUs() {
         }}
       >
         <Typography sx={{ fontSize: { xs: 16, md: 20 }, fontWeight: 600, letterSpacing: 1 }}>
-          Hakeemna platform is the result of joint cooperation between the health sector and
-          specialists in developing the performance of institutions seeking to achieve efficiency in
-          work. After studying the needs of medical institutions and users (patients and others) in
-          the Arab world, a working team was formed to develop this platform. This team has full
-          belief in the importance of developing electronic health services, especially the private
-          sector in our Arab world, by raising the level of medical services and improving the
-          efficiency of daily practices. For medical service providers, facilitating procedures for
-          patients and keeping their medical information and documents securely and in one place.
-          The platform is characterized by being comprehensive for all individuals and institutions,
-          whether the user (medical service provider or patient) subscribes to the services of
-          insurance companies or not, as you can benefit from the services provided to you
-          independently and without association with any insurance or insurance management groups.
+          {t(
+            'Our platform is the result of a collaborative effort between the healthcare sector and specialists in developing the performance of institutions seeking to achieve efficiency and excellence in work.'
+          )}
+        </Typography>
+        <Typography sx={{ fontSize: { xs: 16, md: 20 }, fontWeight: 600, letterSpacing: 1 }}>
+          {t(
+            'After studying the needs of medical institutions and users (patients and others) in the Arab world, a working team was formed to develop this platform. This team fully believes in the importance of developing e-health services, particularly in the private sector, in the Arab world. This will raise the level of medical services and improve the efficiency of daily practices. For medical service providers, it will facilitate procedures for patients and securely store their medical information and documents in one place.'
+          )}
+        </Typography>
+        <Typography sx={{ fontSize: { xs: 16, md: 20 }, fontWeight: 600, letterSpacing: 1 }}>
+          {t(
+            'The platform is comprehensive for all individuals and institutions, whether the user (medical service provider or patient) is subscribed to insurance companies or not. You can benefit from the services provided independently, without being tied to any insurance or insurance management group.'
+          )}
         </Typography>
       </Box>
 
@@ -95,7 +98,9 @@ export default function MoreInfoAboutUs() {
             </Typography>
           </m.div>
           <Typography variant="h6" sx={{ fontSize: { xs: 14, md: 18 } }}>
-            {t('Hakeemna platform is the result of joint cooperation between the health sector...')}
+            {t(
+              'Hakimna 360 is a platform and smartphone application that allows users to easily and privately access the health information documented in their electronic medical records, from anywhere and at any time.'
+            )}
           </Typography>
           <Stack direction="row" sx={{ mt: 2 }}>
             <Link sx={{ color: '#1F2C5C', fontSize: { xs: 14, md: 16 } }}>
@@ -105,13 +110,13 @@ export default function MoreInfoAboutUs() {
         </Stack>
 
         <Stack
-          sx={{ flex: 1, justifyContent: 'center', alignItems: 'center', mt: { xs: 4, md: 0 } }}
+          sx={{ flex: 1, justifyContent: 'center', alignItems: 'center', mt: { xs: 4, md: -4 } }}
         >
           <img
             decoding="async"
             loading="lazy"
             alt="medical services"
-            src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Devices-swe.png"
+            src={devices}
             style={{
               width: '90%',
               maxWidth: '500px',
@@ -138,21 +143,23 @@ export default function MoreInfoAboutUs() {
             <Stack sx={{ flex: 1 }}>
               <m.div variants={varFade().inDown}>
                 <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                  {t('who are we')}
+                  {t('Who are we')}
                 </Typography>
               </m.div>
 
               <Typography sx={{ fontSize: { xs: 14, md: 16 }, my: 2 }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat doloremque...
+                {t(
+                  'Hakimna 360 is one of the platforms of Ghassan Abu Nabaa Foundation for Project Development and Information Technology.'
+                )}
               </Typography>
 
               <Typography sx={{ fontWeight: 600, fontSize: { xs: 14, md: 16 }, color: '#3CB099' }}>
-                {t('العنوان: عمان، شارع وصفي التل 153، عمان، الأردن')}
+                {t('Address: Amman, Wasfi Al Tal Street 153, Amman, Jordan')}
               </Typography>
             </Stack>
             <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
               <img
-                src="/"
+                src={map}
                 alt="Map Location"
                 style={{
                   width: '80%',

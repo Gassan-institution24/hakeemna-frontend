@@ -34,7 +34,7 @@ export default function UnitServiceHero() {
     >
       <m.div variants={varFade().inDown}>
         <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
-          {t('Electronic innovation for a healthier future')}
+          {t('Service providers (medical institutions)')}
         </Typography>
       </m.div>
     </Stack>

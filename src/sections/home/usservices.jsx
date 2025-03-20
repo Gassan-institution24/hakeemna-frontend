@@ -58,12 +58,12 @@ export default function USServices() {
           />
         </Stack>
         <Typography sx={{ mt: 3, textAlign: 'center' }}>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum doloribus tempora culpa
-          voluptatibus aperiam cumque a voluptatem laborum magni, rerum impedit dolor inventore
-          debitis atque quasi tempore deserunt iste. Aperiam! Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Dolorum doloribus tempora culpa voluptatibus aperiam cumque
-          a voluptatem laborum magni, rerum impedit dolor inventore debitis atque quasi tempore
-          deserunt iste. Aperiam!
+          {t(
+            'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.'
+          )}
+          {t(
+            'Digital intelligence requires that it cover all aspects of work in different institutions, and the obstacles that prevent the success of this important transition are varied.Therefore, with the help of God Almighty, the Hakeemna platform was designed to take into account those obstacles (financial, tax, training, workability and compatibility with) (systems Different applications and market) to overcome those limitations in the diet of the diet community in one digital platform to provide modern and intelligent care to patients everywhere.'
+          )}
         </Typography>
       </Box>
 
@@ -106,32 +106,38 @@ export default function USServices() {
         >
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }}>
-              - {t('Managing medical records and appointments')}
+              {t('Managing old paper patient files and storing them in electronic records.')}
             </Typography>
             <Typography sx={{ p: 2 }}>
-              - {t('Insurance and financial transactions processing')}
+              {t('Managing patient records and files electronically.')}
             </Typography>
             <Typography sx={{ p: 2 }}>
-              - {t('Prescription and medical reports issuance')}
+              {t(
+                'Improving the mechanism of access to your medical information and patient files and the ability to access the rest of the data and medical history.'
+              )}
             </Typography>
           </Card>
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }}>
-              - {t('Patient admission and discharge procedures')}
+              {t('Support better decision making in patient care.')}
             </Typography>
             <Typography sx={{ p: 2 }}>
-              - {t('Integration with electronic health records')}
+              {t('Managing and organizing public relations electronically.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>- {t('Mobile health services and telemedicine')}</Typography>
+            <Typography sx={{ p: 2 }}>{t('Organizing patient relations and affairs.')}</Typography>
           </Card>
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }}>
-              - {t('Patient admission and discharge procedures')}
+              {t(
+                'Increasing patient and visitor satisfaction with the services provided and reducing waiting time in the clinic and other medical institutions.'
+              )}
             </Typography>
             <Typography sx={{ p: 2 }}>
-              - {t('Integration with electronic health records')}
+              {t('Making financial budgets for patients and managing premiums.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>- {t('Mobile health services and telemedicine')}</Typography>
+            <Typography sx={{ p: 2 }}>
+              {t('Contributing to reducing medical errors related to medication conflicts.')}
+            </Typography>
           </Card>
         </Box>
         <Typography
@@ -140,7 +146,7 @@ export default function USServices() {
           fontWeight={700}
           sx={{ color: '1F2C5C', position: 'relative', top: 30 }}
         >
-          {t('Patient Affairs')}
+          {t('some services under development')}
         </Typography>
       </Box>
 
@@ -335,7 +341,7 @@ export default function USServices() {
             boxShadow: 'none',
             '&:hover': {
               bgcolor: 'inherit',
-            }, 
+            },
           }}
         >
           <div
