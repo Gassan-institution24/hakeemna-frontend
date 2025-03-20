@@ -28,7 +28,7 @@ export const NavItem = forwardRef(
         open={open}
         active={active}
         subItem={subItem}
-        sx={{ textTransform: 'uppercase', fontWeight: 600, fontSize: curLangAr ? 15 : 14 }}
+        sx={{ textTransform: 'uppercase', fontWeight: 600, fontSize: curLangAr ? 15 : 13 }}
         {...other}
       >
         {title}

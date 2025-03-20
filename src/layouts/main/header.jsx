@@ -8,7 +8,7 @@ import { paths } from 'src/routes/paths';
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
@@ -27,7 +27,8 @@ export default function Header() {
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -42,7 +43,7 @@ export default function Header() {
       <Box
         sx={{
           bgcolor: 'white',
-          py: 2,
+          py: 0.9,
           px: { xs: 2, sm: 5, md: 10 },
           display: 'flex',
           alignItems: 'center',
@@ -72,14 +73,24 @@ export default function Header() {
           <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />
           <Link
             href="tel:+962780830087"
-            sx={{ fontSize: 13, fontWeight: 500, color: '#1F2C5C', textDecoration: 'none' }}
+            sx={{
+              fontSize: curLangAr ? 15 : 13,
+              fontWeight: 500,
+              color: '#1F2C5C',
+              textDecoration: 'none',
+            }}
           >
             +962 780830087
           </Link>
           <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />
           <Link
             href="mailto:info@hakeemna.com"
-            sx={{ fontSize: 13, fontWeight: 500, color: '#1F2C5C', textDecoration: 'none' }}
+            sx={{
+              fontSize: curLangAr ? 15 : 13,
+              fontWeight: 500,
+              color: '#1F2C5C',
+              textDecoration: 'none',
+            }}
           >
             info@hakeemna.com
           </Link>
@@ -96,7 +107,7 @@ export default function Header() {
         }}
       >
         {/* Logo */}
-        <Logo sx={{ width: { xs: 100, sm: 120, md: 110 }, height: 'auto' }} />
+        <Logo sx={{ width: 80 }} />
 
         {/* Desktop Navigation */}
         {mdUp && (
@@ -118,7 +129,14 @@ export default function Header() {
               aria-controls={open ? 'signup-menu' : undefined}
               aria-haspopup="true"
               onClick={handleClick}
-              sx={{ color: '#1F2C5C', display: 'flex', alignItems: 'center' }}
+              sx={{
+                color: '#1F2C5C',
+                display: 'flex',
+                alignItems: 'center',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: curLangAr ? 15 : 13,
+              }}
             >
               {t('sign up')}
               <ExpandMore sx={{ ml: 0.5 }} />
@@ -149,7 +167,13 @@ export default function Header() {
 
             <Link
               href={paths.auth.login}
-              sx={{ textDecoration: 'none', color: '#1F2C5C', fontWeight: 500 }}
+              sx={{
+                textDecoration: 'none',
+                color: '#1F2C5C',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: curLangAr ? 15 : 13,
+              }}
             >
               {t('login')}
             </Link>
