@@ -6,11 +6,12 @@ import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, Link, Grid, Alert, Stack, Typography } from '@mui/material';
+import { Box, Link, Grid, Alert, Stack, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import axiosInstance from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider, { RHFTextField, RHFPhoneNumber } from 'src/components/hook-form';
 
@@ -18,7 +19,10 @@ import TrainingImage from './images/Video files-bro 1.svg';
 
 export default function Training() {
   const { t } = useTranslate();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [errorMsg, setErrorMsg] = useState('');
+
   const RegisterSchema = Yup.object().shape({
     full_name: Yup.string().required('English name is required'),
     topic: Yup.string().required('Topic name is required'),
@@ -27,7 +31,8 @@ export default function Training() {
       .required('Mobile number is required')
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
   });
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const defaultValues = {
     full_name: '',
     topic: '',
@@ -69,35 +74,27 @@ export default function Training() {
         <Typography variant="h6">{t('Get a free certificate')}</Typography>
       </Box>
 
-      <Box
-        sx={{
-          position: 'relative',
-          height: '200px', // Adjust the height as needed
-        }}
-      >
-        <img
-          src={TrainingImage}
-          alt="Training"
-          style={{
-            position: 'absolute',
-            top: -30,
-            right: 0,
-            maxWidth: '50%', // Adjust the width of the image as needed
-          }}
-        />
-      </Box>
+      {!isSmallScreen && (
+        <Box sx={{ position: 'relative', height: '200px' }}>
+          <img
+            src={TrainingImage}
+            alt="Training"
+            style={{
+              position: 'absolute',
+              top: -70,
+              [currentLang ? 'left' : 'right']: 0, // Conditional style
+              maxWidth: '50%',
+            }}
+          />
+        </Box>
+      )}
     </Stack>
   );
 
   const renderTerms = (
     <Typography
       component="div"
-      sx={{
-        color: 'text.secondary',
-        mt: 2.5,
-        typography: 'caption',
-        textAlign: 'center',
-      }}
+      sx={{ color: 'text.secondary', mt: 2.5, typography: 'caption', textAlign: 'center' }}
     >
       {t('By signing up, I agree to ')}
       <Link underline="always" color="text.primary">
@@ -121,38 +118,22 @@ export default function Training() {
         <RHFTextField
           name="full_name"
           label={t('Full Name')}
-          InputLabelProps={{
-            style: {
-              color: '#1F2C5C',
-            },
-          }}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
         />
         <RHFTextField
           name="topic"
           label={t('Topic')}
-          InputLabelProps={{
-            style: {
-              color: '#1F2C5C',
-            },
-          }}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
         />
         <RHFTextField
           name="email"
           label={t('Email address')}
-          InputLabelProps={{
-            style: {
-              color: '#1F2C5C',
-            },
-          }}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
         />
         <RHFPhoneNumber
           name="mobile_num1"
           label={t('Mobile number')}
-          InputLabelProps={{
-            style: {
-              color: '#1F2C5C',
-            },
-          }}
+          InputLabelProps={{ style: { color: '#1F2C5C' } }}
         />
         <LoadingButton
           fullWidth
@@ -169,21 +150,13 @@ export default function Training() {
   );
 
   return (
-    <Grid
-      container
-      component="main"
-      sx={{
-        minHeight: '62vh',
-        px: 30,
-        py: 5,
-      }}
-    >
+    <Grid container component="main" sx={{ minHeight: '62vh', px: 5, py: 5 }}>
       <Grid
         item
         xs={12}
         md={6}
         sx={{
-          p: 8,
+          p: { xs: 4, md: 8 },
           background: 'linear-gradient(to bottom right, #74BCB7, #6EBBB3)',
           borderTopLeftRadius: { md: '20px', xs: 0 },
           borderBottomLeftRadius: { md: '20px', xs: 0 },
@@ -197,7 +170,7 @@ export default function Training() {
         xs={12}
         md={6}
         sx={{
-          p: 8,
+          p: { xs: 4, md: 8 },
           background: '#E4F6F2',
           borderTopRightRadius: { md: '20px', xs: 0 },
           borderBottomRightRadius: { md: '20px', xs: 0 },
