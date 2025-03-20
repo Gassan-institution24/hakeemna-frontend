@@ -20,7 +20,7 @@ export const WebRTCProvider = ({ children }) => {
     const [idToCall, setIdToCall] = useState('');
     const [isMuted, setIsMuted] = useState(false);
     const [isCalling, setIsCalling] = useState(false);
-    const [isVideoOn, setIsVideoOn] = useState(true);
+    const [isVideoOn, setIsVideoOn] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -38,7 +38,6 @@ export const WebRTCProvider = ({ children }) => {
     useEffect(() => {
         if (user?._id && !peerInstance) {
             const peer = new Peer(`${user._id}-hakeemna`);
-
             peer.on('open', (id) => {
                 // eslint-disable-next-line
                 // console.log('My peer ID from open is: ' + id);
@@ -86,6 +85,9 @@ export const WebRTCProvider = ({ children }) => {
         // Notify the other user that call has ended
         socket.emit("endCall", { to: caller });
 
+        if (callAccepted) {
+            router.replace(paths.dashboard.root);
+        }
         // Reset all states
         setCallAccepted(false);
         setReceivingCall(false);
@@ -102,24 +104,17 @@ export const WebRTCProvider = ({ children }) => {
         setStream(null)
 
         // Redirect to dashboard
-        if (callAccepted) {
-            router.replace(paths.dashboard.root);
-        }
     }, [caller, stream, screenStream, mediaRecorder, router, callAccepted]);
 
     const callUser = useCallback((id) => {
         if (!peerInstance || !stream || !socket) return;
 
-        // Notify the user about the call via socket
-        socket.emit("callUser", {
-            userId: id,
-            from: user?._id,
-            userName: user?.userName
-        });
         // Make the call with PeerJS
         const call = peerInstance.call(`${id}-hakeemna`, stream);
 
-        call?.on('stream', (remoteStream) => {
+        if (!call) return
+
+        call.on('stream', (remoteStream) => {
             if (userVideo.current) {
                 userVideo.current.srcObject = remoteStream;
             }
@@ -127,6 +122,13 @@ export const WebRTCProvider = ({ children }) => {
 
         call.on('close', () => {
             endCall();
+        });
+
+        // Notify the user about the call via socket
+        socket.emit("callUser", {
+            userId: id,
+            from: user?._id,
+            userName: user?.userName
         });
 
         setIsCalling(true)
@@ -150,20 +152,31 @@ export const WebRTCProvider = ({ children }) => {
     }, [callRef, stream, userVideo, caller]);
 
     const toggleMute = useCallback(() => {
-        if (stream) {
-            const audioTracks = stream.getAudioTracks();
-            if (audioTracks.length > 0) {
-                audioTracks[0].enabled = !audioTracks[0].enabled;
-                setIsMuted(!audioTracks[0].enabled);
+        if (!stream) return;
 
-                audioTrackRef.current = audioTracks[0];
+        const audioTracks = stream.getAudioTracks();
+        if (audioTracks.length === 0) return;
 
-                if (callRef.current && callRef.current.peerConnection) {
-                    const senders = callRef.current.peerConnection.getSenders();
-                    const audioSender = senders.find(s => s.track && s.track.kind === "audio");
-                    if (audioSender && audioSender.track) {
-                        audioSender.track.enabled = audioTracks[0].enabled;
-                    }
+        const track = audioTracks[0];
+        const currIsMuted = !track.enabled; // Invert the current state
+
+        // Toggle the enabled state of the track
+        track.enabled = currIsMuted;
+
+        setIsMuted(!currIsMuted); // Update the mute state in your app UI
+
+        // If there's an active call, replace the track
+        if (callRef.current?.peerConnection) {
+            const senders = callRef.current.peerConnection.getSenders();
+            const audioSender = senders.find((s) => s.track?.kind === "audio");
+
+            if (audioSender) {
+                if (currIsMuted) {
+                    // If unmuting, replace the track with the original audio track
+                    audioSender.replaceTrack(track);
+                } else {
+                    // If muting, replace the track with null to stop audio transmission
+                    audioSender.replaceTrack(null);
                 }
             }
         }
@@ -172,6 +185,7 @@ export const WebRTCProvider = ({ children }) => {
     const toggleVideo = useCallback(() => {
         if (stream) {
             const videoTracks = stream.getVideoTracks();
+            myVideo.current.srcObject = stream;
             if (videoTracks.length > 0) {
                 videoTracks[0].enabled = !videoTracks[0].enabled;
                 setIsVideoOn(videoTracks[0].enabled);
@@ -189,31 +203,47 @@ export const WebRTCProvider = ({ children }) => {
 
     const toggleScreenSharing = useCallback(async () => {
         if (!isScreenSharing) {
-            // Your existing code for turning ON screen sharing works well
             try {
+                // Start screen sharing
                 const currScreenStream = await navigator.mediaDevices.getDisplayMedia({
                     video: true,
-                    audio: true,
+                    audio: false,
                 });
 
+                // Listen for the "ended" event on the video track
+                const videoTrack = currScreenStream.getVideoTracks()[0];
+                videoTrack.onended = () => {
+                    // Handle stopping screen sharing
+                    setIsScreenSharing(false);
+                    setScreenStream(null);
+
+                    // Switch back to the camera stream
+                    if (stream) {
+                        myVideo.current.srcObject = stream;
+
+                        // Replace the track in the peer connection
+                        if (callRef.current && callRef.current.peerConnection) {
+                            const senders = callRef.current.peerConnection.getSenders();
+                            const videoSender = senders.find((s) => s.track?.kind === "video");
+
+                            if (videoSender) {
+                                videoSender.replaceTrack(stream.getVideoTracks()[0]);
+                            }
+                        }
+                    }
+                };
+
+                // Update state and UI
                 myVideo.current.srcObject = currScreenStream;
                 setScreenStream(currScreenStream);
                 setIsScreenSharing(true);
 
-                if (audioTrackRef.current) {
-                    const audioTracks = currScreenStream.getAudioTracks();
-                    if (audioTracks.length > 0) {
-                        audioTracks[0].enabled = audioTrackRef.current.enabled;
-                    }
-                }
-
+                // Replace the video track in the peer connection
                 if (callRef.current) {
-                    const videoTrack = currScreenStream.getVideoTracks()[0];
-
                     const call = callRef.current;
                     if (call.peerConnection) {
                         const senders = call.peerConnection.getSenders();
-                        const videoSender = senders.find((s) => s.track && s.track.kind === "video");
+                        const videoSender = senders.find((s) => s.track?.kind === "video");
 
                         if (videoSender) {
                             videoSender.replaceTrack(videoTrack);
@@ -221,54 +251,25 @@ export const WebRTCProvider = ({ children }) => {
                     }
                 }
             } catch (error) {
-                // console.error("Error sharing screen:", error);
+                console.error("Error sharing screen:", error);
             }
         } else {
-            // TURNING OFF screen sharing - improvements here
+            // Stop screen sharing manually
             if (screenStream) {
                 screenStream.getTracks().forEach((track) => track.stop());
             }
 
-            // Make sure camera stream exists and is active
-            if (!stream || stream.getVideoTracks().length === 0 || !stream.getVideoTracks()[0].enabled) {
-                try {
-                    // Re-acquire camera if needed
-                    const newStream = await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: true,
-                    });
-
-                    // Update your stream reference
-                    setStream(newStream);
-
-                    // Set the video element source to the camera stream
-                    myVideo.current.srcObject = newStream;
-
-                    // Replace track in peer connection
-                    if (callRef.current && callRef.current.peerConnection) {
-                        const videoTrack = newStream.getVideoTracks()[0];
-                        const senders = callRef.current.peerConnection.getSenders();
-                        const videoSender = senders.find((s) => s.track && s.track.kind === "video");
-
-                        if (videoSender) {
-                            await videoSender.replaceTrack(videoTrack);
-                        }
-                    }
-                } catch (err) {
-                    // console.error("Error reacquiring camera:", err);
-                }
-            } else {
-                // Camera stream exists and is active
+            // Switch back to the camera stream
+            if (stream) {
                 myVideo.current.srcObject = stream;
 
-                // Replace track in peer connection
+                // Replace the track in the peer connection
                 if (callRef.current && callRef.current.peerConnection) {
-                    const videoTrack = stream.getVideoTracks()[0];
                     const senders = callRef.current.peerConnection.getSenders();
-                    const videoSender = senders.find((s) => s.track && s.track.kind === "video");
+                    const videoSender = senders.find((s) => s.track?.kind === "video");
 
                     if (videoSender) {
-                        await videoSender.replaceTrack(videoTrack);
+                        videoSender.replaceTrack(stream.getVideoTracks()[0]);
                     }
                 }
             }
@@ -276,7 +277,7 @@ export const WebRTCProvider = ({ children }) => {
             setIsScreenSharing(false);
             setScreenStream(null);
         }
-    }, [isScreenSharing, audioTrackRef, callRef, screenStream, stream]);
+    }, [isScreenSharing, screenStream, stream, callRef, myVideo]);
 
     // const stopRecording = useCallback(() => {
     //     if (mediaRecorder) {
@@ -312,20 +313,20 @@ export const WebRTCProvider = ({ children }) => {
     //     }
     // }, [setMediaRecorder, setIsRecording, setRecordedChunks, stopRecording]);
 
-    useEffect(() => {
-        if (recordedChunks.length > 0) {
-            const blob = new Blob(recordedChunks, { type: "video/webm" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `${Date.now().toString().slice(0, 10)}-recording.webm`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            setRecordedChunks([]);
-        }
-    }, [recordedChunks]);
+    // useEffect(() => {
+    //     if (recordedChunks.length > 0) {
+    //         const blob = new Blob(recordedChunks, { type: "video/webm" });
+    //         const url = URL.createObjectURL(blob);
+    //         const a = document.createElement("a");
+    //         a.href = url;
+    //         a.download = `${Date.now().toString().slice(0, 10)}-recording.webm`;
+    //         document.body.appendChild(a);
+    //         a.click();
+    //         document.body.removeChild(a);
+    //         URL.revokeObjectURL(url);
+    //         setRecordedChunks([]);
+    //     }
+    // }, [recordedChunks]);
 
     const onCancelCall = useCallback(() => {
         socket.emit('cancelCall', { to: caller });
