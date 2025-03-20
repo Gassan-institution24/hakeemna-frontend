@@ -1,8 +1,10 @@
+import 'swiper/css';
+import 'swiper/css/pagination';
 import { m } from 'framer-motion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { Grid, Paper, Stack, Button, Typography } from '@mui/material';
+import { Box, Paper, Stack, Container, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -11,18 +13,17 @@ import { useGetActiveUnitservices } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function OurPartners() {
   const { t } = useTranslate();
+  const router = useRouter();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { unitservicesData } = useGetActiveUnitservices({
     select: 'name_english name_arabic company_logo',
-    rowPerPage: 4,
   });
-  const router = useRouter();
 
   return (
     <Box
@@ -51,102 +52,82 @@ export default function OurPartners() {
           </m.div>
         </Stack>
 
-        <Grid container spacing={5} justifyContent="center">
+        {/* Swiper Carousel */}
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          slidesPerView={1}
+          pagination={{ clickable: true, el: '.custom-pagination' }}
+          autoplay={{ delay: 3000 }}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+        >
           {unitservicesData.map((partner, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Paper
-                elevation={3}
-                sx={{
-                  overflow: 'hidden',
-                  borderRadius: 3, // More rounded corners
-                  textAlign: 'center',
-                  backgroundColor: 'white',
-                  position: 'relative',
-                }}
+            <SwiperSlide key={index}>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
+                onClick={() => router.push(paths.pages.serviceUnit(partner?._id))}
               >
-                {/* Partner Image */}
-                <Image
-                  src={partner.company_logo}
-                  alt={partner.name_english}
+                <Paper
+                  elevation={3}
                   sx={{
-                    width: '100%',
-                    height: 200,
-                    objectFit: 'cover',
-                  }}
-                />
-
-                {/* Green Overlay at the Bottom */}
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '80px',
-                    backgroundColor: '#2EA98D', // Green color
-                    clipPath: 'ellipse(100% 50% at center bottom)', // Curved bottom shape
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    width: 250, // Set width
+                    overflow: 'hidden',
+                    borderRadius: 3,
+                    textAlign: 'center',
+                    backgroundColor: 'white',
+                    position: 'relative',
                   }}
                 >
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 'bold', color: 'white', fontSize: 18, pt: 5 }}
+                  {partner.company_logo ? (
+                    <Image
+                      // src={partner.company_logo}
+                      src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                      alt={partner.name_english}
+                      sx={{
+                        width: '100%',
+                        height: 170,
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <Box sx={{ width: '100%', height: 170 }} />
+                  )}
+
+                  {/* Green Overlay at the Bottom */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '80px',
+                      backgroundColor: '#2EA98D',
+                      clipPath: 'ellipse(100% 50% at center bottom)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
                   >
-                    {curLangAr ? partner.name_arabic : partner.name_english}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Grid>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: 'bold', color: 'white', fontSize: 16, pt: 5 }}
+                    >
+                      {curLangAr ? partner.name_arabic : partner.name_english}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
+            </SwiperSlide>
           ))}
-        </Grid>
-        <Stack direction="row" sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
-          <Button
-            size="large"
-            id="About"
-            onClick={() => router.push(paths.pages.book)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              borderRadius: '5px',
-              bgcolor: 'transparent',
-              padding: 0,
-              overflow: 'hidden',
-              boxShadow: 'none',
-              '&:hover': {
-                bgcolor: 'inherit',
-              },
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: 'white',
-                color: '#1F2C5C',
-                fontWeight: 'bold',
-                padding: '10px 16px',
-                fontSize: '16px',
-              }}
-            >
-              {t('Read more')}
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#1F2C5C',
-                padding: '10px 12px',
-              }}
-            >
-              {curLangAr ? (
-                <Iconify icon="icon-park-outline:left" width={24} sx={{ color: 'white' }} />
-              ) : (
-                <Iconify icon="eva:arrow-ios-forward-fill" width={24} sx={{ color: 'white' }} />
-              )}
-            </div>
-          </Button>
-        </Stack>
+        </Swiper>
+
+        {/* Custom Pagination */}
+        <Box
+          className="custom-pagination"
+          sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}
+        />
       </Container>
     </Box>
   );

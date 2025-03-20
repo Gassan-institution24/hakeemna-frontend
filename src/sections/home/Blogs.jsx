@@ -78,7 +78,7 @@ export default function Blogs({ onPreview }) {
   });
 
   return (
-    <Box sx={{ py: { xs: 2, md: 4 }, px: { xs: 2, md: 30 }, textAlign: 'start' }}>
+    <Box sx={{ py: { xs: 2, md: 2 }, px: { xs: 2, md: 30 }, textAlign: 'start' }}>
       <Typography variant="h2" component="h2" sx={{ mb: { xs: 5, md: 10 }, textAlign: 'center' }}>
         {t('hakeemna medical blog')}
       </Typography>
@@ -128,6 +128,7 @@ export default function Blogs({ onPreview }) {
                 justifyContent: 'space-between',
                 borderRight: '5px solid #3CB099',
                 borderRadius: '15px',
+                bgcolor:"rgba(216, 246, 240, 0.11)"
               }}
             >
               <Box sx={{ p: 2 }}>

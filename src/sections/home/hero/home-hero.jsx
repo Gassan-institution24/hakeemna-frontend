@@ -49,7 +49,7 @@ export default function HomeHero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === texts.length - 1 ? 0 : prevIndex + 1));
-    }, 4000);
+    }, 6000);
     return () => clearInterval(interval);
   }, [texts.length]);
 
@@ -125,6 +125,7 @@ export default function HomeHero() {
               fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
               mb: 3,
+              color: 'white',
             }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +143,7 @@ export default function HomeHero() {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 1, ease: 'easeInOut' }}
         >
-          <Typography variant="subtitle1" component="p" sx={{ maxWidth: 800, mb: 3 }}>
+          <Typography variant="subtitle1" component="p" sx={{ maxWidth: 800, mb: 3, color: 'white', }}>
             {texts[currentIndex]}
           </Typography>
 
