@@ -175,23 +175,30 @@ export default function EmployeeCard({ employee }) {
             {employee?.fees && (
               <Stack direction="row" gap={1} mb={2}>
                 <Typography variant="body2">{t('fees')}:</Typography>
-                {employee?.fees_after_discount ? <>
-                  <Typography sx={{
-                    textDecoration: 'line-through',
-                    textDecorationColor: 'red',
-                    textDecorationThickness: '2px',
-                  }} variant="body2">
+                {employee?.fees_after_discount ? (
+                  <>
+                    <Typography
+                      sx={{
+                        textDecoration: 'line-through',
+                        textDecorationColor: 'red',
+                        textDecorationThickness: '2px',
+                      }}
+                      variant="body2"
+                    >
+                      {fCurrency(employee?.fees, employee.currency?.symbol)}
+                    </Typography>
+                    <Typography variant="body2">
+                      {fCurrency(employee?.fees_after_discount, employee.currency?.symbol)}
+                    </Typography>
+                    <Typography color="primary.main" variant="caption">
+                      {t('special offer for Hakeemna users')}
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="body2">
                     {fCurrency(employee?.fees, employee.currency?.symbol)}
                   </Typography>
-                  <Typography variant="body2">
-                    {fCurrency(employee?.fees_after_discount, employee.currency?.symbol)}
-                  </Typography>
-                  <Typography color='primary.main' variant="caption">
-                    {t('special offer for Hakeemna users')}
-                  </Typography>
-                </> : <Typography variant="body2">
-                  {fCurrency(employee?.fees, employee.currency?.symbol)}
-                </Typography>}
+                )}
               </Stack>
             )}
             {employee?.unit_service?.address && (
@@ -222,17 +229,17 @@ export default function EmployeeCard({ employee }) {
                 <Stack>
                   {employee?.unit_service?.insurance?.length > 5
                     ? employee?.unit_service?.insurance
-                      ?.filter((one, index) => index <= 5)
-                      .map((one) => (
+                        ?.filter((one, index) => index <= 5)
+                        .map((one) => (
+                          <Typography variant="body2">
+                            {curLangAr ? one.name_arabic : one.name_english}
+                          </Typography>
+                        ))
+                    : employee?.unit_service?.insurance?.map((one) => (
                         <Typography variant="body2">
                           {curLangAr ? one.name_arabic : one.name_english}
                         </Typography>
-                      ))
-                    : employee?.unit_service?.insurance?.map((one) => (
-                      <Typography variant="body2">
-                        {curLangAr ? one.name_arabic : one.name_english}
-                      </Typography>
-                    ))}
+                      ))}
                   {employee?.unit_service?.insurance?.length > 5 &&
                     `+${employee.unit_service.insurance.length - 5}`}
                 </Stack>

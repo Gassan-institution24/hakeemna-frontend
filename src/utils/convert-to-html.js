@@ -16,7 +16,6 @@ export const ConvertToHTML = (data) => {
   return '';
 };
 
-
 export const HTMLToText = (data) => {
   if (data) {
     const decodedHTML = decode(data);

@@ -161,7 +161,7 @@ export default function OldMedicalReports() {
     if (isValidFiles) {
       // setFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles;
-      console.log('newFiles', newFiles)
+      console.log('newFiles', newFiles);
       setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
       setValue('file', [...values.file, ...newFiles]);
     } else {
@@ -411,22 +411,22 @@ export default function OldMedicalReports() {
               variant="outlined"
               onDrop={handleDrop}
               multiple
-            // onRemove={(inputFile) => {
-            //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
-            //     shouldValidate: true,
-            //   });
-            //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
-            // }}
-            // onRemoveAll={() => {
-            //   setValue('files', [], { shouldValidate: true });
-            //   setUploadedFiles([]);
-            // }}
-            // onUpload={onSubmit}
+              // onRemove={(inputFile) => {
+              //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
+              //     shouldValidate: true,
+              //   });
+              //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
+              // }}
+              // onRemoveAll={() => {
+              //   setValue('files', [], { shouldValidate: true });
+              //   setUploadedFiles([]);
+              // }}
+              // onUpload={onSubmit}
             />
 
             <RHFTextField name="note" label={t('More information')} />
           </DialogContent>
-          <Stack direction='row' gap={1} alignItems='center' sx={{ mx: 4 }}>
+          <Stack direction="row" gap={1} alignItems="center" sx={{ mx: 4 }}>
             <Checkbox
               size="small"
               name="agree"

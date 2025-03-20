@@ -54,7 +54,12 @@ export default function ProfessionalMembership() {
       >
         {fields.map((item, index) => (
           <Stack key={index} alignItems="flex-start" spacing={1.5} sx={{ width: '100%' }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={2} sx={{ width: '100%' }}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              alignItems="center"
+              spacing={2}
+              sx={{ width: '100%' }}
+            >
               <RHFTextField
                 // size="small"
                 name={`memberships[${index}].name`}

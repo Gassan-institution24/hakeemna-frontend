@@ -6,9 +6,9 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import App from './app';
 
-(window).global = window;
-(window).process = process;
-(window).Buffer = [];
+window.global = window;
+window.process = process;
+window.Buffer = [];
 
 // ----------------------------------------------------------------------
 

@@ -60,17 +60,20 @@ export default function PatientUpload({ patient }) {
 
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
-  const defaultDrug = useMemo(() => ({
-    unit_service: employee?.unit_service?._id,
-    employee: user?.employee?._id,
-    patient: patient?.patient?._id,
-    unit_service_patient: patient?._id,
-    medicines: null,
-    Frequency_per_day: '',
-    Start_time: '',
-    End_time: '',
-    Doctor_Comments: '',
-  }), [employee?.unit_service, user?.employee, patient]);
+  const defaultDrug = useMemo(
+    () => ({
+      unit_service: employee?.unit_service?._id,
+      employee: user?.employee?._id,
+      patient: patient?.patient?._id,
+      unit_service_patient: patient?._id,
+      medicines: null,
+      Frequency_per_day: '',
+      Start_time: '',
+      End_time: '',
+      Doctor_Comments: '',
+    }),
+    [employee?.unit_service, user?.employee, patient]
+  );
 
   const methods = useForm({
     defaultValues: {
@@ -140,14 +143,14 @@ export default function PatientUpload({ patient }) {
           enqueueSnackbar(t('no data to submit'), { variant: 'error' });
           return;
         }
-        console.log('patient?.patient?._id', patient)
+        console.log('patient?.patient?._id', patient);
         await axiosInstance.post(`/api/instructions`, {
           patient: patient?.patient?._id,
           unit_service_patient: patient?._id,
           adjustable_documents: selectedInstruction,
           unit_service: employee?.unit_service?._id,
         });
-        setSelectedInstruction('')
+        setSelectedInstruction('');
       } else if (table === 'patient_record') {
         if (!values.patient_record_description && !values.patient_record_file) {
           enqueueSnackbar(t('no data to submit'), { variant: 'error' });
@@ -204,7 +207,7 @@ export default function PatientUpload({ patient }) {
       } else if (table === 'prescription') {
         if (!values.drugs?.length || values.drugs.some((one) => !one.medicines)) {
           enqueueSnackbar(t('please choose medicine'), { variant: 'error' });
-          return
+          return;
         }
         setloading(true);
         await axiosInstance.post(endpoints.prescription.all, values.drugs);
@@ -221,8 +224,8 @@ export default function PatientUpload({ patient }) {
   };
 
   useEffect(() => {
-    setValue('drugs', [defaultDrug])
-  }, [defaultDrug, setValue])
+    setValue('drugs', [defaultDrug]);
+  }, [defaultDrug, setValue]);
   return (
     <Container maxWidth="xl">
       <FormProvider methods={methods}>
@@ -352,7 +355,6 @@ export default function PatientUpload({ patient }) {
             </Stack>
           </Card>
 
-
           <Card sx={{ p: 2 }}>
             <Stack gap={2}>
               <Typography variant="subtitle1">{t('communication')}</Typography>
@@ -371,30 +373,49 @@ export default function PatientUpload({ patient }) {
             </Stack>
           </Card>
 
-          {adjustabledocument?.length > 0 && <Card sx={{ p: 2 }}>
-            <Stack gap={2} height='100%'>
-              <Typography variant="subtitle1">{t('Instructions')}</Typography>
-              <Stack gap={1} sx={{ maxHeight: 300, overflow: 'auto' }}>
-                {adjustabledocument?.map((document) => (
-                  <Box key={document?._id} onClick={() => setSelectedInstruction(document?._id)} sx={{ cursor: 'pointer' }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems='center'
-                      sx={{ backgroundColor: 'primary.lighter', paddingX: 4, paddingY: 1, borderRadius: 2, border: selectedInstruction === document?._id ? '1px solid #00A76F' : '' }}
+          {adjustabledocument?.length > 0 && (
+            <Card sx={{ p: 2 }}>
+              <Stack gap={2} height="100%">
+                <Typography variant="subtitle1">{t('Instructions')}</Typography>
+                <Stack gap={1} sx={{ maxHeight: 300, overflow: 'auto' }}>
+                  {adjustabledocument?.map((document) => (
+                    <Box
+                      key={document?._id}
+                      onClick={() => setSelectedInstruction(document?._id)}
+                      sx={{ cursor: 'pointer' }}
                     >
-                      <Typography>{document?.title}</Typography>
-                      <Typography>{document?.applied}</Typography>
-                      <Radio checked={selectedInstruction === document?._id} value={document?._id} onChange={() => setSelectedInstruction(document?._id)} />
-                    </Stack>
-                  </Box>
-                ))}
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{
+                          backgroundColor: 'primary.lighter',
+                          paddingX: 4,
+                          paddingY: 1,
+                          borderRadius: 2,
+                          border: selectedInstruction === document?._id ? '1px solid #00A76F' : '',
+                        }}
+                      >
+                        <Typography>{document?.title}</Typography>
+                        <Typography>{document?.applied}</Typography>
+                        <Radio
+                          checked={selectedInstruction === document?._id}
+                          value={document?._id}
+                          onChange={() => setSelectedInstruction(document?._id)}
+                        />
+                      </Stack>
+                    </Box>
+                  ))}
+                </Stack>
+                <div style={{ flex: 1 }} />
+                <Stack direction="row" justifyContent="flex-end">
+                  <Button variant="contained" onClick={() => handleSubmit('instructions')}>
+                    {t('save')}
+                  </Button>
+                </Stack>
               </Stack>
-              <div style={{ flex: 1 }} />
-              <Stack direction="row" justifyContent="flex-end">
-                <Button variant="contained" onClick={() => handleSubmit('instructions')}>
-                  {t('save')}
-                </Button>
-              </Stack>
-            </Stack>
-          </Card>}
+            </Card>
+          )}
           <Card sx={{ p: 2 }}>
             <Stack gap={2}>
               <Typography variant="subtitle1">{t('sick leave')}</Typography>

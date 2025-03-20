@@ -45,7 +45,6 @@ export default function UploadBlogs({ currentRow }) {
     formState: { isSubmitting },
   } = methods;
 
-
   const onSubmit = async (submitdata) => {
     try {
       const formData = new FormData();

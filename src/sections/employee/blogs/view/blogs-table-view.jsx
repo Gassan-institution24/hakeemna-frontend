@@ -170,7 +170,6 @@ export default function BlogsTableView() {
                     />
                   ))}
 
-
                 <TableNoData notFound={notFound} />
               </TableBody>
             </Table>

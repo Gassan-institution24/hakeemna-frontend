@@ -9,7 +9,6 @@ import { useGetInstructions } from 'src/api/Instructions';
 import InstructionItem from './items/instruction-item';
 
 export default function PatientInstructions({ patient }) {
-
   const { user } = useAuthContext();
   const { data, refetch } = useGetInstructions({
     unit_service:

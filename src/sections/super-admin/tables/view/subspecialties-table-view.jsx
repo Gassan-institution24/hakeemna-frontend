@@ -34,10 +34,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   // TableSelectedAction,
   TablePaginationCustom,
@@ -116,8 +114,6 @@ export default function SubSpecialtiesTableView() {
     filters,
     dateError,
   });
-
-
 
   const canReset = !!filters?.name;
 

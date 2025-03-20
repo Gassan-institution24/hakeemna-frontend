@@ -11,7 +11,15 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Chip, Button, Divider, Tooltip, MenuItem, Typography, InputAdornment } from '@mui/material';
+import {
+  Chip,
+  Button,
+  Divider,
+  Tooltip,
+  MenuItem,
+  Typography,
+  InputAdornment,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -99,14 +107,13 @@ const languages = [
 
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter()
+  const router = useRouter();
   const [page, setPage] = useState('information');
-  const employeeEng =
-    employeeData?.employee_engagements?.[employeeData.selected_engagement];
-  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id)
-  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng?._id)
+  const employeeEng = employeeData?.employee_engagements?.[employeeData.selected_engagement];
+  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id);
+  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng?._id);
 
-  const { data: employeeEngagementData } = useGetEmployeeEngagement(employeeEng?._id)
+  const { data: employeeEngagementData } = useGetEmployeeEngagement(employeeEng?._id);
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
@@ -204,15 +211,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
       certifications: employeeData?.certifications?.length
         ? employeeData?.certifications
         : [
-          {
-            name: '',
-            institution: '',
-            year: null,
-          },
-        ],
+            {
+              name: '',
+              institution: '',
+              year: null,
+            },
+          ],
       fees: employeeEngagementData?.fees || 0,
-      fees_after_discount:
-        employeeEngagementData?.fees_after_discount || 0,
+      fees_after_discount: employeeEngagementData?.fees_after_discount || 0,
       // currency:
       //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
       //   currencies?.[0]?._id,
@@ -294,20 +300,21 @@ export default function AccountGeneral({ employeeData, refetch }) {
       delete dataToSubmit.signature;
       delete dataToSubmit.stamp;
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
-      await axios.patch(
-        endpoints.employee_engagements.one(
-          employeeEng?._id
-        ),
-        { fees: data.fees, fees_after_discount: data.fees_after_discount, currency: data?.currency }
-      );
+      await axios.patch(endpoints.employee_engagements.one(employeeEng?._id), {
+        fees: data.fees,
+        fees_after_discount: data.fees_after_discount,
+        currency: data?.currency,
+      });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
-      router.push(paths.pages.doctor(
-        `${employeeEng._id}_${employeeData?.[t('name_english')]?.replace(
-          / /g,
-          '-'
-        )}_${employeeData?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
-      ));
+      router.push(
+        paths.pages.doctor(
+          `${employeeEng._id}_${employeeData?.[t('name_english')]?.replace(
+            / /g,
+            '-'
+          )}_${employeeData?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+        )
+      );
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -357,7 +364,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
         <br />
         {page === 'information' && (
           <Box sx={{ px: 3 }}>
-            <Typography mb={2} variant="h6">{t('General Information')}</Typography>
+            <Typography mb={2} variant="h6">
+              {t('General Information')}
+            </Typography>
             <Box
               mt={4}
               rowGap={3}
@@ -392,9 +401,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     onChange={handleArabicInputChange}
                     label={t('Full name in Arabic')}
                   />
-                </Box >
-                <Typography variant='caption' sx={{ fontSize: 11 }} color='primary.main'>
-                  {t('If you want your name to appear with a title (such as: Doctor, Consultant, etc.), in this case you must write the title and then your full name (for example: Consultant Muhammad Ahmad Ali).')}
+                </Box>
+                <Typography variant="caption" sx={{ fontSize: 11 }} color="primary.main">
+                  {t(
+                    'If you want your name to appear with a title (such as: Doctor, Consultant, etc.), in this case you must write the title and then your full name (for example: Consultant Muhammad Ahmad Ali).'
+                  )}
                 </Typography>
                 <Box
                   rowGap={3}
@@ -472,20 +483,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <RHFTextField type="email" name="email" label={`${t('email')} :`} />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
+              <RHFTextField name="identification_num" label={`${t('National ID number')} :`} />
               <RHFTextField
-
-                name="identification_num"
-                label={`${t('National ID number')} :`}
-              />
-              <RHFTextField
-
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
               />
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
             </Box>
             <Divider flexItem sx={{ borderStyle: 'solid', py: 3 }} />
-            <Typography my={2} variant="h6">{t('Job Position Information')}</Typography>
+            <Typography my={2} variant="h6">
+              {t('Job Position Information')}
+            </Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -496,18 +504,30 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <Stack direction='row' gap={2}>
-                <Typography variant='subtitle2'>{t('employee type')}:</Typography>
-                <Typography variant='body2'>{employeeData?.employee_type?.[curLangAr ? 'name_arabic' : 'name_english']}</Typography>
+              <Stack direction="row" gap={2}>
+                <Typography variant="subtitle2">{t('employee type')}:</Typography>
+                <Typography variant="body2">
+                  {employeeData?.employee_type?.[curLangAr ? 'name_arabic' : 'name_english']}
+                </Typography>
               </Stack>
-              {!!employeeEngData?.department && <Stack direction='row' gap={2}>
-                <Typography variant='subtitle2'>{t('department')}:</Typography>
-                <Typography variant='body2'>{employeeEngData?.department?.[curLangAr ? 'name_arabic' : 'name_english']}</Typography>
-              </Stack>}
-              {workGroupsData.length > 0 && <Stack direction='row' gap={2}>
-                <Typography variant='subtitle2'>{t('work groups')}:</Typography>
-                <Typography variant='body2'>{workGroupsData.map((one) => one?.[curLangAr ? 'name_arabic' : 'name_english']).join(', ')}</Typography>
-              </Stack>}
+              {!!employeeEngData?.department && (
+                <Stack direction="row" gap={2}>
+                  <Typography variant="subtitle2">{t('department')}:</Typography>
+                  <Typography variant="body2">
+                    {employeeEngData?.department?.[curLangAr ? 'name_arabic' : 'name_english']}
+                  </Typography>
+                </Stack>
+              )}
+              {workGroupsData.length > 0 && (
+                <Stack direction="row" gap={2}>
+                  <Typography variant="subtitle2">{t('work groups')}:</Typography>
+                  <Typography variant="body2">
+                    {workGroupsData
+                      .map((one) => one?.[curLangAr ? 'name_arabic' : 'name_english'])
+                      .join(', ')}
+                  </Typography>
+                </Stack>
+              )}
             </Box>
           </Box>
         )}
@@ -533,14 +553,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -551,10 +571,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 name="fees"
                 label={t('Examination price')}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">{t("JOD")}</InputAdornment>,
+                  endAdornment: <InputAdornment position="end">{t('JOD')}</InputAdornment>,
                 }}
               />
-              <Tooltip title={t("If you want to promote yourself and make a discount on the price of the examination, please write the price of the new examination")}>
+              <Tooltip
+                title={t(
+                  'If you want to promote yourself and make a discount on the price of the examination, please write the price of the new examination'
+                )}
+              >
                 <span>
                   <RHFTextField
                     type="number"
@@ -649,7 +673,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
         )}
         {page === 'verification' && (
           <Box sx={{ p: 1, px: 5, display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <Typography variant='h6'>{t('Personal Authentication Elements')}</Typography>
+            <Typography variant="h6">{t('Personal Authentication Elements')}</Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -669,7 +693,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
               />
             </Box>
             <Divider flexItem sx={{ borderStyle: 'solid' }} />
-            <Typography variant='h6'>{t('Character authentication elements in documents')}</Typography>
+            <Typography variant="h6">
+              {t('Character authentication elements in documents')}
+            </Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -679,7 +705,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(3, 1fr)',
               }}
             >
-              <Tooltip title={t("This signature is what will appear on documents issued by you, such as a prescription document and a medical report.")}>
+              <Tooltip
+                title={t(
+                  'This signature is what will appear on documents issued by you, such as a prescription document and a medical report.'
+                )}
+              >
                 <span>
                   <RHFUploadBox
                     sx={{
@@ -691,7 +721,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   />
                 </span>
               </Tooltip>
-              <Tooltip title={t("This stamp is what will appear on documents issued by you, such as a prescription document and a medical report.")}>
+              <Tooltip
+                title={t(
+                  'This stamp is what will appear on documents issued by you, such as a prescription document and a medical report.'
+                )}
+              >
                 <span>
                   <RHFUploadBox
                     sx={{
@@ -725,7 +759,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
           )}
         </Stack>
       </Card>
-    </FormProvider >
+    </FormProvider>
   );
 }
 AccountGeneral.propTypes = {

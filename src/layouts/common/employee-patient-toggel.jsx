@@ -87,12 +87,11 @@ export default function EmployeePatientToggel() {
     }
   };
 
-
   const handleChangeRole = async () => {
     try {
-      if (Object.keys(errors).length) return
+      if (Object.keys(errors).length) return;
       setLoading(true);
-      if (!user.patient && (!watch('name_english') || !watch("name_arabic"))) {
+      if (!user.patient && (!watch('name_english') || !watch('name_arabic'))) {
         setShowDialog(true);
         setLoading(false);
         return;

@@ -18,7 +18,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TicketsToolbar({ filters, onFilters }) {
   const { ticketCategoriesData } = useGetTicketCategories({ select: 'name_english _id' });
-  const { usersData } = useGetUsers({ role: 'superadmin', select: 'email' })
+  const { usersData } = useGetUsers({ role: 'superadmin', select: 'email' });
 
   const popover = usePopover();
 

@@ -34,10 +34,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -112,8 +110,6 @@ export default function AppointConfigView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset =
     !!filters.name || filters.status !== 'active' || !!filters.startDate || !!filters.endDate;
@@ -292,7 +288,7 @@ export default function AppointConfigView() {
               acl: 'create',
             }) && (
               <Button
-                data-test='create-appointment-config-button'
+                data-test="create-appointment-config-button"
                 component={RouterLink}
                 href={paths.employee.appointmentconfiguration.new}
                 variant="contained"
@@ -340,7 +336,7 @@ export default function AppointConfigView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-          // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
+            // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
           />
 
           {canReset && (
@@ -397,9 +393,9 @@ export default function AppointConfigView() {
                   subcategory: 'appointment_configs',
                   acl: 'update',
                 }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'canceled')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

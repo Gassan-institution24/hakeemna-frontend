@@ -57,7 +57,8 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       unit_service:
         currentTable?.unit_service?._id ||
-        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+          ?._id,
       department: currentTable?.department?._id || null,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',

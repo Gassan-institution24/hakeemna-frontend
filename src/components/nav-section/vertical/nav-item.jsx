@@ -39,7 +39,7 @@ const NavItem = forwardRef(
     },
     ref
   ) => {
-    const { currentLang } = useLocales()
+    const { currentLang } = useLocales();
     const curLangAr = currentLang.value === 'ar';
     const subItem = depth !== 1;
     const renderContent = (
@@ -97,7 +97,13 @@ const NavItem = forwardRef(
             width={16}
             className="arrow"
             // eslint-disable-next-line
-            icon={open ? 'eva:arrow-ios-downward-fill' : curLangAr ? 'eva:arrow-ios-back-fill' : 'eva:arrow-ios-forward-fill'}
+            icon={
+              open
+                ? 'eva:arrow-ios-downward-fill'
+                : curLangAr
+                ? 'eva:arrow-ios-back-fill'
+                : 'eva:arrow-ios-forward-fill'
+            }
           />
         )}
       </StyledNavItem>

@@ -9,7 +9,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import FileItem from './items/file-item';
 
 export default function PatientFile({ patient }) {
-
   const { user } = useAuthContext();
   const { data, refetch } = useGetdoctorreports({
     unit_service:

@@ -26,13 +26,13 @@ import AccountChangePassword from '../account-change-password';
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
-  const { logout } = useAuthContext()
+  const { logout } = useAuthContext();
   const { t } = useTranslate();
-  const [showDialog, setShowDialog] = useState(false)
+  const [showDialog, setShowDialog] = useState(false);
   const handleDeleteAccount = async () => {
-    await axiosInstance.delete(endpoints.auth.deletMe)
-    logout()
-  }
+    await axiosInstance.delete(endpoints.auth.deletMe);
+    logout();
+  };
 
   const TABS = [
     {
@@ -76,7 +76,7 @@ export default function AccountView() {
             mb: { xs: 3, md: 5 },
           }}
         />
-        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Tabs
             value={currentTab}
             onChange={handleChangeTab}
@@ -88,8 +88,10 @@ export default function AccountView() {
               <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
             ))}
           </Tabs>
-          <Stack justifyContent='center'>
-            <Button variant='contained' color='error' onClick={() => setShowDialog(true)} >{t('delete my account')}</Button>
+          <Stack justifyContent="center">
+            <Button variant="contained" color="error" onClick={() => setShowDialog(true)}>
+              {t('delete my account')}
+            </Button>
           </Stack>
         </Stack>
         {currentTab === 'general' && !loading && <AccountGeneral data={data} refetch={refetch} />}
@@ -97,10 +99,17 @@ export default function AccountView() {
         {currentTab === 'security' && <AccountChangePassword />}
       </Container>
 
-      <ConfirmDialog open={showDialog}
+      <ConfirmDialog
+        open={showDialog}
         onClose={() => setShowDialog(false)}
         title={t('delete my account')}
-        content={<Typography>{t('You will not be able to undelete after you did it, are you sure you want to delete your account with its information?')}</Typography>}
+        content={
+          <Typography>
+            {t(
+              'You will not be able to undelete after you did it, are you sure you want to delete your account with its information?'
+            )}
+          </Typography>
+        }
         action={
           <LoadingButton
             variant="contained"
@@ -110,7 +119,8 @@ export default function AccountView() {
           >
             {t('submit')}
           </LoadingButton>
-        } />
+        }
+      />
     </>
   );
 }

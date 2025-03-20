@@ -159,13 +159,25 @@ export default function PatientProfile() {
         ))}
       </Tabs>
       {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
-      {currentTab === 'communication' && usPatientData && <PatientCommunication patient={usPatientData} />}
+      {currentTab === 'communication' && usPatientData && (
+        <PatientCommunication patient={usPatientData} />
+      )}
       {currentTab === 'file' && usPatientData && <PatientFile patient={usPatientData} />}
-      {currentTab === 'sick_leave' && usPatientData && <PatientSickLeaves patient={usPatientData} />}
-      {currentTab === 'medical_reports' && usPatientData && <PatientMedicalReports patient={usPatientData} />}
-      {currentTab === 'prescriptions' && usPatientData && <PatientPrescriptions patient={usPatientData} />}
-      {currentTab === 'appointments' && usPatientData && <AppointmentsHistory patient={usPatientData} />}
-      {currentTab === 'instructions' && usPatientData && <PatientInstructions patient={usPatientData} />}
+      {currentTab === 'sick_leave' && usPatientData && (
+        <PatientSickLeaves patient={usPatientData} />
+      )}
+      {currentTab === 'medical_reports' && usPatientData && (
+        <PatientMedicalReports patient={usPatientData} />
+      )}
+      {currentTab === 'prescriptions' && usPatientData && (
+        <PatientPrescriptions patient={usPatientData} />
+      )}
+      {currentTab === 'appointments' && usPatientData && (
+        <AppointmentsHistory patient={usPatientData} />
+      )}
+      {currentTab === 'instructions' && usPatientData && (
+        <PatientInstructions patient={usPatientData} />
+      )}
       {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
       {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
     </Container>

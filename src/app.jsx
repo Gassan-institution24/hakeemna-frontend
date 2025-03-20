@@ -19,8 +19,7 @@ import ThemeProvider from 'src/theme';
 import { CheckoutProvider } from './sections/unit-service/checkout/context';
 import { WebRTCProvider } from './components/vedio-call/web-rtc-provider';
 
-window.Buffer = Buffer; 
-
+window.Buffer = Buffer;
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -105,7 +104,6 @@ export default function App() {
               <MotionLazy>
                 <SnackbarProvider>
                   <CheckoutProvider>
-
                     <SettingsDrawer />
                     <ProgressBar />
                     <div

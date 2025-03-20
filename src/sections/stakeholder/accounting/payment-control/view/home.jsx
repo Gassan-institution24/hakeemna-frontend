@@ -27,9 +27,7 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -113,8 +111,6 @@ export default function PaymentControlView() {
   });
 
   const dateError = isAfter(filters.startDate, filters.endDate);
-
-
 
   const canReset = !!filters.startDate || !!filters.endDate;
 
@@ -342,12 +338,12 @@ export default function PaymentControlView() {
                 rowCount={incomePaymentData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     incomePaymentData.map((row) => row.id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     incomePaymentData.map((row) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>

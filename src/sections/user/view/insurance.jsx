@@ -167,7 +167,7 @@ export default function Insuranceinfo() {
               ))}
             </RHFSelect>
           </DialogContent>
-          <Stack direction='row' gap={1} alignItems='center' sx={{mx:4}}>
+          <Stack direction="row" gap={1} alignItems="center" sx={{ mx: 4 }}>
             <Checkbox
               size="small"
               name="agree"

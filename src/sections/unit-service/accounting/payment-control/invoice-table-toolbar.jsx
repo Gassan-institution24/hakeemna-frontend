@@ -226,7 +226,7 @@ export default function InvoiceTableToolbar({
           <TextField
             onChange={handleFilterMovement}
             label={t('economic movement')}
-            sx={{ textTransform: 'capitalize', minWidth: 180, }}
+            sx={{ textTransform: 'capitalize', minWidth: 180 }}
           />
 
           {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>

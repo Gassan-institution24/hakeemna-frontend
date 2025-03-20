@@ -33,10 +33,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -118,8 +116,6 @@ export default function EmployeesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -581,7 +577,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.country?.name_english &&
           data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (data?.employee?.country?.name_arabic &&
           data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.city?.name_english &&
@@ -590,10 +586,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.nationality?.name_english &&
           data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (data?.employee?.nationality?.name_arabic &&
           data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (data?.employee?.email &&
           data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||

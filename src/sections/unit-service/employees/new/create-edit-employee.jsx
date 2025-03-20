@@ -230,10 +230,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label={t('Full name in Arabic')}
                 helperText={t('should include title like : doctor, specialist,...')}
               />
-              <RHFTextField
-                name="identification_num"
-                label={t('National ID number')}
-              />
+              <RHFTextField name="identification_num" label={t('National ID number')} />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
 
               <RHFSelect name="nationality" label={t('nationality')}>
@@ -275,14 +272,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={employeeTypesData.map((one) => one._id)}
                 getOptionLabel={(option) =>
                   employeeTypesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       employeeTypesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>
@@ -294,14 +291,14 @@ export default function TableNewEditForm({ currentTable }) {
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
-                  curLangAr ? 'name_arabic' : 'name_english'
+                    curLangAr ? 'name_arabic' : 'name_english'
                   ]
                 }
                 renderOption={(props, option, idx) => (
                   <li lang="ar" {...props} key={idx} value={option}>
                     {
                       specialtiesData.find((one) => one._id === option)?.[
-                      curLangAr ? 'name_arabic' : 'name_english'
+                        curLangAr ? 'name_arabic' : 'name_english'
                       ]
                     }
                   </li>

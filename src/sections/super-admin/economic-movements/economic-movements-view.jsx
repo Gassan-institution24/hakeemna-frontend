@@ -25,10 +25,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -93,8 +91,6 @@ export default function EconomicMovementsView() {
   //   table.page * table.rowsPerPage,
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
-
-
 
   const canReset =
     !!filters.name ||
@@ -292,7 +288,7 @@ export default function EconomicMovementsView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
+            // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
           />
 
           {canReset && (
@@ -356,12 +352,12 @@ export default function EconomicMovementsView() {
                   rowCount={economecMovementsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     economecMovementsData.map((row, idx)  => row.id)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     economecMovementsData.map((row, idx)  => row.id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -378,7 +374,7 @@ export default function EconomicMovementsView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onViewRow={() => handleViewRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
-                      // onDeleteRow={() => handleDeleteRow(row.id)}
+                        // onDeleteRow={() => handleDeleteRow(row.id)}
                       />
                     ))}
 

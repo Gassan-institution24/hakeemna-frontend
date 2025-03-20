@@ -97,7 +97,9 @@ export default function AppointmentsView() {
       : false;
 
   const canReset =
-    filters.priority !== defaultFilters.priority || filters.category !== defaultFilters.category || filters.assigned_to !== defaultFilters.assigned_to;
+    filters.priority !== defaultFilters.priority ||
+    filters.category !== defaultFilters.category ||
+    filters.assigned_to !== defaultFilters.assigned_to;
 
   const notFound = (!ticketsData.length && canReset) || !ticketsData.length;
 

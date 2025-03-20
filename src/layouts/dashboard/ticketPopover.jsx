@@ -57,16 +57,16 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   const { handleSubmit } = methods;
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data)
+      console.log('data', data);
       const Submitted = await axios.post(endpoints.tickets.all, {
         ...data,
         URL: window.location.pathname,
       });
       setChatId(Submitted.data?.chat);
       setPage(1);
-      refetch()
-      refetchLenght()
-      methods.reset()
+      refetch();
+      refetchLenght();
+      methods.reset();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

@@ -58,17 +58,20 @@ export default function PatientUpload({ patient }) {
 
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
-  const defaultDrug = useMemo(() => ({
-    unit_service: employee?.unit_service?._id,
-    employee: user?.employee?._id,
-    patient: patient?.patient?._id,
-    unit_service_patient: patient?._id,
-    medicines: null,
-    Frequency_per_day: '',
-    Start_time: '',
-    End_time: '',
-    Doctor_Comments: '',
-  }), [employee?.unit_service, user?.employee, patient]);
+  const defaultDrug = useMemo(
+    () => ({
+      unit_service: employee?.unit_service?._id,
+      employee: user?.employee?._id,
+      patient: patient?.patient?._id,
+      unit_service_patient: patient?._id,
+      medicines: null,
+      Frequency_per_day: '',
+      Start_time: '',
+      End_time: '',
+      Doctor_Comments: '',
+    }),
+    [employee?.unit_service, user?.employee, patient]
+  );
 
   const methods = useForm({
     defaultValues: {
@@ -187,8 +190,8 @@ export default function PatientUpload({ patient }) {
   };
 
   useEffect(() => {
-    setValue('drugs', [defaultDrug])
-  }, [defaultDrug, setValue])
+    setValue('drugs', [defaultDrug]);
+  }, [defaultDrug, setValue]);
 
   return (
     <Container maxWidth="xl">

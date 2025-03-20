@@ -5,7 +5,6 @@ import { useGetOneBlogs } from 'src/api';
 
 import ViewBlog from 'src/sections/home/view/ViewBlog';
 
-
 // ----------------------------------------------------------------------
 
 export default function TableDetailsPage() {

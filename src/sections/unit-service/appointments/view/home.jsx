@@ -42,9 +42,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -135,97 +133,95 @@ export default function AppointmentsView({ employeeData }) {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-
-
   const canReset = !isEqual(filters, defaultFilters);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const TABS = isMedLab
     ? [
-      // { value: 'all', label: t('all'), color: 'default', count: all },
-      {
-        value: 'booked',
-        label: t('booked'),
-        color: 'warning',
-        count: lengths?.booked,
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: lengths?.finished,
-      },
-      {
-        value: 'available',
-        label: t('available'),
-        color: 'secondary',
-        count: lengths?.available,
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'error',
-        count: lengths?.canceled,
-      },
-    ]
+        // { value: 'all', label: t('all'), color: 'default', count: all },
+        {
+          value: 'booked',
+          label: t('booked'),
+          color: 'warning',
+          count: lengths?.booked,
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: lengths?.finished,
+        },
+        {
+          value: 'available',
+          label: t('available'),
+          color: 'secondary',
+          count: lengths?.available,
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'error',
+          count: lengths?.canceled,
+        },
+      ]
     : [
-      // { value: 'all', label: t('all'), color: 'default', count: all },
-      {
-        value: 'processing',
-        label: t('current'),
-        color: 'info',
-        count: lengths?.processing,
-      },
-      {
-        value: 'arrived',
-        label: t('arrived'),
-        color: 'success',
-        count: lengths?.arrived,
-      },
-      {
-        value: 'late',
-        label: t('late'),
-        color: 'warning',
-        count: lengths?.late,
-      },
-      {
-        value: 'booked',
-        label: t('booked'),
-        color: 'info',
-        count: lengths?.booked,
-      },
-      {
-        value: 'finished',
-        label: t('finished'),
-        color: 'success',
-        count: lengths?.finished,
-      },
-      {
-        value: 'not arrived',
-        label: t('not arrived'),
-        color: 'error',
-        count: lengths?.notArrived,
-      },
-      {
-        value: 'canceled',
-        label: t('canceled'),
-        color: 'warning',
-        count: lengths?.canceled,
-      },
-      {
-        value: 'available',
-        label: t('available'),
-        color: 'secondary',
-        count: lengths?.available,
-      },
-      {
-        value: 'not booked',
-        label: t('not booked'),
-        color: 'secondary',
-        count: lengths?.notBooked,
-      },
-    ];
+        // { value: 'all', label: t('all'), color: 'default', count: all },
+        {
+          value: 'processing',
+          label: t('current'),
+          color: 'info',
+          count: lengths?.processing,
+        },
+        {
+          value: 'arrived',
+          label: t('arrived'),
+          color: 'success',
+          count: lengths?.arrived,
+        },
+        {
+          value: 'late',
+          label: t('late'),
+          color: 'warning',
+          count: lengths?.late,
+        },
+        {
+          value: 'booked',
+          label: t('booked'),
+          color: 'info',
+          count: lengths?.booked,
+        },
+        {
+          value: 'finished',
+          label: t('finished'),
+          color: 'success',
+          count: lengths?.finished,
+        },
+        {
+          value: 'not arrived',
+          label: t('not arrived'),
+          color: 'error',
+          count: lengths?.notArrived,
+        },
+        {
+          value: 'canceled',
+          label: t('canceled'),
+          color: 'warning',
+          count: lengths?.canceled,
+        },
+        {
+          value: 'available',
+          label: t('available'),
+          color: 'secondary',
+          count: lengths?.available,
+        },
+        {
+          value: 'not booked',
+          label: t('not booked'),
+          color: 'secondary',
+          count: lengths?.notBooked,
+        },
+      ];
 
   const handleFilters = useCallback(
     (name, value) => {

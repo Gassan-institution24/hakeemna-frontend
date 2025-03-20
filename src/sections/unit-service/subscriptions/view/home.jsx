@@ -26,10 +26,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
@@ -103,8 +101,6 @@ export default function UnitServicesAccountingView() {
     filters,
     dateError,
   });
-
-
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -256,12 +252,12 @@ export default function UnitServicesAccountingView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-              // onSelectAllRows={(checked) =>
-              //   table.onSelectAllRows(
-              //     checked,
-              //     dataFiltered.map((row, idx)  => row._id)
-              //   )
-              // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row, idx)  => row._id)
+                //   )
+                // }
               />
 
               <TableBody>
@@ -322,7 +318,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         (data?.free_subscription?.name_english &&
           data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-          -1) ||
+            -1) ||
         (data?.free_subscription?.name_arabic &&
           data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.subscription?.name_english &&

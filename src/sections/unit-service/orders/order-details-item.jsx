@@ -25,7 +25,7 @@ export default function OrderDetailsItems({
   totalAmount,
 }) {
   const total = items?.reduce((acc, one) => acc + one.price * one.real_delieverd_quantity, 0);
-  const { t } = useTranslate()
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const renderTotal = (
@@ -43,7 +43,7 @@ export default function OrderDetailsItems({
 
   return (
     <Card>
-      <CardHeader title={t("Details")} />
+      <CardHeader title={t('Details')} />
 
       <Stack
         sx={{
@@ -70,7 +70,11 @@ export default function OrderDetailsItems({
 
               <ListItemText
                 primary={curLangAr ? item?.product?.name_arabic : item?.product?.name_english}
-                secondary={curLangAr ? item?.product?.category?.name_arabic : item?.product?.category?.name_english}
+                secondary={
+                  curLangAr
+                    ? item?.product?.category?.name_arabic
+                    : item?.product?.category?.name_english
+                }
                 primaryTypographyProps={{
                   typography: 'body2',
                 }}

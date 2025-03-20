@@ -33,10 +33,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -114,8 +112,6 @@ export default function StakeholderOffersView({ stakeholderData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset =
     !!filters?.name ||

@@ -40,9 +40,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
-
   TableNoData,
-
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
@@ -128,8 +126,6 @@ export default function AppointmentsView({ employeeData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-
 
   const canReset = !isEqual(filters, defaultFilters);
 
@@ -540,9 +536,9 @@ export default function AppointmentsView({ employeeData }) {
               }
               color={
                 checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'canceled')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

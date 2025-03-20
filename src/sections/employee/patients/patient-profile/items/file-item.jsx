@@ -20,8 +20,8 @@ export default function FileItem({ one, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { enqueueSnackbar } = useSnackbar()
-  const [editting, setEditting] = useState(false)
+  const { enqueueSnackbar } = useSnackbar();
+  const [editting, setEditting] = useState(false);
 
   const schema = Yup.object().shape({
     file: Yup.mixed(),
@@ -31,7 +31,7 @@ export default function FileItem({ one, refetch }) {
   const defaultValues = {
     file: one?.file || [],
     description: one?.description || null,
-  }
+  };
 
   const methods = useForm({
     mode: 'all',
@@ -42,7 +42,7 @@ export default function FileItem({ one, refetch }) {
   const { handleSubmit, setValue, watch } = methods;
 
   const handleDrop = (acceptedFile) => {
-    const oldFiles = watch('file')
+    const oldFiles = watch('file');
     setValue('file', [...oldFiles, ...acceptedFile]);
   };
   const handleRemoveFile = useCallback(
@@ -60,13 +60,13 @@ export default function FileItem({ one, refetch }) {
         if (Array.isArray(data[key])) {
           data[key].forEach((item, index) => {
             formData.append(`${key}[${index}]`, item);
-          })
+          });
         }
-        formData.append(key, data[key])
-      })
+        formData.append(key, data[key]);
+      });
       await axiosInstance.patch(endpoints.doctorreport.one(one?._id), formData);
-      setEditting(false)
-      refetch()
+      setEditting(false);
+      refetch();
       // eslint-disable-next-line
       enqueueSnackbar(`${t('patient file')} ${t('added successfully')}`);
     } catch (e) {
@@ -78,10 +78,12 @@ export default function FileItem({ one, refetch }) {
 
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
-      {editting ?
+      {editting ? (
         <FormProvider methods={methods}>
-          <Stack direction="row" justifyContent="flex-end" alignItems='center' gap={2} >
-            <IconButton onClick={() => setEditting(false)}><Iconify icon='mingcute:close-fill' /></IconButton>
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
+            <IconButton onClick={() => setEditting(false)}>
+              <Iconify icon="mingcute:close-fill" />
+            </IconButton>
           </Stack>
           <Stack gap={2}>
             <Typography variant="subtitle1">{t('patient record')}</Typography>
@@ -108,11 +110,13 @@ export default function FileItem({ one, refetch }) {
             </Stack>
           </Stack>
         </FormProvider>
-        :
+      ) : (
         <>
-          <Stack direction="row" justifyContent="flex-end" alignItems='center' gap={2} >
+          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
             <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton onClick={() => setEditting(true)}><Iconify icon='lets-icons:edit-fill' /></IconButton>
+            <IconButton onClick={() => setEditting(true)}>
+              <Iconify icon="lets-icons:edit-fill" />
+            </IconButton>
           </Stack>
           <Stack gap={1} mt={1} ml={1}>
             <Typography
@@ -129,7 +133,7 @@ export default function FileItem({ one, refetch }) {
             </Stack>
           </Stack>
         </>
-      }
+      )}
     </Card>
   );
 }

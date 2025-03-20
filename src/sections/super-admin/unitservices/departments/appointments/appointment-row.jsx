@@ -59,7 +59,6 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
-
   const { t } = useTranslate();
 
   const checkAcl = useAclGuard();

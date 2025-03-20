@@ -8,7 +8,7 @@ import BlogsView from 'src/sections/home/Blogs';
 // ----------------------------------------------------------------------
 
 export default function TableDetailsPage() {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <>
       <Helmet>

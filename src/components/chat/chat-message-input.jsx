@@ -170,7 +170,7 @@ export default function ChatMessageInput({
                 await axiosInstance.post(endpoints.chat.one(selectedConversationId), messageData);
                 refetch();
               } catch (e) {
-                console.log('e', e)
+                console.log('e', e);
                 enqueueSnackbar(e.message, { variant: 'error' });
               }
             } else {
@@ -191,7 +191,7 @@ export default function ChatMessageInput({
               refetch();
               setAttachment();
             } catch (e) {
-              console.log('e', e)
+              console.log('e', e);
               enqueueSnackbar(e.message, { variant: 'error' });
             }
           }
@@ -207,7 +207,7 @@ export default function ChatMessageInput({
               setAudioBlob();
               setPreviewAudio();
             } catch (e) {
-              console.log('e', e)
+              console.log('e', e);
               enqueueSnackbar(e.message, { variant: 'error' });
             }
           }

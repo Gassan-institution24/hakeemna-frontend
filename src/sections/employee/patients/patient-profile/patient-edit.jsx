@@ -24,7 +24,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 // ----------------------------------------------------------------------
 
 export default function EditPatient({ patient }) {
-  console.log('patient', patient)
+  console.log('patient', patient);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();

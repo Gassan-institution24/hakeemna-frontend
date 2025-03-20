@@ -65,9 +65,10 @@ export const StyledRoot = styled(Stack, {
     borderBottomLeftRadius: 'inherit',
     borderBottomRightRadius: 'inherit',
     // backgroundColor: theme.palette.grey['500Channel'],
-    ...(error && {
-      // backgroundColor: theme.palette.error.mainChannel,
-    }),
+    ...(error &&
+      {
+        // backgroundColor: theme.palette.error.mainChannel,
+      }),
     '& .tiptap': {
       '> * + *': {
         marginTop: 0,

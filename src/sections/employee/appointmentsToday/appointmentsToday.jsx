@@ -262,7 +262,7 @@ export default function AppointmentsToday() {
                 key={index}
                 value={activity?.activities?._id}
                 onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-              // disabled={info?.activityhappend}
+                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -476,7 +476,7 @@ export default function AppointmentsToday() {
                                   ) : (
                                     <>
                                       {info?.unit_service_patient?.identification_num ||
-                                        info?.patient?.identification_num ? (
+                                      info?.patient?.identification_num ? (
                                         <Button
                                           sx={{ p: 2 }}
                                           onClick={() => startAppointment(info)}
@@ -538,7 +538,7 @@ export default function AppointmentsToday() {
                                   startAppointment(info);
                                 } else {
                                   enqueueSnackbar(t('Please enter the patient national number'), {
-                                    variant: 'error'
+                                    variant: 'error',
                                   });
                                 }
                               }}

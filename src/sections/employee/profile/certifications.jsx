@@ -56,7 +56,12 @@ export default function Certifications() {
       >
         {fields.map((item, index) => (
           <Stack key={index} alignItems="center" spacing={1.5} sx={{ width: '100%' }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} alignItems="center" spacing={2} sx={{ width: '100%' }}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              alignItems="center"
+              spacing={2}
+              sx={{ width: '100%' }}
+            >
               <RHFTextField
                 // size="small"
                 name={`certifications[${index}].name`}

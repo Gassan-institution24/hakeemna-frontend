@@ -26,10 +26,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
-
   TableNoData,
   getComparator,
-
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
@@ -104,8 +102,6 @@ export default function IncomePaymentControlView({ stakeholderData }) {
   //   table.page * table.rowsPerPage,
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
-
-
 
   const canReset =
     !!filters.name ||
@@ -357,12 +353,12 @@ export default function IncomePaymentControlView({ stakeholderData }) {
                   rowCount={incomePaymentData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     incomePaymentData.map((row, idx)  => row.id)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     incomePaymentData.map((row, idx)  => row.id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -379,7 +375,7 @@ export default function IncomePaymentControlView({ stakeholderData }) {
                         // onSelectRow={() => table.onSelectRow(row.id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
-                      // onDeleteRow={() => handleDeleteRow(row.id)}
+                        // onDeleteRow={() => handleDeleteRow(row.id)}
                       />
                     ))}
 
