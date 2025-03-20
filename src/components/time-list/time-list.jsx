@@ -43,26 +43,25 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
         }}
       >
         {list.map((time) => (
-          <Button
-            variant="outlined"
-            sx={{
-              width: 100,
-              '&:hover': {
-                bgcolor: 'white',
-                color: 'primary.main',
-              },
-              fontWeight: value === time._id ? 600 : 500,
-              backgroundColor: value === time._id ? 'primary.main' : '',
-              color: value === time._id ? 'white' : '',
-              borderRadius: 2,
-              bgcolor: 'white',
-            }}
-            onClick={() => {
-              onChange(time._id);
-            }}
-          >
-            {fTime(myunitTime(time.start_time), 'p', curLangAr)}
-          </Button>
+         <Button
+         variant="outlined"
+         sx={{
+           width: 100,
+           '&:hover': {
+             bgcolor: 'white',
+             color: 'primary.main',
+           },
+           fontWeight: value === time._id ? 600 : 500,
+           backgroundColor: value === time._id ? 'white' : 'white', // Ensure white background by default
+           color: value === time._id ? 'primary.main' : 'primary.main', // Ensure text color is always visible
+           borderRadius: 2,
+         }}
+         onClick={() => {
+           onChange(time._id);
+         }}
+       >
+         {fTime(myunitTime(time.start_time), 'p', curLangAr)}
+       </Button>
         ))}
       </Stack>
       {/* </Scrollbar> */}
