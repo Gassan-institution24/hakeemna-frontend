@@ -1,21 +1,18 @@
-import { useMemo, useState } from 'react';
 import { m } from 'framer-motion';
+import { useMemo, useState } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import { Box, Grid, Paper, Container, Typography } from '@mui/material';
 
 import { useLocales, useTranslate } from 'src/locales';
+
 import { varFade, MotionViewport } from 'src/components/animate';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 
 export default function WhoAreWe() {
   const { currentLang } = useLocales();
@@ -69,7 +66,7 @@ export default function WhoAreWe() {
   const [dialogContent, setDialogContent] = useState('');
   const [dialogTitle, setDialogTitle] = useState('');
 
-  const handleDialogOpen = (description,title) => {
+  const handleDialogOpen = (description, title) => {
     setDialogContent(description);
     setDialogTitle(title);
     setOpenDialog(true);
@@ -131,7 +128,7 @@ export default function WhoAreWe() {
                     <>
                       {card.description.slice(0, 90)}...
                       <Button
-                        onClick={() => handleDialogOpen(card.description,card.title)}
+                        onClick={() => handleDialogOpen(card.description, card.title)}
                         sx={{ textTransform: 'none', ml: 1, color: '#3CB099' }}
                       >
                         {t('Read More')}
