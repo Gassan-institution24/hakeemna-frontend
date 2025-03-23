@@ -6,7 +6,8 @@ import { Container } from '@mui/material';
 import { useGetmedicalreports } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
-import MedicalReportItem from './items/medical-report-item';
+import MedicalReportItem from './items/medical-report/medical-report-item';
+import MedicalReportUpload from './items/medical-report/medical-report-upload';
 
 export default function PatientMedicalReports({ patient }) {
   const { user } = useAuthContext();
@@ -18,7 +19,8 @@ export default function PatientMedicalReports({ patient }) {
   });
 
   return (
-    <Container maxWidth="xl">
+    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
+      <MedicalReportUpload patient={patient} />
       {data?.map((one, idx) => (
         <MedicalReportItem key={idx} one={one} refetch={refetch} />
       ))}

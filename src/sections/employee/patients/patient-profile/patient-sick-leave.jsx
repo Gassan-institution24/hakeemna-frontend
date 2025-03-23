@@ -6,7 +6,8 @@ import { Container } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetSickLeaves } from 'src/api/sickleave';
 
-import SickLeaveItem from './items/sick-leave-item';
+import SickLeaveItem from './items/sick-leave/sick-leave-item';
+import SickLeaveUpload from './items/sick-leave/sick-leave-upload';
 
 export default function PatientSickLeaves({ patient }) {
   const { user } = useAuthContext();
@@ -17,7 +18,8 @@ export default function PatientSickLeaves({ patient }) {
     unit_service_patient: patient?._id,
   });
   return (
-    <Container maxWidth="xl">
+    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
+      <SickLeaveUpload patient={patient} />
       {data?.map((one, idx) => (
         <SickLeaveItem key={idx} one={one} refetch={refetch} />
       ))}

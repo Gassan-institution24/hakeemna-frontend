@@ -13,6 +13,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
+import PrescriptionUpload from './items/presecription/prescription-upload';
+
 export default function PatientPrescriptions({ patient }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -40,7 +42,8 @@ export default function PatientPrescriptions({ patient }) {
     }
   };
   return (
-    <Container maxWidth="xl">
+    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
+      <PrescriptionUpload patient={patient} />
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
           <Stack direction="row" justifyContent="flex-end" alignItems="center">

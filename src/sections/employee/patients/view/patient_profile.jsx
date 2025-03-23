@@ -1,10 +1,17 @@
+import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import React, { useState, useCallback } from 'react';
 
-import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui/material';
+import { Stack, Container, Typography, IconButton } from '@mui/material';
+
+import { useRouter } from 'src/routes/hooks';
+
+import { fDate } from 'src/utils/format-time';
 
 import { useGetOneUSPatient } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import PageSelector from 'src/components/pageSelector';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -21,6 +28,7 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 export default function PatientProfile() {
   const { id } = useParams();
+  const { router } = useRouter()
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
       {
@@ -39,10 +47,7 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [currentTab, setCurrentTab] = useState('upload');
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  const [currentTab, setCurrentTab] = useState('communication');
   const TABS = [
     // {
     //   value: 'about',
@@ -76,9 +81,25 @@ export default function PatientProfile() {
       value: 'instructions',
       label: t('instructions'),
     },
+    // {
+    //   value: 'upload',
+    //   label: t('upload files'),
+    // },
     {
-      value: 'upload',
-      label: t('upload files'),
+      value: 'requests',
+      label: t('requests'),
+    },
+    {
+      value: 'transfer',
+      label: t('transfer'),
+    },
+    {
+      value: 'checklist',
+      label: t('checklist'),
+    },
+    {
+      value: 'medical_analyses',
+      label: t('medical analyses'),
     },
     {
       value: 'edit',
@@ -114,8 +135,8 @@ export default function PatientProfile() {
   ];
 
   return (
-    <Container maxWidth="xl">
-      <Card sx={{ px: 4, py: 2, mb: 4 }}>
+    <Container sx={{ backgroundColor: '#fff', minHeight: '100%' }} maxWidth=''>
+      {/* <Card sx={{ px: 4, py: 2, mb: 4 }}>
         <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
           <Avatar
             src={patientData?.profile_picture}
@@ -146,40 +167,53 @@ export default function PatientProfile() {
             </Box>
           </Stack>
         </Stack>
-      </Card>
-      <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        {TABS.map((tab, idx) => (
-          <Tab key={idx} label={tab.label} value={tab.value} />
-        ))}
-      </Tabs>
-      {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
-      {currentTab === 'communication' && usPatientData && (
-        <PatientCommunication patient={usPatientData} />
-      )}
-      {currentTab === 'file' && usPatientData && <PatientFile patient={usPatientData} />}
-      {currentTab === 'sick_leave' && usPatientData && (
-        <PatientSickLeaves patient={usPatientData} />
-      )}
-      {currentTab === 'medical_reports' && usPatientData && (
-        <PatientMedicalReports patient={usPatientData} />
-      )}
-      {currentTab === 'prescriptions' && usPatientData && (
-        <PatientPrescriptions patient={usPatientData} />
-      )}
-      {currentTab === 'appointments' && usPatientData && (
-        <AppointmentsHistory patient={usPatientData} />
-      )}
-      {currentTab === 'instructions' && usPatientData && (
-        <PatientInstructions patient={usPatientData} />
-      )}
-      {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
-      {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
+      </Card> */}
+      <Stack paddingTop={5} direction={{ md: 'row' }}>
+        <Stack gap={2} flex={1}>
+          <Stack direction='row' padding={3} paddingTop={0} justifyContent='space-between'>
+            <Stack direction='row' alignItems='center' gap={2}>
+              <IconButton onClick={() => router.back()}>
+                <Iconify icon='eva:arrow-ios-back-fill' />
+              </IconButton>
+              <Typography variant="h6">
+                {curLangAr ? patientData?.name_arabic : patientData?.name_english}
+              </Typography>
+            </Stack>
+            <Typography variant="h6">
+              {t(patientData?.gender)}
+            </Typography>
+            <Typography variant="h6">
+              {calculateAge(patientData?.birth_date)}
+            </Typography>
+            <Typography variant="h6">
+              {fDate(patientData?.birth_date)}
+            </Typography>
+          </Stack>
+          {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
+          {currentTab === 'communication' && usPatientData && (
+            <PatientCommunication patient={usPatientData} />
+          )}
+          {currentTab === 'file' && usPatientData && <PatientFile patient={usPatientData} />}
+          {currentTab === 'sick_leave' && usPatientData && (
+            <PatientSickLeaves patient={usPatientData} />
+          )}
+          {currentTab === 'medical_reports' && usPatientData && (
+            <PatientMedicalReports patient={usPatientData} />
+          )}
+          {currentTab === 'prescriptions' && usPatientData && (
+            <PatientPrescriptions patient={usPatientData} />
+          )}
+          {currentTab === 'appointments' && usPatientData && (
+            <AppointmentsHistory patient={usPatientData} />
+          )}
+          {currentTab === 'instructions' && usPatientData && (
+            <PatientInstructions patient={usPatientData} />
+          )}
+          {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
+          {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
+        </Stack>
+        <PageSelector vertical pages={TABS.map((tab) => ({ ...tab, onClick: () => setCurrentTab(tab.value), active: tab.value === currentTab }))} />
+      </Stack>
     </Container>
   );
 }

@@ -6,7 +6,8 @@ import { Container } from '@mui/material';
 import { useGetdoctorreports } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
-import FileItem from './items/file-item';
+import FileItem from './items/file/file-item';
+import PatientFileUpload from './items/file/file-upload';
 
 export default function PatientFile({ patient }) {
   const { user } = useAuthContext();
@@ -17,7 +18,8 @@ export default function PatientFile({ patient }) {
     unit_service_patient: patient?._id,
   });
   return (
-    <Container maxWidth="xl">
+    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
+      <PatientFileUpload patient={patient} />
       {data?.map((one, idx) => (
         <FileItem key={idx} one={one} refetch={refetch} />
       ))}

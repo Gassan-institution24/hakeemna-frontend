@@ -6,7 +6,8 @@ import { Container } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetInstructions } from 'src/api/Instructions';
 
-import InstructionItem from './items/instruction-item';
+import InstructionItem from './items/instructions/instruction-item';
+import InstructionUpload from './items/instructions/instruction-upload';
 
 export default function PatientInstructions({ patient }) {
   const { user } = useAuthContext();
@@ -18,10 +19,11 @@ export default function PatientInstructions({ patient }) {
   });
 
   return (
-    <Container maxWidth="xl">
-      {data?.map((one, idx) => (
-        <InstructionItem key={idx} one={one} refetch={refetch} />
-      ))}
+    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
+      <InstructionUpload patient={patient} />
+        {data?.map((one, idx) => (
+          <InstructionItem key={idx} one={one} refetch={refetch} />
+        ))}
     </Container>
   );
 }

@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
 import { DatePicker } from '@mui/x-date-pickers';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -24,7 +23,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 // ----------------------------------------------------------------------
 
 export default function EditPatient({ patient }) {
-  console.log('patient', patient);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
@@ -110,187 +108,183 @@ export default function EditPatient({ patient }) {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFTextField
-                name="name_english"
-                label={t('name in english')}
-                onChange={handleEnglishInputChange}
-              />
+      <Card sx={{ p: 3, mx: { md: 15 } }}>
+        <Box
+          rowGap={3}
+          columnGap={2}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+          }}
+        >
+          <RHFTextField
+            name="name_english"
+            label={t('name in english')}
+            onChange={handleEnglishInputChange}
+          />
 
-              <RHFTextField
-                name="name_arabic"
-                label={t('Name in arabic')}
-                onChange={handleArabicInputChange}
-              />
+          <RHFTextField
+            name="name_arabic"
+            label={t('Name in arabic')}
+            onChange={handleArabicInputChange}
+          />
 
-              <MuiTelInput
-                label={t('Mobile Number')}
-                forceCallingCode
-                defaultCountry="JO"
-                value={em_phone}
-                onChange={(newPhone) => {
-                  matchIsValidTel(newPhone);
-                  setEMphone(newPhone);
-                  methods.setValue('mobile_num1', newPhone);
+          <MuiTelInput
+            label={t('Mobile Number')}
+            forceCallingCode
+            defaultCountry="JO"
+            value={em_phone}
+            onChange={(newPhone) => {
+              matchIsValidTel(newPhone);
+              setEMphone(newPhone);
+              methods.setValue('mobile_num1', newPhone);
+            }}
+          />
+          <MuiTelInput
+            label={t('Alternative Mobile Number')}
+            forceCallingCode
+            defaultCountry="JO"
+            value={em_phone2}
+            onChange={(newPhone2) => {
+              matchIsValidTel(newPhone2);
+              setEMphone2(newPhone2);
+              methods.setValue('mobile_num2', newPhone2);
+            }}
+          />
+          <RHFTextField
+            name="email"
+            label={t('Email Address')}
+            // onChange={handleArabicInputChange}
+            disabled
+          />
+          <RHFSelect
+            label={t('nationality')}
+            fullWidth
+            name="nationality"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          <RHFSelect
+            label={t('residence country')}
+            fullWidth
+            name="country"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+
+          <RHFSelect
+            label={t('city')}
+            fullWidth
+            name="city"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {tableData.map((city, idx) => (
+              <MenuItem lang="ar" key={idx} value={city._id}>
+                {city.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          <RHFTextField name="address" label={t('Address')} />
+          <RHFSelect
+            label={t('gender')}
+            fullWidth
+            name="gender"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {['male', 'female'].map((gender, idx) => (
+              <MenuItem lang="ar" key={idx} value={gender}>
+                {gender}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          <Controller
+            name="birth_date"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <DatePicker
+                {...field}
+                label={t('birth date')}
+                sx={{ mb: 2 }}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: !!error,
+                    helperText: error?.message,
+                  },
                 }}
               />
-              <MuiTelInput
-                label={t('Alternative Mobile Number')}
-                forceCallingCode
-                defaultCountry="JO"
-                value={em_phone2}
-                onChange={(newPhone2) => {
-                  matchIsValidTel(newPhone2);
-                  setEMphone2(newPhone2);
-                  methods.setValue('mobile_num2', newPhone2);
-                }}
-              />
-              <RHFTextField
-                name="email"
-                label={t('Email Address')}
-                // onChange={handleArabicInputChange}
-                disabled
-              />
-              <RHFSelect
-                label={t('nationality')}
-                fullWidth
-                name="nationality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {countriesData.map((country, idx) => (
-                  <MenuItem lang="ar" key={idx} value={country._id}>
-                    {country.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect
-                label={t('residence country')}
-                fullWidth
-                name="country"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {countriesData.map((country, idx) => (
-                  <MenuItem lang="ar" key={idx} value={country._id}>
-                    {country.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+            )}
+          />
+          <RHFTextField
+            name="height"
+            label={
+              <span>
+                {t('Height')}
+                <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
+              </span>
+            }
+          />
+          <RHFTextField
+            name="weight"
+            label={
+              <span>
+                {t('Weight')}
+                <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
+              </span>
+            }
+          />
 
-              <RHFSelect
-                label={t('city')}
-                fullWidth
-                name="city"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {tableData.map((city, idx) => (
-                  <MenuItem lang="ar" key={idx} value={city._id}>
-                    {city.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField name="address" label={t('Address')} />
-              <RHFSelect
-                label={t('gender')}
-                fullWidth
-                name="gender"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {['male', 'female'].map((gender, idx) => (
-                  <MenuItem lang="ar" key={idx} value={gender}>
-                    {gender}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <Controller
-                name="birth_date"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    {...field}
-                    label={t('birth date')}
-                    sx={{ mb: 2 }}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <RHFTextField
-                name="height"
-                label={
-                  <span>
-                    {t('Height')}
-                    <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
-                  </span>
-                }
-              />
-              <RHFTextField
-                name="weight"
-                label={
-                  <span>
-                    {t('Weight')}
-                    <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
-                  </span>
-                }
-              />
+          <RHFSelect
+            label={t('Sport Exercises')}
+            fullWidth
+            name="sport_exercises"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {SECDATAFORMAP.map((test, idx) => (
+              <MenuItem lang="ar" value={test} key={idx}>
+                {t(test)}
+              </MenuItem>
+            ))}
+          </RHFSelect>
 
-              <RHFSelect
-                label={t('Sport Exercises')}
-                fullWidth
-                name="sport_exercises"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {SECDATAFORMAP.map((test, idx) => (
-                  <MenuItem lang="ar" value={test} key={idx}>
-                    {t(test)}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+          <RHFSelect
+            label={t('Smoking')}
+            fullWidth
+            name="smoking"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {DATAFORMAP.map((test, idx) => (
+              <MenuItem lang="ar" value={test} key={idx}>
+                {t(test)}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          <RHFTextField name="other_medication_notes" label={t('More information')} />
+        </Box>
 
-              <RHFSelect
-                label={t('Smoking')}
-                fullWidth
-                name="smoking"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {DATAFORMAP.map((test, idx) => (
-                  <MenuItem lang="ar" value={test} key={idx}>
-                    {t(test)}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField name="other_medication_notes" label={t('More information')} />
-            </Box>
-
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-                {t('Save Changes')}
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-      </Grid>
+        <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+          <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+            {t('Save Changes')}
+          </LoadingButton>
+        </Stack>
+      </Card>
     </FormProvider>
   );
 }
