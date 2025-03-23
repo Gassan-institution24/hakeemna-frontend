@@ -1378,6 +1378,7 @@
   "End Call": "انهاء المكالمة",
   "Calling...": "يتصل...",
   "Answer": "الرد",
+  "Either file or description must be provided": "يجب ادخال الملف او الوصف",
 
   "Select this patient": "اختيار المريض",
   "Patient information": "معلومات المريض",
