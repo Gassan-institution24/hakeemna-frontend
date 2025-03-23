@@ -28,7 +28,7 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 export default function PatientProfile() {
   const { id } = useParams();
-  const { router } = useRouter()
+  const router = useRouter()
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
       {
