@@ -133,6 +133,14 @@ export default function PatientProfile() {
         </Stack>
       </Card> */}
       <Stack paddingTop={5} direction={{ md: 'row' }}>
+        <PageSelector
+          vertical
+          pages={TABS.map((tab) => ({
+            ...tab,
+            onClick: () => setCurrentTab(tab.value),
+            active: tab.value === currentTab,
+          }))}
+        />
         <Stack gap={2} flex={1}>
           <Stack
             direction="row"
@@ -183,14 +191,6 @@ export default function PatientProfile() {
           {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
           {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
         </Stack>
-        <PageSelector
-          vertical
-          pages={TABS.map((tab) => ({
-            ...tab,
-            onClick: () => setCurrentTab(tab.value),
-            active: tab.value === currentTab,
-          }))}
-        />
       </Stack>
     </Container>
   );
