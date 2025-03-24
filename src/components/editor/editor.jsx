@@ -35,7 +35,8 @@ export const Editor = forwardRef(
       editable = true,
       fullItem = false,
       value: content = '',
-      placeholder = 'Write something awesome...',
+      placeholder ,
+      reset,
       ...other
     },
     ref
@@ -113,6 +114,14 @@ export const Editor = forwardRef(
       }
     }, [fullScreen]);
 
+    useEffect(() => {
+      if (resetValue) {
+        editor?.commands.clearContent();
+      } else if (editor?.isEmpty && content !== '<p></p>') {
+        editor.commands.setContent(content);
+      }
+    }, [resetValue, content, editor]);
+
     return (
       <Portal disablePortal={!fullScreen}>
         {fullScreen && <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.modal - 1 }} />}
@@ -164,4 +173,5 @@ Editor.propTypes = {
   resetValue: PropTypes.bool,
   placeholder: PropTypes.string,
   slotProps: PropTypes.object,
+  reset:PropTypes.bool
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container } from '@mui/material';
+import { Stack, Button, Container } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetInstructions } from 'src/api/Instructions';
 
@@ -10,6 +11,7 @@ import InstructionItem from './items/instructions/instruction-item';
 import InstructionUpload from './items/instructions/instruction-upload';
 
 export default function PatientInstructions({ patient }) {
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   const { data, refetch } = useGetInstructions({
     unit_service:
@@ -18,15 +20,28 @@ export default function PatientInstructions({ patient }) {
     unit_service_patient: patient?._id,
   });
 
+  const [showAdd, setShowAdd] = React.useState(false);
+
   return (
     <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <InstructionUpload patient={patient} />
-        {data?.map((one, idx) => (
-          <InstructionItem key={idx} one={one} refetch={refetch} />
-        ))}
+      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
+        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
+          {showAdd ? t('X') : t('new instruction')}
+        </Button>
+      </Stack>
+      {showAdd && (
+        <InstructionUpload
+          patient={patient}
+          refetch={() => {
+            setShowAdd(false);
+            refetch();
+          }}
+        />
+      )}
+      {data?.map((one, idx) => (
+        <InstructionItem key={idx} one={one} refetch={refetch} />
+      ))}
     </Container>
   );
 }
-PatientInstructions.propTypes = {
-  patient: PropTypes.object,
-};
+PatientInstructions.propTypes = { patient: PropTypes.object };

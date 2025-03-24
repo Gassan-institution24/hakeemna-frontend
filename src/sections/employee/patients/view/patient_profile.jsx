@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Stack, Container, Typography, IconButton } from '@mui/material';
+import { Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -28,7 +28,7 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 export default function PatientProfile() {
   const { id } = useParams();
-  const router = useRouter()
+  const router = useRouter();
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
       {
@@ -53,58 +53,22 @@ export default function PatientProfile() {
     //   value: 'about',
     //   label: t('about'),
     // },
-    {
-      value: 'communication',
-      label: t('communication'),
-    },
-    {
-      value: 'file',
-      label: t('file'),
-    },
-    {
-      value: 'sick_leave',
-      label: t('sick leave'),
-    },
-    {
-      value: 'medical_reports',
-      label: t('medical reports'),
-    },
-    {
-      value: 'prescriptions',
-      label: t('prescriptions'),
-    },
-    {
-      value: 'appointments',
-      label: t('appointments'),
-    },
-    {
-      value: 'instructions',
-      label: t('instructions'),
-    },
+    { value: 'communication', label: t('communication') },
+    { value: 'file', label: t('file') },
+    { value: 'sick_leave', label: t('sick leave') },
+    { value: 'medical_reports', label: t('medical reports') },
+    { value: 'prescriptions', label: t('prescriptions') },
+    { value: 'appointments', label: t('appointments') },
+    { value: 'instructions', label: t('instructions') },
     // {
     //   value: 'upload',
     //   label: t('upload files'),
     // },
-    {
-      value: 'requests',
-      label: t('requests'),
-    },
-    {
-      value: 'transfer',
-      label: t('transfer'),
-    },
-    {
-      value: 'checklist',
-      label: t('checklist'),
-    },
-    {
-      value: 'medical_analyses',
-      label: t('medical analyses'),
-    },
-    {
-      value: 'edit',
-      label: t('edit'),
-    },
+    { value: 'requests', label: t('requests') },
+    { value: 'transfer', label: t('transfer') },
+    { value: 'checklist', label: t('checklist') },
+    { value: 'medical_analyses', label: t('medical analyses') },
+    // { value: 'edit', label: t('edit') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -135,7 +99,7 @@ export default function PatientProfile() {
   ];
 
   return (
-    <Container sx={{ backgroundColor: '#fff', minHeight: '100%' }} maxWidth=''>
+    <Container sx={{ backgroundColor: '#fff', minHeight: '100%' }} maxWidth="">
       {/* <Card sx={{ px: 4, py: 2, mb: 4 }}>
         <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
           <Avatar
@@ -170,24 +134,31 @@ export default function PatientProfile() {
       </Card> */}
       <Stack paddingTop={5} direction={{ md: 'row' }}>
         <Stack gap={2} flex={1}>
-          <Stack direction='row' padding={3} paddingTop={0} justifyContent='space-between'>
-            <Stack direction='row' alignItems='center' gap={2}>
+          <Stack
+            direction="row"
+            padding={3}
+            paddingX={10}
+            paddingTop={0}
+            justifyContent="space-between"
+          >
+            <Stack direction="row" alignItems="center" gap={2}>
               <IconButton onClick={() => router.back()}>
-                <Iconify icon='eva:arrow-ios-back-fill' />
+                <Iconify icon="eva:arrow-ios-back-fill" />
               </IconButton>
               <Typography variant="h6">
                 {curLangAr ? patientData?.name_arabic : patientData?.name_english}
               </Typography>
             </Stack>
-            <Typography variant="h6">
-              {t(patientData?.gender)}
-            </Typography>
-            <Typography variant="h6">
-              {calculateAge(patientData?.birth_date)}
-            </Typography>
-            <Typography variant="h6">
-              {fDate(patientData?.birth_date)}
-            </Typography>
+            <Typography variant="h6">{t(patientData?.gender)}</Typography>
+            <Typography variant="h6">{calculateAge(patientData?.birth_date)}</Typography>
+            <Typography variant="h6">{fDate(patientData?.birth_date)}</Typography>
+            <Button
+              sx={{ minWidth: 120 }}
+              variant="contained"
+              onClick={() => setCurrentTab('edit')}
+            >
+              {t('edit')}
+            </Button>
           </Stack>
           {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
           {currentTab === 'communication' && usPatientData && (
@@ -212,7 +183,14 @@ export default function PatientProfile() {
           {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
           {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
         </Stack>
-        <PageSelector vertical pages={TABS.map((tab) => ({ ...tab, onClick: () => setCurrentTab(tab.value), active: tab.value === currentTab }))} />
+        <PageSelector
+          vertical
+          pages={TABS.map((tab) => ({
+            ...tab,
+            onClick: () => setCurrentTab(tab.value),
+            active: tab.value === currentTab,
+          }))}
+        />
       </Stack>
     </Container>
   );
