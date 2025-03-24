@@ -11,7 +11,7 @@ import { Editor } from '../editor';
 
 // ----------------------------------------------------------------------
 
-export default function RHFEditor({ name, helperText, label, sx, ...other }) {
+export default function RHFEditor({ name, reset, helperText, label, sx, ...other }) {
   const {
     control,
     watch,
@@ -24,12 +24,15 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
   const isRTL = currentLang.value === 'ar';
 
   useEffect(() => {
-    if (values[name] === '<p><br></p>') {
-      setValue(name, '', {
-        shouldValidate: !isSubmitSuccessful,
-      });
+    if (
+      values[name]?.trim() === '' ||
+      values[name] === '<p><br></p>' ||
+      values[name] === '<p></p>'
+    ) {
+      setValue(name, '', { shouldValidate: !isSubmitSuccessful });
     }
-  }, [isSubmitSuccessful, name, setValue, values]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmitSuccessful, name, values[name]]);
 
   return (
     <Controller
@@ -45,6 +48,7 @@ export default function RHFEditor({ name, helperText, label, sx, ...other }) {
             value={field.value}
             onChange={field.onChange}
             error={!!error}
+            reset={reset}
             sx={{ textAlign: isRTL ? 'right' : '' }}
             helperText={
               (!!error || helperText) && (
@@ -66,4 +70,5 @@ RHFEditor.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   sx: PropTypes.object,
+  reset: PropTypes.bool,
 };

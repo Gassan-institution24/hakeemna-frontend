@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container } from '@mui/material';
+import { Stack, Button, Container } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetSickLeaves } from 'src/api/sickleave';
 
@@ -10,6 +11,7 @@ import SickLeaveItem from './items/sick-leave/sick-leave-item';
 import SickLeaveUpload from './items/sick-leave/sick-leave-upload';
 
 export default function PatientSickLeaves({ patient }) {
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   const { data, refetch } = useGetSickLeaves({
     unit_service:
@@ -17,15 +19,28 @@ export default function PatientSickLeaves({ patient }) {
     patient: patient?.patient?._id,
     unit_service_patient: patient?._id,
   });
+
+  const [showAdd, setShowAdd] = React.useState(false);
   return (
     <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <SickLeaveUpload patient={patient} />
+      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
+        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
+          {showAdd ? t('X') : t('new sick leave')}
+        </Button>
+      </Stack>
+      {showAdd && (
+        <SickLeaveUpload
+          patient={patient}
+          refetch={() => {
+            setShowAdd(false);
+            refetch();
+          }}
+        />
+      )}
       {data?.map((one, idx) => (
         <SickLeaveItem key={idx} one={one} refetch={refetch} />
       ))}
     </Container>
   );
 }
-PatientSickLeaves.propTypes = {
-  patient: PropTypes.object,
-};
+PatientSickLeaves.propTypes = { patient: PropTypes.object };

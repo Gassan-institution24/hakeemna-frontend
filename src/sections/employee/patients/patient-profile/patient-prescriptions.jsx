@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
-import { Box, Card, Stack, Container, Typography, IconButton } from '@mui/material';
+import { Box, Card, Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -30,20 +30,33 @@ export default function PatientPrescriptions({ patient }) {
     populate: { path: 'medicines', populate: 'medicines' },
   });
 
+  const [showAdd, setShowAdd] = React.useState(false);
+
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(endpoints.prescription.one(id));
       enqueueSnackbar(`${t('prescription')} ${t('deleted successfully')}`);
       refetch();
     } catch (e) {
-      enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
-        variant: 'error',
-      });
+      enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, { variant: 'error' });
     }
   };
   return (
     <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <PrescriptionUpload patient={patient} />
+      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
+        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
+          {showAdd ? t('X') : t('new prescription')}
+        </Button>
+      </Stack>
+      {showAdd && (
+        <PrescriptionUpload
+          patient={patient}
+          refetch={() => {
+            setShowAdd(false);
+            refetch();
+          }}
+        />
+      )}
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
           <Stack direction="row" justifyContent="flex-end" alignItems="center">
@@ -58,10 +71,7 @@ export default function PatientPrescriptions({ patient }) {
             rowGap={0.5}
             columnGap={4}
             display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              md: 'repeat(4, 1fr)',
-            }}
+            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(4, 1fr)' }}
           >
             <Typography variant="body2" color="text.disabled">
               {t('trade name')}
@@ -91,6 +101,4 @@ export default function PatientPrescriptions({ patient }) {
     </Container>
   );
 }
-PatientPrescriptions.propTypes = {
-  patient: PropTypes.object,
-};
+PatientPrescriptions.propTypes = { patient: PropTypes.object };

@@ -47,6 +47,11 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
               actionBar: { actions: ['clear'] },
               textField: {
                 fullWidth: true,
+                sx: {
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: error ? 'error.main' : '' },
+                  },
+                },
                 ...other,
               },
             }}
