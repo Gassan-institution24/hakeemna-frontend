@@ -85,9 +85,9 @@ export const WebRTCProvider = ({ children }) => {
     // Notify the other user that call has ended
     socket.emit('endCall', { to: caller });
 
-    if (callAccepted) {
-      router.replace(paths.dashboard.root);
-    }
+    // if (callAccepted) {
+    //   router.replace(paths.dashboard.root);
+    // }
     // Reset all states
     setCallAccepted(false);
     setReceivingCall(false);
@@ -104,14 +104,80 @@ export const WebRTCProvider = ({ children }) => {
     setStream(null);
 
     // Redirect to dashboard
-  }, [caller, stream, screenStream, mediaRecorder, router, callAccepted]);
+  }, [caller, stream, screenStream, mediaRecorder]);
 
   const callUser = useCallback(
-    (id) => {
-      if (!peerInstance || !stream || !socket) return;
+    async (id) => {
+      let currStream;
+      try {
+        const currentStream = await navigator.mediaDevices?.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        const videoTracks = currentStream.getVideoTracks();
+        if (videoTracks.length > 0) {
+          videoTracks[0].enabled = false;
+        }
+        setStream(currentStream);
+        currStream = currentStream;
+        const audioTracks = currentStream.getAudioTracks();
+        if (audioTracks.length > 0) {
+          audioTrackRef.current = audioTracks[0];
+        }
+
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
+      } catch (err) {
+        try {
+          const currentStream = await navigator.mediaDevices?.getUserMedia({
+            video: false,
+            audio: true,
+          });
+          setStream(currentStream);
+          currStream = currentStream;
+
+          // Store a reference to the audio track
+          const audioTracks = currentStream.getAudioTracks();
+          if (audioTracks.length > 0) {
+            audioTrackRef.current = audioTracks[0];
+          }
+
+          if (myVideo.current) {
+            myVideo.current.srcObject = currentStream;
+          }
+        } catch (erro) {
+          try {
+            const currentStream = await navigator.mediaDevices?.getUserMedia({
+              video: true,
+              audio: false,
+            });
+            const videoTracks = currentStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+              videoTracks[0].enabled = false;
+            }
+            setStream(currentStream);
+            currStream = currentStream;
+
+            // Store a reference to the audio track
+            const audioTracks = currentStream.getAudioTracks();
+            if (audioTracks.length > 0) {
+              audioTrackRef.current = audioTracks[0];
+            }
+
+            if (myVideo.current) {
+              myVideo.current.srcObject = currentStream;
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+
+      if (!peerInstance || !socket || !currStream) return;
 
       // Make the call with PeerJS
-      const call = peerInstance.call(`${id}-hakeemna`, stream);
+      const call = peerInstance.call(`${id}-hakeemna`, currStream);
 
       if (!call) return;
 
@@ -126,33 +192,93 @@ export const WebRTCProvider = ({ children }) => {
       });
 
       // Notify the user about the call via socket
-      socket.emit('callUser', {
-        userId: id,
-        from: user?._id,
-        userName: user?.userName,
-      });
+      socket.emit('callUser', { userId: id, from: user?._id, userName: user?.userName });
 
       setIsCalling(true);
 
       callRef.current = call;
     },
-    [peerInstance, stream, user?._id, user?.userName, userVideo, endCall]
+    [peerInstance, user?._id, user?.userName, userVideo, endCall]
   );
 
-  const answerCall = useCallback(() => {
-    if (!callRef.current || !stream) return;
+  const answerCall = useCallback(async () => {
+    let currStream;
+    try {
+      const currentStream = await navigator.mediaDevices?.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      const videoTracks = currentStream.getVideoTracks();
+      if (videoTracks.length > 0) {
+        videoTracks[0].enabled = false;
+      }
+      setStream(currentStream);
+      currStream = currentStream;
+      const audioTracks = currentStream.getAudioTracks();
+      if (audioTracks.length > 0) {
+        audioTrackRef.current = audioTracks[0];
+      }
+
+      if (myVideo.current) {
+        myVideo.current.srcObject = currentStream;
+      }
+    } catch (err) {
+      try {
+        const currentStream = await navigator.mediaDevices?.getUserMedia({
+          video: false,
+          audio: true,
+        });
+        setStream(currentStream);
+        currStream = currentStream;
+
+        // Store a reference to the audio track
+        const audioTracks = currentStream.getAudioTracks();
+        if (audioTracks.length > 0) {
+          audioTrackRef.current = audioTracks[0];
+        }
+
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
+      } catch (erro) {
+        try {
+          const currentStream = await navigator.mediaDevices?.getUserMedia({
+            video: true,
+            audio: false,
+          });
+          const videoTracks = currentStream.getVideoTracks();
+          if (videoTracks.length > 0) {
+            videoTracks[0].enabled = false;
+          }
+          setStream(currentStream);
+          currStream = currentStream;
+
+          // Store a reference to the audio track
+          const audioTracks = currentStream.getAudioTracks();
+          if (audioTracks.length > 0) {
+            audioTrackRef.current = audioTracks[0];
+          }
+
+          if (myVideo.current) {
+            myVideo.current.srcObject = currentStream;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    if (!callRef.current || !currStream) return;
 
     setCallAccepted(true);
-    callRef.current.answer(stream);
+    callRef.current.answer(currStream);
     callRef.current.on('stream', (remoteStream) => {
       if (userVideo.current) {
         userVideo.current.srcObject = remoteStream;
       }
     });
-    socket.emit('answerCall', {
-      to: caller,
-    });
-  }, [callRef, stream, userVideo, caller]);
+    socket.emit('answerCall', { to: caller });
+  }, [callRef, userVideo, caller]);
 
   const toggleMute = useCallback(() => {
     if (!stream) return;
@@ -335,8 +461,8 @@ export const WebRTCProvider = ({ children }) => {
     socket.emit('cancelCall', { to: caller });
     setReceivingCall(false);
     setIsCalling(false);
-    router.replace(paths.dashboard.root);
-  }, [router, caller]);
+    // router.replace(paths.dashboard.root);
+  }, [caller]);
 
   const memoizedValue = useMemo(
     () => ({
@@ -405,6 +531,4 @@ export const WebRTCProvider = ({ children }) => {
   return <WebRTCContext.Provider value={memoizedValue}>{children}</WebRTCContext.Provider>;
 };
 
-WebRTCProvider.propTypes = {
-  children: PropTypes.node,
-};
+WebRTCProvider.propTypes = { children: PropTypes.node };

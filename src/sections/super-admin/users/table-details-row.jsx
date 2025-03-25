@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { format, isValid } from 'date-fns';
 
 import Box from '@mui/material/Box';
-import { ListItemText } from '@mui/material';
+import { Dialog, ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -17,6 +17,9 @@ import { fDateTime } from 'src/utils/format-time';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import { useState } from 'react';
+import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +50,7 @@ export default function CountriesTableRow({
 
   const DDL = usePopover();
   const popover = usePopover();
-  const router = useRouter();
+  const { setIdToCall, idToCall, callUser } = useWebRTC();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -75,11 +78,7 @@ export default function CountriesTableRow({
           }
           secondary={isValid(new Date(last_online)) && format(new Date(last_online), 'p')}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          secondaryTypographyProps={{
-            mt: 0.5,
-            component: 'span',
-            typography: 'caption',
-          }}
+          secondaryTypographyProps={{ mt: 0.5, component: 'span', typography: 'caption' }}
         />
       </TableCell>
 
@@ -160,7 +159,8 @@ export default function CountriesTableRow({
         <MenuItem
           lang="ar"
           onClick={() => {
-            router.push(`${paths.call}?userId=${row?._id}`);
+            setIdToCall(row?._id);
+            callUser(row?._if);
           }}
         >
           <Iconify icon="material-symbols:call-sharp" />
@@ -176,10 +176,7 @@ export default function CountriesTableRow({
         open={DDL.open}
         onClose={DDL.onClose}
         arrow="right-top"
-        sx={{
-          padding: 2,
-          fontSize: '14px',
-        }}
+        sx={{ padding: 2, fontSize: '14px' }}
       >
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
@@ -198,6 +195,11 @@ export default function CountriesTableRow({
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
+      {idToCall && (
+        <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
+          <WebRTCComponent userId={idToCall} />
+        </Dialog>
+      )}
     </>
   );
 }
