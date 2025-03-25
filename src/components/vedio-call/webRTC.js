@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
+
 import React, { useEffect } from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -13,7 +15,7 @@ import { useTranslate } from 'src/locales';
 import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
 
-const WebRTCComponent = () => {
+const WebRTCComponent = ({ userId, callerId, userName }) => {
   const {
     receivingCall,
     callAccepted,
@@ -34,105 +36,43 @@ const WebRTCComponent = () => {
     toggleScreenSharing,
     isScreenSharing,
     setCaller,
+    caller,
     setReceivingCall,
     setStream,
     audioTrackRef,
     stream,
     onCancelCall,
     isCalling,
+    idToCall,
   } = useWebRTC();
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const mdUp = useResponsive('up', 'md');
   const { t } = useTranslate();
 
-  const userId = searchParams.get('userId');
-  const callerParam = searchParams.get('caller');
-  const userNameParam = searchParams.get('userName');
-
   useEffect(() => {
-    if (stream) {
-      if (userId) {
-        setIdToCall(userId);
-        callUser(userId);
-      }
-
-      if (callerParam) {
-        // setReceivingCall(true);
-        setCaller(callerParam);
-      }
+    // if (stream) {
+    if (userId && !idToCall) {
+      setIdToCall(userId);
+      callUser(userId);
     }
+
+    if (callerId && !caller) {
+      // setReceivingCall(true);
+      setCaller(callerId);
+    }
+    // }
     // eslint-disable-next-line
-  }, [userId, callerParam, stream]);
+  }, [userId, callerId]);
 
   useEffect(() => {
-    navigator.mediaDevices
-      ?.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        const videoTracks = currentStream.getVideoTracks();
-        if (videoTracks.length > 0) {
-          videoTracks[0].enabled = false;
-        }
-        setStream(currentStream);
-        const audioTracks = currentStream.getAudioTracks();
-        if (audioTracks.length > 0) {
-          audioTrackRef.current = audioTracks[0];
-        }
-
-        if (myVideo.current) {
-          myVideo.current.srcObject = currentStream;
-        }
-      })
-      .catch((err) => {
-        navigator.mediaDevices
-          ?.getUserMedia({ video: false, audio: true })
-          .then((currentStream) => {
-            setStream(currentStream);
-
-            // Store a reference to the audio track
-            const audioTracks = currentStream.getAudioTracks();
-            if (audioTracks.length > 0) {
-              audioTrackRef.current = audioTracks[0];
-            }
-
-            if (myVideo.current) {
-              myVideo.current.srcObject = currentStream;
-            }
-          })
-          .catch((erro) => {
-            navigator.mediaDevices
-              ?.getUserMedia({ video: true, audio: false })
-              .then((currentStream) => {
-                const videoTracks = currentStream.getVideoTracks();
-                if (videoTracks.length > 0) {
-                  videoTracks[0].enabled = false;
-                }
-                setStream(currentStream);
-
-                // Store a reference to the audio track
-                const audioTracks = currentStream.getAudioTracks();
-                if (audioTracks.length > 0) {
-                  audioTrackRef.current = audioTracks[0];
-                }
-
-                if (myVideo.current) {
-                  myVideo.current.srcObject = currentStream;
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          });
-      });
-
     socket.on('endCall', () => {
       endCall();
     });
     socket.on('cancelCall', () => {
       endCall();
-      router.replace(paths.dashboard.root);
+      // router.replace(paths.dashboard.root);
     });
 
     socket.on('callAccepted', ({ from }) => {
@@ -140,19 +80,19 @@ const WebRTCComponent = () => {
       setCaller(from);
     });
 
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
+    // return () => {
+    //   if (stream) {
+    //     stream.getTracks().forEach((track) => track.stop());
+    //   }
 
-      socket.off('endCall');
-      socket.off('cancelCall');
-      socket.off('callAccepted');
+    //   socket.off('endCall');
+    //   socket.off('cancelCall');
+    //   socket.off('callAccepted');
 
-      if (callAccepted) {
-        endCall();
-      }
-    };
+    //   if (callAccepted) {
+    //     endCall();
+    //   }
+    // };
     // eslint-disable-next-line
   }, []);
 
@@ -166,14 +106,14 @@ const WebRTCComponent = () => {
         // eslint-disable-next-line
         <audio style={{ display: 'none' }} src="/callingTone.mp3" autoPlay loop />
       )}
-      <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
-        {/* Local video */}
-        <Box sx={{ flex: 1 }}>
+      {/* Local video */}
+      <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+        <Box sx={{ width: '100%', height: '100%' }}>
           <Box
             sx={{
               zIndex: 60,
-              position: 'fixed',
-              bottom: 70,
+              position: 'absolute',
+              top: 5,
               right: 5,
               width: mdUp ? 300 : 170,
               height: mdUp ? 200 : 120,
@@ -197,7 +137,14 @@ const WebRTCComponent = () => {
           </Box>
 
           <Box
-            sx={{ zIndex: 40, position: 'fixed', width: '100%', height: '100%', top: 0, left: 0 }}
+            sx={{
+              zIndex: 40,
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+            }}
           >
             {/* eslint-disable */}
             <video
@@ -219,6 +166,9 @@ const WebRTCComponent = () => {
           justifyContent="space-between"
           alignItems="center"
           sx={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
             zIndex: 100,
             width: 1,
             height: 65,
@@ -280,7 +230,7 @@ const WebRTCComponent = () => {
                 icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'}
               />
               <span>{isRecording ? t('Stop Recording') : t('Record')}</span>
-            </Button> */}
+              </Button> */}
           </Stack>
           <Button
             variant="contained"
@@ -292,11 +242,11 @@ const WebRTCComponent = () => {
             {mdUp && <span>{t('End Call')}</span>}
           </Button>
         </Stack>
-      </Dialog>
+      </Box>
       <Dialog open={receivingCall && !callAccepted}>
         <Stack p={3} gap={2}>
           <h3>
-            {userNameParam} {t('Calling...')}
+            {userName} {t('Calling...')}
           </h3>
           <Stack gap={1}>
             <Button
@@ -324,3 +274,9 @@ const WebRTCComponent = () => {
 };
 
 export default WebRTCComponent;
+
+WebRTCComponent.propTypes = {
+  userId: PropTypes.string,
+  callerId: PropTypes.string,
+  userName: PropTypes.string,
+};

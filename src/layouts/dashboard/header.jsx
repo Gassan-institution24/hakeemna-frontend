@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from '@mui/material';
+import { Button, Dialog } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -24,6 +24,7 @@ import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
+import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
@@ -41,7 +42,8 @@ export default function Header({ onOpenNav }) {
   const router = useRouter();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const { setReceivingCall } = useWebRTC();
+  const { setReceivingCall, setCaller, caller } = useWebRTC();
+  const [callerName, setCallerName] = useState();
   const parentToken = localStorage.getItem('parentToken');
   const switchBack = () => {
     localStorage.setItem('accessToken', parentToken);
@@ -64,11 +66,11 @@ export default function Header({ onOpenNav }) {
     socket.on('callUser', ({ userId, from, signal, userName }) => {
       if (user?._id === userId) {
         setReceivingCall(true);
-        router.push(
-          `${paths.call}?caller=${from}&userName=${userName}&signal=${JSON.stringify(signal)}`
-        );
+        setCaller(from);
+        setCallerName(userName);
       }
     });
+    // eslint-disable-next-line
   }, [user?._id, router, setReceivingCall]);
 
   const renderContent = (
@@ -121,42 +123,34 @@ export default function Header({ onOpenNav }) {
         // boxShadow: (design) => design.customShadows.z8,
         height: HEADER.H_MOBILE,
         zIndex: theme.zIndex.appBar + 1,
-        ...bgBlur({
-          color: theme.palette.background.default,
-        }),
+        ...bgBlur({ color: theme.palette.background.default }),
         transition: theme.transitions.create(['height'], {
           duration: theme.transitions.duration.shorter,
         }),
         ...(lgUp && {
           width: `calc(100% - ${NAV.W_VERTICAL + 1}px)`,
           height: HEADER.H_DESKTOP,
-          ...(offsetTop && {
-            height: HEADER.H_DESKTOP_OFFSET,
-          }),
+          ...(offsetTop && { height: HEADER.H_DESKTOP_OFFSET }),
           ...(isNavHorizontal && {
             width: 1,
             bgcolor: 'background.default',
             height: HEADER.H_DESKTOP_OFFSET,
             borderBottom: `dashed 1px ${theme.palette.divider}`,
           }),
-          ...(isNavMini && {
-            width: `calc(100% - ${NAV.W_MINI + 1}px)`,
-          }),
+          ...(isNavMini && { width: `calc(100% - ${NAV.W_MINI + 1}px)` }),
         }),
       }}
     >
-      <Toolbar
-        sx={{
-          height: 1,
-          px: { lg: 5 },
-        }}
-      >
+      <Toolbar sx={{ height: 1, px: { lg: 5 } }}>
         {renderContent}
+        {caller && (
+          <Dialog open fullScreen sx={{ display: 'flex', flexDirection: 'column' }}>
+            <WebRTCComponent callerId={caller} userName={callerName} />
+          </Dialog>
+        )}
       </Toolbar>
     </AppBar>
   );
 }
 
-Header.propTypes = {
-  onOpenNav: PropTypes.func,
-};
+Header.propTypes = { onOpenNav: PropTypes.func };

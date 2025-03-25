@@ -12,6 +12,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
+import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -99,7 +100,7 @@ export default function PatientProfile() {
   ];
 
   return (
-    <Container sx={{ backgroundColor: '#fff', minHeight: '100%' }} maxWidth="">
+    <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
       {/* <Card sx={{ px: 4, py: 2, mb: 4 }}>
         <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
           <Avatar
@@ -132,7 +133,7 @@ export default function PatientProfile() {
           </Stack>
         </Stack>
       </Card> */}
-      <Stack paddingTop={5} direction={{ md: 'row' }}>
+      <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
         <PageSelector
           vertical
           pages={TABS.map((tab) => ({
@@ -160,13 +161,25 @@ export default function PatientProfile() {
             <Typography variant="h6">{t(patientData?.gender)}</Typography>
             <Typography variant="h6">{calculateAge(patientData?.birth_date)}</Typography>
             <Typography variant="h6">{fDate(patientData?.birth_date)}</Typography>
-            <Button
-              sx={{ minWidth: 120 }}
-              variant="contained"
-              onClick={() => setCurrentTab('edit')}
-            >
-              {t('edit')}
-            </Button>
+            <Stack direction="row" gap={2}>
+              <Button
+                sx={{ minWidth: 120 }}
+                variant="contained"
+                onClick={() => setCurrentTab('edit')}
+              >
+                {t('edit')}
+              </Button>
+              {patientData?.user && (
+                <Button
+                  sx={{ minWidth: 120 }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setCurrentTab('call')}
+                >
+                  {t('call')}
+                </Button>
+              )}
+            </Stack>
           </Stack>
           {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
           {currentTab === 'communication' && usPatientData && (
@@ -189,6 +202,7 @@ export default function PatientProfile() {
             <PatientInstructions patient={usPatientData} />
           )}
           {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
+          {currentTab === 'call' && usPatientData && <WebRTCComponent userId={patientData?.user} />}
           {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
         </Stack>
       </Stack>
