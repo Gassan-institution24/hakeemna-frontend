@@ -1,10 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
+import { Dialog } from '@mui/material';
+
+import { useSearchParams } from 'src/routes/hooks';
+
 import { useTranslate } from 'src/locales';
 
 import WebRTCComponent from 'src/components/vedio-call/webRTC';
-import { useSearchParams } from 'src/routes/hooks';
-import { Dialog } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
