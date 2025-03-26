@@ -1,8 +1,10 @@
-import { Dialog } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import { Dialog } from '@mui/material';
+
 import { useSearchParams } from 'src/routes/hooks';
+
+import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 // ----------------------------------------------------------------------
 

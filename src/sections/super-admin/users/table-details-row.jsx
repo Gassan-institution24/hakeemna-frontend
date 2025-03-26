@@ -2,24 +2,20 @@ import PropTypes from 'prop-types';
 import { format, isValid } from 'date-fns';
 
 import Box from '@mui/material/Box';
-import { Dialog, ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { Dialog, ListItemText } from '@mui/material';
 
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import WebRTCComponent from 'src/components/vedio-call/webRTC';
-import { useState } from 'react';
 import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 

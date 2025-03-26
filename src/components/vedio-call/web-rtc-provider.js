@@ -2,7 +2,6 @@ import { Peer } from 'peerjs';
 import PropTypes from 'prop-types';
 import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import socket from 'src/socket';
@@ -13,6 +12,7 @@ import { WebRTCContext } from './web-rtc-context';
 export const WebRTCProvider = ({ children }) => {
   const { user } = useAuthContext();
   const [stream, setStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
   const [screenStream, setScreenStream] = useState(null);
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState('');
@@ -31,6 +31,8 @@ export const WebRTCProvider = ({ children }) => {
 
   const myVideo = useRef(null);
   const userVideo = useRef(null);
+  const myVideoRef = useRef(null);
+  const userVideoRef = useRef(null);
   const callRef = useRef(null);
   const audioTrackRef = useRef(null);
 
@@ -40,17 +42,16 @@ export const WebRTCProvider = ({ children }) => {
       const peer = new Peer(`${user._id}-hakeemna`);
       peer.on('open', (id) => {
         // eslint-disable-next-line
-        // console.log('My peer ID from open is: ' + id);
       });
 
       peer.on('error', (err) => {
-        // console.error('PeerJS error:', err);
+        console.error('PeerJS error:', err);
       });
 
       peer.on('call', (incomingCall) => {
         callRef.current = incomingCall;
         setReceivingCall(true);
-        setCaller(incomingCall.peer);
+        // setCaller(incomingCall.peer);
       });
 
       setPeerInstance(peer);
@@ -63,6 +64,36 @@ export const WebRTCProvider = ({ children }) => {
     };
     // eslint-disable-next-line
   }, [user?._id]);
+
+  useEffect(() => {
+    socket.on('endCall', () => {
+      endCall();
+    });
+    socket.on('cancelCall', () => {
+      endCall();
+      // router.replace(paths.dashboard.root);
+    });
+
+    socket.on('callAccepted', ({ from }) => {
+      setCallAccepted(true);
+      setCaller(from);
+    });
+
+    return () => {
+      //   if (stream) {
+      //     stream.getTracks().forEach((track) => track.stop());
+      //   }
+
+      socket.off('endCall');
+      socket.off('cancelCall');
+      socket.off('callAccepted');
+
+      if (callAccepted) {
+        endCall();
+      }
+    };
+    // eslint-disable-next-line
+  }, []);
 
   const endCall = useCallback(() => {
     if (callRef.current) {
@@ -82,12 +113,9 @@ export const WebRTCProvider = ({ children }) => {
       mediaRecorder.stop();
     }
 
-    // Notify the other user that call has ended
     socket.emit('endCall', { to: caller });
+    // Notify the other user that call has ended
 
-    // if (callAccepted) {
-    //   router.replace(paths.dashboard.root);
-    // }
     // Reset all states
     setCallAccepted(false);
     setReceivingCall(false);
@@ -128,6 +156,9 @@ export const WebRTCProvider = ({ children }) => {
         if (myVideo.current) {
           myVideo.current.srcObject = currentStream;
         }
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject = currentStream;
+        }
       } catch (err) {
         try {
           const currentStream = await navigator.mediaDevices?.getUserMedia({
@@ -145,6 +176,9 @@ export const WebRTCProvider = ({ children }) => {
 
           if (myVideo.current) {
             myVideo.current.srcObject = currentStream;
+          }
+          if (myVideoRef.current) {
+            myVideoRef.current.srcObject = currentStream;
           }
         } catch (erro) {
           try {
@@ -168,6 +202,9 @@ export const WebRTCProvider = ({ children }) => {
             if (myVideo.current) {
               myVideo.current.srcObject = currentStream;
             }
+            if (myVideoRef.current) {
+              myVideoRef.current.srcObject = currentStream;
+            }
           } catch (error) {
             console.log(error);
           }
@@ -181,9 +218,13 @@ export const WebRTCProvider = ({ children }) => {
 
       if (!call) return;
 
-      call.on('stream', (remoteStream) => {
+      call.on('stream', (curremoteStream) => {
+        setRemoteStream(curremoteStream);
         if (userVideo.current) {
-          userVideo.current.srcObject = remoteStream;
+          userVideo.current.srcObject = curremoteStream;
+        }
+        if (userVideoRef.current) {
+          userVideoRef.current.srcObject = curremoteStream;
         }
       });
 
@@ -198,7 +239,7 @@ export const WebRTCProvider = ({ children }) => {
 
       callRef.current = call;
     },
-    [peerInstance, user?._id, user?.userName, userVideo, endCall]
+    [peerInstance, user?._id, user?.userName, userVideo, userVideoRef, endCall]
   );
 
   const answerCall = useCallback(async () => {
@@ -222,6 +263,9 @@ export const WebRTCProvider = ({ children }) => {
       if (myVideo.current) {
         myVideo.current.srcObject = currentStream;
       }
+      if (myVideoRef.current) {
+        myVideoRef.current.srcObject = currentStream;
+      }
     } catch (err) {
       try {
         const currentStream = await navigator.mediaDevices?.getUserMedia({
@@ -239,6 +283,9 @@ export const WebRTCProvider = ({ children }) => {
 
         if (myVideo.current) {
           myVideo.current.srcObject = currentStream;
+        }
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject = currentStream;
         }
       } catch (erro) {
         try {
@@ -262,6 +309,9 @@ export const WebRTCProvider = ({ children }) => {
           if (myVideo.current) {
             myVideo.current.srcObject = currentStream;
           }
+          if (myVideoRef.current) {
+            myVideoRef.current.srcObject = currentStream;
+          }
         } catch (error) {
           console.log(error);
         }
@@ -272,13 +322,17 @@ export const WebRTCProvider = ({ children }) => {
 
     setCallAccepted(true);
     callRef.current.answer(currStream);
-    callRef.current.on('stream', (remoteStream) => {
+    callRef.current.on('stream', (curRemoteStream) => {
+      setRemoteStream(curRemoteStream);
       if (userVideo.current) {
-        userVideo.current.srcObject = remoteStream;
+        userVideo.current.srcObject = curRemoteStream;
+      }
+      if (userVideoRef.current) {
+        userVideoRef.current.srcObject = curRemoteStream;
       }
     });
     socket.emit('answerCall', { to: caller });
-  }, [callRef, userVideo, caller]);
+  }, [callRef, userVideo, userVideoRef, caller]);
 
   const toggleMute = useCallback(() => {
     if (!stream) return;
@@ -314,7 +368,18 @@ export const WebRTCProvider = ({ children }) => {
   const toggleVideo = useCallback(() => {
     if (stream) {
       const videoTracks = stream.getVideoTracks();
-      myVideo.current.srcObject = stream;
+      if (myVideo.current) {
+        myVideo.current.srcObject = stream;
+      }
+      if (myVideoRef.current) {
+        myVideoRef.current.srcObject = stream;
+      }
+      if (userVideo.current) {
+        userVideo.current.srcObject = remoteStream;
+      }
+      if (userVideoRef.current) {
+        userVideoRef.current.srcObject = remoteStream;
+      }
       if (videoTracks.length > 0) {
         videoTracks[0].enabled = !videoTracks[0].enabled;
         setIsVideoOn(videoTracks[0].enabled);
@@ -328,7 +393,7 @@ export const WebRTCProvider = ({ children }) => {
         }
       }
     }
-  }, [stream]);
+  }, [stream, remoteStream]);
 
   const toggleScreenSharing = useCallback(async () => {
     if (!isScreenSharing) {
@@ -349,6 +414,7 @@ export const WebRTCProvider = ({ children }) => {
           // Switch back to the camera stream
           if (stream) {
             myVideo.current.srcObject = stream;
+            myVideoRef.current.srcObject = stream;
 
             // Replace the track in the peer connection
             if (callRef.current && callRef.current.peerConnection) {
@@ -363,7 +429,12 @@ export const WebRTCProvider = ({ children }) => {
         };
 
         // Update state and UI
-        myVideo.current.srcObject = currScreenStream;
+        if (myVideo.current) {
+          myVideo.current.srcObject = currScreenStream;
+        }
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject = currScreenStream;
+        }
         setScreenStream(currScreenStream);
         setIsScreenSharing(true);
 
@@ -390,7 +461,12 @@ export const WebRTCProvider = ({ children }) => {
 
       // Switch back to the camera stream
       if (stream) {
-        myVideo.current.srcObject = stream;
+        if (myVideo.current) {
+          myVideo.current.srcObject = stream;
+        }
+        if (myVideoRef) {
+          myVideoRef.current.srcObject = stream;
+        }
 
         // Replace the track in the peer connection
         if (callRef.current && callRef.current.peerConnection) {
@@ -407,6 +483,29 @@ export const WebRTCProvider = ({ children }) => {
       setScreenStream(null);
     }
   }, [isScreenSharing, screenStream, stream, callRef, myVideo]);
+
+  const refreshStream = useCallback(() => {
+    if (myVideo.current) {
+      if (screenStream) {
+        myVideo.current.srcObject = screenStream;
+      } else {
+        myVideo.current.srcObject = stream;
+      }
+    }
+    if (myVideoRef.current) {
+      if (screenStream) {
+        myVideoRef.current.srcObject = screenStream;
+      } else {
+        myVideoRef.current.srcObject = stream;
+      }
+    }
+    if (userVideo.current) {
+      userVideo.current.srcObject = remoteStream;
+    }
+    if (userVideoRef.current) {
+      userVideoRef.current.srcObject = remoteStream;
+    }
+  }, [stream, remoteStream, screenStream]);
 
   // const stopRecording = useCallback(() => {
   //     if (mediaRecorder) {
@@ -457,6 +556,16 @@ export const WebRTCProvider = ({ children }) => {
   //     }
   // }, [recordedChunks]);
 
+  // const registerRefs = useCallback(
+  //   ({ myVideoRef, userVideoRef }) => {
+  //     if (myVideoRef.current && userVideoRef.current && stream && remoteStream) {
+  //       myVideoRef.current.srcObject = stream;
+  //       userVideoRef.current.srcObject = remoteStream;
+  //     }
+  //   },
+  //   [stream, remoteStream]
+  // );
+
   const onCancelCall = useCallback(() => {
     socket.emit('cancelCall', { to: caller });
     setReceivingCall(false);
@@ -495,6 +604,9 @@ export const WebRTCProvider = ({ children }) => {
       onCancelCall,
       isCalling,
       setIsCalling,
+      myVideoRef,
+      userVideoRef,
+      refreshStream,
     }),
     [
       stream,
@@ -526,9 +638,14 @@ export const WebRTCProvider = ({ children }) => {
       onCancelCall,
       isCalling,
       setIsCalling,
+      myVideoRef,
+      userVideoRef,
+      refreshStream,
     ]
   );
   return <WebRTCContext.Provider value={memoizedValue}>{children}</WebRTCContext.Provider>;
 };
 
-WebRTCProvider.propTypes = { children: PropTypes.node };
+WebRTCProvider.propTypes = {
+  children: PropTypes.node,
+};

@@ -29,7 +29,7 @@ export function button(theme) {
 
     const defaultStyle = {
       // minWidth: 100,
-      borderRadius: 3,
+      borderRadius: 5,
       ...(inheritColor && {
         // CONTAINED
         ...(containedVariant && {

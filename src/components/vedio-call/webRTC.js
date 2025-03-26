@@ -1,98 +1,52 @@
 import PropTypes from 'prop-types';
-
-import React, { useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { Box, Stack, Button, Dialog } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 
 import Iconify from '../iconify';
 import { useWebRTC } from './use-web-rtc';
 
-const WebRTCComponent = ({ userId, callerId, userName }) => {
+const WebRTCComponent = ({ userId, callerId, userName, onShowBig }) => {
   const {
     receivingCall,
     callAccepted,
-    setIdToCall,
     isMuted,
     isVideoOn,
-    // isRecording,
     myVideo,
     userVideo,
-    callUser,
+    myVideoRef,
+    userVideoRef,
     answerCall,
     toggleMute,
     toggleVideo,
-    setCallAccepted,
-    // startRecording,
-    // stopRecording,
     endCall,
     toggleScreenSharing,
     isScreenSharing,
-    setCaller,
-    caller,
-    setReceivingCall,
-    setStream,
-    audioTrackRef,
-    stream,
     onCancelCall,
     isCalling,
-    idToCall,
+    refreshStream,
   } = useWebRTC();
-
-  const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
   const { t } = useTranslate();
+  const componentRef = useRef();
+
+  const [isSmall, setIsSmall] = useState(false);
 
   useEffect(() => {
-    // if (stream) {
-    if (userId && !idToCall) {
-      setIdToCall(userId);
-      callUser(userId);
+    refreshStream();
+    if (componentRef.current) {
+      const { width, height } = componentRef.current.getBoundingClientRect();
+
+      const SMALL_WIDTH_THRESHOLD = 300;
+      const SMALL_HEIGHT_THRESHOLD = 200;
+
+      setIsSmall(width < SMALL_WIDTH_THRESHOLD || height < SMALL_HEIGHT_THRESHOLD);
     }
-
-    if (callerId && !caller) {
-      // setReceivingCall(true);
-      setCaller(callerId);
-    }
-    // }
-    // eslint-disable-next-line
-  }, [userId, callerId]);
-
-  useEffect(() => {
-    socket.on('endCall', () => {
-      endCall();
-    });
-    socket.on('cancelCall', () => {
-      endCall();
-      // router.replace(paths.dashboard.root);
-    });
-
-    socket.on('callAccepted', ({ from }) => {
-      setCallAccepted(true);
-      setCaller(from);
-    });
-
-    // return () => {
-    //   if (stream) {
-    //     stream.getTracks().forEach((track) => track.stop());
-    //   }
-
-    //   socket.off('endCall');
-    //   socket.off('cancelCall');
-    //   socket.off('callAccepted');
-
-    //   if (callAccepted) {
-    //     endCall();
-    //   }
-    // };
     // eslint-disable-next-line
   }, []);
 
@@ -107,49 +61,62 @@ const WebRTCComponent = ({ userId, callerId, userName }) => {
         <audio style={{ display: 'none' }} src="/callingTone.mp3" autoPlay loop />
       )}
       {/* Local video */}
-      <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+      <Box
+        ref={componentRef}
+        sx={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          ':hover': {
+            '#actionBar': {
+              display: 'flex',
+            },
+          },
+        }}
+      >
         <Box sx={{ width: '100%', height: '100%' }}>
-          <Box
-            sx={{
-              zIndex: 60,
-              position: 'absolute',
-              top: 5,
-              right: 5,
-              width: mdUp ? 300 : 170,
-              height: mdUp ? 200 : 120,
-              borderRadius: '10px',
-              overflow: 'hidden',
-              border: '3px solid #ccc',
-            }}
-          >
-            <video
-              playsInline
-              muted
-              ref={myVideo}
-              autoPlay
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                backgroundColor: 'black',
+          {!isSmall && (
+            <Box
+              sx={{
+                zIndex: 60,
+                position: 'absolute',
+                top: 5,
+                right: 5,
+                width: mdUp ? 300 : 170,
+                height: mdUp ? 200 : 120,
+                borderRadius: '10px',
+                overflow: 'hidden',
+                border: '3px solid #ccc',
               }}
-            />
-          </Box>
+            >
+              <video
+                playsInline
+                muted
+                ref={isSmall ? myVideo : myVideoRef}
+                autoPlay
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  backgroundColor: 'black',
+                }}
+              />
+            </Box>
+          )}
 
           <Box
             sx={{
               zIndex: 40,
-              position: 'absolute',
+              position: isSmall ? '' : 'absolute',
               width: '100%',
               height: '100%',
-              top: 0,
-              left: 0,
+              ...(isSmall && { top: 0, left: 0 }),
             }}
           >
             {/* eslint-disable */}
             <video
               playsInline
-              ref={userVideo}
+              ref={isSmall ? userVideo : userVideoRef}
               autoPlay
               style={{
                 width: '100%',
@@ -162,85 +129,102 @@ const WebRTCComponent = ({ userId, callerId, userName }) => {
           </Box>
         </Box>
         <Stack
+          id="actionBar"
           direction="row"
           justifyContent="space-between"
           alignItems="center"
           sx={{
+            display: isSmall ? 'none' : '',
             position: 'absolute',
             bottom: 0,
             right: 0,
             zIndex: 100,
             width: 1,
-            height: 65,
+            height: isSmall ? 45 : 65,
             backgroundColor: '#212B36',
             color: '#fff',
             padding: 1,
-            px: mdUp ? 4 : 2,
+            px: mdUp && !isSmall ? 4 : 1,
           }}
         >
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={isSmall ? 1 : 2}>
             <Button
               variant="outlined"
-              sx={{ display: 'flex', gap: 1, padding: 1 }}
+              sx={{ display: 'flex', gap: 1, padding: isSmall ? 0.5 : 1, minWidth: 0 }}
               onClick={toggleMute}
             >
               <Iconify
-                width={23}
+                width={isSmall ? 20 : 23}
                 icon={isMuted ? 'material-symbols:mic-off' : 'material-symbols:mic'}
               />
-              {mdUp && <span>{isMuted ? t('Unmute') : t('Mute')}</span>}
+              {mdUp && !isSmall && <span>{isMuted ? t('Unmute') : t('Mute')}</span>}
             </Button>
             <Button
               variant="outlined"
-              sx={{ display: 'flex', gap: 1, padding: 1 }}
+              sx={{ display: 'flex', gap: 1, padding: isSmall ? 0.5 : 1, minWidth: 0 }}
               onClick={toggleVideo}
             >
               <Iconify
-                width={23}
+                width={isSmall ? 20 : 23}
                 icon={
                   isVideoOn
                     ? 'material-symbols:video-camera-front'
                     : 'material-symbols:video-camera-front-off'
                 }
               />
-              {mdUp && <span>{isVideoOn ? t('Camera Off') : t('Camera On')}</span>}
+              {mdUp && !isSmall && <span>{isVideoOn ? t('Camera Off') : t('Camera On')}</span>}
             </Button>
-            <Button
-              variant="outlined"
-              sx={{ display: 'flex', gap: 1, padding: 1 }}
-              onClick={toggleScreenSharing}
-            >
-              <Iconify
-                width={23}
-                icon={
-                  isScreenSharing
-                    ? 'material-symbols:stop-screen-share-outline'
-                    : 'material-symbols:screen-share-outline'
-                }
-              />
-              {mdUp && <span>{isScreenSharing ? t('Stop Sharing') : t('Share Screen')}</span>}
-            </Button>
+            {!isSmall && (
+              <Button
+                variant="outlined"
+                sx={{ display: 'flex', gap: 1, padding: isSmall ? 0.5 : 1, minWidth: 0 }}
+                onClick={toggleScreenSharing}
+              >
+                <Iconify
+                  width={isSmall ? 20 : 23}
+                  icon={
+                    isScreenSharing
+                      ? 'material-symbols:stop-screen-share-outline'
+                      : 'material-symbols:screen-share-outline'
+                  }
+                />
+                {mdUp && !isSmall && (
+                  <span>{isScreenSharing ? t('Stop Sharing') : t('Share Screen')}</span>
+                )}
+              </Button>
+            )}
             {/* <Button
               variant="outlined"
               sx={{ display: 'flex', gap: 1, padding: 1 }}
               onClick={isRecording ? stopRecording : startRecording}
-            >
+              >
               <Iconify
-                width={23}
+                width={isSmall?20:23}
                 icon={isRecording ? 'material-symbols:lens' : 'material-symbols:lens-outline'}
-              />
-              <span>{isRecording ? t('Stop Recording') : t('Record')}</span>
-              </Button> */}
+                />
+                <span>{isRecording ? t('Stop Recording') : t('Record')}</span>
+                </Button> */}
           </Stack>
-          <Button
-            variant="contained"
-            color="error"
-            sx={{ display: 'flex', gap: 1, padding: 1 }}
-            onClick={endCall}
-          >
-            <Iconify width={23} icon="material-symbols:call-end-sharp" />
-            {mdUp && <span>{t('End Call')}</span>}
-          </Button>
+          <Stack direction="row" spacing={isSmall ? 1 : 2}>
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ display: 'flex', gap: 1, padding: isSmall ? 0.5 : 1, minWidth: 0 }}
+              onClick={endCall}
+            >
+              <Iconify width={isSmall ? 20 : 23} icon="material-symbols:call-end-sharp" />
+              {mdUp && !isSmall && <span>{t('End Call')}</span>}
+            </Button>
+            {isSmall && onShowBig && (
+              <Button
+                variant="outlined"
+                sx={{ display: 'flex', gap: 1, padding: isSmall ? 0.5 : 1, minWidth: 0 }}
+                onClick={onShowBig}
+              >
+                <Iconify width={isSmall ? 20 : 23} icon="material-symbols:fullscreen-rounded" />
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </Box>
       <Dialog open={receivingCall && !callAccepted}>
@@ -279,4 +263,5 @@ WebRTCComponent.propTypes = {
   userId: PropTypes.string,
   callerId: PropTypes.string,
   userName: PropTypes.string,
+  onShowBig: PropTypes.func,
 };

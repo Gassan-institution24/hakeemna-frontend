@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
-import { Button, Dialog } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { Button, Dialog } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
@@ -23,8 +22,8 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
-import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';

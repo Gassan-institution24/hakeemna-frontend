@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Stack, Button, Container, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -13,6 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
 import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -39,6 +40,8 @@ export default function PatientProfile() {
       { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
     ],
   });
+
+  const { setIdToCall, callUser, idToCall } = useWebRTC();
 
   // const { isMedLab } = useUSTypeGuard();
 
@@ -134,14 +137,21 @@ export default function PatientProfile() {
         </Stack>
       </Card> */}
       <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
-        <PageSelector
-          vertical
-          pages={TABS.map((tab) => ({
-            ...tab,
-            onClick: () => setCurrentTab(tab.value),
-            active: tab.value === currentTab,
-          }))}
-        />
+        <Stack gap={2}>
+          <PageSelector
+            vertical
+            pages={TABS.map((tab) => ({
+              ...tab,
+              onClick: () => setCurrentTab(tab.value),
+              active: tab.value === currentTab,
+            }))}
+          />
+          {currentTab !== 'call' && (
+            <Box sx={{ width: '100%', height: '100%', maxHeight: 200 }}>
+              <WebRTCComponent onShowBig={() => setCurrentTab('call')} />
+            </Box>
+          )}
+        </Stack>
         <Stack gap={2} flex={1}>
           <Stack
             direction="row"
@@ -174,7 +184,13 @@ export default function PatientProfile() {
                   sx={{ minWidth: 120 }}
                   variant="contained"
                   color="primary"
-                  onClick={() => setCurrentTab('call')}
+                  onClick={() => {
+                    if (!idToCall) {
+                      setIdToCall(patientData?.user);
+                      callUser(patientData?.user);
+                    }
+                    setCurrentTab('call');
+                  }}
                 >
                   {t('call')}
                 </Button>
