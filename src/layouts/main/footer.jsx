@@ -53,35 +53,21 @@ export default function Footer() {
 
   return homePage ? (
     <Box
-      component="footer"
-      sx={{
-        position: 'relative',
-        backgroundImage: `url(${footerPic})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <Container sx={{ pt: 20, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
+    component="footer"
+    sx={{
+      position: 'relative',
+      backgroundImage: `linear-gradient(to right, #D2F5EB, #3CB099)`,
+      borderTopLeftRadius: '60px',
+      borderTopRightRadius: '60px',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+    }}
+  >
+  
+      <Container sx={{ pt: 5, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
         <Grid container justifyContent={{ xs: 'center', md: 'space-between' }} alignItems="center">
           <Grid xs={12} md={4}>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 80,
-                left: 250,
-                width: 300,
-                height: '82%',
-                background: 'linear-gradient(100deg,rgba(60, 176, 153, 0.89) , #F4F9F9 ,rgba(60, 176, 153, 0.89)  )',
-                filter: 'blur(15px) brightness(1)',
-                transform: 'skewX(17deg)',
-                zIndex: 0, // Ensures the box stays behind
-                borderRadius: 10,
-              }}
-            />
             <Logo sx={{ mb: 3, width: 170, height: 150, position: 'relative', zIndex: 1 }} />
             <Typography
               variant="body1"
