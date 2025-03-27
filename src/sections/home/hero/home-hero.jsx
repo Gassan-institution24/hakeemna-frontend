@@ -9,9 +9,9 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import photo from '../images/photo_5916008964670211334_y.jpg';
-import photo2 from '../images/photo_5916008964670211335_y.jpg';
-import photo3 from '../images/photo_5916008964670211336_y.jpg';
+import photo from '../images/photo.png';
+import photo2 from '../images/Beneficiary.png';
+import photo3 from '../images/UNITSERVICE.png';
 
 // Lazy load images
 
@@ -79,24 +79,29 @@ export default function HomeHero() {
           })}
         </script>
       </Helmet>
-
       <Stack
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          height: '85vh',
+          height: '60vh',
           width: '100%',
           color: 'white',
           px: 3,
-          mb: '150px',
+          mb: '100px',
           position: 'relative',
-          backgroundImage: `url(${backgroundImages[currentIndex]})`,
-          backgroundSize: 'cover',
+          backgroundImage: `
+      linear-gradient(to right,  #3CB099 , #70D8C0, 
+      url(${backgroundImages[currentIndex]})
+    `,
+          backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           transition: 'background-image 1s ease-in-out',
+          borderBottomLeftRadius: '60px',
+          borderBottomRightRadius: '60px',
+          backgroundBlendMode: 'overlay', // Blends the gradient with the image
         }}
       >
         {/* Content Markers */}
@@ -143,7 +148,11 @@ export default function HomeHero() {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 1, ease: 'easeInOut' }}
         >
-          <Typography variant="subtitle1" component="p" sx={{ maxWidth: 800, mb: 3, color: 'white', }}>
+          <Typography
+            variant="subtitle1"
+            component="p"
+            sx={{ maxWidth: 800, mb: 3, color: 'white' }}
+          >
             {texts[currentIndex]}
           </Typography>
 
