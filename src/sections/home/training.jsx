@@ -65,13 +65,13 @@ export default function Training() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ position: 'relative', color: 'white' }}>
-      <Typography variant="h2" sx={{ textAlign: 'center', mb: 5 }}>
+      <Typography color="white" variant="h2" sx={{ textAlign: 'center', mb: 5 }}>
         {t('Contact us to register for the training course')}
       </Typography>
       <Box>
-        <Typography variant="h6">{t('What are the benefits of registering with us?')}</Typography>
-        <Typography variant="h6">{t('Gain new skills')}</Typography>
-        <Typography variant="h6">{t('Get a free certificate')}</Typography>
+        <Typography color="white" variant="h6">{t('What are the benefits of registering with us?')}</Typography>
+        <Typography color="white" variant="h6">{t('Gain new skills')}</Typography>
+        <Typography color="white" variant="h6">{t('Get a free certificate')}</Typography>
       </Box>
 
       {!isSmallScreen && (
@@ -82,7 +82,7 @@ export default function Training() {
             style={{
               position: 'absolute',
               top: -70,
-              [currentLang ? 'left' : 'right']: 0, // Conditional style
+              [currentLang ? 'left' : 'right']: 0, 
               maxWidth: '50%',
             }}
           />

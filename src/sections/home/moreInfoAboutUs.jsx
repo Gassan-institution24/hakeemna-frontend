@@ -23,19 +23,21 @@ export default function MoreInfoAboutUs() {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          height: { xs: '40vh', md: '55vh' },
-          color: 'white',
-          mb: { xs: '40px', md: '200px' },
+          height: '35vh',
+          width: '100%',
+          px: 3,
+          mb: '150px',
           position: 'relative',
-          backgroundImage: `url(${photo})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          px: { xs: 2, md: 0 },
+          backgroundImage: `linear-gradient(to right, rgba(112, 216, 192, 0.7), rgba(60, 176, 153, 0.7))`,
+          borderBottomLeftRadius: '60px',
+          borderBottomRightRadius: '60px',
         }}
       >
         <m.div variants={varFade().inDown}>
-          <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' }, color: 'white' }}
+          >
             {t('The comprehensive medical platform, Hakeemna 360')}
           </Typography>
         </m.div>
