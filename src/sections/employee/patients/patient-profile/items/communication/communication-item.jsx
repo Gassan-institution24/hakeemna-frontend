@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Card, Stack, Button, Typography, IconButton } from '@mui/material';
 
-import { fDate } from 'src/utils/format-time';
+import { fDate, fDateAndTime, fDateTime } from 'src/utils/format-time';
 import { ConvertToHTML } from 'src/utils/convert-to-html';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -84,7 +84,7 @@ export default function CommunicationItem({ one, refetch }) {
       ) : (
         <>
           <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
+            <Typography variant="subtitle2">{fDateTime(one.created_at)}</Typography>
             <IconButton onClick={() => setEditting(true)}>
               <Iconify icon="lets-icons:edit-fill" />
             </IconButton>
@@ -95,7 +95,7 @@ export default function CommunicationItem({ one, refetch }) {
               <Typography variant="body2" color="text.disabled">
                 {t('date')}
               </Typography>
-              <Typography variant="body2">{fDate(one?.date)}</Typography>
+              <Typography variant="body2">{fDateAndTime(one?.date)}</Typography>
             </Stack>
             <Typography variant="body2" color="text.disabled">
               {t('description')}
