@@ -21,19 +21,19 @@ export default function UnitServiceHero() {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        height: { xs: '40vh', md: '55vh' },
+        height: '35vh',
+        width: '100%',
         color: 'white',
-        mb: { xs: '40px', md: '200px' },
+        px: 3,
+        mb: '150px',
         position: 'relative',
-        backgroundImage: `url(${photo})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        px: { xs: 2, md: 0 },
+        backgroundImage: `linear-gradient(to right, rgba(112, 216, 192, 0.7), rgba(60, 176, 153, 0.7))`,
+        borderBottomLeftRadius: '60px',
+        borderBottomRightRadius: '60px',
       }}
     >
       <m.div variants={varFade().inDown}>
-        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
+        <Typography color="white" variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '24px', md: '32px' } }}>
           {t('Service providers (medical institutions)')}
         </Typography>
       </m.div>

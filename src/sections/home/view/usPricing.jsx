@@ -55,7 +55,7 @@ export default function UsPricing() {
           m: 1.5,
           display: 'grid',
           gridTemplateColumns: '1fr 1fr 1fr',
-          backgroundImage: 'linear-gradient(to bottom, white, #22c55e29)',
+          bgcolor: '#E4F6F2',
         }}
       >
         {subscriptionsData.map((member, index) => (
@@ -95,37 +95,67 @@ export default function UsPricing() {
             >
               {member?.package_appointment === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('Appointment Package')}
                 </li>
               )}
               {member?.package_accounting === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('Accounting Package')}
                 </li>
               )}
               {member?.package_docotor_report === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('Docotor Report Package')}
                 </li>
               )}
               {member?.package_final_reporting === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('Final Reporting Package')}
                 </li>
               )}
               {member?.package_old_files_Management === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('Old Files Management Package')}
                 </li>
               )}
               {member?.package_TAX_Income_reporting === true && (
                 <li>
-                  <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} />{' '}
+                  <Iconify
+                    icon="material-symbols:check"
+                    width={15}
+                    color="success.main"
+                    sx={{ mr: 1, border: '1px solid #1F2C5C', borderRadius: 2 }}
+                  />{' '}
                   {t('TAX Income Reporting Package')}
                 </li>
               )}
@@ -137,7 +167,7 @@ export default function UsPricing() {
               href={paths.auth.registersu}
               sx={{
                 // p: 1,
-                backgroundColor: 'success.main',
+                backgroundColor: '#1F2C5C',
                 mb: 2,
                 position: 'absolute',
                 bottom: 20,

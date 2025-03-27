@@ -105,38 +105,43 @@ export default function USServices() {
           gap={10}
         >
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
-              {t('Managing old paper patient files and storing them in electronic records.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Managing old paper patient files and storing them in electronic records.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              {t('Managing patient records and files electronically.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Managing patient records and files electronically.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
               {t(
                 'Improving the mechanism of access to your medical information and patient files and the ability to access the rest of the data and medical history.'
               )}
             </Typography>
           </Card>
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
-              {t('Support better decision making in patient care.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Support better decision making in patient care.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              {t('Managing and organizing public relations electronically.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Managing and organizing public relations electronically.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>{t('Organizing patient relations and affairs.')}</Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              {' '}
+              - {t('Organizing patient relations and affairs.')}
+            </Typography>
           </Card>
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
               {t(
                 'Increasing patient and visitor satisfaction with the services provided and reducing waiting time in the clinic and other medical institutions.'
               )}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              {t('Making financial budgets for patients and managing premiums.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Making financial budgets for patients and managing premiums.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              {t('Contributing to reducing medical errors related to medication conflicts.')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Contributing to reducing medical errors related to medication conflicts.')}
             </Typography>
           </Card>
         </Box>
@@ -156,22 +161,50 @@ export default function USServices() {
           backgroundColor: '#e4f6f2',
           mb: 25,
           py: 4,
-          px: { xs: 2, md: 22 },
+          px: { xs: 2, md: 20 },
           alignItems: 'center',
           justifyContent: 'center',
+          gap: 20,
         }}
         display="grid"
         gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
       >
         <Stack spacing={3}>
-          <Typography variant="h3">{t('Managing medical records')}</Typography>
-          <Typography variant="h5">- {t('Managing medical records and appointments')}</Typography>
-          <Typography variant="h5">
-            - {t('Insurance and financial transactions processing')}
+          <Typography sx={{ textAlign: 'center' }} variant="h4">
+            {t('Routine and bureaucratic administrative affairs')}
           </Typography>
-          <Typography variant="h5">- {t('Prescription and medical reports issuance')}</Typography>
-          <Typography variant="h5">- {t('Patient admission and discharge procedures')}</Typography>
-          <Typography variant="h5">- {t('Integration with electronic health records')}</Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Managing the daily work of medical institutions with the aim of improving performance and raising efficiency.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">
+            - {t('Preparing medical reports and prescriptions electronically.')}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Freedom from repetitive procedures(bureaucratic routine) and reducing the excessive use of paper documents and files in accordance with sustainability plans.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">
+            - {t('Communicate with patients and suppliers electronically.')}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Managing appointments for patients, and the ability to book appointments in hospitals participating in our platform to reserve the operating room or any other department.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">- {t('Marketing campaigns.')}</Typography>
+          <Typography variant="subtitle1">- {t('Electronic signature and payment.')}</Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Storing the medical institution’s data and files in the cloud and protecting its independence and confidentiality.'
+            )}
+          </Typography>
         </Stack>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row' }}>
           <Image
@@ -203,7 +236,7 @@ export default function USServices() {
         }}
       >
         <Typography variant="h5" textAlign="center" fontWeight={700} mb={3} sx={{ color: 'white' }}>
-          {t('Patient Affairs')}
+          {t('Regulatory affairs')}
         </Typography>
 
         <Box
@@ -212,24 +245,53 @@ export default function USServices() {
           gap={10}
         >
           <Card sx={{ p: 1 }}>
-            <Typography sx={{ p: 2 }}>
-              - {t('Managing medical records and appointments')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Managing departments and activities.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Insurance and financial transactions processing')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('The ability to manage each department and each work team independently.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Prescription and medical reports issuance')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Department of Human Ressources.')}
+            </Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Manage the agenda independently for everyone who works in the medical institution.'
+              )}
+            </Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'The possibility for the visiting doctor or consultant to book an appointment electronically at an independent medical institution(such as a hospital) to perform an operation, for example, and to send the patient’s information electronically.'
+              )}
             </Typography>
           </Card>
           <Card sx={{ p: 1 }}>
-            <Typography sx={{ p: 2 }}>
-              - {t('Patient admission and discharge procedures')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Manage and book appointments electronically, independently for each employee(such as a doctor) and for each work team.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Integration with electronic health records')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Organizing relationships and business with other medical institutions(such as hospitals/ medical laboratories, etc.).'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>- {t('Mobile health services and telemedicine')}</Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'The ability to make modifications to match and adapt to the needs of each client(such as Medical Checklist, instructions, and reports).'
+              )}
+            </Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Continuous employee training and development according to the needs of each organization.'
+              )}
+            </Typography>
           </Card>
         </Box>
       </Box>
@@ -247,14 +309,24 @@ export default function USServices() {
         gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
       >
         <Stack spacing={3}>
-          <Typography variant="h3">{t('Managing medical records')}</Typography>
-          <Typography variant="h5">- {t('Managing medical records and appointments')}</Typography>
-          <Typography variant="h5">
-            - {t('Insurance and financial transactions processing')}
+          <Typography sx={{ textAlign: 'center' }} variant="h4">
+            {t('Financial and tax affairs')}
           </Typography>
-          <Typography variant="h5">- {t('Prescription and medical reports issuance')}</Typography>
-          <Typography variant="h5">- {t('Patient admission and discharge procedures')}</Typography>
-          <Typography variant="h5">- {t('Integration with electronic health records')}</Typography>
+          <Typography variant="subtitle1">
+            - {t('Managing financial affairs and the fund.')}
+          </Typography>
+          <Typography variant="subtitle1">- {t('Managing annual tax affairs.')}</Typography>
+          <Typography variant="subtitle1">- {t('Preparing annual tax return reports.')}</Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t('Managing financial deductions from the Doctors Syndicate, income tax, and others.')}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Organizing financial claims with medical institutions such as hospitals and insurance companies.'
+            )}
+          </Typography>
         </Stack>
         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
           <Image
@@ -305,16 +377,28 @@ export default function USServices() {
           }}
         />
         <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-          مميزات أخرى
+          {t('Other features')}
         </Typography>
-        <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
-          يقدم النظام العديد من المزايا التي تشمل تخفيض التكاليف لإدارة المؤسسة، وإمكانية استخدامه
-          عبر الهاتف الذكي أو اللوح المحمول (Tablet) أو الكمبيوتر. يتميز النظام أيضاً بإجراء تعديلات
-          (Customization) كبيرة للبيانات في المؤسسة، مما يجعله أكثر مرونة وفقًا لاحتياجاتها. يدعم
-          أيضاً عدة طرق تواصل (رسائل نصية، إشعارات، البريد - إيميل)، إضافةً إلى إدارة جدولة وتنظيم
-          المواعيد. يساعد النظام في إدارة البيانات بشكل متكامل مما يعزز المؤسسات من مواكبة تطورات
-          السوق التكنولوجية الحديثة.
-        </Typography>
+        {curLangAr ? (
+          <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
+            يقدم النظام العديد من المزايا التي تشمل تخفيض التكاليف لإدارة المؤسسة، وإمكانية استخدامه
+            عبر الهاتف الذكي أو اللوح المحمول (Tablet) أو الكمبيوتر. يتميز النظام أيضاً بإجراء
+            تعديلات (Customization) كبيرة للبيانات في المؤسسة، مما يجعله أكثر مرونة وفقًا
+            لاحتياجاتها. يدعم أيضاً عدة طرق تواصل (رسائل نصية، إشعارات، البريد - إيميل)، إضافةً إلى
+            إدارة جدولة وتنظيم المواعيد. يساعد النظام في إدارة البيانات بشكل متكامل مما يعزز
+            المؤسسات من مواكبة تطورات السوق التكنولوجية الحديثة.
+          </Typography>
+        ) : (
+          <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
+            The system offers numerous advantages, including reduced costs for managing the
+            organization and the ability to use it via smartphone, tablet, or computer. The system
+            also allows for extensive customization of the organizations data, making it more
+            flexible to suit its needs. It also supports multiple communication methods (text
+            messages, notifications, email), in addition to managing and organizing appointments.
+            The system helps manage data in an integrated manner, enabling organizations to keep
+            pace with developments in the modern technological market.
+          </Typography>
+        )}
       </Box>
       {/* Subscriptions */}
       <Container
@@ -323,7 +407,7 @@ export default function USServices() {
       >
         <m.div variants={varFade().inUp}>
           <Typography variant="h3" sx={{ my: 3 }}>
-            {t('Join now to get the best subscriptions for you')}
+            {t('Join us and Get the right offer for your unit of service')}
           </Typography>
         </m.div>
 

@@ -55,12 +55,24 @@ export default function PatientsServices() {
           />
         </Stack>
         <Typography sx={{ mt: 3, textAlign: 'center' }}>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum doloribus tempora culpa
-          voluptatibus aperiam cumque a voluptatem laborum magni, rerum impedit dolor inventore
-          debitis atque quasi tempore deserunt iste. Aperiam! Lorem, ipsum dolor sit amet
-          consectetur adipisicing elit. Dolorum doloribus tempora culpa voluptatibus aperiam cumque
-          a voluptatem laborum magni, rerum impedit dolor inventore debitis atque quasi tempore
-          deserunt iste. Aperiam!
+          {t(
+            'The electronic system for personal health records - including this platform - contributes to reducing medical errors and costly repetitive procedures, which leads to increasing the quality of care for patients and enhances effective communication with doctors and medical service providers around the world, especially in the Arab world.'
+          )}
+          {t(
+            'This system works to store and organize medical data and shares that information - according to the desire and need of the user - in every place and time between different health care institutions (private and governmental) in any country in the world, which leads to making more accurate health care decisions, to achieve To this end, the user can store all his medical information in the government health system and his information in the private health system in one place, which is the Hakeemna platform.'
+          )}
+          {t(
+            'Joining the Hakeemna family allows you to benefit from all the services available on this distinguished platform, as Hakeemna. O Line provides various services, including an electronic health records system, communication with doctors and medical service providers, electronic prescriptions, medical reports, and other services.'
+          )}
+          {t(
+            'This platform is characterized by flexibility and comprehensiveness compared to other closed platforms that are used only for individuals who have private medical insurance or government medical coverage, so Hakeemna was designed to include everyone, whether they have medical coverage (private or government) or do not have insurance, in the platform. one.'
+          )}
+          {t(
+            'If the user (patient) has more than one health coverage (for example, private insurance and government insurance) or has part of the medical data stored in a specific database or platform (such as a government platform) and has other medical information that is not stored in that platform In the first and second cases, the user can collect and store all information, data and documents in one place, which is the Hakeemna platform. Thus, this platform becomes the main center for all information that he can use in all his medical affairs.'
+          )}
+          {t(
+            'Hakeemna platform. Online and Family: It provides a service for storing and managing all personal health affairs for all family members electronically in order to help you manage all procedures in one platform.'
+          )}
         </Typography>
       </Box>
 
@@ -93,7 +105,7 @@ export default function PatientsServices() {
         }}
       >
         <Typography variant="h5" textAlign="center" fontWeight={700} mb={3} sx={{ color: 'white' }}>
-          {t('Patient Affairs')}
+          {t('Advantages of creating an account in Hakeemna 360')}
         </Typography>
 
         <Box
@@ -102,33 +114,61 @@ export default function PatientsServices() {
           gap={10}
         >
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
-              - {t('Managing medical records and appointments')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              - {t('Register for free in the electronic medical records system.')}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Insurance and financial transactions processing')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Recording and storing data in an organized electronic form, reducing repetitive(bureaucratic) paper procedures and work, and enhancing the confidentiality of information.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Prescription and medical reports issuance')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Promoting a more comprehensive and personalized approach to medical affairs management, as old medical history is stored and recent data is recorded automatically.'
+              )}
             </Typography>
           </Card>
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
-              - {t('Patient admission and discharge procedures')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Faster and more accurate access to medical information and files, supporting better decision- making in patient healthcare.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Integration with electronic health records')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Communicate with doctors and all medical institutions electronically in the same country or in another country.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>- {t('Mobile health services and telemedicine')}</Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Telemedicine and consultation services(visual communication with the doctor) and subscription to the medical journal.'
+              )}
+            </Typography>
           </Card>
           <Card sx={{ p: 3 }}>
-            <Typography sx={{ p: 2 }}>
-              - {t('Patient admission and discharge procedures')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Organizing and scheduling medical appointments conveniently, and booking appointments electronically.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>
-              - {t('Integration with electronic health records')}
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Enhancing patient experience, reducing waiting time and reducing medical errors.'
+              )}
             </Typography>
-            <Typography sx={{ p: 2 }}>- {t('Mobile health services and telemedicine')}</Typography>
+            <Typography sx={{ p: 2 }} variant="subtitle1">
+              -{' '}
+              {t(
+                'Monitoring the level of satisfaction with the services provided by medical institutions.'
+              )}
+            </Typography>
           </Card>
         </Box>
         <Typography
@@ -137,7 +177,7 @@ export default function PatientsServices() {
           fontWeight={700}
           sx={{ color: '1F2C5C', position: 'relative', top: 30 }}
         >
-          {t('Patient Affairs')}
+          {t('some services under development')}
         </Typography>
       </Box>
 
@@ -158,19 +198,19 @@ export default function PatientsServices() {
         }}
       >
         <Stack spacing={3} sx={{ transform: 'skewY(3deg)' }}>
-          <Typography variant="h3">{t('Managing medical records')}</Typography>
-          <Typography variant="h5">- {t('Managing medical records and appointments')}</Typography>
-          <Typography variant="h5">
-            - {t('Insurance and financial transactions processing')}
-          </Typography>
-          <Typography variant="h5">- {t('Prescription and medical reports issuance')}</Typography>
-          <Typography variant="h5">- {t('Patient admission and discharge procedures')}</Typography>
-          <Typography variant="h5">- {t('Integration with electronic health records')}</Typography>
+          <Typography variant="h3">{t('Organizing the affairs of family members')}</Typography>
+          <Typography variant="subtitle1">- {t('The ability to add family members to your personal account(sons and daughters).')}</Typography>
+          <Typography variant="subtitle1">- {t('Linking the father and mother’s accounts if the parents are elderly.')}</Typography>
+          <Typography variant="subtitle1">- {t('Communicate with doctors to consult them about family members’ affairs and book medical appointments.')}</Typography>
+          <Typography variant="subtitle1">- {t('Storing old and recent medical files and images in one place electronically.')}</Typography>
+          <Typography variant="subtitle1">- {t('Managing their medical files such as medical history, prescriptions, medical leave, etc.')}</Typography>
+          <Typography variant="subtitle1">- {t('Document all clinical information to facilitate future reference to make sound medical decisions.')}</Typography>
+          <Typography variant="subtitle1">- {t('Ensuring more accurate health results and reducing medical errors by providing the medical history of all family members.')}</Typography>
         </Stack>
       </Box>
 
       {/*  */}
-      <Box
+      {/* <Box
         sx={{
           backgroundColor: '#e4f6f2',
           mb: 25,
@@ -198,7 +238,7 @@ export default function PatientsServices() {
             sx={{ borderRadius: '5px', width: '70%', position: 'relative' }}
           />
         </Box>
-      </Box>
+      </Box> */}
 
       {/* more services */}
       <Box
@@ -208,11 +248,11 @@ export default function PatientsServices() {
           position: 'relative',
           backgroundColor: '#4aa290',
           borderRadius: 3,
-          mx: { xs: 2, md: 30 },
-          px: 4,
-          py: 3,
-          textAlign: 'center',
-          color: 'white',
+          mx: { xs: 2, md: 40 },
+          px: 8,
+          py: 6,
+          textAlign: 'start',
+          // color: 'white',
           boxShadow: 3,
           mb: 20,
         }}
@@ -220,10 +260,10 @@ export default function PatientsServices() {
         <Box
           sx={{
             position: 'absolute',
-            top: -10,
+            top: -20,
             left: '15%',
-            width: 12,
-            height: 30,
+            width: 18,
+            height: 45,
             backgroundColor: 'white',
             borderRadius: '6px',
             border: 'green 1px solid',
@@ -232,26 +272,23 @@ export default function PatientsServices() {
         <Box
           sx={{
             position: 'absolute',
-            top: -10,
+            top: -20,
             right: '15%',
-            width: 12,
-            height: 30,
+            width: 18,
+            height: 45,
             backgroundColor: 'white',
             borderRadius: '6px',
             border: 'green 1px solid',
           }}
         />
-        <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-          مميزات أخرى
+        <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
+        {t('Other features')}
         </Typography>
-        <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
-          يقدم النظام العديد من المزايا التي تشمل تخفيض التكاليف لإدارة المؤسسة، وإمكانية استخدامه
-          عبر الهاتف الذكي أو اللوح المحمول (Tablet) أو الكمبيوتر. يتميز النظام أيضاً بإجراء تعديلات
-          (Customization) كبيرة للبيانات في المؤسسة، مما يجعله أكثر مرونة وفقًا لاحتياجاتها. يدعم
-          أيضاً عدة طرق تواصل (رسائل نصية، إشعارات، البريد - إيميل)، إضافةً إلى إدارة جدولة وتنظيم
-          المواعيد. يساعد النظام في إدارة البيانات بشكل متكامل مما يعزز المؤسسات من مواكبة تطورات
-          السوق التكنولوجية الحديثة.
-        </Typography>
+        <ul style={{ fontWeight:'bold' }}>
+          <li>{t('Use free applications and platforms, whether you are insured by an insurance company or not.')}</li>
+          <li>{t('Join a comprehensive and distinguished medical community.')}</li>
+          <li>{t('View medical developments.')}</li>
+        </ul>
       </Box>
     </>
   );
