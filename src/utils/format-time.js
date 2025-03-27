@@ -59,10 +59,24 @@ export function fTimeText(date, newFormat, arabic) {
   return `${relativeTime}`;
 }
 
-export function fDateTime(date, newFormat) {
+export function fDateTime(date, newFormat, hideTimezone = false) {
   const fm = newFormat || 'dd MMMMMMMM yyyy p';
 
-  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
+  if (!date) return '';
+
+  const dateObj = new Date(date);
+  let formattedDate = format(dateObj, fm, curLangAr ? { locale: ar } : null);
+
+  if (!hideTimezone) {
+    const timezone =
+      dateObj.toString().match(/\(([^)]+)\)/)?.[1] ||
+      Intl.DateTimeFormat().resolvedOptions().timeZone ||
+      'UTC';
+
+    formattedDate += ` (${timezone})`;
+  }
+
+  return formattedDate;
 }
 export function fDateAndTime(date, newFormat) {
   const fm = newFormat || 'dd MMMMMMMM yyyy';
@@ -70,10 +84,22 @@ export function fDateAndTime(date, newFormat) {
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 
-export function fTime(date, newFormat) {
+export function fTime(date, newFormat, hideTimezone = false) {
+  if (!date) return '';
   const fm = newFormat || 'p';
+  const dateObj = new Date(date);
+  let formattedDate = format(dateObj, fm, curLangAr ? { locale: ar } : null);
 
-  return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
+  if (!hideTimezone) {
+    const timezone =
+      dateObj.toString().match(/\(([^)]+)\)/)?.[1] ||
+      Intl.DateTimeFormat().resolvedOptions().timeZone ||
+      'UTC';
+
+    formattedDate += ` (${timezone})`;
+  }
+
+  return formattedDate;
 }
 export function fDm(date, newFormat) {
   const fm = newFormat || 'dd MMM';

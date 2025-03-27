@@ -45,7 +45,9 @@ export default function PatientProfile() {
 
   // const { isMedLab } = useUSTypeGuard();
 
-  const patientData = usPatientData.patient ? usPatientData.patient : usPatientData;
+  const patientData = usPatientData.patient
+    ? { ...usPatientData, ...usPatientData.patient }
+    : usPatientData;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -53,10 +55,6 @@ export default function PatientProfile() {
 
   const [currentTab, setCurrentTab] = useState('communication');
   const TABS = [
-    // {
-    //   value: 'about',
-    //   label: t('about'),
-    // },
     { value: 'communication', label: t('communication') },
     { value: 'file', label: t('file') },
     { value: 'sick_leave', label: t('sick leave') },
@@ -64,15 +62,10 @@ export default function PatientProfile() {
     { value: 'prescriptions', label: t('prescriptions') },
     { value: 'appointments', label: t('appointments') },
     { value: 'instructions', label: t('instructions') },
-    // {
-    //   value: 'upload',
-    //   label: t('upload files'),
-    // },
     { value: 'requests', label: t('requests') },
     { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analyses', label: t('medical analyses') },
-    // { value: 'edit', label: t('edit') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
