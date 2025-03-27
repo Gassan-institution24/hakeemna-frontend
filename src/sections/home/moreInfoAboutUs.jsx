@@ -8,7 +8,6 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 // import MAP from './Group 117.png';
 import map from './images/map.png';
-import photo from './images/design.png';
 import devices from './images/devices.png';
 
 export default function MoreInfoAboutUs() {
@@ -95,11 +94,11 @@ export default function MoreInfoAboutUs() {
         <Stack sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
           <m.div variants={varFade().inUp}>
             {' '}
-            <Typography sx={{ fontSize: { xs: 28, md: 45 }, fontWeight: 600, mb: 2 }}>
+            <Typography color="white" sx={{ fontSize: { xs: 28, md: 45 }, fontWeight: 600, mb: 2 }}>
               {t('hakeemna app')}
             </Typography>
           </m.div>
-          <Typography variant="h6" sx={{ fontSize: { xs: 14, md: 18 } }}>
+          <Typography color="white" variant="h6" sx={{ fontSize: { xs: 14, md: 18 } }}>
             {t(
               'Hakimna 360 is a platform and smartphone application that allows users to easily and privately access the health information documented in their electronic medical records, from anywhere and at any time.'
             )}
