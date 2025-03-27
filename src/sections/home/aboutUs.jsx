@@ -13,7 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import HOME from './images/home.jpg';
+import HOME from './images/aboutUs.jpg';
 
 export default function Whydoc() {
   const { t } = useTranslate();
@@ -35,14 +35,7 @@ export default function Whydoc() {
         p: { xs: 3, sm: 4, md: 6 },
       }}
     >
-      <Stack
-        sx={{
-          flex: 1,
-          justifyContent: 'start',
-          alignItems: 'start',
-          p: 6,
-        }}
-      >
+      <Stack sx={{ flex: 1, justifyContent: 'start', alignItems: 'start', p: 6 }}>
         <Stack spacing={3} sx={{ textAlign: 'start', mb: 5 }}>
           <m.div variants={varFade().inDown}>
             <Typography
@@ -52,6 +45,7 @@ export default function Whydoc() {
                 fontWeight: 600,
                 fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               }}
+              color="white"
             >
               {t('about us')}
             </Typography>
@@ -67,7 +61,11 @@ export default function Whydoc() {
           }}
         >
           <div style={{ position: 'relative' }}>
-            <Typography variant="h6" sx={{ textAlign: 'start', textTransform: 'none' }}>
+            <Typography 
+              color="white"
+              variant="h6"
+              sx={{ textAlign: 'start', textTransform: 'none' }}
+            >
               {t(
                 'Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency at work.'
               )}
@@ -118,25 +116,13 @@ export default function Whydoc() {
           </Stack>
         </Box>
       </Stack>
-      <Stack
-        sx={{
-          flex: 1,
-          justifyContent: 'start',
-          alignItems: 'start',
-          p: 6,
-        }}
-      >
+      <Stack sx={{ flex: 1, justifyContent: 'start', alignItems: 'start', p: 6 }}>
         <img
           decoding="async"
           loading="lazy"
           alt="medical services"
           src={HOME}
-          style={{
-            width: '90%',
-            maxWidth: '600px',
-            objectFit: 'contain',
-            borderRadius: 6,
-          }}
+          style={{ width: '100%', maxWidth: '800px', objectFit: 'contain', borderRadius: 6 }}
         />
       </Stack>
     </Stack>
