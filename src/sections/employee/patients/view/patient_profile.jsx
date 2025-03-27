@@ -46,7 +46,7 @@ export default function PatientProfile() {
   // const { isMedLab } = useUSTypeGuard();
 
   const patientData = usPatientData.patient
-    ? { ...usPatientData, ...usPatientData.patient }
+    ? { ...usPatientData.patient, ...usPatientData }
     : usPatientData;
 
   const { t } = useTranslate();
