@@ -8,9 +8,10 @@ import { useLocales, useTranslate } from 'src/locales';
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-import img1 from './Group 115.png';
-import img2 from './Rectangle 474.png';
-import img3 from './istockphoto-1429880967-640x640 1.png';
+import img1 from './images/pt1.png';
+import img2 from './images/pt2.png';
+import img3 from './images/pt3.png';
+
 
 export default function PatientsServices() {
   const { t } = useTranslate();
@@ -30,29 +31,28 @@ export default function PatientsServices() {
           justifyContent: 'center',
         }}
       >
-        <Stack display="flex" flexDirection={{ xs: 'column', md: 'row' }}>
+        <Stack display="flex" flexDirection="column">
+          <Image
+            sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
+            src={img1}
+          />
           <Box
             display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(1, 1fr)' }}
-            sx={{ width: { xs: '100%', md: '50%' } }}
+            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
           >
-            <Image
-              sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
-              src={img1}
-            />
             <Image
               sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
               src={img2}
             />
+            <Image
+              sx={{
+                width: { xs: '100%', md: '100%' },
+                p: '4px',
+                display: { xs: 'none', md: 'block' },
+              }}
+              src={img3}
+            />
           </Box>
-          <Image
-            sx={{
-              width: { xs: '100%', md: '74%' },
-              p: '4px',
-              display: { xs: 'none', md: 'block' },
-            }}
-            src={img3}
-          />
         </Stack>
         <Typography sx={{ mt: 3, textAlign: 'center' }}>
           {t(
@@ -199,13 +199,39 @@ export default function PatientsServices() {
       >
         <Stack spacing={3} sx={{ transform: 'skewY(3deg)' }}>
           <Typography variant="h3">{t('Organizing the affairs of family members')}</Typography>
-          <Typography variant="subtitle1">- {t('The ability to add family members to your personal account(sons and daughters).')}</Typography>
-          <Typography variant="subtitle1">- {t('Linking the father and mother’s accounts if the parents are elderly.')}</Typography>
-          <Typography variant="subtitle1">- {t('Communicate with doctors to consult them about family members’ affairs and book medical appointments.')}</Typography>
-          <Typography variant="subtitle1">- {t('Storing old and recent medical files and images in one place electronically.')}</Typography>
-          <Typography variant="subtitle1">- {t('Managing their medical files such as medical history, prescriptions, medical leave, etc.')}</Typography>
-          <Typography variant="subtitle1">- {t('Document all clinical information to facilitate future reference to make sound medical decisions.')}</Typography>
-          <Typography variant="subtitle1">- {t('Ensuring more accurate health results and reducing medical errors by providing the medical history of all family members.')}</Typography>
+          <Typography variant="subtitle1">
+            - {t('The ability to add family members to your personal account(sons and daughters).')}
+          </Typography>
+          <Typography variant="subtitle1">
+            - {t('Linking the father and mother’s accounts if the parents are elderly.')}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Communicate with doctors to consult them about family members’ affairs and book medical appointments.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">
+            - {t('Storing old and recent medical files and images in one place electronically.')}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Managing their medical files such as medical history, prescriptions, medical leave, etc.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Document all clinical information to facilitate future reference to make sound medical decisions.'
+            )}
+          </Typography>
+          <Typography variant="subtitle1">
+            -{' '}
+            {t(
+              'Ensuring more accurate health results and reducing medical errors by providing the medical history of all family members.'
+            )}
+          </Typography>
         </Stack>
       </Box>
 
@@ -260,32 +286,38 @@ export default function PatientsServices() {
         <Box
           sx={{
             position: 'absolute',
-            top: -20,
+            top: -25,
             left: '15%',
             width: 18,
             height: 45,
             backgroundColor: 'white',
-            borderRadius: '6px',
+            borderTopRightRadius: '6px',
+            borderTopLeftRadius: '6px',
             border: 'green 1px solid',
           }}
         />
         <Box
           sx={{
             position: 'absolute',
-            top: -20,
+            top: -25,
             right: '15%',
             width: 18,
             height: 45,
             backgroundColor: 'white',
-            borderRadius: '6px',
+            borderTopRightRadius: '6px',
+            borderTopLeftRadius: '6px',
             border: 'green 1px solid',
           }}
         />
         <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
-        {t('Other features')}
+          {t('Other features')}
         </Typography>
-        <ul style={{ fontWeight:'bold' }}>
-          <li>{t('Use free applications and platforms, whether you are insured by an insurance company or not.')}</li>
+        <ul style={{ fontWeight: 'bold' }}>
+          <li>
+            {t(
+              'Use free applications and platforms, whether you are insured by an insurance company or not.'
+            )}
+          </li>
           <li>{t('Join a comprehensive and distinguished medical community.')}</li>
           <li>{t('View medical developments.')}</li>
         </ul>
