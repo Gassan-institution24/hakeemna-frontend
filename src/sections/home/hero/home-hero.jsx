@@ -10,8 +10,8 @@ import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
 import photo from '../images/photo.png';
-import photo2 from '../images/Beneficiary.png';
-import photo3 from '../images/UNITSERVICE.png';
+import photo2 from '../images/photo2.png';
+import photo3 from '../images/photo3.png';
 
 // Lazy load images
 
@@ -91,17 +91,14 @@ export default function HomeHero() {
           px: 3,
           mb: '100px',
           position: 'relative',
-          backgroundImage: `
-      linear-gradient(to right,  #3CB099 , #70D8C0, 
-      url(${backgroundImages[currentIndex]})
-    `,
+          backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.7)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           transition: 'background-image 1s ease-in-out',
           borderBottomLeftRadius: '60px',
           borderBottomRightRadius: '60px',
-          backgroundBlendMode: 'overlay', // Blends the gradient with the image
+          backgroundBlendMode: 'overlay', // Ensures the image and color blend nicely
         }}
       >
         {/* Content Markers */}

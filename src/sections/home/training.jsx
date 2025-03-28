@@ -33,18 +33,9 @@ export default function Training() {
   });
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const defaultValues = {
-    full_name: '',
-    topic: '',
-    email: '',
-    mobile_num1: '',
-  };
+  const defaultValues = { full_name: '', topic: '', email: '', mobile_num1: '' };
 
-  const methods = useForm({
-    mode: 'all',
-    resolver: yupResolver(RegisterSchema),
-    defaultValues,
-  });
+  const methods = useForm({ mode: 'all', resolver: yupResolver(RegisterSchema), defaultValues });
 
   const {
     handleSubmit,
@@ -69,9 +60,15 @@ export default function Training() {
         {t('Contact us to register for the training course')}
       </Typography>
       <Box>
-        <Typography color="white" variant="h6">{t('What are the benefits of registering with us?')}</Typography>
-        <Typography color="white" variant="h6">{t('Gain new skills')}</Typography>
-        <Typography color="white" variant="h6">{t('Get a free certificate')}</Typography>
+        <Typography color="white" variant="h6">
+          {t('What are the benefits of registering with us?')}
+        </Typography>
+        <Typography color="white" variant="h6">
+          {t('Gain new skills')}
+        </Typography>
+        <Typography color="white" variant="h6">
+          {t('Get a free certificate')}
+        </Typography>
       </Box>
 
       {!isSmallScreen && (
@@ -82,7 +79,7 @@ export default function Training() {
             style={{
               position: 'absolute',
               top: -70,
-              [currentLang ? 'left' : 'right']: 0, 
+              [curLangAr ? 'left' : 'right']: 0, 
               maxWidth: '50%',
             }}
           />
