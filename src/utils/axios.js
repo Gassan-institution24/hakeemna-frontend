@@ -461,6 +461,7 @@ export const endpoints = {
     all: '/api/answersandquestiones',
     one: (id) => (!id ? null : `/api/answersandquestiones/${id}`),
     entrance: (id) => (!id ? null : `/api/answersandquestiones/entrance/${id}`),
+    uspatient: (id) => (!id ? null : `/api/answersandquestiones/uspatient/${id}`),
   },
   entranceManagement: {
     all: '/api/entrance',

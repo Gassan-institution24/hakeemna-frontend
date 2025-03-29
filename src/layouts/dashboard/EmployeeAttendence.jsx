@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 import { Stack, Button, Typography } from '@mui/material';
@@ -10,12 +10,15 @@ import { useGetMyLastAttendence } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { LoadingButton } from '@mui/lab';
 
 function EmployeeAttendence() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
+
+  const [loading, setLoading] = useState(false);
 
   const { attendence, refetch } = useGetMyLastAttendence();
   const hasAttendenceToday =
@@ -49,11 +52,14 @@ function EmployeeAttendence() {
 
   const handleAttendence = async () => {
     try {
+      setLoading(true);
       const coordinates = await getCoordinates();
       await axiosInstance.post(endpoints.attendence.all, { coordinates });
       changingAttendence.onClose();
       refetch();
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
       });
@@ -61,10 +67,13 @@ function EmployeeAttendence() {
   };
   const handleLeave = async () => {
     try {
+      setLoading(true);
       await axiosInstance.post(endpoints.attendence.leave);
       changingAttendence.onClose();
       refetch();
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
@@ -72,47 +81,73 @@ function EmployeeAttendence() {
     <>
       {!attendence || attendence?.check_out_time || attendence?.leave ? (
         !hasAttendenceToday && (
-          <Button
+          <LoadingButton
+            loading={loading}
             variant="contained"
             color="primary"
             onClick={changingAttendence.onOpen}
             sx={{ m: 2 }}
           >
             {t('check in')}
-          </Button>
+          </LoadingButton>
         )
       ) : (
-        <Button
+        <LoadingButton
+          loading={loading}
           variant="contained"
           color="warning"
           onClick={changingAttendence.onOpen}
           sx={{ m: 2 }}
         >
           {t('check out')}
-        </Button>
+        </LoadingButton>
       )}
       <CustomPopover open={changingAttendence.open} onClose={changingAttendence.onClose}>
         <Stack alignItems="center" p={1}>
           <Typography variant="h6">{fTime(new Date())}</Typography>
           {!attendence || attendence?.check_out_time ? (
-            <Button variant="contained" color="primary" onClick={handleAttendence} sx={{ mt: 2 }}>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              color="primary"
+              onClick={handleAttendence}
+              sx={{ mt: 2 }}
+            >
               {t('check in')}
-            </Button>
+            </LoadingButton>
           ) : (
             <>
               {!attendence?.leave_end &&
                 (attendence?.leave_start ? (
-                  <Button variant="contained" color="error" onClick={handleLeave} sx={{ mt: 2 }}>
+                  <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    color="error"
+                    onClick={handleLeave}
+                    sx={{ mt: 2 }}
+                  >
                     {t('end leave')}
-                  </Button>
+                  </LoadingButton>
                 ) : (
-                  <Button variant="contained" color="primary" onClick={handleLeave} sx={{ mt: 2 }}>
+                  <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleLeave}
+                    sx={{ mt: 2 }}
+                  >
                     {t('start leave')}
-                  </Button>
+                  </LoadingButton>
                 ))}
-              <Button variant="contained" color="warning" onClick={handleAttendence} sx={{ mt: 2 }}>
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                color="warning"
+                onClick={handleAttendence}
+                sx={{ mt: 2 }}
+              >
                 {t('check out')}
-              </Button>
+              </LoadingButton>
             </>
           )}
         </Stack>
