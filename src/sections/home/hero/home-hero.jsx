@@ -91,7 +91,7 @@ export default function HomeHero() {
           px: 3,
           mb: '100px',
           position: 'relative',
-          backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.7)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
+          backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
