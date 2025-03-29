@@ -34,7 +34,8 @@ const LINKS = [
     headline: 'legal',
     children: [
       { name: 'terms and condition', href: paths.pages.Termsandcondition },
-      { name: 'Privacy Policy', href: paths.pages.Privacypolicy },
+      { name: 'Patients Privacy Policy', href: paths.pages.PatientsPrivacypolicy },
+      { name: 'Unit Services Privacy Policy', href: paths.pages.UsPrivacypolicy },
     ],
   },
   {
@@ -53,18 +54,17 @@ export default function Footer() {
 
   return homePage ? (
     <Box
-    component="footer"
-    sx={{
-      position: 'relative',
-      backgroundImage: `linear-gradient(to right, #D2F5EB, #3CB099)`,
-      borderTopLeftRadius: '60px',
-      borderTopRightRadius: '60px',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-    }}
-  >
-  
+      component="footer"
+      sx={{
+        position: 'relative',
+        backgroundImage: `linear-gradient(to right, #D2F5EB, #3CB099)`,
+        borderTopLeftRadius: '60px',
+        borderTopRightRadius: '60px',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       <Container sx={{ pt: 5, pb: 5, textAlign: { xs: 'center', md: 'unset' } }}>
         <Grid container justifyContent={{ xs: 'center', md: 'space-between' }} alignItems="center">
           <Grid xs={12} md={4}>
