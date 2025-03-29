@@ -147,7 +147,7 @@ export default function Training() {
   );
 
   return (
-    <Grid container component="main" sx={{ minHeight: '62vh', px: 5, py: 5 }}>
+    <Grid container component="main" sx={{ minHeight: '62vh', px: 30, py: 10 }}>
       <Grid
         item
         xs={12}
