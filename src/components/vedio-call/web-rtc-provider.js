@@ -335,33 +335,26 @@ export const WebRTCProvider = ({ children }) => {
   }, [callRef, userVideo, userVideoRef, caller]);
 
   const toggleMute = useCallback(() => {
-    if (!stream) return;
+    try {
+      if (!stream) throw new Error('No stream available');
 
-    const audioTracks = stream.getAudioTracks();
-    if (audioTracks.length === 0) return;
+      const track = audioTrackRef.current;
+      if (!track) throw new Error('No audio track available');
 
-    const track = audioTracks[0];
-    const currIsMuted = !track.enabled; // Invert the current state
+      const newMuteState = !track.enabled;
+      track.enabled = newMuteState;
+      setIsMuted(!newMuteState);
 
-    // Toggle the enabled state of the track
-    track.enabled = currIsMuted;
-
-    setIsMuted(!currIsMuted); // Update the mute state in your app UI
-
-    // If there's an active call, replace the track
-    if (callRef.current?.peerConnection) {
-      const senders = callRef.current.peerConnection.getSenders();
-      const audioSender = senders.find((s) => s.track?.kind === 'audio');
-
-      if (audioSender) {
-        if (currIsMuted) {
-          // If unmuting, replace the track with the original audio track
-          audioSender.replaceTrack(track);
-        } else {
-          // If muting, replace the track with null to stop audio transmission
-          audioSender.replaceTrack(null);
+      // Update peer connection
+      if (callRef.current?.peerConnection) {
+        const senders = callRef.current.peerConnection.getSenders();
+        const audioSender = senders.find((s) => s.track?.kind === 'audio');
+        if (audioSender?.track) {
+          audioSender.track.enabled = newMuteState;
         }
       }
+    } catch (error) {
+      console.error('Error in toggleMute:', error);
     }
   }, [stream]);
 
