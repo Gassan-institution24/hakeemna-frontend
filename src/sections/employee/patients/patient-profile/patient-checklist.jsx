@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { enqueueSnackbar } from 'notistack';
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';

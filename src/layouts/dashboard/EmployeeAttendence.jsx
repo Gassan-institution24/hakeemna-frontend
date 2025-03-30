@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 
-import { Stack, Button, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Stack, Typography } from '@mui/material';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -10,7 +11,6 @@ import { useGetMyLastAttendence } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { LoadingButton } from '@mui/lab';
 
 function EmployeeAttendence() {
   const { t } = useTranslate();

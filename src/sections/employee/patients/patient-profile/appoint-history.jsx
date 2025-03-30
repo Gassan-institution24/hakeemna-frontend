@@ -40,7 +40,11 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { Stack } from '@mui/material';
+import { RouterLink } from 'src/routes/components';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import PatientHistoryRow from './appoint-history-row';
+import AddEmegencyAppointment from '../../appointments/add-emergency-appointment';
 // import PatientHistoryToolbar from './appoint-history-toolbar';
 // import HistoryFiltersResult from './appoint-history-filters-result';
 
@@ -59,6 +63,7 @@ export default function AppointHistoryView({ patient }) {
   const theme = useTheme();
   const { t } = useTranslate();
   const { isMedLab } = useUSTypeGuard();
+  const checkAcl = useAclGuard();
 
   // const settings = useSettingsContext();
   const TABLE_HEAD = [
@@ -79,6 +84,7 @@ export default function AppointHistoryView({ patient }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const confirm = useBoolean();
+  const addModal = useBoolean();
 
   const { appointmentsData, refetch } = useGetUSPatientAppointments(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
@@ -210,6 +216,24 @@ export default function AppointHistoryView({ patient }) {
     <>
       <Container maxWidth="xl">
         <Card>
+          <Stack direction="row" justifyContent="flex-end" margin={2}>
+            {/* {checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && ( */}
+            <Button
+              component={RouterLink}
+              onClick={() => addModal.onTrue()}
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+              sx={{
+                bgcolor: 'error.dark',
+                '&:hover': {
+                  bgcolor: 'error.main',
+                },
+              }}
+            >
+              {t('new urgent appointment')}
+            </Button>
+            {/* )} */}
+          </Stack>
           <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
@@ -344,6 +368,7 @@ export default function AppointHistoryView({ patient }) {
           </Button>
         }
       />
+      <AddEmegencyAppointment refetch={refetch} open={addModal.value} onClose={addModal.onFalse} />
     </>
   );
 }
