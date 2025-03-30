@@ -25,7 +25,9 @@ export default function RHFDatePicker({ name, helperText, type, views, ...other 
             value={field.value ? new Date(field.value) : null}
             views={views}
             onChange={(newValue) => {
-              field.onChange(newValue);
+              const currentDate = new Date(newValue);
+              currentDate.setHours(12);
+              field.onChange(currentDate);
             }}
             InputLabelProps={{ shrink: true }}
             slots={{
