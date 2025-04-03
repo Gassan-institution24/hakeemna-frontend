@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
+
 import { useLocales } from 'src/locales';
 
 export default function TermsAndCondition() {
