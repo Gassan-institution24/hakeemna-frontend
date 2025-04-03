@@ -1,6 +1,15 @@
 import React, { useRef } from 'react';
 
-import { Box, List, Paper, ListItem, Container, Typography, ListItemText } from '@mui/material';
+import {
+  Box,
+  List,
+  Paper,
+  Divider,
+  ListItem,
+  Container,
+  Typography,
+  ListItemText,
+} from '@mui/material';
 
 export default function Privacypolicy() {
   const sectionRefs = {
@@ -36,6 +45,7 @@ export default function Privacypolicy() {
           <Typography variant="h6">
             السياسات المتعلقة بالمستخدمين الباحثين عن الخدمات الطبية (مرضى و العائلات)
           </Typography>
+          <Divider sx={{ my: 2 }} />
           <List>
             <ListItem
               button

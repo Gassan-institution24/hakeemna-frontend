@@ -66,7 +66,7 @@ export default function USServices() {
     </Box>
 
     {/* Right Side - Text Paragraph */}
-    <Box sx={{ width: { xs: '100%', md: '70%' }, mt: { xs: 3, md: 0 }, textAlign: 'end' }}>
+    <Box sx={{ width: { xs: '100%', md: '70%' }, mt: { xs: 3, md: 0 } }}>
       <Typography sx={{ maxWidth: '800px', margin: '0 auto' }}>
         {t(
           'These are medical bodies that face great challenges in the ability to provide better services and excellence in a sector that requires and is highly competitive, so this soft drink is required to move towards digital digital transformation in some cases because of what it requires to change and adapt to new technology.'

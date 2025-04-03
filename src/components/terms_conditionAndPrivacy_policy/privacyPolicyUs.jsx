@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { Box, List, Paper, ListItem, Container, Typography, ListItemText } from '@mui/material';
+
+import { Box, List, Paper, Divider,ListItem, Container, Typography, ListItemText,  } from '@mui/material';
 
 export default function ProviderPolicy() {
   const sectionRefs = {
@@ -64,10 +65,11 @@ export default function ProviderPolicy() {
           display: { md: 'block', xs: 'none' },
         }}
       >
+        <Paper elevation={3} sx={{ p: 2, backgroundColor: 'rgba(219, 255, 247, 0.37)' }}>
         <Typography variant="h6">
           السياسات المتعلقة بمزودي الخدمات الطبية (عيادات، مراكز صحية، مستشفيات و الموردين)
         </Typography>
-        <Paper elevation={3} sx={{ p: 2, backgroundColor: 'rgba(219, 255, 247, 0.37)' }}>
+        <Divider sx={{ my: 2 }}/>
           <List>
             <ListItem
               button
@@ -221,7 +223,7 @@ export default function ProviderPolicy() {
                   تعديل أو نسخ الخدمة أو إنشاء أعمال مشتقة بناءً على الخدمة أو أي جزء أو ميزة أو
                   وظيفة أو واجهة مستخدم؛
                 </li>
-                <li>استخدام الخدمة في انتهاك لأي قانون؛ أو</li>
+                <li>استخدام الخدمة في انتهاك لأي قانون؛</li>
                 <li>الوصول إلى الخدمة لبناء خدمة أو عرض تنافسي.</li>
               </ul>
             </Typography>
