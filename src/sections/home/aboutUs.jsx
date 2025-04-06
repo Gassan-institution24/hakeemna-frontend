@@ -43,7 +43,6 @@ export default function Whydoc() {
                 position: 'relative',
                 fontSize: 45,
                 fontWeight: 600,
-                fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               }}
               color="white"
             >

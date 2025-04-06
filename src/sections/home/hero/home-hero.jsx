@@ -124,7 +124,6 @@ export default function HomeHero() {
           <Typography
             variant="h1"
             sx={{
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
               mb: 3,
               color: 'white',
