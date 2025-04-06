@@ -10,13 +10,11 @@ import DialogContent from '@mui/material/DialogContent';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import { Box, Grid, Paper, Container, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import {  useTranslate } from 'src/locales';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function WhoAreWe() {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
   const CARDS = useMemo(
@@ -108,7 +106,6 @@ export default function WhoAreWe() {
             sx={{
               fontSize: 45,
               fontWeight: 600,
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
             }}
           >
             {t('our goals')}

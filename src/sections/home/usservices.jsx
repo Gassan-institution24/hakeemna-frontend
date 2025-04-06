@@ -87,7 +87,6 @@ export default function USServices() {
         <m.div variants={varFade().inUp}>
           <Typography
             sx={{
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
               fontSize: { xs: 25, md: 40 },
             }}
@@ -177,7 +176,7 @@ export default function USServices() {
           px: { xs: 2, md: 20 },
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 20,
+          gap: 15,
         }}
         display="grid"
         gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
@@ -222,15 +221,15 @@ export default function USServices() {
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'row' }}>
           <Image
             src={stuk2}
-            sx={{ borderRadius: '5px', width: '70%', position: 'relative' }}
+            sx={{ borderRadius: '5px', width: '65%', position: 'relative' }}
           />
           <Image
             src={stuk}
             sx={{
               borderRadius: '5px',
-              width: '70%',
+              width: '60%',
               position: 'relative',
-              top: '100px',
+              top: '60px',
               right: '100px',
             }}
           />
