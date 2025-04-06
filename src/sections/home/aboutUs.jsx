@@ -70,7 +70,7 @@ export default function Whydoc() {
               )}
             </Typography>
           </div>
-          <Stack direction="row" sx={{ alignSelf: 'end', mt: 4 }}>
+          <Stack direction="row" sx={{ alignSelf:{ xs: 'center', md:  'end'}, mt: 4 }}>
             <Button
               size="large"
               onClick={() => router.push(paths.pages.About)}
@@ -83,6 +83,7 @@ export default function Whydoc() {
                 padding: 0,
                 overflow: 'hidden',
                 boxShadow: 'none',
+              
               }}
             >
               <div
@@ -115,15 +116,31 @@ export default function Whydoc() {
           </Stack>
         </Box>
       </Stack>
-      <Stack sx={{ flex: 1, justifyContent: 'start', alignItems: 'start', p: 6 }}>
+      {/* <Stack sx={{ flex: 1, justifyContent: 'start', alignItems: 'start', p: 6 }}> */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          px: { xs: 0, md: 4 },
+        }}
+      >
         <img
           decoding="async"
           loading="lazy"
           alt="medical services"
           src={HOME}
-          style={{ width: '100%', maxWidth: '800px', objectFit: 'contain', borderRadius: 6 }}
+          style={{
+            width: '100%',
+            maxWidth: 600,
+            height: 'auto',
+            objectFit: 'cover',
+            borderRadius: 12,
+          }}
         />
-      </Stack>
+      </Box>
+      {/* </Stack> */}
     </Stack>
   );
 }
