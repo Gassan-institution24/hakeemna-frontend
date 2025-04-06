@@ -113,32 +113,33 @@ export default function WhoAreWe() {
         </m.div>
       </Stack>
       <Box sx={{ flexGrow: 1, mt: 5 }}>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-          {CARDS.map((card, index) => (
-            <Grid item xs={2} sm={4} md={4} key={index}>
-              <Item>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                  {card.title}
-                </Typography>
-                <Typography>
-                  {card.description.length > 90 ? (
-                    <>
-                      {card.description.slice(0, 90)}...
-                      <Button
-                        onClick={() => handleDialogOpen(card.description, card.title)}
-                        sx={{ textTransform: 'none', ml: 1, color: '#3CB099' }}
-                      >
-                        {t('Read More')}
-                      </Button>
-                    </>
-                  ) : (
-                    card.description
-                  )}
-                </Typography>
-              </Item>
-            </Grid>
-          ))}
-        </Grid>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+  {CARDS.map((card, index) => (
+    <Grid item xs={2} sm={4} md={4} key={index} sx={{ display: 'flex' }}>
+      <Item sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          {card.title}
+        </Typography>
+        <Typography sx={{ flexGrow: 1 }}>
+          {card.description.length > 90 ? (
+            <>
+              {card.description.slice(0, 90)}...
+              <Button
+                onClick={() => handleDialogOpen(card.description, card.title)}
+                sx={{ textTransform: 'none', ml: 1, color: '#3CB099' }}
+              >
+                {t('Read More')}
+              </Button>
+            </>
+          ) : (
+            card.description
+          )}
+        </Typography>
+      </Item>
+    </Grid>
+  ))}
+</Grid>
+
       </Box>
 
       {/* Dialog for full description */}
