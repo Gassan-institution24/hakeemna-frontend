@@ -3,20 +3,17 @@ import { m } from 'framer-motion';
 
 import { Box, Card, Stack, Container, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import {  useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 import img1 from './images/pt1.png';
 import img2 from './images/pt2.png';
-import img3 from './images/pt3.png';
 
 
 export default function PatientsServices() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   return (
     <>
@@ -30,29 +27,23 @@ export default function PatientsServices() {
           alignItems: 'center',
           justifyContent: 'center',
         }}
+        // display="flex" flexDirection="row"
       >
-        <Stack display="flex" flexDirection="column">
-          <Image
-            sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
-            src={img1}
-          />
-          <Box
+        <Stack display="flex" flexDirection="row">
+          {/* <Box
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-          >
+            > */}
+            <Image
+              sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
+              src={img1}
+            />
             <Image
               sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
               src={img2}
             />
-            <Image
-              sx={{
-                width: { xs: '100%', md: '100%' },
-                p: '4px',
-                display: { xs: 'none', md: 'block' },
-              }}
-              src={img3}
-            />
-          </Box>
+           
+          {/* </Box> */}
         </Stack>
         <Typography sx={{ mt: 3, textAlign: 'center' }}>
           {t(
@@ -83,7 +74,6 @@ export default function PatientsServices() {
         <m.div variants={varFade().inUp}>
           <Typography
             sx={{
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               fontWeight: 700,
               fontSize: { xs: 25, md: 40 },
             }}

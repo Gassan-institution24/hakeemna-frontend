@@ -44,7 +44,6 @@ export default function OurPartners() {
               sx={{
                 fontSize: 45,
                 fontWeight: 600,
-                fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
               }}
             >
               {t('our partners')}
@@ -82,8 +81,8 @@ export default function OurPartners() {
                 >
                   {partner.company_logo ? (
                     <Image
-                      // src={partner.company_logo}
-                      src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                      src={partner.company_logo}
+                      // src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
                       alt={partner.name_english}
                       sx={{
                         width: '100%',
