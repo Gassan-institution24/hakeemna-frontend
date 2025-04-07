@@ -59,7 +59,8 @@ export const paths = {
     blogs: `/blogs`,
     BlogsView: (id) => `/blogs/${id}`,
     Termsandcondition: `/termsandcondition`,
-    Privacypolicy: `/privacypolicy`,
+    PatientsPrivacypolicy: `/patients/privacypolicy`,
+    UsPrivacypolicy: `/units/privacypolicy`,
     book: `/book`,
     doctor: (id) => `/doctor/${id}`,
 

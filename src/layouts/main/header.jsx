@@ -1,21 +1,14 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-// dark mode
-import AppBar from '@mui/material/AppBar';
-// import Switch from '@mui/material/Switch';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
-import { Link, Button, Divider, Typography } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
+import { Box, Menu, Link, Stack, Button, AppBar, Toolbar, Divider, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
@@ -26,145 +19,170 @@ import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
 import Language from '../common/language-home-page';
-// ----------------------------------------------------------------------
 
 export default function Header() {
   const mdUp = useResponsive('up', 'lg');
+  const smDown = useResponsive('down', 'sm');
   const { t } = useTranslate();
-
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
-  const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <AppBar>
-      <Toolbar
-        disableGutters
+    <AppBar position="sticky" sx={{ bgcolor: 'white', boxShadow: 'none' }}>
+      {/* Top bar with contact information */}
+      <Box
         sx={{
-          // height: {
-          //   xs: HEADER.H_MOBILE,
-          //   md: HEADER.H_DESKTOP,
-          // },
-          backgroundColor: 'white',
-          // borderBottom: '1px solid #adb5bd'
+          bgcolor: 'white',
+          py: 0.9,
+          px: { xs: 2, sm: 5, md: 10 },
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexDirection: smDown ? 'column' : 'row',
+          borderBottom: '1px solid rgba(60, 176, 153, 0.26)',
         }}
       >
-        {/* <Container
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-        > */}
+        {/* Left Section */}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ justifyContent: smDown ? 'center' : 'flex-start', mb: smDown ? 2 : 0 }}
+        >
+          <Language />
+          <Divider orientation="vertical" flexItem />
+          <Link
+            href={paths.pages.book}
+            sx={{ textDecoration: 'none', color: '#1F2C5C', fontWeight: 500, fontSize: 15 }}
+          >
+            {t('book appointments now')}
+          </Link>
+        </Stack>
 
-        <Logo sx={{ width: { xs: 120, md: 200 }, height: { xs: 50, md: 120 } }} />
-        {/* </Container> */}
+        {/* Right Section */}
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />
+          <Link
+            href="tel:+962780830087"
+            sx={{
+              fontSize: curLangAr ? 15 : 13,
+              fontWeight: 500,
+              color: '#1F2C5C',
+              textDecoration: 'none',
+            }}
+          >
+            +962 780830087
+          </Link>
+          <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />
+          <Link
+            href="mailto:info@hakeemna.com"
+            sx={{
+              fontSize: curLangAr ? 15 : 13,
+              fontWeight: 500,
+              color: '#1F2C5C',
+              textDecoration: 'none',
+            }}
+          >
+            info@hakeemna.com
+          </Link>
+        </Stack>
+      </Box>
+
+      {/* Main Header */}
+      <Toolbar
+        sx={{
+          bgcolor: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: { xs: 2, md: 5 },
+        }}
+      >
+        {/* Logo */}
+        <Logo sx={{ width: 80 }} />
+
+        {/* Desktop Navigation */}
         {mdUp && (
-          <Stack width={1}>
-            <Stack direction="row" width={1} flex={0.2} alignItems="center" justifyContent="center">
-              <Container
-                sx={{
-                  width: 1,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  my: 0.5,
-                  letterSpacing: -0.5,
-                  color: 'black',
-                  display: 'flex',
-                  alignItems: 'center',
-                  textTransform: 'uppercase',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Stack dir="ltr" direction="row">
-                  <Iconify icon="ion:call" width={15} />
-                  <Typography
-                    dir="ltr"
-                    variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, mx: 1 }}
-                  >
-                    +962 780830087
-                  </Typography>
-                  <Iconify icon="clarity:email-solid" width={18} />
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ fontSize: 13, fontWeight: 500, textTransform: 'lowercase', mx: 1 }}
-                  >
-                    info@hakeemna.com
-                  </Typography>
-                </Stack>
-                <Stack direction="row">
-                  <Link
-                    href={paths.auth.registersu}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as unit of service')}
-                  </Link>
-                  <Link
-                    href={paths.auth.stakeholderRegister}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as supplier')}
-                  </Link>
-                  <Link
-                    href={paths.auth.register}
-                    sx={{ borderRight: '1px solid black', py: 0.2, px: 1.5 }}
-                  >
-                    {t('join as user')}
-                  </Link>
-                  <Link href={paths.auth.login} sx={{ py: 0.2, px: 1.5 }}>
-                    {t('login')}
-                  </Link>
-                </Stack>
-              </Container>
-            </Stack>
-            <Divider />
-            <Stack
-              direction="row"
-              width={1}
-              height={80}
-              justifyContent="space-between"
-              alignItems="center"
+          <Stack
+            component="nav"
+            direction="row"
+            spacing={4}
+            sx={{ flexGrow: 1, justifyContent: 'center', color: '#1F2C5C' }}
+          >
+            <NavDesktop data={navConfig} />
+          </Stack>
+        )}
+
+        {/* Right Section (Signup/Login) */}
+        {!smDown && (
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center', ml: 'auto' }}>
+            {/* Sign Up Dropdown */}
+            <Button
+              aria-controls={open ? 'signup-menu' : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+              sx={{
+                color: '#1F2C5C',
+                display: 'flex',
+                alignItems: 'center',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: curLangAr ? 15 : 13,
+              }}
             >
-              <Container
-                sx={{
-                  width: 1,
-                  height: 80,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                {/* <Badge
-                sx={{
-                  [`& .${badgeClasses.badge}`]: {
-                    top: 0,
-                    right: -16,
-                  },
-                  display: { md: 'flex', xs: 'none' },
-                }}
-              >
-                <Logo />
-              </Badge> */}
-                <NavDesktop data={navConfig} />
-                <Box sx={{ flexGrow: 1 }} />
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ borderRadius: 0 }}
-                  onClick={() => router.push(paths.pages.book)}
+              {t('sign up')}
+              <ExpandMore sx={{ ml: 0.5 }} />
+            </Button>
+            <Menu id="signup-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem onClick={handleClose}>
+                <Link
+                  href={paths.auth.registersu}
+                  sx={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  {t('book appointments now')}
-                </Button>
-                <Box sx={{ flexGrow: 0.3 }} />
-                <Language />
-              </Container>
-            </Stack>
+                  {t('join as unit of service')}
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link
+                  href={paths.auth.stakeholderRegister}
+                  sx={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {t('join as supplier')}
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href={paths.auth.register} sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  {t('join as user')}
+                </Link>
+              </MenuItem>
+            </Menu>
+
+            <Link
+              href={paths.auth.login}
+              sx={{
+                textDecoration: 'none',
+                color: '#1F2C5C',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontSize: curLangAr ? 15 : 13,
+              }}
+            >
+              {t('login')}
+            </Link>
           </Stack>
         )}
-        {!mdUp && (
-          <Stack alignItems="center" justifyContent="flex-end" direction="row" width={1}>
-            <Language />
-            <NavMobile data={navConfig} />
-          </Stack>
-        )}
+
+        {/* Mobile Navigation */}
+        {!mdUp && <NavMobile data={navConfig} />}
       </Toolbar>
-      <Divider />
 
       {offsetTop && <HeaderShadow />}
     </AppBar>
