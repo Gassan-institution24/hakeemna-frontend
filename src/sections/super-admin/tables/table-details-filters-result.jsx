@@ -22,10 +22,6 @@ export default function OrderTableFiltersResult({
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const handleRemoveStatus = () => {
-    onFilters('status', 'all');
-  };
-
   const handleRemoveDate = () => {
     onFilters('startDate', null);
     onFilters('endDate', null);
@@ -41,12 +37,6 @@ export default function OrderTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'active' && (
-          <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
-          </Block>
-        )}
-
         {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />

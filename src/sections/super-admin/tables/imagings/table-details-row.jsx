@@ -1,0 +1,174 @@
+import PropTypes from 'prop-types';
+
+import Box from '@mui/material/Box';
+import { ListItemText } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import TableRow from '@mui/material/TableRow';
+import Checkbox from '@mui/material/Checkbox';
+import TableCell from '@mui/material/TableCell';
+import IconButton from '@mui/material/IconButton';
+
+import { fDate } from 'src/utils/format-time';
+
+import Iconify from 'src/components/iconify';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+// ----------------------------------------------------------------------
+
+export default function TableDetailsRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  filters,
+  setFilters,
+}) {
+  const {
+    code,
+    imagining_group,
+    diagnostic_test,
+    description,
+    international_code,
+    created_at,
+    user_creation,
+    ip_address_user_creation,
+    updated_at,
+    user_modification,
+    ip_address_user_modification,
+    modifications_nums,
+  } = row;
+
+  const popover = usePopover();
+
+  const DDL = usePopover();
+
+  const renderPrimary = (
+    <TableRow hover selected={selected}>
+      <TableCell padding="checkbox">
+        <Checkbox checked={selected} onClick={onSelectRow} />
+      </TableCell>
+
+      <TableCell align="center">
+        <Box>{code}</Box>
+      </TableCell>
+
+      <TableCell align="center">{imagining_group}</TableCell>
+      <TableCell align="center">{diagnostic_test}</TableCell>
+      <TableCell align="center">{description}</TableCell>
+      <TableCell align="center">{international_code}</TableCell>
+
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton> */}
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  );
+
+  return (
+    <>
+      {renderPrimary}
+
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 140 }}
+      >
+        <MenuItem
+          lang="ar"
+          onClick={() => {
+            onEditRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="fluent:edit-32-filled" />
+          Edit
+        </MenuItem>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
+        </MenuItem>
+      </CustomPopover>
+
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+      </CustomPopover>
+
+      {/* <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button variant="contained" color="error" onClick={}>
+            Delete
+          </Button>
+        }
+      /> */}
+    </>
+  );
+}
+
+TableDetailsRow.propTypes = {
+  onSelectRow: PropTypes.func,
+  setFilters: PropTypes.func,
+  onEditRow: PropTypes.func,
+  row: PropTypes.object,
+  filters: PropTypes.object,
+  selected: PropTypes.bool,
+};
