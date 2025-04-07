@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -15,6 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -40,9 +42,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { Stack } from '@mui/material';
-import { RouterLink } from 'src/routes/components';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import PatientHistoryRow from './appoint-history-row';
 import AddEmegencyAppointment from '../../appointments/add-emergency-appointment';
 // import PatientHistoryToolbar from './appoint-history-toolbar';
@@ -63,7 +62,6 @@ export default function AppointHistoryView({ patient }) {
   const theme = useTheme();
   const { t } = useTranslate();
   const { isMedLab } = useUSTypeGuard();
-  const checkAcl = useAclGuard();
 
   // const settings = useSettingsContext();
   const TABLE_HEAD = [

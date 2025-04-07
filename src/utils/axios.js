@@ -387,6 +387,16 @@ export const endpoints = {
       all: (id) => (!id ? null : `/api/activities/department/${id}`),
     },
   },
+  imaging: {
+    all: '/api/imaging',
+    one: (id) => (!id ? null : `/api/imaging/${id}`),
+    unit_service: {
+      all: (id) => (!id ? null : `/api/imaging/unitservice/${id}`),
+    },
+    department: {
+      all: (id) => (!id ? null : `/api/imaging/department/${id}`),
+    },
+  },
   calender: {
     all: '/api/calender',
     // one: (id) => id&& `/api/calender/${id}`,

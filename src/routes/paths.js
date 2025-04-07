@@ -538,6 +538,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/activities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/activities/${id}/edit`,
       },
+      imaging: {
+        root: `${ROOTS.SUPERADMIN}/tables/imaging`,
+        new: `${ROOTS.SUPERADMIN}/tables/imaging/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/imaging/${id}/edit`,
+      },
       employeetypes: {
         root: `${ROOTS.SUPERADMIN}/tables/employee_types`,
         new: `${ROOTS.SUPERADMIN}/tables/employee_types/new`,

@@ -83,18 +83,18 @@ export default function PatientProfile() {
     return '';
   }
 
-  const patientGeneralData = [
-    { title: 'age', value: calculateAge(patientData?.birth_date) },
-    // { title: 'gender', value: patientData?.gender },
-    { title: 'phone', value: patientData?.mobile_num1 },
-    { title: 'email', value: patientData?.email },
-    { title: 'file code', value: patientData?.file_code },
-    { title: 'height', value: patientData?.height, unit: 'cm' },
-    { title: 'weight', value: patientData?.weight, unit: 'kg' },
-    { title: 'smoking', value: patientData?.smoking },
-    { title: 'alcohol consumption', value: patientData?.alcohol_consumption },
-    { title: 'sport exercises', value: patientData?.sport_exercises },
-  ];
+  // const patientGeneralData = [
+  //   { title: 'age', value: calculateAge(patientData?.birth_date) },
+  //   // { title: 'gender', value: patientData?.gender },
+  //   { title: 'phone', value: patientData?.mobile_num1 },
+  //   { title: 'email', value: patientData?.email },
+  //   { title: 'file code', value: patientData?.file_code },
+  //   { title: 'height', value: patientData?.height, unit: 'cm' },
+  //   { title: 'weight', value: patientData?.weight, unit: 'kg' },
+  //   { title: 'smoking', value: patientData?.smoking },
+  //   { title: 'alcohol consumption', value: patientData?.alcohol_consumption },
+  //   { title: 'sport exercises', value: patientData?.sport_exercises },
+  // ];
 
   return (
     <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
