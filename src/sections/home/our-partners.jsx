@@ -1,151 +1,133 @@
-import { useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 
-import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import CardContent from '@mui/material/CardContent';
-import { alpha, useTheme } from '@mui/material/styles';
+import { Box, Paper, Stack, Container, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useResponsive } from 'src/hooks/use-responsive';
-
-import { bgGradient } from 'src/theme/css';
 import { useGetActiveUnitservices } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import { varFade } from 'src/components/animate';
-import TextMaxLine from 'src/components/text-max-line';
-import { CarouselArrows } from 'src/components/carousel';
-
-// ----------------------------------------------------------------------
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function OurPartners() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
-  const mdUp = useResponsive('up', 'md');
-  const lgUp = useResponsive('up', 'xl');
-
-  const [page, setPage] = useState(0);
-
-  let rowsPerPage;
-  if (lgUp) {
-    rowsPerPage = 5;
-  } else if (mdUp) {
-    rowsPerPage = 3;
-  } else {
-    rowsPerPage = 1;
-  }
-
-  const { unitservicesData, length } = useGetActiveUnitservices({
-    select: 'name_english name_arabic company_logo',
-    page,
-    rowsPerPage,
-  });
-  if (unitservicesData.length < 1) {
-    return '';
-  }
-  return (
-    <>
-      <Stack
-        spacing={3}
-        sx={{
-          textAlign: 'center',
-          my: { xs: 5, md: 10 },
-        }}
-      >
-        <m.div variants={varFade().inDown}>
-          <Typography
-            sx={{
-              fontSize: 45,
-              fontWeight: 600,
-              fontFamily: curLangAr ? 'Beiruti, sans-serif' : 'Playwrite US Modern, cursive',
-            }}
-          >
-            {t('our partners')}
-          </Typography>
-        </m.div>
-      </Stack>
-      <Stack sx={{ my: 5, position: 'relative' }}>
-        <CarouselArrows
-          filled
-          icon="material-symbols:double-arrow"
-          onNext={() =>
-            setPage((prev) => (prev < Math.ceil(length / rowsPerPage) - 1 ? prev + 1 : 0))
-          }
-          onPrev={() =>
-            setPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(length / rowsPerPage) - 1))
-          }
-        >
-          <Stack direction="row" justifyContent="space-around">
-            {unitservicesData?.map((item, index) => (
-              <Box key={item.id} sx={{ px: 1 }}>
-                <CarouselItem key={item.id} item={item} />
-              </Box>
-            ))}
-          </Stack>
-        </CarouselArrows>
-      </Stack>
-    </>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-function CarouselItem({ item, active }) {
-  const theme = useTheme();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
   const router = useRouter();
 
-  const { _id, company_logo, name_english, name_arabic } = item;
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { unitservicesData } = useGetActiveUnitservices({
+    select: 'name_english name_arabic company_logo',
+  });
 
   return (
-    <Paper sx={{ position: 'relative', height: { md: 300 }, width: { md: 300 } }}>
-      <Image
-        dir="ltr"
-        alt={name_english}
-        src={company_logo}
-        sx={{ height: { md: 300, xs: 300 }, width: { md: 300, xs: 300 } }}
-      />
+    <Box
+      component={MotionViewport}
+      sx={{
+        position: 'relative',
+        backgroundColor: '#e4f6f2',
+        py: { xs: 6, md: 6 },
+        transform: 'skewY(-3deg)',
+        mt: '150px',
+        mb: '150px',
+      }}
+    >
+      <Container sx={{ transform: 'skewY(3deg)' }}>
+        <Stack spacing={3} sx={{ textAlign: 'center', mb: 5 }}>
+          <m.div variants={varFade().inDown}>
+            <Typography
+              sx={{
+                fontSize: 45,
+                fontWeight: 600,
+              }}
+            >
+              {t('our partners')}
+            </Typography>
+          </m.div>
+        </Stack>
 
-      <CardContent
-        sx={{
-          bottom: 0,
-          zIndex: 9,
-          width: '100%',
-          textAlign: 'left',
-          position: 'absolute',
-          color: 'common.white',
-          pb: 10,
-          ...bgGradient({
-            direction: 'to top',
-            startColor: `${theme.palette.grey[900]} 25%`,
-            endColor: `${alpha(theme.palette.grey[900], 0)} 100%`,
-          }),
-        }}
-      >
-        <TextMaxLine
-          variant="h5"
-          onClick={() => router.push(paths.pages.serviceUnit(_id))}
-          sx={{ cursor: 'pointer' }}
+        {/* Swiper Carousel */}
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          slidesPerView={1}
+          pagination={{ clickable: true, el: '.custom-pagination' }}
+          autoplay={{ delay: 3000 }}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
         >
-          {curLangAr ? name_arabic : name_english}
-        </TextMaxLine>
-      </CardContent>
-    </Paper>
+          {unitservicesData.map((partner, index) => (
+            <SwiperSlide key={index}>
+              <Box
+                sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
+                onClick={() => router.push(paths.pages.serviceUnit(partner?._id))}
+              >
+                <Paper
+                  elevation={3}
+                  sx={{
+                    width: 250, // Set width
+                    overflow: 'hidden',
+                    borderRadius: 3,
+                    textAlign: 'center',
+                    backgroundColor: 'white',
+                    position: 'relative',
+                  }}
+                >
+                  {partner.company_logo ? (
+                    <Image
+                      src={partner.company_logo}
+                      // src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                      alt={partner.name_english}
+                      sx={{
+                        width: '100%',
+                        height: 170,
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <Box sx={{ width: '100%', height: 170 }} />
+                  )}
+
+                  {/* Green Overlay at the Bottom */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '80px',
+                      backgroundColor: '#2EA98D',
+                      clipPath: 'ellipse(100% 50% at center bottom)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: 'bold', color: 'white', fontSize: 16, pt: 5 }}
+                    >
+                      {curLangAr ? partner.name_arabic : partner.name_english}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* Custom Pagination */}
+        <Box
+          className="custom-pagination"
+          sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}
+        />
+      </Container>
+    </Box>
   );
 }
-
-CarouselItem.propTypes = {
-  active: PropTypes.bool,
-  item: PropTypes.object,
-};

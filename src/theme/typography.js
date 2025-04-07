@@ -22,7 +22,8 @@ export function responsiveFontSizes({ sm, md, lg }) {
   };
 }
 
-export const primaryFont = 'Public Sans, sans-serif';
+export const primaryFont = 'Amiri';
+// export const primaryFont = 'Tajawal';
 export const secondaryFont = 'Playwrite England SemiJoined, Barlow, sans-serif';
 
 // ----------------------------------------------------------------------
