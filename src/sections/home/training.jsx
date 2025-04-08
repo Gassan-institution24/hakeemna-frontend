@@ -5,9 +5,9 @@ import { enqueueSnackbar } from 'notistack';
 import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useTheme } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Link, Grid, Alert, Stack, Typography, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import axiosInstance from 'src/utils/axios';
 
@@ -16,6 +16,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import FormProvider, { RHFTextField, RHFPhoneNumber } from 'src/components/hook-form';
 
 import TrainingImage from './images/Video files-bro 1.svg';
+
+// same imports...
 
 export default function Training() {
   const { t } = useTranslate();
@@ -31,10 +33,11 @@ export default function Training() {
       .required('Mobile number is required')
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
   });
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const defaultValues = { full_name: '', topic: '', email: '', mobile_num1: '' };
 
+  const defaultValues = { full_name: '', topic: '', email: '', mobile_num1: '' };
   const methods = useForm({ mode: 'all', resolver: yupResolver(RegisterSchema), defaultValues });
 
   const {
@@ -55,20 +58,14 @@ export default function Training() {
   });
 
   const renderHead = (
-    <Stack spacing={2} sx={{ position: 'relative', color: 'white' }}>
-      <Typography color="white" variant="h2" sx={{ textAlign: 'center', mb: 5 }}>
+    <Stack spacing={2} sx={{ color: 'white', position: 'relative', }}>
+      <Typography variant={isSmallScreen ? 'h4' : 'h2'} sx={{ textAlign: 'center', mb: 4 }}>
         {t('Contact us to register for the training course')}
       </Typography>
       <Box>
-        <Typography color="white" variant="h6">
-          {t('What are the benefits of registering with us?')}
-        </Typography>
-        <Typography color="white" variant="h6">
-          {t('Gain new skills')}
-        </Typography>
-        <Typography color="white" variant="h6">
-          {t('Get a free certificate')}
-        </Typography>
+        <Typography variant="h6">{t('What are the benefits of registering with us?')}</Typography>
+        <Typography variant="h6">{t('Gain new skills')}</Typography>
+        <Typography variant="h6">{t('Get a free certificate')}</Typography>
       </Box>
 
       {!isSmallScreen && (
@@ -79,8 +76,8 @@ export default function Training() {
             style={{
               position: 'absolute',
               top: -70,
-              [curLangAr ? 'left' : 'right']: 0, 
-              maxWidth: '50%',
+              [curLangAr ? 'left' : 'right']: 0,
+              maxWidth: isSmallScreen ? '100%' : '50%',
             }}
           />
         </Box>
@@ -91,7 +88,12 @@ export default function Training() {
   const renderTerms = (
     <Typography
       component="div"
-      sx={{ color: 'text.secondary', mt: 2.5, typography: 'caption', textAlign: 'center' }}
+      sx={{
+        color: 'text.secondary',
+        mt: 2.5,
+        typography: 'caption',
+        textAlign: 'center',
+      }}
     >
       {t('By signing up, I agree to ')}
       <Link underline="always" color="text.primary">
@@ -107,7 +109,10 @@ export default function Training() {
 
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Typography variant="h4" sx={{ mb: 2.5, textAlign: 'center', color: '#1F2C5C' }}>
+      <Typography
+        variant={isSmallScreen ? 'h5' : 'h4'}
+        sx={{ mb: 2.5, textAlign: 'center', color: '#1F2C5C' }}
+      >
         {t('How would you like to connect')}
       </Typography>
       <Stack spacing={2.5}>
@@ -147,31 +152,41 @@ export default function Training() {
   );
 
   return (
-    <Grid container component="main" sx={{ minHeight: '62vh', px: 30, py: 10 }}>
+    <Grid
+      container
+      component="main"
+      spacing={0}
+      sx={{
+        minHeight: '62vh',
+        px: { xs: 2, sm: 6, md: 10, lg: 15, xl: 30 },
+        py: { xs: 6, md: 10 },
+        flexDirection: { xs: 'column', md: 'row' },
+        mt: '150px',
+      }}
+    >
       <Grid
         item
         xs={12}
         md={6}
         sx={{
-          p: { xs: 4, md: 8 },
+          p: { xs: 3, md: 6 },
           background: 'linear-gradient(to bottom right, #74BCB7, #6EBBB3)',
           borderTopLeftRadius: { md: '20px', xs: 0 },
           borderBottomLeftRadius: { md: '20px', xs: 0 },
-          borderColor: '#000',
         }}
       >
         {renderHead}
       </Grid>
+
       <Grid
         item
         xs={12}
         md={6}
         sx={{
-          p: { xs: 4, md: 8 },
+          p: { xs: 3, md: 6 },
           background: '#E4F6F2',
           borderTopRightRadius: { md: '20px', xs: 0 },
           borderBottomRightRadius: { md: '20px', xs: 0 },
-          borderColor: '#000',
         }}
       >
         {renderForm}

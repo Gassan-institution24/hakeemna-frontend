@@ -89,6 +89,7 @@ export default function Blogs({ onPreview }) {
           width: '100%',
           px: 3,
           mb: '150px',
+          mt: '150px',
           position: 'relative',
           backgroundImage: `linear-gradient(to right, rgba(112, 216, 192, 0.7), rgba(60, 176, 153, 0.7))`,
           borderBottomLeftRadius: '60px',

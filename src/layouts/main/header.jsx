@@ -38,7 +38,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: 'white', boxShadow: 'none' }}>
+    <AppBar  sx={{ bgcolor: 'white', boxShadow: 'none', }}>
       {/* Top bar with contact information */}
       <Box
         sx={{
@@ -50,6 +50,7 @@ export default function Header() {
           justifyContent: 'space-between',
           flexDirection: smDown ? 'column' : 'row',
           borderBottom: '1px solid rgba(60, 176, 153, 0.26)',
+         
         }}
       >
         {/* Left Section */}
