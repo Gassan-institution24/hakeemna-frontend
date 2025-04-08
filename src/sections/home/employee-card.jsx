@@ -117,7 +117,7 @@ export default function EmployeeCard({ employee }) {
           gap={{ md: 10 }}
         >
           <Box>
-            <Paper
+            <Paper 
               elevation={3}
               sx={{
                 overflow: 'hidden',
