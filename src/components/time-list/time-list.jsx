@@ -53,7 +53,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
               },
               fontWeight: value === time._id ? 600 : 500,
               backgroundColor: value === time._id ? 'primary.main' : 'white', // Ensure white background by default
-              color: value === time._id ? 'whites' : 'primary.main', // Ensure text color is always visible
+              color: value === time._id ? 'white' : 'primary.main', // Ensure text color is always visible
               borderRadius: 2,
             }}
             onClick={() => {
