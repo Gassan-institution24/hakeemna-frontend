@@ -20,7 +20,7 @@ export default function HomeHero() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const gradientDirection = curLangAr ? 'to left' : 'to right';
   const title = [
     t('Electronic innovation for a healthier future'),
     t('beneficiary'),
@@ -65,7 +65,7 @@ export default function HomeHero() {
         />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content={title[currentIndex]} />
-        <meta property="og:description" content={texts[currentIndex]} />
+        <meta property="og:description" content={title[currentIndex]} />
         <meta property="og:image" content={backgroundImages[currentIndex]} />
         <meta property="og:url" content="https://hakeemna.com" />
         <script type="application/ld+json">
@@ -90,8 +90,13 @@ export default function HomeHero() {
           color: 'white',
           px: 3,
           mb: '100px',
+          mt: '170px',
           position: 'relative',
-          backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
+          backgroundImage: {
+            xs: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,
+            md: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`,
+          },
+          // backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
