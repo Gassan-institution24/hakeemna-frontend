@@ -38,7 +38,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar  sx={{ bgcolor: 'white', boxShadow: 'none', }}>
+    <AppBar sx={{ bgcolor: 'white', boxShadow: 'none' }}>
       {/* Top bar with contact information */}
       <Box
         sx={{
@@ -50,7 +50,6 @@ export default function Header() {
           justifyContent: 'space-between',
           flexDirection: smDown ? 'column' : 'row',
           borderBottom: '1px solid rgba(60, 176, 153, 0.26)',
-         
         }}
       >
         {/* Left Section */}
@@ -71,7 +70,7 @@ export default function Header() {
 
         {/* Right Section */}
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />
+          {!curLangAr && <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />}
           <Link
             href="tel:+962780830087"
             sx={{
@@ -81,9 +80,14 @@ export default function Header() {
               textDecoration: 'none',
             }}
           >
-            +962 780830087
+            
+            {
+              curLangAr ? '780830087 962+' : '+962 780830087'
+            }
           </Link>
-          <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />
+          {curLangAr && <Iconify icon="ion:call" width={14} sx={{ color: '#1F2C5C' }} />}
+
+          {!curLangAr && <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />}
           <Link
             href="mailto:info@hakeemna.com"
             sx={{
@@ -95,6 +99,7 @@ export default function Header() {
           >
             info@hakeemna.com
           </Link>
+          {curLangAr && <Iconify icon="clarity:email-solid" width={18} sx={{ color: '#1F2C5C' }} />}
         </Stack>
       </Box>
 
@@ -144,6 +149,11 @@ export default function Header() {
             </Button>
             <Menu id="signup-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
               <MenuItem onClick={handleClose}>
+                <Link href={paths.auth.register} sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  {t('join as user')}
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
                 <Link
                   href={paths.auth.registersu}
                   sx={{ textDecoration: 'none', color: 'inherit' }}
@@ -157,11 +167,6 @@ export default function Header() {
                   sx={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   {t('join as supplier')}
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link href={paths.auth.register} sx={{ textDecoration: 'none', color: 'inherit' }}>
-                  {t('join as user')}
                 </Link>
               </MenuItem>
             </Menu>

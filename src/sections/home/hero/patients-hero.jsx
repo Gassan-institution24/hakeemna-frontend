@@ -7,7 +7,6 @@ import { useTranslate } from 'src/locales';
 
 import { varFade } from 'src/components/animate';
 
-import photo from '../images/design.png';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +25,7 @@ export default function PatientsHero() {
         color: 'white',
         px: 3,
         mb: '150px',
-        mt: '150px',
+        mt: '130px',
         position: 'relative',
         backgroundImage: `linear-gradient(to right, rgba(112, 216, 192, 0.7), rgba(60, 176, 153, 0.7))`,
         borderBottomLeftRadius: '60px',
