@@ -26,7 +26,7 @@ export default function Privacypolicy() {
     disclaimer: useRef(null),
   };
   return (
-    <Container maxWidth="lg" sx={{ display: 'flex', py: 4 }}>
+    <Container maxWidth="lg" sx={{ display: 'flex', py: 4, mt: '120px' }}>
       {/* Sidebar */}
       <Box
         sx={{
@@ -399,19 +399,6 @@ export default function Privacypolicy() {
               ممارسات الخصوصية لدينا.
             </Typography>
 
-            <Typography variant="subtitle1" gutterBottom ref={sectionRefs.cookies}>
-              سياسة cookies.
-            </Typography>
-
-            <Typography variant="body1" paragraph>
-              منصة Hakeemna.com لا تستخدم أدوات كوكيز في الصفحة، البيانات في حوزة المنصة هي التي
-              تقوم انت بتخزينها في النظام وذلك بعد أن تقوم بفتح حساب في المنصة.
-            </Typography>
-
-            <Typography variant="body1" paragraph>
-              أخر تحديث لسياسة cookies هو في تاريخ 01/09/2024
-            </Typography>
-
             <Typography variant="subtitle1" gutterBottom>
               الخسائر والتعويضات
             </Typography>
@@ -423,6 +410,16 @@ export default function Privacypolicy() {
               غيرها، ومنه فإن الملاحقة القانونية ودفع تكاليفها والالتزام بالأضرار هي خارج عن نطاق
               مسؤولية المنصة ومالكيها.
             </Typography>
+            <Typography variant="subtitle1" gutterBottom ref={sectionRefs.cookies}>
+              سياسة cookies.
+            </Typography>
+
+            <Typography variant="body1" paragraph>
+              منصة Hakeemna.com لا تستخدم أدوات كوكيز في الصفحة، البيانات في حوزة المنصة هي التي
+              تقوم انت بتخزينها في النظام وذلك بعد أن تقوم بفتح حساب في المنصة.
+            </Typography>
+
+            <Typography variant="caption">تاريخ آخر تحديث 01/09/2024</Typography>
           </Box>
         </Paper>
       </Box>

@@ -266,13 +266,22 @@ export default function JwtRegisterView() {
       <Typography variant="h4">
         {curLangAr ? 'التسجيل كوحدة خدمة' : 'Sign up as unit of service'}
       </Typography>
-      <Stack direction="row" spacing={0.5}>
-        <Typography sx={{ mb: 3 }} variant="body2">
+      <Stack direction="column">
+       <Stack direction="row" spacing={0.5}>
+       <Typography sx={{ mb: 1 }} variant="body2">
           {t('Already have an account?')}
         </Typography>
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
           {t('login')}
         </Link>
+       </Stack>
+  
+          <Typography variant="body2"  sx={{ mb: 3 }}>
+            <Link href="/" component={RouterLink} variant="subtitle2">
+              {t('Home page')}
+            </Link>
+          </Typography>
+   
       </Stack>
       {values.US_type !== null && (
         <Stepper activeStep={page}>

@@ -78,7 +78,6 @@ export default function Whydoc() {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                borderRadius: '5px',
                 bgcolor: 'transparent',
                 padding: 0,
                 overflow: 'hidden',
@@ -104,6 +103,8 @@ export default function Whydoc() {
                   justifyContent: 'center',
                   backgroundColor: '#1F2C5C',
                   padding: '10px 12px',
+                  borderEndEndRadius: '10px',
+                  borderStartEndRadius: '10px',
                 }}
               >
                 {curLangAr ? (
