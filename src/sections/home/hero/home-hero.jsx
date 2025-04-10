@@ -9,9 +9,9 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import photo from '../images/photo.png';
-import photo2 from '../images/photo2.png';
-import photo3 from '../images/photo3.png';
+import photo from '../images/photo.webp';
+import photo2 from '../images/photo2.webp';
+import photo3 from '../images/photo3.webp';
 
 // Lazy load images
 
@@ -45,8 +45,9 @@ export default function HomeHero() {
     { label: t('Learn More'), path: '/patients' },
     { label: t('Get Started'), path: '/units' },
   ];
-  const capitalizedText =
-  (texts[currentIndex] || '').replace(/^([a-zA-Z\u0600-\u06FF])/, (c) => c.toUpperCase());
+  const capitalizedText = (texts[currentIndex] || '').replace(/^([a-zA-Z\u0600-\u06FF])/, (c) =>
+    c.toUpperCase()
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -159,7 +160,7 @@ export default function HomeHero() {
             component="p"
             sx={{ maxWidth: 800, mb: 3, color: 'white' }}
           >
-             {capitalizedText}
+            {capitalizedText}
           </Typography>
 
           {/* Conditional Button Rendering */}
