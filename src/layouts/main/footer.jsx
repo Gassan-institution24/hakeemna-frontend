@@ -13,7 +13,6 @@ import { useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
 
-import footerPic from './Rectangle.png';
 
 // ----------------------------------------------------------------------
 

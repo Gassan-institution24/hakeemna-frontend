@@ -7,7 +7,6 @@ import { useTranslate } from 'src/locales';
 
 import { varFade } from 'src/components/animate';
 
-import photo from '../images/design.png';
 
 // ----------------------------------------------------------------------
 

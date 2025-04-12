@@ -241,11 +241,11 @@ export default function CompaniesTableView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                sx={{ position: 'sticky', top: 0, zIndex: 5 }}
+                sx={{ position: { sm: 'sticky' }, top: 0, zIndex: { sm: 5 } }}
               />
 
               <TableBody sx={{ position: 'relative' }}>
-                <TableRow sx={{ position: 'sticky', top: 57, backgroundColor: 'white' }}>
+                <TableRow sx={{ position: { sm: 'sticky' }, top: 57, backgroundColor: 'white' }}>
                   <TableCell />
                   <TableCell>
                     <Select

@@ -14,9 +14,9 @@ import { varFade, MotionViewport } from 'src/components/animate';
 import img1 from './images/us1.png';
 import img2 from './images/us2.png';
 import img3 from './images/us3.png';
-import Rectangle from './images/Rectangle.png';
 import stuk from './images/stuk.png';
 import stuk2 from './images/stuck2.png';
+import Rectangle from './images/Rectangle.png';
 
 export default function USServices() {
   const { t } = useTranslate();

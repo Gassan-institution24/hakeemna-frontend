@@ -105,6 +105,7 @@ export default function TablesListView() {
       { tableName: 'checklist', documents: [] }, //
       { tableName: 'product_categories', documents: [] }, //
       { tableName: 'imaging', documents: [] }, //
+      { tableName: 'doctors', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,
