@@ -162,7 +162,7 @@ export default function MoreInfoAboutUs() {
             <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
               <img
                 src={map}
-                alt="Map Location"
+                alt="حكييم"
                 style={{
                   width: '80%',
                   borderRadius: '12px',

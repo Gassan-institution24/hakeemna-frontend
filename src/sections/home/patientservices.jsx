@@ -3,7 +3,7 @@ import { m } from 'framer-motion';
 
 import { Box, Card, Stack, Container, Typography } from '@mui/material';
 
-import {  useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
@@ -11,60 +11,82 @@ import { varFade, MotionViewport } from 'src/components/animate';
 import img1 from './images/pt1.png';
 import img2 from './images/pt2.png';
 
-
 export default function PatientsServices() {
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <>
       {/* Header Section */}
       <Box
         sx={{
           backgroundColor: '#e4f6f2',
-          mb: 25,
           py: 10,
-          px: { xs: 2, md: 40 },
-          alignItems: 'center',
-          justifyContent: 'center',
+          px: { xs: 2, md: 10 },
         }}
-        // display="flex" flexDirection="row"
       >
-        <Stack display="flex" flexDirection="row">
-          {/* <Box
-            display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-            > */}
-            <Image
-              sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
-              src={img1}
-            />
-            <Image
-              sx={{ width: '100%', p: '4px', display: { xs: 'none', md: 'block' } }}
-              src={img2}
-            />
-           
-          {/* </Box> */}
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={4}
+        >
+          {/* Images Section */}
+          <Stack spacing={2} sx={{ width: { xs: '100%', md: '20%' } }}>
+            <Image src={img1} sx={{ borderRadius: 2 }} />
+            <Image src={img2} sx={{ borderRadius: 2 }} />
+          </Stack>
+
+          {/* Text Section */}
+          <Box sx={{ width: { xs: '100%', md: '60%' } }}>
+            {curLangAr ? (
+              <Typography fontSize={18} lineHeight={3}>
+                يساهم النظام الإلكتروني للسجلات الصحية الشخصية، ومنها منصة حكيمنا 360، في تقليل
+                الأخطاء الطبية والإجراءات المكررة المكلفة، مما يعزز جودة الرعاية الصحية ويحسن
+                التواصل مع الأطباء وغيرهم من مزودي الخدمات الطبية.
+                <br />
+                تستطيع من خلال المنصة تخزين البيانات الطبية وتنظيمها، ويسمح بمشاركة المعلومات حسب
+                حاجة المستخدم بين مؤسسات الرعاية الصحية المختلفة، مما يسهل اتخاذ قرارات صحية أكثر
+                دقة، بحيث يتم تخزين كل معلوماتك الطبية في مكان واحد، سواء كانت تلك المعلومات في
+                النظام الصحي الحكومي أو الخاص.
+                <br />
+                تتيح منصة حكيمنا 360 الاستفادة من خدمات متنوعة مثل السجلات الصحية الإلكترونية،
+                الوصفات الطبية الإلكترونية، والتقارير المخبرية والشعاعية، حيث تخدم الجميع سواء كان
+                لديهم تأمين طبي أم لا.
+                <br />
+                إذا كان لديك أكثر من تغطية صحية (على سبيل المثال تأمين خاص و تأمين حكومي) أو توجد في
+                قواعد بيانات مختلفة، يمكنك جمعها جميعاً في منصة حكيمنا 360، مما يجعلها المركز
+                الرئيسي لكل معلوماتك الصحية.
+                <br />
+                تقدم المنصة خدمات إدارة السجلات الصحية الشخصية لجميع أفراد العائلة بشكل إلكتروني،
+                مما يسهل إدارة الإجراءات في مكان واحد.
+              </Typography>
+            ) : (
+              <Typography fontSize={18} lineHeight={2.4}>
+                Electronic personal health records, including the Hakeemna 360 platform, help reduce
+                medical errors and costly duplicate procedures, enhancing the quality of healthcare
+                and improving communication with physicians and other healthcare providers.
+                <br />
+                The platform allows you to store and organize medical data, and allows information
+                to be shared as needed between different healthcare institutions, This facilitates
+                more accurate healthcare decisions, as all your medical information is stored in one
+                place, whether in the public or private healthcare system.
+                <br />
+                The Hakeemna 360 platform offers a variety of services, such as electronic health
+                records, electronic prescriptions, and laboratory and radiology reports, serving
+                everyone, whether they have medical insurance or not.
+                <br />
+                If you have more than one health coverage (for example, private and government
+                insurance) or if your coverage is located in different databases, you can
+                consolidate them all into the Hakeemna 360 platform, making it the central hub for
+                all your health information
+                <br />
+                The platform provides personal health record management services for all family
+                members electronically, making it easier to manage procedures in one place.
+              </Typography>
+            )}
+          </Box>
         </Stack>
-        <Typography sx={{ mt: 3, textAlign: 'center' }}>
-          {t(
-            'The electronic system for personal health records - including this platform - contributes to reducing medical errors and costly repetitive procedures, which leads to increasing the quality of care for patients and enhances effective communication with doctors and medical service providers around the world, especially in the Arab world.'
-          )}
-          {t(
-            'This system works to store and organize medical data and shares that information - according to the desire and need of the user - in every place and time between different health care institutions (private and governmental) in any country in the world, which leads to making more accurate health care decisions, to achieve To this end, the user can store all his medical information in the government health system and his information in the private health system in one place, which is the Hakeemna platform.'
-          )}
-          {t(
-            'Joining the Hakeemna family allows you to benefit from all the services available on this distinguished platform, as Hakeemna. O Line provides various services, including an electronic health records system, communication with doctors and medical service providers, electronic prescriptions, medical reports, and other services.'
-          )}
-          {t(
-            'This platform is characterized by flexibility and comprehensiveness compared to other closed platforms that are used only for individuals who have private medical insurance or government medical coverage, so Hakeemna was designed to include everyone, whether they have medical coverage (private or government) or do not have insurance, in the platform. one.'
-          )}
-          {t(
-            'If the user (patient) has more than one health coverage (for example, private insurance and government insurance) or has part of the medical data stored in a specific database or platform (such as a government platform) and has other medical information that is not stored in that platform In the first and second cases, the user can collect and store all information, data and documents in one place, which is the Hakeemna platform. Thus, this platform becomes the main center for all information that he can use in all his medical affairs.'
-          )}
-          {t(
-            'Hakeemna platform. Online and Family: It provides a service for storing and managing all personal health affairs for all family members electronically in order to help you manage all procedures in one platform.'
-          )}
-        </Typography>
       </Box>
 
       <Container
@@ -105,7 +127,7 @@ export default function PatientsServices() {
         >
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-               {t('Register for free in the electronic medical records system.')}
+              {t('Register for free in the electronic medical records system.')}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
               {' '}
@@ -190,10 +212,10 @@ export default function PatientsServices() {
         <Stack spacing={3} sx={{ transform: 'skewY(3deg)' }}>
           <Typography variant="h3">{t('Organizing the affairs of family members')}</Typography>
           <Typography variant="subtitle1">
-             {t('The ability to add family members to your personal account(sons and daughters).')}
+            {t('The ability to add family members to your personal account(sons and daughters).')}
           </Typography>
           <Typography variant="subtitle1">
-             {t('Linking the father and mother’s accounts if the parents are elderly.')}
+            {t('Linking the father and mother’s accounts if the parents are elderly.')}
           </Typography>
           <Typography variant="subtitle1">
             {' '}
@@ -202,7 +224,7 @@ export default function PatientsServices() {
             )}
           </Typography>
           <Typography variant="subtitle1">
-             {t('Storing old and recent medical files and images in one place electronically.')}
+            {t('Storing old and recent medical files and images in one place electronically.')}
           </Typography>
           <Typography variant="subtitle1">
             {' '}
