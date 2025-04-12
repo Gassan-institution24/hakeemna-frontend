@@ -5,9 +5,9 @@ import MainLayout from 'src/layouts/main';
 import CompactLayout from 'src/layouts/compact';
 
 import { SplashScreen } from 'src/components/loading-screen';
-import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
 import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicy';
 import USPrivacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicyUs';
+import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
 
 // ----------------------------------------------------------------------
 

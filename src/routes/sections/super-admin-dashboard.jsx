@@ -229,6 +229,10 @@ const InsuranceTypeEditPage = lazy(
 const ImagingsTablePage = lazy(() => import('src/pages/super-admin/tables/imagings/table'));
 const ImagingCreatePage = lazy(() => import('src/pages/super-admin/tables/imagings/new'));
 const ImagingEditPage = lazy(() => import('src/pages/super-admin/tables/imagings/edit'));
+
+const DoctorsTablePage = lazy(() => import('src/pages/super-admin/tables/doctors/table'));
+const DoctorCreatePage = lazy(() => import('src/pages/super-admin/tables/doctors/new'));
+const DoctorEditPage = lazy(() => import('src/pages/super-admin/tables/doctors/edit'));
 // UNITSERVICES SIDEBAR OPTIONS
 const UnitservicesPage = lazy(() => import('src/pages/super-admin/unitservices/home'));
 // UNITSERVICES ACCOUNTING
@@ -1083,6 +1087,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <ImagingsTablePage /> },
               { path: 'new', element: <ImagingCreatePage /> },
               { path: ':id/edit', element: <ImagingEditPage /> },
+            ],
+          },
+          {
+            path: 'doctors',
+            children: [
+              { element: <DoctorsTablePage />, index: true },
+              { path: 'list', element: <DoctorsTablePage /> },
+              { path: 'new', element: <DoctorCreatePage /> },
+              { path: ':id/edit', element: <DoctorEditPage /> },
             ],
           },
           {

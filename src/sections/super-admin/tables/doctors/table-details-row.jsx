@@ -20,24 +20,12 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function TableDetailsRow({ row, index, selected, onEditRow, showAll, onSelectRow }) {
   const {
     code,
-    unit_service_type,
-    country,
+    name,
+    phone,
     city,
-    email,
-    insurance,
-    info,
-    sector,
-    commercial_name,
-    province,
-    address,
-    phone_number_1,
-    Phone_number_2,
-    work_shift,
-    constitution_objective,
-    type_of_specialty_1,
-    type_of_specialty_2,
+    notes,
+    communication_date,
     status,
-    com_note,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -48,7 +36,7 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
   } = row;
 
   const { enqueueSnackbar } = useSnackbar();
-  const [text, setText] = useState(com_note);
+  const [text, setText] = useState(notes);
   const popover = usePopover();
   const DDL = usePopover();
 
@@ -62,7 +50,7 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
   };
   const handleSubmitText = async () => {
     try {
-      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text });
+      await axiosInstance.patch(endpoints.doctors.one(row?._id), { notes: text });
       enqueueSnackbar('done');
     } catch (e) {
       enqueueSnackbar('error', { variant: 'error' });
@@ -79,20 +67,13 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
-      <TableCell align="center">{unit_service_type}</TableCell>
-      <TableCell align="center">{country}</TableCell>
+      <TableCell align="center">{name}</TableCell>
+      <TableCell align="center">
+        <a href={`tel:${phone}`}>{phone}</a>
+      </TableCell>
       <TableCell align="center">{city}</TableCell>
-      <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{sector}</TableCell>
-      <TableCell align="center">{commercial_name}</TableCell>
-      <TableCell align="center">{province}</TableCell>
-      <TableCell align="center">{address}</TableCell>
-      <TableCell align="center">
-        <a href={`tel:${phone_number_1}`}>{phone_number_1}</a>
-      </TableCell>
-      <TableCell align="center">
-        <a href={`tel:${Phone_number_2}`}>{Phone_number_2}</a>
-      </TableCell>
+      <TableCell align="center">{notes}</TableCell>
+      <TableCell align="center">{communication_date}</TableCell>
       <TableCell align="center">
         <TextField select fullWidth value={status} onChange={handleChangeStatus}>
           <MenuItem value="not contact">لم يتم التواصل</MenuItem>
@@ -119,16 +100,6 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
           }}
         />
       </TableCell>
-      {showAll && (
-        <>
-          <TableCell align="center">{insurance}</TableCell>
-          <TableCell align="center">{info}</TableCell>
-          <TableCell align="center">{work_shift}</TableCell>
-          <TableCell align="center">{constitution_objective}</TableCell>
-          <TableCell align="center">{type_of_specialty_1}</TableCell>
-          <TableCell align="center">{type_of_specialty_2}</TableCell>
-        </>
-      )}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
