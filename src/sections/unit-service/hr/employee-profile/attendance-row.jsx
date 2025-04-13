@@ -143,7 +143,9 @@ export default function AttendanceRow({
         </Box>
       </CustomPopover>
 
-      <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
+      {open && (
+        <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
+      )}
     </>
   );
 }

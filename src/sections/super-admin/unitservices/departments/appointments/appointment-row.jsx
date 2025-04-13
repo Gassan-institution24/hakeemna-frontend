@@ -205,12 +205,13 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem lang="ar" onClick={confirmDelayOne.onTrue}>
-            <Iconify icon="mdi:timer-sync" />
-            {t('delay')}
-          </MenuItem>
-        )}
+        {checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) &&
+          !['finished', 'canceled', 'not booked'].includes(status) && (
+            <MenuItem lang="ar" onClick={confirmDelayOne.onTrue}>
+              <Iconify icon="mdi:timer-sync" />
+              {t('delay')}
+            </MenuItem>
+          )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
