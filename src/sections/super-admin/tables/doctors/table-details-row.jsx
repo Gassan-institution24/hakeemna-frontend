@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import { TextField, ListItemText, InputAdornment } from '@mui/material';
+import { TextField, ListItemText, InputAdornment, Stack } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -70,6 +70,24 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
       <TableCell align="center">{name}</TableCell>
       <TableCell align="center">
         <a href={`tel:${phone}`}>{phone}</a>
+      </TableCell>
+      <TableCell align="center">
+        <Stack direction="row" justifyContent="space-between">
+          <a rel="noreferrer" target="_blank" style={{ color: 'green' }} href={`tel:${phone}`}>
+            <Iconify icon="material-symbols:call" />
+          </a>
+          <a rel="noreferrer" target="_blank" style={{ color: 'green' }} href={`sms:${phone}`}>
+            <Iconify icon="solar:chat-round-dots-bold" />
+          </a>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            style={{ color: 'green' }}
+            href={`https://wa.me/${phone}`}
+          >
+            <Iconify icon="flowbite:whatsapp-solid" />
+          </a>
+        </Stack>
       </TableCell>
       <TableCell align="center">{city}</TableCell>
       <TableCell align="center">{notes}</TableCell>

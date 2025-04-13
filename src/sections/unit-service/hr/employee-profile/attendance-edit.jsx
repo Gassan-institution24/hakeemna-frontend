@@ -47,7 +47,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
   const defaultValues = {
     date: row?.date || null,
     check_in_time: row?.check_in_time || null,
-    off: row?.off || false,
+    off: row?.off || !!row?.leave || false,
     check_out_time: row?.check_out_time || null,
     leave_end: row?.leave_end || null,
     leave_start: row?.leave_start || null,
@@ -141,6 +141,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
                   <MenuItem value="online">{t('online')}</MenuItem>
                   <MenuItem value="onsite">{t('onsite')}</MenuItem>
                   <MenuItem value="hybrid">{t('hybrid')}</MenuItem>
+                  <MenuItem value="field">{t('on the ground')}</MenuItem>
                 </RHFSelect>
                 <RHFTimePicker name="check_in_time" label={t('Check in time')} />
                 <RHFTimePicker name="check_out_time" label={t('Check out time')} />

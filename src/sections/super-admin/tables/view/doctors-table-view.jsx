@@ -52,6 +52,7 @@ export default function CompaniesTableView() {
     { id: 'code', label: 'code' },
     { id: 'name', label: 'name' },
     { id: 'phone', label: 'phone' },
+    { id: 'contact', label: 'contact' },
     { id: 'city', label: 'city' },
     { id: 'notes', label: 'notes' },
     { id: 'communication_date', label: 'communication date' },
