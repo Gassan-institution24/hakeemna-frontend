@@ -64,6 +64,7 @@ export default function CompaniesTableView() {
     { id: 'address', label: 'address' },
     { id: 'phone_number_1', label: 'phone_number_1' },
     { id: 'Phone_number_2', label: 'Phone_number_2' },
+    { id: '', label: 'communication' },
     { id: 'status', label: 'status', width: 120 },
     { id: 'com_note', label: 'com_note', width: 200 },
     showAll && { id: 'insurance', label: 'insurance' },

@@ -57,6 +57,7 @@ export default function CompaniesTableView() {
     { id: 'notes', label: 'notes' },
     { id: 'communication_date', label: 'communication date' },
     { id: 'status', label: 'status' },
+    { id: '', label: '' },
     { id: '', width: 50 },
   ].filter(Boolean);
   const table = useTable({ defaultOrderBy: 'code' });
