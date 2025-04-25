@@ -15,7 +15,7 @@ import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import AttendanceEdit from './attendance-edit';
+// import AttendanceEdit from './attendance-edit';
 
 // import UploadAnalysis from '../upload-analysis';
 
@@ -34,8 +34,6 @@ export default function AttendanceRow({
     date,
     check_in_time,
     check_out_time,
-    // leave_start,
-    // leave_end,
     leave,
     work_type,
     leaveTime,
@@ -141,9 +139,9 @@ export default function AttendanceRow({
         </Box>
       </CustomPopover>
 
-      {open && (
+      {/* {open && (
         <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
-      )}
+      )} */}
     </>
   );
 }
