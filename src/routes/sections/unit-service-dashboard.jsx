@@ -20,52 +20,52 @@ import { LoadingScreen } from 'src/components/loading-screen';
 const DepartmentsHomePage = lazy(() => import('src/pages/unit-service/departments/home'));
 const DepartmentsNewPage = lazy(() => import('src/pages/unit-service/departments/new'));
 const DepartmentsInfoPage = lazy(() => import('src/pages/unit-service/departments/info'));
-const DepartmentsEmployeesPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/home')
+const DepartmentsEmployeesPage = lazy(
+  () => import('src/pages/unit-service/departments/employees/home')
 );
-const DepartmentsEmployeesNewPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/new')
+const DepartmentsEmployeesNewPage = lazy(
+  () => import('src/pages/unit-service/departments/employees/new')
 );
-const DepartmentsAccountingPage = lazy(() =>
-  import('src/pages/unit-service/departments/accounting')
+const DepartmentsAccountingPage = lazy(
+  () => import('src/pages/unit-service/departments/accounting')
 );
-const DepartmentsActivitiesPage = lazy(() =>
-  import('src/pages/unit-service/departments/activities/activities')
+const DepartmentsActivitiesPage = lazy(
+  () => import('src/pages/unit-service/departments/activities/activities')
 );
-const DepartmentsNewActivitiesPage = lazy(() =>
-  import('src/pages/unit-service/departments/activities/addActivitty')
+const DepartmentsNewActivitiesPage = lazy(
+  () => import('src/pages/unit-service/departments/activities/addActivitty')
 );
-const DepartmentsEditActivitiesPage = lazy(() =>
-  import('src/pages/unit-service/departments/activities/editActivity')
+const DepartmentsEditActivitiesPage = lazy(
+  () => import('src/pages/unit-service/departments/activities/editActivity')
 );
-const DepartmentsAppointmentsPage = lazy(() =>
-  import('src/pages/unit-service/departments/appointments')
+const DepartmentsAppointmentsPage = lazy(
+  () => import('src/pages/unit-service/departments/appointments')
 );
-const DepartmentsAppointmentConfigPage = lazy(() =>
-  import('src/pages/unit-service/departments/appointmentconfiguration')
+const DepartmentsAppointmentConfigPage = lazy(
+  () => import('src/pages/unit-service/departments/appointmentconfiguration')
 );
-const DepartmentsQualityControlPage = lazy(() =>
-  import('src/pages/unit-service/departments/qualitycontrole')
+const DepartmentsQualityControlPage = lazy(
+  () => import('src/pages/unit-service/departments/qualitycontrole')
 );
 const DepartmentsRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms/rooms'));
 const DepartmentsNewRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms/add'));
-const DepartmentsEditRoomsPage = lazy(() =>
-  import('src/pages/unit-service/departments/rooms/edit')
+const DepartmentsEditRoomsPage = lazy(
+  () => import('src/pages/unit-service/departments/rooms/edit')
 );
-const DepartmentsWorkGroupsPage = lazy(() =>
-  import('src/pages/unit-service/departments/work-groups/home')
+const DepartmentsWorkGroupsPage = lazy(
+  () => import('src/pages/unit-service/departments/work-groups/home')
 );
-const DepartmentsNewWorkGroupsPage = lazy(() =>
-  import('src/pages/unit-service/departments/work-groups/add')
+const DepartmentsNewWorkGroupsPage = lazy(
+  () => import('src/pages/unit-service/departments/work-groups/add')
 );
-const DepartmentsWorkGroupsPermissionPage = lazy(() =>
-  import('src/pages/unit-service/departments/work-groups/permissions/home')
+const DepartmentsWorkGroupsPermissionPage = lazy(
+  () => import('src/pages/unit-service/departments/work-groups/permissions/home')
 );
-const DepartmentsWorkGroupsEmployeePermissionPage = lazy(() =>
-  import('src/pages/unit-service/departments/work-groups/permissions/employee')
+const DepartmentsWorkGroupsEmployeePermissionPage = lazy(
+  () => import('src/pages/unit-service/departments/work-groups/permissions/employee')
 );
-const DepartmentsEditWorkGroupsPage = lazy(() =>
-  import('src/pages/unit-service/departments/work-groups/edit')
+const DepartmentsEditWorkGroupsPage = lazy(
+  () => import('src/pages/unit-service/departments/work-groups/edit')
 );
 // const DepartmentsPermissionsPage = lazy(() =>
 //   import('src/pages/unit-service/departments/permissions/home')
@@ -77,17 +77,17 @@ const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/department
 // EMPLOYEES
 const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));
 const EmployeesInfoPage = lazy(() => import('src/pages/unit-service/employees/info'));
-const EmployeesAppointmentsPage = lazy(() =>
-  import('src/pages/unit-service/employees/appontiments')
+const EmployeesAppointmentsPage = lazy(
+  () => import('src/pages/unit-service/employees/appontiments')
 );
-const EmployeesAppointmentConfigPage = lazy(() =>
-  import('src/pages/unit-service/employees/appoint-config')
+const EmployeesAppointmentConfigPage = lazy(
+  () => import('src/pages/unit-service/employees/appoint-config')
 );
-const EmployeesAppointmentConfigDetailsPage = lazy(() =>
-  import('src/pages/unit-service/employees/appoint-config-detail')
+const EmployeesAppointmentConfigDetailsPage = lazy(
+  () => import('src/pages/unit-service/employees/appoint-config-detail')
 );
-const EmployeesNewAppointmentConfigPage = lazy(() =>
-  import('src/pages/unit-service/employees/new-appoint-config')
+const EmployeesNewAppointmentConfigPage = lazy(
+  () => import('src/pages/unit-service/employees/new-appoint-config')
 );
 const EmployeesAccountingPage = lazy(() => import('src/pages/unit-service/employees/accounting'));
 const EmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/employees/feedback'));
@@ -107,21 +107,21 @@ const AppointmentsBookPage = lazy(() => import('src/pages/unit-service/appointme
 
 // ACCOUNTING
 // ECONOMIC MOVEMENTS
-const EconomicHomePage = lazy(() =>
-  import('src/pages/unit-service/accounting/economic-movements/home')
+const EconomicHomePage = lazy(
+  () => import('src/pages/unit-service/accounting/economic-movements/home')
 );
-const EconomicInfoPage = lazy(() =>
-  import('src/pages/unit-service/accounting/economic-movements/info')
+const EconomicInfoPage = lazy(
+  () => import('src/pages/unit-service/accounting/economic-movements/info')
 );
-const EconomicEditPage = lazy(() =>
-  import('src/pages/unit-service/accounting/economic-movements/edit')
+const EconomicEditPage = lazy(
+  () => import('src/pages/unit-service/accounting/economic-movements/edit')
 );
-const EconomicNewPage = lazy(() =>
-  import('src/pages/unit-service/accounting/economic-movements/new')
+const EconomicNewPage = lazy(
+  () => import('src/pages/unit-service/accounting/economic-movements/new')
 );
 // PAYMENT CONTROL
-const PaymentControlHomePage = lazy(() =>
-  import('src/pages/unit-service/accounting/payment-control/home')
+const PaymentControlHomePage = lazy(
+  () => import('src/pages/unit-service/accounting/payment-control/home')
 );
 // RECEIPTS
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
@@ -170,11 +170,11 @@ const WorkShiftsEditPage = lazy(() => import('src/pages/unit-service/tables/work
 const WorkGroupsHomePage = lazy(() => import('src/pages/unit-service/tables/work-groups/home'));
 const WorkGroupsNewPage = lazy(() => import('src/pages/unit-service/tables/work-groups/new'));
 const WorkGroupsEditPage = lazy(() => import('src/pages/unit-service/tables/work-groups/edit'));
-const WorkGroupsPermissionPage = lazy(() =>
-  import('src/pages/unit-service/tables/work-groups/permissions/home')
+const WorkGroupsPermissionPage = lazy(
+  () => import('src/pages/unit-service/tables/work-groups/permissions/home')
 );
-const WorkGroupsEmployeePermissionPage = lazy(() =>
-  import('src/pages/unit-service/tables/work-groups/permissions/employee')
+const WorkGroupsEmployeePermissionPage = lazy(
+  () => import('src/pages/unit-service/tables/work-groups/permissions/employee')
 );
 // ROOMS
 const RoomsHomePage = lazy(() => import('src/pages/unit-service/tables/rooms/home'));
@@ -203,35 +203,37 @@ const PatientNewPage = lazy(() => import('src/pages/unit-service/patients/new-pa
 // PRODUCTS
 const AllProductsPage = lazy(() => import('src/pages/unit-service/products/all-products'));
 const ProductsStakeholdersPage = lazy(() => import('src/pages/unit-service/products/stakeholders'));
-const StakeholderProductsPage = lazy(() =>
-  import('src/pages/unit-service/products/stakeholder-products')
+const StakeholderProductsPage = lazy(
+  () => import('src/pages/unit-service/products/stakeholder-products')
 );
 const ProductCheckoutPage = lazy(() => import('src/pages/unit-service/products/checkout'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 
 // PERMISSIONS
-const USPermissions = lazy(() =>
-  import('src/pages/unit-service/permissions/unitservice-permission')
+const USPermissions = lazy(
+  () => import('src/pages/unit-service/permissions/unitservice-permission')
 );
-const DepartmentsPermissions = lazy(() =>
-  import('src/pages/unit-service/permissions/departments-permission')
+const DepartmentsPermissions = lazy(
+  () => import('src/pages/unit-service/permissions/departments-permission')
 );
-const WorkGroupsPermissions = lazy(() =>
-  import('src/pages/unit-service/permissions/workgroup-permission')
+const WorkGroupsPermissions = lazy(
+  () => import('src/pages/unit-service/permissions/workgroup-permission')
 );
 const EmployeesList = lazy(() => import('src/pages/unit-service/permissions/employees-list'));
-const EmployeeUSPermission = lazy(() =>
-  import('src/pages/unit-service/permissions/employee-us-permissions')
+const EmployeeUSPermission = lazy(
+  () => import('src/pages/unit-service/permissions/employee-us-permissions')
 );
-const EmployeeDepartmentPermission = lazy(() =>
-  import('src/pages/unit-service/permissions/employee-department-permissions')
+const EmployeeDepartmentPermission = lazy(
+  () => import('src/pages/unit-service/permissions/employee-department-permissions')
 );
-const EmployeeWGPermission = lazy(() =>
-  import('src/pages/unit-service/permissions/employee-workgroup-permissions')
+const EmployeeWGPermission = lazy(
+  () => import('src/pages/unit-service/permissions/employee-workgroup-permissions')
 );
 
 // HR
 const HRPage = lazy(() => import('src/pages/unit-service/hr/home'));
+const HRSalaryPage = lazy(() => import('src/pages/unit-service/hr/salary'));
+const HREmployeeSalaryPage = lazy(() => import('src/pages/unit-service/hr/employee-salary'));
 const HREmployeePage = lazy(() => import('src/pages/unit-service/hr/employee'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 // const PatientNewPage = lazy(() => import('src/pages/unit-service/patients/new-patient'));
@@ -374,6 +376,8 @@ export const unitServiceDashboardRoutes = [
         children: [
           { element: <HRPage />, index: true },
           { path: 'list', element: <HRPage /> },
+          { path: 'salary', element: <HRSalaryPage /> },
+          { path: 'salary/:id', element: <HREmployeeSalaryPage /> },
           { path: ':id', element: <HREmployeePage /> },
         ],
       },

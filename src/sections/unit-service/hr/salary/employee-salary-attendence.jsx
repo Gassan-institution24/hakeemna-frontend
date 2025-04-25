@@ -38,7 +38,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeAttendence({ employee }) {
+export default function EmployeeSalaryAttendence({ employee }) {
   const { t } = useTranslate();
 
   const TABLE_HEAD = [
@@ -64,6 +64,7 @@ export default function EmployeeAttendence({ employee }) {
       rowsPerPage: table.rowsPerPage,
       order: table.order,
       sortBy: table.orderBy,
+      reported: 1,
       ...filters,
     });
 
@@ -93,9 +94,9 @@ export default function EmployeeAttendence({ employee }) {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" justifyContent="space-around" mb={2}>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('working hours')}</Typography>
+      <Stack direction={{ md: 'row' }} justifyContent="space-around" mb={2}>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('working hours')}:</Typography>
           <Typography>
             {hours > 60
               ? `${Math.floor(hours / 60)} ${t('hr')} : ${(hours % 60)
@@ -104,20 +105,20 @@ export default function EmployeeAttendence({ employee }) {
               : `${hours} ${t('min')}`}
           </Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('annual days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('annual days off')}:</Typography>
           <Typography>{annual}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('sick days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('sick days off')}:</Typography>
           <Typography>{sick}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('unpaid days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('unpaid days off')}:</Typography>
           <Typography>{unpaid}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('other days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('other days off')}:</Typography>
           <Typography>{other}</Typography>
         </Stack>
       </Stack>
@@ -194,6 +195,6 @@ export default function EmployeeAttendence({ employee }) {
 
 // ----------------------------------------------------------------------
 
-EmployeeAttendence.propTypes = {
+EmployeeSalaryAttendence.propTypes = {
   employee: PropTypes.object,
 };

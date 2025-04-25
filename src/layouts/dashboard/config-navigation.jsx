@@ -401,6 +401,10 @@ export function useNavData() {
         path: paths.unitservice.hr.root,
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
         'data-test': 'us-nav-item-hr',
+        children: [
+          { show: true, title: t('attendence'), path: paths.unitservice.hr.list },
+          { show: true, title: t('calculate salary'), path: paths.unitservice.hr.salary },
+        ],
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),

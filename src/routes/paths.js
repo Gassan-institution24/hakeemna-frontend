@@ -622,6 +622,9 @@ export const paths = {
     root: `${ROOTS.SUPERADMIN}/us`,
     hr: {
       root: `${ROOTS.SUPERADMIN}/us/hr`,
+      list: `${ROOTS.SUPERADMIN}/us/hr/list`,
+      salary: `${ROOTS.SUPERADMIN}/us/hr/salary`,
+      employeeSalary: (id) => `${ROOTS.SUPERADMIN}/us/hr/salary/${id}`,
       employee: (id) => `${ROOTS.SUPERADMIN}/us/hr/${id}`,
     },
     acl: {

@@ -1,45 +1,32 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
+import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 
-import { fDate, fTime, fHourMin } from 'src/utils/format-time';
+import { fDate, fTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import AttendanceEdit from './attendance-edit';
-
-// import UploadAnalysis from '../upload-analysis';
-
 // ----------------------------------------------------------------------
 
-export default function AttendanceRow({
+export default function EmployeeSalaryRow({
   row,
   selected,
-  refetch,
   onSelectRow,
   onViewRow,
-  onCancelRow,
-  onDeleteRow,
 }) {
   const {
-    date,
-    check_in_time,
-    check_out_time,
-    // leave_start,
-    // leave_end,
-    leave,
-    work_type,
-    leaveTime,
-    workTime,
+    employee,
+    salary,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -48,47 +35,69 @@ export default function AttendanceRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
   const { t } = useTranslate();
-  const [open, setOpen] = useState(false);
-  const weekDays = [
-    t('Saturday'),
-    t('Sunday'),
-    t('Monday'),
-    t('Tuesday'),
-    t('Wednesday'),
-    t('Thursday'),
-    t('Friday'),
-  ];
+
+  const checkAcl = useAclGuard();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const popover = usePopover();
   const DDL = usePopover();
 
+  const renderPrimary = (
+    <TableRow hover selected={selected}>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+        align="center"
+      >
+        {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+        align="center"
+      >
+        {curLangAr ? employee?.name_arabic : employee?.name_english}
+      </TableCell>
+      <TableCell align="center">
+        {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
+      </TableCell>
+      <TableCell align="center">{salary}</TableCell>
+
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  );
+
   return (
     <>
-      <TableRow hover selected={selected}>
-        <TableCell align="center">{fDate(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
-        <TableCell align="center">{fTime(check_in_time)}</TableCell>
-        <TableCell align="center">{fTime(check_out_time)}</TableCell>
-        <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
-        <TableCell align="center">{fHourMin(workTime)}</TableCell>
-        <TableCell align="center">{t(work_type)}</TableCell>
-        <TableCell align="center">{t(leave)}</TableCell>
+      {renderPrimary}
 
-        <TableCell align="right" sx={{ px: 1 }}>
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-
-      <CustomPopover open={popover.open} onClose={popover.onClose} arrow="right-top">
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 140 }}
+      >
+        <MenuItem lang="ar" onClick={onViewRow}>
+          <Iconify icon="solar:eye-bold" />
+          {t('view')}
+        </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
-        </MenuItem>
-        <MenuItem lang="ar" onClick={() => setOpen(true)}>
-          <Iconify icon="fluent:edit-32-filled" />
-          {t('Edit')}
         </MenuItem>
       </CustomPopover>
 
@@ -140,20 +149,13 @@ export default function AttendanceRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
-
-      {open && (
-        <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
-      )}
     </>
   );
 }
 
-AttendanceRow.propTypes = {
-  onDeleteRow: PropTypes.func,
-  onCancelRow: PropTypes.func,
+EmployeeSalaryRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
-  refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };
