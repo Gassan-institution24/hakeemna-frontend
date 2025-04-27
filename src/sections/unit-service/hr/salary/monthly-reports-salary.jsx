@@ -36,7 +36,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeSalaryView() {
+export default function MonthlyReports() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },

@@ -27,8 +27,6 @@ export const WebRTCProvider = ({ children }) => {
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [peerInstance, setPeerInstance] = useState(null);
 
-  const router = useRouter();
-
   const myVideo = useRef(null);
   const userVideo = useRef(null);
   const myVideoRef = useRef(null);

@@ -21,6 +21,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import FormProvider, {
   RHFSelect,
   RHFCheckbox,
+  RHFTextField,
   RHFDatePicker,
   RHFTimePicker,
 } from 'src/components/hook-form';
@@ -42,6 +43,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     employee_engagement: Yup.string().nullable(),
     leave: Yup.string().nullable(),
     work_type: Yup.string().nullable(),
+    note: Yup.string().nullable(),
   });
 
   const defaultValues = {
@@ -53,6 +55,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     leave_start: row?.leave_start || null,
     leave: row?.leave || '',
     work_type: row?.work_type || '',
+    note: row?.note || '',
     employee_engagement: employeeId || '',
   };
 
@@ -71,6 +74,15 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      if (offValues) {
+        data.check_in_time = null;
+        data.check_out_time = null;
+        data.leave_start = null;
+        data.leave_end = null;
+        data.work_type = '';
+      } else {
+        data.leave = '';
+      }
       if (row?._id) {
         await axiosInstance.patch(endpoints.attendence.one(row?._id), data);
         onClose();
@@ -132,6 +144,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
                 <MenuItem value="annual">{t('annual')}</MenuItem>
                 <MenuItem value="sick">{t('sick')}</MenuItem>
                 <MenuItem value="unpaid">{t('unpaid')}</MenuItem>
+                <MenuItem value="public">{t('public')}</MenuItem>
                 <MenuItem value="other">{t('other')}</MenuItem>
               </RHFSelect>
             )}
@@ -149,6 +162,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
                 <RHFTimePicker name="leave_end" label={t('Leave end')} />
               </>
             )}
+            <RHFTextField name="note" label={t('note')} />
           </Stack>
         </DialogContent>
 

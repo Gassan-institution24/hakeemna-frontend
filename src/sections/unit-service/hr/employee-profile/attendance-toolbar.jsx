@@ -45,60 +45,45 @@ export default function AttendanceToolbar({
 
   return (
     <>
-      <Stack
-        spacing={2}
-        alignItems={{ xs: 'flex-end', md: 'center' }}
-        direction={{
-          xs: 'column',
-          md: 'row',
-        }}
-        sx={{
-          p: 2.5,
-          pr: { xs: 2.5, md: 1 },
-        }}
-      >
-        <DatePicker
-          label={t('start date')}
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            width: { xs: 1, md: 200 },
-          }}
-        />
-
-        <DatePicker
-          label={t('end date')}
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-            },
+      <Stack direction="row" justifyContent="space-between">
+        <Stack
+          spacing={2}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+          direction={{
+            xs: 'column',
+            md: 'row',
           }}
           sx={{
-            width: { xs: 1, md: 200 },
+            p: 2.5,
+            pr: { xs: 2.5, md: 1 },
           }}
-        />
-        {/* <Stack
-          direction="row"
-          justifyContent="flex-end"
-          gap={2}
-          flex={1}
-          mr={3}
-          sx={{ fontSize: 14 }}
         >
-          {t('total working hours')}
-          {'  '}
-          {hours > 60
-            ? `${Math.floor(hours / 60)} ${t('hr')} : ${(hours % 60)
-                .toString()
-                .padStart(2, '0')} ${t('min')}`
-            : `${hours} ${t('min')}`}
-        </Stack> */}
+          <DatePicker
+            label={t('start date')}
+            value={filters.startDate}
+            onChange={handleFilterStartDate}
+            slotProps={{ textField: { fullWidth: true } }}
+            sx={{
+              width: { xs: 1, md: 200 },
+            }}
+          />
+
+          <DatePicker
+            label={t('end date')}
+            value={filters.endDate}
+            onChange={handleFilterEndDate}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: dateError,
+              },
+            }}
+            sx={{
+              width: { xs: 1, md: 200 },
+            }}
+          />
+        </Stack>
       </Stack>
-      {/* </Stack> */}
 
       <CustomPopover
         open={popover.open}

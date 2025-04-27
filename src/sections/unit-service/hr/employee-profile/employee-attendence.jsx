@@ -7,9 +7,12 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import { Stack, Typography } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useGetEmployeeAttendence } from 'src/api';
@@ -23,7 +26,6 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { Stack, Typography } from '@mui/material';
 
 import EmployeeAttendenceRow from './attendance-row';
 import EmployeeAttendanceToolbar from './attendance-toolbar';
@@ -49,6 +51,7 @@ export default function EmployeeAttendence({ employee }) {
     { id: 'work_time', label: t('work time') },
     { id: 'work_type', label: t('work type') },
     { id: 'leave', label: t('leave') },
+    { id: 'note', label: t('note') },
     { id: '' },
   ].filter(Boolean);
 
@@ -58,14 +61,23 @@ export default function EmployeeAttendence({ employee }) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { attendence, length, hours, annual, sick, unpaid, other, refetch } =
-    useGetEmployeeAttendence(employee?._id, {
-      page: table.page,
-      rowsPerPage: table.rowsPerPage,
-      order: table.order,
-      sortBy: table.orderBy,
-      ...filters,
-    });
+  const {
+    attendence,
+    length,
+    hours,
+    annual,
+    sick,
+    public: publicHolidays,
+    unpaid,
+    other,
+    refetch,
+  } = useGetEmployeeAttendence(employee?._id, {
+    page: table.page,
+    rowsPerPage: table.rowsPerPage,
+    order: table.order,
+    sortBy: table.orderBy,
+    ...filters,
+  });
 
   const dateError =
     filters.startDate && filters.endDate
@@ -91,11 +103,19 @@ export default function EmployeeAttendence({ employee }) {
     setFilters(defaultFilters);
   }, []);
 
+  const deleteHandler = useCallback(
+    async (id) => {
+      await axiosInstance.delete(endpoints.attendence.one(id));
+      refetch();
+    },
+    [refetch]
+  );
+
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" justifyContent="space-around" mb={2}>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('working hours')}</Typography>
+      <Stack direction={{ md: 'row' }} justifyContent="space-around" mb={2}>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('working hours')}:</Typography>
           <Typography>
             {hours > 60
               ? `${Math.floor(hours / 60)} ${t('hr')} : ${(hours % 60)
@@ -104,20 +124,24 @@ export default function EmployeeAttendence({ employee }) {
               : `${hours} ${t('min')}`}
           </Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('annual days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('annual days off')}:</Typography>
           <Typography>{annual}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('sick days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('sick days off')}:</Typography>
           <Typography>{sick}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('unpaid days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('unpaid days off')}:</Typography>
           <Typography>{unpaid}</Typography>
         </Stack>
-        <Stack alignItems="center" gap={1}>
-          <Typography>{t('other days off')}</Typography>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('public days off')}:</Typography>
+          <Typography>{publicHolidays}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('other days off')}:</Typography>
           <Typography>{other}</Typography>
         </Stack>
       </Stack>
@@ -168,7 +192,12 @@ export default function EmployeeAttendence({ employee }) {
 
               <TableBody>
                 {attendence.map((row, idx) => (
-                  <EmployeeAttendenceRow key={idx} row={row} refetch={refetch} />
+                  <EmployeeAttendenceRow
+                    key={idx}
+                    row={row}
+                    refetch={refetch}
+                    onDeleteRow={deleteHandler}
+                  />
                 ))}
 
                 <TableNoData notFound={notFound} />

@@ -1,23 +1,17 @@
+import PropTypes from 'prop-types';
 import { useRef, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import { useGetUSEmployeeEngs } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 import { useTranslate } from 'src/locales';
 
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
@@ -27,11 +21,19 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
+import { Stack, Typography } from '@mui/material';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useGetMonthlyReports } from 'src/api/monthly_reports';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import TableDetailToolbar from '../table-details-toolbar';
+import MonthlyReportRow from './monthly-report-row';
+import AttendanceToolbar from './attendance-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import EmployeeSalaryRow from './employee-salary-row';
 
 // ----------------------------------------------------------------------
 
@@ -41,32 +43,56 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function MonthlyReportsView() {
+export default function MonthlyReportsView({ employee }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'sequence_number', label: t('number') },
-    { id: 'name_english', label: t('name') },
-    { id: 'employee_type', label: t('employee type') },
-    { id: 'salary', label: t('salary') },
+    { id: 'code', label: t('number') },
+    ...(!employee ? [{ id: 'employee_engagement', label: t('employee name') }] : []),
+    { id: 'start_date', label: t('Start Date') },
+    { id: 'end_date', label: t('End Date') },
+    { id: 'working_time', label: t('Working hours') },
+    { id: 'annual', label: t('annual days off') },
+    { id: 'sick', label: t('sick days off') },
+    { id: 'unpaid', label: t('unpaid days off') },
+    { id: 'public', label: t('public days off') },
+    { id: 'other', label: t('other days off') },
     { id: '', width: 88 },
-  ];
+  ].filter(Boolean);
 
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
-  const { user } = useAuthContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
 
-  const { employeesData, loading } = useGetUSEmployeeEngs(
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
-  );
-
   const [filters, setFilters] = useState(defaultFilters);
+
+  const {
+    reportsData,
+    refetch,
+    loading,
+    hours,
+    annual,
+    sick,
+    unpaid,
+    other,
+    public: publicCount,
+    ids,
+  } = useGetMonthlyReports({
+    populate: [
+      {
+        path: 'employee_engagement',
+        select: 'employee',
+        populate: { path: 'employee', select: 'name_english name_arabic' },
+      },
+    ],
+    employee_engagement: employee,
+    startDate: filters?.startDate,
+    endDate: filters?.endDate,
+    reported: 0,
+  });
 
   const dateError =
     filters.startDate && filters.endDate
@@ -74,7 +100,7 @@ export default function MonthlyReportsView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: employeesData,
+    inputData: reportsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -106,16 +132,70 @@ export default function MonthlyReportsView() {
     setFilters(defaultFilters);
   }, []);
 
+  const handleDeleteRow = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.delete(endpoints.monthlyReport.one(id));
+        refetch();
+      } catch (error) {
+        console.log('error', error);
+        enqueueSnackbar(error?.message, { variant: 'error' });
+      }
+    },
+    [enqueueSnackbar, refetch]
+  );
+
   if (loading) {
     return <LoadingScreen />;
   }
 
   return (
     <Container maxWidth="xl">
+      <Stack direction={{ md: 'row' }} justifyContent="space-around" mb={2}>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('working hours')}:</Typography>
+          <Typography>
+            {hours > 60
+              ? `${Math.floor(hours / 60)} ${t('hr')} : ${(hours % 60)
+                  .toString()
+                  .padStart(2, '0')} ${t('min')}`
+              : `${hours} ${t('min')}`}
+          </Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('annual days off')}:</Typography>
+          <Typography>{annual}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('sick days off')}:</Typography>
+          <Typography>{sick}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('unpaid days off')}:</Typography>
+          <Typography>{unpaid}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('public days off')}:</Typography>
+          <Typography>{publicCount}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('other days off')}:</Typography>
+          <Typography>{other}</Typography>
+        </Stack>
+      </Stack>
       <Card>
-        <TableDetailToolbar
+        <AttendanceToolbar
           filters={filters}
           onFilters={handleFilters}
+          monthly
+          hours={hours}
+          annual={annual}
+          sick={sick}
+          unpaid={unpaid}
+          other={other}
+          ids={ids}
+          publicHolidays={publicCount}
+          refetch={refetch}
           // onDownload={handleDownload}
           //
           canReset={canReset}
@@ -166,7 +246,7 @@ export default function MonthlyReportsView() {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row, idx) => (
-                    <EmployeeSalaryRow
+                    <MonthlyReportRow
                       key={idx}
                       row={row}
                       filters={filters}
@@ -174,6 +254,8 @@ export default function MonthlyReportsView() {
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
                       onViewRow={() => handleViewRow(row._id)}
+                      onDeleteRow={() => handleDeleteRow(row._id)}
+                      hideEmployee={!!employee}
                     />
                   ))}
                 <TableNoData notFound={notFound} />
@@ -200,7 +282,7 @@ export default function MonthlyReportsView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
@@ -245,3 +327,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+MonthlyReportsView.propTypes = {
+  employee: PropTypes.string,
+};

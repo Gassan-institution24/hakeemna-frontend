@@ -7,9 +7,12 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import { Stack, Typography } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useGetEmployeeAttendence } from 'src/api';
@@ -23,7 +26,6 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { Stack, Typography } from '@mui/material';
 
 import EmployeeAttendenceRow from './attendance-row';
 import EmployeeAttendanceToolbar from './attendance-toolbar';
@@ -49,6 +51,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
     { id: 'work_time', label: t('work time') },
     { id: 'work_type', label: t('work type') },
     { id: 'leave', label: t('leave') },
+    { id: 'note', label: t('note') },
     { id: '' },
   ].filter(Boolean);
 
@@ -58,15 +61,25 @@ export default function EmployeeSalaryAttendence({ employee }) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { attendence, length, hours, annual, sick, unpaid, other, refetch } =
-    useGetEmployeeAttendence(employee?._id, {
-      page: table.page,
-      rowsPerPage: table.rowsPerPage,
-      order: table.order,
-      sortBy: table.orderBy,
-      reported: 1,
-      ...filters,
-    });
+  const {
+    attendence,
+    length,
+    hours,
+    annual,
+    sick,
+    unpaid,
+    other,
+    public: publicHolidays,
+    ids,
+    refetch,
+  } = useGetEmployeeAttendence(employee?._id, {
+    page: table.page,
+    rowsPerPage: table.rowsPerPage,
+    order: table.order,
+    sortBy: table.orderBy,
+    reported: 0,
+    ...filters,
+  });
 
   const dateError =
     filters.startDate && filters.endDate
@@ -91,6 +104,14 @@ export default function EmployeeSalaryAttendence({ employee }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const deleteHandler = useCallback(
+    async (id) => {
+      await axiosInstance.delete(endpoints.attendence.one(id));
+      refetch();
+    },
+    [refetch]
+  );
 
   return (
     <Container maxWidth="xl">
@@ -118,6 +139,10 @@ export default function EmployeeSalaryAttendence({ employee }) {
           <Typography>{unpaid}</Typography>
         </Stack>
         <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('public days off')}:</Typography>
+          <Typography>{publicHolidays}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
           <Typography>{t('other days off')}:</Typography>
           <Typography>{other}</Typography>
         </Stack>
@@ -126,6 +151,14 @@ export default function EmployeeSalaryAttendence({ employee }) {
         <EmployeeAttendanceToolbar
           filters={filters}
           onFilters={handleFilters}
+          hours={hours}
+          annual={annual}
+          sick={sick}
+          unpaid={unpaid}
+          publicHolidays={publicHolidays}
+          other={other}
+          ids={ids}
+          refetch={refetch}
           //
           dateError={dateError}
         />
@@ -169,7 +202,12 @@ export default function EmployeeSalaryAttendence({ employee }) {
 
               <TableBody>
                 {attendence.map((row, idx) => (
-                  <EmployeeAttendenceRow key={idx} row={row} refetch={refetch} />
+                  <EmployeeAttendenceRow
+                    key={idx}
+                    row={row}
+                    refetch={refetch}
+                    onDeleteRow={deleteHandler}
+                  />
                 ))}
 
                 <TableNoData notFound={notFound} />

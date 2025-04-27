@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { usePathname } from 'src/routes/hooks';
-
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import Footer from './footer';
@@ -13,8 +11,6 @@ import Header from './header';
 // ----------------------------------------------------------------------
 
 export default function MainLayout({ children }) {
-  const pathname = usePathname();
-  const homePage = pathname === '/';
   const mdUp = useResponsive('up', 'md');
 
   const [showHeader, setShowHeader] = useState(true);
@@ -46,12 +42,7 @@ export default function MainLayout({ children }) {
       {/* Toggle header visibility based on scroll direction */}
       {showHeader && <Header />}
 
-      <Box
-        component="main"
-       
-      >
-        {children}
-      </Box>
+      <Box component="main">{children}</Box>
 
       <Footer />
     </Box>

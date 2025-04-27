@@ -1,30 +1,43 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { Button, ListItemText } from '@mui/material';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeSalaryRow({
+export default function MonthlyReportRow({
   row,
   selected,
   onSelectRow,
+  onDeleteRow,
   onViewRow,
+  hideEmployee,
 }) {
   const {
-    employee,
-    salary,
+    code,
+    employee_engagement,
+    start_date,
+    end_date,
+    working_time,
+    annual,
+    sick,
+    unpaid,
+    public: publicOff,
+    other,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -34,6 +47,7 @@ export default function EmployeeSalaryRow({
     modifications_nums,
   } = row;
 
+
   const { t } = useTranslate();
 
   const { currentLang } = useLocales();
@@ -41,6 +55,7 @@ export default function EmployeeSalaryRow({
 
   const popover = usePopover();
   const DDL = usePopover();
+  const deleting = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -52,22 +67,30 @@ export default function EmployeeSalaryRow({
         // onClick={onViewRow}
         align="center"
       >
-        {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
+        {code}
       </TableCell>
-      <TableCell
-        // sx={{
-        //   cursor: 'pointer',
-        //   color: '#3F54EB',
-        // }}
-        // onClick={onViewRow}
-        align="center"
-      >
-        {curLangAr ? employee?.name_arabic : employee?.name_english}
-      </TableCell>
-      <TableCell align="center">
-        {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
-      </TableCell>
-      <TableCell align="center">{salary}</TableCell>
+      {!hideEmployee && (
+        <TableCell
+          // sx={{
+          //   cursor: 'pointer',
+          //   color: '#3F54EB',
+          // }}
+          // onClick={onViewRow}
+          align="center"
+        >
+          {curLangAr
+            ? employee_engagement?.employee?.name_arabic
+            : employee_engagement?.employee?.name_english}
+        </TableCell>
+      )}
+      <TableCell align="center">{fDate(start_date)}</TableCell>
+      <TableCell align="center">{fDate(end_date)}</TableCell>
+      <TableCell align="center">{working_time}</TableCell>
+      <TableCell align="center">{annual}</TableCell>
+      <TableCell align="center">{sick}</TableCell>
+      <TableCell align="center">{unpaid}</TableCell>
+      <TableCell align="center">{publicOff}</TableCell>
+      <TableCell align="center">{other}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -94,6 +117,10 @@ export default function EmployeeSalaryRow({
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
+        </MenuItem>
+        <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
+          <Iconify icon="mdi:trash" />
+          {t('Delete')}
         </MenuItem>
       </CustomPopover>
 
@@ -145,13 +172,35 @@ export default function EmployeeSalaryRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
+
+      <ConfirmDialog
+        open={deleting.value}
+        onClose={deleting.onFalse}
+        title={t('Deleting Report')}
+        content={t('Are you sure to delete this?')}
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              popover.onClose();
+              deleting.onFalse();
+              onDeleteRow(row._id);
+            }}
+          >
+            {t('Delete')}
+          </Button>
+        }
+      />
     </>
   );
 }
 
-EmployeeSalaryRow.propTypes = {
+MonthlyReportRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onDeleteRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  hideEmployee: PropTypes.bool,
 };
