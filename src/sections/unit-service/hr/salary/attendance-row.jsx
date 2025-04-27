@@ -49,7 +49,7 @@ export default function AttendanceRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-  
+
   const { t } = useTranslate();
   const popover = usePopover();
   const DDL = usePopover();
