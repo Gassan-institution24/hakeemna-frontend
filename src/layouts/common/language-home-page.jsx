@@ -9,7 +9,7 @@ import { useTranslate, useLocalesHome } from 'src/locales';
 
 export default function Language() {
   const { onChangeLang } = useTranslate();
-  const { langs, currentLang } = useLocalesHome();
+  const { currentLang } = useLocalesHome();
 
   const handleChangeLang = useCallback(
     (newLang) => {

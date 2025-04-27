@@ -15,11 +15,10 @@ import {
 
 import axiosInstance from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 export default function FAQ() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
   const [data, setData] = React.useState('');
 
   const onSubmit = async () => {
@@ -36,24 +35,43 @@ export default function FAQ() {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#E4F6F2', p: 8, borderRadius: 2, maxWidth: 800, mx: 'auto', my: '30px',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',color:'#1F2C5C' }}>
+    <Box
+      sx={{
+        backgroundColor: '#E4F6F2',
+        p: 8,
+        borderRadius: 2,
+        maxWidth: 800,
+        mx: 'auto',
+        my: '30px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#1F2C5C',
+      }}
+    >
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
         {t('الأٔسئلة الشائعة')}
       </Typography>
-      <Card sx={{ backgroundColor: 'white', boxShadow: 1, }}>
+      <Card sx={{ backgroundColor: 'white', boxShadow: 1 }}>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'primary.main' }} />}>
-            <Typography sx={{ fontWeight: 'bold',color:'#1F2C5C' }}>ما هي الغايات من طلب معلوماتي الشخصية</Typography>
+            <Typography sx={{ fontWeight: 'bold', color: '#1F2C5C' }}>
+              ما هي الغايات من طلب معلوماتي الشخصية
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              في حكيمنا هدفنا هو توفير جميع سبل الراحة من خلال تسهيل كامل الاجرائات الطبية، لذلك توفيرها من قبل المستخدم يساعدنا في تحقيق هذا الهدف.
+              في حكيمنا هدفنا هو توفير جميع سبل الراحة من خلال تسهيل كامل الاجرائات الطبية، لذلك
+              توفيرها من قبل المستخدم يساعدنا في تحقيق هذا الهدف.
             </Typography>
           </AccordionDetails>
         </Accordion>
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'primary.main' }} />}>
-            <Typography sx={{ fontWeight: 'bold',color:'#1F2C5C' }}>ما هي المعلومات الطبية التي يمكنني رفعها وتخزينها على منصة حكيمنا؟</Typography>
+            <Typography sx={{ fontWeight: 'bold', color: '#1F2C5C' }}>
+              ما هي المعلومات الطبية التي يمكنني رفعها وتخزينها على منصة حكيمنا؟
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
@@ -69,8 +87,10 @@ export default function FAQ() {
         </Accordion>
       </Card>
 
-      <Box sx={{ mt: 4, textAlign: 'center' ,borderTop:'dashed 2px #63BFAD', width: '100%' }}>
-        <Typography variant="h6" sx={{ mb: 1,mt:2 }}>لم تتمكن من العثور على ما تبحث عنه؟</Typography>
+      <Box sx={{ mt: 4, textAlign: 'center', borderTop: 'dashed 2px #63BFAD', width: '100%' }}>
+        <Typography variant="h6" sx={{ mb: 1, mt: 2 }}>
+          لم تتمكن من العثور على ما تبحث عنه؟
+        </Typography>
         <Typography sx={{ color: 'gray', mb: 2 }}>نحن هنا للإجابة على استفساراتك.</Typography>
         <TextField
           fullWidth

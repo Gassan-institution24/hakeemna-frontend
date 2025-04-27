@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -13,6 +14,7 @@ import { fDate, fTime, fHourMin } from 'src/utils/format-time';
 import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import AttendanceEdit from './attendance-edit';
@@ -38,6 +40,7 @@ export default function AttendanceRow({
     // leave_end,
     leave,
     work_type,
+    note,
     leaveTime,
     workTime,
     created_at,
@@ -50,18 +53,10 @@ export default function AttendanceRow({
   } = row;
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
-  const weekDays = [
-    t('Saturday'),
-    t('Sunday'),
-    t('Monday'),
-    t('Tuesday'),
-    t('Wednesday'),
-    t('Thursday'),
-    t('Friday'),
-  ];
 
   const popover = usePopover();
   const DDL = usePopover();
+  const deleting = usePopover();
 
   return (
     <>
@@ -73,6 +68,7 @@ export default function AttendanceRow({
         <TableCell align="center">{fHourMin(workTime)}</TableCell>
         <TableCell align="center">{t(work_type)}</TableCell>
         <TableCell align="center">{t(leave)}</TableCell>
+        <TableCell align="center">{note}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -89,6 +85,10 @@ export default function AttendanceRow({
         <MenuItem lang="ar" onClick={() => setOpen(true)}>
           <Iconify icon="fluent:edit-32-filled" />
           {t('Edit')}
+        </MenuItem>
+        <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
+          <Iconify icon="mdi:trash" />
+          {t('Delete')}
         </MenuItem>
       </CustomPopover>
 
@@ -144,6 +144,25 @@ export default function AttendanceRow({
       {open && (
         <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
       )}
+      <ConfirmDialog
+        open={deleting.open}
+        onClose={deleting.onClose}
+        title={t('Deleting Attendence')}
+        content={t('Are you sure to delete this?')}
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              popover.onClose();
+              deleting.onClose();
+              onDeleteRow(row._id);
+            }}
+          >
+            {t('Delete')}
+          </Button>
+        }
+      />
     </>
   );
 }

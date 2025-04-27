@@ -472,6 +472,16 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/attendence/${id}`),
     employee: (id) => (!id ? null : `/api/attendence/employee/${id}`),
   },
+  monthlyReport: {
+    all: '/api/monthlyreport',
+    one: (id) => `/api/monthlyreport/${id}`,
+    employee: (id) => `/api/monthlyreport/employee/${id}`,
+  },
+  yearlyReport: {
+    all: '/api/yearlyreport',
+    one: (id) => `/api/yearlyreport/${id}`,
+    employee: (id) => `/api/yearlyreport/employee/${id}`,
+  },
   answers: {
     all: '/api/answersandquestiones',
     one: (id) => (!id ? null : `/api/answersandquestiones/${id}`),

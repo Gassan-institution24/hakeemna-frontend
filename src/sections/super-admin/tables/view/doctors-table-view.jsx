@@ -260,7 +260,7 @@ export default function CompaniesTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, USType, city, sector, province, speciality1, speciality2 } = filters;
+  const { name } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 

@@ -3,12 +3,14 @@ import React, { useState, useCallback } from 'react';
 import { Tab, Tabs, Container } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+
 import { useTranslate } from 'src/locales';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import EditEmployee from '../employee-profile/employee-edit';
-import EmployeeSalaryView from '../salary/employee-salary';
 import MonthlyReportsView from '../salary/monthly-report';
+import EmployeeSalaryView from '../salary/employee-salary';
+import EditEmployee from '../employee-profile/employee-edit';
 
 // ----------------------------------------------------------------------
 
