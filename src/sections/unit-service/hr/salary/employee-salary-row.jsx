@@ -45,21 +45,21 @@ export default function EmployeeSalaryRow({
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell
-        // sx={{
-        //   cursor: 'pointer',
-        //   color: '#3F54EB',
-        // }}
-        // onClick={onViewRow}
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
         align="center"
       >
         {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
       </TableCell>
       <TableCell
-        // sx={{
-        //   cursor: 'pointer',
-        //   color: '#3F54EB',
-        // }}
-        // onClick={onViewRow}
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
         align="center"
       >
         {curLangAr ? employee?.name_arabic : employee?.name_english}
