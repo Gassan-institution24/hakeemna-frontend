@@ -11,6 +11,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import MonthlyReportsView from '../salary/monthly-report';
 import EmployeeSalaryView from '../salary/employee-salary';
 import EditEmployee from '../employee-profile/employee-edit';
+import YearlyReportsView from '../salary/yearly-report';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ export default function HRSalaryView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('calculate salary')} 
+        heading={t('calculate salary')}
         links={[
           {
             name: t('dashboard'),
@@ -65,7 +66,7 @@ export default function HRSalaryView() {
       </Tabs>
       {currentTab === 'employees' && <EmployeeSalaryView />}
       {currentTab === 'monthly report' && <MonthlyReportsView />}
-      {currentTab === 'yearly report' && <EditEmployee />}
+      {currentTab === 'yearly report' && <YearlyReportsView />}
     </Container>
   );
 }
