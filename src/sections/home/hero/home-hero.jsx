@@ -9,9 +9,9 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import photo from '../images/photo.png';
-import photo2 from '../images/photo2.png';
-import photo3 from '../images/photo3.png';
+import photo from '../images/photo.webp';
+import photo2 from '../images/photo2.webp';
+import photo3 from '../images/photo3.webp';
 
 // Lazy load images
 
@@ -29,10 +29,10 @@ export default function HomeHero() {
 
   const texts = [
     t(
-      'Hakimna is An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
+      'Hakimna 360 is An integrated electronic system for organizing work between medical service providers (such as doctors, laboratories, a specialized medical center, a radiology center, and others) and all members of society. It also provides various services such as keeping personal medical records for individuals and integrated management of medical institutions.'
     ),
     t(
-      'Hakimna provides patients with flexible storage and management of medical data and information, facilitating access to information, medical history, and data collaboration at any time and at any time, and communicating efficiently with medical heroes.'
+      'Hakimna 360 provides patients with flexible storage and management of medical data and information, facilitating access to information, medical history, and data collaboration at any time and at any time, and communicating efficiently with medical heroes.'
     ),
     t(
       'Hakeemna 360 platform enables healthcare providers to manage patient records electronically and manage their organizations efficiently and easily, paving the way for focusing on the most important things in your business, enhancing excellence and competitiveness. The platform meets the needs of medical institutions, clinics, laboratories, specialized medical centers, radiology centers, and others.'
@@ -45,6 +45,9 @@ export default function HomeHero() {
     { label: t('Learn More'), path: '/patients' },
     { label: t('Get Started'), path: '/units' },
   ];
+  const capitalizedText = (texts[currentIndex] || '').replace(/^([a-zA-Z\u0600-\u06FF])/, (c) =>
+    c.toUpperCase()
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,7 +60,7 @@ export default function HomeHero() {
     <>
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>{title[currentIndex]}</title>
+        <title>Hakeemna 360</title>
         <meta name="description" content={texts[currentIndex]} />
         <meta
           name="keywords"
@@ -65,7 +68,7 @@ export default function HomeHero() {
         />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content={title[currentIndex]} />
-        <meta property="og:description" content={title[currentIndex]} />
+        <meta property="og:description" content={texts[currentIndex]} />
         <meta property="og:image" content={backgroundImages[currentIndex]} />
         <meta property="og:url" content="https://hakeemna.com" />
         <script type="application/ld+json">
@@ -89,14 +92,17 @@ export default function HomeHero() {
           width: '100%',
           color: 'white',
           px: 3,
+          py: { xs: 30 },
           mb: '100px',
-          mt: '170px',
+          mt: '130px',
           position: 'relative',
           backgroundImage: {
             xs: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,
-            md: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`,
+            sm: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,
+            md: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,
+            lg: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,
+            xl: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`,
           },
-          // backgroundImage: `linear-gradient(to right, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24)), url(${backgroundImages[currentIndex]})`, // Applying gradient color on top of the image
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -154,7 +160,7 @@ export default function HomeHero() {
             component="p"
             sx={{ maxWidth: 800, mb: 3, color: 'white' }}
           >
-            {texts[currentIndex]}
+            {capitalizedText}
           </Typography>
 
           {/* Conditional Button Rendering */}
@@ -191,8 +197,8 @@ export default function HomeHero() {
                   justifyContent: 'center',
                   backgroundColor: '#1F2C5C',
                   padding: '10px 8px',
-                  borderEndEndRadius: '5px',
-                  borderStartEndRadius: '5px',
+                  borderEndEndRadius: '10px',
+                  borderStartEndRadius: '10px',
                 }}
               >
                 {curLangAr ? (

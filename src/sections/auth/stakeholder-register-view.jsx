@@ -162,6 +162,14 @@ export default function JwtRegisterView() {
           {t('login')}
         </Link>
       </Stack>
+
+      <Stack direction="row" spacing={0.5}>
+        <Typography variant="body2">
+          <Link href="/" component={RouterLink} variant="subtitle2">
+            {t('Home page')}
+          </Link>
+        </Typography>
+      </Stack>
     </Stack>
   );
 

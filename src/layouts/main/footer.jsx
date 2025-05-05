@@ -9,10 +9,9 @@ import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
-
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +19,7 @@ const LINKS = [
   {
     headline: 'hakeemna',
     children: [
-      { name: 'home', href: '/' },
+      { name: 'Home', href: '/' },
       { name: 'about us', href: paths.pages.About },
       { name: 'beneficiaries', href: paths.pages.patients },
       { name: 'units of service', href: paths.pages.unit },
@@ -32,9 +31,9 @@ const LINKS = [
   {
     headline: 'legal',
     children: [
-      { name: 'terms and condition', href: paths.pages.Termsandcondition },
-      { name: 'Patients Privacy Policy', href: paths.pages.PatientsPrivacypolicy },
-      { name: 'Unit Services Privacy Policy', href: paths.pages.UsPrivacypolicy },
+      { name: 'terms and condition (patientes)', href: paths.pages.Termsandcondition },
+      { name: 'Patients Privacy Policy (patientes)', href: paths.pages.PatientsPrivacypolicy },
+      { name: 'Privacy Policy and Terms of Use (unit of service)', href: paths.pages.UsPrivacypolicy },
     ],
   },
   {
@@ -50,6 +49,9 @@ export default function Footer() {
   const pathname = usePathname();
   const homePage = pathname === '/';
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+
+  const curLangAr = currentLang.value === 'ar';
 
   return homePage ? (
     <Box
@@ -102,7 +104,7 @@ export default function Footer() {
                       href={link.href}
                       color="#1F2C5C"
                       variant="subtitle2"
-                      textTransform="lowercase"
+                      // textTransform="lowercase"
                       sx={{
                         '&:hover': {
                           color: 'white',
@@ -124,7 +126,9 @@ export default function Footer() {
           variant="body1"
           sx={{ mt: 2, textAlign: { md: 'end', xs: 'center' }, fontWeight: 600, color: 'white' }}
         >
-          {t(`© ${new Date().getFullYear()}. All rights reserved`)}
+          {!curLangAr
+            ? `Copyright © ${new Date().getFullYear()} Hakeemna 360`
+            : `حقوق النشر © ${new Date().getFullYear()} حكيمنا 360`}
         </Typography>
       </Container>
     </Box>

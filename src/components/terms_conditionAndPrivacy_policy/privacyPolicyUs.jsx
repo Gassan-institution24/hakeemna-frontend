@@ -65,7 +65,7 @@ export default function ProviderPolicy() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ display: 'flex', py: 4 }}>
+    <Container maxWidth="lg" sx={{ display: 'flex', py: 4, mt: '120px' }}>
       {/* Sidebar */}
       <Box
         sx={{
@@ -1211,7 +1211,7 @@ export default function ProviderPolicy() {
               لا نستخدم أدوات كوكيز في الصفحة، نجمع البيانات التي تقوم أنت بتخزينها في النظام وذلك
               بعد أن تقوم بفتح حساب في المنصة.
             </Typography>
-            <Typography variant="caption">تاريخ آخر تحديث 30/10/202—- 16/03/2025</Typography>
+            <Typography variant="caption">تاريخ آخر تحديث  16/03/2025</Typography>
           </Box>
         </Paper>
       </Box>

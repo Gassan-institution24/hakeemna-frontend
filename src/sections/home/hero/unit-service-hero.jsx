@@ -24,7 +24,7 @@ export default function UnitServiceHero() {
         width: '100%',
         color: 'white',
         px: 3,
-        mt: '150px',
+        mt: '130px',
         mb: '150px',
         position: 'relative',
         backgroundImage: `linear-gradient(to right, rgba(112, 216, 192, 0.7), rgba(60, 176, 153, 0.7))`,
