@@ -6,7 +6,7 @@ export default function TermsAndCondition() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   return (
-    <Box sx={{ bgcolor: '#E4F6F2', my: 10, p: 5, mx: 30, borderRadius: 3, color: '#1F2C5C' }}>
+    <Box sx={{ bgcolor: '#E4F6F2', my: 10, p: 5, mx: 30, borderRadius: 3, color: '#1F2C5C', mt: '150px' }}>
       <Stack gap={1}>
         {curLangAr ? (
           <Typography variant="h3" sx={{ mt: 4 }}>

@@ -105,16 +105,16 @@ export default function PatientsServices() {
         >
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              - {t('Register for free in the electronic medical records system.')}
+               {t('Register for free in the electronic medical records system.')}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Recording and storing data in an organized electronic form, reducing repetitive(bureaucratic) paper procedures and work, and enhancing the confidentiality of information.'
               )}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Promoting a more comprehensive and personalized approach to medical affairs management, as old medical history is stored and recent data is recorded automatically.'
               )}
@@ -122,19 +122,19 @@ export default function PatientsServices() {
           </Card>
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
-                'Faster and more accurate access to medical information and files, supporting better decision- making in patient healthcare.'
+                'Faster and more accurate access to medical information and files, supporting better decision making in patient healthcare.'
               )}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Communicate with doctors and all medical institutions electronically in the same country or in another country.'
               )}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Telemedicine and consultation services(visual communication with the doctor) and subscription to the medical journal.'
               )}
@@ -142,19 +142,19 @@ export default function PatientsServices() {
           </Card>
           <Card sx={{ p: 3 }}>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Organizing and scheduling medical appointments conveniently, and booking appointments electronically.'
               )}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Enhancing patient experience, reducing waiting time and reducing medical errors.'
               )}
             </Typography>
             <Typography sx={{ p: 2 }} variant="subtitle1">
-              -{' '}
+              {' '}
               {t(
                 'Monitoring the level of satisfaction with the services provided by medical institutions.'
               )}
@@ -190,34 +190,34 @@ export default function PatientsServices() {
         <Stack spacing={3} sx={{ transform: 'skewY(3deg)' }}>
           <Typography variant="h3">{t('Organizing the affairs of family members')}</Typography>
           <Typography variant="subtitle1">
-            - {t('The ability to add family members to your personal account(sons and daughters).')}
+             {t('The ability to add family members to your personal account(sons and daughters).')}
           </Typography>
           <Typography variant="subtitle1">
-            - {t('Linking the father and mother’s accounts if the parents are elderly.')}
+             {t('Linking the father and mother’s accounts if the parents are elderly.')}
           </Typography>
           <Typography variant="subtitle1">
-            -{' '}
+            {' '}
             {t(
               'Communicate with doctors to consult them about family members’ affairs and book medical appointments.'
             )}
           </Typography>
           <Typography variant="subtitle1">
-            - {t('Storing old and recent medical files and images in one place electronically.')}
+             {t('Storing old and recent medical files and images in one place electronically.')}
           </Typography>
           <Typography variant="subtitle1">
-            -{' '}
+            {' '}
             {t(
               'Managing their medical files such as medical history, prescriptions, medical leave, etc.'
             )}
           </Typography>
           <Typography variant="subtitle1">
-            -{' '}
+            {' '}
             {t(
               'Document all clinical information to facilitate future reference to make sound medical decisions.'
             )}
           </Typography>
           <Typography variant="subtitle1">
-            -{' '}
+            {' '}
             {t(
               'Ensuring more accurate health results and reducing medical errors by providing the medical history of all family members.'
             )}

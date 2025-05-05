@@ -13,7 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
 
-import HOME from './images/aboutUs.jpg';
+import HOME from './images/about.webp';
 
 export default function Whydoc() {
   const { t } = useTranslate();
@@ -60,7 +60,7 @@ export default function Whydoc() {
           }}
         >
           <div style={{ position: 'relative' }}>
-            <Typography 
+            <Typography
               color="white"
               variant="h6"
               sx={{ textAlign: 'start', textTransform: 'none' }}
@@ -70,7 +70,7 @@ export default function Whydoc() {
               )}
             </Typography>
           </div>
-          <Stack direction="row" sx={{ alignSelf:{ xs: 'center', md:  'end'}, mt: 4 }}>
+          <Stack direction="row" sx={{ alignSelf: { xs: 'center', md: 'end' }, mt: 4 }}>
             <Button
               size="large"
               onClick={() => router.push(paths.pages.About)}
@@ -78,12 +78,10 @@ export default function Whydoc() {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                borderRadius: '5px',
                 bgcolor: 'transparent',
                 padding: 0,
                 overflow: 'hidden',
                 boxShadow: 'none',
-              
               }}
             >
               <div
@@ -104,6 +102,8 @@ export default function Whydoc() {
                   justifyContent: 'center',
                   backgroundColor: '#1F2C5C',
                   padding: '10px 12px',
+                  borderEndEndRadius: '10px',
+                  borderStartEndRadius: '10px',
                 }}
               >
                 {curLangAr ? (

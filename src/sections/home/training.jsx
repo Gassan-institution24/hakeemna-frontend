@@ -9,6 +9,8 @@ import { useTheme } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Link, Grid, Alert, Stack, Typography, useMediaQuery } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+
 import axiosInstance from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -58,14 +60,23 @@ export default function Training() {
   });
 
   const renderHead = (
-    <Stack spacing={2} sx={{ color: 'white', position: 'relative', }}>
-      <Typography variant={isSmallScreen ? 'h4' : 'h2'} sx={{ textAlign: 'center', mb: 4 }}>
+    <Stack spacing={2} sx={{ color: 'white', position: 'relative' }}>
+      <Typography
+        variant={isSmallScreen ? 'h4' : 'h2'}
+        sx={{ textAlign: 'center', mb: 4, color: 'white' }}
+      >
         {t('Contact us to register for the training course')}
       </Typography>
       <Box>
-        <Typography variant="h6">{t('What are the benefits of registering with us?')}</Typography>
-        <Typography variant="h6">{t('Gain new skills')}</Typography>
-        <Typography variant="h6">{t('Get a free certificate')}</Typography>
+        <Typography sx={{ color: 'white' }} variant="h6">
+          {t('What are the benefits of registering with us?')}
+        </Typography>
+        <Typography sx={{ color: 'white' }} variant="h6">
+          {t('Gain new skills')}
+        </Typography>
+        <Typography sx={{ color: 'white' }} variant="h6">
+          {t('Get a free certificate')}
+        </Typography>
       </Box>
 
       {!isSmallScreen && (
@@ -96,11 +107,12 @@ export default function Training() {
       }}
     >
       {t('By signing up, I agree to ')}
-      <Link underline="always" color="text.primary">
+      <Link underline="always" color="text.primary" href={paths.pages.UsPrivacypolicy}>
         {t('Terms of Service ')}
       </Link>
-      {t('and ')}
-      <Link underline="always" color="text.primary">
+      &nbsp;
+      {t('and ')}&nbsp;
+      <Link underline="always" color="text.primary" href={paths.pages.UsPrivacypolicy}>
         {t('Privacy Policy')}
       </Link>
       .
