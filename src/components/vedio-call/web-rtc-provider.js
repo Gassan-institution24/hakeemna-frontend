@@ -40,9 +40,13 @@ export const WebRTCProvider = ({ children }) => {
       const peer = new Peer(`${user._id}-hakeemna`, {
         config: {
           iceServers: [
+            { urls: 'stun:89.34.226.171:3478' },
+            {
+              urls: 'stun:89.34.226.171:3478',
+              username: 'hakeemna',
+              credential: 'Hakeemna360',
+            },
             { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' },
           ],
         },
       });
