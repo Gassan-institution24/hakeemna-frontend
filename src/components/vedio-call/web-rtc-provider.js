@@ -37,7 +37,15 @@ export const WebRTCProvider = ({ children }) => {
   // Initialize PeerJS instance
   useEffect(() => {
     if (user?._id && !peerInstance) {
-      const peer = new Peer(`${user._id}-hakeemna`);
+      const peer = new Peer(`${user._id}-hakeemna`, {
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+          ],
+        },
+      });
       peer.on('open', (id) => {
         // eslint-disable-next-line
       });
