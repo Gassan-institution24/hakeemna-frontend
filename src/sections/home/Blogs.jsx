@@ -155,7 +155,7 @@ export default function Blogs({ onPreview }) {
                     {blog.title}
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'gray' }}>
-                    {fDateAndTime(blog.created_at)} dsfsdfsfd
+                    {fDateAndTime(blog.created_at)}
                   </Typography>
                   <Typography
                     dangerouslySetInnerHTML={{

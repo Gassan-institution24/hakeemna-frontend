@@ -30,6 +30,7 @@ export default function AppointmentsTableRow({ row, selected }) {
     unit_service_patient,
     start_time,
     status,
+    invoiced,
   } = row;
 
   const router = useRouter();
@@ -129,18 +130,20 @@ export default function AppointmentsTableRow({ row, selected }) {
       </TableCell>
 
       <TableCell align="center" sx={{ px: 1 }}>
-        <Button
-          variant="outlined"
-          onClick={() =>
-            router.push(
-              `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${
-                entrance ? `&&entrance=${entrance}` : ''
-              }`
-            )
-          }
-        >
-          {t('make an invoice')}
-        </Button>
+        {!invoiced && (
+          <Button
+            variant="outlined"
+            onClick={() =>
+              router.push(
+                `${paths.unitservice.accounting.economicmovements.add}?appointment=${_id}${
+                  entrance ? `&&entrance=${entrance}` : ''
+                }`
+              )
+            }
+          >
+            {t('make an invoice')}
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );

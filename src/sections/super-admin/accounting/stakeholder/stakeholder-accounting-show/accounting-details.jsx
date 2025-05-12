@@ -169,7 +169,7 @@ export default function InvoiceDetails({ economicMovementData }) {
           <Box
             component="img"
             alt="logo"
-            src="/logo/logo_single.svg"
+            src="/logo/doc.svg"
             sx={{ width: 48, height: 48 }}
           />
 
