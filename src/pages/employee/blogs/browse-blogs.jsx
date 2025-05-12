@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import BlogsView from 'src/sections/home/Blogs';
+import BlogsView from 'src/sections/employee/blogs/view/Blogs';
 
 // ----------------------------------------------------------------------
 

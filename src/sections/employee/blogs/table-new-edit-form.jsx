@@ -15,11 +15,14 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFEditor, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 export default function UploadBlogs({ currentRow }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { Data, refetch } = useGetBlog_category();
+  const router = useRouter();
 
   const BlogsSchema = Yup.object().shape({
     title: Yup.string().required(),
@@ -67,6 +70,7 @@ export default function UploadBlogs({ currentRow }) {
       enqueueSnackbar(currentRow ? t('updated successfully') : t('created successfully'));
       refetch();
       reset();
+      router.push(paths.employee.documents.blogs.root);
     } catch (error) {
       enqueueSnackbar(error.message, { variant: 'error' });
     }

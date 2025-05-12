@@ -126,7 +126,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={stakeholder?.company_logo ? stakeholder?.company_logo : '/logo/logo_single.svg'}
+            source={stakeholder?.company_logo ? stakeholder?.company_logo : '/logo/doc.svg'}
             style={{ width: 48, height: 48 }}
           />
 
