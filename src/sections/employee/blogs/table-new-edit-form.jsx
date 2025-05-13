@@ -7,6 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Card, Stack, Button, MenuItem } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
@@ -15,8 +18,6 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFEditor, RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 export default function UploadBlogs({ currentRow }) {
   const { t } = useTranslate();
