@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
