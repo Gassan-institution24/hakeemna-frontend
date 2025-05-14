@@ -5,7 +5,7 @@ import { Tab, Tabs, Stack, Container, Typography, IconButton } from '@mui/materi
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetEmployeeEngagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -17,6 +17,7 @@ import EmployeeSalaryAttendence from '../salary/employee-salary-attendence';
 // ----------------------------------------------------------------------
 
 export default function EmployeeSalaryProfile() {
+  const { t } = useTranslate();
   const { id } = useParams();
   const { data } = useGetEmployeeEngagement(id);
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function EmployeeSalaryProfile() {
         }}
       >
         {TABS.map((tab, idx) => (
-          <Tab key={idx} label={tab} value={tab} />
+          <Tab key={idx} label={t(tab)} value={tab} />
         ))}
       </Tabs>
 
