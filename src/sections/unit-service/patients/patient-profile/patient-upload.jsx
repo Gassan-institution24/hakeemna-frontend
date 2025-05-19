@@ -216,7 +216,10 @@ export default function PatientUpload({ patient }) {
                     onChange={(event, newValue) =>
                       setValue(`drugs[${index}].medicines`, newValue?._id)
                     }
-                    getOptionLabel={(option) => option.trade_name || ''}
+                    getOptionLabel={(option) =>
+                      // eslint-disable-next-line
+                      option.trade_name + ' ' + option.concentration || ''
+                    }
                     onInputChange={(event, newInputValue) => {
                       setMedSerach(newInputValue);
                     }}
