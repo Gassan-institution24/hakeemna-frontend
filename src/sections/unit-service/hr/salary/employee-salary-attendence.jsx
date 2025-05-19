@@ -159,6 +159,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
           other={other}
           ids={ids}
           refetch={refetch}
+          length={length}
           //
           dateError={dateError}
         />

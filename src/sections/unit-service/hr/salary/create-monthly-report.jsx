@@ -41,6 +41,7 @@ export default function CreateMonthlyReport({
   other,
   ids,
   monthly,
+  length,
 }) {
   const { user } = useAuthContext();
   const { id } = useParams();
@@ -67,6 +68,7 @@ export default function CreateMonthlyReport({
     unpaid_equivalent: Yup.number(),
     public_equivalent: Yup.number(),
     other_equivalent: Yup.number(),
+    days: Yup.number(),
     note: Yup.string().nullable(),
   });
 
@@ -94,6 +96,7 @@ export default function CreateMonthlyReport({
     public_equivalent: row?.public_equivalent || 0,
     other_equivalent: row?.other_equivalent || 0,
     note: row?.note || '',
+    days: row?.days || length || 0,
   };
 
   const methods = useForm({
@@ -132,7 +135,7 @@ export default function CreateMonthlyReport({
   useEffect(() => {
     methods.setValue(
       'total',
-      values.salary - values.deduction - values.tax - values.social_security
+      values.salary ? values.salary - values.deduction - values.tax - values.social_security : 0
     );
     // eslint-disable-next-line
   }, [values.salary, values.deduction, values.tax, values.social_security]);
@@ -164,7 +167,7 @@ export default function CreateMonthlyReport({
               <RHFDatePicker disabled name="start_date" label={t('Start date')} />
               <RHFDatePicker disabled name="end_date" label={t('End date')} />
               <RHFHoursMins disabled name="working_time" label={t('Working time')} />
-              <div />
+              <RHFTextField disabled type="number" name="days" label={t('Days')} />
               <RHFTextField disabled type="number" name="annual" label={t('Annual')} />
               <RHFHoursMins type="number" name="annual_equivalent" label={t('Annual equivalent')} />
               <RHFTextField disabled type="number" name="sick" label={t('Sick')} />
@@ -223,5 +226,6 @@ CreateMonthlyReport.propTypes = {
   unpaid: PropTypes.number,
   publicHolidays: PropTypes.number,
   other: PropTypes.number,
+  length: PropTypes.number,
   ids: PropTypes.array,
 };

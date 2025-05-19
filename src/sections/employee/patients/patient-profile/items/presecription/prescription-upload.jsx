@@ -68,23 +68,17 @@ export default function PrescriptionUpload({ patient, refetch }) {
     defaultValues: { drugs: [defaultDrug] },
     mode: 'all',
     resolver: yupResolver(
-      yup
-        .object()
-        .shape({
-          drugs: yup
-            .array()
-            .of(
-              yup
-                .object()
-                .shape({
-                  medicines: yup.string().required(t('required field')),
-                  Frequency_per_day: yup.string(),
-                  Start_time: yup.date().nullable(),
-                  End_time: yup.date().nullable(),
-                  Doctor_Comments: yup.string(),
-                })
-            ),
-        })
+      yup.object().shape({
+        drugs: yup.array().of(
+          yup.object().shape({
+            medicines: yup.string().required(t('required field')),
+            Frequency_per_day: yup.string(),
+            Start_time: yup.date().nullable(),
+            End_time: yup.date().nullable(),
+            Doctor_Comments: yup.string(),
+          })
+        ),
+      })
     ),
   });
 
@@ -161,7 +155,8 @@ export default function PrescriptionUpload({ patient, refetch }) {
                   onChange={(event, newValue) =>
                     setValue(`drugs[${index}].medicines`, newValue?._id)
                   }
-                  getOptionLabel={(option) => option.trade_name || ''}
+                  // eslint-disable-next-line
+                  getOptionLabel={(option) => option.trade_name + ' ' + option.concentration || ''}
                   onBlur={() => setMedSerach()}
                   onInputChange={(event, newInputValue) => {
                     setMedSerach(newInputValue);

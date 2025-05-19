@@ -16,6 +16,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import CreateMonthlyReport from './create-monthly-report';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ export default function MonthlyReportRow({
   onDeleteRow,
   onViewRow,
   hideEmployee,
+  refetch,
 }) {
   const {
     code,
@@ -35,7 +37,9 @@ export default function MonthlyReportRow({
     working_time,
     annual,
     sick,
+    public: publicCount,
     unpaid,
+    other,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -55,6 +59,7 @@ export default function MonthlyReportRow({
   const popover = usePopover();
   const DDL = usePopover();
   const deleting = useBoolean();
+  const show = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -88,6 +93,8 @@ export default function MonthlyReportRow({
       <TableCell align="center">{annual}</TableCell>
       <TableCell align="center">{sick}</TableCell>
       <TableCell align="center">{unpaid}</TableCell>
+      <TableCell align="center">{publicCount}</TableCell>
+      <TableCell align="center">{other}</TableCell>
       <TableCell align="center">{salary}</TableCell>
       <TableCell align="center">{total}</TableCell>
 
@@ -117,11 +124,17 @@ export default function MonthlyReportRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
+        <MenuItem lang="ar" onClick={show.onTrue}>
+          <Iconify icon="fluent:edit-32-filled" />
+          {t('Edit')}
+        </MenuItem>
         <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
           <Iconify icon="mdi:trash" />
           {t('Delete')}
         </MenuItem>
       </CustomPopover>
+
+      <CreateMonthlyReport row={row} refetch={refetch} open={show.value} onClose={show.onFalse} />
 
       <CustomPopover
         open={DDL.open}
@@ -199,6 +212,7 @@ MonthlyReportRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   hideEmployee: PropTypes.bool,

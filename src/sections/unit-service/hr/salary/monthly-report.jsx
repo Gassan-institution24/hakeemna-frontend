@@ -54,8 +54,8 @@ export default function MonthlyReportsView({ employee }) {
     { id: 'annual', label: t('annual days off') },
     { id: 'sick', label: t('sick days off') },
     { id: 'unpaid', label: t('unpaid days off') },
-    // { id: 'public', label: t('public days off') },
-    // { id: 'other', label: t('other days off') },
+    { id: 'public', label: t('public days off') },
+    { id: 'other', label: t('other days off') },
     { id: 'salary', label: t('salary') },
     { id: 'total', label: t('total') },
     { id: '', width: 88 },
@@ -179,6 +179,10 @@ export default function MonthlyReportsView({ employee }) {
           <Typography>{unpaid}</Typography>
         </Stack>
         <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('public days off')}:</Typography>
+          <Typography>{publicCount}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
           <Typography>{t('other days off')}:</Typography>
           <Typography>{other}</Typography>
         </Stack>
@@ -264,6 +268,7 @@ export default function MonthlyReportsView({ employee }) {
                       onViewRow={() => handleViewRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
                       hideEmployee={!!employee}
+                      refetch={refetch}
                     />
                   ))}
                 <TableNoData notFound={notFound} />

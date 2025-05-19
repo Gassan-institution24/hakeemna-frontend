@@ -95,9 +95,10 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
         enqueueSnackbar(t('created successfuly'));
       }
     } catch (error) {
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message || error, {
         variant: 'error',
       });
+      refetch();
     }
   });
 

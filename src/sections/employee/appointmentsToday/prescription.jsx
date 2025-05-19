@@ -290,7 +290,8 @@ export default function Prescription({ Entrance }) {
                   onChange={(event, newValue) =>
                     setValue(`prescriptions[${index}].medicines`, newValue?._id)
                   }
-                  getOptionLabel={(option) => option.trade_name || ''}
+                  // eslint-disable-next-line
+                  getOptionLabel={(option) => option.trade_name + ' ' + option.concentration || ''}
                   onInputChange={(event, newInputValue) => {
                     setMedSerach(newInputValue);
                   }}
