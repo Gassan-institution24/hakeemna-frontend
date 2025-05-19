@@ -99,7 +99,7 @@ export default function AttendanceToolbar({
             />
             {error && (
               <Typography variant="caption" color="error">
-                {t('select start and end date')}
+                {t('please select start and end date')}
               </Typography>
             )}
           </Stack>
@@ -126,7 +126,7 @@ export default function AttendanceToolbar({
             />
             {error && (
               <Typography variant="caption" color="error">
-                {t('select start and end date')}
+                {t('please select start and end date')}
               </Typography>
             )}
           </Stack>

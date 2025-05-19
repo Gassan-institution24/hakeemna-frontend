@@ -170,7 +170,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
             //
             onResetFilters={handleResetFilters}
             //
-            results={attendence.length}
+            results={length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}

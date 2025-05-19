@@ -54,8 +54,10 @@ export default function MonthlyReportsView({ employee }) {
     { id: 'annual', label: t('annual days off') },
     { id: 'sick', label: t('sick days off') },
     { id: 'unpaid', label: t('unpaid days off') },
-    { id: 'public', label: t('public days off') },
-    { id: 'other', label: t('other days off') },
+    // { id: 'public', label: t('public days off') },
+    // { id: 'other', label: t('other days off') },
+    { id: 'salary', label: t('salary') },
+    { id: 'total', label: t('total') },
     { id: '', width: 88 },
   ].filter(Boolean);
 
@@ -77,6 +79,8 @@ export default function MonthlyReportsView({ employee }) {
     annual,
     sick,
     unpaid,
+    salary,
+    total,
     other,
     public: publicCount,
     ids,
@@ -175,12 +179,16 @@ export default function MonthlyReportsView({ employee }) {
           <Typography>{unpaid}</Typography>
         </Stack>
         <Stack alignItems="center" direction="row" gap={1}>
-          <Typography>{t('public days off')}:</Typography>
-          <Typography>{publicCount}</Typography>
-        </Stack>
-        <Stack alignItems="center" direction="row" gap={1}>
           <Typography>{t('other days off')}:</Typography>
           <Typography>{other}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('salary')}:</Typography>
+          <Typography>{salary}</Typography>
+        </Stack>
+        <Stack alignItems="center" direction="row" gap={1}>
+          <Typography>{t('total')}:</Typography>
+          <Typography>{total}</Typography>
         </Stack>
       </Stack>
       <Card>

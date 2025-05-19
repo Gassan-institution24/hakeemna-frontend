@@ -160,7 +160,7 @@ export default function EmployeeAttendence({ employee }) {
             //
             onResetFilters={handleResetFilters}
             //
-            results={attendence.length}
+            results={length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
