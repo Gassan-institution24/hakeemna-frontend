@@ -17,6 +17,8 @@ export function useGetMonthlyReports(params) {
       other: data?.other,
       public: data?.public,
       hours: data?.hours,
+      salary: data?.salary,
+      total: data?.total,
       ids: data?.ids || [],
       loading: isLoading,
       error,

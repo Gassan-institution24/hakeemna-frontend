@@ -19,7 +19,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function MonthlyReportRow({
+export default function YearlyReportRow({
   row,
   selected,
   onSelectRow,
@@ -36,6 +36,8 @@ export default function MonthlyReportRow({
     annual,
     sick,
     unpaid,
+    public: publicOff,
+    other,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -43,8 +45,6 @@ export default function MonthlyReportRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
-    salary,
-    total,
   } = row;
 
   const { t } = useTranslate();
@@ -88,8 +88,8 @@ export default function MonthlyReportRow({
       <TableCell align="center">{annual}</TableCell>
       <TableCell align="center">{sick}</TableCell>
       <TableCell align="center">{unpaid}</TableCell>
-      <TableCell align="center">{salary}</TableCell>
-      <TableCell align="center">{total}</TableCell>
+      <TableCell align="center">{publicOff}</TableCell>
+      <TableCell align="center">{other}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -195,7 +195,7 @@ export default function MonthlyReportRow({
   );
 }
 
-MonthlyReportRow.propTypes = {
+YearlyReportRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
