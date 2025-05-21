@@ -115,11 +115,25 @@ export default function CreateMonthlyReport({
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (monthly) {
+        if (row) {
+          await axiosInstance.patch(endpoints.yearlyReport.one(row._id), data);
+          onClose();
+          refetch();
+          enqueueSnackbar(t('edited successfuly'));
+          return;
+        }
         await axiosInstance.post(endpoints.yearlyReport.all, { ...data, ids });
         onClose();
         refetch();
         enqueueSnackbar(t('created successfuly'));
       } else {
+        if (row) {
+          await axiosInstance.patch(endpoints.monthlyReport.one(row._id), data);
+          onClose();
+          refetch();
+          enqueueSnackbar(t('edited successfuly'));
+          return;
+        }
         await axiosInstance.post(endpoints.monthlyReport.all, { ...data, ids });
         onClose();
         refetch();
