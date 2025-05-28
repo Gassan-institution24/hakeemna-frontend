@@ -5,7 +5,7 @@ import { Stack, TextField, Typography, InputAdornment } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
-export default function RHFHoursMins({ name, helperText, label, ...other }) {
+export default function RHFHoursMins({ name, button, helperText, label, ...other }) {
   const { control } = useFormContext();
   const { t } = useTranslate();
 
@@ -32,9 +32,12 @@ export default function RHFHoursMins({ name, helperText, label, ...other }) {
 
         return (
           <Stack>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {label}
-            </Typography>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {label}
+              </Typography>
+              {button}
+            </Stack>
             <Stack direction="row" gap={1}>
               <TextField
                 size="small"
@@ -42,7 +45,7 @@ export default function RHFHoursMins({ name, helperText, label, ...other }) {
                 onChange={handleHoursChange}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">{t("hr")}</InputAdornment>,
+                  endAdornment: <InputAdornment position="end">{t('hr')}</InputAdornment>,
                 }}
                 error={!!error}
                 helperText={error ? error?.message : helperText}
@@ -54,7 +57,7 @@ export default function RHFHoursMins({ name, helperText, label, ...other }) {
                 onChange={handleMinutesChange}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">{t("min")}</InputAdornment>,
+                  endAdornment: <InputAdornment position="end">{t('min')}</InputAdornment>,
                 }}
                 error={!!error}
                 helperText={error ? error?.message : helperText}
@@ -72,4 +75,5 @@ RHFHoursMins.propTypes = {
   helperText: PropTypes.any,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  button: PropTypes.element,
 };

@@ -11,7 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -25,7 +25,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -104,13 +104,14 @@ export default function TableNewEditForm({ currentTable }) {
           link: paths.unitservice.departments.info(currentTable._id),
           msg: `updating department <strong>${data.name_english || ''}</strong>`,
         });
+        router.push(paths.unitservice.departments.root);
       } else {
         const newDepartment = await axiosInstance.post(endpoints.departments.all, {
           ...data,
           unit_service:
             user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
               ._id,
-        });
+            });
         socket.emit('created', {
           data,
           user,
@@ -121,7 +122,6 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.departments.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

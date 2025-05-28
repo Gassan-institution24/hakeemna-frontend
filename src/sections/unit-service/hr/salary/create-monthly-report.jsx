@@ -201,7 +201,31 @@ export default function CreateMonthlyReport({
               gridTemplateColumns={{ xs: 'repeat(2, 1fr)' }}
               alignItems="flex-end"
             >
-              <RHFHoursMins name="calculated_time" label={t('Calculated minutes')} />
+              <RHFHoursMins
+                name="calculated_time"
+                label={t('Calculated minutes')}
+                button={
+                  <Button
+                    onClick={() =>
+                      methods.setValue(
+                        'calculated_time',
+                        values.working_time +
+                          values.unpaid_equivalent +
+                          values.other_equivalent +
+                          values.public_equivalent +
+                          values.sick_equivalent +
+                          values.annual_equivalent
+                      )
+                    }
+                    sx={{ my: 1 }}
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                  >
+                    {t('Calculate')}
+                  </Button>
+                }
+              />
               <RHFTextField type="number" name="salary" label={t('Salary')} />
               <RHFTextField type="number" name="social_security" label={t('social security')} />
               <RHFTextField type="number" name="tax" label={t('tax')} />
