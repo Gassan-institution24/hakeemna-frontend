@@ -12,6 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fDate, fHourMin } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -48,6 +49,7 @@ export default function YearlyReportRow({
   } = row;
 
   const { t } = useTranslate();
+  const { checkAcl } = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -117,10 +119,16 @@ export default function YearlyReportRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
-          <Iconify icon="mdi:trash" />
-          {t('Delete')}
-        </MenuItem>
+        {checkAcl({
+          category: 'unit_service',
+          subcategory: 'hr',
+          acl: 'delete',
+        }) && (
+          <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
+            <Iconify icon="mdi:trash" />
+            {t('Delete')}
+          </MenuItem>
+        )}
       </CustomPopover>
 
       <CustomPopover

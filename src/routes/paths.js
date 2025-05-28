@@ -928,6 +928,9 @@ export const paths = {
     qualityControl: {
       root: `${ROOTS.SUPERADMIN}/profile/qc`,
     },
+    myattendence: {
+      root: `${ROOTS.SUPERADMIN}/profile/myattendence`,
+    },
     calender: `${ROOTS.SUPERADMIN}/calender`,
     blogs: `${ROOTS.SUPERADMIN}/browzeblogs`,
     previewBlog: (id) => `${ROOTS.SUPERADMIN}/browzeblogs/${id}`,

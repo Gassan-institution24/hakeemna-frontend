@@ -394,9 +394,11 @@ export function useNavData() {
         ],
       },
       {
-        show:
-          // checkAcl({ category: 'unit_service', subcategory: 'hr', acl: 'read' }) &&
-          true,
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'hr',
+          acl: 'read',
+        }),
         title: t('human resource'),
         path: paths.unitservice.hr.root,
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
@@ -668,6 +670,14 @@ export function useNavData() {
             path: paths.employee.communication.root,
             // icon: <Iconify icon="solar:call-chat-bold" />,
             navItemId: 'EMCommunicationNav',
+            'data-test': 'employee-nav-item-profile-communication',
+          },
+          {
+            show: true,
+            title: t('my attendence'),
+            path: paths.employee.myattendence.root,
+            // icon: <Iconify icon="solar:call-chat-bold" />,
+            navItemId: 'EMAttendenceNav',
             'data-test': 'employee-nav-item-profile-communication',
           },
           {
