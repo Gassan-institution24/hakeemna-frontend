@@ -49,7 +49,7 @@ export default function YearlyReportRow({
   } = row;
 
   const { t } = useTranslate();
-  const { checkAcl } = useAclGuard();
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

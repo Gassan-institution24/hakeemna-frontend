@@ -54,7 +54,7 @@ export default function MonthlyReportRow({
   } = row;
 
   const { t } = useTranslate();
-  const { checkAcl } = useAclGuard();
+  const  checkAcl  = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

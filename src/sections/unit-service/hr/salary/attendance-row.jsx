@@ -56,7 +56,7 @@ export default function AttendanceRow({
   const DDL = usePopover();
   const deleting = usePopover();
   const [open, setOpen] = useState(false);
-  const { checkAcl } = useAclGuard();
+  const checkAcl = useAclGuard();
 
   return (
     <>
