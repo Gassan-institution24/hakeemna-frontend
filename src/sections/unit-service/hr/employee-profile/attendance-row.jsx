@@ -54,7 +54,7 @@ export default function AttendanceRow({
   } = row;
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
-  const { checkAcl } = useAclGuard();
+  const  checkAcl  = useAclGuard();
 
   const popover = usePopover();
   const DDL = usePopover();
