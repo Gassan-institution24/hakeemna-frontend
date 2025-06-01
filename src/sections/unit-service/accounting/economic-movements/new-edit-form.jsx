@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
@@ -20,9 +21,10 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatient, useGetUnitservice, useGetOneEntranceManagement } from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import FormProvider, { RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 
 import InvoiceNewEditAddress from './invoice-new-edit-address';
 import InvoiceNewEditDetails from './invoice-new-edit-details';
@@ -38,15 +40,18 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const searchParams = useSearchParams();
   const appointment = searchParams.get('appointment');
   const entrance = searchParams.get('entrance');
-
+  const { Entrance } = useGetOneEntranceManagement(entrance);
   const [entranceInfo, setEntranceInfo] = useState();
+  const { data: PatientData } = useGetPatient(Entrance?.patient);
+  const { data: unitData } = useGetUnitservice(Entrance?.service_unit);
   const [appointmentInfo, setAppointmentInfo] = useState();
-
+  const [invoicing, setInvoicing] = useState(false);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
+  console.log(PatientData);
 
   const confirm = useBoolean();
   const insurance = useBoolean();
@@ -209,24 +214,52 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     loadingSend.onTrue();
     try {
       const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
+      const discount_amount =
+        data.items?.reduce((acc, item) => acc + (item.discount_amount || 0), 0) || 0;
+      const subtotal = data.subtotal || 0;
+      const quantity = data.quantity || 0;
+      const concept = data.concept ?? '';
+      const total = data.totalAmount || 0;
+      const payloadForOtherTable = {
+        Secret_Key: unitData.Secret_Key,
+        Activity_Number: unitData.Activity_Number,
+        ClientId: unitData.ClientId,
+        CompanyID: unitData.CompanyID,
+        RegistrationName: unitData.RegistrationName,
+        Buyer: PatientData?.name_arabic,
+        BuyerNum: PatientData?.mobile_num1,
+        BuyerIdNum: PatientData?.identification_num,
+        BuyerCity: PatientData?.city?.name_arabic,
+        subtotal,
+        quantity,
+        discount_amount,
+        total,
+        concept,
+      };
+
+      if (invoicing) {
+        await axiosInstance.post('/api/invoice', payloadForOtherTable);
+      }
+
       reset();
       enqueueSnackbar(t('created successfully'));
-      loadingSend.onFalse();
-      router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id));
+
       if (invoice?.data?.receiptPayment?._id) {
         window.open(
           paths.unitservice.accounting.reciepts.info(invoice?.data?.receiptPayment?._id),
           '_blank'
         );
       }
-      console.info('DATA', JSON.stringify(data, null, 2));
+
+      await router.push(
+        paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id)
+      );
     } catch (error) {
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        { variant: 'error' }
       );
+    } finally {
       loadingSend.onFalse();
     }
   });
@@ -237,14 +270,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         <FormProvider methods={methods}>
           <Card>
             <InvoiceNewEditAddress />
-            {/* 
-            <Stack direction="row" justifyContent="flex-end" px={5} pt={3} pb={0}>
-              <RHFCheckbox
-                name="detailedTaxes"
-                label={t('detailed taxes')}
-                onChange={confirm.onTrue}
-              />
-            </Stack> */}
+
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
             <InvoiceNewEditStatusDate />
 
@@ -267,6 +293,13 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <Stack sx={{ my: 2, px: 2 }}>
               <RHFTextField name="concept" label={t('concept')} />
             </Stack>
+            <Stack sx={{ my: 2, px: 2 }}>
+              <RHFCheckbox
+                name=""
+                onChange={() => setInvoicing(!invoicing)}
+                label={t('Do you want to register the invoice in the national billing system?')}
+              />
+            </Stack>
 
             <InvoiceNewEditInstallment
               open={installment.value}
@@ -285,7 +318,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <LoadingButton
               size="large"
               variant="contained"
-              loading={loadingSend.value && isSubmitting}
+              loading={loadingSend.value}
               onClick={() => {
                 if (watch().status === 'installment') {
                   installment.onTrue();
