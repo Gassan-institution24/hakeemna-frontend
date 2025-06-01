@@ -1,4 +1,3 @@
-import Test from '../testpage';
 import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
 import HomeHero from '../hero/home-hero';
@@ -10,7 +9,6 @@ export default function HomeView() {
     <>
       <HomeHero id="home" />
       <OurMission />
-      <Test />
       <Whydoc />
       <OurPartners />
     </>
