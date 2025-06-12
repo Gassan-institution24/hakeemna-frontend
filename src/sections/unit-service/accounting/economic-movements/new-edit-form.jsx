@@ -51,7 +51,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  console.log(PatientData);
+  // console.log(PatientData);
 
   const confirm = useBoolean();
   const insurance = useBoolean();
