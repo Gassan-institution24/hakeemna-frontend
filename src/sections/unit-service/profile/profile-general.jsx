@@ -94,11 +94,11 @@ export default function AccountGeneral({ unitServiceData }) {
     introduction_letter: Yup.string(),
     arabic_introduction_letter: Yup.string(),
     location_gps: Yup.string(),
-    Secret_Key: Yup.string(),
-    Activity_Number: Yup.string(),
-    ClientId: Yup.string(),
-    CompanyID: Yup.string(),
-    RegistrationName: Yup.string(),
+    Secret_Key: Yup.string().required(t('required field')),
+    Activity_Number: Yup.string().required(t('required field')),
+    ClientId: Yup.string().required(t('required field')),
+    CompanyID: Yup.string().required(t('required field')),
+    RegistrationName: Yup.string().required(t('required field')),
     company_logo: Yup.mixed(),
     facebook: Yup.mixed(),
     instagram: Yup.mixed(),
@@ -341,7 +341,9 @@ export default function AccountGeneral({ unitServiceData }) {
               </Stack>
 
               <Stack alignItems="flex-start" gap={1}>
-                <Typography variant="subtitle1">{t('financial information')}</Typography>
+                <Typography variant="subtitle1">
+                  {t('Jordanian National Billing System Information')}
+                </Typography>
                 {data?.invoicing_system && (
                   <>
                     {' '}
