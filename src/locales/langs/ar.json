@@ -1476,6 +1476,6 @@
   "Secret Key": "المفتاح السري",
   "Activity Number": "تسلسل مصدر الدخل",
   "Client Id": "رقم المستخدم",
-  "Company ID": "الرقم الضريبي",
-  "Registration Name": "الاسم"
+  "Company ID": "الرقم الوطني للمؤسسة",
+  "Registration Name": "الاسم المسجل"
 }
