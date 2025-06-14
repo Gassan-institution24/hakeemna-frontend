@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[38731],{38731:(i,s,r)=>{r.r(s),r.d(s,{default:()=>c});var t=r(29490),e=r(67132),n=r(7621),a=r(70579);function c(){const i=(0,e.g)(),{id:s}=i;return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsx)(t.mg,{children:(0,a.jsx)("title",{children:" Dashboard: Product Edit"})}),(0,a.jsx)(n.xo,{id:`${s}`})]})}}}]);
+//# sourceMappingURL=38731.c6dd4f8f.chunk.js.map

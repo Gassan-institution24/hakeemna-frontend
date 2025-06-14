@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8722],{27583:(e,n,s)=>{s.r(n),s.d(n,{default:()=>r});var t=s(29490),i=s(3032),a=s(70579);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(t.mg,{children:[(0,a.jsx)("title",{children:" Hakeemna: Register"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(i.kk,{})]})}}}]);
+//# sourceMappingURL=8722.edb6fc48.chunk.js.map

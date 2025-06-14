@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[76959],{58320:(e,i,n)=>{n.r(i),n.d(i,{default:()=>r});var t=n(29490),s=n(3032),a=n(70579);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(t.mg,{children:[(0,a.jsx)("title",{children:" Hakeemna: unit of service registration"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(s.YY,{})]})}}}]);
+//# sourceMappingURL=76959.dc47062d.chunk.js.map

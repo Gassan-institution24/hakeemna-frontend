@@ -1,0 +1,2 @@
+(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[81861],{619:()=>{},81861:(e,n,t)=>{"use strict";t.r(n),t.d(n,{default:()=>c});var i=t(29490),s=t(619),a=t.n(s),r=t(70579);function c(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsxs)(i.mg,{children:[(0,r.jsx)("title",{children:" Add Patient"}),(0,r.jsx)("meta",{name:"description",content:"meta"})]}),(0,r.jsx)(a(),{})]})}}}]);
+//# sourceMappingURL=81861.dbce3574.chunk.js.map

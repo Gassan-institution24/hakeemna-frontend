@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[57890],{57890:(e,n,i)=>{i.r(n),i.d(n,{default:()=>r});var s=i(29490),t=i(92836),a=i(70579);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(s.mg,{children:[(0,a.jsx)("title",{children:" Dashboard: Deduction Config Table"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(t.lZ,{})]})}}}]);
+//# sourceMappingURL=57890.81c8a23b.chunk.js.map

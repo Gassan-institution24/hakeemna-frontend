@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[50691],{97172:(e,n,a)=>{a.r(n),a.d(n,{default:()=>r});var s=a(29490),t=a(3032),i=a(70579);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(s.mg,{children:[(0,i.jsx)("title",{children:" Hakeemna: Change ID Page"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(t.$z,{})]})}}}]);
+//# sourceMappingURL=50691.7331f01b.chunk.js.map

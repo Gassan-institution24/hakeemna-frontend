@@ -1,0 +1,52 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[48161,70542],{22698:(e,t,a)=>{a.d(t,{A:()=>j});var o=a(58168),r=a(98587),n=a(65043),i=a(58387),s=a(98610),l=a(88092),d=a(34535),c=a(98206),h=a(94496),p=a(67266),u=a(66734),m=a(70579);const g=(0,u.A)((0,m.jsx)("path",{d:"M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"}),"MoreHoriz");var b=a(96030);const v=["slots","slotProps"],f=(0,d.Ay)(b.A)((e=>{let{theme:t}=e;return(0,o.A)({display:"flex",marginLeft:`calc(${t.spacing(1)} * 0.5)`,marginRight:`calc(${t.spacing(1)} * 0.5)`},"light"===t.palette.mode?{backgroundColor:t.palette.grey[100],color:t.palette.grey[700]}:{backgroundColor:t.palette.grey[700],color:t.palette.grey[100]},{borderRadius:2,"&:hover, &:focus":(0,o.A)({},"light"===t.palette.mode?{backgroundColor:t.palette.grey[200]}:{backgroundColor:t.palette.grey[600]}),"&:active":(0,o.A)({boxShadow:t.shadows[0]},"light"===t.palette.mode?{backgroundColor:(0,p.tL)(t.palette.grey[200],.12)}:{backgroundColor:(0,p.tL)(t.palette.grey[600],.12)})})})),A=(0,d.Ay)(g)({width:24,height:16});const w=function(e){const{slots:t={},slotProps:a={}}=e,n=(0,r.A)(e,v),i=e;return(0,m.jsx)("li",{children:(0,m.jsx)(f,(0,o.A)({focusRipple:!0},n,{ownerState:i,children:(0,m.jsx)(A,(0,o.A)({as:t.CollapsedIcon,ownerState:i},a.collapsedIcon))}))})};var x=a(92532),C=a(72372);function y(e){return(0,C.Ay)("MuiBreadcrumbs",e)}const k=(0,x.A)("MuiBreadcrumbs",["root","ol","li","separator"]),S=["children","className","component","slots","slotProps","expandText","itemsAfterCollapse","itemsBeforeCollapse","maxItems","separator"],R=(0,d.Ay)(h.A,{name:"MuiBreadcrumbs",slot:"Root",overridesResolver:(e,t)=>[{[`& .${k.li}`]:t.li},t.root]})({}),z=(0,d.Ay)("ol",{name:"MuiBreadcrumbs",slot:"Ol",overridesResolver:(e,t)=>t.ol})({display:"flex",flexWrap:"wrap",alignItems:"center",padding:0,margin:0,listStyle:"none"}),M=(0,d.Ay)("li",{name:"MuiBreadcrumbs",slot:"Separator",overridesResolver:(e,t)=>t.separator})({display:"flex",userSelect:"none",marginLeft:8,marginRight:8});function $(e,t,a,o){return e.reduce(((r,n,i)=>(i<e.length-1?r=r.concat(n,(0,m.jsx)(M,{"aria-hidden":!0,className:t,ownerState:o,children:a},`separator-${i}`)):r.push(n),r)),[])}const j=n.forwardRef((function(e,t){const a=(0,c.b)({props:e,name:"MuiBreadcrumbs"}),{children:d,className:h,component:p="nav",slots:u={},slotProps:g={},expandText:b="Show path",itemsAfterCollapse:v=1,itemsBeforeCollapse:f=1,maxItems:A=8,separator:x="/"}=a,C=(0,r.A)(a,S),[k,M]=n.useState(!1),j=(0,o.A)({},a,{component:p,expanded:k,expandText:b,itemsAfterCollapse:v,itemsBeforeCollapse:f,maxItems:A,separator:x}),I=(e=>{const{classes:t}=e;return(0,s.A)({root:["root"],li:["li"],ol:["ol"],separator:["separator"]},y,t)})(j),N=(0,l.A)({elementType:u.CollapsedIcon,externalSlotProps:g.collapsedIcon,ownerState:j}),B=n.useRef(null),F=n.Children.toArray(d).filter((e=>n.isValidElement(e))).map(((e,t)=>(0,m.jsx)("li",{className:I.li,children:e},`child-${t}`)));return(0,m.jsx)(R,(0,o.A)({ref:t,component:p,color:"text.secondary",className:(0,i.A)(I.root,h),ownerState:j},C,{children:(0,m.jsx)(z,{className:I.ol,ref:B,ownerState:j,children:$(k||A&&F.length<=A?F:(e=>f+v>=e.length?e:[...e.slice(0,f),(0,m.jsx)(w,{"aria-label":b,slots:{CollapsedIcon:u.CollapsedIcon},slotProps:{collapsedIcon:N},onClick:()=>{M(!0);const e=B.current.querySelector("a[href],button,[tabindex]");e&&e.focus()}},"ellipsis"),...e.slice(e.length-v,e.length)])(F),I.separator,x,j)})}))}))},33936:(e,t,a)=>{a.d(t,{A:()=>v});var o=a(98587),r=a(58168),n=a(65043),i=a(58387),s=a(98610),l=a(96030),d=a(6803),c=a(98206),h=a(19586),p=a(34535),u=a(61475),m=a(70579);const g=["children","className","color","component","disabled","disableFocusRipple","focusVisibleClassName","size","variant"],b=(0,p.Ay)(l.A,{name:"MuiFab",slot:"Root",shouldForwardProp:e=>(0,u.A)(e)||"classes"===e,overridesResolver:(e,t)=>{const{ownerState:a}=e;return[t.root,t[a.variant],t[`size${(0,d.A)(a.size)}`],"inherit"===a.color&&t.colorInherit,t[(0,d.A)(a.size)],t[a.color]]}})((e=>{let{theme:t,ownerState:a}=e;var o,n;return(0,r.A)({},t.typography.button,{minHeight:36,transition:t.transitions.create(["background-color","box-shadow","border-color"],{duration:t.transitions.duration.short}),borderRadius:"50%",padding:0,minWidth:0,width:56,height:56,zIndex:(t.vars||t).zIndex.fab,boxShadow:(t.vars||t).shadows[6],"&:active":{boxShadow:(t.vars||t).shadows[12]},color:t.vars?t.vars.palette.text.primary:null==(o=(n=t.palette).getContrastText)?void 0:o.call(n,t.palette.grey[300]),backgroundColor:(t.vars||t).palette.grey[300],"&:hover":{backgroundColor:(t.vars||t).palette.grey.A100,"@media (hover: none)":{backgroundColor:(t.vars||t).palette.grey[300]},textDecoration:"none"},[`&.${h.A.focusVisible}`]:{boxShadow:(t.vars||t).shadows[6]}},"small"===a.size&&{width:40,height:40},"medium"===a.size&&{width:48,height:48},"extended"===a.variant&&{borderRadius:24,padding:"0 16px",width:"auto",minHeight:"auto",minWidth:48,height:48},"extended"===a.variant&&"small"===a.size&&{width:"auto",padding:"0 8px",borderRadius:17,minWidth:34,height:34},"extended"===a.variant&&"medium"===a.size&&{width:"auto",padding:"0 16px",borderRadius:20,minWidth:40,height:40},"inherit"===a.color&&{color:"inherit"})}),(e=>{let{theme:t,ownerState:a}=e;return(0,r.A)({},"inherit"!==a.color&&"default"!==a.color&&null!=(t.vars||t).palette[a.color]&&{color:(t.vars||t).palette[a.color].contrastText,backgroundColor:(t.vars||t).palette[a.color].main,"&:hover":{backgroundColor:(t.vars||t).palette[a.color].dark,"@media (hover: none)":{backgroundColor:(t.vars||t).palette[a.color].main}}})}),(e=>{let{theme:t}=e;return{[`&.${h.A.disabled}`]:{color:(t.vars||t).palette.action.disabled,boxShadow:(t.vars||t).shadows[0],backgroundColor:(t.vars||t).palette.action.disabledBackground}}})),v=n.forwardRef((function(e,t){const a=(0,c.b)({props:e,name:"MuiFab"}),{children:n,className:l,color:p="default",component:u="button",disabled:v=!1,disableFocusRipple:f=!1,focusVisibleClassName:A,size:w="large",variant:x="circular"}=a,C=(0,o.A)(a,g),y=(0,r.A)({},a,{color:p,component:u,disabled:v,disableFocusRipple:f,size:w,variant:x}),k=(e=>{const{color:t,variant:a,classes:o,size:n}=e,i={root:["root",a,`size${(0,d.A)(n)}`,"inherit"===t?"colorInherit":t]},l=(0,s.A)(i,h.C,o);return(0,r.A)({},o,l)})(y);return(0,m.jsx)(b,(0,r.A)({className:(0,i.A)(k.root,l),component:u,disabled:v,focusRipple:!f,focusVisibleClassName:(0,i.A)(k.focusVisible,A),ownerState:y,ref:t},C,{classes:k,children:n}))}))},38354:(e,t,a)=>{a.d(t,{A:()=>n});a(65043);var o=a(66734),r=a(70579);const n=(0,o.A)((0,r.jsx)("path",{d:"M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"}),"FirstPage")},67884:(e,t,a)=>{a.d(t,{A:()=>n});a(65043);var o=a(66734),r=a(70579);const n=(0,o.A)((0,r.jsx)("path",{d:"M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"}),"LastPage")},78185:(e,t,a)=>{a.d(t,{A:()=>z});var o=a(98587),r=a(58168),n=a(65043),i=a(58387),s=a(83290),l=a(98610);function d(e){return String(e).match(/[\d.\-+]*\s*(.*)/)[1]||""}function c(e){return parseFloat(e)}var h=a(90310),p=a(34535),u=a(98206),m=a(92532),g=a(72372);function b(e){return(0,g.Ay)("MuiSkeleton",e)}(0,m.A)("MuiSkeleton",["root","text","rectangular","rounded","circular","pulse","wave","withChildren","fitContent","heightAuto"]);var v=a(70579);const f=["animation","className","component","height","style","variant","width"];let A,w,x,C,y=e=>e;const k=(0,s.i7)(A||(A=y`
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`)),S=(0,s.i7)(w||(w=y`
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    /* +0.5s of delay between each loop */
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+`)),R=(0,p.Ay)("span",{name:"MuiSkeleton",slot:"Root",overridesResolver:(e,t)=>{const{ownerState:a}=e;return[t.root,t[a.variant],!1!==a.animation&&t[a.animation],a.hasChildren&&t.withChildren,a.hasChildren&&!a.width&&t.fitContent,a.hasChildren&&!a.height&&t.heightAuto]}})((e=>{let{theme:t,ownerState:a}=e;const o=d(t.shape.borderRadius)||"px",n=c(t.shape.borderRadius);return(0,r.A)({display:"block",backgroundColor:t.vars?t.vars.palette.Skeleton.bg:(0,h.X4)(t.palette.text.primary,"light"===t.palette.mode?.11:.13),height:"1.2em"},"text"===a.variant&&{marginTop:0,marginBottom:0,height:"auto",transformOrigin:"0 55%",transform:"scale(1, 0.60)",borderRadius:`${n}${o}/${Math.round(n/.6*10)/10}${o}`,"&:empty:before":{content:'"\\00a0"'}},"circular"===a.variant&&{borderRadius:"50%"},"rounded"===a.variant&&{borderRadius:(t.vars||t).shape.borderRadius},a.hasChildren&&{"& > *":{visibility:"hidden"}},a.hasChildren&&!a.width&&{maxWidth:"fit-content"},a.hasChildren&&!a.height&&{height:"auto"})}),(e=>{let{ownerState:t}=e;return"pulse"===t.animation&&(0,s.AH)(x||(x=y`
+      animation: ${0} 2s ease-in-out 0.5s infinite;
+    `),k)}),(e=>{let{ownerState:t,theme:a}=e;return"wave"===t.animation&&(0,s.AH)(C||(C=y`
+      position: relative;
+      overflow: hidden;
+
+      /* Fix bug in Safari https://bugs.webkit.org/show_bug.cgi?id=68196 */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+      &::after {
+        animation: ${0} 2s linear 0.5s infinite;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          ${0},
+          transparent
+        );
+        content: '';
+        position: absolute;
+        transform: translateX(-100%); /* Avoid flash during server-side hydration */
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+      }
+    `),S,(a.vars||a).palette.action.hover)})),z=n.forwardRef((function(e,t){const a=(0,u.b)({props:e,name:"MuiSkeleton"}),{animation:n="pulse",className:s,component:d="span",height:c,style:h,variant:p="text",width:m}=a,g=(0,o.A)(a,f),A=(0,r.A)({},a,{animation:n,component:d,variant:p,hasChildren:Boolean(g.children)}),w=(e=>{const{classes:t,variant:a,animation:o,hasChildren:r,width:n,height:i}=e,s={root:["root",a,o,r&&"withChildren",r&&!n&&"fitContent",r&&!i&&"heightAuto"]};return(0,l.A)(s,b,t)})(A);return(0,v.jsx)(R,(0,r.A)({as:d,ref:t,className:(0,i.A)(w.root,s),ownerState:A},g,{style:(0,r.A)({width:m,height:c},h)}))}))}}]);
+//# sourceMappingURL=70542.3d1dd981.chunk.js.map
