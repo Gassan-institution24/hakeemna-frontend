@@ -628,6 +628,7 @@
   "scanned ID": "الهوية الشخصية",
   "signature": "التوقيع",
   "stamp": "الختم",
+  "Jordanian National Billing System Information": "معلومات نظام الفوترة الاردني الوطني",
   "current password": "كلمة المرور الحالية",
   "new password": "كلمة المرور الجديدة",
   "confirm new password": "تأكيد كلمة المرور",
@@ -642,11 +643,13 @@
   "Medical sick leave start*": "تاريخ بداية الاجازة المرضية",
   "Medical sick leave end*": "تاريخ انتهاء الاجازة المرضية",
   "Settings": "الإعدادات",
+  "concept (Notes are added to the National Billing System)": "ملاحظات (يتم اضافتها لملاحظات نظام الفوترة)",
   "Arrival Time": "موعد الوصول",
   "Logout": "تسجيل الخروج",
   "unit of service": "وحدة خدمة",
   "admin": "الآدمن",
   "Already have an account?": "لديك حساب في موقعنا؟",
+  "Do you want to register the invoice in the national Jordanian billing system?": "هل تريد تسجيل الفاتورة في نظام الفوترة الوطني الأردني؟",
   "back": "رجوع",
   "Back": "رجوع",
   "Terms of Service": "شروط الخدمة ",
@@ -1469,5 +1472,10 @@
   "Ensuring more accurate health results and reducing medical errors by providing the medical history of all family members.": "ضمان نتائج صحية أكثر دقة و تقليل الأخطاء الطبية وذلك بحكم توفر التاريخ المرضي لكل أفراد العائلة.",
   "Use free applications and platforms, whether you are insured by an insurance company or not.": "استخدام تطبيقات و منصة مجانية سواء كان لديك اشتراك تأمين أم لا.",
   "Join a comprehensive and distinguished medical community.": "الانضمام إلى مجتمع طبي شامل و متميز.",
-  "View medical developments.": "الاطلاع على المستجدات الطبية."
+  "View medical developments.": "الاطلاع على المستجدات الطبية.",
+  "Secret Key": "المفتاح السري",
+  "Activity Number": "تسلسل مصدر الدخل",
+  "Client Id": "رقم المستخدم",
+  "Company ID": "الرقم الضريبي",
+  "Registration Name": "الاسم"
 }
