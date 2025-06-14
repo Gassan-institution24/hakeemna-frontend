@@ -94,12 +94,18 @@ export default function AccountGeneral({ unitServiceData }) {
     introduction_letter: Yup.string(),
     arabic_introduction_letter: Yup.string(),
     location_gps: Yup.string(),
+    Secret_Key: Yup.string().required(t('required field')),
+    Activity_Number: Yup.string().required(t('required field')),
+    ClientId: Yup.string().required(t('required field')),
+    CompanyID: Yup.string().required(t('required field')),
+    RegistrationName: Yup.string().required(t('required field')),
     company_logo: Yup.mixed(),
     facebook: Yup.mixed(),
     instagram: Yup.mixed(),
     other: Yup.mixed(),
     has_tax: Yup.bool(),
     has_deduction: Yup.bool(),
+    invoicing_system: Yup.bool(),
   });
 
   // const handleCountryChange = (event) => {
@@ -142,8 +148,14 @@ export default function AccountGeneral({ unitServiceData }) {
     facebook: data?.facebook || '',
     instagram: data?.instagram || '',
     other: data?.other || '',
+    Secret_Key: data?.Secret_Key || '',
+    Activity_Number: data?.Activity_Number || '',
+    ClientId: data?.ClientId || '',
+    CompanyID: data?.CompanyID || '',
+    RegistrationName: data?.RegistrationName || '',
     has_tax: data?.has_tax || false,
     has_deduction: data?.has_deduction || false,
+    invoicing_system: data?.invoicing_system || false,
   };
 
   const methods = useForm({
@@ -306,6 +318,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 name="email"
                 label={`${t('institution email')} :`}
               />
+
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Divider />
               <Stack alignItems="flex-start" gap={1}>
@@ -320,6 +333,52 @@ export default function AccountGeneral({ unitServiceData }) {
                   onChange={() => setValue('has_deduction', !values.has_deduction)}
                   label={t('subject to deductions - income tax or doctors syndicate')}
                 />
+                <RHFCheckbox
+                  name="invoicing_system"
+                  onChange={() => setValue('invoicing_system', !values.invoicing_system)}
+                  label={t('Are you registered in the National Billing System?')}
+                />
+              </Stack>
+
+              <Stack alignItems="flex-start" gap={1}>
+                <Typography variant="subtitle1">
+                  {t('Jordanian National Billing System Information')}
+                </Typography>
+                {data?.invoicing_system && (
+                  <>
+                    {' '}
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="Secret_Key"
+                      label={`${t('Secret Key')} :`}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="Activity_Number"
+                      label={`${t('Activity Number')} :`}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="ClientId"
+                      label={`${t('Client Id')} :`}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="CompanyID"
+                      label={`${t('Company ID')} :`}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="RegistrationName"
+                      label={`${t('Registration Name')} :`}
+                    />
+                  </>
+                )}
               </Stack>
               {/* <RHFTextField
                 

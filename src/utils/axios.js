@@ -585,6 +585,7 @@ export const endpoints = {
   },
   economec_movements: {
     all: '/api/economicmovements',
+    invoice: '/api/invoice',
     one: (id) => (!id ? null : `/api/economicmovements/${id}`),
     department: {
       one: (id) => (!id ? null : `/api/economicmovements/department/${id}`),

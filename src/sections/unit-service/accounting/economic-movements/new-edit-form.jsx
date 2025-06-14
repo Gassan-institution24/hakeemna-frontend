@@ -11,7 +11,6 @@ import { Button, Container } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-// import { paths } from 'src/routes/paths';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -20,9 +19,15 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import {
+  useGetPatient,
+  useGetServiceType,
+  useGetUnitservice,
+  useGetOneEntranceManagement,
+} from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import FormProvider, { RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
 
 import InvoiceNewEditAddress from './invoice-new-edit-address';
 import InvoiceNewEditDetails from './invoice-new-edit-details';
@@ -38,23 +43,17 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const searchParams = useSearchParams();
   const appointment = searchParams.get('appointment');
   const entrance = searchParams.get('entrance');
-
+  const { Entrance } = useGetOneEntranceManagement(entrance);
   const [entranceInfo, setEntranceInfo] = useState();
+  const { data: PatientData } = useGetPatient(Entrance?.patient);
+  const { data: unitData } = useGetUnitservice(Entrance?.service_unit);
   const [appointmentInfo, setAppointmentInfo] = useState();
+  const [invoicing, setInvoicing] = useState(false);
+  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const { user } = useAuthContext();
-
-  const confirm = useBoolean();
-  const insurance = useBoolean();
-  const installment = useBoolean();
-  // const loadingSave = useBoolean();
-  const loadingSend = useBoolean();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const NewInvoiceSchema = Yup.object().shape({
     createDate: Yup.mixed().nullable().required(t('required field')),
@@ -70,7 +69,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         Yup.object({
           service_type: Yup.string().required(t('required field')),
           activity: Yup.string().nullable(),
-          // deduction: Yup.number(),
           price_per_unit: Yup.number(),
           discount_amount: Yup.number(),
           subtotal: Yup.number(),
@@ -84,14 +82,12 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     status: Yup.string(),
     taxes_type: Yup.string().nullable(),
     taxes: Yup.number(),
-    // deduction_type: Yup.string().nullable(),
-    // deduction: Yup.number(),
     discount: Yup.number(),
     work_shift: Yup.string().nullable(),
     subtotal: Yup.number(),
     totalAmount: Yup.number(),
+    concept: Yup.string().required(t('required field')),
   });
-
   const defaultValues = useMemo(
     () => ({
       createDate: currentInvoice?.created_at || new Date(),
@@ -141,7 +137,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             price_per_unit: Number(one.Price_per_unit) || 0,
             subtotal: Number(one.Price_per_unit) || 0,
             discount_amount: 0,
-            // deduction: 0,
             tax: 0,
             total: Number(one.Price_per_unit) || 0,
           }))) || [
@@ -152,7 +147,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             price_per_unit: 0,
             subtotal: 0,
             discount_amount: 0,
-            // deduction: 0,
             tax: 0,
             total: 0,
           },
@@ -174,10 +168,21 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
+  const values = watch();
+  const firstServiceTypeId = values?.items?.[0]?.service_type;
+  const { data: ServiceTypeData } = useGetServiceType(firstServiceTypeId);
+  const totalQuantity = values?.items?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
+
+  const confirm = useBoolean();
+  const insurance = useBoolean();
+  const installment = useBoolean();
+
+  const loadingSend = useBoolean();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -209,24 +214,51 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     loadingSend.onTrue();
     try {
       const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
+      const subtotal = data.subtotal || 0;
+      const quantity = totalQuantity;
+      const concept = data.concept ?? '';
+      const total = data.totalAmount || 0;
+      const discount = data.discount || 0;
+      const payloadForOtherTable = {
+        Secret_Key: unitData.Secret_Key,
+        Activity_Number: unitData.Activity_Number,
+        ClientId: unitData.ClientId,
+        CompanyID: unitData.CompanyID,
+        RegistrationName: unitData.RegistrationName,
+        Buyer: PatientData?.name_arabic,
+        BuyerNum: PatientData?.mobile_num1,
+        BuyerIdNum: PatientData?.identification_num,
+        BuyerCity: PatientData?.city?.name_arabic,
+        service_type: ServiceTypeData?.name_arabic,
+        subtotal,
+        quantity,
+        discount,
+        total,
+        concept,
+      };
+      if (invoicing) {
+        await axiosInstance.post('/api/invoice', payloadForOtherTable);
+      }
+
       reset();
       enqueueSnackbar(t('created successfully'));
-      loadingSend.onFalse();
-      router.push(paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id));
+
       if (invoice?.data?.receiptPayment?._id) {
         window.open(
           paths.unitservice.accounting.reciepts.info(invoice?.data?.receiptPayment?._id),
           '_blank'
         );
       }
-      console.info('DATA', JSON.stringify(data, null, 2));
+
+      await router.push(
+        paths.unitservice.accounting.economicmovements.info(invoice?.data?.movement._id)
+      );
     } catch (error) {
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        { variant: 'error' }
       );
+    } finally {
       loadingSend.onFalse();
     }
   });
@@ -237,14 +269,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         <FormProvider methods={methods}>
           <Card>
             <InvoiceNewEditAddress />
-            {/* 
-            <Stack direction="row" justifyContent="flex-end" px={5} pt={3} pb={0}>
-              <RHFCheckbox
-                name="detailedTaxes"
-                label={t('detailed taxes')}
-                onChange={confirm.onTrue}
-              />
-            </Stack> */}
+
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
             <InvoiceNewEditStatusDate />
 
@@ -265,7 +290,14 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             )}
 
             <Stack sx={{ my: 2, px: 2 }}>
-              <RHFTextField name="concept" label={t('concept')} />
+              <RHFTextField name="concept" label={t('concept (Notes are added to the National Billing System)')} />
+            </Stack>
+            <Stack sx={{ my: 2, px: 2 }}>
+              <RHFCheckbox
+                name=""
+                onChange={() => setInvoicing(!invoicing)}
+                label={t('Do you want to register the invoice in the national Jordanian billing system?')}
+              />
             </Stack>
 
             <InvoiceNewEditInstallment
@@ -285,7 +317,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <LoadingButton
               size="large"
               variant="contained"
-              loading={loadingSend.value && isSubmitting}
+              loading={loadingSend.value}
               onClick={() => {
                 if (watch().status === 'installment') {
                   installment.onTrue();

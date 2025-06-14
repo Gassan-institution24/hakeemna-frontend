@@ -2,7 +2,6 @@ import Whydoc from '../aboutUs';
 import OurMission from '../ourMission';
 import HomeHero from '../hero/home-hero';
 import OurPartners from '../our-partners';
-// import OurPartners from '../our-partners';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
