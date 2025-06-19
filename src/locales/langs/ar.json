@@ -666,7 +666,7 @@
   "Medical sick leave start*": "تاريخ بداية الاجازة المرضية",
   "Medical sick leave end*": "تاريخ انتهاء الاجازة المرضية",
   "Settings": "الإعدادات",
-  "concept (Notes are added to the National Billing System)": "ملاحظات (يتم اضافتها لملاحظات نظام الفوترة)",
+  "concept (Notes are added to the National Jordanian Billing System)": "ملاحظات (يتم اضافتها لملاحظات نظام الفوترة الوطني الاردني)",
   "Arrival Time": "موعد الوصول",
   "Logout": "تسجيل الخروج",
   "unit of service": "وحدة خدمة",
@@ -1516,6 +1516,7 @@
   "Secret Key": "المفتاح السري",
   "Activity Number": "تسلسل مصدر الدخل",
   "Client Id": "رقم المستخدم",
-  "Company ID": "الرقم الوطني للمؤسسة",
-  "Registration Name": "الاسم المسجل"
+  "Company ID": "الرقم الضريبي للمؤسسة",
+  "Registration Name": "الاسم التجاري",
+  "Are you registered in the National Jordanian Billing System?":"هل  انت مسجل في نظام الفوترة الاردني الوطني؟"
 }
