@@ -290,7 +290,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             )}
 
             <Stack sx={{ my: 2, px: 2 }}>
-              <RHFTextField name="concept" label={t('concept (Notes are added to the National Billing System)')} />
+              <RHFTextField name="concept" label={t('concept (Notes are added to the National Jordanian Billing System)')} />
             </Stack>
             <Stack sx={{ my: 2, px: 2 }}>
               <RHFCheckbox

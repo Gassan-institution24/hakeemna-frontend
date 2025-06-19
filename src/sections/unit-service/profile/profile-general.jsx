@@ -336,22 +336,27 @@ export default function AccountGeneral({ unitServiceData }) {
                 <RHFCheckbox
                   name="invoicing_system"
                   onChange={() => setValue('invoicing_system', !values.invoicing_system)}
-                  label={t('Are you registered in the National Billing System?')}
+                  label={t('Are you registered in the National Jordanian Billing System?')}
                 />
               </Stack>
 
               <Stack alignItems="flex-start" gap={1}>
+                {values.invoicing_system && (
+                  <>
                 <Typography variant="subtitle1">
                   {t('Jordanian National Billing System Information')}
                 </Typography>
-                {data?.invoicing_system && (
-                  <>
-                    {' '}
                     <RHFTextField
                       type="string"
                       variant="filled"
-                      name="Secret_Key"
-                      label={`${t('Secret Key')} :`}
+                      name="RegistrationName"
+                      label={`${t('Registration Name')} :`}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="CompanyID"
+                      label={`${t('Company ID')} :`}
                     />
                     <RHFTextField
                       type="string"
@@ -368,25 +373,12 @@ export default function AccountGeneral({ unitServiceData }) {
                     <RHFTextField
                       type="string"
                       variant="filled"
-                      name="CompanyID"
-                      label={`${t('Company ID')} :`}
-                    />
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="RegistrationName"
-                      label={`${t('Registration Name')} :`}
+                      name="Secret_Key"
+                      label={`${t('Secret Key')} :`}
                     />
                   </>
                 )}
               </Stack>
-              {/* <RHFTextField
-                
-                type="number"
-                variant="filled"
-                name="phone"
-                label={`${t('phone')} :`}
-              /> */}
             </Box>
           </Card>
         </Grid>
@@ -452,20 +444,6 @@ export default function AccountGeneral({ unitServiceData }) {
                   </MenuItem>
                 ))}
               </TextField>
-
-              {/* <RHFSelect
-                label={`${t('specialty')} *`}
-                fullWidth
-                name="speciality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {specialtiesData.map((specialty, idx) => (
-                  <MenuItem lang="ar" value={specialty._id} key={idx}>
-                    {curLangAr ? specialty.name_arabic : specialty.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect> */}
               <TextField
                 disabled
                 select
@@ -516,10 +494,6 @@ export default function AccountGeneral({ unitServiceData }) {
                   {option}
                 </li>
               )}
-              // onChange={(event, newValue) => {
-              //   // setSelectedEmployees(newValue);
-              //   methods.setValue('work_days', newValue, { shouldValidate: true });
-              // }}
               renderTags={(selected, getTagProps) =>
                 selected.map((option, index) => (
                   <Chip
@@ -546,25 +520,6 @@ export default function AccountGeneral({ unitServiceData }) {
               label={t('introduction letter in arabic')}
               sx={{ mt: 3, textTransform: 'lowercase' }}
             />
-            {/* <RHFTextField
-              multiline
-              colSpan={14}
-              rows={4}
-              sx={{ mt: 3 }}
-              onChange={handleEnglishInputChange}
-              name="introduction_letter"
-              label={t('introduction letter in english')}
-            />
-            <RHFTextField
-              multiline
-              colSpan={14}
-              rows={4}
-              sx={{ mt: 3 }}
-              onChange={handleArabicInputChange}
-              name="arabic_introduction_letter"
-              label={t('introduction letter in arabic')}
-            /> */}
-
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {t('save changes')}
