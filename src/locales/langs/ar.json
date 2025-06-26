@@ -1518,5 +1518,16 @@
   "Client Id": "رقم المستخدم",
   "Company ID": "الرقم الضريبي للمؤسسة",
   "Registration Name": "الاسم التجاري",
-  "Are you registered in the National Jordanian Billing System?":"هل  انت مسجل في نظام الفوترة الاردني الوطني؟"
+  "Are you registered in the National Jordanian Billing System?":"هل  انت مسجل في نظام الفوترة الاردني الوطني؟",
+  "Single": "اعزب",
+  "Married": "متزوج",
+  "Divorced": "مطلق",
+  "Widowed": "أرمل",
+  "Separated": "منفصل",
+  "File code": "رقم الملف",
+  "work group is required": "مجموعة العمل مطلوبة",
+  "Add mutliple patients": "إضافة مرضى متعددين",
+  "Add a single patient": "إضافة مريض واحد",
+  "Create a new patient": "إنشاء مريض جديد",
+  "patient created successfully": "تم إنشاء المريض بنجاح"
 }
