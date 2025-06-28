@@ -1518,5 +1518,7 @@
   "Client Id": "رقم المستخدم",
   "Company ID": "الرقم الضريبي للمؤسسة",
   "Registration Name": "الاسم التجاري",
-  "Are you registered in the National Jordanian Billing System?":"هل  انت مسجل في نظام الفوترة الاردني الوطني؟"
+  "Update my data": "تحديث بياناتي",
+  "Are you registered in the National Jordanian Billing System?": "هل انت مسجل في نظام الفوترة الاردني الوطني؟",
+  "Add your national Jordanian billing system information" : "اضف معلوماتك في نظام الفوترة الاردني الوطني"
 }
