@@ -25,7 +25,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
   useGetUnitservice,
-  // useGetSpecialties,
   useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
@@ -34,7 +33,6 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFEditor,
   RHFCheckbox,
-  // RHFSelect,
   RHFTextField,
   RHFTimePicker,
   RHFPhoneNumber,
@@ -70,7 +68,6 @@ export default function AccountGeneral({ unitServiceData }) {
   );
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  // const { specialtiesData } = useGetSpecialties();
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required(t('required field')),
@@ -80,7 +77,6 @@ export default function AccountGeneral({ unitServiceData }) {
     US_type: Yup.string().required(t('required field')),
     email: Yup.string(),
     sector_type: Yup.string(),
-    // speciality: Yup.string(),
     identification_num: Yup.string().required(t('required field')),
     address: Yup.string(),
     web_page: Yup.string(),
@@ -108,20 +104,6 @@ export default function AccountGeneral({ unitServiceData }) {
     invoicing_system: Yup.bool(),
   });
 
-  // const handleCountryChange = (event) => {
-  //   const selectedCountryId = event.target.value;
-  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
-  //   setSelectedCountry(selectedCountryId);
-  // };
-
-  // useEffect(() => {
-  //   setCities(
-  //     selectedCountry
-  //       ? tableData.filter((info) => info?.country?._id === selectedCountry)
-  //       : tableData
-  //   );
-  // }, [tableData, selectedCountry]);
-
   const defaultValues = {
     name_english: data?.name_english || '',
     name_arabic: data?.name_arabic || '',
@@ -130,7 +112,6 @@ export default function AccountGeneral({ unitServiceData }) {
     US_type: data?.US_type?._id || null,
     email: data?.email || '',
     sector_type: data?.sector_type || '',
-    // speciality: data?.speciality?._id || null,
     identification_num: data?.identification_num || '',
     address: data?.address || '',
     web_page: data?.web_page || '',
@@ -231,7 +212,6 @@ export default function AccountGeneral({ unitServiceData }) {
       });
       refetch();
     } catch (error) {
-      // error emitted in backend
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {
@@ -241,24 +221,6 @@ export default function AccountGeneral({ unitServiceData }) {
       console.error(error);
     }
   });
-
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
-
-  //   if (arabicRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
-
-  // const handleEnglishInputChange = (event) => {
-  //   // Validate the input based on English language rules
-  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
-
-  //   if (englishRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -335,17 +297,46 @@ export default function AccountGeneral({ unitServiceData }) {
                 />
                 <RHFCheckbox
                   name="invoicing_system"
-                  onChange={() => setValue('invoicing_system', !values.invoicing_system)}
                   label={t('Are you registered in the National Jordanian Billing System?')}
+                  onChange={async () => {
+                    const newValue = !values.invoicing_system;
+                    setValue('invoicing_system', newValue);
+
+                    try {
+                      await axios.patch(
+                        endpoints.unit_services.one(
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                            ?.unit_service._id
+                        ),
+                        { invoicing_system: newValue }
+                      );
+                      enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
+
+                      socket.emit('updated', {
+                        user,
+                        link: paths.unitservice.profile.root,
+                        msg: `updated invoicing_system status`,
+                      });
+
+                      refetch(); // optional if you want to re-fetch fresh data
+                    } catch (error) {
+                      enqueueSnackbar(
+                        curLangAr
+                          ? `${error.arabic_message}` || `${error.message}`
+                          : `${error.message}`,
+                        { variant: 'error' }
+                      );
+                    }
+                  }}
                 />
               </Stack>
 
               <Stack alignItems="flex-start" gap={1}>
                 {values.invoicing_system && (
                   <>
-                <Typography variant="subtitle1">
-                  {t('Jordanian National Billing System Information')}
-                </Typography>
+                    <Typography variant="subtitle1">
+                      {t('Jordanian National Billing System Information')}
+                    </Typography>
                     <RHFTextField
                       type="string"
                       variant="filled"
@@ -356,7 +347,7 @@ export default function AccountGeneral({ unitServiceData }) {
                       type="string"
                       variant="filled"
                       name="CompanyID"
-                      label={`${t('Company ID')} :`}
+                      label={`${t('Company ID')} :`} 
                     />
                     <RHFTextField
                       type="string"
@@ -402,7 +393,6 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
@@ -533,5 +523,4 @@ export default function AccountGeneral({ unitServiceData }) {
 }
 AccountGeneral.propTypes = {
   unitServiceData: PropTypes.object,
-  // refetch: PropTypes.func,
 };
