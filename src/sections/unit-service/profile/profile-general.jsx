@@ -297,7 +297,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 />
                 <RHFCheckbox
                   name="invoicing_system"
-                  label={t('Are you registered in the National Jordanian Billing System?')}
+                  label={t('Are you registered in the National Jordanian')}
                   onChange={async () => {
                     const newValue = !values.invoicing_system;
                     setValue('invoicing_system', newValue);
