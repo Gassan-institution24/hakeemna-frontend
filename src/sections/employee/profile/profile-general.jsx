@@ -715,6 +715,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     sx={{
                       mx: 'auto',
                     }}
+                    showOnDocument
                     name="signature"
                     label={t('signature')}
                     onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
@@ -731,6 +732,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     sx={{
                       mx: 'auto',
                     }}
+                    showOnDocument
                     name="stamp"
                     label={t('stamp')}
                     onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}

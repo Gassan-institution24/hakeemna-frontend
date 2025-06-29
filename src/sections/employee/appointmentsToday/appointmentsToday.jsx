@@ -81,7 +81,7 @@ export default function AppointmentsToday() {
   const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
 
   const { roomsData } = useGetUSRooms(unitServiceId);
-
+  const [patientId, setPatientId] = useState();
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
@@ -181,6 +181,12 @@ export default function AppointmentsToday() {
       console.error(error.message);
       enqueueSnackbar('Error starting appointment', { variant: 'error' });
     }
+  };
+  const handlePatientClick = (info) => {
+    setPatientId(info);
+    router.push(`/dashboard/mypatients/${info}`);
+    console.log(`dashboard/mypatients/${info}`);
+    
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -427,7 +433,21 @@ export default function AppointmentsToday() {
                       <>
                         <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
                           <TableCell>{fTime(info?.start_time)}</TableCell>
-                          <TableCell>{patientName}</TableCell>
+                          <TableCell>
+                            {' '}
+                            <Button
+                              variant="text"
+                              onClick={() => handlePatientClick(info?.patient?._id)}
+                              sx={{
+                                textTransform: 'none',
+                                padding: 0,
+                                minWidth: 0,
+                                color: 'primary.main',
+                              }}
+                            >
+                              {patientName}
+                            </Button>
+                          </TableCell>
                           {currentTab !== 'three' && (
                             <>
                               <TableCell>

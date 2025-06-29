@@ -1,47 +1,44 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
+import { Button, ListItemText } from '@mui/material';
 
-import { fDate, fTime, fHourMin } from 'src/utils/format-time';
+import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+import { fDate, fHourMin } from 'src/utils/format-time';
+
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import AttendanceEdit from '../employee-profile/attendance-edit';
-
-// import UploadAnalysis from '../upload-analysis';
-
 // ----------------------------------------------------------------------
 
-export default function AttendanceRow({
+export default function YearlyReportRow({
   row,
   selected,
-  refetch,
   onSelectRow,
-  onViewRow,
-  onCancelRow,
   onDeleteRow,
+  onViewRow,
+  hideEmployee,
 }) {
   const {
-    date,
-    check_in_time,
-    check_out_time,
-    leave,
-    work_type,
-    leaveTime,
-    workTime,
-    note,
+    code,
+    employee_engagement,
+    start_date,
+    end_date,
+    working_time,
+    annual,
+    sick,
+    unpaid,
+    public: publicOff,
+    other,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -52,32 +49,72 @@ export default function AttendanceRow({
   } = row;
 
   const { t } = useTranslate();
+  const checkAcl = useAclGuard();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
   const DDL = usePopover();
-  const deleting = usePopover();
-  const [open, setOpen] = useState(false);
-  const checkAcl = useAclGuard();
+  const deleting = useBoolean();
+
+  const renderPrimary = (
+    <TableRow hover selected={selected}>
+      <TableCell
+        // sx={{
+        //   cursor: 'pointer',
+        //   color: '#3F54EB',
+        // }}
+        // onClick={onViewRow}
+        align="center"
+      >
+        {code}
+      </TableCell>
+      {!hideEmployee && (
+        <TableCell
+          // sx={{
+          //   cursor: 'pointer',
+          //   color: '#3F54EB',
+          // }}
+          // onClick={onViewRow}
+          align="center"
+        >
+          {curLangAr
+            ? employee_engagement?.employee?.name_arabic
+            : employee_engagement?.employee?.name_english}
+        </TableCell>
+      )}
+      <TableCell align="center">{fDate(start_date)}</TableCell>
+      <TableCell align="center">{fDate(end_date)}</TableCell>
+      <TableCell align="center">{fHourMin(working_time)}</TableCell>
+      <TableCell align="center">{annual}</TableCell>
+      <TableCell align="center">{sick}</TableCell>
+      <TableCell align="center">{unpaid}</TableCell>
+      <TableCell align="center">{publicOff}</TableCell>
+      <TableCell align="center">{other}</TableCell>
+
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  );
 
   return (
     <>
-      <TableRow hover selected={selected}>
-        <TableCell align="center">{fDate(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
-        <TableCell align="center">{fTime(check_in_time)}</TableCell>
-        <TableCell align="center">{fTime(check_out_time)}</TableCell>
-        <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
-        <TableCell align="center">{fHourMin(workTime)}</TableCell>
-        <TableCell align="center">{t(work_type)}</TableCell>
-        <TableCell align="center">{t(leave)}</TableCell>
-        <TableCell align="center">{note}</TableCell>
+      {renderPrimary}
 
-        <TableCell align="right" sx={{ px: 1 }}>
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-
-      <CustomPopover open={popover.open} onClose={popover.onClose} arrow="right-top">
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 140 }}
+      >
+        {/* <MenuItem lang="ar" onClick={onViewRow}>
+          <Iconify icon="solar:eye-bold" />
+          {t('view')}
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -85,19 +122,9 @@ export default function AttendanceRow({
         {checkAcl({
           category: 'unit_service',
           subcategory: 'hr',
-          acl: 'update',
-        }) && (
-          <MenuItem lang="ar" onClick={() => setOpen(true)}>
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('Edit')}
-          </MenuItem>
-        )}
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
           acl: 'delete',
         }) && (
-          <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
+          <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
             <Iconify icon="mdi:trash" />
             {t('Delete')}
           </MenuItem>
@@ -153,13 +180,10 @@ export default function AttendanceRow({
         </Box>
       </CustomPopover>
 
-      {open && (
-        <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
-      )}
       <ConfirmDialog
-        open={deleting.open}
-        onClose={deleting.onClose}
-        title={t('Deleting Attendence')}
+        open={deleting.value}
+        onClose={deleting.onFalse}
+        title={t('Deleting Report')}
         content={t('Are you sure to delete this?')}
         action={
           <Button
@@ -167,7 +191,7 @@ export default function AttendanceRow({
             color="error"
             onClick={() => {
               popover.onClose();
-              deleting.onClose();
+              deleting.onFalse();
               onDeleteRow(row._id);
             }}
           >
@@ -179,12 +203,11 @@ export default function AttendanceRow({
   );
 }
 
-AttendanceRow.propTypes = {
-  onDeleteRow: PropTypes.func,
-  onCancelRow: PropTypes.func,
+YearlyReportRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
-  refetch: PropTypes.func,
+  onDeleteRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  hideEmployee: PropTypes.bool,
 };

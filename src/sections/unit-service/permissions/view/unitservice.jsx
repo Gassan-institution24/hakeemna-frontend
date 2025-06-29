@@ -74,7 +74,8 @@ export default function TableNewEditForm() {
       quality_control: data?.acl?.unit_service?.quality_control || [],
       unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
       old_patient: data?.acl?.unit_service?.old_patient || [],
-      permissions: data?.acl?.unit_service?.old_patient || [],
+      permissions: data?.acl?.unit_service?.permissions || [],
+      hr: data?.acl?.unit_service?.hr || [],
       entrance: data?.acl?.unit_service?.entrance || [],
     }),
     [data]
@@ -224,6 +225,12 @@ export default function TableNewEditForm() {
                 {t('permissions')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="permissions" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('human resource')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="hr" options={options} />
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">

@@ -11,7 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -25,7 +25,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ departmentData, currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -106,6 +106,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             departmentData.name_english
           }</strong> department`,
         });
+        router.push(paths.unitservice.departments.rooms.root(departmentData._id));
       } else {
         await axiosInstance.post(endpoints.rooms.all, {
           department: departmentData._id,
@@ -125,7 +126,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.departments.rooms.root(departmentData._id));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

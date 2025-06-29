@@ -54,6 +54,7 @@ export default function TableNewEditForm() {
     accounting: Yup.array(),
     quality_control: Yup.array(),
     permissions: Yup.array(),
+    hr: Yup.array(),
   });
 
   const defaultValues = useMemo(
@@ -65,6 +66,7 @@ export default function TableNewEditForm() {
       accounting: data?.acl?.department?.accounting || [],
       quality_control: data?.acl?.department?.quality_control || [],
       permissions: data?.acl?.department?.permissions || [],
+      hr: data?.acl?.department?.hr || [],
     }),
     [data]
   );
@@ -180,6 +182,12 @@ export default function TableNewEditForm() {
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="permissions" options={options} />
             </Stack>
+            {/* <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('human resourse')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="hr" options={options} />
+            </Stack> */}
           </Stack>
         </Card>
       </Grid>

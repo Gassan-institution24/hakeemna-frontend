@@ -8,10 +8,9 @@ import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import YearlyReportsView from '../salary/yearly-report';
 import MonthlyReportsView from '../salary/monthly-report';
 import EmployeeSalaryView from '../salary/employee-salary';
-import EditEmployee from '../employee-profile/employee-edit';
-import YearlyReportsView from '../salary/yearly-report';
 
 // ----------------------------------------------------------------------
 

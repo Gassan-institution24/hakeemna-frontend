@@ -3,14 +3,12 @@ import { useSnackbar } from 'notistack';
 
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
 import { fCurrency } from 'src/utils/format-number';
 
@@ -130,9 +128,9 @@ export default function ProductItem({ product }) {
     <Stack spacing={2.5} sx={{ p: 3, pt: 2 }}>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 1 }}>
         <Stack>
-          <Link component={RouterLink} href={linkTo} color="inherit" variant="subtitle1" noWrap>
+          <Typography variant="subtitle2" pt={0}>
             {curLangAr ? name_arabic : name_english}
-          </Link>
+          </Typography>
           <Typography variant="caption" pt={0}>
             {curLangAr ? description_arabic : description_english}
           </Typography>

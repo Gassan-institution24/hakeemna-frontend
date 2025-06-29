@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -12,13 +10,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { fDate, fTime, fHourMin } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import AttendanceEdit from '../employee-profile/attendance-edit';
 
 // import UploadAnalysis from '../upload-analysis';
 
@@ -37,11 +31,13 @@ export default function AttendanceRow({
     date,
     check_in_time,
     check_out_time,
+    // leave_start,
+    // leave_end,
     leave,
     work_type,
+    note,
     leaveTime,
     workTime,
-    note,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -50,13 +46,10 @@ export default function AttendanceRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-
   const { t } = useTranslate();
+
   const popover = usePopover();
   const DDL = usePopover();
-  const deleting = usePopover();
-  const [open, setOpen] = useState(false);
-  const checkAcl = useAclGuard();
 
   return (
     <>
@@ -82,26 +75,6 @@ export default function AttendanceRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'update',
-        }) && (
-          <MenuItem lang="ar" onClick={() => setOpen(true)}>
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('Edit')}
-          </MenuItem>
-        )}
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'delete',
-        }) && (
-          <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
-            <Iconify icon="mdi:trash" />
-            {t('Delete')}
-          </MenuItem>
-        )}
       </CustomPopover>
 
       <CustomPopover
@@ -152,29 +125,6 @@ export default function AttendanceRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
-
-      {open && (
-        <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
-      )}
-      <ConfirmDialog
-        open={deleting.open}
-        onClose={deleting.onClose}
-        title={t('Deleting Attendence')}
-        content={t('Are you sure to delete this?')}
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              popover.onClose();
-              deleting.onClose();
-              onDeleteRow(row._id);
-            }}
-          >
-            {t('Delete')}
-          </Button>
-        }
-      />
     </>
   );
 }

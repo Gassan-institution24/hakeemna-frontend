@@ -7,6 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Card, Stack, Button, MenuItem } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
@@ -20,6 +23,7 @@ export default function UploadBlogs({ currentRow }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { Data, refetch } = useGetBlog_category();
+  const router = useRouter();
 
   const BlogsSchema = Yup.object().shape({
     title: Yup.string().required(),
@@ -67,6 +71,7 @@ export default function UploadBlogs({ currentRow }) {
       enqueueSnackbar(currentRow ? t('updated successfully') : t('created successfully'));
       refetch();
       reset();
+      router.push(paths.employee.documents.blogs.root);
     } catch (error) {
       enqueueSnackbar(error.message, { variant: 'error' });
     }

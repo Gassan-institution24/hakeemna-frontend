@@ -11,6 +11,9 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MenuItem, Typography } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetAppointmentTypes } from 'src/api';
@@ -22,7 +25,7 @@ import FormProvider, { RHFSelect, RHFCheckbox, RHFTimePicker } from 'src/compone
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -73,12 +76,12 @@ export default function TableNewEditForm({ currentTable }) {
     try {
       if (currentTable) {
         await axiosInstance.patch(endpoints.appointments.one(currentTable._id), data);
+        router.push(paths.unitservice.tables.workshifts.root);
       } else {
         await axiosInstance.post(endpoints.appointments.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.tables.workshifts.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

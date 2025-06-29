@@ -13,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
@@ -31,7 +31,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -121,6 +121,8 @@ export default function TableNewEditForm({ currentTable }) {
           link: paths.unitservice.tables.workgroups.root,
           msg: `updated a work group <strong>${data.name_english || ''}</strong>`,
         });
+        reset();
+        router.push(paths.unitservice.tables.workgroups.root);  
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
         socket.emit('created', {

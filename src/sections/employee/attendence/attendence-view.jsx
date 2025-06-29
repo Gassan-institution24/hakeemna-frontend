@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
@@ -15,6 +14,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAttendence } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -40,8 +40,10 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeAttendence({ employee }) {
+export default function MyAttendence() {
   const { t } = useTranslate();
+  const { user } = useAuthContext();
+  const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
   const TABLE_HEAD = [
     { id: 'date', label: t('Day') },
@@ -220,9 +222,3 @@ export default function EmployeeAttendence({ employee }) {
     </Container>
   );
 }
-
-// ----------------------------------------------------------------------
-
-EmployeeAttendence.propTypes = {
-  employee: PropTypes.object,
-};

@@ -16,28 +16,28 @@ const AppointmentsBookPage = lazy(() => import('src/pages/employee/appointments/
 
 // ACCOUNTING
 // ECONOMIC MOVEMENTS
-const EconomicHomePage = lazy(() =>
-  import('src/pages/employee/accounting/economic-movements/home')
+const EconomicHomePage = lazy(
+  () => import('src/pages/employee/accounting/economic-movements/home')
 );
-const EconomicInfoPage = lazy(() =>
-  import('src/pages/employee/accounting/economic-movements/info')
+const EconomicInfoPage = lazy(
+  () => import('src/pages/employee/accounting/economic-movements/info')
 );
-const EconomicEditPage = lazy(() =>
-  import('src/pages/employee/accounting/economic-movements/edit')
+const EconomicEditPage = lazy(
+  () => import('src/pages/employee/accounting/economic-movements/edit')
 );
 const EconomicNewPage = lazy(() => import('src/pages/employee/accounting/economic-movements/new'));
 // PAYMENT CONTROL
-const PaymentControlHomePage = lazy(() =>
-  import('src/pages/employee/accounting/payment-control/home')
+const PaymentControlHomePage = lazy(
+  () => import('src/pages/employee/accounting/payment-control/home')
 );
-const PaymentControlInfoPage = lazy(() =>
-  import('src/pages/employee/accounting/payment-control/info')
+const PaymentControlInfoPage = lazy(
+  () => import('src/pages/employee/accounting/payment-control/info')
 );
-const PaymentControlEditPage = lazy(() =>
-  import('src/pages/employee/accounting/payment-control/edit')
+const PaymentControlEditPage = lazy(
+  () => import('src/pages/employee/accounting/payment-control/edit')
 );
-const PaymentControlNewPage = lazy(() =>
-  import('src/pages/employee/accounting/payment-control/new')
+const PaymentControlNewPage = lazy(
+  () => import('src/pages/employee/accounting/payment-control/new')
 );
 // RECEIPTS
 const RecieptsHomePage = lazy(() => import('src/pages/employee/accounting/reciepts/home'));
@@ -49,8 +49,8 @@ const CommunicationHomePage = lazy(() => import('src/pages/employee/communicatio
 // WORK GROUPS
 const WorkGroupsHomePage = lazy(() => import('src/pages/employee/wgroups/home'));
 const WorkGroupsPermissionPage = lazy(() => import('src/pages/employee/wgroups/permissions/home'));
-const WorkGroupsEmployeePermissionPage = lazy(() =>
-  import('src/pages/employee/wgroups/permissions/employee')
+const WorkGroupsEmployeePermissionPage = lazy(
+  () => import('src/pages/employee/wgroups/permissions/employee')
 );
 // QUALITY CONTROL
 const QCHomePage = lazy(() => import('src/pages/employee/qualitycontrol/home'));
@@ -60,24 +60,24 @@ const ProfileHomePage = lazy(() => import('src/pages/employee/profile/home'));
 const ProfileEditPage = lazy(() => import('src/pages/employee/profile/edit'));
 
 // APPOINTMENT CONFIGURATION
-const AppointmentConfigPage = lazy(() =>
-  import('src/pages/employee/appoint-config/appoint-config')
+const AppointmentConfigPage = lazy(
+  () => import('src/pages/employee/appoint-config/appoint-config')
 );
-const AppointmentConfigDetailsPage = lazy(() =>
-  import('src/pages/employee/appoint-config/appoint-config-detail')
+const AppointmentConfigDetailsPage = lazy(
+  () => import('src/pages/employee/appoint-config/appoint-config-detail')
 );
-const NewAppointmentConfigPage = lazy(() =>
-  import('src/pages/employee/appoint-config/new-appoint-config')
+const NewAppointmentConfigPage = lazy(
+  () => import('src/pages/employee/appoint-config/new-appoint-config')
 );
 
 // CALENDER
 const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
-const AppointmentsToday = lazy(() =>
-  import('src/pages/employee/appointmentsToday/appintmentaToday')
+const AppointmentsToday = lazy(
+  () => import('src/pages/employee/appointmentsToday/appintmentaToday')
 );
 const RecordPage = lazy(() => import('src/pages/employee/appointmentsToday/recordPage'));
-const PrescriotionPage = lazy(() =>
-  import('src/pages/employee/appointmentsToday/prescriotionPage')
+const PrescriotionPage = lazy(
+  () => import('src/pages/employee/appointmentsToday/prescriotionPage')
 );
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 const SickleavePage = lazy(() => import('src/pages/employee/appointmentsToday/sickleavePage'));
@@ -105,17 +105,20 @@ const BlogsEditPage = lazy(() => import('src/pages/employee/blogs/edit'));
 
 const BrowseBlogs = lazy(() => import('src/pages/employee/blogs/browse-blogs'));
 const PreviewBlogs = lazy(() => import('src/pages/employee/blogs/preview-blogs'));
+
+const MyAttendencePage = lazy(() => import('src/pages/employee/attendence/my_attendence'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
   {
     path: 'dashboard/mypatients/:id',
-    element:
+    element: (
       <AuthGuard>
         <RoleBasedGuard hasContent roles={['admin', 'employee']}>
           <PatientInfoPage />
         </RoleBasedGuard>
-      </AuthGuard>,
+      </AuthGuard>
+    ),
   },
   {
     path: 'dashboard',
@@ -161,6 +164,10 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: 'new', element: <BlogsNewPage /> },
           { path: ':id/edit', element: <BlogsEditPage /> },
         ],
+      },
+      {
+        path: 'profile/myattendence',
+        children: [{ element: <MyAttendencePage />, index: true }],
       },
       {
         path: 'appointments',

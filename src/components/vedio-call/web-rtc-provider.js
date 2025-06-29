@@ -2,8 +2,6 @@ import { Peer } from 'peerjs';
 import PropTypes from 'prop-types';
 import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
-import { useRouter } from 'src/routes/hooks';
-
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 

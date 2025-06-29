@@ -171,8 +171,8 @@ export default function InvoiceDetails({ paymentData }) {
           <Box
             component="img"
             alt="logo"
-            src="/logo/logo_single.svg"
-            sx={{ width: 48, height: 48 }}
+            src="/logo/doc.svg"
+            sx={{ width: 64, height: 64 }}
           />
 
           <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
