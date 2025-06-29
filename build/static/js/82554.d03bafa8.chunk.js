@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[82554],{82554:(t,e,n)=>{n.r(e),n.d(e,{default:()=>r});var s=n(29490),i=n(60778),a=n(79368),c=n(70579);function r(){const{t:t}=(0,i.WD)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsxs)(s.mg,{children:[(0,c.jsxs)("title",{children:[t("Appointments")," "]}),(0,c.jsx)("meta",{name:"description",content:"meta"})]}),(0,c.jsx)(a.l3,{})]})}}}]);
+//# sourceMappingURL=82554.d03bafa8.chunk.js.map

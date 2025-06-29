@@ -211,9 +211,9 @@ export default function InvoiceDetails({ invoice, refetch }) {
             src={
               invoice.unit_service?.company_logo
                 ? invoice.unit_service?.company_logo
-                : '/logo/logo_single.svg'
+                : '/logo/doc.svg'
             }
-            sx={{ width: 48, height: 48 }}
+            sx={{ width: 64, height: 64 }}
           />
 
           <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>

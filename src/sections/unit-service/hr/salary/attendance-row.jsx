@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { fDate, fTime, fHourMin } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -55,6 +56,7 @@ export default function AttendanceRow({
   const DDL = usePopover();
   const deleting = usePopover();
   const [open, setOpen] = useState(false);
+  const checkAcl = useAclGuard();
 
   return (
     <>
@@ -80,14 +82,26 @@ export default function AttendanceRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        <MenuItem lang="ar" onClick={() => setOpen(true)}>
-          <Iconify icon="fluent:edit-32-filled" />
-          {t('Edit')}
-        </MenuItem>
-        <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
-          <Iconify icon="mdi:trash" />
-          {t('Delete')}
-        </MenuItem>
+        {checkAcl({
+          category: 'unit_service',
+          subcategory: 'hr',
+          acl: 'update',
+        }) && (
+          <MenuItem lang="ar" onClick={() => setOpen(true)}>
+            <Iconify icon="fluent:edit-32-filled" />
+            {t('Edit')}
+          </MenuItem>
+        )}
+        {checkAcl({
+          category: 'unit_service',
+          subcategory: 'hr',
+          acl: 'delete',
+        }) && (
+          <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
+            <Iconify icon="mdi:trash" />
+            {t('Delete')}
+          </MenuItem>
+        )}
       </CustomPopover>
 
       <CustomPopover

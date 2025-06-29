@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[99243],{5980:(e,n,t)=>{t.r(n),t.d(n,{default:()=>c});var i=t(29490),a=t(3032),s=t(70579);function c(){return(0,s.jsxs)(s.Fragment,{children:[(0,s.jsxs)(i.mg,{children:[(0,s.jsx)("title",{children:" Hakeemna: Activation"}),(0,s.jsx)("meta",{name:"description",content:"meta"})]}),(0,s.jsx)(a.DK,{})]})}}}]);
+//# sourceMappingURL=99243.1dc6752b.chunk.js.map

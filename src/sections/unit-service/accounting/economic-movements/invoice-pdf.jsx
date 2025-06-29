@@ -128,9 +128,9 @@ export default function InvoicePDF({ invoice, currentStatus }) {
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
             source={
-              unit_service?.company_logo ? unit_service?.company_logo : '/logo/logo_single.svg'
+              unit_service?.company_logo ? unit_service?.company_logo : '/logo/doc.svg'
             }
-            style={{ width: 48, height: 48 }}
+            style={{ width: 54, height: 54 }}
           />
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>

@@ -155,7 +155,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
             src={
               invoice.stakeholder?.company_logo
                 ? invoice.stakeholder?.company_logo
-                : '/logo/logo_single.svg'
+                : '/logo/doc.svg'
             }
             sx={{ width: 48, height: 48 }}
           />

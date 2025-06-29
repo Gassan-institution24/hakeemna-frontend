@@ -12,7 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Divider, Checkbox, MenuItem, Typography, FormControlLabel } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
@@ -36,7 +36,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { user } = useAuthContext();
 
@@ -133,12 +133,12 @@ export default function TableNewEditForm({ currentTable }) {
     try {
       if (currentTable) {
         await axiosInstance.patch(endpoints.service_types.one(currentTable._id), data);
+        router.push(paths.unitservice.tables.services.root);
       } else {
         await axiosInstance.post(endpoints.service_types.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
-      // router.push(paths.unitservice.tables.services.root);
     } catch (error) {
       console.error(error);
       enqueueSnackbar(error, { variant: 'error' });

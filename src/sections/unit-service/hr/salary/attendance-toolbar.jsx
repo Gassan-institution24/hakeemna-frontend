@@ -22,6 +22,7 @@ export default function AttendanceToolbar({
   onFilters,
   onAdd,
   hours,
+  length,
   annual,
   sick,
   unpaid,
@@ -99,7 +100,7 @@ export default function AttendanceToolbar({
             />
             {error && (
               <Typography variant="caption" color="error">
-                {t('select start and end date')}
+                {t('please select start and end date')}
               </Typography>
             )}
           </Stack>
@@ -126,7 +127,7 @@ export default function AttendanceToolbar({
             />
             {error && (
               <Typography variant="caption" color="error">
-                {t('select start and end date')}
+                {t('please select start and end date')}
               </Typography>
             )}
           </Stack>
@@ -179,6 +180,7 @@ export default function AttendanceToolbar({
           ids={ids}
           refetch={refetch}
           monthly={monthly}
+          length={length}
         />
       )}
     </>
@@ -193,6 +195,7 @@ AttendanceToolbar.propTypes = {
   onAdd: PropTypes.func,
   hours: PropTypes.number,
   annual: PropTypes.number,
+  length: PropTypes.number,
   sick: PropTypes.number,
   unpaid: PropTypes.number,
   publicHolidays: PropTypes.number,

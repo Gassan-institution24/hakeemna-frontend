@@ -12,7 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
@@ -30,7 +30,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // const router = useRouter();
+  const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -122,6 +122,7 @@ export default function TableNewEditForm({ currentTable }) {
           link: paths.unitservice.tables.rooms.root,
           msg: `updated a room <strong>${data.name_english || ''}</strong>`,
         });
+        router.push(paths.unitservice.tables.rooms.root);
       } else {
         await axiosInstance.post(endpoints.rooms.all, {
           // ip_address_user_creation: address.data.IPv4,
@@ -136,7 +137,6 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.tables.rooms.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

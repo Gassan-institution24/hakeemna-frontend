@@ -31,7 +31,7 @@ import { useGetYearlyReports } from 'src/api/yearly_reports';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import MonthlyReportRow from './monthly-report-row';
+import YearlyReportRow from './yearly-report-row';
 import AttendanceToolbar from './attendance-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -246,7 +246,7 @@ export default function YearlyReportsView({ employee }) {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row, idx) => (
-                    <MonthlyReportRow
+                    <YearlyReportRow
                       key={idx}
                       row={row}
                       filters={filters}

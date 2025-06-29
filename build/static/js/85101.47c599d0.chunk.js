@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[85101],{85101:(e,s,i)=>{i.r(s),i.d(s,{default:()=>r});var t=i(29490),a=i(92836),n=i(70579);function r(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsxs)(t.mg,{children:[(0,n.jsx)("title",{children:" Dashboard: Cities Table"}),(0,n.jsx)("meta",{name:"description",content:"meta"})]}),(0,n.jsx)(a.jC,{})]})}}}]);
+//# sourceMappingURL=85101.47c599d0.chunk.js.map

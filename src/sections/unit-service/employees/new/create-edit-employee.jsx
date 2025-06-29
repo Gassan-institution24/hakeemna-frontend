@@ -98,7 +98,7 @@ export default function TableNewEditForm({ currentTable }) {
         currentTable?.unit_service?._id ||
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           ._id,
-      department: currentTable?.department?._id || '',
+      department: currentTable?.department?._id || null,
       employee_type: currentTable?.employee_type?._id || '',
       email: currentTable?.email || '',
       name_english: currentTable?.name_english || '',

@@ -159,6 +159,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
           other={other}
           ids={ids}
           refetch={refetch}
+          length={length}
           //
           dateError={dateError}
         />
@@ -170,7 +171,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
             //
             onResetFilters={handleResetFilters}
             //
-            results={attendence.length}
+            results={length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}

@@ -4,7 +4,6 @@ import { format, isValid } from 'date-fns';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import { Dialog, ListItemText } from '@mui/material';
@@ -50,9 +49,9 @@ export default function CountriesTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+      </TableCell> */}
 
       <TableCell align="center">
         <Box>{code}</Box>
@@ -119,7 +118,8 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {/* {status === 'active' ? (
-          <MenuItem lang="ar" 
+          <MenuItem
+            lang="ar"
             onClick={() => {
               onInactivate();
               popover.onClose();
@@ -130,7 +130,8 @@ export default function CountriesTableRow({
             Inactivate
           </MenuItem>
         ) : (
-          <MenuItem lang="ar" 
+          <MenuItem
+            lang="ar"
             onClick={() => {
               onActivate();
               popover.onClose();
@@ -152,7 +153,7 @@ export default function CountriesTableRow({
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem> */}
-        <MenuItem
+        {/* <MenuItem
           lang="ar"
           onClick={() => {
             setIdToCall(row?._id);
@@ -161,7 +162,7 @@ export default function CountriesTableRow({
         >
           <Iconify icon="material-symbols:call-sharp" />
           Call
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

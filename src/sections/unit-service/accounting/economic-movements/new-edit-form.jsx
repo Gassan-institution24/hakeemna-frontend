@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
@@ -8,11 +7,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Button, Container } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  Button,
+  Dialog,
+  Container,
+  TextField,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-// import { paths } from 'src/routes/paths';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -21,7 +27,12 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatient, useGetUnitservice, useGetOneEntranceManagement } from 'src/api';
+import {
+  useGetPatient,
+  useGetServiceType,
+  useGetUnitservice,
+  useGetOneEntranceManagement,
+} from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import FormProvider, { RHFCheckbox, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
@@ -46,20 +57,29 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const { data: unitData } = useGetUnitservice(Entrance?.service_unit);
   const [appointmentInfo, setAppointmentInfo] = useState();
   const [invoicing, setInvoicing] = useState(false);
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+
+  const { user } = useAuthContext();
+  const dialog = useBoolean(false);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const [formData, setFormData] = useState({
+    Secret_Key: unitData?.Secret_Key || '',
+    Activity_Number: unitData?.Activity_Number || '',
+    ClientId: unitData?.ClientId || '',
+    CompanyID: unitData?.CompanyID || '',
+    RegistrationName: unitData?.RegistrationName || '',
+    invoicing_system: unitData?.invoicing_system || true,
+  });
 
-  const { user } = useAuthContext();
-  // console.log(PatientData);
-
-  const confirm = useBoolean();
-  const insurance = useBoolean();
-  const installment = useBoolean();
-  // const loadingSave = useBoolean();
-  const loadingSend = useBoolean();
-
-  const { enqueueSnackbar } = useSnackbar();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const NewInvoiceSchema = Yup.object().shape({
     createDate: Yup.mixed().nullable().required(t('required field')),
@@ -75,7 +95,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         Yup.object({
           service_type: Yup.string().required(t('required field')),
           activity: Yup.string().nullable(),
-          // deduction: Yup.number(),
           price_per_unit: Yup.number(),
           discount_amount: Yup.number(),
           subtotal: Yup.number(),
@@ -85,18 +104,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         })
       )
     ),
-    // not required
     status: Yup.string(),
     taxes_type: Yup.string().nullable(),
     taxes: Yup.number(),
-    // deduction_type: Yup.string().nullable(),
-    // deduction: Yup.number(),
     discount: Yup.number(),
     work_shift: Yup.string().nullable(),
     subtotal: Yup.number(),
     totalAmount: Yup.number(),
+    concept: Yup.string().required(t('required field')),
   });
-
   const defaultValues = useMemo(
     () => ({
       createDate: currentInvoice?.created_at || new Date(),
@@ -132,7 +148,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       appointment: currentInvoice?.appointment || appointment || entranceInfo?.appointment || null,
       detailedTaxes: currentInvoice?.detailedTaxes || false,
       taxes: currentInvoice?.taxes || 0,
-      // deduction: currentInvoice?.Total_deduction_amount || 0,
       status: currentInvoice?.status || 'paid',
       discount: currentInvoice?.Total_discount_amount || 0,
       subtotal: currentInvoice?.Subtotal_Amount || 0,
@@ -146,7 +161,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             price_per_unit: Number(one.Price_per_unit) || 0,
             subtotal: Number(one.Price_per_unit) || 0,
             discount_amount: 0,
-            // deduction: 0,
             tax: 0,
             total: Number(one.Price_per_unit) || 0,
           }))) || [
@@ -157,7 +171,6 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             price_per_unit: 0,
             subtotal: 0,
             discount_amount: 0,
-            // deduction: 0,
             tax: 0,
             total: 0,
           },
@@ -179,10 +192,21 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
+  const values = watch();
+  const firstServiceTypeId = values?.items?.[0]?.service_type;
+  const { data: ServiceTypeData } = useGetServiceType(firstServiceTypeId);
+  const totalQuantity = values?.items?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
+
+  const confirm = useBoolean();
+  const insurance = useBoolean();
+  const installment = useBoolean();
+
+  const loadingSend = useBoolean();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -209,17 +233,56 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     };
     fetchData();
   }, [appointment, entrance]);
+  const handleInvoicingChange = async (checked) => {
+    setIsCheckboxChecked(checked);
+    // If user is unchecking, simply close dialog and disable invoicing
+    if (!checked) {
+      setInvoicing(false);
+      dialog.onFalse();
+      return;
+    }
+    // Check if any required field is missing
+    const missing =
+      !unitData.Secret_Key ||
+      !unitData.Activity_Number ||
+      !unitData.ClientId ||
+      !unitData.CompanyID ||
+      !unitData.RegistrationName;
+
+    if (missing) {
+      setInvoicing(false);
+      dialog.onTrue(); // show dialog to fill in data
+    } else {
+      setInvoicing(true); // all data exists; just check box
+      dialog.onFalse();
+    }
+  };
+
+  const handleDialogClose = () => {
+    dialog.onFalse();
+    setIsCheckboxChecked(false);
+  };
+  const handleUpdateData = async () => {
+    try {
+      await axiosInstance.patch(endpoints.unit_services.one(unitData._id), formData);
+      enqueueSnackbar(t('Data updated successfully'), { variant: 'success' });
+      dialog.onFalse();
+      setIsCheckboxChecked(true); // keep box checked after successful update
+      setInvoicing(true);
+    } catch (err) {
+      enqueueSnackbar(err.message || err, { variant: 'error' });
+    }
+  };
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
     try {
       const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
-      const discount_amount =
-        data.items?.reduce((acc, item) => acc + (item.discount_amount || 0), 0) || 0;
       const subtotal = data.subtotal || 0;
-      const quantity = data.quantity || 0;
+      const quantity = totalQuantity;
       const concept = data.concept ?? '';
       const total = data.totalAmount || 0;
+      const discount = data.discount || 0;
       const payloadForOtherTable = {
         Secret_Key: unitData.Secret_Key,
         Activity_Number: unitData.Activity_Number,
@@ -230,13 +293,13 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         BuyerNum: PatientData?.mobile_num1,
         BuyerIdNum: PatientData?.identification_num,
         BuyerCity: PatientData?.city?.name_arabic,
+        service_type: ServiceTypeData?.name_arabic,
         subtotal,
         quantity,
-        discount_amount,
+        discount,
         total,
         concept,
       };
-
       if (invoicing) {
         await axiosInstance.post('/api/invoice', payloadForOtherTable);
       }
@@ -291,13 +354,19 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             )}
 
             <Stack sx={{ my: 2, px: 2 }}>
-              <RHFTextField name="concept" label={t('concept')} />
+              <RHFTextField
+                name="concept"
+                label={t('concept (Notes are added to the National Jordanian Billing System)')}
+              />
             </Stack>
             <Stack sx={{ my: 2, px: 2 }}>
               <RHFCheckbox
                 name=""
-                onChange={() => setInvoicing(!invoicing)}
-                label={t('Do you want to register the invoice in the national billing system?')}
+                checked={isCheckboxChecked}
+                onChange={(e) => handleInvoicingChange(e.target.checked)}
+                label={t(
+                  'Do you want to register the invoice in the national Jordanian billing system?'
+                )}
               />
             </Stack>
 
@@ -351,6 +420,60 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           </Button>
         }
       />
+      {/* billing system information dialog */}
+      {dialog.value && (
+        <Dialog fullWidth maxWidth="sm" open={dialog.value} onClose={handleDialogClose}>
+          <DialogTitle>{t("Add your national Jordanian billing system information")}</DialogTitle>
+          <DialogContent>
+            <Stack spacing={3}>
+              <TextField
+                label={t('Registration Name')}
+                name="RegistrationName"
+                fullWidth
+                value={formData.RegistrationName || unitData.RegistrationName}
+                onChange={handleInputChange}
+              />
+              <TextField
+                label={t('Company ID')}
+                name="CompanyID"
+                fullWidth
+                value={formData.CompanyID || unitData.CompanyID}
+                onChange={handleInputChange}
+              />
+              <TextField
+                label={t('Activity Number')}
+                name="Activity_Number"
+                fullWidth
+                value={formData.Activity_Number || unitData.Activity_Number}
+                onChange={handleInputChange}
+              />
+              <TextField
+                label={t('Client Id')}
+                name="ClientId"
+                fullWidth
+                value={formData.ClientId || unitData.ClientId}
+                onChange={handleInputChange}
+              />
+              <TextField
+                label={t('Secret Key')}
+                name="Secret_Key"
+                fullWidth
+                value={formData.Secret_Key || unitData.Secret_Key}
+                onChange={handleInputChange}
+              />
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button color="inherit" variant="outlined" onClick={handleDialogClose}>
+              {t("Cancel")}
+            </Button>
+
+            <LoadingButton variant="contained" onClick={handleUpdateData}>
+              {t("Update my data")}
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 }

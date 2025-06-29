@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[41865],{41865:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r});var t=a(29490),i=a(92836),n=a(70579);function r(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsxs)(t.mg,{children:[(0,n.jsx)("title",{children:" Dashboard: Hospitals Table"}),(0,n.jsx)("meta",{name:"description",content:"meta"})]}),(0,n.jsx)(i.br,{})]})}}}]);
+//# sourceMappingURL=41865.8e3d4480.chunk.js.map

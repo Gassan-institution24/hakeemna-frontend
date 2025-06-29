@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[88629],{27258:(e,t,n)=>{n.r(t),n.d(t,{default:()=>r});var a=n(29490),i=n(3032),s=n(70579);function r(){return(0,s.jsxs)(s.Fragment,{children:[(0,s.jsxs)(a.mg,{children:[(0,s.jsx)("title",{children:" Hakeemna: Stakeholder registration"}),(0,s.jsx)("meta",{name:"description",content:"meta"})]}),(0,s.jsx)(i.CD,{})]})}}}]);
+//# sourceMappingURL=88629.9e143281.chunk.js.map

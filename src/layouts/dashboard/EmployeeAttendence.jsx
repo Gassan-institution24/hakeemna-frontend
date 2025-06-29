@@ -105,16 +105,18 @@ function EmployeeAttendence() {
       <CustomPopover open={changingAttendence.open} onClose={changingAttendence.onClose}>
         <Stack alignItems="center" p={1}>
           <Typography variant="h6">{fTime(new Date())}</Typography>
-          {!attendence || attendence?.check_out_time ? (
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              color="primary"
-              onClick={handleAttendence}
-              sx={{ mt: 2 }}
-            >
-              {t('check in')}
-            </LoadingButton>
+          {!attendence || attendence?.check_out_time || attendence?.leave ? (
+            !hasAttendenceToday && (
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                color="primary"
+                onClick={handleAttendence}
+                sx={{ mt: 2 }}
+              >
+                {t('check in')}
+              </LoadingButton>
+            )
           ) : (
             <>
               {!attendence?.leave_end &&

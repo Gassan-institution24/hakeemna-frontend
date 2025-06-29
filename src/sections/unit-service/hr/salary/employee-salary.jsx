@@ -66,7 +66,7 @@ export default function EmployeeSalaryView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: employeesData,
+    inputData: employeesData.filter((one) => one.status === 'active'),
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,

@@ -218,10 +218,23 @@ export default function NavVertical({ openNav, onCloseNav }) {
     const createdAtValid =
       user.created_at &&
       new Date(user.created_at).getTime() + 2 * 24 * 60 * 60 * 1000 >= new Date().getTime();
-    const shouldShowDialog = !loading && isEmployee && createdAtValid && !user.last_online;
+    const shouldShowDialog =
+      !loading &&
+      isEmployee &&
+      createdAtValid &&
+      !user.last_online &&
+      new Date(user.unit_service?.created_at) <
+        new Date(new Date().getTime() - 10 * 60 * 60 * 1000);
     setDialog(shouldShowDialog);
     setLastOnline();
-  }, [user.created_at, user.last_online, loading, isEmployee, setLastOnline]);
+  }, [
+    user.created_at,
+    user.unit_service?.created_at,
+    user.last_online,
+    loading,
+    isEmployee,
+    setLastOnline,
+  ]);
 
   useEffect(() => {
     if (openNav) {

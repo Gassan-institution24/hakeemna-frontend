@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[58778],{58778:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r});var t=a(29490),n=a(92836),i=a(70579);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(t.mg,{children:[(0,i.jsx)("title",{children:" Dashboard: Stakeholder Types Table"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(n.fY,{})]})}}}]);
+//# sourceMappingURL=58778.c4b6e9b6.chunk.js.map

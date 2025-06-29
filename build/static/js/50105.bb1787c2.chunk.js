@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[50105],{11934:(e,n,s)=>{s.r(n),s.d(n,{default:()=>r});var t=s(29490),a=s(3032),i=s(70579);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(t.mg,{children:[(0,i.jsx)("title",{children:" Hakeemna: New user"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(a.C1,{})]})}}}]);
+//# sourceMappingURL=50105.bb1787c2.chunk.js.map
