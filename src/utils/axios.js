@@ -507,6 +507,7 @@ export const endpoints = {
     all: '/api/uspatients',
     many: '/api/uspatients/many',
     find: '/api/uspatients/find',
+    addOne: '/api/uspatients/',
     one: (id) => (!id ? null : `/api/uspatients/${id}`),
     unit_service: {
       all: (id) => (!id ? null : `/api/uspatients/unitservice/${id}`),
