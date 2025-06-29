@@ -1,7 +1,7 @@
 import { paths } from 'src/routes/paths';
 
 // API
-// ----------------------------------------------------------------------
+// ------------------------------------------------------------
 
 export const HOST_API = process.env.REACT_APP_API_URL;
 export const SERVER_IP = process.env.REACT_APP_SERVER;
