@@ -10,21 +10,21 @@ import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableManyNewForm from '../new-patient/add-many-patients';
 import AddOnePatient from '../new-patient/add-one-patient';
+import TableManyNewForm from '../new-patient/add-many-patients';
 
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
   const { t } = useTranslate();
 
-  const [currentTab, setCurrentTab] = useState(t('Add mutliple patients'));
+  const [currentTab, setCurrentTab] = useState(t('Add a single patient'));
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
 
-  const HistoryTabsList = [t('Add mutliple patients'), t('Add a single patient')];
+  const HistoryTabsList = [t('Add a single patient'), t('Add mutliple patients')];
 
   const renderTabs = (
     <Tabs
@@ -61,8 +61,8 @@ export default function TableCreateView() {
       />
 
       {renderTabs}
-      {currentTab === t('Add mutliple patients') && <TableManyNewForm />}
       {currentTab === t('Add a single patient') && <AddOnePatient />}
+      {currentTab === t('Add mutliple patients') && <TableManyNewForm />}
 
 
     </Container>
