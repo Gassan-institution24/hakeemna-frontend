@@ -1,3 +1,6 @@
+import {useState, useCallback,  } from 'react';
+
+import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -6,12 +9,35 @@ import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import AddOnePatient from '../new-patient/add-one-patient';
 import TableManyNewForm from '../new-patient/add-many-patients';
 
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
   const { t } = useTranslate();
+
+  const [currentTab, setCurrentTab] = useState(t('Add a single patient'));
+
+    const handleChangeTab = useCallback((event, newValue) => {
+      setCurrentTab(newValue);
+    }, []);
+
+    const HistoryTabsList = [t('Add a single patient'), t('Add mutliple patients')];
+
+     const renderTabs = (
+        <Tabs
+          value={currentTab}
+          onChange={handleChangeTab}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        >
+          {HistoryTabsList.map((tab, idx) => (
+            <Tab key={idx} iconPosition="end" value={tab} label={tab} />
+          ))}
+        </Tabs>
+      );
 
   return (
     <Container maxWidth="xl">
@@ -33,7 +59,10 @@ export default function TableCreateView() {
         }}
       />
 
-      <TableManyNewForm />
+      {renderTabs}
+      {currentTab === t('Add a single patient') &&  <AddOnePatient />}
+      {currentTab === t('Add mutliple patients') && <TableManyNewForm />}
+
     </Container>
   );
 }
