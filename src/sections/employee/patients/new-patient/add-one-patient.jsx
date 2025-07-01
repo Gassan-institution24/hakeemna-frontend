@@ -10,7 +10,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveWorkGroups } from 'src/api';
+import { useGetEmployeeActiveWorkGroups } from 'src/api';
 import { useSnackbar } from 'src/components/snackbar';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -33,7 +33,7 @@ export default function AddOnePatient() {
   const { enqueueSnackbar } = useSnackbar();
 
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
-  const { workGroupsData } = useGetUSActiveWorkGroups(employee?.unit_service?._id);
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(employee?._id);
 
   const handleEnglishInputChange = (event) => {
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow English chars
