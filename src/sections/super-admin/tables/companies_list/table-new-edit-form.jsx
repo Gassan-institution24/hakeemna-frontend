@@ -105,20 +105,26 @@ export default function TableNewEditForm({ currentSelected }) {
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.companies.root);
+        const search = window.location.search;
+        router.push(`${paths.superadmin.tables.companies.root}${search}`);
     } catch (error) {
       console.error(error);
     }
   });
+
+  const onCancel = () => {
+      const search = window.location.search;
+      router.push(`${paths.superadmin.tables.companies.root}${search}`);
+    }
 
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        <Grid xs={12} maxWidth="md">
+    <FormProvider methods={methods} onSubmit={onSubmit} >
+      <Grid container spacing={3} >
+        <Grid xs={12} >
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -127,6 +133,7 @@ export default function TableNewEditForm({ currentSelected }) {
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
               }} /// edit
             >
               <RHFTextField
@@ -203,8 +210,22 @@ export default function TableNewEditForm({ currentSelected }) {
               <RHFTextField name="communication" label="communication" />
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+           <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mt: 3 }}>
+              {currentSelected && (
+                <LoadingButton
+                  variant="outlined"
+                  onClick={onCancel}
+                  sx={{ ml: 1 }}
+                >
+                  Cancel
+                </LoadingButton>
+              )}
+              <LoadingButton
+                type="submit"
+                tabIndex={-1}
+                variant="contained"
+                loading={isSubmitting}
+              >
                 {!currentSelected ? 'Create One' : 'Save Changes'}
               </LoadingButton>
             </Stack>
