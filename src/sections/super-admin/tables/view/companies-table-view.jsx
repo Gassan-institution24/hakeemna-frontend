@@ -2,14 +2,13 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useEffect, useCallback } from 'react';
-
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import { Select, MenuItem, TableRow, Checkbox, TableCell } from '@mui/material';
+import { Checkbox, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -29,6 +28,8 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { Box } from '@mui/system';
+import TableDetailFilters from './table-details-filters'
 import TableDetailRow from '../companies_list/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -76,11 +77,19 @@ export default function CompaniesTableView() {
     showAll && { id: 'subscribe_to', label: 'subscribe_to' },
     showAll && { id: 'social_network', label: 'social_network' },
     showAll && { id: 'notes', label: 'notes' },
-    { id: '', width: 50 },
   ].filter(Boolean);
   const table = useTable({ defaultOrderBy: 'code' });
 
+  const [visibleColumns, setVisibleColumns] = useState(
+    Object.fromEntries(TABLE_HEAD.map((col) => [col.id, true]))
+  );
+
+
+
+  const displayedColumns = TABLE_HEAD.filter((col) => visibleColumns[col.id]);
+
   const componentRef = useRef();
+
 
   // const settings = useSettingsContext();
 
@@ -93,6 +102,32 @@ export default function CompaniesTableView() {
   const searchParams = useSearchParams();
 
   const upload_record = searchParams.get('upload_record');
+
+
+  useEffect(() => {
+    const name = searchParams.get('name');
+    const USType = searchParams.get('ust');
+    const city = searchParams.get('city');
+    const sector = searchParams.get('sector');
+    const province = searchParams.get('province');
+    const page = Number(searchParams.get('page') || '0');
+
+    if (name || USType || city || sector || province) {
+      setFilters({
+        name: name || '',
+        USType: USType || '',
+        city: city || '',
+        sector: sector || '',
+        province: province || '',
+        speciality1: '',
+        speciality2: '',
+      });
+    }
+
+    table.setPage(page);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
 
   useEffect(() => {
     if (upload_record) {
@@ -152,9 +187,18 @@ export default function CompaniesTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.companies.edit(id)); /// edit
+    const search = new URLSearchParams({
+      ...(filters.name && { name: filters.name }),
+      ...(filters.USType && { ust: filters.USType }),
+      ...(filters.city && { city: filters.city }),
+      ...(filters.sector && { sector: filters.sector }),
+      ...(filters.province && { province: filters.province }),
+      page: table.page,
+    }).toString();
+
+    router.push(`${paths.superadmin.tables.companies.edit(id)}?${search}`);
     },
-    [router]
+    [router, filters, table.page]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -209,6 +253,32 @@ export default function CompaniesTableView() {
         }}
       />
 
+      <TableDetailFilters
+        uniqueUnitServiceTypes={uniqueUnitServiceTypes}
+        uniqueCities={uniqueCities}
+        uniqueSectors={uniqueSectors}
+        uniqueProvince={uniqueProvince}
+        filters={filters}
+        onFilters={handleFilters}
+        onReset={handleResetFilters}
+      />
+      <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
+        {TABLE_HEAD.map((col) => (
+          <Box key={col.id} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Checkbox
+              size="small"
+              checked={visibleColumns[col.id] || false}
+              onChange={(e) =>
+                setVisibleColumns((prev) => ({
+                  ...prev,
+                  [col.id]: e.target.checked,
+                }))
+              }
+            />
+            <Typography variant="body2">{col.label}</Typography>
+          </Box>
+        ))}
+      </Box>
       <Card>
         <TableDetailToolbar
           onPrint={printHandler}
@@ -233,12 +303,12 @@ export default function CompaniesTableView() {
           />
         )}
         <TableContainer>
-          <Scrollbar sx={{ height: '60vh', position: 'relative' }}>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+          <Scrollbar sx={{ height: '100vh', position: 'relative' }}>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'} >
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
+                headLabel={displayedColumns}
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
@@ -246,103 +316,6 @@ export default function CompaniesTableView() {
               />
 
               <TableBody sx={{ position: 'relative' }}>
-                <TableRow sx={{ position: { sm: 'sticky' }, top: 57, backgroundColor: 'white' }}>
-                  <TableCell />
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.USType}
-                      onChange={(e) => handleFilters('USType', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueUnitServiceTypes.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.city}
-                      onChange={(e) => handleFilters('city', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueCities.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.sector}
-                      onChange={(e) => handleFilters('sector', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueSectors.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell>
-                    <Select
-                      fullWidth
-                      size="small"
-                      value={filters.province}
-                      onChange={(e) => handleFilters('province', e.target.value)}
-                    >
-                      <MenuItem value="">all</MenuItem>
-                      {uniqueProvince.map(
-                        (one, index) =>
-                          one && (
-                            <MenuItem key={index} value={one}>
-                              {one}
-                            </MenuItem>
-                          )
-                      )}
-                    </Select>
-                  </TableCell>
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
-                  {showAll && (
-                    <>
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                      <TableCell />
-                    </>
-                  )}
-                </TableRow>
                 {dataFiltered
                   .slice(
                     table.page * table.rowsPerPage,
@@ -357,6 +330,7 @@ export default function CompaniesTableView() {
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
                       onEditRow={() => handleEditRow(row._id)}
+                      displayedColumns={displayedColumns}
                     />
                   ))}
 
@@ -461,3 +435,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+
+
+
