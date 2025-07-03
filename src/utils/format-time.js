@@ -1,4 +1,5 @@
 import ar from 'date-fns/locale/ar-SA';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
 import { Typography } from '@mui/material';
@@ -6,7 +7,6 @@ import { Typography } from '@mui/material';
 import { useLocales } from 'src/locales';
 // import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
 const { currentLang } = useLocales();
@@ -31,6 +31,39 @@ export const useUnitTime = () => {
     myunitTime,
   };
 };
+
+export function useFDateTimeUnit() {
+  const { user } = useAuthContext();
+
+  const timeZone =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
+      ?.country?.time_zone || 'Asia/Amman';
+
+  const fDateUnit = (date, newFormat = 'dd MMMMMMMM yyyy') => {
+    if (!date) return '';
+    const utcDate = zonedTimeToUtc(new Date(date), timeZone);
+    const unitDate = utcToZonedTime(utcDate, timeZone);
+    return isValid(unitDate) ? format(unitDate, newFormat) : '';
+  };
+
+  const fTimeUnit = (date, newFormat = 'p', hideTimezone = false) => {
+    if (!date) return '';
+    const utcDate = zonedTimeToUtc(new Date(date), timeZone);
+    const unitDate = utcToZonedTime(utcDate, timeZone);
+    let formatted = format(unitDate, newFormat);
+    if (!hideTimezone) {
+      formatted += ` (${timeZone})`;
+    }
+    return formatted;
+  };
+
+  return {
+    fDateUnit,
+    fTimeUnit,
+    timeZone,
+  };
+}
+
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMMMMMMM yyyy';
 
