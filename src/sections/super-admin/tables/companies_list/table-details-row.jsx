@@ -16,8 +16,15 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
-
-export default function TableDetailsRow({ row, index, selected, onEditRow, showAll, onSelectRow }) {
+export default function TableDetailsRow({
+  row,
+  index,
+  selected,
+  onEditRow,
+  showAll,
+  onSelectRow,
+  displayedColumns,
+}) {
   const {
     code,
     unit_service_type,
@@ -60,6 +67,7 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
       enqueueSnackbar('error', { variant: 'error' });
     }
   };
+
   const handleSubmitText = async () => {
     try {
       await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text });
@@ -68,107 +76,183 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
       enqueueSnackbar('error', { variant: 'error' });
     }
   };
+    const handleAddress = ()=>{
 
-  const renderPrimary = (
-    <TableRow
-      hover
-      index={index}
-      sx={{ backgroundColor: index % 2 ? 'background.lightgray' : '' }}
-      selected={selected}
-    >
-      <TableCell align="center">
-        <Box>{code}</Box>
-      </TableCell>
-      <TableCell align="center">{unit_service_type}</TableCell>
-      <TableCell align="center">{country}</TableCell>
-      <TableCell align="center">{city}</TableCell>
-      <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{sector}</TableCell>
-      <TableCell align="center">{commercial_name}</TableCell>
-      <TableCell align="center">{province}</TableCell>
-      <TableCell align="center">{address}</TableCell>
-      <TableCell align="center">
-        <a href={`tel:${phone_number_1}`}>{phone_number_1}</a>
-      </TableCell>
-      <TableCell align="center">
-        <a href={`tel:${Phone_number_2}`}>{Phone_number_2}</a>
-      </TableCell>
-      <TableCell align="center">
-        <Stack direction="row" justifyContent="space-between">
-          <a
-            rel="noreferrer"
-            target="_blank"
-            style={{ color: 'green' }}
-            href={`tel:${phone_number_1}`}
+      if (!address) return null;
+      const words = address.split(' ');
+      if( words.length > 1) {
+      const firstWord = words[0];
+      const fullAddress = address
+        return (
+          <Box
+            component="span"
+            title={fullAddress} // Tooltip on hover
+            sx={{
+              cursor: 'default',
+              maxWidth: '150px',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+            }}
           >
-            <Iconify icon="material-symbols:call" />
-          </a>
-          <a
-            rel="noreferrer"
-            target="_blank"
-            style={{ color: 'green' }}
-            href={`sms:${phone_number_1}`}
-          >
-            <Iconify icon="solar:chat-round-dots-bold" />
-          </a>
-          <a
-            rel="noreferrer"
-            target="_blank"
-            style={{ color: 'green' }}
-            href={`https://wa.me/${phone_number_1}`}
-          >
-            <Iconify icon="flowbite:whatsapp-solid" />
-          </a>
-        </Stack>
-      </TableCell>
-      <TableCell align="center">
-        <TextField select fullWidth value={status} onChange={handleChangeStatus}>
-          <MenuItem value="not contact">لم يتم التواصل</MenuItem>
-          <MenuItem value="agreed">قبول</MenuItem>
-          <MenuItem value="refused">رفض</MenuItem>
-          <MenuItem value="no number">لا يوجد رقم للتواصل</MenuItem>
-          <MenuItem value="wrong number">الرقم خاطئ</MenuItem>
-        </TextField>
-      </TableCell>
-      <TableCell align="center">
-        <TextField
-          fullWidth
-          multiline
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleSubmitText} edge="end">
-                  <Iconify icon="icon-park-solid:correct" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </TableCell>
-      {showAll && (
-        <>
-          <TableCell align="center">{insurance}</TableCell>
-          <TableCell align="center">{info}</TableCell>
-          <TableCell align="center">{work_shift}</TableCell>
-          <TableCell align="center">{constitution_objective}</TableCell>
-          <TableCell align="center">{type_of_specialty_1}</TableCell>
-          <TableCell align="center">{type_of_specialty_2}</TableCell>
-        </>
+            {firstWord}...
+          </Box>
       )}
+      return (
+        <Box
+          component="span"
+          title={address} // Tooltip on hover
+          sx={{
+            cursor: 'default',
+            maxWidth: '150px',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {address}
+        </Box>
+      );
+    }
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  );
+
+
+  const renderCell = (columnId) => {
+    switch (columnId) {
+      case 'code':
+        return <Box>{code}</Box>;
+      case 'unit_service_type':
+        return unit_service_type;
+      case 'country':
+        return country;
+      case 'city':
+        return city;
+      case 'email':
+        return email;
+      case 'sector':
+        return sector;
+      case 'commercial_name':
+        return commercial_name;
+      case 'province':
+        return province;
+      case 'address':
+        return handleAddress();
+
+      case 'phone_number_1':
+        return (
+          <a href={`tel:${phone_number_1}`} target="_blank" rel="noreferrer">
+            {phone_number_1}
+          </a>
+        );
+      case 'Phone_number_2':
+        return (
+          <a href={`tel:${Phone_number_2}`} target="_blank" rel="noreferrer">
+            {Phone_number_2}
+          </a>
+        );
+      case '':
+        return (
+          <Stack direction="row" justifyContent="space-between">
+            <a
+              rel="noreferrer"
+              target="_blank"
+              style={{ color: 'green' }}
+              href={`tel:${phone_number_1}`}
+            >
+              <Iconify icon="material-symbols:call" />
+            </a>
+            <a
+              rel="noreferrer"
+              target="_blank"
+              style={{ color: 'green' }}
+              href={`sms:${phone_number_1}`}
+            >
+              <Iconify icon="solar:chat-round-dots-bold" />
+            </a>
+            <a
+              rel="noreferrer"
+              target="_blank"
+              style={{ color: 'green' }}
+              href={`https://wa.me/ ${phone_number_1}`}
+            >
+              <Iconify icon="flowbite:whatsapp-solid" />
+            </a>
+          </Stack>
+        );
+      case 'status':
+        return (
+          <TextField select fullWidth value={status} onChange={handleChangeStatus}>
+            <MenuItem value="not contact">لم يتم التواصل</MenuItem>
+            <MenuItem value="agreed">قبول</MenuItem>
+            <MenuItem value="refused">رفض</MenuItem>
+            <MenuItem value="no number">لا يوجد رقم للتواصل</MenuItem>
+            <MenuItem value="wrong number">الرقم خاطئ</MenuItem>
+          </TextField>
+        );
+      case 'com_note':
+        return (
+          <TextField
+            fullWidth
+            multiline
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleSubmitText} edge="end">
+                    <Iconify icon="icon-park-solid:correct" />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        );
+      case 'insurance':
+        return showAll && insurance;
+      case 'info':
+        return showAll && info;
+      case 'work_shift':
+        return showAll && work_shift;
+      case 'constitution_objective':
+        return showAll && constitution_objective;
+      case 'type_of_specialty_1':
+        return showAll && type_of_specialty_1;
+      case 'type_of_specialty_2':
+        return showAll && type_of_specialty_2;
+      case 'subscribe_to':
+        return showAll && '—';
+      case 'social_network':
+        return showAll && '—';
+      case 'notes':
+        return showAll && '—';
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
-      {renderPrimary}
+      <TableRow
+        hover
+        sx={{
+          backgroundColor: index % 2 ? 'background.lightgray' : '',
+          cursor: 'pointer',
+        }}
+        selected={selected}
+        onClick={onSelectRow}
+      >
+
+        {displayedColumns.map((col) => (
+          <TableCell key={col.id} align="center">
+            {renderCell(col.id)}
+          </TableCell>
+        ))}
+
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+
 
       <CustomPopover
         open={popover.open}
@@ -184,7 +268,7 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
           }}
         >
           <Iconify icon="fluent:edit-32-filled" />
-          Edit
+          تعديل
         </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
@@ -213,11 +297,13 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
             }}
           />
         </Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
@@ -230,12 +316,15 @@ export default function TableDetailsRow({ row, index, selected, onEditRow, showA
             }}
           />
         </Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           {ip_address_user_modification}
         </Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
     </>
@@ -249,4 +338,5 @@ TableDetailsRow.propTypes = {
   selected: PropTypes.bool,
   showAll: PropTypes.bool,
   index: PropTypes.number,
+  displayedColumns: PropTypes.array.isRequired,
 };
