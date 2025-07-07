@@ -28,13 +28,21 @@ import FormProvider, {
 
 // ----------------------------------------------------------------------
 
-export default function AttendanceEdit({ row, open, onClose, refetch, employeeId }) {
+export default function AttendanceEdit({ row, open, onClose, refetch, employeeId, lastAttendance }) {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const attendanceSchema = Yup.object().shape({
-    date: Yup.date().nullable(),
+    date: Yup.date().nullable().test('check-last-attendance', t('There is already an attendance registered today.'), (value) => {
+      const lastAttendanceDate = lastAttendance?.date.split('T')[0];
+      const currentDate = value.toISOString().split('T')[0];
+
+      if(currentDate === lastAttendanceDate) {
+        return false;
+      }
+      return value && value.toString().length > 0;
+    }),
     check_in_time: Yup.date().nullable(),
     off: Yup.boolean().nullable(),
     check_out_time: Yup.date().nullable(),
@@ -186,4 +194,5 @@ AttendanceEdit.propTypes = {
   employeeId: PropTypes.string,
   open: PropTypes.bool,
   row: PropTypes.object,
+  lastAttendance: PropTypes.object,
 };
