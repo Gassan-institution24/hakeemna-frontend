@@ -191,7 +191,7 @@ export default function WaitingRoom() {
                         )}
 
                         <TableCell>{patientName}</TableCell>
-                        <TableCell>{fTimeUnit(entranceData?.Arrival_time)}</TableCell>
+                        <TableCell>{fTimeUnit(entranceData?.Arrival_time, 'p', true)}</TableCell>
                         <TableCell>{entranceData?.note}</TableCell>
                         <TableCell>
                           <Button

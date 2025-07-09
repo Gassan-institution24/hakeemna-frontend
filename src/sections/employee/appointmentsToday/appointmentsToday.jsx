@@ -30,7 +30,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTime } from 'src/utils/format-time';
+import { fTime, useFDateTimeUnit } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -54,7 +54,7 @@ import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
   const checkAcl = useAclGuard();
-
+  const { fTimeUnit } = useFDateTimeUnit();
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
@@ -81,7 +81,6 @@ export default function AppointmentsToday() {
   const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
 
   const { roomsData } = useGetUSRooms(unitServiceId);
-  const [patientId, setPatientId] = useState();
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
@@ -183,10 +182,7 @@ export default function AppointmentsToday() {
     }
   };
   const handlePatientClick = (info) => {
-    setPatientId(info);
     router.push(`/dashboard/mypatients/${info}`);
-    console.log(`dashboard/mypatients/${info}`);
-    
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -432,7 +428,7 @@ export default function AppointmentsToday() {
                     return (
                       <>
                         <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                          <TableCell>{fTime(info?.start_time)}</TableCell>
+                          <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
                           <TableCell>
                             {' '}
                             <Button
