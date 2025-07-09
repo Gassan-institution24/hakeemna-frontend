@@ -64,7 +64,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedTitles, setSelectedTitles] = useState({});
   const [pateintInfo, setPatientInfo] = useState('');
   const [addingId, setAddingId] = useState('');
   const { fullWidth } = useState(false);
@@ -251,9 +251,15 @@ export default function AppointmentsToday() {
             width: 150,
             height: 35,
           }}
-          value={selectedTitle}
+          value={selectedTitles[info._id] || ''}
           displayEmpty
-          onChange={(e) => setSelectedTitle(e.target.value)}
+          onChange={(e) => {
+            setSelectedTitles((prev) => ({
+              ...prev,
+              [info._id]: e.target.value,
+            }));
+            updateAppointmentactivity(e.target.value, info);
+          }}
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
             {t('Next activity')}
@@ -263,8 +269,6 @@ export default function AppointmentsToday() {
               <MenuItem
                 key={index}
                 value={activity?.activities?._id}
-                onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
