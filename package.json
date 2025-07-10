@@ -19,6 +19,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
     "@aws-amplify/auth": "^5.6.5",
+    "@daily-co/daily-js": "^0.80.0",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
