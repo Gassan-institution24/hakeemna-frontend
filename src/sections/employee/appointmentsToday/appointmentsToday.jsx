@@ -181,8 +181,9 @@ export default function AppointmentsToday() {
       enqueueSnackbar('Error starting appointment', { variant: 'error' });
     }
   };
+
   const handlePatientClick = (info) => {
-    router.push(`/dashboard/mypatients/${info}`);
+    router.push(`/dashboard/mypatients/${info?.patient?._id || info?.unit_service_patient?._id}`);
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -433,7 +434,7 @@ export default function AppointmentsToday() {
                             {' '}
                             <Button
                               variant="text"
-                              onClick={() => handlePatientClick(info?.patient?._id)}
+                              onClick={() => handlePatientClick(info)}
                               sx={{
                                 textTransform: 'none',
                                 padding: 0,

@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import DailyIframe from '@daily-co/daily-js';
-import React, { useRef, useEffect, useState } from 'react';
-import { Button, Stack } from '@mui/material';
+import React, { useRef, useState, useEffect } from 'react';
+
+import { Stack, Button } from '@mui/material';
 
 export default function WebRTCComponent({ roomUrl }) {
   const containerRef = useRef(null);
