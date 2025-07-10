@@ -9,7 +9,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate, fTime, fHourMin } from 'src/utils/format-time';
+import { fDate, fHourMin, useFDateTimeUnit } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -56,6 +56,8 @@ export default function AttendanceRow({
   const [open, setOpen] = useState(false);
   const  checkAcl  = useAclGuard();
 
+  const { fDateUnit, fTimeUnit } = useFDateTimeUnit();
+
   const popover = usePopover();
   const DDL = usePopover();
   const deleting = usePopover();
@@ -63,9 +65,9 @@ export default function AttendanceRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{fDate(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
-        <TableCell align="center">{fTime(check_in_time)}</TableCell>
-        <TableCell align="center">{fTime(check_out_time)}</TableCell>
+        <TableCell align="center">{fDateUnit(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
+        <TableCell align="center">{fTimeUnit(check_in_time)}</TableCell>
+        <TableCell align="center">{fTimeUnit(check_out_time)}</TableCell>
         <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
         <TableCell align="center">{fHourMin(workTime)}</TableCell>
         <TableCell align="center">{t(work_type)}</TableCell>

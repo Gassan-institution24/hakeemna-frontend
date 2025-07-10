@@ -1535,5 +1535,6 @@
   "patient created successfully": "تم إنشاء المريض بنجاح",
   "Update my data": "تحديث بياناتي",
   "Are you registered in the National Jordanian Billing System?": "هل انت مسجل في نظام الفوترة الاردني الوطني؟",
-  "Add your national Jordanian billing system information" : "اضف معلوماتك في نظام الفوترة الاردني الوطني"
+  "Add your national Jordanian billing system information" : "اضف معلوماتك في نظام الفوترة الاردني الوطني",
+  "There is already an attendance registered today.": "يوجد دوام مسجل اليوم بالفعل."
 }

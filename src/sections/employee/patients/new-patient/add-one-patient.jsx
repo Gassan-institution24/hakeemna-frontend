@@ -18,7 +18,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import FormProvider, {
   RHFTextField,
   RHFSelect,
-  RHFPhoneNumber
+  RHFPhoneNumber,
+  RHFDatePicker
 } from 'src/components/hook-form';
 import { MenuItem } from '@mui/material';
 import { useMemo } from 'react';
@@ -208,7 +209,7 @@ const defaultWorkGroup = useMemo(
             </MenuItem>
           </RHFSelect>
           <RHFTextField name="file_code" label={t('File code')} />
-          <RHFTextField
+          <RHFDatePicker
             name="birth_date"
             type="date"
             label={t('birth date')}
