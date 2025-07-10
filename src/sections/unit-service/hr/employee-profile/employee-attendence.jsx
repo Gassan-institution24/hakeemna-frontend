@@ -40,7 +40,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeAttendence({ employee }) {
+export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const { t } = useTranslate();
 
   const TABLE_HEAD = [
@@ -78,6 +78,10 @@ export default function EmployeeAttendence({ employee }) {
     sortBy: table.orderBy,
     ...filters,
   });
+
+  if (attendence.length) {
+    setLastAttendance(attendence[0]);
+  }
 
   const dateError =
     filters.startDate && filters.endDate
@@ -225,4 +229,5 @@ export default function EmployeeAttendence({ employee }) {
 
 EmployeeAttendence.propTypes = {
   employee: PropTypes.object,
+  setLastAttendance: PropTypes.func,
 };

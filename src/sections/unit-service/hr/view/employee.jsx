@@ -19,6 +19,8 @@ export default function EmployeeProfile() {
   const { id } = useParams();
   const { data, refetch } = useGetEmployeeEngagement(id);
 
+  const [lastAttendance, setLastAttendance] = useState(null);
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -100,7 +102,7 @@ export default function EmployeeProfile() {
         )}
       </Stack>
 
-      {currentTab === 'attendance' && <EmployeeAttendence employee={data} />}
+      {currentTab === 'attendance' && <EmployeeAttendence employee={data} setLastAttendance={setLastAttendance} />}
       {currentTab === 'edit' && <EditEmployee employee={data} refetch={refetch} />}
       <AttendanceEdit
         employeeId={id}
@@ -112,6 +114,7 @@ export default function EmployeeProfile() {
           }, 100);
         }}
         onClose={() => setOpen(false)}
+        lastAttendance={lastAttendance}
       />
     </Container>
   );
