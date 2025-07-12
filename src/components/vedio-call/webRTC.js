@@ -24,15 +24,14 @@ export default function WebRTCComponent({ roomUrl }) {
       },
     });
 
-    // احتفظ بالإطار في ref
     callFrameRef.current = callFrame;
 
-    // أضف iframe
     if (callFrame.iframe instanceof Node) {
       containerRef.current.appendChild(callFrame.iframe);
     }
 
-    callFrame.join({ url: roomUrl })
+    callFrame
+      .join({ url: roomUrl })
       .then(() => setCallActive(true))
       .catch(console.error);
 

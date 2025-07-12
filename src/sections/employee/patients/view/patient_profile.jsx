@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 
@@ -79,30 +80,67 @@ export default function PatientProfile() {
     }
     return '';
   }
+  // const handleCall = async () => {
+  //   try {
+  //     const uniqueRoom = `hakeemna-${Date.now()}`; 
+
+  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ roomName: uniqueRoom }),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error || 'Failed to create room');
+  //     }
+
+  //     const data = await response.json();
+  //     setRoomUrl(data.url);
+  //     setCurrentTab('call');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
   const handleCall = async () => {
-    try {
-      const uniqueRoom = `hakeemna-${Date.now()}`; // أو خلي السيرفر يولد الاسم لو حابب
+  try {
+    const uniqueRoom = `hakeemna-${Date.now()}`;
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ roomName: uniqueRoom }),
-      });
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ roomName: uniqueRoom }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create room');
-      }
-
-      const data = await response.json();
-      setRoomUrl(data.url);
-      setCurrentTab('call');
-    } catch (error) {
-      console.error(error);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create room');
     }
-  };
+
+    const data = await response.json();
+    setRoomUrl(data.url);
+    setCurrentTab('call');
+
+    // ✅ أرسل بيانات الاتصال إلى الطرف الثاني
+    const socket = io(process.env.REACT_APP_API_URL); // تأكد أنك ما كررته بمكان ثاني
+    socket.emit('callUser', {
+      userId: patientData.user, // ← ID المستقبل
+      userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
+      roomUrl: data.url, // ← أهم شيء عشان الطرف الثاني يعرف الغرفة
+    });
+
+    console.log('📤 Sent callUser with room:', data.url);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
     <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
       <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
