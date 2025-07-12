@@ -66,10 +66,10 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
       </Dialog>
 
       {/* مكون المكالمة الفيديو */}
-      {callAccepted && roomUrl && (
+      {roomUrl && (
         <WebRTCComponent
           roomUrl={roomUrl}
-          open={open}
+          open={callAccepted} // نتحكم من برّا، بس بدون إخفاء المكون
           onClose={() => {
             setCallAccepted(false);
             setRoomUrl('');
