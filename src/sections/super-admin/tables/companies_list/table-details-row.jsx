@@ -25,6 +25,16 @@ export default function TableDetailsRow({
   onSelectRow,
   displayedColumns,
 }) {
+  const { enqueueSnackbar } = useSnackbar();
+  const [text, setText] = useState(row?.com_note || '');
+  const popover = usePopover();
+  const DDL = usePopover();
+
+  // Add null check for row
+  if (!row) {
+    return null;
+  }
+
   const {
     code,
     unit_service_type,
@@ -52,12 +62,7 @@ export default function TableDetailsRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
-  } = row;
-
-  const { enqueueSnackbar } = useSnackbar();
-  const [text, setText] = useState(com_note);
-  const popover = usePopover();
-  const DDL = usePopover();
+  } = row || {};
 
   const handleChangeStatus = async (event) => {
     try {
@@ -77,7 +82,6 @@ export default function TableDetailsRow({
     }
   };
     const handleAddress = ()=>{
-
       if (!address) return null;
       const words = address.split(' ');
       if( words.length > 1) {
@@ -118,38 +122,38 @@ export default function TableDetailsRow({
   const renderCell = (columnId) => {
     switch (columnId) {
       case 'code':
-        return <Box>{code}</Box>;
+        return <Box>{code || ''}</Box>;
       case 'unit_service_type':
-        return unit_service_type;
+        return unit_service_type || '';
       case 'country':
-        return country;
+        return country || '';
       case 'city':
-        return city;
+        return city || '';
       case 'email':
-        return email;
+        return email || '';
       case 'sector':
-        return sector;
+        return sector || '';
       case 'commercial_name':
-        return commercial_name;
+        return commercial_name || '';
       case 'province':
-        return province;
+        return province || '';
       case 'address':
         return handleAddress();
 
       case 'phone_number_1':
-        return (
+        return phone_number_1 ? (
           <a href={`tel:${phone_number_1}`} target="_blank" rel="noreferrer">
             {phone_number_1}
           </a>
-        );
+        ) : '';
       case 'Phone_number_2':
-        return (
+        return Phone_number_2 ? (
           <a href={`tel:${Phone_number_2}`} target="_blank" rel="noreferrer">
             {Phone_number_2}
           </a>
-        );
+        ) : '';
       case '':
-        return (
+        return phone_number_1 ? (
           <Stack direction="row" justifyContent="space-between">
             <a
               rel="noreferrer"
@@ -176,10 +180,10 @@ export default function TableDetailsRow({
               <Iconify icon="flowbite:whatsapp-solid" />
             </a>
           </Stack>
-        );
+        ) : '';
       case 'status':
         return (
-          <TextField select fullWidth value={status} onChange={handleChangeStatus}>
+          <TextField select fullWidth value={status || ''} onChange={handleChangeStatus}>
             <MenuItem value="not contact">لم يتم التواصل</MenuItem>
             <MenuItem value="agreed">قبول</MenuItem>
             <MenuItem value="refused">رفض</MenuItem>
@@ -192,7 +196,7 @@ export default function TableDetailsRow({
           <TextField
             fullWidth
             multiline
-            value={text}
+            value={text || ''}
             onChange={(e) => setText(e.target.value)}
             InputProps={{
               endAdornment: (
@@ -206,17 +210,17 @@ export default function TableDetailsRow({
           />
         );
       case 'insurance':
-        return showAll && insurance;
+        return showAll && (insurance || '');
       case 'info':
-        return showAll && info;
+        return showAll && (info || '');
       case 'work_shift':
-        return showAll && work_shift;
+        return showAll && (work_shift || '');
       case 'constitution_objective':
-        return showAll && constitution_objective;
+        return showAll && (constitution_objective || '');
       case 'type_of_specialty_1':
-        return showAll && type_of_specialty_1;
+        return showAll && (type_of_specialty_1 || '');
       case 'type_of_specialty_2':
-        return showAll && type_of_specialty_2;
+        return showAll && (type_of_specialty_2 || '');
       case 'subscribe_to':
         return showAll && '—';
       case 'social_network':
