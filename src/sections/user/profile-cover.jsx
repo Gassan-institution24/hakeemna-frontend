@@ -1,77 +1,81 @@
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import io from 'socket.io-client';
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import ListItemText from '@mui/material/ListItemText';
-import { alpha, useTheme } from '@mui/material/styles';
-
-import { bgGradient } from 'src/theme/css';
-
-// ----------------------------------------------------------------------
+import WebRTCComponent from 'src/components/vedio-call/webRTC'; // تأكد من المسار حسب مشروعك
 
 export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
-  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const [callerName, setCallerName] = useState('');
+  const [callerId, setCallerId] = useState('');
+  const [roomUrl, setRoomUrl] = useState('');
+  const [callAccepted, setCallAccepted] = useState(false);
+
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_API_URL);
+    socket.on('callUser', (data) => {
+      console.log('📞 Incoming call data:', data); // <--- هذا مهم جدًا
+      setCallerName(data.userName);
+      setCallerId(data.from);
+      setRoomUrl(data.roomUrl);
+      setOpen(true);
+    });
+
+    // استقبل الاتصال الوارد
+    socket.on('callUser', (data) => {
+      setCallerName(data.userName);
+      setCallerId(data.from);
+      setRoomUrl(data.roomUrl);
+      setOpen(true); // افتح نافذة الاتصال
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const handleAccept = () => {
+    setCallAccepted(true);
+    setOpen(false);
+  };
+
+  const handleReject = () => {
+    setOpen(false);
+    setCallerName('');
+    setCallerId('');
+    setRoomUrl('');
+  };
 
   return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.primary.darker, 0.8),
-          imgUrl: coverUrl,
-        }),
-        height: 1,
-        color: 'common.white',
-      }}
-    >
-      <Stack
-        direction={{ xs: 'column', md: 'row' }}
-        sx={{
-          left: { md: 24 },
-          bottom: { md: 24 },
-          zIndex: { md: 10 },
-          pt: { xs: 6, md: 0 },
-          position: { md: 'absolute' },
-        }}
-      >
-        <Avatar
-          src={avatarUrl}
-          alt={name}
-          sx={{
-            mx: 'auto',
-            width: { xs: 64, md: 128 },
-            height: { xs: 64, md: 128 },
-            border: `solid 2px ${theme.palette.common.white}`,
-          }}
-        />
+    <>
+      {/* نافذة الاتصال الوارد */}
+      <Dialog open={open} onClose={handleReject}>
+        <DialogTitle>📞 Incoming Call from {callerName}</DialogTitle>
+        <DialogActions>
+          <Button color="error" onClick={handleReject}>
+            رفض
+          </Button>
+          <Button color="primary" onClick={handleAccept}>
+            قبول
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        <ListItemText
-          sx={{
-            mt: 3,
-            ml: { md: 3 },
-            textAlign: { xs: 'center', md: 'unset' },
-          }}
-          primary={name}
-          secondary={role}
-          primaryTypographyProps={{
-            typography: 'h4',
-          }}
-          secondaryTypographyProps={{
-            mt: 0.5,
-            color: 'inherit',
-            component: 'span',
-            typography: 'body2',
-            sx: { opacity: 0.48 },
+      {/* مكون المكالمة الفيديو */}
+      {roomUrl && (
+        <WebRTCComponent
+          roomUrl={roomUrl}
+          open={callAccepted} // نتحكم من برّا، بس بدون إخفاء المكون
+          onClose={() => {
+            setCallAccepted(false);
+            setRoomUrl('');
           }}
         />
-      </Stack>
-    </Box>
+      )}
+    </>
   );
 }
-
-ProfileCover.propTypes = {
-  avatarUrl: PropTypes.string,
-  coverUrl: PropTypes.string,
-  name: PropTypes.string,
-  role: PropTypes.string,
-};

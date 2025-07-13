@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 
@@ -13,7 +14,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
 import WebRTCComponent from 'src/components/vedio-call/webRTC';
-import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -32,6 +32,8 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 export default function PatientProfile() {
   const { id } = useParams();
   const router = useRouter();
+  const [roomUrl, setRoomUrl] = useState(null);
+
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
       {
@@ -41,10 +43,6 @@ export default function PatientProfile() {
       { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
     ],
   });
-
-  const { setIdToCall, callUser, idToCall } = useWebRTC();
-
-  // const { isMedLab } = useUSTypeGuard();
 
   const patientData = usPatientData.patient
     ? { ...usPatientData.patient, ...usPatientData }
@@ -82,54 +80,69 @@ export default function PatientProfile() {
     }
     return '';
   }
+  // const handleCall = async () => {
+  //   try {
+  //     const uniqueRoom = `hakeemna-${Date.now()}`; 
 
-  // const patientGeneralData = [
-  //   { title: 'age', value: calculateAge(patientData?.birth_date) },
-  //   // { title: 'gender', value: patientData?.gender },
-  //   { title: 'phone', value: patientData?.mobile_num1 },
-  //   { title: 'email', value: patientData?.email },
-  //   { title: 'file code', value: patientData?.file_code },
-  //   { title: 'height', value: patientData?.height, unit: 'cm' },
-  //   { title: 'weight', value: patientData?.weight, unit: 'kg' },
-  //   { title: 'smoking', value: patientData?.smoking },
-  //   { title: 'alcohol consumption', value: patientData?.alcohol_consumption },
-  //   { title: 'sport exercises', value: patientData?.sport_exercises },
-  // ];
+  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ roomName: uniqueRoom }),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error || 'Failed to create room');
+  //     }
+
+  //     const data = await response.json();
+  //     setRoomUrl(data.url);
+  //     setCurrentTab('call');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
+  const handleCall = async () => {
+  try {
+    const uniqueRoom = `hakeemna-${Date.now()}`;
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ roomName: uniqueRoom }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create room');
+    }
+
+    const data = await response.json();
+    setRoomUrl(data.url);
+    setCurrentTab('call');
+
+    // ✅ أرسل بيانات الاتصال إلى الطرف الثاني
+    const socket = io(process.env.REACT_APP_API_URL); // تأكد أنك ما كررته بمكان ثاني
+    socket.emit('callUser', {
+      userId: patientData.user, // ← ID المستقبل
+      userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
+      roomUrl: data.url, // ← أهم شيء عشان الطرف الثاني يعرف الغرفة
+    });
+
+    console.log('📤 Sent callUser with room:', data.url);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
-      {/* <Card sx={{ px: 4, py: 2, mb: 4 }}>
-        <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
-          <Avatar
-            src={patientData?.profile_picture}
-            sx={{ width: { md: 100 }, height: { md: 100 } }}
-          />
-          <Stack gap={1}>
-            <Typography variant="h6">
-              {curLangAr ? patientData?.name_arabic : patientData?.name_english}
-            </Typography>
-            <Box
-              rowGap={0.5}
-              columnGap={8}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                md: 'repeat(3, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              {patientGeneralData?.map((one, idx) => (
-                <Typography key={idx} variant="body2">
-                  <span style={{ fontWeight: 650, color: '#637381' }}>{t(one?.title)}</span>:{' '}
-                  <span dir={one.title === 'phone' ? 'ltr' : ''}>
-                    {t(one.value)} {one.unit}
-                  </span>
-                </Typography>
-              ))}
-            </Box>
-          </Stack>
-        </Stack>
-      </Card> */}
       <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
         <Stack gap={2}>
           <PageSelector
@@ -142,7 +155,14 @@ export default function PatientProfile() {
           />
           {currentTab !== 'call' && (
             <Box sx={{ width: '100%', height: '100%', maxHeight: 200 }}>
-              <WebRTCComponent onShowBig={() => setCurrentTab('call')} />
+              <WebRTCComponent
+                roomUrl={roomUrl}
+                open={currentTab === 'call' && Boolean(roomUrl)}
+                onClose={() => {
+                  setRoomUrl(null);
+                  setCurrentTab('communication');
+                }}
+              />
             </Box>
           )}
         </Stack>
@@ -173,18 +193,12 @@ export default function PatientProfile() {
               >
                 {t('edit')}
               </Button>
-              {patientData?.user && (
+              {patientData && (
                 <Button
                   sx={{ minWidth: 120 }}
                   variant="contained"
                   color="primary"
-                  onClick={() => {
-                    if (!idToCall) {
-                      setIdToCall(patientData?.user);
-                      callUser(patientData?.user);
-                    }
-                    setCurrentTab('call');
-                  }}
+                  onClick={handleCall}
                 >
                   {t('call')}
                 </Button>
@@ -212,7 +226,17 @@ export default function PatientProfile() {
             <PatientInstructions patient={usPatientData} />
           )}
           {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
-          {currentTab === 'call' && usPatientData && <WebRTCComponent userId={patientData?.user} />}
+          {currentTab === 'call' && roomUrl && (
+            <WebRTCComponent
+              roomUrl={roomUrl}
+              open={currentTab === 'call' && Boolean(roomUrl)}
+              onClose={() => {
+                setRoomUrl(null);
+                setCurrentTab('communication');
+              }}
+            />
+          )}
+
           {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
           {currentTab === 'checklist' && usPatientData && (
             <PatientCheckList patient={usPatientData} />
