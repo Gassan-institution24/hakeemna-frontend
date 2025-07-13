@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useContext } from 'react';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -13,12 +13,11 @@ import { Checkbox, Typography } from '@mui/material';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
-
+import { CompaniesContext } from 'src/context/CompaniesContext';
 import { useGetCompanies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -27,10 +26,10 @@ import {
   getComparator,
   TableHeadCustom,
   TablePaginationCustom,
-} from 'src/components/table'; /// edit
+} from 'src/components/table';
 import { Box } from '@mui/system';
 import TableDetailFilters from './table-details-filters'
-import TableDetailRow from '../companies_list/table-details-row'; /// edit
+import TableDetailRow from '../companies_list/table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -44,16 +43,26 @@ const defaultFilters = {
   province: '',
   speciality1: '',
   speciality2: '',
-  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function CompaniesTableView() {
-  /// edit
-  const [showAll, setShowAll] = useState(false);
+  const { state, setState } = useContext(CompaniesContext);
+  const { savedFilters, savedPage, savedVisibleColumns, savedShowAll } = state;
+
+  const handleSetState = useCallback((newState) => {
+    setState((prevState) => ({ ...prevState, ...newState }));
+  }, [setState]);
+
+  const [showAll, setShowAll] = useState(savedShowAll || false);
+  const [filters, setFilters] = useState(savedFilters || defaultFilters);
+  const [visibleColumns, setVisibleColumns] = useState(
+    savedVisibleColumns || {}
+  );
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const TABLE_HEAD = [
-    /// to edit
     { id: 'code', label: 'code' },
     { id: 'unit_service_type', label: 'unit_service_type' },
     { id: 'country', label: 'country' },
@@ -78,31 +87,54 @@ export default function CompaniesTableView() {
     showAll && { id: 'social_network', label: 'social_network' },
     showAll && { id: 'notes', label: 'notes' },
   ].filter(Boolean);
+  
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const [visibleColumns, setVisibleColumns] = useState(
-    Object.fromEntries(TABLE_HEAD.map((col) => [col.id, true]))
-  );
+  useEffect(() => {
+    if (Object.keys(visibleColumns).length === 0) {
+      const initialColumns = Object.fromEntries(TABLE_HEAD.map((col) => [col.id, true]));
+      setVisibleColumns(initialColumns);
+      handleSetState({ savedVisibleColumns: initialColumns });
+    }
+  }, [visibleColumns, setVisibleColumns, TABLE_HEAD, handleSetState]);
 
+  useEffect(() => {
+    if (!isInitialized && savedPage !== undefined) {
+      table.setPage(savedPage);
+      setIsInitialized(true);
+    }
+  }, [savedPage, table, isInitialized]);
 
+  useEffect(() => {
+    if (isInitialized && savedPage !== undefined && savedPage !== table.page) {
+      table.setPage(savedPage);
+    }
+  }, [savedPage, table, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const timeoutId = setTimeout(() => {
+      if (table.page !== savedPage) {
+        handleSetState({ savedPage: table.page });
+      }
+    }, 100);
+
+  // eslint-disable-next-line consistent-return
+    return () => clearTimeout(timeoutId);
+  }, [table.page, savedPage, handleSetState, isInitialized]);
 
   const displayedColumns = TABLE_HEAD.filter((col) => visibleColumns[col.id]);
 
   const componentRef = useRef();
 
-
-  // const settings = useSettingsContext();
-
   const router = useRouter();
 
   const { companiesData, loading } = useGetCompanies();
 
-  const [filters, setFilters] = useState(defaultFilters);
-
   const searchParams = useSearchParams();
 
   const upload_record = searchParams.get('upload_record');
-
 
   useEffect(() => {
     const name = searchParams.get('name');
@@ -113,7 +145,7 @@ export default function CompaniesTableView() {
     const page = Number(searchParams.get('page') || '0');
 
     if (name || USType || city || sector || province) {
-      setFilters({
+      const newFilters = {
         name: name || '',
         USType: USType || '',
         city: city || '',
@@ -121,19 +153,24 @@ export default function CompaniesTableView() {
         province: province || '',
         speciality1: '',
         speciality2: '',
-      });
+      };
+      setFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     }
 
-    table.setPage(page);
+    if (page !== 0) {
+      table.setPage(page);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
-
   useEffect(() => {
     if (upload_record) {
-      setFilters((prev) => ({ ...prev, name: upload_record }));
+      const newFilters = { ...filters, name: upload_record };
+      setFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     }
-  }, [upload_record]);
+  }, [upload_record, filters, handleSetState]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -160,7 +197,7 @@ export default function CompaniesTableView() {
       acc.push({
         code: data.code,
         name: data.name_english,
-        description: data.description, /// edit
+        description: data.description, 
       });
       return acc;
     }, []);
@@ -171,46 +208,55 @@ export default function CompaniesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'companiesTable.xlsx'); /// edit
+    saveAs(data, 'companiesTable.xlsx');
   };
 
   const handleFilters = useCallback(
     (name, value) => {
       table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+      const newFilters = { ...filters, [name]: value };
+      setFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     },
-    [table]
+    [table, filters, handleSetState]
   );
 
   const handleEditRow = useCallback(
     (id) => {
-    const search = new URLSearchParams({
-      ...(filters.name && { name: filters.name }),
-      ...(filters.USType && { ust: filters.USType }),
-      ...(filters.city && { city: filters.city }),
-      ...(filters.sector && { sector: filters.sector }),
-      ...(filters.province && { province: filters.province }),
-      page: table.page,
-    }).toString();
-
-    router.push(`${paths.superadmin.tables.companies.edit(id)}?${search}`);
+      router.push(`${paths.superadmin.tables.companies.edit(id)}`);
     },
-    [router, filters, table.page]
+    [router]
   );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
-  }, []);
+    handleSetState({ savedFilters: defaultFilters });
+  }, [handleSetState]);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleShowAllChange = useCallback((newShowAll) => {
+    setShowAll(newShowAll);
+    handleSetState({ savedShowAll: newShowAll });
+  }, [handleSetState]);
+
+  const handleVisibleColumnsChange = useCallback((newVisibleColumns) => {
+    setVisibleColumns(newVisibleColumns);
+    handleSetState({ savedVisibleColumns: newVisibleColumns });
+  }, [handleSetState]);
+
+  const handlePageChange = useCallback((event, newPage) => {
+    table.onChangePage(event, newPage);
+    handleSetState({ savedPage: newPage });
+  }, [table, handleSetState]);
+
+  const handleSetPage = useCallback((newPage) => {
+    table.setPage(newPage);
+    handleSetState({ savedPage: newPage });
+  }, [table, handleSetState]);
+
+  const handleRowsPerPageChange = useCallback((event) => {
+    table.onChangeRowsPerPage(event);
+    handleSetState({ savedPage: 0 });
+  }, [table, handleSetState]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -220,13 +266,11 @@ export default function CompaniesTableView() {
   const uniqueCities = [...new Set(dataFiltered.map((one) => one.city))];
   const uniqueSectors = [...new Set(dataFiltered.map((one) => one.sector))];
   const uniqueProvince = [...new Set(dataFiltered.map((one) => one.province))];
-  // const uniqueSpecialities1 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_1))];
-  // const uniqueSpecialities2 = [...new Set(dataFiltered.map((one) => one.type_of_specialty_2))];
 
   return (
     <Container maxWidth="">
       <CustomBreadcrumbs
-        heading="companies" /// edit
+        heading="companies"
         links={[
           {
             name: 'dashboard',
@@ -236,17 +280,17 @@ export default function CompaniesTableView() {
             name: 'Tables',
             href: paths.superadmin.tables.list,
           },
-          { name: 'companies' }, /// edit
+          { name: 'companies' },
         ]}
         action={
           <Button
             component={RouterLink}
-            href={paths.superadmin.tables.companies.new} /// edit
+            href={paths.superadmin.tables.companies.new}
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
             New company
-          </Button> /// edit
+          </Button>
         }
         sx={{
           mb: { xs: 3, md: 5 },
@@ -269,10 +313,10 @@ export default function CompaniesTableView() {
               size="small"
               checked={visibleColumns[col.id] || false}
               onChange={(e) =>
-                setVisibleColumns((prev) => ({
-                  ...prev,
+                handleVisibleColumnsChange({
+                  ...visibleColumns,
                   [col.id]: e.target.checked,
-                }))
+                })
               }
             />
             <Typography variant="body2">{col.label}</Typography>
@@ -285,19 +329,16 @@ export default function CompaniesTableView() {
           filters={filters}
           onFilters={handleFilters}
           onDownload={handleDownload}
-          //
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
-        <Checkbox checked={showAll} onChange={() => setShowAll(!showAll)} />
+        <Checkbox checked={showAll} onChange={(e) => handleShowAllChange(e.target.checked)} />
         show all
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            //
             onResetFilters={handleResetFilters}
-            //
             results={dataFiltered.length}
             sx={{ p: 2.5, pt: 0 }}
           />
@@ -342,11 +383,10 @@ export default function CompaniesTableView() {
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
-          setPage={table.setPage}
+          setPage={handleSetPage}
           rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
           dense={table.dense}
           onChangeDense={table.onChangeDense}
         />
@@ -428,10 +468,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) => data.type_of_specialty_2?.toLowerCase().indexOf(speciality2.toLowerCase()) !== -1
     );
   }
-
-  // if (status !== 'all') {
-  //   inputData = inputData.filter((order) => order.status === status);
-  // }
 
   return inputData;
 }

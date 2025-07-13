@@ -64,7 +64,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  const [selectedTitles, setSelectedTitles] = useState({});
+  const [selectedTitle, setSelectedTitle] = useState('');
   const [pateintInfo, setPatientInfo] = useState('');
   const [addingId, setAddingId] = useState('');
   const { fullWidth } = useState(false);
@@ -148,6 +148,7 @@ export default function AppointmentsToday() {
   const StatusFunction = async (info, status, alert) => {
     try {
       const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
+
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
       refetch();
       enqueueSnackbar(`${info?.patient?.name_english} ${alert}`, {
@@ -180,7 +181,6 @@ export default function AppointmentsToday() {
       enqueueSnackbar('Error starting appointment', { variant: 'error' });
     }
   };
-
   const handlePatientClick = (info) => {
     router.push(`/dashboard/mypatients/${info}`);
   };
@@ -251,15 +251,9 @@ export default function AppointmentsToday() {
             width: 150,
             height: 35,
           }}
-          value={selectedTitles[info._id] || ''}
+          value={selectedTitle}
           displayEmpty
-          onChange={(e) => {
-            setSelectedTitles((prev) => ({
-              ...prev,
-              [info._id]: e.target.value,
-            }));
-            updateAppointmentactivity(e.target.value, info);
-          }}
+          onChange={(e) => setSelectedTitle(e.target.value)}
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
             {t('Next activity')}
@@ -269,6 +263,8 @@ export default function AppointmentsToday() {
               <MenuItem
                 key={index}
                 value={activity?.activities?._id}
+                onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
+                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -432,12 +428,13 @@ export default function AppointmentsToday() {
                     return (
                       <>
                         <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                          <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
+                          {console.log(fTimeUnit(info?.start_time, 'p', true))}
+                          <TableCell>{info?.start_time}</TableCell>
                           <TableCell>
                             {' '}
                             <Button
                               variant="text"
-                              onClick={() => handlePatientClick(info)}
+                              onClick={() => handlePatientClick(info?.patient?._id)}
                               sx={{
                                 textTransform: 'none',
                                 padding: 0,
