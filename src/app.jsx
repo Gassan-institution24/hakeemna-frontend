@@ -18,6 +18,7 @@ import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 import { CheckoutProvider } from './sections/unit-service/checkout/context';
 import { WebRTCProvider } from './components/vedio-call/web-rtc-provider';
+import { CompaniesProvider } from './context/CompaniesContext';
 
 window.Buffer = Buffer;
 
@@ -89,6 +90,7 @@ export default function App() {
   return (
     <AuthProvider>
       <WebRTCProvider>
+        <CompaniesProvider>
         <LocalizationProvider>
           <SettingsProvider
             defaultSettings={{
@@ -113,11 +115,12 @@ export default function App() {
                       <Router />
                     </div>
                   </CheckoutProvider>
-                </SnackbarProvider>
-              </MotionLazy>
-            </ThemeProvider>
-          </SettingsProvider>
-        </LocalizationProvider>
+                  </SnackbarProvider>
+                </MotionLazy>
+              </ThemeProvider>
+            </SettingsProvider>
+          </LocalizationProvider>
+        </CompaniesProvider>
       </WebRTCProvider>
     </AuthProvider>
   );
