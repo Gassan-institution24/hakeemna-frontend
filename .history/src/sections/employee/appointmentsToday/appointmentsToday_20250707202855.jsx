@@ -30,7 +30,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTime, useFDateTimeUnit } from 'src/utils/format-time';
+import { fTime, useFDateTimeUnitimport { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -54,7 +54,7 @@ import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
   const checkAcl = useAclGuard();
-  const { fTimeUnit } = useFDateTimeUnit();
+
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
@@ -64,7 +64,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  const [selectedTitles, setSelectedTitles] = useState({});
+  const [selectedTitle, setSelectedTitle] = useState('');
   const [pateintInfo, setPatientInfo] = useState('');
   const [addingId, setAddingId] = useState('');
   const { fullWidth } = useState(false);
@@ -81,6 +81,7 @@ export default function AppointmentsToday() {
   const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
 
   const { roomsData } = useGetUSRooms(unitServiceId);
+  const [patientId, setPatientId] = useState();
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find(
     (activity) => activity?.activities?.name_english === 'Reception'
@@ -148,6 +149,7 @@ export default function AppointmentsToday() {
   const StatusFunction = async (info, status, alert) => {
     try {
       const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
+
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
       refetch();
       enqueueSnackbar(`${info?.patient?.name_english} ${alert}`, {
@@ -181,7 +183,10 @@ export default function AppointmentsToday() {
     }
   };
   const handlePatientClick = (info) => {
+    setPatientId(info);
     router.push(`/dashboard/mypatients/${info}`);
+    console.log(`dashboard/mypatients/${info}`);
+
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -250,15 +255,9 @@ export default function AppointmentsToday() {
             width: 150,
             height: 35,
           }}
-          value={selectedTitles[info._id] || ''}
+          value={selectedTitle}
           displayEmpty
-          onChange={(e) => {
-            setSelectedTitles((prev) => ({
-              ...prev,
-              [info._id]: e.target.value,
-            }));
-            updateAppointmentactivity(e.target.value, info);
-          }}
+          onChange={(e) => setSelectedTitle(e.target.value)}
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
             {t('Next activity')}
@@ -268,6 +267,8 @@ export default function AppointmentsToday() {
               <MenuItem
                 key={index}
                 value={activity?.activities?._id}
+                onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
+                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
@@ -431,41 +432,8 @@ export default function AppointmentsToday() {
                     return (
                       <>
                         <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                          <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
-                          <TableCell>
-                            {' '}
-                            <Button
-                              variant="text"
-                              onClick={() => handlePatientClick(info?.patient?._id)}
-                              sx={{
-                                textTransform: 'none',
-                                padding: 0,
-                                minWidth: 0,
-                                color: 'primary.main',
-                              }}
-                            >
-                              {patientName}
-                            </Button>
-                          </TableCell>
-                          {currentTab !== 'three' && (
-                            <>
-                              <TableCell>
-                                <>
-                                  {info?.coming !== undefined ? (
-                                    <Iconify
-                                      width={22}
-                                      sx={{
-                                        cursor: 'pointer',
-                                        mr: 1,
-                                        color: info.coming ? 'info.main' : 'error.main',
-                                      }}
-                                      icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
-                                    />
-                                  ) : (
-                                    <>
-                                      <Button
-                                        sx={{ p: 2 }}
-                                        onClick={() => StatusFunction(info, true, 'coming')}
+                          <TableCell>{fTime(info?.start_time)}</TableCell>
+Function(info, true, 'coming')}
                                       >
                                         {t('Yes')}
                                       </Button>
