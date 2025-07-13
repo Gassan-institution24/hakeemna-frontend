@@ -90,9 +90,38 @@ const styles = StyleSheet.create({
     opacity: 0.2, // Set opacity to 30%
     zIndex: -1,
   },
+  signatureSection: {
+    position: 'absolute',
+    bottom: 80, // Position in the third third of the page
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  signatureContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  signatureImage: {
+    width: 80,
+    height: 40,
+    marginBottom: 5,
+  },
+  stampImage: {
+    width: 60,
+    height: 60,
+    marginBottom: 5,
+  },
+  signatureText: {
+    fontSize: 10,
+    textAlign: 'center',
+    marginTop: 5,
+  },
 });
 
 const MedicalReportPDF = ({ report }) => {
+  console.log(report);
   const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
   const plainText = convert(sanitizedHtmlString, {
     wordwrap: 130,
@@ -132,8 +161,25 @@ const MedicalReportPDF = ({ report }) => {
           ))}
         </View>
 
+        {/* Signature and Stamp Section */}
+        <View style={styles.signatureSection}>
+          <View style={styles.signatureContainer}>
+            {report?.employee?.signature && (
+              <PdfImage src={report.employee.signature} style={styles.signatureImage} />
+            )}
+            <Text style={styles.signatureText}>Employee Signature</Text>
+          </View>
+
+          <View style={styles.signatureContainer}>
+            {report?.employee?.stamp && (
+              <PdfImage src={report.employee.stamp} style={styles.stampImage} />
+            )}
+            <Text style={styles.signatureText}>Official Stamp</Text>
+          </View>
+        </View>
+
         {/* Footer */}
-        <Text style={styles.footer}>Made by hakeemna</Text>
+        <Text style={styles.footer}>Powered by hakeemna</Text>
       </Page>
     </Document>
   );

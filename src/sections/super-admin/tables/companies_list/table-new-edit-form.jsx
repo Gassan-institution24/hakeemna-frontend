@@ -49,7 +49,6 @@ export default function TableNewEditForm({ currentSelected }) {
   });
 
   const defaultValues = useMemo(
-    /// edit
     () => ({
       unit_service_type: currentSelected?.unit_service_type || '',
       country: currentSelected?.country || '',
@@ -87,35 +86,25 @@ export default function TableNewEditForm({ currentSelected }) {
     formState: { isSubmitting },
   } = methods;
 
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
-
-  //   if (arabicRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.companies.one(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.companies.one(currentSelected._id), data);
       } else {
-        await axiosInstance.post(endpoints.companies.all, data); /// edit
+        await axiosInstance.post(endpoints.companies.all, data);
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-        const search = window.location.search;
-        router.push(`${paths.superadmin.tables.companies.root}${search}`);
+        router.push(paths.superadmin.tables.companies.root);
     } catch (error) {
       console.error(error);
     }
   });
 
   const onCancel = () => {
-      const search = window.location.search;
-      router.push(`${paths.superadmin.tables.companies.root}${search}`);
-    }
+    router.push(paths.superadmin.tables.companies.root);
+  };
 
   useEffect(() => {
     reset(defaultValues);
@@ -134,70 +123,57 @@ export default function TableNewEditForm({ currentSelected }) {
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(2, 1fr)',
                 md: 'repeat(3, 1fr)',
-              }} /// edit
+              }}
             >
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="unit_service_type"
                 label="unit_service_type"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="country"
                 label="country"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="city"
                 label="city"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="sector"
                 label="sector"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="commercial_name"
                 label="commercial_name"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="province"
                 label="province"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="address"
                 label="address"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="phone_number_1"
                 label="phone_number_1"
               />
-              <RHFTextField
-                // onChange={handleEnglishInputChange}
+              <RHFTextField 
                 name="Phone_number_2"
                 label="Phone_number_2"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="work_shift"
                 label="work_shift"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="constitution_objective"
                 label="constitution_objective"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="type_of_specialty_1"
                 label="type_of_specialty_1"
               />
               <RHFTextField
-                // onChange={handleEnglishInputChange}
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"
               />

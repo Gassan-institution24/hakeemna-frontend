@@ -20,7 +20,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance from 'src/utils/axios';
-import { useFDateTimeUnit } from 'src/utils/format-time';
+import { fTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -36,7 +36,6 @@ import Scrollbar from 'src/components/scrollbar';
 // ----------------------------------------------------------------------
 
 export default function WaitingRoom() {
-  const { fTimeUnit} = useFDateTimeUnit();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -191,7 +190,7 @@ export default function WaitingRoom() {
                         )}
 
                         <TableCell>{patientName}</TableCell>
-                        <TableCell>{fTimeUnit(entranceData?.Arrival_time, 'p', true)}</TableCell>
+                        <TableCell>{fTime(entranceData?.Arrival_time)}</TableCell>
                         <TableCell>{entranceData?.note}</TableCell>
                         <TableCell>
                           <Button
