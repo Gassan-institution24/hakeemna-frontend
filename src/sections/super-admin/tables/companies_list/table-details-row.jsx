@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { useModal } from 'src/context/Modal';
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import { Stack, TextField, ListItemText, InputAdornment } from '@mui/material';
+import { Stack, TextField, ListItemText, InputAdornment, Button } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -16,6 +17,31 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
+function CompanyNoteModalContent({ initialValue, onChange, value, setValue }) {
+  useEffect(() => {
+    setValue(initialValue);
+    // eslint-disable-next-line
+  }, []);
+  return (
+    <TextField
+      autoFocus
+      fullWidth
+      multiline
+      minRows={3}
+      value={value}
+      sx={{ mt: 2 }}
+      onChange={onChange}
+      label="Company Note"
+    />
+  );
+}
+CompanyNoteModalContent.propTypes = {
+  initialValue: PropTypes.string,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+};
+
 export default function TableDetailsRow({
   row,
   index,
@@ -29,7 +55,7 @@ export default function TableDetailsRow({
   const [text, setText] = useState(row?.com_note || '');
   const popover = usePopover();
   const DDL = usePopover();
-
+  const { showModal } = useModal();
   // Add null check for row
   if (!row) {
     return null;
@@ -73,9 +99,34 @@ export default function TableDetailsRow({
     }
   };
 
-  const handleSubmitText = async () => {
+  // Custom hook to set initial value only once
+  function useInitialValue(setValue, value) {
+    useEffect(() => {
+      setValue(value);
+      // eslint-disable-next-line
+    }, []);
+  }
+
+  const handleOpenNoteModal = () => {
+    const initialValue = text || '';
+    showModal(
+      text ? 'Edit Note' : 'Add Note',
+      (props) => <CompanyNoteModalContent initialValue={initialValue} {...props} />,
+      (onClose, noteValue) => ({
+        onSave: async () => {
+          await handleSubmitText(noteValue);
+          setText(noteValue);
+          onClose();
+        },
+        onCancel: onClose,
+      })
+    );
+  };
+
+  // Update handleSubmitText to accept a value
+  const handleSubmitText = async (value) => {
     try {
-      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text });
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: value });
       enqueueSnackbar('done');
     } catch (e) {
       enqueueSnackbar('error', { variant: 'error' });
@@ -193,21 +244,14 @@ export default function TableDetailsRow({
         );
       case 'com_note':
         return (
-          <TextField
-            fullWidth
-            multiline
-            value={text || ''}
-            onChange={(e) => setText(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleSubmitText} edge="end">
-                    <Iconify icon="icon-park-solid:correct" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <Button
+            variant="outlined"
+            startIcon={<Iconify icon={text ? 'mdi:pencil' : 'mdi:plus'} />}
+            onClick={handleOpenNoteModal}
+            color={text ? 'primary' : 'success'}
+          >
+            {text ? 'Edit Note' : 'Add Note'}
+          </Button>
         );
       case 'insurance':
         return showAll && (insurance || '');
