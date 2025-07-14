@@ -54,7 +54,8 @@ import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
   const checkAcl = useAclGuard();
-  const { fDateUnit, fTimeUnit } = useFDateTimeUnit();
+  const { fTimeUnit } = useFDateTimeUnit();
+
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
@@ -64,7 +65,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedTitles, setSelectedTitles] = useState({});
   const [pateintInfo, setPatientInfo] = useState('');
   const [addingId, setAddingId] = useState('');
   const { fullWidth } = useState(false);
@@ -183,7 +184,8 @@ export default function AppointmentsToday() {
   };
 
   const handlePatientClick = (info) => {
-    router.push(`/dashboard/mypatients/${info?.patient?._id || info?.unit_service_patient?._id}`);
+    router.push(`/dashboard/mypatients/${info}`);
+
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -252,9 +254,15 @@ export default function AppointmentsToday() {
             width: 150,
             height: 35,
           }}
-          value={selectedTitle}
+          value={selectedTitles[info._id] || ''}
           displayEmpty
-          onChange={(e) => setSelectedTitle(e.target.value)}
+          onChange={(e) => {
+            setSelectedTitles((prev) => ({
+              ...prev,
+              [info._id]: e.target.value,
+            }));
+            updateAppointmentactivity(e.target.value, info);
+          }}
         >
           <MenuItem value="" disabled sx={{ display: 'none' }}>
             {t('Next activity')}
@@ -264,8 +272,6 @@ export default function AppointmentsToday() {
               <MenuItem
                 key={index}
                 value={activity?.activities?._id}
-                onClick={() => updateAppointmentactivity(activity?.activities?._id, info)}
-                // disabled={info?.activityhappend}
               >
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
