@@ -19,6 +19,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
     "@aws-amplify/auth": "^5.6.5",
+    "@daily-co/daily-js": "^0.80.0",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
@@ -63,6 +64,7 @@
     "date-fns-tz": "^2.0.0",
     "dayjs": "^1.11.11",
     "dompurify": "^3.1.6",
+    "dotenv": "^17.0.1",
     "embla-carousel": "^8.1.5",
     "file-saver": "^2.0.5",
     "firebase": "^10.4.0",
