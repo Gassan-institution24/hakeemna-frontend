@@ -103,21 +103,10 @@ export default function CompaniesTableView() {
 
   // Sync table page only on initial load
   useEffect(() => {
-    if (savedTablePage !== undefined && savedTablePage !== table.page && table.page === 0) {
+    if (savedTablePage !== undefined && savedTablePage !== table.page) {
       table.setPage(savedTablePage);
     }
   }, [savedTablePage, table]);
-
-  // Save page changes with debounce
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (table.page !== savedTablePage) {
-        updateTablePage(table.page);
-      }
-    }, 100); // Small delay to prevent rapid updates
-
-    return () => clearTimeout(timeoutId);
-  }, [table.page, savedTablePage, updateTablePage]);
 
   // Handle URL parameters
   useEffect(() => {
@@ -330,19 +319,13 @@ export default function CompaniesTableView() {
   }, [updateEnabledColumns]);
 
   const handlePageChange = useCallback((event, newPage) => {
-    table.onChangePage(event, newPage);
-    // Update context after a small delay to prevent flickering
-    setTimeout(() => {
-      updateTablePage(newPage);
-    }, 50);
+    table.onChangePage(event, newPage); // update table UI immediately
+    updateTablePage(newPage);           // update context
   }, [table, updateTablePage]);
 
   const handleRowsPerPageChange = useCallback((event) => {
-    table.onChangeRowsPerPage(event);
-    // Reset to first page when changing rows per page
-    setTimeout(() => {
-      updateTablePage(0);
-    }, 50);
+    table.onChangeRowsPerPage(event);   // update table UI immediately
+    updateTablePage(0);                 // reset context page to 0
   }, [table, updateTablePage]);
 
   if (loading) {
@@ -471,7 +454,10 @@ export default function CompaniesTableView() {
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
-          setPage={table.setPage}
+          setPage={(newPage) => {
+            table.setPage(newPage);
+            updateTablePage(newPage);
+          }}
           rowsPerPage={table.rowsPerPage}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleRowsPerPageChange}
