@@ -111,36 +111,47 @@ export default function Doctorreport() {
     reset();
   };
 
-  const fuser = (fuserSize) => {
-    const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
-
-    const isValidFile = (fileName) => {
-      const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
-      const isExtensionAllowed = allowedExtensions.includes(fileExtension);
-      return isExtensionAllowed;
-    };
-
-    const isValidSize = (fileSize) => fileSize <= 3145728;
-
-    return {
-      validateFile: isValidFile,
-      validateSize: isValidSize,
-    };
-  };
-
   const handleDrop = (acceptedFiles) => {
-    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
+    const allowedTypes = ['.jpg', '.jpeg', '.png'];
+    const maxFileSizeInBytes = 5 * 1024 * 1024;
+    const allowedTypesDisplay = allowedTypes.join(', ');
+    const maxFileSizeDisplay = '5 MB';
 
-    const isValidFiles = acceptedFiles.every(
-      (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
-    );
+    const invalidFiles = {
+      type: [],
+      size: [],
+    };
 
-    if (isValidFiles) {
-      const newFiles = acceptedFiles;
+    const validFiles = [];
 
-      setValue('file', [...values.file, ...newFiles]);
-    } else {
-      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
+    acceptedFiles.forEach((file) => {
+      const isTypeValid = allowedTypes.some((ext) => file.name.toLowerCase().endsWith(ext));
+      const isSizeValid = file.size <= maxFileSizeInBytes;
+
+      if (!isTypeValid) invalidFiles.type.push(file.name);
+      if (!isSizeValid) invalidFiles.size.push(file.name);
+
+      if (isTypeValid && isSizeValid) {
+        validFiles.push(file);
+      }
+    });
+
+    if (validFiles.length > 0) {
+      setValue('file', [...values.file, ...validFiles]);
+    }
+
+    if (invalidFiles.type.length > 0) {
+      enqueueSnackbar(
+        `${t('Invalid file type')}, ${t('Allowed types are')}: ${allowedTypesDisplay}`,
+        { variant: 'error' }
+      );
+    }
+
+    if (invalidFiles.size.length > 0) {
+      enqueueSnackbar(
+        `${t('File size too large')}, ${t('Maximum allowed size is')}: ${maxFileSizeDisplay}`,
+        { variant: 'error' }
+      );
     }
   };
 
