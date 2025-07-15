@@ -168,6 +168,10 @@ export default function TableDetailsRow({
       );
     }
 
+    const handleNoteButton = ()=>{
+      
+    }
+
 
 
   const renderCell = (columnId) => {
@@ -248,6 +252,7 @@ export default function TableDetailsRow({
             variant="outlined"
             startIcon={<Iconify icon={text ? 'mdi:pencil' : 'mdi:plus'} />}
             onClick={handleOpenNoteModal}
+            title={text}  
             color={text ? 'primary' : 'success'}
           >
             {text ? 'Edit Note' : 'Add Note'}
