@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { useModal } from 'src/context/Modal';
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import { Stack, TextField, ListItemText, InputAdornment } from '@mui/material';
+import { Stack, TextField, ListItemText, InputAdornment, Button } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -16,6 +17,31 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
+function CompanyNoteModalContent({ initialValue, onChange, value, setValue }) {
+  useEffect(() => {
+    setValue(initialValue);
+    // eslint-disable-next-line
+  }, []);
+  return (
+    <TextField
+      autoFocus
+      fullWidth
+      multiline
+      minRows={3}
+      value={value}
+      sx={{ mt: 2 }}
+      onChange={onChange}
+      label="Company Note"
+    />
+  );
+}
+CompanyNoteModalContent.propTypes = {
+  initialValue: PropTypes.string,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+};
+
 export default function TableDetailsRow({
   row,
   index,
@@ -25,6 +51,16 @@ export default function TableDetailsRow({
   onSelectRow,
   displayedColumns,
 }) {
+  const { enqueueSnackbar } = useSnackbar();
+  const [text, setText] = useState(row?.com_note || '');
+  const popover = usePopover();
+  const DDL = usePopover();
+  const { showModal } = useModal();
+  // Add null check for row
+  if (!row) {
+    return null;
+  }
+
   const {
     code,
     unit_service_type,
@@ -52,12 +88,10 @@ export default function TableDetailsRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
-  } = row;
-
-  const { enqueueSnackbar } = useSnackbar();
-  const [text, setText] = useState(com_note);
-  const popover = usePopover();
-  const DDL = usePopover();
+    notes,
+    subscribe_to,
+    social_network,
+  } = row || {};
 
   const handleChangeStatus = async (event) => {
     try {
@@ -68,16 +102,40 @@ export default function TableDetailsRow({
     }
   };
 
-  const handleSubmitText = async () => {
+  // Custom hook to set initial value only once
+  function useInitialValue(setValue, value) {
+    useEffect(() => {
+      setValue(value);
+      // eslint-disable-next-line
+    }, []);
+  }
+
+  const handleOpenNoteModal = () => {
+    const initialValue = text || '';
+    showModal(
+      text ? 'Edit Note' : 'Add Note',
+      (props) => <CompanyNoteModalContent initialValue={initialValue} {...props} />,
+      (onClose, noteValue) => ({
+        onSave: async () => {
+          await handleSubmitText(noteValue);
+          setText(noteValue);
+          onClose();
+        },
+        onCancel: onClose,
+      })
+    );
+  };
+
+  // Update handleSubmitText to accept a value
+  const handleSubmitText = async (value) => {
     try {
-      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: text });
+      await axiosInstance.patch(endpoints.companies.one(row?._id), { com_note: value });
       enqueueSnackbar('done');
     } catch (e) {
       enqueueSnackbar('error', { variant: 'error' });
     }
   };
     const handleAddress = ()=>{
-
       if (!address) return null;
       const words = address.split(' ');
       if( words.length > 1) {
@@ -115,41 +173,42 @@ export default function TableDetailsRow({
 
 
 
+
   const renderCell = (columnId) => {
     switch (columnId) {
       case 'code':
-        return <Box>{code}</Box>;
+        return <Box>{code || ''}</Box>;
       case 'unit_service_type':
-        return unit_service_type;
+        return unit_service_type || '';
       case 'country':
-        return country;
+        return country || '';
       case 'city':
-        return city;
+        return city || '';
       case 'email':
-        return email;
+        return email || '';
       case 'sector':
-        return sector;
+        return sector || '';
       case 'commercial_name':
-        return commercial_name;
+        return commercial_name || '';
       case 'province':
-        return province;
+        return province || '';
       case 'address':
         return handleAddress();
 
       case 'phone_number_1':
-        return (
+        return phone_number_1 ? (
           <a href={`tel:${phone_number_1}`} target="_blank" rel="noreferrer">
             {phone_number_1}
           </a>
-        );
+        ) : '';
       case 'Phone_number_2':
-        return (
+        return Phone_number_2 ? (
           <a href={`tel:${Phone_number_2}`} target="_blank" rel="noreferrer">
             {Phone_number_2}
           </a>
-        );
+        ) : '';
       case '':
-        return (
+        return phone_number_1 ? (
           <Stack direction="row" justifyContent="space-between">
             <a
               rel="noreferrer"
@@ -176,10 +235,10 @@ export default function TableDetailsRow({
               <Iconify icon="flowbite:whatsapp-solid" />
             </a>
           </Stack>
-        );
+        ) : '';
       case 'status':
         return (
-          <TextField select fullWidth value={status} onChange={handleChangeStatus}>
+          <TextField select fullWidth value={status || ''} onChange={handleChangeStatus}>
             <MenuItem value="not contact">لم يتم التواصل</MenuItem>
             <MenuItem value="agreed">قبول</MenuItem>
             <MenuItem value="refused">رفض</MenuItem>
@@ -189,40 +248,34 @@ export default function TableDetailsRow({
         );
       case 'com_note':
         return (
-          <TextField
-            fullWidth
-            multiline
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleSubmitText} edge="end">
-                    <Iconify icon="icon-park-solid:correct" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <Button
+            variant="outlined"
+            startIcon={<Iconify icon={text ? 'mdi:pencil' : 'mdi:plus'} />}
+            onClick={handleOpenNoteModal}
+            title={text}  
+            color={text ? 'primary' : 'success'}
+          >
+            {text ? 'Edit Note' : 'Add Note'}
+          </Button>
         );
       case 'insurance':
-        return showAll && insurance;
+        return showAll && (insurance || '');
       case 'info':
-        return showAll && info;
+        return showAll && (info || '');
       case 'work_shift':
-        return showAll && work_shift;
+        return showAll && (work_shift || '');
       case 'constitution_objective':
-        return showAll && constitution_objective;
+        return showAll && (constitution_objective || '');
       case 'type_of_specialty_1':
-        return showAll && type_of_specialty_1;
+        return showAll && (type_of_specialty_1 || '');
       case 'type_of_specialty_2':
-        return showAll && type_of_specialty_2;
+        return showAll && (type_of_specialty_2 || '');
       case 'subscribe_to':
-        return showAll && '—';
+        return showAll && subscribe_to;
       case 'social_network':
-        return showAll && '—';
+        return showAll && social_network;
       case 'notes':
-        return showAll && '—';
+        return showAll && notes;
       default:
         return null;
     }
