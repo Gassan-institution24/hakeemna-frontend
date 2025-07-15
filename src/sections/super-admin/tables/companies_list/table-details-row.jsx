@@ -88,6 +88,9 @@ export default function TableDetailsRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    notes,
+    subscribe_to,
+    social_network,
   } = row || {};
 
   const handleChangeStatus = async (event) => {
@@ -168,9 +171,6 @@ export default function TableDetailsRow({
       );
     }
 
-    const handleNoteButton = ()=>{
-      
-    }
 
 
 
@@ -271,11 +271,11 @@ export default function TableDetailsRow({
       case 'type_of_specialty_2':
         return showAll && (type_of_specialty_2 || '');
       case 'subscribe_to':
-        return showAll && '—';
+        return showAll && subscribe_to;
       case 'social_network':
-        return showAll && '—';
+        return showAll && social_network;
       case 'notes':
-        return showAll && '—';
+        return showAll && notes;
       default:
         return null;
     }
