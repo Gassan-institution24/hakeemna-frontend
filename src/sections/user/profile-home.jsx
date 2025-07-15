@@ -14,6 +14,7 @@ import Image from 'src/components/image/image';
 
 import patientCard from '../home/images/cardimage.png';
 import patientCardAr from '../home/images/cardimagear.png';
+import CallDialog from './call_dialog';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
@@ -465,20 +466,21 @@ export default function ProfileHome() {
   );
 
   return (
-    <Grid container spacing={3}>
-      <Grid xs={12} md={4}>
-        {renderOverview}
+    // <Grid container spacing={3}>
+    //   <Grid xs={12} md={4}>
+    //     {renderOverview}
 
-        {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
-        <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
-      </Grid>
+    //     {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+    //     <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
+    //   </Grid>
 
-      {hasData && (
-        <Grid xs={12} md={7}>
-          {renderContent}
-          <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
-        </Grid>
-      )}
-    </Grid>
+    //   {hasData && (
+    //     <Grid xs={12} md={7}>
+    //       {renderContent}
+    //       <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
+    //     </Grid>
+    //   )}
+    // </Grid>
+    <CallDialog />
   );
 }
