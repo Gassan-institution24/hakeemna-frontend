@@ -85,7 +85,7 @@ export const userRoutes = [
           <RoleBasedGuard hasContent roles={['patient']}>
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
-              <CallDialog />
+              {/* <CallDialog /> */}
             </Suspense>
           </RoleBasedGuard>
         ),
