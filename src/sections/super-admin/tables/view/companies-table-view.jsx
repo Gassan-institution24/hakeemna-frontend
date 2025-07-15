@@ -287,20 +287,11 @@ export default function CompaniesTableView() {
     [table, filters, updateFilters]
   );
 
-  const handleEditRow = useCallback(
+  const handleEditRow = useCallback( 
     (id) => {
-      const search = new URLSearchParams({
-        ...(filters.name && { name: filters.name }),
-        ...(filters.USType && { ust: filters.USType }),
-        ...(filters.city && { city: filters.city }),
-        ...(filters.sector && { sector: filters.sector }),
-        ...(filters.province && { province: filters.province }),
-        page: table.page,
-      }).toString();
-
-      router.push(`${paths.superadmin.tables.companies.edit(id)}?${search}`);
+      router.push(`${paths.superadmin.tables.companies.edit(id)}`);
     },
-    [router, filters, table.page]
+    [router]
   );
 
   const handleResetFilters = useCallback(() => {
