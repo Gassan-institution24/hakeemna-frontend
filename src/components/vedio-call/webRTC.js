@@ -1,14 +1,15 @@
-import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import DailyIframe from '@daily-co/daily-js';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Stack, Button } from '@mui/material';
-
-export default function WebRTCComponent({ roomUrl }) {
+export default function WebRTCComponent() {
+  const [searchParams] = useSearchParams();
+  const roomUrl = searchParams.get('roomUrl');
   const containerRef = useRef(null);
   const callFrameRef = useRef(null);
-  const [callActive, setCallActive] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!roomUrl || !containerRef.current) return;
@@ -20,8 +21,11 @@ export default function WebRTCComponent({ roomUrl }) {
         width: '100%',
         height: '100%',
         border: '0',
-        borderRadius: '12px',
+        position: 'absolute',
+        top: 0,
       },
+      showFullscreenButton: true,
+      showLeaveButton: true,
     });
 
     callFrameRef.current = callFrame;
@@ -30,40 +34,30 @@ export default function WebRTCComponent({ roomUrl }) {
       containerRef.current.appendChild(callFrame.iframe);
     }
 
-    callFrame
-      .join({ url: roomUrl })
-      .then(() => setCallActive(true))
-      .catch(console.error);
+    callFrame.on('left-meeting', () => {
+      console.log('👋 User left the call');
+      navigate(-1); 
+    });
+
+    callFrame.join({ url: roomUrl }).catch(console.error);
 
     // eslint-disable-next-line consistent-return
     return () => {
       callFrame.leave();
       callFrame.destroy();
-      setCallActive(false);
     };
-  }, [roomUrl]);
-
-  const handleLeave = () => {
-    if (callFrameRef.current) {
-      callFrameRef.current.leave();
-      callFrameRef.current.destroy();
-      callFrameRef.current = null;
-      setCallActive(false);
-    }
-  };
+  }, [roomUrl, navigate]);
 
   return (
-    <Stack spacing={2}>
-      <div ref={containerRef} style={{ width: '100%', height: '300px' }} />
-      {callActive && (
-        <Button variant="contained" color="error" onClick={handleLeave}>
-          إنهاء المكالمة
-        </Button>
-      )}
-    </Stack>
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        height: '100%', 
+        minHeight: 400, 
+        flex: 1,
+      }}
+    />
   );
 }
-
-WebRTCComponent.propTypes = {
-  roomUrl: PropTypes.string.isRequired,
-};
+// Duplicate DailyIframe instances are not allowed

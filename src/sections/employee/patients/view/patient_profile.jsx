@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Stack, Button, Container, Typography, IconButton } from '@mui/material';
+import { Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -13,7 +13,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -32,7 +31,6 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 export default function PatientProfile() {
   const { id } = useParams();
   const router = useRouter();
-  const [roomUrl, setRoomUrl] = useState(null);
 
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
@@ -80,66 +78,39 @@ export default function PatientProfile() {
     }
     return '';
   }
-  // const handleCall = async () => {
-  //   try {
-  //     const uniqueRoom = `hakeemna-${Date.now()}`; 
-
-  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ roomName: uniqueRoom }),
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       throw new Error(errorData.error || 'Failed to create room');
-  //     }
-
-  //     const data = await response.json();
-  //     setRoomUrl(data.url);
-  //     setCurrentTab('call');
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-
   const handleCall = async () => {
-  try {
-    const uniqueRoom = `hakeemna-${Date.now()}`;
+    try {
+      const uniqueRoom = `hakeemna-${Date.now()}`;
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ roomName: uniqueRoom }),
-    });
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roomName: uniqueRoom }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create room');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create room');
+      }
+
+      const data = await response.json();
+      router.push(`/call?roomUrl=${encodeURIComponent(data.url)}`);
+
+      // ✅ أرسل بيانات الاتصال إلى الطرف الثاني
+      const socket = io(process.env.REACT_APP_API_URL); // تأكد أنك ما كررته بمكان ثاني
+      socket.emit('callUser', {
+        userId: patientData.user, // ← ID المستقبل
+        userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
+        roomUrl: data.url, // ← أهم شيء عشان الطرف الثاني يعرف الغرفة
+      });
+
+      console.log('📤 Sent callUser with room:', data.url);
+    } catch (error) {
+      console.error(error);
     }
-
-    const data = await response.json();
-    setRoomUrl(data.url);
-    setCurrentTab('call');
-
-    // ✅ أرسل بيانات الاتصال إلى الطرف الثاني
-    const socket = io(process.env.REACT_APP_API_URL); // تأكد أنك ما كررته بمكان ثاني
-    socket.emit('callUser', {
-      userId: patientData.user, // ← ID المستقبل
-      userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
-      roomUrl: data.url, // ← أهم شيء عشان الطرف الثاني يعرف الغرفة
-    });
-
-    console.log('📤 Sent callUser with room:', data.url);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
   return (
     <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
@@ -153,18 +124,6 @@ export default function PatientProfile() {
               active: tab.value === currentTab,
             }))}
           />
-          {currentTab !== 'call' && (
-            <Box sx={{ width: '100%', height: '100%', maxHeight: 200 }}>
-              <WebRTCComponent
-                roomUrl={roomUrl}
-                open={currentTab === 'call' && Boolean(roomUrl)}
-                onClose={() => {
-                  setRoomUrl(null);
-                  setCurrentTab('communication');
-                }}
-              />
-            </Box>
-          )}
         </Stack>
         <Stack gap={2} flex={1}>
           <Stack
@@ -226,16 +185,6 @@ export default function PatientProfile() {
             <PatientInstructions patient={usPatientData} />
           )}
           {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
-          {currentTab === 'call' && roomUrl && (
-            <WebRTCComponent
-              roomUrl={roomUrl}
-              open={currentTab === 'call' && Boolean(roomUrl)}
-              onClose={() => {
-                setRoomUrl(null);
-                setCurrentTab('communication');
-              }}
-            />
-          )}
 
           {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
           {currentTab === 'checklist' && usPatientData && (
