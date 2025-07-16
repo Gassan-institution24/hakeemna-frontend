@@ -119,7 +119,7 @@ export default function App() {
             </SettingsProvider>
           </LocalizationProvider>
         </CompaniesProvider>
-        <LocalizationProvider>
+        {/* <LocalizationProvider>
           <SettingsProvider
             defaultSettings={{
               themeMode: 'light', // 'light' | 'dark'
@@ -147,7 +147,7 @@ export default function App() {
               </MotionLazy>
             </ThemeProvider>
           </SettingsProvider>
-        </LocalizationProvider>
+        </LocalizationProvider> */}
     </AuthProvider>
   );
 }
