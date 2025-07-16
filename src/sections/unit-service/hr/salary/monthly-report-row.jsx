@@ -30,6 +30,7 @@ export default function MonthlyReportRow({
   onViewRow,
   hideEmployee,
   refetch,
+  selectedReported,
 }) {
   const {
     code,
@@ -51,6 +52,7 @@ export default function MonthlyReportRow({
     modifications_nums,
     salary,
     total,
+    reported,
   } = row;
 
   const { t } = useTranslate();
@@ -64,8 +66,14 @@ export default function MonthlyReportRow({
   const deleting = useBoolean();
   const show = useBoolean();
 
+  const getRowColor = () => {
+    if (selectedReported !== null) return 'black';
+    if (reported) return 'green';
+    return 'red';
+  };
+
   const renderPrimary = (
-    <TableRow hover selected={selected}>
+    <TableRow hover selected={selected} sx={{ '& .MuiTableCell-root': { color: getRowColor() }}}>
       <TableCell
         // sx={{
         //   cursor: 'pointer',
@@ -231,4 +239,5 @@ MonthlyReportRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   hideEmployee: PropTypes.bool,
+  selectedReported: PropTypes.bool,
 };

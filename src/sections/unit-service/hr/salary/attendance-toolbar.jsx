@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import { Button, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -30,6 +31,7 @@ export default function AttendanceToolbar({
   other,
   refetch,
   monthly,
+  showReported,
   //
   dateError,
   ids,
@@ -39,6 +41,10 @@ export default function AttendanceToolbar({
 
   const popover = usePopover();
   const report = useBoolean();
+
+  let reportedValue = 'all';
+  if (filters.reported === true) reportedValue = 'reported';
+  else if (filters.reported === false) reportedValue = 'unreported';
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
@@ -131,6 +137,26 @@ export default function AttendanceToolbar({
               </Typography>
             )}
           </Stack>
+          {showReported && (
+          <Stack justifyContent="flex-start">
+            <TextField
+              select
+              label={t('Reported Status')}
+              value={reportedValue}
+              onChange={e => {
+                const val = e.target.value;
+                if (val === 'reported') onFilters('reported', true);
+                else if (val === 'unreported') onFilters('reported', false);
+                else onFilters('reported', null);
+              }}
+              sx={{ width: { xs: 1, md: 200 } }}
+            >
+              <MenuItem value="all">{t('All')}</MenuItem>
+              <MenuItem value="reported">{t('Reported')}</MenuItem>
+                <MenuItem value="unreported">{t('Unreported')}</MenuItem>
+              </TextField>
+            </Stack>
+          )}
         </Stack>
         <Stack justifyContent="center" mx={3}>
           <Button variant="contained" color="primary" onClick={reportHandler}>
@@ -161,7 +187,7 @@ export default function AttendanceToolbar({
             popover.onClose();
           }}
         >
-          <Iconify icon="solar:export-bold" />
+          <Iconify icon="solar:export-bold" /> 
           {t('export')}
         </MenuItem>
       </CustomPopover>
@@ -202,4 +228,5 @@ AttendanceToolbar.propTypes = {
   other: PropTypes.number,
   ids: PropTypes.array,
   monthly: PropTypes.bool,
+  showReported: PropTypes.bool,
 };
