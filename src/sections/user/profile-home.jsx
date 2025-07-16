@@ -12,7 +12,6 @@ import { useGetPatientInsurance, useGetCurrentPatientMedicines } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-import ProfileCover from "./profile-cover";
 import patientCard from '../home/images/cardimage.png';
 import patientCardAr from '../home/images/cardimagear.png';
 // ----------------------------------------------------------------------
@@ -466,23 +465,20 @@ export default function ProfileHome() {
   );
 
   return (
-  //  <ProfileCover/>
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
-        {/* {renderOverview}
+        {renderOverview}
 
         {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
-        <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box> */}
-   <ProfileCover/>
-
+        <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
-      {/* {hasData && (
+      {hasData && (
         <Grid xs={12} md={7}>
           {renderContent}
           <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
         </Grid>
-      )} */}
+      )}
     </Grid>
   );
 }
