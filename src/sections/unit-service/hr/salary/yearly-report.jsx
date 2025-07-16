@@ -196,6 +196,7 @@ export default function YearlyReportsView({ employee }) {
           publicHolidays={publicCount}
           refetch={refetch}
           ids={ids}
+          showReported={false}
           // onDownload={handleDownload}
           //
           canReset={canReset}

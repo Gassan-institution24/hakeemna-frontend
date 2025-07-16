@@ -39,6 +39,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
+  reported: null,
 };
 
 // ----------------------------------------------------------------------
@@ -95,7 +96,7 @@ export default function MonthlyReportsView({ employee }) {
     employee_engagement: employee,
     startDate: filters?.startDate,
     endDate: filters?.endDate,
-    reported: 0,
+    reported: filters?.reported,
   });
 
   const dateError =
@@ -195,6 +196,11 @@ export default function MonthlyReportsView({ employee }) {
           <Typography>{total}</Typography>
         </Stack>
       </Stack>
+      {filters.reported === null && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          <b>Note:</b> Rows highlighted in <span style={{ color: 'red' }}>red</span> are not assigned to a specific yearly report, and rows highlighted in <span style={{ color: 'green' }}>green</span> are assigned to a specific yearly report.
+        </Typography>
+      )}
       <Card>
         <AttendanceToolbar
           filters={filters}
@@ -212,6 +218,7 @@ export default function MonthlyReportsView({ employee }) {
           //
           canReset={canReset}
           onResetFilters={handleResetFilters}
+          showReported
         />
 
         {canReset && (
@@ -269,6 +276,7 @@ export default function MonthlyReportsView({ employee }) {
                       onDeleteRow={() => handleDeleteRow(row._id)}
                       hideEmployee={!!employee}
                       refetch={refetch}
+                      selectedReported={filters.reported}
                     />
                   ))}
                 <TableNoData notFound={notFound} />
