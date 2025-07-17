@@ -34,3 +34,18 @@ export function useGetMonthlyReports(params) {
 
   return { ...memoizedValue, refetch };
 }
+
+export function useGetMonthlyReportInterval(enabled = true, params = {}) {
+  const shouldFetch = enabled && params?.startDate && params?.endDate;
+
+  const URL = shouldFetch ? [endpoints.monthlyReport.interval, { params }] : null;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  return {
+    data: data || [],
+    isLoading,
+    error,
+    isValidating,
+  };
+}

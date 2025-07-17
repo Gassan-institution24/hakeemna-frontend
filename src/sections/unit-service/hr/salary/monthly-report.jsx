@@ -37,11 +37,10 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
+const defaultFilters = {src/api/monthly_reports.js
   name: '',
   reported: null,
 };
-
 // ----------------------------------------------------------------------
 
 export default function MonthlyReportsView({ employee }) {

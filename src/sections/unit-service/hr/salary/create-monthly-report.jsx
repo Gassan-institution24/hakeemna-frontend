@@ -13,6 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { fHourMin } from 'src/utils/format-time';
 
 import { useParams } from 'src/routes/hooks';
 
@@ -42,6 +43,7 @@ export default function CreateMonthlyReport({
   ids,
   monthly,
   length,
+  intervalData,
 }) {
   const { user } = useAuthContext();
   const { id } = useParams();
@@ -74,29 +76,30 @@ export default function CreateMonthlyReport({
 
   const defaultValues = {
     unit_service:
-      row?.unit_service ||
-      user?.employee?.employee_engagements?.[user.employee.selected_engagement].unit_service?._id,
+    row?.unit_service ||
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement].unit_service?._id,
     employee_engagement: row?.employee_engagement || id,
     start_date: row?.start_date || start_date || null,
     end_date: row?.end_date || end_date || null,
-    working_time: row?.working_time || hours || 0,
-    calculated_time: row?.calculated_time || 0,
-    annual: row?.annual || annual || 0,
-    sick: row?.sick || sick || 0,
-    unpaid: row?.unpaid || unpaid || 0,
-    public: row?.public || publicHolidays || 0,
-    other: row?.other || other || 0,
-    social_security: row?.social_security || 0,
-    tax: row?.tax || 0,
-    deduction: row?.deduction || 0,
-    total: row?.total || 0,
-    annual_equivalent: row?.annual_equivalent || 0,
-    sick_equivalent: row?.sick_equivalent || 0,
-    unpaid_equivalent: row?.unpaid_equivalent || 0,
-    public_equivalent: row?.public_equivalent || 0,
-    other_equivalent: row?.other_equivalent || 0,
+    working_time: row?.working_time || intervalData?.working_time || hours || 0,
+    calculated_time: row?.calculated_time || intervalData?.calculated_time || 0,
+    annual: row?.annual || intervalData?.annual || annual || 0,
+    sick: row?.sick || intervalData?.sick || sick || 0,
+    unpaid: row?.unpaid || intervalData?.unpaid || unpaid || 0,
+    public: row?.public || intervalData?.public || publicHolidays || 0,
+    other: row?.other || intervalData?.other || other || 0,
+    social_security: row?.social_security || intervalData?.social_security || 0,
+    tax: row?.tax || intervalData?.tax || 0,
+    deduction: row?.deduction || intervalData?.deduction || 0,
+    total: row?.total || intervalData?.total || 0,
+    annual_equivalent: row?.annual_equivalent || intervalData?.annual_equivalent || 0,
+    sick_equivalent: row?.sick_equivalent || intervalData?.sick_equivalent || 0,
+    unpaid_equivalent: row?.unpaid_equivalent || intervalData?.unpaid_equivalent || 0,
+    public_equivalent: row?.public_equivalent || intervalData?.public_equivalent || 0,
+    other_equivalent: row?.other_equivalent || intervalData?.other_equivalent || 0,
     note: row?.note || '',
-    days: row?.days || length || 0,
+    days: row?.days || intervalData?.days || length || 0,
+    salary: row?.salary || intervalData?.salary || 0,
   };
 
   const methods = useForm({
@@ -183,15 +186,15 @@ export default function CreateMonthlyReport({
               <RHFHoursMins disabled name="working_time" label={t('Working time')} />
               <RHFTextField disabled type="number" name="days" label={t('Days')} />
               <RHFTextField disabled type="number" name="annual" label={t('Annual')} />
-              <RHFHoursMins type="number" name="annual_equivalent" label={t('Annual equivalent')} />
+              <RHFHoursMins disabled={monthly && ids.length > 0} type="number" name="annual_equivalent" label={t('Annual equivalent')} />
               <RHFTextField disabled type="number" name="sick" label={t('Sick')} />
-              <RHFHoursMins type="number" name="sick_equivalent" label={t('Sick equivalent')} />
+              <RHFHoursMins disabled={monthly && ids.length > 0} type="number" name="sick_equivalent" label={t('Sick equivalent')} />
               <RHFTextField disabled type="number" name="unpaid" label={t('Unpaid')} />
-              <RHFHoursMins type="number" name="unpaid_equivalent" label={t('Unpaid equivalent')} />
+              <RHFHoursMins disabled={monthly && ids.length > 0} type="number" name="unpaid_equivalent" label={t('Unpaid equivalent')} />
               <RHFTextField disabled type="number" name="public" label={t('Public')} />
-              <RHFHoursMins type="number" name="public_equivalent" label={t('Public equivalent')} />
+              <RHFHoursMins disabled={monthly && ids.length > 0} type="number" name="public_equivalent" label={t('Public equivalent')} />
               <RHFTextField disabled type="number" name="other" label={t('Other')} />
-              <RHFHoursMins type="number" name="other_equivalent" label={t('Other equivalent')} />
+              <RHFHoursMins disabled={monthly && ids.length > 0} type="number" name="other_equivalent" label={t('Other equivalent')} />
             </Box>
             <Divider />
             <Box
@@ -202,9 +205,11 @@ export default function CreateMonthlyReport({
               alignItems="flex-end"
             >
               <RHFHoursMins
+                disabled={monthly && ids.length > 0}
                 name="calculated_time"
                 label={t('Calculated minutes')}
                 button={
+                  monthly && ids.length > 0 ? null :
                   <Button
                     onClick={() =>
                       methods.setValue(
@@ -226,11 +231,11 @@ export default function CreateMonthlyReport({
                   </Button>
                 }
               />
-              <RHFTextField type="number" name="salary" label={t('Salary')} />
-              <RHFTextField type="number" name="social_security" label={t('social security')} />
-              <RHFTextField type="number" name="tax" label={t('tax')} />
-              <RHFTextField type="number" name="deduction" label={t('deduction')} />
-              <RHFTextField disabled type="number" name="total" label={t('total')} />
+              <RHFTextField disabled={monthly && ids.length > 0} type="number" name="salary" label={t('Salary')} />
+              <RHFTextField disabled={monthly && ids.length > 0} type="number" name="social_security" label={t('social security')} />
+              <RHFTextField disabled={monthly && ids.length > 0} type="number" name="tax" label={t('tax')} />
+              <RHFTextField disabled={monthly && ids.length > 0} type="number" name="deduction" label={t('deduction')} />
+              <RHFTextField disabled={monthly && ids.length > 0} type="number" name="total" label={t('total')} />
             </Box>
 
             <RHFTextField name="note" label={t('note')} />
@@ -256,8 +261,8 @@ CreateMonthlyReport.propTypes = {
   open: PropTypes.bool,
   monthly: PropTypes.bool,
   row: PropTypes.object,
-  start_date: PropTypes.string,
-  end_date: PropTypes.string,
+  start_date: PropTypes.instanceOf(Date),
+  end_date: PropTypes.instanceOf(Date),
   hours: PropTypes.number,
   annual: PropTypes.number,
   sick: PropTypes.number,
@@ -266,4 +271,5 @@ CreateMonthlyReport.propTypes = {
   other: PropTypes.number,
   length: PropTypes.number,
   ids: PropTypes.array,
+  intervalData: PropTypes.object,
 };
