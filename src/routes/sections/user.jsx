@@ -5,6 +5,7 @@ import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UserDashboardLayout from 'src/layouts/dashboard/indexUser';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+
 import CallDialog from '../../sections/user/call_dialog';
 // import TableCreatePage from 'src/pages/dashboard/tables/new';
 // import TableEditPage from 'src/pages/dashboard/tables/edit';
@@ -85,7 +86,7 @@ export const userRoutes = [
           <RoleBasedGuard hasContent roles={['patient']}>
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
-              {/* <CallDialog /> */}
+              <CallDialog />
             </Suspense>
           </RoleBasedGuard>
         ),

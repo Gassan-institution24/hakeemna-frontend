@@ -9,13 +9,15 @@ import DialogActions from '@mui/material/DialogActions';
 
 import { useRouter } from 'src/routes/hooks';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 export default function CallDialog() {
   const [open, setOpen] = useState(false);
   const [callerName, setCallerName] = useState('');
   const [roomUrl, setRoomUrl] = useState('');
   const router = useRouter();
   const socketRef = useRef(null);
-
+  const { user } = useAuthContext();
   useEffect(() => {
     if (socketRef.current) return;
 
@@ -45,7 +47,9 @@ export default function CallDialog() {
 
     const url = window._roomUrlTemp || roomUrl;
     if (url) {
-      router.push(`/call?roomUrl=${encodeURIComponent(url)}`);
+      router.push(
+        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}`
+      );
     } else {
       console.error('❌ No room URL available to join');
     }

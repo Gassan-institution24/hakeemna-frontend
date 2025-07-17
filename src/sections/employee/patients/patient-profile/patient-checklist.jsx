@@ -36,7 +36,6 @@ export default function PatientCheckList({ patient }) {
   const { data } = useGetCheckList(thId);
   const { answer, refetch } = useGetUSPatientCheckList(patient?._id);
 
-  console.log('answer', answer);
 
   const onSubmit = async (answers) => {
     try {
