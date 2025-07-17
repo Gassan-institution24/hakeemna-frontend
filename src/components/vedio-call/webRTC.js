@@ -6,13 +6,14 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 export default function WebRTCComponent() {
   const [searchParams] = useSearchParams();
   const roomUrl = searchParams.get('roomUrl');
+  const userName = searchParams.get('userName');
   const containerRef = useRef(null);
   const callFrameRef = useRef(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!roomUrl || !containerRef.current) return;
+    if (!roomUrl || !userName || !containerRef.current) return;
 
     containerRef.current.innerHTML = '';
 
@@ -26,6 +27,7 @@ export default function WebRTCComponent() {
       },
       showFullscreenButton: true,
       showLeaveButton: true,
+      userName,
     });
 
     callFrameRef.current = callFrame;
@@ -36,7 +38,7 @@ export default function WebRTCComponent() {
 
     callFrame.on('left-meeting', () => {
       console.log('👋 User left the call');
-      navigate(-1); 
+      navigate(-1);
     });
 
     callFrame.join({ url: roomUrl }).catch(console.error);
@@ -46,15 +48,15 @@ export default function WebRTCComponent() {
       callFrame.leave();
       callFrame.destroy();
     };
-  }, [roomUrl, navigate]);
+  }, [roomUrl, navigate, userName]);
 
   return (
     <div
       ref={containerRef}
       style={{
         width: '100%',
-        height: '100%', 
-        minHeight: 400, 
+        height: '100%',
+        minHeight: 400,
         flex: 1,
       }}
     />
