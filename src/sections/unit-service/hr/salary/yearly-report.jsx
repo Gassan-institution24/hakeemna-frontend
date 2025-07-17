@@ -31,6 +31,7 @@ import { useGetYearlyReports } from 'src/api/yearly_reports';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import YearlyReportDetailsModal from './YearlyReportDetailsModal';
 import YearlyReportRow from './yearly-report-row';
 import AttendanceToolbar from './attendance-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -68,6 +69,8 @@ export default function YearlyReportsView({ employee }) {
   const router = useRouter();
 
   const [filters, setFilters] = useState(defaultFilters);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const {
     reportsData,
@@ -145,6 +148,15 @@ export default function YearlyReportsView({ employee }) {
     [enqueueSnackbar, refetch]
   );
 
+  const handleOpenModal = useCallback((report) => {
+    setSelectedReport(report);
+    setModalOpen(true);
+  }, []);
+  const handleCloseModal = useCallback(() => {
+    setModalOpen(false);
+    setSelectedReport(null);
+  }, []);
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -196,6 +208,7 @@ export default function YearlyReportsView({ employee }) {
           publicHolidays={publicCount}
           refetch={refetch}
           ids={ids}
+          showReported={false}
           // onDownload={handleDownload}
           //
           canReset={canReset}
@@ -256,6 +269,7 @@ export default function YearlyReportsView({ employee }) {
                       onViewRow={() => handleViewRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
                       hideEmployee={!!employee}
+                      onRowClick={() => handleOpenModal(row)}
                     />
                   ))}
                 <TableNoData notFound={notFound} />
@@ -275,6 +289,7 @@ export default function YearlyReportsView({ employee }) {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+      <YearlyReportDetailsModal open={modalOpen} onClose={handleCloseModal} report={selectedReport} />
     </Container>
   );
 }
