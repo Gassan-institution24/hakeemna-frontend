@@ -37,7 +37,9 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {src/api/monthly_reports.js
+const defaultFilters = {
+  startDate: null,
+  endDate: null,
   name: '',
   reported: null,
 };
