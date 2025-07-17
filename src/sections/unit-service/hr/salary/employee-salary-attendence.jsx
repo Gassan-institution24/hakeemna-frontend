@@ -36,6 +36,7 @@ import AtteendanceFiltersResult from './attendance-filters-result';
 const defaultFilters = {
   startDate: null,
   endDate: null,
+  reported: null,
 };
 
 // ----------------------------------------------------------------------
@@ -77,7 +78,6 @@ export default function EmployeeSalaryAttendence({ employee }) {
     rowsPerPage: table.rowsPerPage,
     order: table.order,
     sortBy: table.orderBy,
-    reported: 0,
     ...filters,
   });
 
@@ -147,6 +147,11 @@ export default function EmployeeSalaryAttendence({ employee }) {
           <Typography>{other}</Typography>
         </Stack>
       </Stack>
+      {filters.reported === null && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          <b>Note:</b> Rows highlighted in <span style={{ color: 'red' }}>red</span> are not assigned to a specific monthly report, and rows highlighted in <span style={{ color: 'green' }}>green</span> are assigned to a specific monthly report.
+        </Typography>
+      )}
       <Card>
         <EmployeeAttendanceToolbar
           filters={filters}
@@ -160,6 +165,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
           ids={ids}
           refetch={refetch}
           length={length}
+          showReported
           //
           dateError={dateError}
         />
@@ -208,6 +214,9 @@ export default function EmployeeSalaryAttendence({ employee }) {
                     row={row}
                     refetch={refetch}
                     onDeleteRow={deleteHandler}
+                    reported={row.reported}
+                    selectedReported={filters.reported}
+                    
                   />
                 ))}
 

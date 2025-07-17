@@ -476,6 +476,7 @@ export const endpoints = {
     all: '/api/monthlyreport',
     one: (id) => `/api/monthlyreport/${id}`,
     employee: (id) => `/api/monthlyreport/employee/${id}`,
+    interval: '/api/monthlyreport/interval',
   },
   yearlyReport: {
     all: '/api/yearlyreport',

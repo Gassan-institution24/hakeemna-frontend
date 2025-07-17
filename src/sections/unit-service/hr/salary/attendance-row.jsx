@@ -32,6 +32,8 @@ export default function AttendanceRow({
   onViewRow,
   onCancelRow,
   onDeleteRow,
+  reported,
+  selectedReported,
 }) {
   const {
     date,
@@ -58,9 +60,15 @@ export default function AttendanceRow({
   const [open, setOpen] = useState(false);
   const checkAcl = useAclGuard();
 
+  const getRowColor = () => {
+    if (selectedReported !== null) return 'black';
+    if (reported) return 'green';
+    return 'red';
+  };
+
   return (
     <>
-      <TableRow hover selected={selected}>
+      <TableRow hover selected={selected} sx={{ '& .MuiTableCell-root': { color: getRowColor() }}}>
         <TableCell align="center">{fDate(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
         <TableCell align="center">{fTime(check_in_time)}</TableCell>
         <TableCell align="center">{fTime(check_out_time)}</TableCell>
@@ -187,4 +195,6 @@ AttendanceRow.propTypes = {
   refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  reported: PropTypes.bool,
+  selectedReported: PropTypes.bool,
 };
