@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
+import { useGetMonthlyReportInterval } from 'src/api/monthly_reports';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -69,6 +70,12 @@ export default function AttendanceToolbar({
     }
     report.onTrue();
   }, [filters.startDate, filters.endDate, report]);
+
+
+  const { data: intervalData } = useGetMonthlyReportInterval(filters.startDate && filters.endDate, {
+    startDate: filters.startDate,
+    endDate: filters.endDate,
+  });
 
   return (
     <>
@@ -207,6 +214,7 @@ export default function AttendanceToolbar({
           refetch={refetch}
           monthly={monthly}
           length={length}
+          intervalData={intervalData}
         />
       )}
     </>

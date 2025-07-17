@@ -27,6 +27,7 @@ export default function YearlyReportRow({
   onDeleteRow,
   onViewRow,
   hideEmployee,
+  onRowClick,
 }) {
   const {
     code,
@@ -59,26 +60,15 @@ export default function YearlyReportRow({
   const deleting = useBoolean();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-      <TableCell
-        // sx={{
-        //   cursor: 'pointer',
-        //   color: '#3F54EB',
-        // }}
-        // onClick={onViewRow}
-        align="center"
-      >
-        {code}
-      </TableCell>
+    <TableRow
+      hover
+      selected={selected}
+      onClick={onRowClick}
+      sx={{ cursor: onRowClick ? 'pointer' : 'default' }}
+    >
+      <TableCell align="center">{code}</TableCell>
       {!hideEmployee && (
-        <TableCell
-          // sx={{
-          //   cursor: 'pointer',
-          //   color: '#3F54EB',
-          // }}
-          // onClick={onViewRow}
-          align="center"
-        >
+        <TableCell align="center">
           {curLangAr
             ? employee_engagement?.employee?.name_arabic
             : employee_engagement?.employee?.name_english}
@@ -92,7 +82,6 @@ export default function YearlyReportRow({
       <TableCell align="center">{unpaid}</TableCell>
       <TableCell align="center">{publicOff}</TableCell>
       <TableCell align="center">{other}</TableCell>
-
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -210,4 +199,5 @@ YearlyReportRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   hideEmployee: PropTypes.bool,
+  onRowClick: PropTypes.func,
 };
