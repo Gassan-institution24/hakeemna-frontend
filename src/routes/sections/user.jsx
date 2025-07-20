@@ -87,7 +87,7 @@ export const userRoutes = [
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
               <CallDialog />
-            </Suspense>
+            </Suspense> 
           </RoleBasedGuard>
         ),
         children: [
