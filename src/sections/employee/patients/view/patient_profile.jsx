@@ -184,7 +184,7 @@ export default function PatientProfile() {
                   color="primary"
                   onClick={handleCall}
                 >
-                  {t('call')}
+                  {t('Call')}
                 </Button>
               )}
             </Stack>

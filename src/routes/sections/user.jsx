@@ -74,6 +74,7 @@ export const userRoutes = [
         <UserDashboardLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
+            <CallDialog />
           </Suspense>
         </UserDashboardLayout>
       </AuthGuard>
@@ -86,8 +87,7 @@ export const userRoutes = [
           <RoleBasedGuard hasContent roles={['patient']}>
             <Suspense fallback={<LoadingScreen />}>
               <Outlet />
-              <CallDialog />
-            </Suspense> 
+            </Suspense>
           </RoleBasedGuard>
         ),
         children: [
