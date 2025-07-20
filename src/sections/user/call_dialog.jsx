@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import io from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 import React, { useRef, useState, useEffect } from 'react';
 
 import Dialog from '@mui/material/Dialog';
@@ -15,6 +16,7 @@ export default function CallDialog() {
   const [open, setOpen] = useState(false);
   const [callerName, setCallerName] = useState('');
   const [roomUrl, setRoomUrl] = useState('');
+  const { t } = useTranslation();
   const router = useRouter();
   const socketRef = useRef(null);
   const { user } = useAuthContext();
@@ -63,7 +65,9 @@ export default function CallDialog() {
 
   return (
     <Dialog open={open} onClose={handleReject}>
-      <DialogTitle>📞 Incoming Call from {callerName}</DialogTitle>
+      <DialogTitle>
+        📞 {t('Incoming Call from')} {callerName}
+      </DialogTitle>
       <DialogActions>
         <Button color="error" onClick={handleReject}>
           رفض
