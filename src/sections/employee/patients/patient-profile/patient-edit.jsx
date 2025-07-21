@@ -108,6 +108,8 @@ export default function EditPatient({ patient }) {
     }
   };
 
+  console.log(patient);
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ p: 3, mx: { md: 15 } }}>
@@ -279,7 +281,7 @@ export default function EditPatient({ patient }) {
             ))}
           </RHFSelect>
           <RHFTextField name="other_medication_notes" label={t('More information')} />
-          {patient?.patient === undefined && <RHFTextField name="identification_num" label={t('ID Number')} />}
+          {patient?.patient?.user === undefined && <RHFTextField name="identification_num" label={t('ID Number')} />}
         </Box>
 
         <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
