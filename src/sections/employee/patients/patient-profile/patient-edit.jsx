@@ -58,6 +58,7 @@ export default function EditPatient({ patient }) {
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
+    identification_num: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
@@ -79,6 +80,7 @@ export default function EditPatient({ patient }) {
     sport_exercises: patient?.sport_exercises || '',
     smoking: patient?.smoking || '',
     other_medication_notes: patient?.other_medication_notes || '',
+    identification_num: patient?.identification_num || '',
   };
 
   const methods = useForm({
@@ -277,6 +279,7 @@ export default function EditPatient({ patient }) {
             ))}
           </RHFSelect>
           <RHFTextField name="other_medication_notes" label={t('More information')} />
+          {patient?.patient === undefined && <RHFTextField name="identification_num" label={t('ID Number')} />}
         </Box>
 
         <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
