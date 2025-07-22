@@ -664,6 +664,9 @@ export const endpoints = {
     all: '/api/training',
     one: (id) => (!id ? null : `/api/training/${id}`),
   },
+  videoCalls: {
+    all: '/api/video-call'
+  },
 
   tables: {
     // countries: `/api/countries`,

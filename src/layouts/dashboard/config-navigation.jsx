@@ -75,6 +75,11 @@ export function useNavData() {
             icon: <Iconify icon="mdi:people-group-outline" />,
           },
           {
+            title: t('video calls'),
+            path: paths.unitservice.videocalls.root,
+            icon: <Iconify icon="mdi:video" />,
+          },
+          {
             title: t('employees'),
             path: paths.superadmin.employees.root,
             icon: <Iconify icon="fluent:people-20-filled" />,
@@ -337,6 +342,13 @@ export function useNavData() {
         path: paths.unitservice.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
         'data-test': 'us-nav-item-patients',
+      },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        title: t('video calls'),
+        path: paths.unitservice.videocalls.root,
+        icon: <Iconify icon="mdi:video" />,
+        'data-test': 'us-nav-item-video-calls',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),

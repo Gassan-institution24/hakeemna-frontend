@@ -357,6 +357,9 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/users/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
     },
+    videoCalls: {
+      root: `${ROOTS.SUPERADMIN}/videocalls`,
+    },
     employees: {
       root: `${ROOTS.SUPERADMIN}/employees`,
       new: `${ROOTS.SUPERADMIN}/employees/new`,
@@ -850,7 +853,11 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/services/${id}/edit`,
       },
     },
+    videocalls: {
+      root: `${ROOTS.SUPERADMIN}/us/videocalls`,
+    },
   },
+  
 
   employee: {
     root: ROOTS.SUPERADMIN,
@@ -879,6 +886,7 @@ export const paths = {
       all: `${ROOTS.SUPERADMIN}/mypatients`,
       new: `${ROOTS.SUPERADMIN}/mypatients/new`,
     },
+    
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
       new: `${ROOTS.SUPERADMIN}/entrancemanagement/new`,

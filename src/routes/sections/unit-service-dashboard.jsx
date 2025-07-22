@@ -14,6 +14,7 @@ import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import UnitServiceVideoCallsPage from 'src/pages/unit-service/videocalls';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -187,7 +188,7 @@ const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/servic
 const Processing = lazy(() => import('src/sections/employee/appointmentsToday/Processing'));
 const Viewgpage = lazy(() => import('src/sections/employee/appointmentsToday/viewgpage'));
 const Test = lazy(() => import('src/sections/employee/appointmentsToday/prescription'));
-
+const VideoCallsHomePage = lazy(() => import('src/pages/super-admin/videocalls'));
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
 
@@ -387,6 +388,12 @@ export const unitServiceDashboardRoutes = [
           { element: <PatientsPage />, index: true },
           { path: 'new', element: <PatientNewPage /> },
           { path: ':id', element: <PatientInfoPage /> },
+        ],
+      },
+      {
+        path: 'videocalls',
+        children: [
+          { element: <UnitServiceVideoCallsPage />, index: true },
         ],
       },
       {
