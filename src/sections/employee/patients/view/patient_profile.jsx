@@ -9,6 +9,7 @@ import { useRouter } from 'src/routes/hooks';
 import { fDate } from 'src/utils/format-time';
 
 import { useGetOneUSPatient } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -31,7 +32,7 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 export default function PatientProfile() {
   const { id } = useParams();
   const router = useRouter();
-
+  const { user } = useAuthContext();
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
       {
@@ -96,19 +97,43 @@ export default function PatientProfile() {
       }
 
       const data = await response.json();
-      router.push(`/call?roomUrl=${encodeURIComponent(data.url)}`);
+      const roomUrl = data.url;
 
-      // ✅ أرسل بيانات الاتصال إلى الطرف الثاني
-      const socket = io(process.env.REACT_APP_API_URL); // تأكد أنك ما كررته بمكان ثاني
-      socket.emit('callUser', {
-        userId: patientData.user, // ← ID المستقبل
-        userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
-        roomUrl: data.url, // ← أهم شيء عشان الطرف الثاني يعرف الغرفة
+      const saveResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/video-call`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
+          patient: patientData?._id,
+          description: `Call started at ${new Date().toISOString()}`,
+        }),
       });
 
-      console.log('📤 Sent callUser with room:', data.url);
+      if (!saveResponse.ok) {
+        const err = await saveResponse.json();
+        console.warn('⚠️ Video call not saved:', err);
+      } else {
+        console.log('✅ Video call saved in DB');
+      }
+
+      router.push(
+        `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
+          user?.employee?.name_arabic || user?.employee?.name_english
+        )}`
+      );
+
+      const socket = io(process.env.REACT_APP_API_URL);
+      socket.emit('callUser', {
+        userId: patientData.user,
+        userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
+        roomUrl,
+      });
+
+      console.log('📤 Sent callUser with room:', roomUrl);
     } catch (error) {
-      console.error(error);
+      console.error('❌ handleCall error:', error);
     }
   };
 
@@ -159,7 +184,7 @@ export default function PatientProfile() {
                   color="primary"
                   onClick={handleCall}
                 >
-                  {t('call')}
+                  {t('Call')}
                 </Button>
               )}
             </Stack>
