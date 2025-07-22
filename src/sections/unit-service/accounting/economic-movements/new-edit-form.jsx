@@ -31,6 +31,7 @@ import {
   useGetPatient,
   useGetServiceType,
   useGetUnitservice,
+  useGetOneUSPatient,
   useGetOneEntranceManagement,
 } from 'src/api';
 
@@ -55,6 +56,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const [entranceInfo, setEntranceInfo] = useState();
   const { data: PatientData } = useGetPatient(Entrance?.patient);
   const { data: unitData } = useGetUnitservice(Entrance?.service_unit);
+  const { usPatientData } = useGetOneUSPatient(Entrance?.unit_service_patient);
   const [appointmentInfo, setAppointmentInfo] = useState();
   const [invoicing, setInvoicing] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -289,10 +291,14 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         ClientId: unitData.ClientId,
         CompanyID: unitData.CompanyID,
         RegistrationName: unitData.RegistrationName,
-        Buyer: PatientData?.name_arabic,
-        BuyerNum: PatientData?.mobile_num1,
-        BuyerIdNum: PatientData?.identification_num,
-        BuyerCity: PatientData?.city?.name_arabic,
+        Buyer:
+          PatientData?.name_arabic ||
+          usPatientData?.name_arabic ||
+          PatientData?.name_english ||
+          usPatientData?.name_english,
+        BuyerNum: PatientData?.mobile_num1 || usPatientData?.mobile_num1,
+        BuyerIdNum: PatientData?.identification_num || usPatientData?.identification_num,
+        BuyerCity: PatientData?.city?.name_arabic || usPatientData?.city?.name_arabic,
         service_type: ServiceTypeData?.name_arabic,
         subtotal,
         quantity,
@@ -301,9 +307,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         concept,
       };
       if (invoicing) {
-        await axiosInstance.post('/api/invoice', payloadForOtherTable);
+        try {
+          await axiosInstance.post('/api/invoice', payloadForOtherTable);
+        } catch (e) {
+          console.error('خطأ أثناء إرسال الفاتورة للنظام الوطني:', e);
+          enqueueSnackbar('خطأ أثناء إرسال الفاتورة للنظام الوطني', {
+            variant: 'warning',
+          });
+        }
       }
-
       reset();
       enqueueSnackbar(t('created successfully'));
 
@@ -423,7 +435,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       {/* billing system information dialog */}
       {dialog.value && (
         <Dialog fullWidth maxWidth="sm" open={dialog.value} onClose={handleDialogClose}>
-          <DialogTitle>{t("Add your national Jordanian billing system information")}</DialogTitle>
+          <DialogTitle>{t('Add your national Jordanian billing system information')}</DialogTitle>
           <DialogContent>
             <Stack spacing={3}>
               <TextField
@@ -465,11 +477,11 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           </DialogContent>
           <DialogActions>
             <Button color="inherit" variant="outlined" onClick={handleDialogClose}>
-              {t("Cancel")}
+              {t('Cancel')}
             </Button>
 
             <LoadingButton variant="contained" onClick={handleUpdateData}>
-              {t("Update my data")}
+              {t('Update my data')}
             </LoadingButton>
           </DialogActions>
         </Dialog>
