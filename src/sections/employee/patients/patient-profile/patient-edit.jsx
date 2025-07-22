@@ -289,7 +289,6 @@ export default function EditPatient({ patient }) {
             ))}
           </RHFSelect>
           <RHFTextField name="other_medication_notes" label={t('More information')} />
-          {patient?.patient?.user === undefined && <RHFTextField name="identification_num" label={t('ID Number')} />}
         </Box>
 
         <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
