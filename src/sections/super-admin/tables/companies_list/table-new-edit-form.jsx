@@ -54,7 +54,8 @@ export default function TableNewEditForm({ currentSelected }) {
       'refused',
       'no number',
       'wrong number',
-    ]),
+      ''
+    ]).nullable(),
     com_note: Yup.string(),
   });
 
@@ -79,7 +80,7 @@ export default function TableNewEditForm({ currentSelected }) {
       subscribe_to: currentSelected?.subscribe_to || '',
       social_network: currentSelected?.social_network || '',
       notes: currentSelected?.notes || '',
-      status: currentSelected?.status || '',
+      status: currentSelected?.status || null,
       com_note: currentSelected?.com_note || '',
     }),
     [currentSelected]
