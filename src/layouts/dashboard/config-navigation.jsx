@@ -76,7 +76,7 @@ export function useNavData() {
           },
           {
             title: t('video calls'),
-            path: paths.unitservice.videocalls.root,
+            path: paths.superadmin.videoCalls.root,
             icon: <Iconify icon="mdi:video" />,
           },
           {
