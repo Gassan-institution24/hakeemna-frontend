@@ -14,7 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -25,7 +25,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function EditPatient({ patient }) {
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
-  const { t } = useTranslate();
+  const { t, i18n } = useTranslate();
+  const { currentLang } = useLocales();
+  const isArabic = currentLang.value === 'ar';
   const [em_phone, setEMphone] = useState(patient.mobile_num1);
   const [em_phone2, setEMphone2] = useState(patient.mobile_num2);
   const handleArabicInputChange = (event) => {
@@ -59,6 +61,7 @@ export default function EditPatient({ patient }) {
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
     identification_num: Yup.string(),
+    cloud_storage_link: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
@@ -81,6 +84,7 @@ export default function EditPatient({ patient }) {
     smoking: patient?.smoking || '',
     other_medication_notes: patient?.other_medication_notes || '',
     identification_num: patient?.identification_num || '',
+    cloud_storage_link: patient?.cloud_storage_link || '',
   };
 
   const methods = useForm({
@@ -104,7 +108,8 @@ export default function EditPatient({ patient }) {
       await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      // eslint-disable-next-line no-nested-ternary
+      enqueueSnackbar(typeof error === 'string' ? error : isArabic ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
@@ -131,6 +136,54 @@ export default function EditPatient({ patient }) {
             label={t('Name in arabic')}
             onChange={handleArabicInputChange}
           />
+
+          <RHFSelect
+            label={t('nationality')}
+            fullWidth
+            name="nationality"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {isArabic ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          {patient?.patient?.user === undefined && <RHFTextField 
+          name="identification_num" 
+          label={t('Personal identification number')} 
+          title={t('The number must be written as it appears in the official document, including letters and symbols')}/>}
+
+          <RHFSelect
+            label={t('residence country')}
+            fullWidth
+            name="country"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {isArabic ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+
+          <RHFSelect
+            label={t('city')}
+            fullWidth
+            name="city"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {tableData.map((city, idx) => (
+              <MenuItem lang="ar" key={idx} value={city._id}>
+                {isArabic ? city.name_arabic : city.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+
+          <RHFTextField name="address" label={t('Address')} />
 
           <MuiTelInput
             label={t('Mobile Number')}
@@ -160,60 +213,7 @@ export default function EditPatient({ patient }) {
             // onChange={handleArabicInputChange}
             disabled
           />
-          <RHFSelect
-            label={t('nationality')}
-            fullWidth
-            name="nationality"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
-                {country.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFSelect
-            label={t('residence country')}
-            fullWidth
-            name="country"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
-                {country.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-
-          <RHFSelect
-            label={t('city')}
-            fullWidth
-            name="city"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {tableData.map((city, idx) => (
-              <MenuItem lang="ar" key={idx} value={city._id}>
-                {city.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFTextField name="address" label={t('Address')} />
-          <RHFSelect
-            label={t('gender')}
-            fullWidth
-            name="gender"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {['male', 'female'].map((gender, idx) => (
-              <MenuItem lang="ar" key={idx} value={gender}>
-                {gender}
-              </MenuItem>
-            ))}
-          </RHFSelect>
+          
           <Controller
             name="birth_date"
             control={control}
@@ -232,6 +232,21 @@ export default function EditPatient({ patient }) {
               />
             )}
           />
+
+          <RHFSelect
+            label={t('gender')}
+            fullWidth
+            name="gender"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {['male', 'female'].map((gender, idx) => (
+              <MenuItem lang="ar" key={idx} value={gender}>
+                {t(gender)}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          
           <RHFTextField
             name="height"
             label={
@@ -278,8 +293,16 @@ export default function EditPatient({ patient }) {
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFTextField name="other_medication_notes" label={t('More information')} />
-          {patient?.patient === undefined && <RHFTextField name="identification_num" label={t('ID Number')} />}
+          <RHFTextField 
+          name="other_medication_notes"
+          label={t('More information')} 
+          multiline
+          rows={4}
+          />
+          <RHFTextField 
+          name="cloud_storage_link" 
+          label={t('cloud Storage link for patient data')}
+          title={t('If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file')} />
         </Box>
 
         <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

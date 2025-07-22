@@ -1537,5 +1537,9 @@
   "Update my data": "تحديث بياناتي",
   "Are you registered in the National Jordanian Billing System?": "هل انت مسجل في نظام الفوترة الاردني الوطني؟",
   "Add your national Jordanian billing system information" : "اضف معلوماتك في نظام الفوترة الاردني الوطني",
-  "There is already an attendance registered today.": "يوجد دوام مسجل اليوم بالفعل."
+  "There is already an attendance registered today.": "يوجد دوام مسجل اليوم بالفعل.",
+  "Personal identification number": "الرقم الوطني",
+  "The number must be written as it appears in the official document, including letters and symbols": "يجب كتابة الرقم كما هو في الوثيقة او المستند الرسمي بما في ذلك الاحرف و الرموز",
+  "cloud Storage link for patient data": "رابط التخزين السحابي لبيانات المريض",
+  "If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file": "في حال كنت تقوم بتخزين بيانات المرضى (مثل: صور، ملفات) في الانترنت (مثل جوجل درايف او غيره) فانه تستطيع هنا تخزين الرابط للذهاب مباشرة لذلك الملف"
 }
