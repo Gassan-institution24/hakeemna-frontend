@@ -82,7 +82,7 @@ export default function InvoiceNewEditAddress() {
               {t('to')}:
             </Typography>
           </Stack>
-          {/* {patient && (
+          {patient ? (
             <Stack spacing={1}>
               <Typography variant="subtitle2">
                 {curLangAr ? data?.name_arabic : data?.name_english}
@@ -94,16 +94,15 @@ export default function InvoiceNewEditAddress() {
               </Typography>
               <Typography variant="body2"> {data?.phone}</Typography>
             </Stack>
-          )} */}
-          {unit_service_patient && (
+          ) : (
             <Stack spacing={1}>
               <Typography variant="subtitle2">
                 {curLangAr ? usPatientData?.name_arabic : usPatientData?.name_english}
               </Typography>
-
               <Typography variant="body2"> {usPatientData?.phone}</Typography>
             </Stack>
           )}
+
           {!patient && !unit_service_patient && (
             <Stack direction="row" justifyContent="flex-start">
               <RHFAutocomplete
