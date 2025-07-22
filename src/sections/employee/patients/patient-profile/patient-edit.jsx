@@ -61,6 +61,7 @@ export default function EditPatient({ patient }) {
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
     identification_num: Yup.string(),
+    cloud_storage_link: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
@@ -83,6 +84,7 @@ export default function EditPatient({ patient }) {
     smoking: patient?.smoking || '',
     other_medication_notes: patient?.other_medication_notes || '',
     identification_num: patient?.identification_num || '',
+    cloud_storage_link: patient?.cloud_storage_link || '',
   };
 
   const methods = useForm({
@@ -148,7 +150,10 @@ export default function EditPatient({ patient }) {
               </MenuItem>
             ))}
           </RHFSelect>
-          {patient?.patient?.user === undefined && <RHFTextField name="identification_num" label={t('Identification number')} />}
+          {patient?.patient?.user === undefined && <RHFTextField 
+          name="identification_num" 
+          label={t('Personal identification number')} 
+          title={t('The number must be written as it appears in the official document, including letters and symbols')}/>}
 
           <RHFSelect
             label={t('residence country')}
@@ -288,7 +293,16 @@ export default function EditPatient({ patient }) {
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFTextField name="other_medication_notes" label={t('More information')} />
+          <RHFTextField 
+          name="other_medication_notes"
+          label={t('More information')} 
+          multiline
+          rows={4}
+          />
+          <RHFTextField 
+          name="cloud_storage_link" 
+          label={t('cloud Storage link for patient data')}
+          title={t('If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file')} />
         </Box>
 
         <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
