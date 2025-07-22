@@ -14,7 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -25,7 +25,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function EditPatient({ patient }) {
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
-  const { t } = useTranslate();
+  const { t, i18n } = useTranslate();
+  const { currentLang } = useLocales();
+  const isArabic = currentLang.value === 'ar';
   const [em_phone, setEMphone] = useState(patient.mobile_num1);
   const [em_phone2, setEMphone2] = useState(patient.mobile_num2);
   const handleArabicInputChange = (event) => {
@@ -104,11 +106,10 @@ export default function EditPatient({ patient }) {
       await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      // eslint-disable-next-line no-nested-ternary
+      enqueueSnackbar(typeof error === 'string' ? error : isArabic ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
-
-  console.log(patient);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -133,6 +134,51 @@ export default function EditPatient({ patient }) {
             label={t('Name in arabic')}
             onChange={handleArabicInputChange}
           />
+
+          <RHFSelect
+            label={t('nationality')}
+            fullWidth
+            name="nationality"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {isArabic ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          {patient?.patient?.user === undefined && <RHFTextField name="identification_num" label={t('Identification number')} />}
+
+          <RHFSelect
+            label={t('residence country')}
+            fullWidth
+            name="country"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {countriesData.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country._id}>
+                {isArabic ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+
+          <RHFSelect
+            label={t('city')}
+            fullWidth
+            name="city"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {tableData.map((city, idx) => (
+              <MenuItem lang="ar" key={idx} value={city._id}>
+                {isArabic ? city.name_arabic : city.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+
+          <RHFTextField name="address" label={t('Address')} />
 
           <MuiTelInput
             label={t('Mobile Number')}
@@ -162,60 +208,7 @@ export default function EditPatient({ patient }) {
             // onChange={handleArabicInputChange}
             disabled
           />
-          <RHFSelect
-            label={t('nationality')}
-            fullWidth
-            name="nationality"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
-                {country.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFSelect
-            label={t('residence country')}
-            fullWidth
-            name="country"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
-                {country.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-
-          <RHFSelect
-            label={t('city')}
-            fullWidth
-            name="city"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {tableData.map((city, idx) => (
-              <MenuItem lang="ar" key={idx} value={city._id}>
-                {city.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFTextField name="address" label={t('Address')} />
-          <RHFSelect
-            label={t('gender')}
-            fullWidth
-            name="gender"
-            InputLabelProps={{ shrink: true }}
-            PaperPropsSx={{ textTransform: 'capitalize' }}
-          >
-            {['male', 'female'].map((gender, idx) => (
-              <MenuItem lang="ar" key={idx} value={gender}>
-                {gender}
-              </MenuItem>
-            ))}
-          </RHFSelect>
+          
           <Controller
             name="birth_date"
             control={control}
@@ -234,6 +227,21 @@ export default function EditPatient({ patient }) {
               />
             )}
           />
+
+          <RHFSelect
+            label={t('gender')}
+            fullWidth
+            name="gender"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+          >
+            {['male', 'female'].map((gender, idx) => (
+              <MenuItem lang="ar" key={idx} value={gender}>
+                {t(gender)}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+          
           <RHFTextField
             name="height"
             label={
