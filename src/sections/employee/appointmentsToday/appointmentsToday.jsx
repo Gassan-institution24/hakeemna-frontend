@@ -184,8 +184,7 @@ export default function AppointmentsToday() {
   };
 
   const handlePatientClick = (info) => {
-    router.push(`/dashboard/mypatients/${info}`);
-
+    router.push(`/dashboard/mypatients/${info?.unit_service_patient?._id}`);
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -269,10 +268,7 @@ export default function AppointmentsToday() {
           </MenuItem>
           {roomsData.map((activity, index) =>
             activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
-              <MenuItem
-                key={index}
-                value={activity?.activities?._id}
-              >
+              <MenuItem key={index} value={activity?.activities?._id}>
                 {curLangAr ? activity?.name_arabic : activity?.name_english}
               </MenuItem>
             ) : null
