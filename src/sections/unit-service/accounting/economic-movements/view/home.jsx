@@ -46,6 +46,8 @@ const TABLE_HEAD = [
   { id: 'patient', label: 'patient' },
   { id: 'stakeholder', label: 'stakeholder' },
   { id: 'Balance', label: 'total amount' },
+  { id: 'invoiceId', label: 'invoiceId' },
+  { id: 'sent_to_the_envoicing_system', label: 'sent to the envoicing system' },
   // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'status' },
   { id: '' },
@@ -83,7 +85,7 @@ export default function InvoiceListView() {
       sortBy: table.orderBy || 'created_at',
       rowsPerPage: table.rowsPerPage || 10,
       order: table.order || 'desc',
-      select: 'sequence_number created_at unit_service patient employee Balance status updated_at',
+      select: 'sequence_number created_at unit_service invoiceId patient employee Balance status updated_at sent_to_the_envoicing_system',
       populate: [
         { path: 'unit_service', select: 'name_english name_arabic' },
         { path: 'stakeholder', select: 'name_english name_arabic' },
@@ -92,6 +94,7 @@ export default function InvoiceListView() {
       ],
       ...filters,
     });
+console.log(economecMovementsData,"economecMovementsData");
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
