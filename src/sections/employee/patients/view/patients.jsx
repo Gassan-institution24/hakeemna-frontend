@@ -36,6 +36,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
+import { addWorkGroupColors } from 'src/utils/workgroupColors';
 
 import TableDetailRow from '../patients_row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -95,6 +96,8 @@ export default function PatientTableView() {
       ...filtersToSend,
     }
   );
+
+  const patientsDataWithColors = addWorkGroupColors(patientsData, 'hex');
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -216,7 +219,7 @@ export default function PatientTableView() {
               />
 
               <TableBody>
-                {patientsData.map((row, idx) => (
+                {patientsDataWithColors.map((row, idx) => (
                   <TableDetailRow
                     key={idx}
                     row={row}
