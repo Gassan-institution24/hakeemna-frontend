@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 20,
     backgroundColor: '#fff',
+    position: 'relative',
   },
   header: {
     flexDirection: 'row',
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 20,
     left: 20,
     right: 20,
     fontSize: 8,
@@ -61,83 +62,240 @@ const styles = StyleSheet.create({
   content: {
     marginTop: 20,
     paddingHorizontal: 20,
+    paddingBottom: 120, // Space for signature section and footer
+  },
+  contentContinuation: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 60, // Less padding for continuation pages
   },
   text: {
     fontSize: 13,
     marginBottom: 6,
+    lineHeight: 1.4,
   },
   largeText: {
     fontSize: 15,
     marginBottom: 7,
     fontWeight: 'bold',
   },
-  image: {
+  imageContainer: {
     marginTop: 20,
+    marginBottom: 20,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
   },
-  insideImage: {
-    width: '100%', // Make the image full width
-    height: 'auto', // Maintain the aspect ratio
+  reportImage: {
+    width: '100%',
+    height: 'auto',
+    maxHeight: 400,
+    marginBottom: 10,
   },
   watermark: {
     position: 'absolute',
-    top: '30%', // Adjust the vertical position as needed
-    left: '25%', // Adjust the horizontal position as needed
-    width: '50%', // Adjust width for desired size
-    opacity: 0.2, // Set opacity to 30%
+    top: '30%',
+    left: '25%',
+    width: '50%',
+    opacity: 0.2,
     zIndex: -1,
+  },
+  signatureSection: {
+    position: 'absolute',
+    bottom: 60, // Above the footer
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingTop: 20,
+    borderTop: '1px solid #eee',
+  },
+  signatureContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  signatureImage: {
+    width: 80,
+    height: 40,
+    marginBottom: 5,
+  },
+  stampImage: {
+    width: 60,
+    height: 60,
+    marginBottom: 5,
+  },
+  signatureText: {
+    fontSize: 10,
+    textAlign: 'center',
+    marginTop: 5,
+  },
+  pageNumber: {
+    position: 'absolute',
+    bottom: 40,
+    right: 20,
+    fontSize: 8,
+    color: '#777',
   },
 });
 
+// Helper function to split text into chunks that fit on a page
+const splitTextIntoPages = (text, maxCharsPerPage = 2000) => {
+  const sentences = text.split('. ');
+  
+  const result = sentences.reduce((acc, sentence) => {
+    const { pages, currentPage } = acc;
+    const potentialPage = `${currentPage}${sentence}. `;
+    
+    if (potentialPage.length > maxCharsPerPage && currentPage.length > 0) {
+      return {
+        pages: [...pages, currentPage.trim()],
+        currentPage: `${sentence}. `
+      };
+    }
+    
+    return {
+      pages,
+      currentPage: potentialPage
+    };
+  }, { pages: [], currentPage: '' });
+  
+  const finalPages = result.currentPage.trim() 
+    ? [...result.pages, result.currentPage.trim()]
+    : result.pages;
+  
+  return finalPages.length > 0 ? finalPages : [text];
+};
+
+// Helper function to distribute images across pages
+const distributeImages = (images, imagesPerPage = 2) => {
+  const imagePages = [];
+  let i = 0;
+  
+  while (i < images.length) {
+    imagePages.push(images.slice(i, i + imagesPerPage));
+    i += imagesPerPage;
+  }
+  
+  return imagePages;
+};
+
 const MedicalReportPDF = ({ report }) => {
+  console.log(report);
   const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
   const plainText = convert(sanitizedHtmlString, {
     wordwrap: 130,
   });
   const result = convert(plainText);
 
+  // Split content into pages
+  const textPages = splitTextIntoPages(result, 1800);
+  const imagePages = report?.file?.length > 0 ? distributeImages(report.file, 2) : [];
+  const totalPages = textPages.length + imagePages.length;
+
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
+      <View>
+        <Text style={styles.headerText}>Medical Report</Text>
+        <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
+        <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
+        <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
+      </View>
+    </View>
+  );
+
+  const renderWatermark = () => (
+    <PdfImage src={Doclogo} style={styles.watermark} />
+  );
+
+  const renderSignatureSection = () => (
+    <View style={styles.signatureSection}>
+      <View style={styles.signatureContainer}>
+        {report?.employee?.signature && (
+          <PdfImage src={report?.employee?.signature} style={styles.signatureImage} />
+        )}
+        <Text style={styles.signatureText}>Employee Signature</Text>
+      </View>
+      <View style={styles.signatureContainer}>
+        {report?.employee?.stamp && (
+          <PdfImage src={report?.employee?.stamp} style={styles.stampImage} />
+        )}
+        <Text style={styles.signatureText}>Official Stamp</Text>
+      </View>
+    </View>
+  );
+
+  const renderFooter = (pageNumber) => (
+    <>
+      <Text style={styles.footer}>Powered by hakeemna</Text>
+      <Text style={styles.pageNumber}>Page {pageNumber} of {totalPages}</Text>
+    </>
+  );
+
   return (
     <Document>
+      {/* First page with patient info and first part of content */}
       <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <PdfImage src={report?.unit_service?.company_logo} style={styles.headerImage} />
-          <View>
-            <Text style={styles.headerText}>Medical Report</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
-            <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
-          </View>
-        </View>
-
-        {/* Watermark Logo */}
-        <PdfImage src={Doclogo} style={styles.watermark} />
-
-        {/* Content */}
+        {renderHeader()}
+        {renderWatermark()}
+        
         <View style={styles.content}>
           <Text style={styles.largeText}>Patient Information</Text>
           <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
-          <Text style={styles.text}>Age: {fDmPdf(report?.patient?.birth_date)}</Text>
+          <Text style={styles.text}>Birth Date: {fDmPdf(report?.patient?.birth_date)}</Text>
           <Text style={styles.largeText}>Report Details</Text>
-          <Text style={styles.text}>{result}</Text>
+          <Text style={styles.text}>{textPages[0]}</Text>
         </View>
 
-        {/* Images */}
-        <View style={styles.image}>
-          {report?.file?.map((file, index) => (
-            <PdfImage key={index} src={file} style={styles.insideImage} />
-          ))}
-        </View>
-
-        {/* Footer */}
-        <Text style={styles.footer}>Made by hakeemna</Text>
+        {/* Only show signature section if this is the last page */}
+        {totalPages === 1 && renderSignatureSection()}
+        {renderFooter(1)}
       </Page>
+
+      {/* Additional text pages */}
+      {textPages.slice(1).map((pageText, index) => (
+        <Page key={`text-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+          {renderWatermark()}
+          
+          <View style={styles.contentContinuation}>
+            <Text style={styles.text}>{pageText}</Text>
+          </View>
+
+          {/* Show signature section only on the last page */}
+          {index + 2 === totalPages && renderSignatureSection()}
+          {renderFooter(index + 2)}
+        </Page>
+      ))}
+
+      {/* Image pages */}
+      {imagePages.map((pageImages, index) => {
+        const currentPageNum = textPages.length + index + 1;
+        const isLastPage = currentPageNum === totalPages;
+        
+        return (
+          <Page key={`images-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+            {renderWatermark()}
+            
+            <View style={isLastPage ? styles.content : styles.contentContinuation}>
+              {pageImages.map((imageUrl, imgIndex) => (
+                <View key={imgIndex} style={styles.imageContainer}>
+                  <PdfImage src={imageUrl} style={styles.reportImage} />
+                </View>
+              ))}
+            </View>
+
+            {/* Show signature section only on the last page */}
+            {isLastPage && renderSignatureSection()}
+            {renderFooter(currentPageNum)}
+          </Page>
+        );
+      })}
     </Document>
   );
 };
+
 MedicalReportPDF.propTypes = {
   report: PropTypes.object,
 };
@@ -149,21 +307,25 @@ export default function Medicalreports() {
   const router = useRouter();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
+  
   const handleMouseOut = () => {
     setHoveredButtonId(null);
   };
+  
   const handleViewClick = (id) => {
     router.push(paths.dashboard.user.medicalreportsview(id));
   };
+  
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
+  
   const formatTextWithLineBreaks = (text, id, limit = 20) => {
     if (!text) return '';
 
     const chunks = [];
-
     for (let i = 0; i < text.length; i += 100) {
       chunks.push(text.slice(i, i + 100));
     }
