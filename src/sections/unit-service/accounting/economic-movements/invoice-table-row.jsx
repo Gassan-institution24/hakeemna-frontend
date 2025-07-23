@@ -19,6 +19,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +48,8 @@ export default function MovementTableRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    sent_to_the_envoicing_system,
+    invoiceId,
   } = row;
 
   const { t } = useTranslate();
@@ -86,6 +89,13 @@ export default function MovementTableRow({
 
         <TableCell align="center">
           {fCurrency(stakeholder ? -Balance : Balance, Currency?.symbol)}
+        </TableCell>
+        <TableCell align="center">{invoiceId}</TableCell>
+        <TableCell align="center">
+          {' '}
+          <Typography color={sent_to_the_envoicing_system ? 'success.main' : 'error.main'}>
+            {sent_to_the_envoicing_system ? t('yes') : t('no')}
+          </Typography>
         </TableCell>
 
         <TableCell align="center">
