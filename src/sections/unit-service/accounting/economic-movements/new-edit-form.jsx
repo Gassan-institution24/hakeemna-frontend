@@ -280,6 +280,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     loadingSend.onTrue();
     try {
       const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
+      const movementId = invoice?.data?.movement?._id;
       const subtotal = data.subtotal || 0;
       const quantity = totalQuantity;
       const concept = data.concept ?? '';
@@ -305,6 +306,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         discount,
         total,
         concept,
+        economicMovementId: movementId,
       };
       if (invoicing) {
         try {
