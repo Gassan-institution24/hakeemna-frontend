@@ -12,7 +12,7 @@
   "departments": "الأقسام",
   "Field removed successfully": "تم ازالة الوصفة الطبية",
   "Negligence in treatment": "الاهمال في المعاملة",
-  "Staff behavior": "سلوك الموظفين",
+  "Staff behavior": "سلوك الموظفين",  
   "Cleanliness": "النظافة",
   "Services provided added successfully": "تمت إضافة الخدمات المقدمة بنجاح",
   "Price": "السعر",
@@ -1541,5 +1541,18 @@
   "Personal identification number": "الرقم الوطني",
   "The number must be written as it appears in the official document, including letters and symbols": "يجب كتابة الرقم كما هو في الوثيقة او المستند الرسمي بما في ذلك الاحرف و الرموز",
   "cloud Storage link for patient data": "رابط التخزين السحابي لبيانات المريض",
-  "If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file": "في حال كنت تقوم بتخزين بيانات المرضى (مثل: صور، ملفات) في الانترنت (مثل جوجل درايف او غيره) فانه تستطيع هنا تخزين الرابط للذهاب مباشرة لذلك الملف"
+  "If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file": "في حال كنت تقوم بتخزين بيانات المرضى (مثل: صور، ملفات) في الانترنت (مثل جوجل درايف او غيره) فانه تستطيع هنا تخزين الرابط للذهاب مباشرة لذلك الملف",
+  "Confirm Arrival": "تأكيد الوصول",
+  "Arrival confirmed": "تم تأكيد الوصول",
+  "Your appointments today at": "مواعيدك اليوم في",
+  "Video calls": "مكالمات الفيديو",
+  "medical analyses": "تحاليل طبية",
+  "medical reports": "تقارير طبية",
+  "prescriptions": "وصفات طبية",
+  "appointments": "مواعيد",
+  "instructions": "تعليمات",
+  "requests": "طلبات",
+  "transfer": "تحويل",
+  "checklist": "قائمة التحقق",
+  "Search by code, patient, or description...": "ابحث برقم المريض، اسم المريض، او الوصف"
 }
