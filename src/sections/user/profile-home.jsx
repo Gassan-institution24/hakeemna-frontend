@@ -14,7 +14,6 @@ import Image from 'src/components/image/image';
 
 import patientCard from '../home/images/cardimage.png';
 import patientCardAr from '../home/images/cardimagear.png';
-import CallDialog from './call_dialog';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
