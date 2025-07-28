@@ -62,20 +62,6 @@ export default function InvoiceNewEditAddress() {
   return (
     <Stack direction={{ md: 'row' }}>
       <Stack spacing={{ xs: 2, md: 3 }} sx={{ p: 3 }} flex={1}>
-        {/* <Stack sx={{ width: 1 }}>
-          <Stack spacing={1}>
-            <Typography variant="h4">
-              {curLangAr ? USData?.name_arabic : USData?.name_english}
-            </Typography>
-            <Typography variant="body2">
-              {curLangAr
-                ? `${USData?.city?.name_arabic}, ${USData?.country?.name_arabic}`
-                : `${USData?.city?.name_english}, ${USData?.country?.name_english}`}
-            </Typography>
-            <Typography variant="body2"> {USData?.phone}</Typography>
-          </Stack>
-        </Stack> */}
-
         <Stack sx={{ width: 1 }}>
           <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
             <Typography variant="h6" sx={{ color: 'text.disabled', flexGrow: 1 }}>
@@ -125,11 +111,6 @@ export default function InvoiceNewEditAddress() {
                   </li>
                 )}
               />
-              {/* <RHFSelect name='invoiceTo' sx={{ maxWidth: 200 }} >
-              {patientsData?.map((one) => (
-                <MenuItem value={one._id}>{one.name_english}</MenuItem>
-              ))}
-            </RHFSelect> */}
             </Stack>
           )}
         </Stack>

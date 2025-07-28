@@ -297,7 +297,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           usPatientData?.name_arabic ||
           PatientData?.name_english ||
           usPatientData?.name_english,
-        BuyerNum: PatientData?.mobile_num1 || usPatientData?.mobile_num1,
+        BuyerNum: (PatientData?.mobile_num1 || usPatientData?.mobile_num1 || '').replace(
+          /\s+/g,
+          ''
+        ),
         BuyerIdNum: PatientData?.identification_num || usPatientData?.identification_num,
         BuyerCity: PatientData?.city?.name_arabic || usPatientData?.city?.name_arabic,
         service_type: ServiceTypeData?.name_arabic,
