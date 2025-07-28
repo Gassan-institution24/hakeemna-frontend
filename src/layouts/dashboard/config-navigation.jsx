@@ -344,13 +344,6 @@ export function useNavData() {
         'data-test': 'us-nav-item-patients',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
-        title: t('video calls'),
-        path: paths.unitservice.videocalls.root,
-        icon: <Iconify icon="mdi:video" />,
-        'data-test': 'us-nav-item-video-calls',
-      },
-      {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
