@@ -13,29 +13,34 @@ import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Scrollbar from 'src/components/scrollbar';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 import { useState, useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Iconify from 'src/components/iconify';
 
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit service' },
-  { id: 'patient_name', label: 'Patient' },
-  { id: 'description', label: 'Description' },
-];
+import UnitServiceVideoCallsRow from './table-details-row';
 
 function getSortedData(data, order, orderBy) {
   return [...data].sort(getComparator(order, orderBy));
 }
 
-export default function UnitServiceVideoCallsTableView({ unitServiceId }) {
+export default function UnitServiceVideoCallsTableView({ patient }) {
   const table = useTable({ defaultOrderBy: 'code' });
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
-  const { data, isLoading } = useGetVideoCalls({ unit_service_id: unitServiceId });
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'unit_service', label: t('unit of service') },
+    { id: 'patient_name', label: t('patient') },
+    { id: 'description', label: t('description') },
+    { id: 'actions', label: '', align: 'right' },
+  ];
+  
+  const { data, isLoading } = useGetVideoCalls({ patient_id: patient?._id });
   const [search, setSearch] = useState('');
 
   const videoCalls = data?.videoCalls || data || [];
@@ -106,12 +111,10 @@ export default function UnitServiceVideoCallsTableView({ unitServiceId }) {
                 {!isLoading && notFound && <TableNoData notFound={notFound} />}
                 {!isLoading && !notFound &&
                   dataInPage.map((row, idx) => (
-                    <TableRow hover key={row.code || idx}>
-                      <TableCell align="center">{row.code}</TableCell>
-                      <TableCell align="center">{row.unit_service?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{row.patient?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{row.description || '-'}</TableCell>
-                    </TableRow>
+                    <UnitServiceVideoCallsRow
+                      key={row.code || idx}
+                      row={row}
+                    />
                   ))}
               </TableBody>
             </Table>
@@ -132,5 +135,5 @@ export default function UnitServiceVideoCallsTableView({ unitServiceId }) {
 }
 
 UnitServiceVideoCallsTableView.propTypes = {
-  unitServiceId: PropTypes.string.isRequired,
+  patient: PropTypes.object.isRequired,
 }; 
