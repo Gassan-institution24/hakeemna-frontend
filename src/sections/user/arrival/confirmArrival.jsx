@@ -104,11 +104,38 @@ export default function ConfirmArrival() {
       <Typography variant="h4" sx={{ mb: 4, textAlign: 'center', width: '100%' }}>
         {t("Your appointments today at")} {isArabic ? unitService?.name_arabic : unitService?.name_english}
       </Typography>
-      <Stack spacing={4} sx={{ width: '100%' }}>
-        {appointments.map((appointment, idx) => (
-          <AppointmentCard key={idx} appointment={appointment} t={t} handleConfirmArrival={handleConfirmArrival} />
-        ))}
-      </Stack>
+      
+      {appointments && appointments.length > 0 ? (
+        <Stack spacing={4} sx={{ width: '100%' }}>
+          {appointments.map((appointment, idx) => (
+            <AppointmentCard key={idx} appointment={appointment} t={t} handleConfirmArrival={handleConfirmArrival} />
+          ))}
+        </Stack>
+      ) : (
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="40vh" gap={3}>
+          <Typography variant="h5" color="text.secondary" gutterBottom>
+            {t('No appointments found')}
+          </Typography>
+          <Typography color="text.secondary" sx={{ mb: 2, textAlign: 'center' }}>
+            {t('You don\'t have any appointments scheduled for today at this unit of service.')}
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => navigate('/dashboard/user/', { replace: true })}
+            sx={{ 
+              px: 4, 
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: '1rem',
+              fontWeight: 600
+            }}
+          >
+            {t('Return to Home Page')}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }

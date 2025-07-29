@@ -1544,6 +1544,7 @@
   "If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file": "في حال كنت تقوم بتخزين بيانات المرضى (مثل: صور، ملفات) في الانترنت (مثل جوجل درايف او غيره) فانه تستطيع هنا تخزين الرابط للذهاب مباشرة لذلك الملف",
   "Confirm Arrival": "تأكيد الوصول",
   "Arrival confirmed": "تم تأكيد الوصول",
+  "Confirming...": "يتم التأكيد...",
   "Your appointments today at": "مواعيدك اليوم في",
   "Video calls": "مكالمات الفيديو",
   "medical analyses": "تحاليل طبية",
@@ -1569,5 +1570,8 @@
   "Error updating status": "حدث خطأ أثناء تحديث الحالة",
   "Room updated successfully": "تم تحديث الغرفة بنجاح",
   "Employee is already in the selected room": "الموظف موجود في الغرفة المختارة",
-  "Error updating room": "حدث خطأ أثناء تحديث الغرفة"
+  "Error updating room": "حدث خطأ أثناء تحديث الغرفة",
+  "No appointments found": "لا يوجد مواعيد",
+  "You don't have any appointments scheduled for today at this unit of service.": "لا يوجد مواعيد مجدولة لك اليوم في هذه الوحدة الطبية.",
+  "Return to Home Page": "العودة إلى الصفحة الرئيسية"
 }
