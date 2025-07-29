@@ -7,6 +7,7 @@ import UnitServiceNav from 'src/layouts/service-unit-topbar';
 import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import VideoCallsHomePage from '../../pages/super-admin/videocalls';
 
 // ----------------------------------------------------------------------
 
@@ -712,6 +713,12 @@ export const dashboardRoutes = [
           { path: 'new', element: <AddUserPage /> },
           // { path: ':id/user', element: <UnitserviceInsurancePage /> },
           { path: ':id/edit', element: <EditUserPage /> },
+        ],
+      },
+      {
+        path: 'videoCalls',
+        children: [
+          { element: <VideoCallsHomePage />, index: true },
         ],
       },
       {

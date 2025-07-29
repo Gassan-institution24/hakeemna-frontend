@@ -72,7 +72,7 @@ export default function WaitingRoom() {
       router.push(`${paths.unitservice.departments.processingPage}/${entrance?._id}`);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error updating status', { variant: 'error' });
+      enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
   };
   const updateRoom = async (roomId) => {
@@ -111,13 +111,13 @@ export default function WaitingRoom() {
           employee: [...nextRoomEmployees, user?.employee?._id],
         });
 
-        enqueueSnackbar('Room updated successfully', { variant: 'success' });
+        enqueueSnackbar(t('Room updated successfully'), { variant: 'success' });
       } else {
-        enqueueSnackbar('Employee is already in the selected room', { variant: 'info' });
+        enqueueSnackbar(t('Employee is already in the selected room'), { variant: 'info' });
       }
     } catch (error) {
       console.error('Error updating room:', error.message);
-      enqueueSnackbar('Error updating room', { variant: 'error' });
+      enqueueSnackbar(t('Error updating room'), { variant: 'error' });
     }
   };
 

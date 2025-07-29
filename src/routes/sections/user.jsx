@@ -6,6 +6,7 @@ import UserDashboardLayout from 'src/layouts/dashboard/indexUser';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import ArrivalPage from 'src/pages/dashboard/user/arrival/arrival';
 import CallDialog from '../../sections/user/call_dialog';
 // import TableCreatePage from 'src/pages/dashboard/tables/new';
 // import TableEditPage from 'src/pages/dashboard/tables/edit';
@@ -140,6 +141,10 @@ export const userRoutes = [
               { element: <OrdersPage />, index: true },
               { path: ':id/details', element: <OrdersDetailsPage /> },
             ],
+          },
+          {
+            path: 'arrival',
+            element: <ArrivalPage />,
           },
         ],
       },

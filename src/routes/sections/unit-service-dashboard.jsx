@@ -13,7 +13,7 @@ import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
-import { LoadingScreen } from 'src/components/loading-screen';
+import { LoadingScreen } from 'src/components/loading-screen';  
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -187,7 +187,6 @@ const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/servic
 const Processing = lazy(() => import('src/sections/employee/appointmentsToday/Processing'));
 const Viewgpage = lazy(() => import('src/sections/employee/appointmentsToday/viewgpage'));
 const Test = lazy(() => import('src/sections/employee/appointmentsToday/prescription'));
-
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
 

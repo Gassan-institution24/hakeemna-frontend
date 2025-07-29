@@ -313,6 +313,7 @@ export const endpoints = {
     all: '/api/unitservice',
     active: '/api/unitservice/active',
     one: (id) => (!id ? null : `/api/unitservice/${id}`),
+    regenerateQrcode: (id) => (!id ? null : `/api/unitservice/generate-qr-code/${id}`),
   },
   departments: {
     all: '/api/departments',
@@ -576,6 +577,7 @@ export const endpoints = {
       patient: (id, pid, uspId) => `/api/appointments/unitservice/${id}/patient/${pid}/${uspId}`,
       today: (id) => (!id ? null : `/api/appointments/unitserviceappointments/${id}`),
       comingpatients: (id) => (!id ? null : `/api/appointments/comingpatients/${id}`),
+      qrcode: (id, pid) => `/api/appointments/unitservice/qrcode/${id}/${pid}`,
     },
     patient: {
       many: (id) => (!id ? null : `/api/appointments/patient/${id}`),
@@ -663,6 +665,9 @@ export const endpoints = {
   training: {
     all: '/api/training',
     one: (id) => (!id ? null : `/api/training/${id}`),
+  },
+  videoCalls: {
+    all: '/api/video-call'
   },
 
   tables: {
