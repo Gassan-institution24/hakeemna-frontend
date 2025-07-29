@@ -92,7 +92,7 @@ export function useGetPatientFinishedAppointments(id) {
 
 export function useGetUSPatientAppointments(id, pid, uspId) {
   const URL = endpoints.appointments.unit_service.patient(id, pid, uspId);
-
+  
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
@@ -112,6 +112,26 @@ export function useGetUSPatientAppointments(id, pid, uspId) {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetQrCodeAppointments(unitServiceId, patientId) {
+  const URL = endpoints.appointments.unit_service.qrcode(unitServiceId, patientId);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentsData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
 export function useGetpatientNotify(id) {
   const URL = endpoints.appointments.patient.notify(id);
 

@@ -68,7 +68,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
         <TableCell
           sx={{
             cursor: 'pointer',
-            color: '#3F54EB',
+            color: row.color,
           }}
           onClick={clickHandler}
           align="center"

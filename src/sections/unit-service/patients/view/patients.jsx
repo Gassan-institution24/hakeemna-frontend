@@ -24,6 +24,8 @@ import {
 
 import { useSnackbar } from 'notistack';
 
+import { addWorkGroupColors } from 'src/utils/workgroupColors';
+
 import { Button } from '@mui/material';
 
 import { RouterLink } from 'src/routes/components';
@@ -94,6 +96,8 @@ export default function PatientTableView() {
       ...filtersToSend,
     }
   );
+
+  const patientsDataWithColors = addWorkGroupColors(patientsData, 'hex');
 
   const canReset = !!filters?.name || filters.status !== 'active';
 
@@ -215,7 +219,7 @@ export default function PatientTableView() {
               />
 
               <TableBody>
-                {patientsData.map((row, idx) => (
+                {patientsDataWithColors.map((row, idx) => (
                   <TableDetailRow
                     key={idx}
                     row={row}

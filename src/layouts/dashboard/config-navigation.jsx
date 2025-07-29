@@ -75,6 +75,11 @@ export function useNavData() {
             icon: <Iconify icon="mdi:people-group-outline" />,
           },
           {
+            title: t('video calls'),
+            path: paths.superadmin.videoCalls.root,
+            icon: <Iconify icon="mdi:video" />,
+          },
+          {
             title: t('employees'),
             path: paths.superadmin.employees.root,
             icon: <Iconify icon="fluent:people-20-filled" />,
