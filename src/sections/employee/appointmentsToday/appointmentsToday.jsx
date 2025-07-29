@@ -50,6 +50,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
 
+import { Link } from 'react-router-dom';
 import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
@@ -384,6 +385,8 @@ export default function AppointmentsToday() {
                 <Button
                   component={RouterLink}
                   href={paths.employee.qrCode}
+                  target="_blank"
+                  rel="noopener"
                   variant="contained"
                   color="success"
                   startIcon={<Iconify icon="eva:qr-code-fill" />}
