@@ -1554,5 +1554,20 @@
   "requests": "طلبات",
   "transfer": "تحويل",
   "checklist": "قائمة التحقق",
-  "Search by code, patient, or description...": "ابحث برقم المريض، اسم المريض، او الوصف"
+  "Search by code, patient, or description...": "ابحث برقم المريض، اسم المريض، او الوصف",
+  "Scan this QR code to confirm patient arrival": "افحص هذا الرمز المرجعي لتأكيد وصول المريض",
+  "Regenerate QR Code": "إعادة إنشاء الرمز المرجعي",
+  "Regenerating...": "يتم إعادة الإنشاء...",
+  "Regenerate": "إعادة الإنشاء",
+  "Download QR Code": "تحميل الرمز المرجعي",
+  "QR code regenerated successfully": "تم إعادة إنشاء الرمز المرجعي بنجاح",
+  "Appointment started successfully": "تم بدء الموعد بنجاح",
+  "Appointment started": "تم بدء الموعد",
+  "Error starting appointment": "حدث خطأ أثناء بدء الموعد",
+  "appointment finished": "تم إنهاء الموعد",
+  "something went wrong": "حدث خطأ ما",
+  "Error updating status": "حدث خطأ أثناء تحديث الحالة",
+  "Room updated successfully": "تم تحديث الغرفة بنجاح",
+  "Employee is already in the selected room": "الموظف موجود في الغرفة المختارة",
+  "Error updating room": "حدث خطأ أثناء تحديث الغرفة"
 }

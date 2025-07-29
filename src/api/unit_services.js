@@ -68,3 +68,24 @@ export function useGetUnitservice(id) {
 
   return { ...memoizedValue, refetch };
 }
+
+export function useGetUnitServiceQrCode(id) {
+  const URL = endpoints.unit_services.one(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
