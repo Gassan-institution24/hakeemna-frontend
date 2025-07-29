@@ -55,7 +55,6 @@ import NewAppointmentDialog from './new-patient/new-patient';
 export default function AppointmentsToday() {
   const checkAcl = useAclGuard();
   const { fTimeUnit } = useFDateTimeUnit();
-
   const [currentTab, setCurrentTab] = useState('one');
 
   const { user } = useAuthContext();
@@ -138,18 +137,17 @@ export default function AppointmentsToday() {
       }
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, dataToUpdate);
       refetch();
-      enqueueSnackbar('Appointment started successfully', {
+      enqueueSnackbar(t('Appointment started'), {
         variant: 'success',
       });
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error updating status', { variant: 'error' });
+      enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
   };
   const StatusFunction = async (info, status, alert) => {
     try {
       const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
-
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
       refetch();
       enqueueSnackbar(`${info?.patient?.name_english} ${alert}`, {
@@ -157,7 +155,7 @@ export default function AppointmentsToday() {
       });
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error updating status', { variant: 'error' });
+      enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
   };
   const dialogOnTrue = async (info) => {
@@ -167,6 +165,12 @@ export default function AppointmentsToday() {
 
   const updateAppointmentactivity = async (activityId, info) => {
     try {
+      
+      if (!info?.entrance) {
+        enqueueSnackbar(t('Appointment must be started first before selecting next activity'), { variant: 'error' });
+        return;
+      }
+
       await axiosInstance.patch(`${endpoints.entranceManagement.one(info?.entrance)}`, {
         Next_activity: activityId,
       });
@@ -176,10 +180,10 @@ export default function AppointmentsToday() {
       refetch();
       refetch2();
       setCurrentTab('two');
-      enqueueSnackbar('Appointment started', { variant: 'success' });
+      enqueueSnackbar(t('Appointment started'), { variant: 'success' });
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error starting appointment', { variant: 'error' });
+      enqueueSnackbar(t('Error starting appointment'), { variant: 'error' });
     }
   };
 
@@ -201,14 +205,14 @@ export default function AppointmentsToday() {
         patient: appointmentdata?.patient?._id,
         unit_service_patient: appointmentdata?.unit_service_patient?._id,
       });
-      enqueueSnackbar('appointment finished', { variant: 'success' });
+      enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
       refetch2();
       refetch3();
       router.push(paths.employee.appointmentsToday);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('something went wrong', { variant: 'error' });
+      enqueueSnackbar(t('something went wrong'), { variant: 'error' });
     }
   };
 
@@ -376,6 +380,16 @@ export default function AppointmentsToday() {
                   startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                   {t('create & book appointment')}
+                </Button>
+                <Button
+                  component={RouterLink}
+                  href={paths.employee.qrCode}
+                  variant="contained"
+                  color="success"
+                  startIcon={<Iconify icon="eva:qr-code-fill" />}
+                  sx={{ ml: 2 }}
+                >
+                  {t('Confirm Arrival')}
                 </Button>
               </>
             )

@@ -943,6 +943,7 @@ export const paths = {
     blogs: `${ROOTS.SUPERADMIN}/browzeblogs`,
     previewBlog: (id) => `${ROOTS.SUPERADMIN}/browzeblogs/${id}`,
     appointmentsToday: `${ROOTS.SUPERADMIN}/appointmentsToday`,
+     qrCode: `${ROOTS.SUPERADMIN}/qr-code`,
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,
     Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,

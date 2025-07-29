@@ -82,6 +82,7 @@ const PrescriotionPage = lazy(
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 const SickleavePage = lazy(() => import('src/pages/employee/appointmentsToday/sickleavePage'));
 const DoctorReportPage = lazy(() => import('src/pages/employee/appointmentsToday/docreport'));
+const QrCodePage = lazy(() => import('src/pages/employee/qr-code'));
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
@@ -291,6 +292,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'docreport/:id',
         element: <DoctorReportPage />,
+      },
+      {
+        path: 'qr-code',
+        element: <QrCodePage />,
       },
     ],
   },
