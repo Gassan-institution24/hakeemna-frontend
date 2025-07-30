@@ -40,13 +40,17 @@ function Container({ children }) {
 
   const check = useCallback(() => {
     if (!authenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.pathname,
-      }).toString();
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const currentPath = url.pathname;
+      const currentSearch = url.search;
+
+      const searchParams = new URLSearchParams();
+      searchParams.set('returnTo', currentPath + currentSearch);
 
       const loginPath = paths.auth.login;
 
-      const href = `${loginPath}?${searchParams}`;
+      const href = `${loginPath}?${searchParams.toString()}`;
 
       router.replace(href);
     } else {
