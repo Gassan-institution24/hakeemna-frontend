@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
@@ -51,6 +51,10 @@ export default function CreateMonthlyReport({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  
+  // State to store fetched interval data for yearly reports
+  const [yearlyIntervalData, setYearlyIntervalData] = useState(null);
+  
   const attendanceSchema = Yup.object().shape({
     start_date: Yup.date().required(t('required field')),
     end_date: Yup.date().required(t('required field')),
@@ -74,6 +78,32 @@ export default function CreateMonthlyReport({
     note: Yup.string().nullable(),
   });
 
+  // Fetch interval data only for yearly reports when modal opens
+  useEffect(() => {
+    if (open && monthly && !row) {
+      // Fetch interval data for yearly reports only
+      const fetchYearlyData = async () => {
+        try {
+          const response = await axiosInstance.get(endpoints.monthlyReport.interval, {
+            params: {
+              startDate: start_date,
+              endDate: end_date,
+            },
+          });
+          setYearlyIntervalData(response.data);
+        } catch (error) {
+          console.error('Error fetching yearly interval data:', error);
+          setYearlyIntervalData(null);
+        }
+      };
+      
+      fetchYearlyData();
+    } else {
+      // Clear interval data for monthly reports or when editing
+      setYearlyIntervalData(null);
+    }
+  }, [open, monthly, row, start_date, end_date]);
+
   const defaultValues = {
     unit_service:
     row?.unit_service ||
@@ -81,25 +111,25 @@ export default function CreateMonthlyReport({
     employee_engagement: row?.employee_engagement || id,
     start_date: row?.start_date || start_date || null,
     end_date: row?.end_date || end_date || null,
-    working_time: row?.working_time || intervalData?.working_time || hours || 0,
-    calculated_time: row?.calculated_time || intervalData?.calculated_time || 0,
-    annual: row?.annual || intervalData?.annual || annual || 0,
-    sick: row?.sick || intervalData?.sick || sick || 0,
-    unpaid: row?.unpaid || intervalData?.unpaid || unpaid || 0,
-    public: row?.public || intervalData?.public || publicHolidays || 0,
-    other: row?.other || intervalData?.other || other || 0,
-    social_security: row?.social_security || intervalData?.social_security || 0,
-    tax: row?.tax || intervalData?.tax || 0,
-    deduction: row?.deduction || intervalData?.deduction || 0,
-    total: row?.total || intervalData?.total || 0,
-    annual_equivalent: row?.annual_equivalent || intervalData?.annual_equivalent || 0,
-    sick_equivalent: row?.sick_equivalent || intervalData?.sick_equivalent || 0,
-    unpaid_equivalent: row?.unpaid_equivalent || intervalData?.unpaid_equivalent || 0,
-    public_equivalent: row?.public_equivalent || intervalData?.public_equivalent || 0,
-    other_equivalent: row?.other_equivalent || intervalData?.other_equivalent || 0,
+    working_time: row?.working_time || (monthly ? yearlyIntervalData?.working_time : intervalData?.working_time) || hours || 0,
+    calculated_time: row?.calculated_time || (monthly ? yearlyIntervalData?.calculated_time : intervalData?.calculated_time) || 0,
+    annual: row?.annual || (monthly ? yearlyIntervalData?.annual : intervalData?.annual) || annual || 0,
+    sick: row?.sick || (monthly ? yearlyIntervalData?.sick : intervalData?.sick) || sick || 0,
+    unpaid: row?.unpaid || (monthly ? yearlyIntervalData?.unpaid : intervalData?.unpaid) || unpaid || 0,
+    public: row?.public || (monthly ? yearlyIntervalData?.public : intervalData?.public) || publicHolidays || 0,
+    other: row?.other || (monthly ? yearlyIntervalData?.other : intervalData?.other) || other || 0,
+    social_security: row?.social_security || (monthly ? yearlyIntervalData?.social_security : intervalData?.social_security) || 0,
+    tax: row?.tax || (monthly ? yearlyIntervalData?.tax : intervalData?.tax) || 0,
+    deduction: row?.deduction || (monthly ? yearlyIntervalData?.deduction : intervalData?.deduction) || 0,
+    total: row?.total || (monthly ? yearlyIntervalData?.total : intervalData?.total) || 0,
+    annual_equivalent: row?.annual_equivalent || (monthly ? yearlyIntervalData?.annual_equivalent : intervalData?.annual_equivalent) || 0,
+    sick_equivalent: row?.sick_equivalent || (monthly ? yearlyIntervalData?.sick_equivalent : intervalData?.sick_equivalent) || 0,
+    unpaid_equivalent: row?.unpaid_equivalent || (monthly ? yearlyIntervalData?.unpaid_equivalent : intervalData?.unpaid_equivalent) || 0,
+    public_equivalent: row?.public_equivalent || (monthly ? yearlyIntervalData?.public_equivalent : intervalData?.public_equivalent) || 0,
+    other_equivalent: row?.other_equivalent || (monthly ? yearlyIntervalData?.other_equivalent : intervalData?.other_equivalent) || 0,
     note: row?.note || '',
-    days: row?.days || intervalData?.days || length || 0,
-    salary: row?.salary || intervalData?.salary || 0,
+    days: row?.days || (monthly ? yearlyIntervalData?.days : intervalData?.days) || length || 0,
+    salary: row?.salary || (monthly ? yearlyIntervalData?.salary : intervalData?.salary) || 0,
   };
 
   const methods = useForm({
@@ -110,10 +140,73 @@ export default function CreateMonthlyReport({
   const {
     watch,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = methods;
 
   const values = watch();
+
+  // Reset form when modal opens - distinguish between create and edit
+  useEffect(() => {
+    if (open) {
+      if (row) {
+        // Editing existing report - load all values from backend
+        reset({
+          unit_service: row.unit_service,
+          employee_engagement: row.employee_engagement,
+          start_date: row.start_date,
+          end_date: row.end_date,
+          working_time: row.working_time,
+          calculated_time: row.calculated_time,
+          annual: row.annual,
+          sick: row.sick,
+          unpaid: row.unpaid,
+          public: row.public,
+          other: row.other,
+          social_security: row.social_security,
+          tax: row.tax,
+          deduction: row.deduction,
+          total: row.total,
+          annual_equivalent: row.annual_equivalent,
+          sick_equivalent: row.sick_equivalent,
+          unpaid_equivalent: row.unpaid_equivalent,
+          public_equivalent: row.public_equivalent,
+          other_equivalent: row.other_equivalent,
+          note: row.note,
+          days: row.days,
+          salary: row.salary,
+        });
+      } else {
+        // Creating new report - use fetched data for yearly reports, reset calculated fields for monthly
+        const newValues = {
+          unit_service: user?.employee?.employee_engagements?.[user.employee.selected_engagement].unit_service?._id,
+          employee_engagement: id,
+          start_date: start_date || null,
+          end_date: end_date || null,
+          working_time: monthly ? (yearlyIntervalData?.working_time || hours || 0) : (hours || 0),
+          calculated_time: monthly ? (yearlyIntervalData?.calculated_time || 0) : 0,
+          annual: monthly ? (yearlyIntervalData?.annual || annual || 0) : (annual || 0),
+          sick: monthly ? (yearlyIntervalData?.sick || sick || 0) : (sick || 0),
+          unpaid: monthly ? (yearlyIntervalData?.unpaid || unpaid || 0) : (unpaid || 0),
+          public: monthly ? (yearlyIntervalData?.public || publicHolidays || 0) : (publicHolidays || 0),
+          other: monthly ? (yearlyIntervalData?.other || other || 0) : (other || 0),
+          social_security: monthly ? (yearlyIntervalData?.social_security || 0) : 0,
+          tax: monthly ? (yearlyIntervalData?.tax || 0) : 0,
+          deduction: monthly ? (yearlyIntervalData?.deduction || 0) : 0,
+          total: monthly ? (yearlyIntervalData?.total || 0) : 0,
+          annual_equivalent: monthly ? (yearlyIntervalData?.annual_equivalent || 0) : 0,
+          sick_equivalent: monthly ? (yearlyIntervalData?.sick_equivalent || 0) : 0,
+          unpaid_equivalent: monthly ? (yearlyIntervalData?.unpaid_equivalent || 0) : 0,
+          public_equivalent: monthly ? (yearlyIntervalData?.public_equivalent || 0) : 0,
+          other_equivalent: monthly ? (yearlyIntervalData?.other_equivalent || 0) : 0,
+          note: '',
+          days: monthly ? (yearlyIntervalData?.days || length || 0) : (length || 0),
+          salary: monthly ? (yearlyIntervalData?.salary || 0) : 0,
+        };
+        reset(newValues);
+      }
+    }
+  }, [open, reset, row, id, start_date, end_date, hours, annual, sick, unpaid, publicHolidays, other, length, user, monthly, yearlyIntervalData]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -157,13 +250,18 @@ export default function CreateMonthlyReport({
     // eslint-disable-next-line
   }, [values.salary, values.deduction, values.tax, values.social_security]);
 
+  // Generate unique key to force re-mounting when switching employees
+  const dialogKey = `${row?.employee_engagement || id}-${start_date}-${end_date}-${monthly}`;
+
   return (
     <Dialog
+      key={dialogKey}
       fullWidth
       maxWidth="md"
       open={open}
       onClose={() => {
         methods.reset();
+        setYearlyIntervalData(null); // Clear interval data when closing
         onClose();
       }}
     >
