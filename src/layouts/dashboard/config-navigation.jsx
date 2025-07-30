@@ -181,6 +181,17 @@ export function useNavData() {
           subcategory: 'management_tables',
           acl: 'read',
         }),
+        title: t('departments'),
+        path: paths.unitservice.departments.root,
+        navItemId: 'USWorkShiftNav',
+        'data-test': 'us-nav-item-workshifts',
+      },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
         title: t('work shifts'),
         path: paths.unitservice.tables.workshifts.root,
         navItemId: 'USWorkShiftNav',
