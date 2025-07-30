@@ -313,6 +313,7 @@ export const endpoints = {
     all: '/api/unitservice',
     active: '/api/unitservice/active',
     one: (id) => (!id ? null : `/api/unitservice/${id}`),
+    regenerateQrcode: (id) => (!id ? null : `/api/unitservice/generate-qr-code/${id}`),
   },
   departments: {
     all: '/api/departments',
@@ -476,6 +477,7 @@ export const endpoints = {
     all: '/api/monthlyreport',
     one: (id) => `/api/monthlyreport/${id}`,
     employee: (id) => `/api/monthlyreport/employee/${id}`,
+    interval: '/api/monthlyreport/interval',
   },
   yearlyReport: {
     all: '/api/yearlyreport',
@@ -662,6 +664,9 @@ export const endpoints = {
   training: {
     all: '/api/training',
     one: (id) => (!id ? null : `/api/training/${id}`),
+  },
+  videoCalls: {
+    all: '/api/video-call'
   },
 
   tables: {
