@@ -1573,5 +1573,6 @@
   "Error updating room": "حدث خطأ أثناء تحديث الغرفة",
   "No appointments found": "لا يوجد مواعيد",
   "You don't have any appointments scheduled for today at this unit of service.": "لا يوجد مواعيد مجدولة لك اليوم في هذه الوحدة الطبية.",
-  "Return to Home Page": "العودة إلى الصفحة الرئيسية"
+  "Return to Home Page": "العودة إلى الصفحة الرئيسية",
+  "duration": "المدة"
 }

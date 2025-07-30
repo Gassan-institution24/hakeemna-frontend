@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { fDate } from 'src/utils/format-time';
+import { fDate, fMinSec } from 'src/utils/format-time';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
@@ -33,6 +33,9 @@ export default function UnitServiceVideoCallsRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    employee,
+    work_group,
+    duration,
   } = row;
 
   const { t } = useTranslate();
@@ -55,18 +58,35 @@ export default function UnitServiceVideoCallsRow({
       >
         {curLangAr ? unit_service?.name_arabic || '-' : unit_service?.name_english || '-'}
       </TableCell>
+      
+      <TableCell
+        align="center"
+      >
+        {curLangAr ? employee?.name_arabic || '-' : employee?.name_english || '-'}
+      </TableCell>
+      
       <TableCell    
         align="center"
       >
         {curLangAr ? patient?.name_arabic || '-' : patient?.name_english || '-'}
+      </TableCell>
+
+      <TableCell
+        align="center"
+      >
+        {curLangAr ? work_group?.name_arabic || '-' : work_group?.name_english || '-'}
+      </TableCell>
+      <TableCell
+        align="center"
+      >
+        {fMinSec(duration)}
       </TableCell>
       <TableCell
         align="center"
       >
         {description || '-'}
       </TableCell>
-     
-
+      
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

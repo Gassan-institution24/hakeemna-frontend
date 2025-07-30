@@ -35,14 +35,17 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'unit_service', label: t('unit of service') },
+    { id: 'employee', label: t('employee') },
     { id: 'patient_name', label: t('patient') },
+    { id: 'work_group', label: t('work group') },
+    { id: 'duration', label: t('duration') },
     { id: 'description', label: t('description') },
     { id: 'actions', label: '', align: 'right' },
   ];
-  
+
   const { data, isLoading } = useGetVideoCalls({ patient_id: patient?._id });
   const [search, setSearch] = useState('');
-
+  
   const videoCalls = data?.videoCalls || data || [];
   const videoCallsWithNames = videoCalls.map((row) => ({
     ...row,

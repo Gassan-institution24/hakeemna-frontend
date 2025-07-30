@@ -107,9 +107,11 @@ export default function PatientProfile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
           patient: patientData?._id,
           description: `Call started at ${new Date().toISOString()}`,
+          room_name: uniqueRoom,
+          work_group: usPatientData.work_group,
+          employee: user?.employee?._id,
         }),
       });
 

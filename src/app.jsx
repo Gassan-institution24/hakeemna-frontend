@@ -17,7 +17,8 @@ import { LocalizationProvider } from 'src/locales';
 import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 import { CheckoutProvider } from './sections/unit-service/checkout/context';
-import { CompaniesProvider } from './context/companiesContext';
+import { WebRTCProvider } from './components/vedio-call/web-rtc-provider';
+import { CompaniesProvider } from './context/CompaniesContext';
 
 window.Buffer = Buffer;
 
@@ -88,6 +89,7 @@ export default function App() {
 
   return (
     <AuthProvider>
+      <WebRTCProvider>
         <CompaniesProvider>
           <LocalizationProvider>
             <SettingsProvider
@@ -119,6 +121,7 @@ export default function App() {
             </SettingsProvider>
           </LocalizationProvider>
         </CompaniesProvider>
+      </WebRTCProvider>
     </AuthProvider>
   );
 }
