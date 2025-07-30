@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import { useGetQrCodeAppointments } from 'src/api/appointments';
 import { useAuthContext } from 'src/auth/hooks';
 import { enqueueSnackbar } from 'notistack';
+import {LoadingScreen} from 'src/components/loading-screen';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import AppointmentCard from './appointmentCard';
 
@@ -57,11 +58,11 @@ export default function ConfirmArrival() {
     }
   }, [unitServiceId, token, navigate]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || appointmentsLoading) {
+    return <LoadingScreen />;
   }
 
-  if (unitService?.QrCodeToken !== token) {
+  if (unitService && unitService.QrCodeToken !== token) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="60vh" gap={3}>
         <Typography variant="h4" color="error" gutterBottom>
@@ -75,6 +76,10 @@ export default function ConfirmArrival() {
         </Button>
       </Box>
     );
+  }
+
+  if (!unitService) {
+    return <LoadingScreen />;
   }
 
   // Dummy appointments data for structure (replace with real data as needed)
