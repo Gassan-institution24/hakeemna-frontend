@@ -101,85 +101,7 @@ const styles = StyleSheet.create({
     opacity: 0.2,
     zIndex: -1,
   },
-  signatureSection: {
-    position: 'absolute',
-    bottom: 60, // Above the footer
-    left: 20,
-    right: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingTop: 20,
-    borderTop: '1px solid #eee',
-  },
-  signatureContainer: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  signatureImage: {
-    width: 80,
-    height: 40,
-    marginBottom: 5,
-  },
-  stampImage: {
-    width: 60,
-    height: 60,
-    marginBottom: 5,
-  },
-  signatureText: {
-    fontSize: 10,
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  pageNumber: {
-    position: 'absolute',
-    bottom: 40,
-    right: 20,
-    fontSize: 8,
-    color: '#777',
-  },
 });
-
-// Helper function to split text into chunks that fit on a page
-const splitTextIntoPages = (text, maxCharsPerPage = 2000) => {
-  const sentences = text.split('. ');
-  
-  const result = sentences.reduce((acc, sentence) => {
-    const { pages, currentPage } = acc;
-    const potentialPage = `${currentPage}${sentence}. `;
-    
-    if (potentialPage.length > maxCharsPerPage && currentPage.length > 0) {
-      return {
-        pages: [...pages, currentPage.trim()],
-        currentPage: `${sentence}. `
-      };
-    }
-    
-    return {
-      pages,
-      currentPage: potentialPage
-    };
-  }, { pages: [], currentPage: '' });
-  
-  const finalPages = result.currentPage.trim() 
-    ? [...result.pages, result.currentPage.trim()]
-    : result.pages;
-  
-  return finalPages.length > 0 ? finalPages : [text];
-};
-
-// Helper function to distribute images across pages
-const distributeImages = (images, imagesPerPage = 2) => {
-  const imagePages = [];
-  let i = 0;
-  
-  while (i < images.length) {
-    imagePages.push(images.slice(i, i + imagesPerPage));
-    i += imagesPerPage;
-  }
-  
-  return imagePages;
-};
 
 const MedicalReportPDF = ({ report }) => {
   console.log(report);
@@ -249,49 +171,33 @@ const MedicalReportPDF = ({ report }) => {
           <Text style={styles.text}>{textPages[0]}</Text>
         </View>
 
-        {/* Only show signature section if this is the last page */}
-        {totalPages === 1 && renderSignatureSection()}
-        {renderFooter(1)}
-      </Page>
+        {/* Images */}
+        <View style={styles.image}>
+          {report?.file?.map((file, index) => (
+            <PdfImage key={index} src={file} style={styles.insideImage} />
+          ))}
+        </View>
 
-      {/* Additional text pages */}
-      {textPages.slice(1).map((pageText, index) => (
-        <Page key={`text-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-          {renderWatermark()}
-          
-          <View style={styles.contentContinuation}>
-            <Text style={styles.text}>{pageText}</Text>
+        {/* Signature and Stamp Section */}
+        <View style={styles.signatureSection}>
+          <View style={styles.signatureContainer}>
+            {report?.employee?.signature && (
+              <PdfImage src={report.employee.signature} style={styles.signatureImage} />
+            )}
+            <Text style={styles.signatureText}>Employee Signature</Text>
           </View>
 
-          {/* Show signature section only on the last page */}
-          {index + 2 === totalPages && renderSignatureSection()}
-          {renderFooter(index + 2)}
-        </Page>
-      ))}
+          <View style={styles.signatureContainer}>
+            {report?.employee?.stamp && (
+              <PdfImage src={report.employee.stamp} style={styles.stampImage} />
+            )}
+            <Text style={styles.signatureText}>Official Stamp</Text>
+          </View>
+        </View>
 
-      {/* Image pages */}
-      {imagePages.map((pageImages, index) => {
-        const currentPageNum = textPages.length + index + 1;
-        const isLastPage = currentPageNum === totalPages;
-        
-        return (
-          <Page key={`images-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-            {renderWatermark()}
-            
-            <View style={isLastPage ? styles.content : styles.contentContinuation}>
-              {pageImages.map((imageUrl, imgIndex) => (
-                <View key={imgIndex} style={styles.imageContainer}>
-                  <PdfImage src={imageUrl} style={styles.reportImage} />
-                </View>
-              ))}
-            </View>
-
-            {/* Show signature section only on the last page */}
-            {isLastPage && renderSignatureSection()}
-            {renderFooter(currentPageNum)}
-          </Page>
-        );
-      })}
+        {/* Footer */}
+        <Text style={styles.footer}>Made by hakeemna</Text>
+      </Page>
     </Document>
   );
 };
