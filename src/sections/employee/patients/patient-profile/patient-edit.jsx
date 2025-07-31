@@ -195,7 +195,7 @@ export default function EditPatient({ patient }) {
           <RHFTextField name="address" label={t('Address')} />
 
           <MuiTelInput
-            label={t('Mobile Nasasumber')}
+            label={t('Mobile Number')}
             forceCallingCode
             defaultCountry="JO"
             value={em_phone}
