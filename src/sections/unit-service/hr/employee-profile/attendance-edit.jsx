@@ -13,6 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { useParams } from 'react-router';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -28,8 +29,17 @@ import FormProvider, {
 
 // ----------------------------------------------------------------------
 
-export default function AttendanceEdit({ row, open, onClose, refetch, employeeId, lastAttendance }) {
+export default function AttendanceEdit({ 
+  row, 
+  open, 
+  onClose, 
+  refetch, 
+  employeeId, 
+  lastAttendance,
+  isMissingAttendance = false 
+}) {
   const { enqueueSnackbar } = useSnackbar();
+  const { id } = useParams();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -63,10 +73,11 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     leave_start: row?.leave_start || null,
     leave: row?.leave || '',
     work_type: row?.work_type || '',
-    note: row?.note || '',
+    note: isMissingAttendance ? '' : row?.note || '',
     employee_engagement: employeeId || '',
   };
 
+  
   const methods = useForm({
     resolver: yupResolver(attendanceSchema),
     defaultValues,
@@ -91,12 +102,22 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
       } else {
         data.leave = '';
       }
-      if (row?._id) {
+      
+      // If it's missing attendance data, always create a new record
+      if (isMissingAttendance) {
+        data.employee_engagement = id;
+        await axiosInstance.post(endpoints.attendence.create, data);
+        onClose();
+        refetch();
+        enqueueSnackbar(t('created successfuly'));
+      } else if (row?._id) {
+        // Regular attendance - update existing record
         await axiosInstance.patch(endpoints.attendence.one(row?._id), data);
         onClose();
         refetch();
         enqueueSnackbar(t('updated successfuly'));
       } else {
+        // New regular attendance record
         await axiosInstance.post(endpoints.attendence.create, data);
         onClose();
         refetch();
@@ -123,6 +144,16 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
     // eslint-disable-next-line
   }, [leaveValue]);
 
+  const getDialogTitle = () => {
+    if (isMissingAttendance) {
+      return t('Create Missing Attendance Record');
+    }
+    if (row) {
+      return t('Edit Attendance details');
+    }
+    return t('Create New Attendance');
+  };
+
   return (
     <Dialog
       fullWidth
@@ -134,7 +165,7 @@ export default function AttendanceEdit({ row, open, onClose, refetch, employeeId
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>{row ? t('Edit Attendance details') : t('Create New Attendance')}</DialogTitle>
+        <DialogTitle>{getDialogTitle()}</DialogTitle>
 
         <DialogContent dividers>
           <Stack spacing={3} mt={2}>
@@ -195,4 +226,5 @@ AttendanceEdit.propTypes = {
   open: PropTypes.bool,
   row: PropTypes.object,
   lastAttendance: PropTypes.object,
+  isMissingAttendance: PropTypes.bool,
 };

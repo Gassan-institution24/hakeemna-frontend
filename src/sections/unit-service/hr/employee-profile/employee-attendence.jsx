@@ -94,9 +94,6 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
     sortBy: table.orderBy,
     ...filters,
   });
-  console.log(missingAttendanceData);
-  console.log(attendence);
-  console.log(missingAttendanceDataLength);
 
   const displayData = filters.showUnattendance ? (missingAttendanceData || []) : (attendence || []);
   const displayLength = filters.showUnattendance ? (missingAttendanceDataLength || 0) : (length || 0);
@@ -249,6 +246,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                     refetch={refetch}
                     onDeleteRow={deleteHandler}
                     showUnattendance={showUnattendance}
+                    isMissingAttendance={filters.showUnattendance}
                   />
                 ))}
 
