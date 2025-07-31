@@ -113,7 +113,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     work_shift: Yup.string().nullable(),
     subtotal: Yup.number(),
     totalAmount: Yup.number(),
-    concept: Yup.string().required(t('required field')),
+    concept: Yup.string(),
   });
   const defaultValues = useMemo(
     () => ({
@@ -283,7 +283,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       const movementId = invoice?.data?.movement?._id;
       const subtotal = data.subtotal || 0;
       const quantity = totalQuantity;
-      const concept = data.concept ?? '';
+      const concept = data?.concept;
       const total = data.totalAmount || 0;
       const discount = data.discount || 0;
       const payloadForOtherTable = {
@@ -373,7 +373,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             <Stack sx={{ my: 2, px: 2 }}>
               <RHFTextField
                 name="concept"
-                label={t('concept (Notes are added to the National Jordanian Billing System)')}
+                label={t('Notes (Notes are added to the National Jordanian Billing System)')}
               />
             </Stack>
             <Stack sx={{ my: 2, px: 2 }}>
