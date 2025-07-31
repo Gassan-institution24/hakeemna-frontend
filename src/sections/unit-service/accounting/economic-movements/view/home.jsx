@@ -76,7 +76,7 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders } =
+  const { economecMovementsData, lengths, totals, unitServices, patients, stakeholders, refetch } =
     useGetEconomicMovements({
       unit_service:
         user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
@@ -85,16 +85,42 @@ export default function InvoiceListView() {
       sortBy: table.orderBy || 'created_at',
       rowsPerPage: table.rowsPerPage || 10,
       order: table.order || 'desc',
-      select: 'sequence_number created_at unit_service invoiceId patient employee Balance status updated_at sent_to_the_envoicing_system',
+      select:
+        'sequence_number created_at unit_service Provided_services invoiceId patient employee Balance status updated_at sent_to_the_envoicing_system service_type Subtotal_Amount quantity Total_discount_amount Total_Amount concept',
       populate: [
-        { path: 'unit_service', select: 'name_english name_arabic' },
+        {
+          path: 'unit_service',
+          select:
+            'name_english name_arabic Secret_Key Activity_Number ClientId CompanyID RegistrationName',
+        },
         { path: 'stakeholder', select: 'name_english name_arabic' },
-        { path: 'patient', select: 'name_english name_arabic' },
-        { path: 'unit_service_patient', select: 'name_english name_arabic' },
+        {
+          path: 'Provided_services',
+          select: 'service_type',
+          populate: {
+            path: 'service_type',
+            select: 'name_arabic name_english',
+          },
+        },
+        {
+          path: 'patient',
+          select: 'name_english name_arabic city  mobile_num1 identification_num',
+          populate: {
+            path: 'city',
+            select: 'name_arabic',
+          },
+        },
+        {
+          path: 'unit_service_patient',
+          select: 'name_english name_arabic mobile_num1  city identification_num',
+          populate: {
+            path: 'city',
+            select: 'name_arabic',
+          },
+        },
       ],
       ...filters,
     });
-console.log(economecMovementsData,"economecMovementsData");
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
@@ -296,45 +322,6 @@ console.log(economecMovementsData,"economecMovementsData");
         )}
 
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          {/* <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={economecMovementsData.length}
-            onSelectAllRows={(checked) => {
-              table.onSelectAllRows(
-                checked,
-                economecMovementsData.map((row) => row.id)
-              );
-            }}
-            action={
-              <Stack direction="row">
-                <Tooltip title="Sent">
-                  <IconButton color="primary">
-                    <Iconify icon="iconamoon:send-fill" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Download">
-                  <IconButton color="primary">
-                    <Iconify icon="eva:download-outline" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Print">
-                  <IconButton color="primary">
-                    <Iconify icon="solar:printer-minimalistic-bold" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            }
-          /> */}
-
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
               <TableHeadCustom
@@ -344,12 +331,6 @@ console.log(economecMovementsData,"economecMovementsData");
                 rowCount={economecMovementsData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     economecMovementsData.map((row) => row.id)
-                //   )
-                // }
               />
 
               <TableBody>
@@ -360,6 +341,7 @@ console.log(economecMovementsData,"economecMovementsData");
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
                     onViewRow={() => handleViewRow(row.id)}
+                    refetch={refetch}
                     // onEditRow={() => handleEditRow(row.id)}
                   />
                 ))}
