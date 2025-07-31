@@ -189,7 +189,7 @@ export default function AppointmentsToday() {
   };
 
   const handlePatientClick = (info) => {
-    router.push(`/dashboard/mypatients/${info?.unit_service_patient?._id}`);
+    router.push(`/dashboard/mypatients/${info}`);
   };
 
   const handleEndAppointment = async (appointmentdata) => {

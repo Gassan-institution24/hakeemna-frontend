@@ -3,6 +3,8 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // import { useAuthContext } from 'src/auth/hooks';
@@ -21,6 +23,7 @@ export default function AttendanceToolbar({
   //
   dateError,
   options,
+  onShowUnattendanceChange,
 }) {
   const { t } = useTranslate();
   // const { user } = useAuthContext();
@@ -41,6 +44,17 @@ export default function AttendanceToolbar({
       onFilters('endDate', newValue);
     },
     [onFilters]
+  );
+
+  const handleUnattendanceCheckbox = useCallback(
+    (event) => {
+      const isChecked = event.target.checked;
+      onFilters('showUnattendance', isChecked);
+      if (onShowUnattendanceChange) {
+        onShowUnattendanceChange(isChecked);
+      }
+    },
+    [onFilters, onShowUnattendanceChange]
   );
 
   return (
@@ -80,6 +94,23 @@ export default function AttendanceToolbar({
             }}
             sx={{
               width: { xs: 1, md: 200 },
+            }}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={filters.showUnattendance || false}
+                onChange={handleUnattendanceCheckbox}
+                color="primary"
+              />
+            }
+            label={t('Find missing attendance dates')}
+            sx={{
+              minWidth: { xs: 'auto', md: 200 },
+              '& .MuiFormControlLabel-label': {
+                fontSize: '0.875rem',
+              },
             }}
           />
         </Stack>
@@ -122,4 +153,5 @@ AttendanceToolbar.propTypes = {
   onAdd: PropTypes.func,
   options: PropTypes.array,
   hours: PropTypes.number,
+  onShowUnattendanceChange: PropTypes.func,
 };
