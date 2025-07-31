@@ -194,6 +194,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
     work_group: values.work_group,
+    appointment_type: values.appointment_type,
+    work_shift: values.work_shift,
   });
 
   const { existPatients } = useFindPatient({
@@ -201,7 +203,6 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     select:
       'code name_english name_arabic mobile_num1 mobile_num2 identification_num nationality birth_date',
   });
-
   const { foundPatients } = useFindUSPatient({
     ...debouncedQuery,
     select:
