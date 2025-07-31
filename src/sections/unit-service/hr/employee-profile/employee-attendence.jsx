@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -36,6 +36,7 @@ import AtteendanceFiltersResult from './attendance-filters-result';
 const defaultFilters = {
   startDate: null,
   endDate: null,
+  showUnattendance: false,
 };
 
 // ----------------------------------------------------------------------
@@ -43,23 +44,36 @@ const defaultFilters = {
 export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const { t } = useTranslate();
 
-  const TABLE_HEAD = [
-    { id: 'date', label: t('Day') },
-    { id: 'check_in_time', label: t('check in') },
-    { id: 'check_out_time', label: t('check out') },
-    { id: 'leave_time', label: t('leave time') },
-    { id: 'work_time', label: t('work time') },
-    { id: 'work_type', label: t('work type') },
-    { id: 'leave', label: t('leave') },
-    { id: 'note', label: t('note') },
-    { id: '' },
-  ].filter(Boolean);
+  const [showUnattendance, setShowUnattendance] = useState(false);
+
+  const TABLE_HEAD = showUnattendance 
+    ? [
+        { id: 'date', label: t('Day') },
+        { id: 'note', label: t('note') },
+        { id: '' },
+      ].filter(Boolean)
+    : [
+        { id: 'date', label: t('Day') },
+        { id: 'check_in_time', label: t('check in') },
+        { id: 'check_out_time', label: t('check out') },
+        { id: 'leave_time', label: t('leave time') },
+        { id: 'work_time', label: t('work time') },
+        { id: 'work_type', label: t('work type') },
+        { id: 'leave', label: t('leave') },
+        { id: 'note', label: t('note') },
+        { id: '' },
+      ].filter(Boolean);
 
   const table = useTable({ defaultOrderBy: 'code' });
 
   const confirm = useBoolean();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  // Synchronize showUnattendance state with filters
+  useEffect(() => {
+    setShowUnattendance(filters.showUnattendance || false);
+  }, [filters.showUnattendance]);
 
   const {
     attendence,
@@ -70,6 +84,8 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
     public: publicHolidays,
     unpaid,
     other,
+    missingAttendanceData,
+    missingAttendanceDataLength,
     refetch,
   } = useGetEmployeeAttendence(employee?._id, {
     page: table.page,
@@ -78,8 +94,33 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
     sortBy: table.orderBy,
     ...filters,
   });
+  console.log(missingAttendanceData);
+  console.log(attendence);
+  console.log(missingAttendanceDataLength);
 
-  if (attendence.length) {
+  const displayData = filters.showUnattendance ? (missingAttendanceData || []) : (attendence || []);
+  const displayLength = filters.showUnattendance ? (missingAttendanceDataLength || 0) : (length || 0);
+
+  const paginatedDisplayData = filters.showUnattendance && missingAttendanceData 
+    ? missingAttendanceData.slice(
+        table.page * table.rowsPerPage,
+        (table.page + 1) * table.rowsPerPage
+      )
+    : displayData;
+
+  const finalDisplayData = filters.showUnattendance ? paginatedDisplayData : displayData;
+  const finalDisplayLength = filters.showUnattendance 
+    ? (missingAttendanceData?.length || 0) 
+    : displayLength;
+
+  useEffect(() => {
+    const maxPage = Math.ceil(finalDisplayLength / table.rowsPerPage) - 1;
+    if (table.page > maxPage && maxPage >= 0) {
+      table.onResetPage();
+    }
+  }, [finalDisplayLength, table.rowsPerPage, table.page, table.onResetPage, table]);
+
+  if (attendence && attendence.length) {
     setLastAttendance(attendence[0]);
   }
 
@@ -90,7 +131,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
 
   const canReset = !!filters.startDate && !!filters.endDate;
 
-  const notFound = (!attendence.length && canReset) || !attendence.length;
+  const notFound = (!finalDisplayData.length && canReset) || !finalDisplayData.length;
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -106,6 +147,11 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const handleShowUnattendanceChange = useCallback((isChecked) => {
+    setShowUnattendance(isChecked);
+    table.onResetPage();
+  }, [table]);
 
   const deleteHandler = useCallback(
     async (id) => {
@@ -155,6 +201,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
           onFilters={handleFilters}
           //
           dateError={dateError}
+          onShowUnattendanceChange={handleShowUnattendanceChange}
         />
 
         {canReset && (
@@ -164,7 +211,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
             //
             onResetFilters={handleResetFilters}
             //
-            results={length}
+            results={finalDisplayLength}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
@@ -173,7 +220,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
           <TableSelectedAction
             dense={table.dense}
             numSelected={table.selected.length}
-            rowCount={attendence.length}
+            rowCount={finalDisplayData.length}
             action={
               <Tooltip title="Unbook all">
                 <IconButton color="error" onClick={confirm.onTrue}>
@@ -189,18 +236,19 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={attendence.length}
+                rowCount={finalDisplayData.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
               />
 
               <TableBody>
-                {attendence.map((row, idx) => (
+                {finalDisplayData.map((row, idx) => (
                   <EmployeeAttendenceRow
                     key={idx}
                     row={row}
                     refetch={refetch}
                     onDeleteRow={deleteHandler}
+                    showUnattendance={showUnattendance}
                   />
                 ))}
 
@@ -210,16 +258,18 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
           </Scrollbar>
         </TableContainer>
 
-        <TablePaginationCustom
-          count={length}
-          page={table.page}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
-          dense={table.dense}
-          onChangeDense={table.onChangeDense}
-        />
+        {finalDisplayLength > 0 && (
+          <TablePaginationCustom
+            count={finalDisplayLength}
+            page={table.page}
+            rowsPerPage={table.rowsPerPage}
+            onPageChange={table.onChangePage}
+            onRowsPerPageChange={table.onChangeRowsPerPage}
+            //
+            dense={table.dense}
+            onChangeDense={table.onChangeDense}
+          />
+        )}
       </Card>
     </Container>
   );
