@@ -40,6 +40,8 @@ export function useGetEmployeeAttendence(id, params) {
       unpaid: data?.unpaid || 0,
       other: data?.other || 0,
       ids: data?.ids || [],
+      missingAttendanceData: data?.missingAttendanceData || [],
+      missingAttendanceDataLength: data?.missingAttendanceDataLength || 0,
       loading: isLoading,
       error,
       validating: isValidating,

@@ -185,3 +185,28 @@ export function fHourMin(time, endDate) {
 
   return results;
 }
+
+export function fMinSec(seconds) {
+  if (!seconds || seconds === 0) return '-';
+  
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  
+  let timeString;
+  if (hours > 0) {
+    // Format: HH:MM:SS for durations over 1 hour
+    timeString = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${remainingSeconds.toString().padStart(2, '0')}`;
+  } else {
+    // Format: MM:SS for durations under 1 hour
+    timeString = `${minutes.toString().padStart(2, '0')} : ${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+  
+  const results = (
+    <Typography variant="body2" sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}>
+      {timeString}
+    </Typography>
+  );
+
+  return results;
+}

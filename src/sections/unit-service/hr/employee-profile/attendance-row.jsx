@@ -32,6 +32,7 @@ export default function AttendanceRow({
   onViewRow,
   onCancelRow,
   onDeleteRow,
+  showUnattendance = false,
 }) {
   const {
     date,
@@ -66,13 +67,19 @@ export default function AttendanceRow({
     <>
       <TableRow hover selected={selected}>
         <TableCell align="center">{fDateUnit(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
-        <TableCell align="center">{fTimeUnit(check_in_time)}</TableCell>
-        <TableCell align="center">{fTimeUnit(check_out_time)}</TableCell>
-        <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
-        <TableCell align="center">{fHourMin(workTime)}</TableCell>
-        <TableCell align="center">{t(work_type)}</TableCell>
-        <TableCell align="center">{t(leave)}</TableCell>
-        <TableCell align="center">{note}</TableCell>
+        
+        {!showUnattendance && (
+          <>
+            <TableCell align="center">{fTimeUnit(check_in_time)}</TableCell>
+            <TableCell align="center">{fTimeUnit(check_out_time)}</TableCell>
+            <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
+            <TableCell align="center">{fHourMin(workTime)}</TableCell>
+            <TableCell align="center">{t(work_type)}</TableCell>
+            <TableCell align="center">{t(leave)}</TableCell>
+          </>
+        )}
+        
+        <TableCell align="center">{t(note)}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -191,4 +198,5 @@ AttendanceRow.propTypes = {
   refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  showUnattendance: PropTypes.bool,
 };
