@@ -303,7 +303,7 @@ export default function MovementTableRow({
         <DialogActions>
           <Button onClick={() => setOpenConceptDialog(false)}>{t('Send without notes')}</Button>
           <Button variant="contained" onClick={handleConfirmSend} disabled={!newConcept.trim()}>
-            {t('Send')}
+            {t('send')}
           </Button>
         </DialogActions>
       </Dialog>
