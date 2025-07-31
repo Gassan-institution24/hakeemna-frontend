@@ -1,17 +1,27 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
+import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-// import { Checkbox } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import {
+  Button,
+  Dialog,
+  TextField,
+  Typography,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import axiosInstance from 'src/utils/axios';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
@@ -28,6 +38,7 @@ export default function MovementTableRow({
   selected,
   onSelectRow,
   onViewRow,
+  refetch,
   onEditRow,
   onDeleteRow,
 }) {
@@ -40,7 +51,7 @@ export default function MovementTableRow({
     Balance,
     Currency,
     status,
-
+    Provided_services,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -50,17 +61,20 @@ export default function MovementTableRow({
     modifications_nums,
     sent_to_the_envoicing_system,
     invoiceId,
+    concept,
   } = row;
 
   const { t } = useTranslate();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const DDL = usePopover();
   const popover = usePopover();
-
+  const [openConceptDialog, setOpenConceptDialog] = useState(false);
+  const [newConcept, setNewConcept] = useState('');
   let patientName;
   if (patient) {
     patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
@@ -70,13 +84,67 @@ export default function MovementTableRow({
       : unit_service_patient?.name_english;
   }
 
+  const handleSendToInovicgSystem = () => {
+    if (concept && concept.trim() !== '') {
+      sendInvoice(concept);
+    } else {
+      setOpenConceptDialog(true);
+    }
+  };
+
+  const firstServiceTypeId = Provided_services?.[0]?.service_type;
+  const sendInvoice = useCallback(
+    async (finalConcept) => {
+      const payloadForOtherTable = {
+        Secret_Key: row.unit_service?.Secret_Key,
+        Activity_Number: row.unit_service?.Activity_Number,
+        ClientId: row.unit_service?.ClientId,
+        CompanyID: row.unit_service?.CompanyID,
+        RegistrationName: row.unit_service?.RegistrationName,
+        Buyer:
+          row.patient?.name_arabic ||
+          row.unit_service_patient?.name_arabic ||
+          row.patient?.name_english ||
+          row.unit_service_patient?.name_english,
+        BuyerNum: (row.patient?.mobile_num1 || row.unit_service_patient?.mobile_num1 || '').replace(
+          /\s+/g,
+          ''
+        ),
+        BuyerIdNum: row.patient?.identification_num || row.unit_service_patient?.identification_num,
+        BuyerCity: row.patient?.city?.name_arabic || row.unit_service_patient?.city?.name_arabic,
+        service_type: firstServiceTypeId?.name_arabic,
+        subtotal: row.Subtotal_Amount || 0,
+        quantity: row.totalQuantity || 0,
+        discount: row.Total_discount_amount || 0,
+        total: row.Total_Amount || 0,
+        concept: finalConcept ?? '',
+        economicMovementId: row._id,
+        date: row.created_at,
+      };
+
+      try {
+        await axiosInstance.post('/api/invoice', payloadForOtherTable);
+        refetch();
+        enqueueSnackbar('تم إرسال الفاتورة للنظام الوطني بنجاح', { variant: 'success' });
+      } catch (e) {
+        console.error('خطأ أثناء إرسال الفاتورة للنظام الوطني:', e);
+        enqueueSnackbar('خطأ أثناء إرسال الفاتورة للنظام الوطني', {
+          variant: 'warning',
+        });
+      }
+    },
+    [row, enqueueSnackbar, firstServiceTypeId?.name_arabic, refetch]
+  );
+
+  const handleConfirmSend = () => {
+    sendInvoice(newConcept);
+    setOpenConceptDialog(false);
+    setNewConcept('');
+  };
+
   return (
     <>
       <TableRow hover selected={selected}>
-        {/* <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell> */}
-
         <TableCell align="center">{sequence_number}</TableCell>
 
         <TableCell align="center">{fDate(created_at)}</TableCell>
@@ -118,13 +186,26 @@ export default function MovementTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-
+      {/* here */}
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 160 }}
+        sx={{ width: 260 }}
       >
+        {!sent_to_the_envoicing_system && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              handleSendToInovicgSystem();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:forward-bold" />
+            {t('send to jordanian envoicing system')}
+          </MenuItem>
+        )}
+
         <MenuItem
           lang="ar"
           onClick={() => {
@@ -154,19 +235,6 @@ export default function MovementTableRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-
-        {/* <Divider sx={{ borderStyle: 'dashed' }} />
-        
-        <MenuItem lang="ar" 
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem> */}
       </CustomPopover>
       <CustomPopover
         open={DDL.open}
@@ -216,18 +284,29 @@ export default function MovementTableRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
-
-      {/* <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
+      {/* Dialog for entering concept */}
+      <Dialog open={openConceptDialog} onClose={() => setOpenConceptDialog(false)}>
+        <DialogTitle>
+          {' '}
+          {t('Notes (Notes are added to the National Jordanian Billing System)')}{' '}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            value={newConcept}
+            onChange={(e) => setNewConcept(e.target.value)}
+            label={t('Notes')}
+            autoFocus
+            sx={{ mt: 1 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConceptDialog(false)}>{t('Send without notes')}</Button>
+          <Button variant="contained" onClick={handleConfirmSend} disabled={!newConcept.trim()}>
+            {t('Send')}
           </Button>
-        }
-      /> */}
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
@@ -239,4 +318,5 @@ MovementTableRow.propTypes = {
   onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  refetch: PropTypes.func,
 };
