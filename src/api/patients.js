@@ -69,11 +69,14 @@ export function useGetPatient(id) {
 }
 
 export function useFindPatient(params) {
+  // Create a unique key based on the parameters
+  const paramsKey = JSON.stringify(params);
   const URL = [
     endpoints.patients.find,
     {
       params,
     },
+    paramsKey, // Add the params as a unique key
   ];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

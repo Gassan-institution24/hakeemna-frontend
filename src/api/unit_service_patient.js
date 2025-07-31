@@ -26,7 +26,9 @@ export function useGetUSPatients(id, params) {
 }
 
 export function useFindUSPatient(params) {
-  const URL = [endpoints.usPatients.find, { params }];
+  // Create a unique key based on the parameters
+  const paramsKey = JSON.stringify(params);
+  const URL = [endpoints.usPatients.find, { params }, paramsKey];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
