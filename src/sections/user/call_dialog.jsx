@@ -1,14 +1,12 @@
 /* eslint-disable react/prop-types */
 import io from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
-
-import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -17,7 +15,6 @@ export default function CallDialog() {
   const [callerName, setCallerName] = useState('');
   const [roomUrl, setRoomUrl] = useState('');
   const { t } = useTranslation();
-  const router = useRouter();
   const socketRef = useRef(null);
   const { user } = useAuthContext();
   useEffect(() => {
@@ -49,8 +46,9 @@ export default function CallDialog() {
 
     const url = window._roomUrlTemp || roomUrl;
     if (url) {
-      router.push(
-        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}`
+      window.open(
+        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}`,
+        '_blank'
       );
     } else {
       console.error('❌ No room URL available to join');
