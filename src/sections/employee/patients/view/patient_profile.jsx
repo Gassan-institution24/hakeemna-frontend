@@ -14,7 +14,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
-import UnitServiceVideoCallsTableView from 'src/sections/unit-service/videocalls/UnitServiceVideoCallsTableView';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -65,7 +64,6 @@ export default function PatientProfile() {
     { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analyses', label: t('medical analyses') },
-    { value: 'video_calls', label: t('Video calls') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -219,7 +217,6 @@ export default function PatientProfile() {
           {currentTab === 'checklist' && usPatientData && (
             <PatientCheckList patient={usPatientData} />
           )}
-          {currentTab === 'video_calls' && usPatientData && <UnitServiceVideoCallsTableView patient={usPatientData} />}
         </Stack>
       </Stack>
     </Container>
