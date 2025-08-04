@@ -14,6 +14,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
+import UnitServiceVideoCallsTableView from 'src/sections/unit-service/videocalls/UnitServiceVideoCallsTableView';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -64,6 +65,7 @@ export default function PatientProfile() {
     { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analyses', label: t('medical analyses') },
+    { value: 'video_calls', label: t('Video calls') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -105,11 +107,9 @@ export default function PatientProfile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
           patient: patientData?._id,
           description: `Call started at ${new Date().toISOString()}`,
-          room_name: uniqueRoom,
-          work_group: usPatientData.work_group,
-          employee: user?.employee?._id,
         }),
       });
 
@@ -120,11 +120,11 @@ export default function PatientProfile() {
         console.log('✅ Video call saved in DB');
       }
 
-      window.open(
+      router.push(
         `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
           user?.employee?.name_arabic || user?.employee?.name_english
         )}`
-      , '_blank');
+      );
 
       const socket = io(process.env.REACT_APP_API_URL);
       socket.emit('callUser', {
@@ -217,6 +217,7 @@ export default function PatientProfile() {
           {currentTab === 'checklist' && usPatientData && (
             <PatientCheckList patient={usPatientData} />
           )}
+          {currentTab === 'video_calls' && usPatientData && <UnitServiceVideoCallsTableView patient={usPatientData} />}
         </Stack>
       </Stack>
     </Container>

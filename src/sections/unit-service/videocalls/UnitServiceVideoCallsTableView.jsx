@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
 import { getComparator } from 'src/components/table/utils';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetVideoCalls } from 'src/api/video_calls';
 import Table from '@mui/material/Table';
@@ -34,17 +35,14 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'unit_service', label: t('unit of service') },
-    { id: 'employee', label: t('employee') },
     { id: 'patient_name', label: t('patient') },
-    { id: 'work_group', label: t('work group') },
-    { id: 'duration', label: t('duration') },
     { id: 'description', label: t('description') },
     { id: 'actions', label: '', align: 'right' },
   ];
-
+  
   const { data, isLoading } = useGetVideoCalls({ patient_id: patient?._id });
   const [search, setSearch] = useState('');
-  
+
   const videoCalls = data?.videoCalls || data || [];
   const videoCallsWithNames = videoCalls.map((row) => ({
     ...row,
@@ -72,6 +70,7 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
 
   return (
     <Container maxWidth="xl">
+      <CustomBreadcrumbs heading={t('Video calls')} links={[{ name: t('Video calls') }]} />
       <Card>
         <Stack spacing={2} alignItems={{ xs: 'flex-end', md: 'center' }} direction={{ xs: 'column', md: 'row' }} sx={{ p: 2.5, pr: { xs: 2.5, md: 1 } }}>
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
