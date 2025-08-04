@@ -33,6 +33,7 @@ export default function AttendanceRow({
   onCancelRow,
   onDeleteRow,
   showUnattendance = false,
+  isMissingAttendance = false,
 }) {
   const {
     date,
@@ -165,7 +166,13 @@ export default function AttendanceRow({
       </CustomPopover>
 
       {open && (
-        <AttendanceEdit row={row} open={open} refetch={refetch} onClose={() => setOpen(false)} />
+        <AttendanceEdit 
+          row={row} 
+          open={open} 
+          refetch={refetch} 
+          onClose={() => setOpen(false)} 
+          isMissingAttendance={isMissingAttendance}
+        />
       )}
       <ConfirmDialog
         open={deleting.open}
@@ -199,4 +206,5 @@ AttendanceRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   showUnattendance: PropTypes.bool,
+  isMissingAttendance: PropTypes.bool,
 };
