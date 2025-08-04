@@ -1,30 +1,25 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import { Box } from '@mui/system';
-import { Checkbox, Typography } from '@mui/material';
+import { useRef, useState, useEffect, useCallback, useContext } from 'react';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import { Checkbox, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
-
+import { CompaniesContext } from 'src/context/companiesContext';
 import { useGetCompanies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import { useCompaniesContext } from 'src/context/companiesContext';
-
 import {
   useTable,
   TableNoData,
@@ -32,39 +27,42 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
-
-import TableDetailFilters from './table-details-filters';
+import { Box } from '@mui/system';
+import TableDetailFilters from './table-details-filters'
 import TableDetailRow from '../companies_list/table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
+const defaultFilters = {
+  name: '',
+  USType: '',
+  city: '',
+  sector: '',
+  province: '',
+  speciality1: '',
+  speciality2: '',
+};
+
+// ----------------------------------------------------------------------
+
 export default function CompaniesTableView() {
-  const {
-    filters: savedFilters,
-    showAll: savedShowAll,
-    enabledColumns: savedEnabledColumns,
-    tablePage: savedTablePage,
-    updateFilters,
-    updateShowAll,
-    updateEnabledColumns,
-    updateTablePage,
-  } = useCompaniesContext();
+  const { state, setState } = useContext(CompaniesContext);
+  const { savedFilters, savedPage, savedVisibleColumns, savedShowAll } = state;
 
-  // Local state
-  const [filters, setFilters] = useState(savedFilters);
-  const [showAll, setShowAll] = useState(savedShowAll);
-  const [visibleColumns, setVisibleColumns] = useState(savedEnabledColumns);
+  const handleSetState = useCallback((newState) => {
+    setState((prevState) => ({ ...prevState, ...newState }));
+  }, [setState]);
 
-  const table = useTable({ defaultOrderBy: 'code' });
-  const componentRef = useRef();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { companiesData, loading } = useGetCompanies();
+  const [showAll, setShowAll] = useState(savedShowAll || false);
+  const [filters, setFilters] = useState(savedFilters || defaultFilters);
+  const [visibleColumns, setVisibleColumns] = useState(
+    savedVisibleColumns || {}
+  );
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Define table columns with useMemo
-  const TABLE_HEAD = useMemo(() => [
+  const TABLE_HEAD = [
     { id: 'code', label: 'code' },
     { id: 'unit_service_type', label: 'unit_service_type' },
     { id: 'country', label: 'country' },
@@ -79,36 +77,65 @@ export default function CompaniesTableView() {
     { id: '', label: 'communication' },
     { id: 'status', label: 'status', width: 120 },
     { id: 'com_note', label: 'com_note', width: 200 },
-    ...(showAll ? [
-      { id: 'insurance', label: 'insurance' },
-      { id: 'info', label: 'info' },
-      { id: 'work_shift', label: 'work_shift' },
-      { id: 'constitution_objective', label: 'constitution_objective' },
-      { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
-      { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
-      { id: 'subscribe_to', label: 'subscribe_to' },
-      { id: 'social_network', label: 'social_network' },
-      { id: 'notes', label: 'notes' },
-    ] : []),
-  ], [showAll]);
+    showAll && { id: 'insurance', label: 'insurance' },
+    showAll && { id: 'info', label: 'info' },
+    showAll && { id: 'work_shift', label: 'work_shift' },
+    showAll && { id: 'constitution_objective', label: 'constitution_objective' },
+    showAll && { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
+    showAll && { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
+    showAll && { id: 'subscribe_to', label: 'subscribe_to' },
+    showAll && { id: 'social_network', label: 'social_network' },
+    showAll && { id: 'notes', label: 'notes' },
+  ].filter(Boolean);
+  
+  const table = useTable({ defaultOrderBy: 'code' });
 
-  // Initialize visible columns
   useEffect(() => {
-    if (!visibleColumns || Object.keys(visibleColumns).length === 0) {
+    if (Object.keys(visibleColumns).length === 0) {
       const initialColumns = Object.fromEntries(TABLE_HEAD.map((col) => [col.id, true]));
       setVisibleColumns(initialColumns);
-      updateEnabledColumns(initialColumns);
+      handleSetState({ savedVisibleColumns: initialColumns });
     }
-  }, [visibleColumns, TABLE_HEAD, updateEnabledColumns]);
+  }, [visibleColumns, setVisibleColumns, TABLE_HEAD, handleSetState]);
 
-  // Sync table page only on initial load
   useEffect(() => {
-    if (savedTablePage !== undefined && savedTablePage !== table.page) {
-      table.setPage(savedTablePage);
+    if (!isInitialized && savedPage !== undefined) {
+      table.setPage(savedPage);
+      setIsInitialized(true);
     }
-  }, [savedTablePage, table]);
+  }, [savedPage, table, isInitialized]);
 
-  // Handle URL parameters
+  useEffect(() => {
+    if (isInitialized && savedPage !== undefined && savedPage !== table.page) {
+      table.setPage(savedPage);
+    }
+  }, [savedPage, table, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const timeoutId = setTimeout(() => {
+      if (table.page !== savedPage) {
+        handleSetState({ savedPage: table.page });
+      }
+    }, 100);
+
+  // eslint-disable-next-line consistent-return
+    return () => clearTimeout(timeoutId);
+  }, [table.page, savedPage, handleSetState, isInitialized]);
+
+  const displayedColumns = TABLE_HEAD.filter((col) => visibleColumns[col.id]);
+
+  const componentRef = useRef();
+
+  const router = useRouter();
+
+  const { companiesData, loading } = useGetCompanies();
+
+  const searchParams = useSearchParams();
+
+  const upload_record = searchParams.get('upload_record');
+
   useEffect(() => {
     const name = searchParams.get('name');
     const USType = searchParams.get('ust');
@@ -128,130 +155,37 @@ export default function CompaniesTableView() {
         speciality2: '',
       };
       setFilters(newFilters);
-      updateFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     }
 
     if (page !== 0) {
       table.setPage(page);
     }
-  }, [searchParams, updateFilters, table]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
-  // Handle upload record
-  const upload_record = searchParams.get('upload_record');
   useEffect(() => {
     if (upload_record) {
       const newFilters = { ...filters, name: upload_record };
       setFilters(newFilters);
-      updateFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     }
-  }, [upload_record, filters, updateFilters]);
+  }, [upload_record, filters, handleSetState]);
 
-  // Filter and process data
-  const dataFiltered = useMemo(() => {
-    if (!companiesData || !Array.isArray(companiesData)) {
-      return [];
-    }
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
-    let filtered = companiesData.filter(item => item != null);
+  const dataFiltered = applyFilter({
+    inputData: companiesData,
+    comparator: getComparator(table.order, table.orderBy),
+    filters,
+    dateError,
+  });
 
-    // Apply filters
-    if (filters.name) {
-      const searchTerm = filters.name.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && (
-          (item.name_english && item.name_english.toLowerCase().includes(searchTerm)) ||
-          (item.name_arabic && item.name_arabic.toLowerCase().includes(searchTerm)) ||
-          (item.commercial_name && item.commercial_name.toLowerCase().includes(searchTerm)) ||
-          (item.province && item.province.toLowerCase().includes(searchTerm)) ||
-          (item.country && item.country.toLowerCase().includes(searchTerm)) ||
-          (item.city && item.city.toLowerCase().includes(searchTerm)) ||
-          (item.email && item.email.toLowerCase().includes(searchTerm)) ||
-          (item.phone_number_1 && item.phone_number_1.toLowerCase().includes(searchTerm)) ||
-          (item.type_of_specialty_1 && item.type_of_specialty_1.toLowerCase().includes(searchTerm)) ||
-          (item.type_of_specialty_2 && item.type_of_specialty_2.toLowerCase().includes(searchTerm)) ||
-          (item.unit_service_type && item.unit_service_type.toLowerCase().includes(searchTerm)) ||
-          (item.sector && item.sector.toLowerCase().includes(searchTerm)) ||
-          (item.info && item.info.toLowerCase().includes(searchTerm)) ||
-          (item.upload_record === filters.name) ||
-          (item._id === filters.name) ||
-          (item.code && JSON.stringify(item.code) === filters.name)
-        )
-      );
-    }
-
-    if (filters.USType) {
-      const searchTerm = filters.USType.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.unit_service_type && item.unit_service_type.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    if (filters.city) {
-      const searchTerm = filters.city.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.city && item.city.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    if (filters.sector) {
-      const searchTerm = filters.sector.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.sector && item.sector.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    if (filters.province) {
-      const searchTerm = filters.province.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.province && item.province.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    if (filters.speciality1) {
-      const searchTerm = filters.speciality1.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.type_of_specialty_1 && item.type_of_specialty_1.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    if (filters.speciality2) {
-      const searchTerm = filters.speciality2.toLowerCase();
-      filtered = filtered.filter(item => 
-        item && item.type_of_specialty_2 && item.type_of_specialty_2.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    // Sort data
-    const stabilizedThis = filtered.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = getComparator(table.order, table.orderBy)(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-
-    return stabilizedThis.map((el) => el[0]);
-  }, [companiesData, filters, table.order, table.orderBy]);
-
-  // Get unique values for filters
-  const uniqueUnitServiceTypes = useMemo(() => 
-    [...new Set(dataFiltered.filter(item => item?.unit_service_type).map(item => item.unit_service_type))],
-    [dataFiltered]
-  );
-  const uniqueCities = useMemo(() => 
-    [...new Set(dataFiltered.filter(item => item?.city).map(item => item.city))],
-    [dataFiltered]
-  );
-  const uniqueSectors = useMemo(() => 
-    [...new Set(dataFiltered.filter(item => item?.sector).map(item => item.sector))],
-    [dataFiltered]
-  );
-  const uniqueProvince = useMemo(() => 
-    [...new Set(dataFiltered.filter(item => item?.province).map(item => item.province))],
-    [dataFiltered]
-  );
-
-  const displayedColumns = TABLE_HEAD.filter((col) => visibleColumns[col.id]);
   const canReset = !!filters?.name;
+
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const printHandler = useReactToPrint({
@@ -259,14 +193,14 @@ export default function CompaniesTableView() {
   });
 
   const handleDownload = () => {
-    const excelBody = dataFiltered
-      .filter(data => data != null)
-      .map(data => ({
-        code: data?.code || '',
-        name: data?.name_english || '',
-        description: data?.description || '',
-      }));
-
+    const excelBody = dataFiltered.reduce((acc, data) => {
+      acc.push({
+        code: data.code,
+        name: data.name_english,
+        description: data.description, 
+      });
+      return acc;
+    }, []);
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(excelBody);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
@@ -282,12 +216,12 @@ export default function CompaniesTableView() {
       table.onResetPage();
       const newFilters = { ...filters, [name]: value };
       setFilters(newFilters);
-      updateFilters(newFilters);
+      handleSetState({ savedFilters: newFilters });
     },
-    [table, filters, updateFilters]
+    [table, filters, handleSetState]
   );
 
-  const handleEditRow = useCallback( 
+  const handleEditRow = useCallback(
     (id) => {
       router.push(`${paths.superadmin.tables.companies.edit(id)}`);
     },
@@ -295,33 +229,43 @@ export default function CompaniesTableView() {
   );
 
   const handleResetFilters = useCallback(() => {
-    setFilters({ name: '', USType: '', city: '', sector: '', province: '', speciality1: '', speciality2: '' });
-    updateFilters({ name: '', USType: '', city: '', sector: '', province: '', speciality1: '', speciality2: '' });
-  }, [updateFilters]);
+    setFilters(defaultFilters);
+    handleSetState({ savedFilters: defaultFilters });
+  }, [handleSetState]);
 
   const handleShowAllChange = useCallback((newShowAll) => {
     setShowAll(newShowAll);
-    updateShowAll(newShowAll);
-  }, [updateShowAll]);
+    handleSetState({ savedShowAll: newShowAll });
+  }, [handleSetState]);
 
   const handleVisibleColumnsChange = useCallback((newVisibleColumns) => {
     setVisibleColumns(newVisibleColumns);
-    updateEnabledColumns(newVisibleColumns);
-  }, [updateEnabledColumns]);
+    handleSetState({ savedVisibleColumns: newVisibleColumns });
+  }, [handleSetState]);
 
   const handlePageChange = useCallback((event, newPage) => {
-    table.onChangePage(event, newPage); // update table UI immediately
-    updateTablePage(newPage);           // update context
-  }, [table, updateTablePage]);
+    table.onChangePage(event, newPage);
+    handleSetState({ savedPage: newPage });
+  }, [table, handleSetState]);
+
+  const handleSetPage = useCallback((newPage) => {
+    table.setPage(newPage);
+    handleSetState({ savedPage: newPage });
+  }, [table, handleSetState]);
 
   const handleRowsPerPageChange = useCallback((event) => {
-    table.onChangeRowsPerPage(event);   // update table UI immediately
-    updateTablePage(0);                 // reset context page to 0
-  }, [table, updateTablePage]);
+    table.onChangeRowsPerPage(event);
+    handleSetState({ savedPage: 0 });
+  }, [table, handleSetState]);
 
   if (loading) {
     return <LoadingScreen />;
   }
+
+  const uniqueUnitServiceTypes = [...new Set(dataFiltered.map((one) => one.unit_service_type))];
+  const uniqueCities = [...new Set(dataFiltered.map((one) => one.city))];
+  const uniqueSectors = [...new Set(dataFiltered.map((one) => one.sector))];
+  const uniqueProvince = [...new Set(dataFiltered.map((one) => one.province))];
 
   return (
     <Container maxWidth="">
@@ -362,7 +306,6 @@ export default function CompaniesTableView() {
         onFilters={handleFilters}
         onReset={handleResetFilters}
       />
-
       <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
         {TABLE_HEAD.map((col) => (
           <Box key={col.id} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -380,7 +323,6 @@ export default function CompaniesTableView() {
           </Box>
         ))}
       </Box>
-
       <Card>
         <TableDetailToolbar
           onPrint={printHandler}
@@ -390,10 +332,8 @@ export default function CompaniesTableView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
-
         <Checkbox checked={showAll} onChange={(e) => handleShowAllChange(e.target.checked)} />
         show all
-
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
@@ -403,10 +343,9 @@ export default function CompaniesTableView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
-
         <TableContainer>
           <Scrollbar sx={{ height: '100vh', position: 'relative' }}>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'} >
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
@@ -425,13 +364,13 @@ export default function CompaniesTableView() {
                   )
                   .map((row, idx) => (
                     <TableDetailRow
-                      key={row?._id || idx}
+                      key={idx}
                       index={idx}
                       row={row}
                       showAll={showAll}
-                      selected={table.selected.includes(row?._id)}
-                      onSelectRow={() => table.onSelectRow(row?._id)}
-                      onEditRow={() => handleEditRow(row?._id)}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
                       displayedColumns={displayedColumns}
                     />
                   ))}
@@ -441,14 +380,10 @@ export default function CompaniesTableView() {
             </Table>
           </Scrollbar>
         </TableContainer>
-
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
-          setPage={(newPage) => {
-            table.setPage(newPage);
-            updateTablePage(newPage);
-          }}
+          setPage={handleSetPage}
           rowsPerPage={table.rowsPerPage}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleRowsPerPageChange}
@@ -458,6 +393,83 @@ export default function CompaniesTableView() {
       </Card>
     </Container>
   );
+}
+
+// ----------------------------------------------------------------------
+
+function applyFilter({ inputData, comparator, filters, dateError }) {
+  const { name, USType, city, sector, province, speciality1, speciality2 } = filters;
+
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
+
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+
+  inputData = stabilizedThis.map((el, idx) => el[0]);
+
+  if (name) {
+    inputData = inputData.filter(
+      (data) =>
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.commercial_name &&
+          data?.commercial_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.province && data?.province?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country && data?.country?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city && data?.city?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.email && data?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.phone_number_1 &&
+          data?.phone_number_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type_of_specialty_1 &&
+          data?.type_of_specialty_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type_of_specialty_2 &&
+          data?.type_of_specialty_2?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service_type &&
+          data?.unit_service_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.sector && data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.info && data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        data?.upload_record === name ||
+        data?._id === name ||
+        JSON.stringify(data.code) === name
+    );
+  }
+  if (USType) {
+    inputData = inputData.filter(
+      (data) => data.unit_service_type?.toLowerCase().indexOf(USType.toLowerCase()) !== -1
+    );
+  }
+  if (city) {
+    inputData = inputData.filter(
+      (data) => data.city?.toLowerCase().indexOf(city.toLowerCase()) !== -1
+    );
+  }
+  if (sector) {
+    inputData = inputData.filter(
+      (data) => data.sector?.toLowerCase().indexOf(sector.toLowerCase()) !== -1
+    );
+  }
+  if (province) {
+    inputData = inputData.filter(
+      (data) => data.province?.toLowerCase().indexOf(province.toLowerCase()) !== -1
+    );
+  }
+  if (speciality1) {
+    inputData = inputData.filter(
+      (data) => data.type_of_specialty_1?.toLowerCase().indexOf(speciality1.toLowerCase()) !== -1
+    );
+  }
+  if (speciality2) {
+    inputData = inputData.filter(
+      (data) => data.type_of_specialty_2?.toLowerCase().indexOf(speciality2.toLowerCase()) !== -1
+    );
+  }
+
+  return inputData;
 }
 
 
