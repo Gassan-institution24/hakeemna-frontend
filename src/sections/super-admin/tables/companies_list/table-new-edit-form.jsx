@@ -12,7 +12,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -108,103 +107,165 @@ export default function TableNewEditForm({ currentSelected }) {
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-        router.push(paths.superadmin.tables.companies.root);
+      router.push(`${paths.superadmin.tables.companies.root}`);
     } catch (error) {
       console.error(error);
     }
   });
 
   const onCancel = () => {
-    router.push(paths.superadmin.tables.companies.root);
+    router.push(`${paths.superadmin.tables.companies.root}`);
   };
 
   useEffect(() => {
-    if (currentSelected) {
-      reset(currentSelected);
-    }
-  }, [currentSelected, reset]);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid xs={12}>
           <Card sx={{ p: 3 }}>
             <Box
               display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(3, 1fr)',
-              }}
+              gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '2fr auto 1fr' }}
+              gap={3}
+              alignItems="start"
             >
-              <RHFTextField
-                name="unit_service_type"
-                label="unit_service_type"
-              />
-              <RHFTextField
-                name="country"
-                label="country"
-              />
-              <RHFTextField
-                name="city"
-                label="city"
-              />
-              <RHFTextField
-                name="sector"
-                label="sector"
-              />
-              <RHFTextField
-                name="commercial_name"
-                label="commercial_name"
-              />
-              <RHFTextField
-                name="province"
-                label="province"
-              />
-              <RHFTextField
-                name="address"
-                label="address"
-              />
-              <RHFTextField
-                name="phone_number_1"
-                label="phone_number_1"
-              />
-              <RHFTextField 
-                name="Phone_number_2"
-                label="Phone_number_2"
-              />
-              <RHFTextField
-                name="work_shift"
-                label="work_shift"
-              />
-              <RHFTextField
-                name="constitution_objective"
-                label="constitution_objective"
-              />
-              <RHFTextField
-                name="type_of_specialty_1"
-                label="type_of_specialty_1"
-              />
-              <RHFTextField
-                name="type_of_specialty_2"
-                label="type_of_specialty_2"
-              />
-              <RHFTextField name="info" label="info" />
-              <RHFTextField name="email" label="email" />
-              <RHFTextField name="insurance" label="insurance" />
-              <RHFTextField name="subscribe_to" label="subscribe to" />
-              <RHFTextField name="social_network" label="social network" />
-              <RHFTextField name="notes" label="notes" />
-              <RHFTextField name="communication" label="communication" />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
+                  Location Info
+                </Typography>
+                <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2}>
+                  <RHFTextField name="unit_service_type" label="unit_service_type" />
+                  <RHFTextField name="country" label="country" />
+                  <RHFTextField name="province" label="province" />
+                  <RHFTextField name="city" label="city" />
+                </Box>
+                <Divider />
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
+                  Company Details
+                </Typography>
+                <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2}>
+                  <RHFTextField name="commercial_name" label="commercial_name" />
+                  <RHFTextField name="sector" label="sector" />
+                  <RHFTextField name="constitution_objective" label="constitution_objective" />
+                  <RHFTextField name="type_of_specialty_1" label="type_of_specialty_1" />
+                  <RHFTextField name="type_of_specialty_2" label="type_of_specialty_2" />
+                  <RHFTextField name="work_shift" label="work_shift" />
+                  <RHFTextField name="insurance" label="insurance" />
+                </Box>
+                <Divider />
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
+                  Contact Info
+                </Typography>
+                <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2}>
+                  <RHFTextField name="address" label="address" />
+                  <RHFTextField name="phone_number_1" label="phone_number_1" />
+                  <RHFTextField name="Phone_number_2" label="Phone_number_2" />
+                  <RHFTextField name="email" label="email" />
+                  <RHFTextField name="social_network" label="social network" />
+                </Box>
+                <Divider />
+                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
+                  Other Info
+                </Typography>
+                <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2}>
+                  <RHFTextField name="info" label="info" />
+                  <RHFTextField name="subscribe_to" label="subscribe to" />
+                </Box>
+              </Box>
+
+              <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', md: 'block' } }} />
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                }}
+              >
+                <RHFTextField
+                  name="com_note"
+                  label="Communication Note"
+                  multiline
+                  minRows={4}
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: 'primary.main' },
+                      '&:hover fieldset': { borderColor: 'primary.dark' },
+                      '&.Mui-focused fieldset': { borderColor: 'primary.dark' },
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: 'primary.main',
+                      '&.Mui-focused': { color: 'primary.dark' },
+                    },
+                  }}
+                />
+                <RHFTextField
+                  name="notes"
+                  label="notes"
+                  multiline
+                  minRows={4}
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: 'primary.main' },
+                      '&:hover fieldset': { borderColor: 'primary.dark' },
+                      '&.Mui-focused fieldset': { borderColor: 'primary.dark' },
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: 'primary.main',
+                      '&.Mui-focused': { color: 'primary.dark' },
+                    },
+                  }}
+                />
+                <RHFTextField
+                  name="status"
+                  label="status"
+                  select
+                  fullWidth
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: 'primary.main' },
+                      '&:hover fieldset': { borderColor: 'primary.dark' },
+                      '&.Mui-focused fieldset': { borderColor: 'primary.dark' },
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: 'primary.main',
+                      '&.Mui-focused': { color: 'primary.dark' },
+                    },
+                  }}
+                >
+                  <MenuItem value="not contact">تم التواصل</MenuItem>
+                  <MenuItem value="agreed">قبول</MenuItem>
+                  <MenuItem value="refused">رفض</MenuItem>
+                  <MenuItem value="no number">لا يوجد رقم للتواصل</MenuItem>
+                  <MenuItem value="wrong number">الرقم خاطئ</MenuItem>
+                </RHFTextField>
+              </Box>
             </Box>
 
             <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mt: 3 }}>
-              <Button variant="outlined" color="inherit" onClick={onCancel}>
-                Cancel
-              </Button>
-
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 1 }}>
-                {currentSelected ? 'Update' : 'Create'}
+              {currentSelected && (
+                <LoadingButton variant="outlined" onClick={onCancel} sx={{ ml: 1 }}>
+                  Cancel
+                </LoadingButton>
+              )}
+              <LoadingButton
+                type="submit"
+                tabIndex={-1}
+                variant="contained"
+                loading={isSubmitting}
+              >
+                {!currentSelected ? 'Create One' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
