@@ -105,11 +105,9 @@ export default function PatientProfile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
           patient: patientData?._id,
           description: `Call started at ${new Date().toISOString()}`,
-          room_name: uniqueRoom,
-          work_group: usPatientData.work_group,
-          employee: user?.employee?._id,
         }),
       });
 
@@ -120,11 +118,11 @@ export default function PatientProfile() {
         console.log('✅ Video call saved in DB');
       }
 
-      window.open(
+      router.push(
         `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
           user?.employee?.name_arabic || user?.employee?.name_english
         )}`
-      , '_blank');
+      );
 
       const socket = io(process.env.REACT_APP_API_URL);
       socket.emit('callUser', {

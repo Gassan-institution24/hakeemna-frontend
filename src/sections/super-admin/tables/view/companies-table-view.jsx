@@ -1,46 +1,32 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useEffect, useCallback, useContext, useMemo } from 'react';
+import { useRef, useState, useEffect, useCallback, useContext } from 'react';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import Checkbox from '@mui/material/Checkbox';
+import { Checkbox, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
+import { CompaniesContext } from 'src/context/companiesContext';
 import { useGetCompanies } from 'src/api';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useSnackbar } from 'src/components/snackbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import {
   useTable,
-  getComparator,
-  emptyRows,
   TableNoData,
-  TableEmptyRows,
+  getComparator,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-
-import { CompaniesContext } from 'src/context/CompaniesContext';
-
 import { Box } from '@mui/system';
 import TableDetailFilters from './table-details-filters'
 import TableDetailRow from '../companies_list/table-details-row';
@@ -81,19 +67,14 @@ export default function CompaniesTableView() {
     { id: 'unit_service_type', label: 'unit_service_type' },
     { id: 'country', label: 'country' },
     { id: 'city', label: 'city' },
+    { id: 'email', label: 'email' },
     { id: 'sector', label: 'sector' },
     { id: 'commercial_name', label: 'commercial_name' },
     { id: 'province', label: 'province' },
     { id: 'address', label: 'address' },
     { id: 'phone_number_1', label: 'phone_number_1' },
     { id: 'Phone_number_2', label: 'Phone_number_2' },
-    { id: 'email', label: 'email' },
-    { id: 'work_shift', label: 'work_shift' },
-    { id: 'constitution_objective', label: 'constitution_objective' },
-    { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
-    { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
-    { id: 'subscribe_to', label: 'subscribe_to' },
-    { id: 'social_network', label: 'social_network' },
+    { id: '', label: 'communication' },
     { id: 'status', label: 'status', width: 120 },
     { id: 'com_note', label: 'com_note', width: 200 },
     showAll && { id: 'insurance', label: 'insurance' },
@@ -161,21 +142,24 @@ export default function CompaniesTableView() {
     const city = searchParams.get('city');
     const sector = searchParams.get('sector');
     const province = searchParams.get('province');
-    const speciality1 = searchParams.get('speciality1');
-    const speciality2 = searchParams.get('speciality2');
+    const page = Number(searchParams.get('page') || '0');
 
-    if (name || USType || city || sector || province || speciality1 || speciality2) {
+    if (name || USType || city || sector || province) {
       const newFilters = {
         name: name || '',
         USType: USType || '',
         city: city || '',
         sector: sector || '',
         province: province || '',
-        speciality1: speciality1 || '',
-        speciality2: speciality2 || '',
+        speciality1: '',
+        speciality2: '',
       };
       setFilters(newFilters);
       handleSetState({ savedFilters: newFilters });
+    }
+
+    if (page !== 0) {
+      table.setPage(page);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
@@ -188,27 +172,44 @@ export default function CompaniesTableView() {
     }
   }, [upload_record, filters, handleSetState]);
 
-  // Filter and process data
-  const dataFiltered = useMemo(() => {
-    if (!companiesData) return [];
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
-    return applyFilter({
-      inputData: companiesData,
-      comparator: getComparator(table.order, table.orderBy),
-      filters,
-    });
-  }, [companiesData, table.order, table.orderBy, filters]);
+  const dataFiltered = applyFilter({
+    inputData: companiesData,
+    comparator: getComparator(table.order, table.orderBy),
+    filters,
+    dateError,
+  });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
-
-  const denseHeight = table.dense ? 52 : 72;
-
-  const canReset = !Object.values(filters).every((value) => value === '');
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+
+  const printHandler = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  const handleDownload = () => {
+    const excelBody = dataFiltered.reduce((acc, data) => {
+      acc.push({
+        code: data.code,
+        name: data.name_english,
+        description: data.description, 
+      });
+      return acc;
+    }, []);
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(excelBody);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    saveAs(data, 'companiesTable.xlsx');
+  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -220,9 +221,9 @@ export default function CompaniesTableView() {
     [table, filters, handleSetState]
   );
 
-  const handleEditRow = useCallback( 
+  const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.companies.edit(id));
+      router.push(`${paths.superadmin.tables.companies.edit(id)}`);
     },
     [router]
   );
@@ -264,16 +265,22 @@ export default function CompaniesTableView() {
   const uniqueUnitServiceTypes = [...new Set(dataFiltered.map((one) => one.unit_service_type))];
   const uniqueCities = [...new Set(dataFiltered.map((one) => one.city))];
   const uniqueSectors = [...new Set(dataFiltered.map((one) => one.sector))];
-
   const uniqueProvince = [...new Set(dataFiltered.map((one) => one.province))];
 
   return (
     <Container maxWidth="">
       <CustomBreadcrumbs
-        heading="Companies"
+        heading="companies"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Companies' },
+          {
+            name: 'dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Tables',
+            href: paths.superadmin.tables.list,
+          },
+          { name: 'companies' },
         ]}
         action={
           <Button
@@ -282,7 +289,7 @@ export default function CompaniesTableView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New Company
+            New company
           </Button>
         }
         sx={{
@@ -290,33 +297,55 @@ export default function CompaniesTableView() {
         }}
       />
 
+      <TableDetailFilters
+        uniqueUnitServiceTypes={uniqueUnitServiceTypes}
+        uniqueCities={uniqueCities}
+        uniqueSectors={uniqueSectors}
+        uniqueProvince={uniqueProvince}
+        filters={filters}
+        onFilters={handleFilters}
+        onReset={handleResetFilters}
+      />
+      <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
+        {TABLE_HEAD.map((col) => (
+          <Box key={col.id} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Checkbox
+              size="small"
+              checked={visibleColumns[col.id] || false}
+              onChange={(e) =>
+                handleVisibleColumnsChange({
+                  ...visibleColumns,
+                  [col.id]: e.target.checked,
+                })
+              }
+            />
+            <Typography variant="body2">{col.label}</Typography>
+          </Box>
+        ))}
+      </Box>
       <Card>
         <TableDetailToolbar
+          onPrint={printHandler}
           filters={filters}
           onFilters={handleFilters}
-          //
+          onDownload={handleDownload}
           canReset={canReset}
           onResetFilters={handleResetFilters}
         />
-        
         <Checkbox checked={showAll} onChange={(e) => handleShowAllChange(e.target.checked)} />
         show all
-
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            //
             onResetFilters={handleResetFilters}
-            //
             results={dataFiltered.length}
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
-
         <TableContainer>
           <Scrollbar sx={{ height: '100vh', position: 'relative' }}>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'} >
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
@@ -335,13 +364,13 @@ export default function CompaniesTableView() {
                   )
                   .map((row, idx) => (
                     <TableDetailRow
-                      key={row?._id || idx}
+                      key={idx}
                       index={idx}
                       row={row}
                       showAll={showAll}
-                      selected={table.selected.includes(row?._id)}
-                      onSelectRow={() => table.onSelectRow(row?._id)}
-                      onEditRow={() => handleEditRow(row?._id)}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
                       displayedColumns={displayedColumns}
                     />
                   ))}
@@ -351,7 +380,6 @@ export default function CompaniesTableView() {
             </Table>
           </Scrollbar>
         </TableContainer>
-
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
@@ -443,5 +471,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+
 
 
