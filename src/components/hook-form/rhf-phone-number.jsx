@@ -21,7 +21,8 @@ export default function RHFPhoneNumber({ name, helperText, type, ...other }) {
           value={field.value}
           excludedCountries={['IL']}
           onChange={(newPhone) => {
-            field.onChange(newPhone);
+            const cleanedPhone = newPhone.replace(/\s+/g, '');
+            field.onChange(cleanedPhone);
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}
