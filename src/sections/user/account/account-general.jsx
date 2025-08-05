@@ -226,16 +226,16 @@ export default function AccountGeneral({ data, refetch }) {
                 label={t('Name in arabic')}
                 onChange={handleArabicInputChange}
               />
-
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
                 defaultCountry="JO"
                 value={em_phone}
                 onChange={(newPhone) => {
-                  matchIsValidTel(newPhone);
-                  setEMphone(newPhone);
-                  methods.setValue('mobile_num1', newPhone);
+                  const cleanedPhone = newPhone.replace(/\s/g, '');
+                  matchIsValidTel(cleanedPhone);
+                  setEMphone(cleanedPhone);
+                  methods.setValue('mobile_num1', cleanedPhone);
                 }}
               />
               <MuiTelInput
@@ -244,9 +244,10 @@ export default function AccountGeneral({ data, refetch }) {
                 defaultCountry="JO"
                 value={em_phone2}
                 onChange={(newPhone2) => {
-                  matchIsValidTel(newPhone2);
-                  setEMphone2(newPhone2);
-                  methods.setValue('mobile_num2', newPhone2);
+                  const cleanedPhone = newPhone2.replace(/\s/g, '');
+                  matchIsValidTel(cleanedPhone);
+                  setEMphone2(cleanedPhone);
+                  methods.setValue('mobile_num2', cleanedPhone);
                 }}
               />
               <RHFTextField
