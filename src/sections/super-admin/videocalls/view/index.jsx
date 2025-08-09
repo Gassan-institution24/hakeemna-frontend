@@ -18,13 +18,17 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Scrollbar from 'src/components/scrollbar';
-import { fMinSec } from 'src/utils/format-time';
+import { fMinSec, fDate } from 'src/utils/format-time';
 import { useGetVideoCalls } from 'src/api/video_calls';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import Iconify from 'src/components/iconify';
 import { useTranslate } from 'src/locales';
 import { paths } from 'src/routes/paths';
+import MenuItem from '@mui/material/MenuItem';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Box from '@mui/material/Box';
+import ListItemText from '@mui/material/ListItemText';
 import {
   useTable,
   TableNoData,
@@ -136,15 +140,7 @@ export default function VideoCallsTableView() {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row, idx) => (
-                    <TableRow hover key={row.code || idx}>
-                      <TableCell align="center">{row.code}</TableCell>
-                      <TableCell align="center">{row.unit_service?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{row.employee?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{row.patient?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{row.work_group?.name_english || '-'}</TableCell>
-                      <TableCell align="center">{fMinSec(row.duration)}</TableCell>
-                      <TableCell align="center">{row.description || '-'}</TableCell>
-                    </TableRow>
+                    <VideoCallTableRow row={row} idx={idx} t={t} />
                   ))}
 
                 <TableNoData notFound={notFound} />
@@ -238,3 +234,92 @@ function applyFilter({ inputData, comparator }) {
 
   return inputData;
 }
+
+// ----------------------------------------------------------------------
+
+function VideoCallTableRow({ row, idx, t }) {
+  const popover = usePopover();
+  const DDL = usePopover();
+  
+  return (
+    <>
+      <TableRow hover key={row.code || idx}>
+        <TableCell align="center">{row.code}</TableCell>
+        <TableCell align="center">{row.unit_service?.name_english || '-'}</TableCell>
+        <TableCell align="center">{row.employee?.name_english || '-'}</TableCell>
+        <TableCell align="center">{row.patient?.name_english || '-'}</TableCell>
+        <TableCell align="center">{row.work_group?.name_english || '-'}</TableCell>
+        <TableCell align="center">{fMinSec(row.duration)}</TableCell>
+        <TableCell align="center">{row.description || '-'}</TableCell>
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 160 }}
+      >
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          {t('DDL')}
+        </MenuItem>
+      </CustomPopover>
+
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(row.created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(row.created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_creation?.email || '-'}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_creation || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(row.updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(row.updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_modification?.email || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>{row.ip_address_user_modification || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Modifications No')}: {row.modifications_nums || 0}</Box>
+      </CustomPopover>
+    </>
+  );
+}
+
+VideoCallTableRow.propTypes = {
+  row: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
+};
