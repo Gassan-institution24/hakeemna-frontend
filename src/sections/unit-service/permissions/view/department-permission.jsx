@@ -36,9 +36,8 @@ export default function TableNewEditForm() {
     { label: t('delete'), value: 'delete' },
   ];
 
-  const { id } = useParams();
-
-  const { data } = useGetEmployeeEngagement(id);
+  const { emid } = useParams();
+  const { data } = useGetEmployeeEngagement(emid);
 
   const { user } = useAuthContext();
 
@@ -99,10 +98,10 @@ export default function TableNewEditForm() {
     try {
       const newAcl = data.acl;
       newAcl.department = submitedData;
-      axios.patch(endpoints.employee_engagements.one(id), { acl: newAcl });
+      axios.patch(endpoints.employee_engagements.one(emid), { acl: newAcl });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.acl(id),
+        link: paths.unitservice.employees.acl(emid),
         msg: `updated a department employee permissions`,
       });
       enqueueSnackbar(t('updated successfully!'));

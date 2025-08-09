@@ -1578,5 +1578,7 @@
   "You don't have any appointments scheduled for today at this unit of service.": "لا يوجد مواعيد مجدولة لك اليوم في هذه الوحدة الطبية.",
   "Return to Home Page": "العودة إلى الصفحة الرئيسية",
   "Find missing attendance dates": "البحث عن الغيابات",
-  "No attendance record for this date": "لا يوجد دوام مسجل لهذا التاريخ"
+  "No attendance record for this date": "لا يوجد دوام مسجل لهذا التاريخ",
+  "duration": "المدة",
+  "Search by code, patient, employee, or description...": "ابحث برقم المريض، اسم المريض، اسم الموظف، او الوصف"
 }

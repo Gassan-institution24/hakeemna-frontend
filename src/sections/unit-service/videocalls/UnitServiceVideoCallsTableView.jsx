@@ -19,7 +19,12 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Iconify from 'src/components/iconify';
-import { fMinSec } from 'src/utils/format-time';
+import { fMinSec, fDate } from 'src/utils/format-time';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Box from '@mui/material/Box';
+import ListItemText from '@mui/material/ListItemText';
 
 import UnitServiceVideoCallsRow from './table-details-row';
 
@@ -73,7 +78,6 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
 
   return (
     <Container maxWidth="xl">
-      <CustomBreadcrumbs heading={t('Video calls')} links={[{ name: t('Video calls') }]} />
       <Card>
         <Stack spacing={2} alignItems={{ xs: 'flex-end', md: 'center' }} direction={{ xs: 'column', md: 'row' }} sx={{ p: 2.5, pr: { xs: 2.5, md: 1 } }}>
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
@@ -110,26 +114,13 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row, idx) => (
-                    <TableRow hover key={row.code || idx}>
-                      <TableCell align="center">{row.code}</TableCell>
-                      <TableCell align="center">
-                        {curLangAr ? row.unit_service?.name_arabic || '-' : row.unit_service?.name_english || '-'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {curLangAr ? row.employee?.name_arabic || '-' : row.employee?.name_english || '-'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {curLangAr ? row.patient?.name_arabic || '-' : row.patient?.name_english || '-'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {curLangAr ? row.work_group?.name_arabic || '-' : row.work_group?.name_english || '-'}
-                      </TableCell>
-                      <TableCell align="center">{fMinSec(row.duration)}</TableCell>
-                      <TableCell align="center">{row.description || '-'}</TableCell>
-                      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-                        <Iconify icon="eva:more-vertical-fill" />
-                      </TableCell>
-                    </TableRow>
+                    <VideoCallTableRow
+                      key={row.code || idx}
+                      row={row}
+                      idx={idx}
+                      curLangAr={curLangAr}
+                      t={t}
+                    />
                   ))}
 
                 <TableNoData notFound={notFound} />
@@ -221,6 +212,103 @@ function applyFilter({ inputData, comparator }) {
 
   return inputData;
 }
+
+function VideoCallTableRow({ row, idx, curLangAr, t }) {
+  const popover = usePopover();
+  const DDL = usePopover();
+  
+  return (
+    <>
+      <TableRow hover key={row.code || idx}>
+        <TableCell align="center">{row.code}</TableCell>
+        <TableCell align="center">
+          {curLangAr ? row.unit_service?.name_arabic || '-' : row.unit_service?.name_english || '-'}
+        </TableCell>
+        <TableCell align="center">
+          {curLangAr ? row.employee?.name_arabic || '-' : row.employee?.name_english || '-'}
+        </TableCell>
+        <TableCell align="center">
+          {curLangAr ? row.patient?.name_arabic || '-' : row.patient?.name_english || '-'}
+        </TableCell>
+        <TableCell align="center">
+          {curLangAr ? row.work_group?.name_arabic || '-' : row.work_group?.name_english || '-'}
+        </TableCell>
+        <TableCell align="center">{fMinSec(row.duration)}</TableCell>
+        <TableCell align="center">{row.description || '-'}</TableCell>
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 160 }}
+      >
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          {t('DDL')}
+        </MenuItem>
+      </CustomPopover>
+
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>{t('Creation Time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(row.created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(row.created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_creation?.email || '-'}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_creation || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editing Time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(row.updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(row.updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('edited by')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_modification?.email || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('edited by IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_modification || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications nums')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.modifications_nums || 0}</Box>
+      </CustomPopover>
+    </>
+  );
+}
+
+VideoCallTableRow.propTypes = {
+  row: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
+  curLangAr: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+};
 
 UnitServiceVideoCallsTableView.propTypes = {
   patient: PropTypes.object.isRequired,
