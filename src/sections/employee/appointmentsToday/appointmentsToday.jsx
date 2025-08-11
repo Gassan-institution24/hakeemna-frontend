@@ -50,7 +50,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
 
-import { Link } from 'react-router-dom';
 import NewAppointmentDialog from './new-patient/new-patient';
 
 export default function AppointmentsToday() {
@@ -166,9 +165,10 @@ export default function AppointmentsToday() {
 
   const updateAppointmentactivity = async (activityId, info) => {
     try {
-      
       if (!info?.entrance) {
-        enqueueSnackbar(t('Appointment must be started first before selecting next activity'), { variant: 'error' });
+        enqueueSnackbar(t('Appointment must be started first before selecting next activity'), {
+          variant: 'error',
+        });
         return;
       }
 
@@ -205,6 +205,15 @@ export default function AppointmentsToday() {
         appointment: appointmentdata?._id,
         patient: appointmentdata?.patient?._id,
         unit_service_patient: appointmentdata?.unit_service_patient?._id,
+      });
+      await axiosInstance.post('/api/history', {
+        patient: appointmentdata?.patient?._id,
+        unit_service_patient: appointmentdata?.unit_service_patient?._id,
+        work_group: appointmentdata?.work_group?._id,
+        entrance: appointmentdata?.entrance,
+        actual_date: appointmentdata?.created_at,
+        service_unit: appointmentdata?.service_unit?._id,
+        appointment: true,
       });
       enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
