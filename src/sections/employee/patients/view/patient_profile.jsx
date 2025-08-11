@@ -17,6 +17,7 @@ import PageSelector from 'src/components/pageSelector';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
+import PatientHistory from '../patient-profile/patient-hy';
 import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
 import PatientCheckList from '../patient-profile/patient-checklist';
@@ -55,6 +56,7 @@ export default function PatientProfile() {
   const TABS = [
     { value: 'communication', label: t('communication') },
     { value: 'file', label: t('file') },
+    { value: 'history', label: t('history') },
     { value: 'sick_leave', label: t('sick leave') },
     { value: 'medical_reports', label: t('medical reports') },
     { value: 'prescriptions', label: t('prescriptions') },
@@ -194,6 +196,7 @@ export default function PatientProfile() {
             <PatientCommunication patient={usPatientData} />
           )}
           {currentTab === 'file' && usPatientData && <PatientFile patient={usPatientData} />}
+          {currentTab === 'history' && usPatientData && <PatientHistory patient={usPatientData} />}
           {currentTab === 'sick_leave' && usPatientData && (
             <PatientSickLeaves patient={usPatientData} />
           )}
