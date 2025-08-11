@@ -37,7 +37,6 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
-    { id: 'unit_service', label: t('unit of service') },
     { id: 'employee', label: t('employee') },
     { id: 'patient_name', label: t('patient') },
     { id: 'work_group', label: t('work group') },
@@ -46,8 +45,11 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
     { id: 'actions', label: '', align: 'right' },
   ];
   
-  const { data, isLoading } = useGetVideoCalls({ patient_id: patient?._id });
-
+  const { data, isLoading } = useGetVideoCalls({ 
+    patient_id: patient?._id,
+    unit_service: patient?.unit_service,
+  });
+  console.log('patient', patient);
   const videoCalls = data?.videoCalls || data || [];
   const videoCallsWithNames = videoCalls.map((row) => ({
     ...row,
@@ -61,7 +63,6 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
     return videoCallsWithNames.filter(
       (row) =>
         (row.code && row.code.toString().toLowerCase().includes(lower)) ||
-        (row.unit_service?.name_english && row.unit_service.name_english.toLowerCase().includes(lower)) ||
         (row.employee?.name_english && row.employee.name_english.toLowerCase().includes(lower)) ||
         (row.patient_name && row.patient_name.toLowerCase().includes(lower)) ||
         (row.work_group?.name_english && row.work_group.name_english.toLowerCase().includes(lower)) ||
@@ -75,6 +76,10 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
   });
 
   const notFound = (!dataFiltered.length && !!videoCallsWithNames.length) || (!isLoading && !videoCallsWithNames.length);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Container maxWidth="xl">
@@ -154,10 +159,6 @@ function getCustomComparator(order, orderBy) {
         aValue = a.code || 0;
         bValue = b.code || 0;
         break;
-      case 'unit_service':
-        aValue = a.unit_service?.name_english || '';
-        bValue = b.unit_service?.name_english || '';
-        break;
       case 'employee':
         aValue = a.employee?.name_english || '';
         bValue = b.employee?.name_english || '';
@@ -221,9 +222,6 @@ function VideoCallTableRow({ row, idx, curLangAr, t }) {
     <>
       <TableRow hover key={row.code || idx}>
         <TableCell align="center">{row.code}</TableCell>
-        <TableCell align="center">
-          {curLangAr ? row.unit_service?.name_arabic || '-' : row.unit_service?.name_english || '-'}
-        </TableCell>
         <TableCell align="center">
           {curLangAr ? row.employee?.name_arabic || '-' : row.employee?.name_english || '-'}
         </TableCell>
