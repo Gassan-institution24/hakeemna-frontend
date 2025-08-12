@@ -49,7 +49,6 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
     patient_id: patient?._id,
     unit_service: patient?.unit_service,
   });
-  console.log('patient', patient);
   const videoCalls = data?.videoCalls || data || [];
   const videoCallsWithNames = videoCalls.map((row) => ({
     ...row,
