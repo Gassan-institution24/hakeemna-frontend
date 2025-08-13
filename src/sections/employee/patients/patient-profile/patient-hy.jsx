@@ -70,7 +70,7 @@ export default function PatientHistory({ patient }) {
                 border: '1px solid',
                 borderColor: 'divider',
                 borderRadius: 1,
-                backgroundColor: bgColor,
+                backgroundColor: bgColor
               }}
             >
               <Typography component="span" sx={{ mr: 1, color: 'text.secondary' }}>
