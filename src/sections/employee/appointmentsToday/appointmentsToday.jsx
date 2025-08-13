@@ -112,7 +112,7 @@ export default function AppointmentsToday() {
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
-
+  const savedHistoryId = localStorage.getItem('historyId');
   const startAppointment = async (info) => {
     try {
       const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
@@ -127,6 +127,20 @@ export default function AppointmentsToday() {
         Last_activity_atended: info?.Last_activity_atended,
         Arrival_time: info?.created_at,
       });
+      const historyRes = await axiosInstance.post('/api/history', {
+        appointmentId: info?._id,
+        patient: info?.patient?._id,
+        unit_service_patient: info?.unit_service_patient?._id,
+        work_group: info?.work_group?._id,
+        entrance: info?.entrance,
+        actual_date: info?.created_at,
+        service_unit: info?.unit_service?._id,
+        appointment: true,
+      });
+      const historyId = historyRes.data?._id;
+      if (historyId) {
+        localStorage.setItem('historyId', historyId);
+      }
       const dataToUpdate = {
         started: true,
         entrance: entranceData?.data?._id,
@@ -206,15 +220,11 @@ export default function AppointmentsToday() {
         patient: appointmentdata?.patient?._id,
         unit_service_patient: appointmentdata?.unit_service_patient?._id,
       });
-      await axiosInstance.post('/api/history', {
-        patient: appointmentdata?.patient?._id,
-        unit_service_patient: appointmentdata?.unit_service_patient?._id,
-        work_group: appointmentdata?.work_group?._id,
-        entrance: appointmentdata?.entrance,
-        actual_date: appointmentdata?.created_at,
-        service_unit: appointmentdata?.service_unit?._id,
-        appointment: true,
+      await axiosInstance.patch(`/api/history/${savedHistoryId}`, {
+        end_date: new Date().toISOString(),
       });
+      localStorage.removeItem('historyId');
+
       enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
       refetch2();

@@ -21,7 +21,7 @@ import { useTranslate } from 'src/locales';
 import { useGetPatientHistoryDataForUs } from 'src/api';
 
 export default function PatientHistory({ patient }) {
-  const { currentLang } = useTranslate();
+  const { currentLang, t } = useTranslate();
   const curLangAr = currentLang?.value === 'ar';
 
   const { historyDataForPatient } = useGetPatientHistoryDataForUs(patient?._id);
@@ -33,7 +33,6 @@ export default function PatientHistory({ patient }) {
     setSelectedData(item);
     setOpenDialog(true);
   };
-
   const colorPalette = ['#ffebee', '#e8f5e9', '#e3f2fd', '#fff3e0', '#f3e5f5', '#ede7f6'];
   const workGroupColors = {};
   let colorIndex = 0;
@@ -78,17 +77,20 @@ export default function PatientHistory({ patient }) {
                 {fDate(one?.created_at)}
               </Typography>
               <Typography component="span" sx={{ mr: 1, fontWeight: 'bold' }}>
-                {one.title || 'No title'}
+                {one?.title || 'No title'}
               </Typography>
               <Typography component="span" sx={{ mr: 1, color: 'text.secondary' }}>
-                {one?.work_group?.name_english || one?.work_group?.name_arabic}
+                {curLangAr ? one?.work_group?.name_arabic : one?.work_group?.name_english}
               </Typography>
               <Typography component="span" sx={{ color: 'text.secondary' }}>
-                {one?.service_unit?.name_arabic || one?.service_unit?.name_english}
+                {curLangAr ? one?.service_unit?.name_arabic : one?.service_unit?.name_english}
+              </Typography>
+              <Typography component="span" sx={{ color: 'text.secondary' }}>
+                 {one?.duration} {t('munutes')}{' '}
               </Typography>
 
               <Button variant="outlined" onClick={() => handleView(one)}>
-                View
+                {t('View')}
               </Button>
             </Stack>
           );
@@ -97,42 +99,44 @@ export default function PatientHistory({ patient }) {
 
       {/* Dialog عرض التفاصيل */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Patient History Details</DialogTitle>
+        <DialogTitle>{t("Patient History Details")}</DialogTitle>
         <DialogContent dividers>
           {selectedData ? (
             <Stack spacing={3} sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
               {/* General Info Section */}
               <Typography variant="h6" gutterBottom>
-                General Information
+                {t('General Information')}
               </Typography>
               <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Title
+                    {t('title')}
                   </Typography>
                   <Typography>{selectedData.title || 'N/A'}</Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Created At
+                    {t('date')}
                   </Typography>
                   <Typography>{fDate(selectedData.created_at)}</Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Status
+                    {t('duration')}
                   </Typography>
-                  <Chip
-                    label={selectedData.status || 'N/A'}
-                    color={selectedData.status === 'active' ? 'success' : 'default'}
-                    size="small"
-                  />
+                  <Typography>
+                    {selectedData?.duration} {t('munutes')}{' '}
+                  </Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Modifications Number
+                    {t('sequence Number')}
                   </Typography>
-                  <Typography>{selectedData.modifications_nums ?? 0}</Typography>
+                  <Chip
+                    label={selectedData.sequence_number || 'N/A'}
+                    color="success"
+                    size="small"
+                  />
                 </Grid>
               </Grid>
 
@@ -140,7 +144,7 @@ export default function PatientHistory({ patient }) {
 
               {/* Work Group Section */}
               <Typography variant="h6" gutterBottom>
-                Work Group
+                {t("work group")}
               </Typography>
               <Typography>
                 {selectedData.work_group
@@ -154,7 +158,7 @@ export default function PatientHistory({ patient }) {
 
               {/* Service Unit Section */}
               <Typography variant="h6" gutterBottom>
-                Service Unit
+                {t("Service Unit")}
               </Typography>
               <Typography>
                 {selectedData.service_unit
@@ -171,7 +175,7 @@ export default function PatientHistory({ patient }) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Close</Button>
+          <Button onClick={() => setOpenDialog(false)}>{t("close")}</Button>
         </DialogActions>
       </Dialog>
     </Container>
