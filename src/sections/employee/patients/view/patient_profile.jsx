@@ -100,7 +100,6 @@ export default function PatientProfile() {
 
       const data = await response.json();
       const roomUrl = data.url;
-
       const saveResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/video-call`, {
         method: 'POST',
         headers: {
@@ -109,6 +108,8 @@ export default function PatientProfile() {
         body: JSON.stringify({
           unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
           patient: patientData?._id,
+          employee: user?.employee?._id,
+          work_group: patientData?.work_group,
           description: `Call started at ${new Date().toISOString()}`,
         }),
       });
