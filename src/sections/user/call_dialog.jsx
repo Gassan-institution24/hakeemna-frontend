@@ -24,7 +24,6 @@ export default function CallDialog() {
     socketRef.current = socket;
 
     socket.on('callUser', (data) => {
-      console.log('📞 Incoming call data:', data);
 
       if (!data.roomUrl) return;
 

@@ -41,9 +41,13 @@ export default function Header({ onOpenNav }) {
   const router = useRouter();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const { setReceivingCall, setCaller, caller } = useWebRTC();
+  const webRTCContext = useWebRTC();
   const [callerName, setCallerName] = useState();
   const parentToken = localStorage.getItem('parentToken');
+  
+  const setReceivingCall = webRTCContext?.setReceivingCall || (() => {});
+  const setCaller = webRTCContext?.setCaller || (() => {});
+  const caller = webRTCContext?.caller;
   const switchBack = () => {
     localStorage.setItem('accessToken', parentToken);
     localStorage.removeItem('parentToken');
