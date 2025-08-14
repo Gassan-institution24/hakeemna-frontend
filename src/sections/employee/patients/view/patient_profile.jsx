@@ -111,6 +111,7 @@ export default function PatientProfile() {
           employee: user?.employee?._id,
           work_group: patientData?.work_group,
           description: `Call started at ${new Date().toISOString()}`,
+          room_name: uniqueRoom,
         }),
       });
 
@@ -124,7 +125,7 @@ export default function PatientProfile() {
       router.push(
         `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
           user?.employee?.name_arabic || user?.employee?.name_english
-        )}`
+        )}&uniqueRoom=${encodeURIComponent(uniqueRoom)}`
       );
 
       const socket = io(process.env.REACT_APP_API_URL);
@@ -132,6 +133,7 @@ export default function PatientProfile() {
         userId: patientData.user,
         userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
         roomUrl,
+        uniqueRoom,
       });
 
       console.log('📤 Sent callUser with room:', roomUrl);
