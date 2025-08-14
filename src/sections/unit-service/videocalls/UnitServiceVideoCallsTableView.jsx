@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
-import { getComparator } from 'src/components/table/utils';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetVideoCalls } from 'src/api/video_calls';
 import Table from '@mui/material/Table';
@@ -12,7 +10,6 @@ import TableRow from '@mui/material/TableRow';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Scrollbar from 'src/components/scrollbar';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useTranslate, useLocales } from 'src/locales';
 import { useState, useMemo } from 'react';
 import Stack from '@mui/material/Stack';
@@ -25,8 +22,176 @@ import IconButton from '@mui/material/IconButton';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
+import { useTheme, useMediaQuery } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
-import UnitServiceVideoCallsRow from './table-details-row';
+function MobileCardView({ row, curLangAr, t }) {
+  const popover = usePopover();
+  const DDL = usePopover();
+
+  return (
+    <>
+      <Paper 
+        elevation={1} 
+        sx={{ 
+          p: 2, 
+          mb: 2,
+          borderRadius: 2,
+          border: '1px solid',
+          borderColor: 'divider'
+        }}
+      >
+        <Stack spacing={1.5}>
+          <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+            <Box>
+              <Typography variant="subtitle2" color="primary">
+                {t('Code')}: {row.code}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {fMinSec(row.duration)}
+              </Typography>
+            </Box>
+            <IconButton 
+              color={popover.open ? 'inherit' : 'default'} 
+              onClick={popover.onOpen}
+              size="small"
+            >
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          </Stack>
+
+          <Divider />
+
+          <Stack spacing={0.5}>
+            <Typography variant="caption" color="text.secondary">
+              {t('Employee')}
+            </Typography>
+            <Typography variant="body2">
+              {curLangAr ? row.employee?.name_arabic || '-' : row.employee?.name_english || '-'}
+            </Typography>
+          </Stack>
+
+          <Stack spacing={0.5}>
+            <Typography variant="caption" color="text.secondary">
+              {t('Patient')}
+            </Typography>
+            <Typography variant="body2">
+              {curLangAr ? row.patient?.name_arabic || '-' : row.patient?.name_english || '-'}
+            </Typography>
+          </Stack>
+
+          <Stack spacing={0.5}>
+            <Typography variant="caption" color="text.secondary">
+              {t('Work Group')}
+            </Typography>
+            <Typography variant="body2">
+              {curLangAr ? row.work_group?.name_arabic || '-' : row.work_group?.name_english || '-'}
+            </Typography>
+          </Stack>
+
+          <Stack spacing={0.5}>
+            <Typography variant="caption" color="text.secondary">
+              {t('Description')}
+            </Typography>
+            <Typography variant="body2">
+              {row.description || '-'}
+            </Typography>
+          </Stack>
+        </Stack>
+
+        <CustomPopover
+          open={popover.open}
+          onClose={popover.onClose}
+          arrow="right-top"
+          sx={{ width: 140 }}
+        >
+          <MenuItem lang="ar" onClick={DDL.onOpen}>
+            <Iconify icon="carbon:data-quality-definition" sx={{ mr: 1 }} />
+            {t('DDL')}
+          </MenuItem>
+        </CustomPopover>
+
+        <CustomPopover
+          open={DDL.open}
+          onClose={DDL.onClose}
+          arrow="right-top"
+          sx={{ padding: 2, maxWidth: 320 }}
+        >
+          <Box sx={{ fontWeight: 600 }}>{t('Creation Time')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+            <ListItemText
+              primary={fDate(row.created_at, 'dd MMMMMMMM yyyy')}
+              secondary={fDate(row.created_at, 'p')}
+              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+              secondaryTypographyProps={{
+                component: 'span',
+                typography: 'caption',
+              }}
+            />
+          </Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_creation?.email || '-'}</Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_creation || '-'}</Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editing Time')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+            <ListItemText
+              primary={fDate(row.updated_at, 'dd MMMMMMMM yyyy')}
+              secondary={fDate(row.updated_at, 'p')}
+              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+              secondaryTypographyProps={{
+                component: 'span',
+                typography: 'caption',
+              }}
+            />
+          </Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('edited by')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_modification?.email || '-'}</Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('edited by IP')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_modification || '-'}</Box>
+          <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications nums')}:</Box>
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.modifications_nums || 0}</Box>
+        </CustomPopover>
+      </Paper>
+    </>
+  );
+}
+
+
+MobileCardView.propTypes = {
+  row: PropTypes.shape({
+    code: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    duration: PropTypes.number,
+    employee: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    patient: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    work_group: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    description: PropTypes.string,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
+    user_creation: PropTypes.shape({
+      email: PropTypes.string,
+    }),
+    user_modification: PropTypes.shape({
+      email: PropTypes.string,
+    }),
+    ip_address_user_creation: PropTypes.string,
+    ip_address_user_modification: PropTypes.string,
+    modifications_nums: PropTypes.number,
+  }).isRequired,
+  curLangAr: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+};
 
 export default function UnitServiceVideoCallsTableView({ patient }) {
   const table = useTable({ defaultOrderBy: 'code' });
@@ -34,6 +199,8 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -55,7 +222,7 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
     patient_name: row.patient?.name_english || '',
   }));
 
-  // Filter by search
+  
   const filteredData = useMemo(() => {
     if (!search) return videoCallsWithNames;
     const lower = search.toLowerCase();
@@ -80,58 +247,114 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
     return <LoadingScreen />;
   }
 
+  
+  function DesktopTableView() {
+    return (
+      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+        <Scrollbar>
+          <Table size={table.dense ? 'small' : 'medium'}>
+            <TableHeadCustom
+              order={table.order}
+              orderBy={table.orderBy}
+              headLabel={TABLE_HEAD}
+              rowCount={dataFiltered.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+            />
+            <TableBody>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
+                )
+                .map((row, idx) => (
+                  <VideoCallTableRow
+                    key={row.code || idx}
+                    row={row}
+                    idx={idx}
+                    curLangAr={curLangAr}
+                    t={t}
+                  />
+                ))}
+
+              <TableNoData notFound={notFound} />
+            </TableBody>
+          </Table>
+        </Scrollbar>
+      </TableContainer>
+    );
+  }
+
   return (
-    <Container maxWidth="xl">
-      <Card>
-        <Stack spacing={2} alignItems={{ xs: 'flex-end', md: 'center' }} direction={{ xs: 'column', md: 'row' }} sx={{ p: 2.5, pr: { xs: 2.5, md: 1 } }}>
-          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+    <Container maxWidth="xl" sx={{ px: { xs: 1, sm: 2 } }}>
+      <Card sx={{ 
+        boxShadow: { xs: 0, sm: 1 },
+        border: { xs: '1px solid', sm: 'none' },
+        borderColor: 'divider'
+      }}>
+        <Stack 
+          spacing={2} 
+          alignItems={{ xs: 'stretch', md: 'center' }} 
+          direction={{ xs: 'column', md: 'row' }} 
+          sx={{ 
+            p: { xs: 1.5, sm: 2.5 }, 
+            pr: { xs: 1.5, sm: 2.5, md: 1 } 
+          }}
+        >
+          <Stack 
+            direction="row" 
+            alignItems="center" 
+            spacing={1} 
+            sx={{ width: { xs: '100%', md: 'auto' } }}
+          >
             <TextField
               fullWidth
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('Search by code, patient, employee, or description...')}
+              size={isMobile ? 'small' : 'medium'}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', fontSize: isMobile ? 18 : 20 }} />
                   </InputAdornment>
                 ),
+              }}
+              sx={{ 
+                maxWidth: { md: 300, lg: 400 },
+                '& .MuiInputBase-root': {
+                  height: isMobile ? 40 : 48
+                }
               }}
             />
           </Stack>
         </Stack>
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, idx) => (
-                    <VideoCallTableRow
-                      key={row.code || idx}
-                      row={row}
-                      idx={idx}
-                      curLangAr={curLangAr}
-                      t={t}
-                    />
-                  ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+
+        {isMobile ? (
+          <Box sx={{ p: { xs: 1, sm: 2 } }}>
+            {dataFiltered.length > 0 ? (
+              dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
+                )
+                .map((row, idx) => (
+                  <MobileCardView 
+                    key={row.code || idx} 
+                    row={row} 
+                    curLangAr={curLangAr}
+                    t={t}
+                  />
+                ))
+            ) : (
+              <TableNoData notFound={notFound} />
+            )}
+          </Box>
+        ) : (
+          <DesktopTableView />
+        )}
+
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
@@ -140,13 +363,26 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
           onRowsPerPageChange={table.onChangeRowsPerPage}
           dense={table.dense}
           onChangeDense={table.onChangeDense}
+          sx={{
+            '& .MuiTablePagination-select': {
+              fontSize: { xs: 12, sm: 14 }
+            },
+            '& .MuiTablePagination-displayedRows': {
+              fontSize: { xs: 12, sm: 14 }
+            },
+            '& .MuiTablePagination-actions': {
+              '& .MuiIconButton-root': {
+                fontSize: { xs: 18, sm: 22 }
+              }
+            }
+          }}
         />
       </Card>
     </Container>
   );
 }
 
-// ----------------------------------------------------------------------
+
 
 function getCustomComparator(order, orderBy) {
   return (a, b) => {
@@ -183,7 +419,7 @@ function getCustomComparator(order, orderBy) {
         bValue = b[orderBy] || '';
     }
 
-    // Handle numeric values for code and duration
+    
     if (orderBy === 'code' || orderBy === 'duration') {
       if (order === 'desc') {
         return bValue - aValue;
@@ -191,7 +427,7 @@ function getCustomComparator(order, orderBy) {
       return aValue - bValue;
     }
 
-    // Handle string values
+    
     if (order === 'desc') {
       return bValue.toString().localeCompare(aValue.toString());
     }
@@ -301,7 +537,34 @@ function VideoCallTableRow({ row, idx, curLangAr, t }) {
 }
 
 VideoCallTableRow.propTypes = {
-  row: PropTypes.object.isRequired,
+  row: PropTypes.shape({
+    code: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    duration: PropTypes.number,
+    employee: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    patient: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    work_group: PropTypes.shape({
+      name_arabic: PropTypes.string,
+      name_english: PropTypes.string,
+    }),
+    description: PropTypes.string,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
+    user_creation: PropTypes.shape({
+      email: PropTypes.string,
+    }),
+    user_modification: PropTypes.shape({
+      email: PropTypes.string,
+    }),
+    ip_address_user_creation: PropTypes.string,
+    ip_address_user_modification: PropTypes.string,
+    modifications_nums: PropTypes.number,
+  }).isRequired,
   idx: PropTypes.number.isRequired,
   curLangAr: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
@@ -309,4 +572,4 @@ VideoCallTableRow.propTypes = {
 
 UnitServiceVideoCallsTableView.propTypes = {
   patient: PropTypes.object.isRequired,
-}; 
+};
