@@ -7,13 +7,14 @@ export default function WebRTCComponent() {
   const [searchParams] = useSearchParams();
   const roomUrl = searchParams.get('roomUrl');
   const userName = searchParams.get('userName');
+  const uniqueRoom = searchParams.get('uniqueRoom');
   const containerRef = useRef(null);
   const callFrameRef = useRef(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!roomUrl || !userName || !containerRef.current) return;
+    if (!roomUrl || !userName || !containerRef.current || !uniqueRoom) return;
 
     containerRef.current.innerHTML = '';
 
@@ -36,8 +37,30 @@ export default function WebRTCComponent() {
       containerRef.current.appendChild(callFrame.iframe);
     }
 
-    callFrame.on('left-meeting', () => {
-      console.log('👋 User left the call');
+    callFrame.on('left-meeting', async () => {
+      try {
+        const roomName = uniqueRoom;
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/video-call`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: roomName,
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || 'Failed to update video call');
+        }
+
+        const updatedCall = await response.json();
+        console.log('✅ Call end time updated in DB:', updatedCall);
+      } catch (err) {
+        console.error('❌ Error updating call end time:', err);
+      }
       navigate(-1);
     });
 
@@ -48,7 +71,7 @@ export default function WebRTCComponent() {
       callFrame.leave();
       callFrame.destroy();
     };
-  }, [roomUrl, navigate, userName]);
+  }, [roomUrl, navigate, userName, uniqueRoom]);
 
   return (
     <div
@@ -62,4 +85,3 @@ export default function WebRTCComponent() {
     />
   );
 }
-// Duplicate DailyIframe instances are not allowed

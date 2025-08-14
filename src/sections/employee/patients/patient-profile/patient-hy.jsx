@@ -87,7 +87,7 @@ export default function PatientHistory({ patient }) {
               </Typography>
               <Typography component="span" sx={{ color: 'text.secondary' }}>
                  {one?.duration} {t('munutes')}{' '}
-              </Typography>
+              </Typography> 
 
               <Button variant="outlined" onClick={() => handleView(one)}>
                 {t('View')}
