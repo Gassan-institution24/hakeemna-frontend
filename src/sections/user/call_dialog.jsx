@@ -24,7 +24,6 @@ export default function CallDialog() {
     socketRef.current = socket;
 
     socket.on('callUser', (data) => {
-
       if (!data.roomUrl) return;
 
       setCallerName(data.userName);
@@ -32,6 +31,7 @@ export default function CallDialog() {
       setOpen(true);
 
       window._roomUrlTemp = data.roomUrl;
+      window._roomNameTemp = data.uniqueRoom;
     });
 
     // eslint-disable-next-line consistent-return
@@ -46,7 +46,7 @@ export default function CallDialog() {
     const url = window._roomUrlTemp || roomUrl;
     if (url) {
       window.open(
-        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}`,
+        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}&uniqueRoom=${encodeURIComponent(window._roomNameTemp)}`,
         '_blank'
       );
     } else {
