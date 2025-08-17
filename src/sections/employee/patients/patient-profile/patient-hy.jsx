@@ -70,7 +70,7 @@ export default function PatientHistory({ patient }) {
                 border: '1px solid',
                 borderColor: 'divider',
                 borderRadius: 1,
-                backgroundColor: bgColor,
+                backgroundColor: bgColor
               }}
             >
               <Typography component="span" sx={{ mr: 1, color: 'text.secondary' }}>
@@ -87,7 +87,7 @@ export default function PatientHistory({ patient }) {
               </Typography>
               <Typography component="span" sx={{ color: 'text.secondary' }}>
                  {one?.duration} {t('munutes')}{' '}
-              </Typography>
+              </Typography> 
 
               <Button variant="outlined" onClick={() => handleView(one)}>
                 {t('View')}
