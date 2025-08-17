@@ -17,7 +17,6 @@ export default function Sharedoctorna() {
       </Helmet>
 
       <Share />
-      {/* <WebRTCComponent /> */}
     </>
   );
 }
