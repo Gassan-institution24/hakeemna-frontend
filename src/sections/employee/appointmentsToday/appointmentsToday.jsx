@@ -83,7 +83,7 @@ export default function AppointmentsToday() {
   const { roomsData } = useGetUSRooms(unitServiceId);
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find(
-    (activity) => activity?.activities?.name_english === 'Reception'
+    (activity) => activity?.name_english === 'Reception'
   );
   const TABS = [
     checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) && {
@@ -127,7 +127,7 @@ export default function AppointmentsToday() {
         Last_activity_atended: info?.Last_activity_atended,
         Arrival_time: info?.created_at,
       });
-      const historyRes = await axiosInstance.post('/api/history', {
+      const historyRes = await axiosInstance.post(endpoints.history.all, {
         appointmentId: info?._id,
         patient: info?.patient?._id,
         unit_service_patient: info?.unit_service_patient?._id,
@@ -136,7 +136,10 @@ export default function AppointmentsToday() {
         actual_date: info?.created_at,
         service_unit: info?.unit_service?._id,
         appointment: true,
+        activity_id: receptionActivity?._id,
+        start_time: new Date().toISOString(),
       });
+      
       const historyId = historyRes.data?._id;
       if (historyId) {
         localStorage.setItem('historyId', historyId);
@@ -191,6 +194,12 @@ export default function AppointmentsToday() {
       });
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
         activityhappend: true,
+      });
+      console.log('update activity', activityId);
+      await axiosInstance.patch(endpoints.history.one(savedHistoryId), {
+        activity_id: activityId,
+        end_time: new Date().toISOString(),
+        start_time: new Date().toISOString(),
       });
       refetch();
       refetch2();
