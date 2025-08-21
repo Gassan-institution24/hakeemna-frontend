@@ -93,6 +93,11 @@ export default function Medicalreport() {
   }, [user, Entrance, reset]);
   const removemedicalrepoort = async (IdToremove2) => {
     await axiosInstance.delete(endpoints.medicalreports.one(IdToremove2));
+    const historyId = localStorage.getItem('historyId');
+    await axiosInstance.patch(endpoints.history.remove_id(historyId), {
+          type: 'medicalReport',
+          id: IdToremove2,
+        });
 
     enqueueSnackbar('Feild removed successfully', { variant: 'success' });
     refetch();
@@ -171,21 +176,28 @@ export default function Medicalreport() {
           formData.append(key, submitdata[key]);
         }
       });
-
-      await axiosInstance.post(endpoints.history.all, {
-        patient: Entrance?.patient?._id,
-        unit_service_patient: Entrance?.unit_service_patient,
-        name_english: 'A medical report has been added',
-        name_arabic: 'تم ارفاق تقرير طبي',
-        sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
-        sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
-        actual_date: Entrance?.created_at,
-        title: 'medical report',
-        service_unit: Entrance?.service_unit?._id,
+      
+      
+      // await axiosInstance.post(endpoints.history.all, {
+      //   patient: Entrance?.patient?._id,
+      //   work_group: Entrance?.work_group,
+      //   unit_service_patient: Entrance?.unit_service_patient,
+      //   name_english: 'A medical report has been added',
+      //   name_arabic: 'تم ارفاق تقرير طبي',
+      //   sub_english: `Medical report from ${Entrance?.service_unit?.name_english}`,
+      //   sub_arabic: `تقرير طبي من ${Entrance?.service_unit?.name_arabic}`,
+      //   actual_date: Entrance?.created_at,
+      //   title: 'medical report',
+      //   medical_report: true,
+      //   service_unit: Entrance?.service_unit?._id,
+      // });
+      
+      const medicalReport = await axiosInstance.post('/api/examination', formData);
+      const historyId = localStorage.getItem('historyId');
+      await axiosInstance.patch(endpoints.history.one(historyId), {
+        medical_report: true,
+        medicalReportId: medicalReport?.data?.data?.examinationreports?._id,
       });
-
-      await axiosInstance.post('/api/examination', formData);
-
       await axiosInstance.patch(`/api/entrance/${id}`, {
         medical_report_status: true,
       });
