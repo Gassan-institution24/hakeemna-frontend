@@ -8,9 +8,9 @@ import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useTheme, useMediaQuery, MenuItem } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -30,6 +30,10 @@ export default function EditPatient({ patient }) {
   const isArabic = currentLang.value === 'ar';
   const [em_phone, setEMphone] = useState(patient.mobile_num1);
   const [em_phone2, setEMphone2] = useState(patient.mobile_num2);
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const handleArabicInputChange = (event) => {
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/;
     if (arabicRegex.test(event.target.value)) {
@@ -63,6 +67,7 @@ export default function EditPatient({ patient }) {
     identification_num: Yup.string(),
     cloud_storage_link: Yup.string(),
   });
+  
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
@@ -92,6 +97,7 @@ export default function EditPatient({ patient }) {
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
+  
   const {
     handleSubmit,
     control,
@@ -108,25 +114,41 @@ export default function EditPatient({ patient }) {
       await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
     } catch (error) {
-      // eslint-disable-next-line no-nested-ternary
-      enqueueSnackbar(
-        // eslint-disable-next-line no-nested-ternary
-        typeof error === 'string' ? error : isArabic ? error.arabic_message : error.message,
-        { variant: 'error' }
-      );
+      let errorMessage;
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (isArabic) {
+        errorMessage = error.arabic_message;
+      } else {
+        errorMessage = error.message;
+      }
+      enqueueSnackbar(errorMessage, { variant: 'error' });
     }
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={{ p: 3, mx: { md: 15 } }}>
+      <Card sx={{ 
+        p: { xs: 2, sm: 3 }, 
+        mx: 0, 
+        my: { xs: 1, sm: 2 },
+        width: '100%',
+        borderRadius: 0 
+      }}>
         <Box
-          rowGap={3}
-          columnGap={2}
+          rowGap={{ xs: 2, sm: 3 }}
+          columnGap={{ xs: 1, sm: 2 }}
           display="grid"
           gridTemplateColumns={{
             xs: 'repeat(1, 1fr)',
             sm: 'repeat(2, 1fr)',
+          }}
+          sx={{ 
+            width: '100%',
+            px: 0, 
+            '& .MuiFormControl-root, & .MuiTextField-root, & .MuiAutocomplete-root': {
+              width: '100%'
+            }
           }}
         >
           <RHFTextField
@@ -143,17 +165,18 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('nationality')}
-            fullWidth
             name="nationality"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
+            {countriesData.map((country) => (
+              <MenuItem lang="ar" key={country._id} value={country._id}>
                 {isArabic ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
+          
           {patient?.patient?.user === undefined && (
             <RHFTextField
               name="identification_num"
@@ -166,13 +189,13 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('residence country')}
-            fullWidth
             name="country"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {countriesData.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country._id}>
+            {countriesData.map((country) => (
+              <MenuItem lang="ar" key={country._id} value={country._id}>
                 {isArabic ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
@@ -180,48 +203,60 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('city')}
-            fullWidth
             name="city"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {tableData.map((city, idx) => (
-              <MenuItem lang="ar" key={idx} value={city._id}>
+            {tableData.map((city) => (
+              <MenuItem lang="ar" key={city._id} value={city._id}>
                 {isArabic ? city.name_arabic : city.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
 
-          <RHFTextField name="address" label={t('Address')} />
+          <RHFTextField 
+            name="address" 
+            label={t('Address')} 
+          />
 
-          <MuiTelInput
-            label={t('Mobile Number')}
-            forceCallingCode
-            defaultCountry="JO"
-            value={em_phone}
-            onChange={(newPhone) => {
-              const cleanedPhone = newPhone.replace(/\s/g, '');
-              matchIsValidTel(cleanedPhone);
-              setEMphone(cleanedPhone);
-              methods.setValue('mobile_num1', cleanedPhone);
-            }}
-          />
-          <MuiTelInput
-            label={t('Alternative Mobile Number')}
-            forceCallingCode
-            defaultCountry="JO"
-            value={em_phone2}
-            onChange={(newPhone2) => {
-              const cleanedPhone = newPhone2.replace(/\s/g, '');
-              matchIsValidTel(cleanedPhone);
-              setEMphone2(cleanedPhone);
-              methods.setValue('mobile_num2', cleanedPhone);
-            }}
-          />
+          <Box sx={{ width: '100%' }}>
+            <MuiTelInput
+              label={t('Mobile Number')}
+              forceCallingCode
+              defaultCountry="JO"
+              value={em_phone}
+              onChange={(newPhone) => {
+                const cleanedPhone = newPhone.replace(/\s/g, '');
+                matchIsValidTel(cleanedPhone);
+                setEMphone(cleanedPhone);
+                methods.setValue('mobile_num1', cleanedPhone);
+              }}
+              size={isMobile ? 'small' : 'medium'}
+              sx={{ width: '100%' }}
+            />
+          </Box>
+          
+          <Box sx={{ width: '100%' }}>
+            <MuiTelInput
+              label={t('Alternative Mobile Number')}
+              forceCallingCode
+              defaultCountry="JO"
+              value={em_phone2}
+              onChange={(newPhone2) => {
+                const cleanedPhone = newPhone2.replace(/\s/g, '');
+                matchIsValidTel(cleanedPhone);
+                setEMphone2(cleanedPhone);
+                methods.setValue('mobile_num2', cleanedPhone);
+              }}
+              size={isMobile ? 'small' : 'medium'}
+              sx={{ width: '100%' }}
+            />
+          </Box>
+          
           <RHFTextField
             name="email"
             label={t('Email Address')}
-            // onChange={handleArabicInputChange}
             disabled
           />
 
@@ -232,12 +267,13 @@ export default function EditPatient({ patient }) {
               <DatePicker
                 {...field}
                 label={t('birth date')}
-                sx={{ mb: 2 }}
+                sx={{ width: '100%' }}
                 slotProps={{
                   textField: {
                     fullWidth: true,
                     error: !!error,
                     helperText: error?.message,
+                    size: isMobile ? 'small' : 'medium',
                   },
                 }}
               />
@@ -246,13 +282,13 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('gender')}
-            fullWidth
             name="gender"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {['male', 'female'].map((gender, idx) => (
-              <MenuItem lang="ar" key={idx} value={gender}>
+            {['male', 'female'].map((gender) => (
+              <MenuItem lang="ar" key={gender} value={gender}>
                 {t(gender)}
               </MenuItem>
             ))}
@@ -267,6 +303,7 @@ export default function EditPatient({ patient }) {
               </span>
             }
           />
+          
           <RHFTextField
             name="weight"
             label={
@@ -279,13 +316,13 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('Sport Exercises')}
-            fullWidth
             name="sport_exercises"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {SECDATAFORMAP.map((test, idx) => (
-              <MenuItem lang="ar" value={test} key={idx}>
+            {SECDATAFORMAP.map((test) => (
+              <MenuItem lang="ar" value={test} key={test}>
                 {t(test)}
               </MenuItem>
             ))}
@@ -293,34 +330,61 @@ export default function EditPatient({ patient }) {
 
           <RHFSelect
             label={t('Smoking')}
-            fullWidth
             name="smoking"
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
+            size={isMobile ? 'small' : 'medium'}
           >
-            {DATAFORMAP.map((test, idx) => (
-              <MenuItem lang="ar" value={test} key={idx}>
+            {DATAFORMAP.map((test) => (
+              <MenuItem lang="ar" value={test} key={test}>
                 {t(test)}
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFTextField
-            name="other_medication_notes"
-            label={t('More information')}
-            multiline
-            rows={4}
-          />
-          <RHFTextField
-            name="cloud_storage_link"
-            label={t('cloud Storage link for patient data')}
-            title={t(
-              'If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file'
-            )}
-          />
+          
+          <Box 
+            sx={{ 
+              gridColumn: { xs: '1', sm: '1 / span 2' },
+              width: '100%'
+            }}
+          >
+            <RHFTextField
+              name="other_medication_notes"
+              label={t('More information')}
+              multiline
+              rows={isMobile ? 3 : 4}
+            />
+          </Box>
+          
+          <Box 
+            sx={{ 
+              gridColumn: { xs: '1', sm: '1 / span 2' },
+              width: '100%'
+            }}
+          >
+            <RHFTextField
+              name="cloud_storage_link"
+              label={t('cloud Storage link for patient data')}
+              title={t(
+                'If you store patient data (e.g. images, files) on the internet (e.g. Google Drive, etc.), here you can store a link to go directly to that file'
+              )}
+            />
+          </Box>
         </Box>
 
-        <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-          <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+        <Stack spacing={2} alignItems="flex-end" sx={{ mt: 3, width: '100%', px: 0 }}>
+          <LoadingButton 
+            type="submit" 
+            tabIndex={-1} 
+            variant="contained" 
+            loading={isSubmitting}
+            size={isMobile ? 'small' : 'large'}
+            sx={{ 
+              width: { xs: '100%', sm: 'auto' },
+              py: isMobile ? 1 : 1.5,
+              px: isMobile ? 2 : 4
+            }}
+          >
             {t('Save Changes')}
           </LoadingButton>
         </Stack>
@@ -328,6 +392,7 @@ export default function EditPatient({ patient }) {
     </FormProvider>
   );
 }
+
 EditPatient.propTypes = {
-  patient: PropTypes.func,
+  patient: PropTypes.object.isRequired,
 };

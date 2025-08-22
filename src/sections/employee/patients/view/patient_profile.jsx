@@ -1,17 +1,28 @@
 import io from 'socket.io-client';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-
-import { Stack, Button, Container, Typography, IconButton } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Container,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  Box,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { useRouter } from 'src/routes/hooks';
-
 import { fDate } from 'src/utils/format-time';
-
 import { useGetOneUSPatient } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-
 import Iconify from 'src/components/iconify';
 import PageSelector from 'src/components/pageSelector';
 
@@ -53,6 +64,11 @@ export default function PatientProfile() {
   const curLangAr = currentLang.value === 'ar';
 
   const [currentTab, setCurrentTab] = useState('communication');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const TABS = [
     { value: 'communication', label: t('communication') },
     { value: 'file', label: t('file') },
@@ -72,7 +88,6 @@ export default function PatientProfile() {
     if (birthDate) {
       const today = new Date();
       const dob = new Date(birthDate);
-
       const age = today.getFullYear() - dob.getFullYear();
       if (age === 0) {
         return `${today.getMonth() - dob.getMonth()} months`;
@@ -81,15 +96,14 @@ export default function PatientProfile() {
     }
     return '';
   }
+
   const handleCall = async () => {
     try {
       const uniqueRoom = `hakeemna-${Date.now()}`;
 
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/daily/create-room`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roomName: uniqueRoom }),
       });
 
@@ -100,13 +114,12 @@ export default function PatientProfile() {
 
       const data = await response.json();
       const roomUrl = data.url;
-      const saveResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/video-call`, {
+
+      await fetch(`${process.env.REACT_APP_API_URL}/api/video-call`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          unit_service: usPatientData.unit_service, // تأكد هذا هو ID من `unit_services`
+          unit_service: usPatientData.unit_service,
           patient: patientData?._id,
           employee: user?.employee?._id,
           work_group: patientData?.work_group,
@@ -114,13 +127,6 @@ export default function PatientProfile() {
           room_name: uniqueRoom,
         }),
       });
-
-      if (!saveResponse.ok) {
-        const err = await saveResponse.json();
-        console.warn('⚠️ Video call not saved:', err);
-      } else {
-        console.log('✅ Video call saved in DB');
-      }
 
       router.push(
         `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
@@ -135,33 +141,115 @@ export default function PatientProfile() {
         roomUrl,
         uniqueRoom,
       });
-
-      console.log('📤 Sent callUser with room:', roomUrl);
     } catch (error) {
       console.error('❌ handleCall error:', error);
     }
   };
 
+  const renderTabContent = () => {
+    switch (currentTab) {
+      case 'about':
+        return <PatientAbout patient={usPatientData} />;
+      case 'communication':
+        return <PatientCommunication patient={usPatientData} />;
+      case 'file':
+        return <PatientFile patient={usPatientData} />;
+      case 'history':
+        return <PatientHistory patient={usPatientData} />;
+      case 'sick_leave':
+        return <PatientSickLeaves patient={usPatientData} />;
+      case 'medical_reports':
+        return <PatientMedicalReports patient={usPatientData} />;
+      case 'prescriptions':
+        return <PatientPrescriptions patient={usPatientData} />;
+      case 'appointments':
+        return <AppointmentsHistory patient={usPatientData} />;
+      case 'instructions':
+        return <PatientInstructions patient={usPatientData} />;
+      case 'upload':
+        return <PatientUpload patient={usPatientData} />;
+      case 'edit':
+        return <EditPatient patient={usPatientData} />;
+      case 'checklist':
+        return <PatientCheckList patient={usPatientData} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <Container sx={{ backgroundColor: '#fff', minHeight: '100vh' }} maxWidth="">
+    <Container sx={{ backgroundColor: '#fff', minHeight: '100vh', paddingTop: isMobile ? "20px": '0' }} maxWidth={false}>
       <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
-        <Stack gap={2}>
-          <PageSelector
-            vertical
-            pages={TABS.map((tab) => ({
-              ...tab,
-              onClick: () => setCurrentTab(tab.value),
-              active: tab.value === currentTab,
-            }))}
-          />
-        </Stack>
+        {isMobile ? (
+          <>
+            <IconButton
+              sx={{ 
+                position: 'fixed', 
+                top: 16, 
+                left: 16, 
+                zIndex: 1300,
+                backgroundColor: 'background.paper',
+                boxShadow: 1,
+                '&:hover': {
+                  backgroundColor: 'background.paper',
+                }
+              }}
+              onClick={() => setDrawerOpen(!drawerOpen)}
+            >
+              {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+
+            <Drawer 
+              anchor="left" 
+              open={drawerOpen} 
+              onClose={() => setDrawerOpen(false)}
+              sx={{
+                '& .MuiDrawer-paper': {
+                  paddingTop: '64px',
+                }
+              }}
+            >
+              <Box sx={{ width: 250, p: 2 }} role="presentation">
+                <List>
+                  {TABS.map((tab) => (
+                    <ListItem
+                      button
+                      key={tab.value}
+                      selected={tab.value === currentTab}
+                      onClick={() => {
+                        setCurrentTab(tab.value);
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      <ListItemText primary={tab.label} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Drawer>
+          </>
+        ) : (
+          <Stack gap={2} sx={{ minWidth: 200, pr: 2 }}>
+            <PageSelector
+              vertical
+              pages={TABS.map((tab) => ({
+                ...tab,
+                onClick: () => setCurrentTab(tab.value),
+                active: tab.value === currentTab,
+              }))}
+            />
+          </Stack>
+        )}
+
         <Stack gap={2} flex={1}>
           <Stack
             direction="row"
             padding={3}
-            paddingX={10}
+            paddingX={{ xs: 2, md: 10 }}
             paddingTop={0}
             justifyContent="space-between"
+            flexWrap="wrap"
+            gap={2}
           >
             <Stack direction="row" alignItems="center" gap={2}>
               <IconButton onClick={() => router.back()}>
@@ -171,9 +259,13 @@ export default function PatientProfile() {
                 {curLangAr ? patientData?.name_arabic : patientData?.name_english}
               </Typography>
             </Stack>
-            <Typography variant="h6">{t(patientData?.gender)}</Typography>
-            <Typography variant="h6">{calculateAge(patientData?.birth_date)}</Typography>
-            <Typography variant="h6">{fDate(patientData?.birth_date)}</Typography>
+
+            <Stack direction="row" gap={2} flexWrap="wrap">
+              <Typography variant="h6">{t(patientData?.gender)}</Typography>
+              <Typography variant="h6">{calculateAge(patientData?.birth_date)}</Typography>
+              <Typography variant="h6">{fDate(patientData?.birth_date)}</Typography>
+            </Stack>
+
             <Stack direction="row" gap={2}>
               <Button
                 sx={{ minWidth: 120 }}
@@ -194,33 +286,10 @@ export default function PatientProfile() {
               )}
             </Stack>
           </Stack>
-          {currentTab === 'about' && usPatientData && <PatientAbout patient={usPatientData} />}
-          {currentTab === 'communication' && usPatientData && (
-            <PatientCommunication patient={usPatientData} />
-          )}
-          {currentTab === 'file' && usPatientData && <PatientFile patient={usPatientData} />}
-          {currentTab === 'history' && usPatientData && <PatientHistory patient={usPatientData} />}
-          {currentTab === 'sick_leave' && usPatientData && (
-            <PatientSickLeaves patient={usPatientData} />
-          )}
-          {currentTab === 'medical_reports' && usPatientData && (
-            <PatientMedicalReports patient={usPatientData} />
-          )}
-          {currentTab === 'prescriptions' && usPatientData && (
-            <PatientPrescriptions patient={usPatientData} />
-          )}
-          {currentTab === 'appointments' && usPatientData && (
-            <AppointmentsHistory patient={usPatientData} />
-          )}
-          {currentTab === 'instructions' && usPatientData && (
-            <PatientInstructions patient={usPatientData} />
-          )}
-          {currentTab === 'upload' && usPatientData && <PatientUpload patient={usPatientData} />}
 
-          {currentTab === 'edit' && usPatientData && <EditPatient patient={usPatientData} />}
-          {currentTab === 'checklist' && usPatientData && (
-            <PatientCheckList patient={usPatientData} />
-          )}
+          <Box sx={{ px: { xs: 2, md: 10 }, pb: 4 }}>
+            {renderTabContent()}
+          </Box>
         </Stack>
       </Stack>
     </Container>
