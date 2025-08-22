@@ -67,6 +67,7 @@ export default function Prescription({ Entrance }) {
     const newPrescription = {
       id: prescriptions.length,
       employee: user?.employee?._id || '',
+      work_group: Entrance?.work_group,
       patient: Entrance?.patient?._id || '',
       unit_service_patient: Entrance?.unit_service_patient,
       entrance_mangament: Entrance?._id || '',
@@ -146,6 +147,11 @@ export default function Prescription({ Entrance }) {
 
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
+    const historyId = localStorage.getItem('historyId');
+    await axiosInstance.patch(endpoints.history.remove_id(historyId), {
+      type: 'prescription',
+      id: IdToremove,
+    });
 
     enqueueSnackbar(t('Field removed successfully'), { variant: 'success' });
     refetch();
@@ -178,21 +184,27 @@ export default function Prescription({ Entrance }) {
       }));
 
       if (prescriptionDialog.value) {
-        await axiosInstance.post(endpoints.history.all, {
-          patient: Entrance?.patient?._id,
-          unit_service_patient: Entrance?.unit_service_patient,
-          name_english: 'a prescription has been added',
-          name_arabic: 'تم ارفاق وصفة طبية',
-          sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
-          sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
-          actual_date: Entrance?.created_at,
-          title: 'prescription',
-          service_unit: Entrance?.service_unit?._id,
-        });
-
-        await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
+        const historyId = localStorage.getItem('historyId');
+        
+        // await axiosInstance.post(endpoints.history.all, {
+        //   patient: patient?._id,
+        //   unit_service_patient: Entrance?.unit_service_patient,
+        //   name_english: 'a prescription has been added',
+        //   name_arabic: 'تم ارفاق وصفة طبية',
+        //   sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
+        //   sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
+        //   actual_date: Entrance?.created_at,
+        //   title: 'prescription',
+        //   service_unit: Entrance?.service_unit?._id,
+        // });
+        
+        const prescription = await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
         await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
           Drugs_report_status: true,
+        });
+        axiosInstance.patch(endpoints.history.one(historyId), {
+          prescription: true,
+          prescriptionId: prescription?.data?._id,
         });
         enqueueSnackbar(t('Prescription uploaded successfully'), { variant: 'success' });
         prescriptionDialog.onFalse();
