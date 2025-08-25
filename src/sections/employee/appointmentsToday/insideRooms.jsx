@@ -22,7 +22,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -126,6 +126,10 @@ export default function Rooms() {
         medical_report: medicalReportIds,
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,
+      });
+      const historyId = localStorage.getItem('historyId');
+      await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
+        end_time: new Date(),
       });
 
       enqueueSnackbar('appointment finished', { variant: 'success' });

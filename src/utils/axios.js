@@ -448,6 +448,7 @@ export const endpoints = {
     patient: (id) => `/api/history/patient/${id}`,
     unit_service_patient_history: (id) => `/api/history/unit_service_patient_history/${id}`,
     remove_id: (id) => `/api/history/${id}/remove_id`,
+    end_appointment: (id) => `/api/history/${id}/end_appointment`,
   },
   Instructions: {
     all: '/api/instructions',
