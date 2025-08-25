@@ -1589,5 +1589,14 @@
   "Find missing attendance dates": "البحث عن الغيابات",
   "No attendance record for this date": "لا يوجد دوام مسجل لهذا التاريخ",
   "duration": "المدة",
-  "Search by code, patient, employee, or description...": "ابحث برقم المريض، اسم المريض، اسم الموظف، او الوصف"
+  "Search by code, patient, employee, or description...": "ابحث برقم المريض، اسم المريض، اسم الموظف، او الوصف",
+  "Reported Status": "الحالة المبلغ عنها",
+  "Reported": "تم الإبلاغ",
+  "Unreported": "لم يتم الإبلاغ",
+  "Note:": "ملاحظة:",
+  "Rows highlighted in": "الصفوف المظللة باللون",
+  "red": "بالأحمر",
+  "are not assigned to a specific monthly report, and rows highlighted in": "غير مخصصة لترحيل شهري معين، والصفوف المظللة باللون",
+  "green": "بالأخضر",
+  "are assigned to a specific monthly report.": "مخصصة لتحليل شهري معين"
 }
