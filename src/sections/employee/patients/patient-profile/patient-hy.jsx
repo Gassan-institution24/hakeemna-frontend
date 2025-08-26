@@ -1,185 +1,150 @@
-import React from 'react';
+
 import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
+
 
 import {
-  Grid,
-  Chip,
-  Stack,
-  Button,
-  Dialog,
-  Divider,
+  Alert,
   Container,
+  LinearProgress,
   Typography,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from '@mui/material';
 
-import { fDate } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
 import { useGetPatientHistoryDataForUs } from 'src/api';
 
-export default function PatientHistory({ patient }) {
-  const { currentLang, t } = useTranslate();
-  const curLangAr = currentLang?.value === 'ar';
 
-  const { historyDataForPatient } = useGetPatientHistoryDataForUs(patient?._id);
+import HistorySummary from './HistorySummary';
+import HistoryFilters from './HistoryFilters';
+import HistoryList from './HistoryList';
+import HistoryDetailsDialog from './HistoryDetailsDialog';
 
-  const [selectedData, setSelectedData] = React.useState(null);
-  const [openDialog, setOpenDialog] = React.useState(false);
-  // const { fTimeUnit } = useFDateTimeUnit();
+function PatientHistory({ patient }) {
+  const { historyDataForPatient, loading, error } = useGetPatientHistoryDataForUs(patient?._id);
+
+  const [selectedData, setSelectedData] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
+  
+  const itemsPerPage = 10;
+
+  
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  
+  const filteredHistory = useMemo(() => {
+    if (!historyDataForPatient?.data?.history) return [];
+    
+    let filtered = [...historyDataForPatient.data.history];
+
+    
+    if (filterType !== 'all') {
+      filtered = filtered.filter(record => record.recordType === filterType);
+    }
+
+    
+    if (searchTerm) {
+      filtered = filtered.filter(record =>
+        (record.work_group?.name_english?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.work_group?.name_arabic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.service_unit?.name_english?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.service_unit?.name_arabic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.visitLabel?.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    
+    if (sortConfig.key) {
+      filtered.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [historyDataForPatient, filterType, searchTerm, sortConfig]);
+
+  
+  const paginatedHistory = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredHistory.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredHistory, currentPage]);
+
+  const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+
   const handleView = (item) => {
     setSelectedData(item);
     setOpenDialog(true);
   };
-  const colorPalette = ['#ffebee', '#e8f5e9', '#e3f2fd', '#fff3e0', '#f3e5f5', '#ede7f6'];
-  const workGroupColors = {};
-  let colorIndex = 0;
 
-  historyDataForPatient?.forEach((one) => {
-    const workGroupId = typeof one.work_group === 'object' ? one.work_group?._id : one.work_group;
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
-    if (workGroupId && !workGroupColors[workGroupId]) {
-      workGroupColors[workGroupId] = colorPalette[colorIndex % colorPalette.length];
-      // eslint-disable-next-line no-plusplus
-      colorIndex++;
-    }
-  });
+  if (loading) {
+    return (
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        <LinearProgress />
+        <Typography sx={{ mt: 2, textAlign: 'center' }}>Loading patient history...</Typography>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        <Alert severity="error">
+          Error loading patient history: {error.message}
+        </Alert>
+      </Container>
+    );
+  }
+
+  const historyData = historyDataForPatient?.data;
 
   return (
-    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-start">
-        {curLangAr ? patient?.name_arabic : patient?.name_english}
-      </Stack>
-
-      <Stack spacing={2}>
-        {historyDataForPatient?.map((one, idx) => {
-          const workGroupId =
-            typeof one.work_group === 'object' ? one.work_group?._id : one.work_group;
-          const bgColor = workGroupColors[workGroupId] || '#fff';
-
-          return (
-            <Stack
-              key={idx}
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{
-                p: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 1,
-                backgroundColor: bgColor
-              }}
-            >
-              <Typography component="span" sx={{ mr: 1, color: 'text.secondary' }}>
-                {fDate(one?.created_at)}
-              </Typography>
-              <Typography component="span" sx={{ mr: 1, fontWeight: 'bold' }}>
-                {one?.title || 'No title'}
-              </Typography>
-              <Typography component="span" sx={{ mr: 1, color: 'text.secondary' }}>
-                {curLangAr ? one?.work_group?.name_arabic : one?.work_group?.name_english}
-              </Typography>
-              <Typography component="span" sx={{ color: 'text.secondary' }}>
-                {curLangAr ? one?.service_unit?.name_arabic : one?.service_unit?.name_english}
-              </Typography>
-              <Typography component="span" sx={{ color: 'text.secondary' }}>
-                 {one?.duration} {t('munutes')}{' '}
-              </Typography> 
-
-              <Button variant="outlined" onClick={() => handleView(one)}>
-                {t('View')}
-              </Button>
-            </Stack>
-          );
-        })}
-      </Stack>
-
-      {/* Dialog عرض التفاصيل */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>{t("Patient History Details")}</DialogTitle>
-        <DialogContent dividers>
-          {selectedData ? (
-            <Stack spacing={3} sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
-              {/* General Info Section */}
-              <Typography variant="h6" gutterBottom>
-                {t('General Information')}
-              </Typography>
-              <Grid container spacing={1}>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {t('title')}
-                  </Typography>
-                  <Typography>{selectedData.title || 'N/A'}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {t('date')}
-                  </Typography>
-                  <Typography>{fDate(selectedData.created_at)}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {t('duration')}
-                  </Typography>
-                  <Typography>
-                    {selectedData?.duration} {t('munutes')}{' '}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {t('sequence Number')}
-                  </Typography>
-                  <Chip
-                    label={selectedData.sequence_number || 'N/A'}
-                    color="success"
-                    size="small"
-                  />
-                </Grid>
-              </Grid>
-
-              <Divider />
-
-              {/* Work Group Section */}
-              <Typography variant="h6" gutterBottom>
-                {t("work group")}
-              </Typography>
-              <Typography>
-                {selectedData.work_group
-                  ? selectedData.work_group.name_english ||
-                    selectedData.work_group.name_arabic ||
-                    'N/A'
-                  : 'N/A'}
-              </Typography>
-
-              <Divider />
-
-              {/* Service Unit Section */}
-              <Typography variant="h6" gutterBottom>
-                {t("Service Unit")}
-              </Typography>
-              <Typography>
-                {selectedData.service_unit
-                  ? selectedData.service_unit.name_english ||
-                    selectedData.service_unit.name_arabic ||
-                    'N/A'
-                  : 'N/A'}
-              </Typography>
-
-              <Divider />
-            </Stack>
-          ) : (
-            <Typography>No data selected</Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>{t("close")}</Button>
-        </DialogActions>
-      </Dialog>
+    <Container maxWidth="xl" sx={{ py: 3 }}>
+      <HistorySummary summary={historyData?.summary} history={historyData?.history} />
+      <HistoryFilters 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filterType={filterType}
+        setFilterType={setFilterType}
+        sortConfig={sortConfig}
+        requestSort={requestSort}
+      />
+      <HistoryList 
+        history={paginatedHistory}
+        onView={handleView}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+      <HistoryDetailsDialog 
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        data={selectedData}
+      />
     </Container>
   );
 }
 
-PatientHistory.propTypes = { patient: PropTypes.object };
+PatientHistory.propTypes = {
+  patient: PropTypes.object,
+};
+
+export default PatientHistory;

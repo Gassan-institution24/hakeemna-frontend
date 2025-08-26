@@ -1595,5 +1595,7 @@
   "red": "بالأحمر",
   "are not assigned to a specific monthly report, and rows highlighted in": "غير مخصصة لترحيل شهري معين، والصفوف المظللة باللون",
   "green": "بالأخضر",
-  "are assigned to a specific monthly report.": "مخصصة لتحليل شهري معين"
+  "are assigned to a specific monthly report.": "مخصصة لتحليل شهري معين",
+  "are not assigned to a specific yearly report, and rows highlighted in": "غير مخصصة لترحيل سنوي معين، والصفوف المظللة باللون",
+  "are assigned to a specific yearly report.": "مخصصة لترحيل سنوي معين."
 }

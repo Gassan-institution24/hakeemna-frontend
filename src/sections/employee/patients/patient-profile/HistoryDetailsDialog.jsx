@@ -174,14 +174,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 secondary={prescription.created_at ? 
                                   fDate(prescription.created_at) : 'Date not specified'}
                               />
-                              <Chip 
-                                label="View" 
-                                size="small" 
-                                variant="outlined" 
-                                color="warning"
-                                sx={{ cursor: 'pointer' }}
-                                onClick={() => console.log('View prescription details')}
-                              />
+                               
                             </ListItem>
                           ))}
                         </List>
@@ -209,14 +202,6 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 primary={report.name || `Report #${idx + 1}`}
                                 secondary={report.created_at ? 
                                   fDate(report.created_at) : 'Date not specified'}
-                              />
-                              <Chip 
-                                label="View" 
-                                size="small" 
-                                variant="outlined" 
-                                color="info"
-                                sx={{ cursor: 'pointer' }}
-                                onClick={() => console.log('View report details')}
                               />
                             </ListItem>
                           ))}
@@ -246,14 +231,6 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 secondary={leave.Medical_sick_leave_start && leave.Medical_sick_leave_end ?
                                   `${fDate(leave.Medical_sick_leave_start)} - ${fDate(leave.Medical_sick_leave_end)}` : 
                                   'Dates not specified'}
-                              />
-                              <Chip 
-                                label="View" 
-                                size="small" 
-                                variant="outlined" 
-                                color="error"
-                                sx={{ cursor: 'pointer' }}
-                                onClick={() => console.log('View sick leave details')}
                               />
                             </ListItem>
                           ))}
