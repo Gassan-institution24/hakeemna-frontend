@@ -199,7 +199,7 @@ export default function MonthlyReportsView({ employee }) {
       </Stack>
       {filters.reported === null && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          <b>Note:</b> Rows highlighted in <span style={{ color: 'red' }}>red</span> are not assigned to a specific yearly report, and rows highlighted in <span style={{ color: 'green' }}>green</span> are assigned to a specific yearly report.
+          <b>{t('Note:')}</b> {t('Rows highlighted in')} <span style={{ color: 'red' }}>{t('red')}</span> {t('are not assigned to a specific yearly report, and rows highlighted in')} <span style={{ color: 'green' }}>{t('green')}</span> {t('are assigned to a specific yearly report.')}
         </Typography>
       )}
       <Card>
