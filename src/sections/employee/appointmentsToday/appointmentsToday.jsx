@@ -82,9 +82,7 @@ export default function AppointmentsToday() {
 
   const { roomsData } = useGetUSRooms(unitServiceId);
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
-  const receptionActivity = roomsData.find(
-    (activity) => activity?.name_english === 'Reception'
-  );
+  const receptionActivity = roomsData.find((activity) => activity?.name_english === 'Reception');
   const TABS = [
     checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) && {
       value: 'one',
@@ -139,7 +137,7 @@ export default function AppointmentsToday() {
         activity_id: receptionActivity?._id,
         start_time: new Date().toISOString(),
       });
-      
+
       const historyId = historyRes.data?._id;
       if (historyId) {
         localStorage.setItem('historyId', historyId);
@@ -590,6 +588,7 @@ export default function AppointmentsToday() {
                           </DialogContent>
 
                           <DialogActions>
+                            {/* زر الإضافة العادي */}
                             <Button
                               size="small"
                               variant="contained"
@@ -609,14 +608,19 @@ export default function AppointmentsToday() {
                             >
                               {t('add')}
                             </Button>
+
+                            {/* زر جديد: ما عنده رقم هوية */}
                             <Button
                               size="small"
-                              variant="outlined"
+                              color="warning"
+                              variant="contained"
                               onClick={() => {
                                 iddialog.onFalse();
+                                setAddingId(''); // نضمن إنو ما يضل فيه قيمة قديمة
+                                startAppointment(info);
                               }}
                             >
-                              {t('cancel')}
+                              {t("Doesn't have ID")}
                             </Button>
                           </DialogActions>
                         </Dialog>
