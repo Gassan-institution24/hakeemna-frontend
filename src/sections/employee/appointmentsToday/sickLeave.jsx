@@ -75,7 +75,11 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
     await axiosInstance.delete(endpoints.sickleave.onee(IdToremove2), {
       Activation: false,
     });
-
+    const historyId = localStorage.getItem('historyId');
+    await axiosInstance.patch(endpoints.history.remove_id(historyId), {
+      type: 'sickLeave',
+      id: IdToremove2
+    });
     enqueueSnackbar('Feild removed successfully', { variant: 'success' });
     refetch();
     reset();
@@ -99,8 +103,13 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
 
   const onSubmit = async (submitdata) => {
     try {
-      await axiosInstance.post('/api/sickleave', submitdata);
+      const leave =  await axiosInstance.post('/api/sickleave', submitdata);
       enqueueSnackbar('sick leave created successfully', { variant: 'success' });
+      const historyId = localStorage.getItem('historyId');
+      await axiosInstance.patch(endpoints.history.one(historyId), { 
+        sick_leave: true,
+        sickLeavesId: leave.data._id
+      });
       dialog.onFalse();
       refetch();
       reset();
