@@ -69,7 +69,7 @@ export default function VideoCallsTableView() {
         (row.employee?.name_english && row.employee.name_english.toLowerCase().includes(lower)) ||
         (row.patient?.name_english && row.patient.name_english.toLowerCase().includes(lower)) ||
         (row.work_group?.name_english && row.work_group.name_english.toLowerCase().includes(lower)) ||
-        (row.description && row.description.toLowerCase().includes(lower))
+        (row.descriptionEn && row.descriptionEn.toLowerCase().includes(lower))
     );
   }, [search, data]);
 
@@ -197,8 +197,8 @@ function getCustomComparator(order, orderBy) {
         bValue = b.duration || 0;
         break;
       case 'description':
-        aValue = a.description || '';
-        bValue = b.description || '';
+        aValue = a.descriptionEn || '';
+        bValue = b.descriptionEn || '';
         break;
       default:
         aValue = a[orderBy] || '';
@@ -250,7 +250,7 @@ function VideoCallTableRow({ row, idx, t }) {
         <TableCell align="center">{row.patient?.name_english || '-'}</TableCell>
         <TableCell align="center">{row.work_group?.name_english || '-'}</TableCell>
         <TableCell align="center">{fMinSec(row.duration)}</TableCell>
-        <TableCell align="center">{row.description || '-'}</TableCell>
+        <TableCell align="center">{row.descriptionEn || '-'}</TableCell>
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />

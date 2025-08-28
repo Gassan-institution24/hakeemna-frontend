@@ -123,7 +123,8 @@ export default function PatientProfile() {
           patient: patientData?._id,
           employee: user?.employee?._id,
           work_group: patientData?.work_group,
-          description: `Call started at ${new Date().toISOString()}`,
+          descriptionEn: `Video call initiated by Dr. ${user?.employee?.name_english} with patient ${patientData?.name_english} at ${new Date().toLocaleString()}`,
+          descriptionAR: `تم بدء مكالمة فيديو من قبل الدكتور ${user?.employee?.name_arabic} مع المريض ${patientData?.name_arabic} بتاريخ ${new Date().toLocaleString('ar-EG')}`,
           room_name: uniqueRoom,
         }),
       });
@@ -178,35 +179,38 @@ export default function PatientProfile() {
   };
 
   return (
-    <Container sx={{ backgroundColor: '#fff', minHeight: '100vh', paddingTop: isMobile ? "20px": '0' }} maxWidth={false}>
+    <Container
+      sx={{ backgroundColor: '#fff', minHeight: '100vh', paddingTop: isMobile ? '20px' : '0' }}
+      maxWidth={false}
+    >
       <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
         {isMobile ? (
           <>
             <IconButton
-              sx={{ 
-                position: 'fixed', 
-                top: 16, 
-                left: 16, 
+              sx={{
+                position: 'fixed',
+                top: 16,
+                left: 16,
                 zIndex: 1300,
                 backgroundColor: 'background.paper',
                 boxShadow: 1,
                 '&:hover': {
                   backgroundColor: 'background.paper',
-                }
+                },
               }}
               onClick={() => setDrawerOpen(!drawerOpen)}
             >
               {drawerOpen ? <CloseIcon /> : <MenuIcon />}
             </IconButton>
 
-            <Drawer 
-              anchor="left" 
-              open={drawerOpen} 
+            <Drawer
+              anchor="left"
+              open={drawerOpen}
               onClose={() => setDrawerOpen(false)}
               sx={{
                 '& .MuiDrawer-paper': {
                   paddingTop: '64px',
-                }
+                },
               }}
             >
               <Box sx={{ width: 250, p: 2 }} role="presentation">
@@ -287,9 +291,7 @@ export default function PatientProfile() {
             </Stack>
           </Stack>
 
-          <Box sx={{ px: { xs: 2, md: 10 }, pb: 4 }}>
-            {renderTabContent()}
-          </Box>
+          <Box sx={{ px: { xs: 2, md: 10 }, pb: 4 }}>{renderTabContent()}</Box>
         </Stack>
       </Stack>
     </Container>
