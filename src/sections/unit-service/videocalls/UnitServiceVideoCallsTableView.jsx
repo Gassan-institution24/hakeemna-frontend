@@ -1,39 +1,42 @@
 import PropTypes from 'prop-types';
-import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetVideoCalls } from 'src/api/video_calls';
+import { useState, useMemo } from 'react';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import TableRow from '@mui/material/TableRow';
+import MenuItem from '@mui/material/MenuItem';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import Scrollbar from 'src/components/scrollbar';
-import { useTranslate, useLocales } from 'src/locales';
-import { useState, useMemo } from 'react';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-import Iconify from 'src/components/iconify';
-import { fMinSec, fDate } from 'src/utils/format-time';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme, useMediaQuery } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import TableContainer from '@mui/material/TableContainer';
+import InputAdornment from '@mui/material/InputAdornment';
+
+import { fDate, fMinSec } from 'src/utils/format-time';
+
+import { useGetVideoCalls } from 'src/api/video_calls';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
+import { LoadingScreen } from 'src/components/loading-screen';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useTable, TableNoData, TableHeadCustom, TablePaginationCustom } from 'src/components/table';
 
 function MobileCardView({ row, curLangAr, t }) {
   const popover = usePopover();
   const DDL = usePopover();
 
   return (
-    <>
-      <Paper 
+    <Paper 
         elevation={1} 
         sx={{ 
           p: 2, 
@@ -96,7 +99,7 @@ function MobileCardView({ row, curLangAr, t }) {
               {t('Description')}
             </Typography>
             <Typography variant="body2">
-              {row.description || '-'}
+              {curLangAr ? row.descriptionAR :  row.descriptionEN}
             </Typography>
           </Stack>
         </Stack>
@@ -155,7 +158,6 @@ function MobileCardView({ row, curLangAr, t }) {
           <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.modifications_nums || 0}</Box>
         </CustomPopover>
       </Paper>
-    </>
   );
 }
 
@@ -176,7 +178,8 @@ MobileCardView.propTypes = {
       name_arabic: PropTypes.string,
       name_english: PropTypes.string,
     }),
-    description: PropTypes.string,
+    descriptionAR: PropTypes.string,
+    descriptionEN: PropTypes.string,
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
     user_creation: PropTypes.shape({
@@ -232,7 +235,8 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
         (row.employee?.name_english && row.employee.name_english.toLowerCase().includes(lower)) ||
         (row.patient_name && row.patient_name.toLowerCase().includes(lower)) ||
         (row.work_group?.name_english && row.work_group.name_english.toLowerCase().includes(lower)) ||
-        (row.description && row.description.toLowerCase().includes(lower))
+        (row.descriptionAR && row.descriptionAR.toLowerCase().includes(lower))
+        (row.descriptionEN && row.descriptionEN.toLowerCase().includes(lower))
     );
   }, [search, videoCallsWithNames]);
 
@@ -248,6 +252,7 @@ export default function UnitServiceVideoCallsTableView({ patient }) {
   }
 
   
+  // eslint-disable-next-line react/no-unstable-nested-components
   function DesktopTableView() {
     return (
       <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -410,9 +415,13 @@ function getCustomComparator(order, orderBy) {
         aValue = a.duration || 0;
         bValue = b.duration || 0;
         break;
-      case 'description':
-        aValue = a.description || '';
-        bValue = b.description || '';
+      case 'descriptionEN':
+        aValue = a.descriptionEN || '';
+        bValue = b.descriptionEN || '';
+        break;
+      case 'descriptionAR':
+        aValue = a.descriptionAR || '';
+        bValue = b.descriptionAR || '';
         break;
       default:
         aValue = a[orderBy] || '';
@@ -467,7 +476,7 @@ function VideoCallTableRow({ row, idx, curLangAr, t }) {
           {curLangAr ? row.work_group?.name_arabic || '-' : row.work_group?.name_english || '-'}
         </TableCell>
         <TableCell align="center">{fMinSec(row.duration)}</TableCell>
-        <TableCell align="center">{row.description || '-'}</TableCell>
+        <TableCell align="center">{curLangAr ?  row.descriptionAR :  row.descriptionEN}</TableCell>
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -552,7 +561,8 @@ VideoCallTableRow.propTypes = {
       name_arabic: PropTypes.string,
       name_english: PropTypes.string,
     }),
-    description: PropTypes.string,
+    descriptionAR: PropTypes.string,
+    descriptionEN: PropTypes.string,
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
     user_creation: PropTypes.shape({

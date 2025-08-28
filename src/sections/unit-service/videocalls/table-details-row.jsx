@@ -18,14 +18,13 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function UnitServiceVideoCallsRow({
-  row,
-}) {
+export default function UnitServiceVideoCallsRow({ row }) {
   const {
     code,
     unit_service,
     patient,
-    description,    
+    descriptionEn,
+    descriptionAR,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -47,25 +46,14 @@ export default function UnitServiceVideoCallsRow({
 
   const renderPrimary = (
     <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
       <TableCell align="center">
-        {code}
-      </TableCell>
-      <TableCell
-        align="center"
-      >
         {curLangAr ? unit_service?.name_arabic || '-' : unit_service?.name_english || '-'}
       </TableCell>
-      <TableCell    
-        align="center"
-      >
+      <TableCell align="center">
         {curLangAr ? patient?.name_arabic || '-' : patient?.name_english || '-'}
       </TableCell>
-      <TableCell
-        align="center"
-      >
-        {description || '-'}
-      </TableCell>
-     
+      <TableCell align="center">{curLangAr ? descriptionAR : descriptionEn || '-'}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -145,4 +133,4 @@ export default function UnitServiceVideoCallsRow({
 
 UnitServiceVideoCallsRow.propTypes = {
   row: PropTypes.object,
-}; 
+};
