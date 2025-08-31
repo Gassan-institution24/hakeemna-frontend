@@ -20,7 +20,11 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
+
 const HistorySummary = ({ summary, history }) => {
+  const { t } = useTranslate();
+
   if (!summary) return null;
 
   const recordCounts = {
@@ -32,11 +36,11 @@ const HistorySummary = ({ summary, history }) => {
   return (
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 2, 
-            borderRadius: 3, 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 3,
             height: '100%',
             background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
             border: '1px solid',
@@ -52,19 +56,19 @@ const HistorySummary = ({ summary, history }) => {
                 {summary.totalVisits}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Total Records
+                {t('Total Records')}
               </Typography>
             </Box>
           </Stack>
         </Paper>
       </Grid>
-      
+
       <Grid item xs={12} sm={6} md={3}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 2, 
-            borderRadius: 3, 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 3,
             height: '100%',
             background: 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)',
             border: '1px solid',
@@ -80,19 +84,19 @@ const HistorySummary = ({ summary, history }) => {
                 {recordCounts.sick_leave}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Sick Leaves
+                {t('Sick Leaves')}
               </Typography>
             </Box>
           </Stack>
         </Paper>
       </Grid>
-      
+
       <Grid item xs={12} sm={6} md={3}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 2, 
-            borderRadius: 3, 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 3,
             height: '100%',
             background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
             border: '1px solid',
@@ -108,19 +112,19 @@ const HistorySummary = ({ summary, history }) => {
                 {recordCounts.prescription}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Prescriptions
+                {t('Prescriptions')}
               </Typography>
             </Box>
           </Stack>
         </Paper>
       </Grid>
-      
+
       <Grid item xs={12} sm={6} md={3}>
-        <Paper 
-          elevation={3} 
-          sx={{ 
-            p: 2, 
-            borderRadius: 3, 
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            borderRadius: 3,
             height: '100%',
             background: 'linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%)',
             border: '1px solid',
@@ -136,7 +140,7 @@ const HistorySummary = ({ summary, history }) => {
                 {recordCounts.medical_report}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Medical Reports
+                {t('Medical Reports')}
               </Typography>
             </Box>
           </Stack>
@@ -149,7 +153,7 @@ const HistorySummary = ({ summary, history }) => {
 HistorySummary.propTypes = {
   summary: PropTypes.shape({
     totalVisits: PropTypes.number.isRequired,
-    
+
   }),
   history: PropTypes.arrayOf(
     PropTypes.shape({

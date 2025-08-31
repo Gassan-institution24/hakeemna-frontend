@@ -47,33 +47,33 @@ import { useTranslate } from 'src/locales';
 
 
 const recordTypeConfig = {
-  sick_leave: { 
-    label: 'Sick Leave', 
-    icon: EventBusy, 
+  sick_leave: {
+    label: 'Sick Leave',
+    icon: EventBusy,
     color: '#d32f2f',
     bgColor: '#ffebee'
   },
-  medical_report: { 
-    label: 'Medical Report', 
-    icon: Assignment, 
+  medical_report: {
+    label: 'Medical Report',
+    icon: Assignment,
     color: '#1976d2',
     bgColor: '#e3f2fd'
   },
-  prescription: { 
-    label: 'Prescription', 
-    icon: Receipt, 
+  prescription: {
+    label: 'Prescription',
+    icon: Receipt,
     color: '#ed6c02',
     bgColor: '#fff3e0'
   },
-  appointment: { 
-    label: 'Appointment', 
-    icon: CalendarToday, 
+  appointment: {
+    label: 'Appointment',
+    icon: CalendarToday,
     color: '#388e3c',
     bgColor: '#e8f5e9'
   },
-  general: { 
-    label: 'General Visit', 
-    icon: LocalHospital, 
+  general: {
+    label: 'General Visit',
+    icon: LocalHospital,
     color: '#7b1fa2',
     bgColor: '#f3e5f5'
   },
@@ -81,19 +81,19 @@ const recordTypeConfig = {
 
 
 const HistoryCard = ({ record, onView }) => {
-  const { currentLang } = useTranslate();
+  const { currentLang, t } = useTranslate();
   const [expanded, setExpanded] = useState(false);
   const curLangAr = currentLang?.value === 'ar';
-  
+
   const recordType = recordTypeConfig[record.recordType] || recordTypeConfig.general;
   const RecordIcon = recordType.icon;
 
-  
+
   const statusConfig = {
-    completed: { color: '#388e3c', bgColor: '#e8f5e9', label: 'Completed' },
-    cancelled: { color: '#d32f2f', bgColor: '#ffebee', label: 'Cancelled' },
-    attended: { color: '#1976d2', bgColor: '#e3f2fd', label: 'Attended' },
-    scheduled: { color: '#ed6c02', bgColor: '#fff3e0', label: 'Scheduled' }
+    completed: { color: '#388e3c', bgColor: '#e8f5e9', label: t('Completed') },
+    cancelled: { color: '#d32f2f', bgColor: '#ffebee', label: t('Cancelled') },
+    attended: { color: '#1976d2', bgColor: '#e3f2fd', label: t('Attended') },
+    scheduled: { color: '#ed6c02', bgColor: '#fff3e0', label: t('Scheduled') }
   };
 
   const visitStatus = statusConfig[record.visitStatus] || statusConfig.scheduled;
@@ -129,8 +129,8 @@ const HistoryCard = ({ record, onView }) => {
               }
             }}
           >
-            <Avatar 
-              sx={{ 
+            <Avatar
+              sx={{
                 bgcolor: recordType.color,
                 width: 48,
                 height: 48
@@ -152,8 +152,8 @@ const HistoryCard = ({ record, onView }) => {
                 height: 24
               }}
             />
-            <IconButton 
-              onClick={() => setExpanded(!expanded)} 
+            <IconButton
+              onClick={() => setExpanded(!expanded)}
               size="small"
               sx={{
                 bgcolor: 'background.paper',
@@ -179,7 +179,7 @@ const HistoryCard = ({ record, onView }) => {
                 {fDate(record.created_at)}
               </Typography>
             </Stack>
-            
+
             {record.durationInHours && (
               <Stack direction="row" spacing={1} alignItems="center">
                 <AccessTime sx={{ fontSize: 16, color: 'text.secondary' }} />
@@ -188,12 +188,12 @@ const HistoryCard = ({ record, onView }) => {
                 </Typography>
               </Stack>
             )}
-            
+
             <Stack direction="row" spacing={1} alignItems="center">
               <Groups sx={{ fontSize: 16, color: 'text.secondary' }} />
               <Typography variant="body2" color="text.secondary">
-                {curLangAr 
-                  ? record.work_group?.name_arabic 
+                {curLangAr
+                  ? record.work_group?.name_arabic
                   : record.work_group?.name_english}
               </Typography>
             </Stack>
@@ -209,26 +209,26 @@ const HistoryCard = ({ record, onView }) => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ fontWeight: 600 }}>
-                Service Unit
+                {t('Service Unit')}
               </Typography>
               <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                 <Typography variant="body2">
-                  {curLangAr 
-                    ? record.service_unit?.name_arabic 
+                  {curLangAr
+                    ? record.service_unit?.name_arabic
                     : record.service_unit?.name_english}
                 </Typography>
               </Paper>
             </Grid>
-            
+
             {record.activitySummary.total_activities > 0 && (
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ fontWeight: 600 }}>
-                  Activities Progress
+                  {t('Activities Progress')}
                 </Typography>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <Typography variant="body2">
-                      {record.activitySummary.completed_activities}/{record.activitySummary.total_activities} completed
+                      {record.activitySummary.completed_activities}/{record.activitySummary.total_activities} {t('completed')}
                     </Typography>
                     <LinearProgress
                       variant="determinate"
@@ -238,7 +238,7 @@ const HistoryCard = ({ record, onView }) => {
                   </Stack>
                   {record.activitySummary.ongoing_activities > 0 && (
                     <Typography variant="caption" color="warning.main" sx={{ mt: 0.5, display: 'block' }}>
-                      {record.activitySummary.ongoing_activities} ongoing activities
+                      {record.activitySummary.ongoing_activities} {t('ongoing activities')}
                     </Typography>
                   )}
                 </Paper>
@@ -248,14 +248,14 @@ const HistoryCard = ({ record, onView }) => {
             {/* Enhanced Services Summary */}
             <Grid item xs={12}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ fontWeight: 600 }}>
-                Services & Documents
+                {t('Services & Documents')}
               </Typography>
               <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                 <Stack direction="row" spacing={1} flexWrap="wrap">
                   {record.servicesSummary.hasAppointment && (
                     <Chip
                       icon={<CalendarToday />}
-                      label={`Appointment${record.servicesSummary.isEmergency ? ' (Emergency)' : ''}`}
+                      label={`${t('Appointment')}${record.servicesSummary.isEmergency ? ` (${t('Emergency')})` : ''}`}
                       size="small"
                       variant="filled"
                       color={record.servicesSummary.isEmergency ? "error" : "success"}
@@ -265,7 +265,7 @@ const HistoryCard = ({ record, onView }) => {
                   {record.servicesSummary.medicalReports > 0 && (
                     <Chip
                       icon={<Assignment />}
-                      label={`${record.servicesSummary.medicalReports} Report${record.servicesSummary.medicalReports > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary.medicalReports} ${t('Report')}${record.servicesSummary.medicalReports > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="info"
@@ -275,7 +275,7 @@ const HistoryCard = ({ record, onView }) => {
                   {record.servicesSummary.prescriptions > 0 && (
                     <Chip
                       icon={<Receipt />}
-                      label={`${record.servicesSummary.prescriptions} Prescription${record.servicesSummary.prescriptions > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary.prescriptions} ${t('Prescription')}${record.servicesSummary.prescriptions > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="warning"
@@ -285,7 +285,7 @@ const HistoryCard = ({ record, onView }) => {
                   {record.servicesSummary.sickLeaves > 0 && (
                     <Chip
                       icon={<EventBusy />}
-                      label={`${record.servicesSummary.sickLeaves} Sick Leave${record.servicesSummary.sickLeaves > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary.sickLeaves} ${t('Sick Leave')}${record.servicesSummary.sickLeaves > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="error"
@@ -300,7 +300,7 @@ const HistoryCard = ({ record, onView }) => {
             {record.entrance && (
               <Grid item xs={12}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ fontWeight: 600 }}>
-                  Visit Timeline
+                  {t('Visit Timeline')}
                 </Typography>
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ fontSize: '0.875rem' }}>
@@ -308,7 +308,7 @@ const HistoryCard = ({ record, onView }) => {
                       <Stack direction="row" spacing={1} alignItems="center">
                         <AccessTime sx={{ fontSize: 16, color: 'text.secondary' }} />
                         <Typography variant="body2">
-                          Arrived: {fDateTime(record.entrance.Arrival_time)}
+                          {t('Arrived')}: {fDateTime(record.entrance.Arrival_time)}
                         </Typography>
                       </Stack>
                     )}
@@ -316,7 +316,7 @@ const HistoryCard = ({ record, onView }) => {
                       <Stack direction="row" spacing={1} alignItems="center">
                         <CheckCircle sx={{ fontSize: 16, color: 'text.secondary' }} />
                         <Typography variant="body2">
-                          Ended: {fDateTime(record.entrance.end_attended_Time)}
+                          {t('Ended')}: {fDateTime(record.entrance.end_attended_Time)}
                         </Typography>
                       </Stack>
                     )}
@@ -330,7 +330,7 @@ const HistoryCard = ({ record, onView }) => {
             <Button
               variant="contained"
               onClick={() => onView(record)}
-              sx={{ 
+              sx={{
                 borderRadius: 2,
                 px: 3,
                 py: 1,
@@ -339,7 +339,7 @@ const HistoryCard = ({ record, onView }) => {
               }}
               endIcon={<Timeline />}
             >
-              View Details
+              {t('View Details')}
             </Button>
           </Box>
         </CardContent>

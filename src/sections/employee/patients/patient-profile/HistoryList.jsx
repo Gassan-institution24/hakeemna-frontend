@@ -13,20 +13,22 @@ import {
 
 import { History as HistoryIcon } from '@mui/icons-material';
 
-
+import { useTranslate } from 'src/locales';
 
 import HistoryCard from './HistoryCard';
 
 const HistoryList = ({ history, onView, currentPage, totalPages, onPageChange }) => {
+  const { t } = useTranslate();
+
   if (!history || history.length === 0) {
     return (
       <Paper elevation={0} sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
         <HistoryIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
         <Typography variant="h6" color="text.secondary" gutterBottom>
-          No records found
+          {t('No records found')}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Try adjusting your search or filter criteria
+          {t('Try adjusting your search or filter criteria')}
         </Typography>
       </Paper>
     );

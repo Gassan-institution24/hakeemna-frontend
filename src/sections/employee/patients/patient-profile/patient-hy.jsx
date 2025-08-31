@@ -12,6 +12,7 @@ import {
 
 
 import { useGetPatientHistoryDataForUs } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 
 import HistorySummary from './HistorySummary';
@@ -20,6 +21,7 @@ import HistoryList from './HistoryList';
 import HistoryDetailsDialog from './HistoryDetailsDialog';
 
 function PatientHistory({ patient }) {
+  const { t } = useTranslate();
   const { historyDataForPatient, loading, error } = useGetPatientHistoryDataForUs(patient?._id);
 
   const [selectedData, setSelectedData] = useState(null);
@@ -28,10 +30,10 @@ function PatientHistory({ patient }) {
   const [filterType, setFilterType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
-  
+
   const itemsPerPage = 10;
 
-  
+
   const requestSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -40,21 +42,21 @@ function PatientHistory({ patient }) {
     setSortConfig({ key, direction });
   };
 
-  
+
   const filteredHistory = useMemo(() => {
     if (!historyDataForPatient?.data?.history) return [];
-    
+
     let filtered = [...historyDataForPatient.data.history];
 
-    
+
     if (filterType !== 'all') {
       filtered = filtered.filter(record => record.recordType === filterType);
     }
 
-    
+
     if (searchTerm) {
       filtered = filtered.filter(record =>
-        (record.work_group?.name_english?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (record.work_group?.name_english?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         record.work_group?.name_arabic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         record.service_unit?.name_english?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         record.service_unit?.name_arabic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -62,7 +64,7 @@ function PatientHistory({ patient }) {
       );
     }
 
-    
+
     if (sortConfig.key) {
       filtered.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -78,7 +80,7 @@ function PatientHistory({ patient }) {
     return filtered;
   }, [historyDataForPatient, filterType, searchTerm, sortConfig]);
 
-  
+
   const paginatedHistory = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredHistory.slice(startIndex, startIndex + itemsPerPage);
@@ -99,7 +101,7 @@ function PatientHistory({ patient }) {
     return (
       <Container maxWidth="xl" sx={{ py: 3 }}>
         <LinearProgress />
-        <Typography sx={{ mt: 2, textAlign: 'center' }}>Loading patient history...</Typography>
+        <Typography sx={{ mt: 2, textAlign: 'center' }}>{t('Loading patient history...')}</Typography>
       </Container>
     );
   }
@@ -108,7 +110,7 @@ function PatientHistory({ patient }) {
     return (
       <Container maxWidth="xl" sx={{ py: 3 }}>
         <Alert severity="error">
-          Error loading patient history: {error.message}
+          {t('Error loading patient history')}: {error.message}
         </Alert>
       </Container>
     );
@@ -119,7 +121,7 @@ function PatientHistory({ patient }) {
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
       <HistorySummary summary={historyData?.summary} history={historyData?.history} />
-      <HistoryFilters 
+      <HistoryFilters
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         filterType={filterType}
@@ -127,14 +129,14 @@ function PatientHistory({ patient }) {
         sortConfig={sortConfig}
         requestSort={requestSort}
       />
-      <HistoryList 
+      <HistoryList
         history={paginatedHistory}
         onView={handleView}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-      <HistoryDetailsDialog 
+      <HistoryDetailsDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         data={selectedData}

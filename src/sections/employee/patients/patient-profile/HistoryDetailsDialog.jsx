@@ -65,10 +65,10 @@ const getAppointmentColor = (appointment) => {
 };
 
 const HistoryDetailsDialog = ({ open, onClose, data }) => {
-  const { currentLang } = useTranslate();
+  const { currentLang, t } = useTranslate();
   const curLangAr = currentLang?.value === 'ar';
 
-  
+
   const getDisplayName = (entity) => {
     if (!entity) return '';
     if (curLangAr && entity.name_arabic) return entity.name_arabic;
@@ -90,42 +90,42 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
       <DialogTitle>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Timeline sx={{ color: 'primary.main' }} />
-          <Typography variant="h5" fontWeight={600}>Patient History Details</Typography>
+          <Typography variant="h5" fontWeight={600}>{t('Patient History Details')}</Typography>
         </Stack>
       </DialogTitle>
-      
+
       <DialogContent dividers>
         <Grid container spacing={3}>
           {/* General Information */}
           <Grid item xs={12}>
             <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-              General Information
+              {t('General Information')}
             </Typography>
             <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={3}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Visit
+                    {t('Visit')}
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>{data.visitLabel}</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Date & Time
+                    {t('Date & Time')}
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>{fDateTime(data.created_at)}</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Duration
+                    {t('Duration')}
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
-                    {data.durationInHours ? `${data.durationInHours} hours` : 'N/A'}
+                    {data.durationInHours ? `${data.durationInHours} ${t('hours')}` : 'N/A'}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Status
+                    {t('Status')}
                   </Typography>
                   <Chip
                     label={data.visitStatus}
@@ -149,9 +149,9 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
             <>
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                  Services & Documents
+                  {t('Services & Documents')}
                 </Typography>
-                
+
                 <Grid container spacing={2}>
                   {/* Prescriptions */}
                   {data.prescriptionId?.length > 0 && (
@@ -160,7 +160,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                           <Receipt color="warning" />
                           <Typography variant="subtitle1" fontWeight={600}>
-                            Prescriptions ({data.prescriptionId.length})
+                            {t('Prescriptions')} ({data.prescriptionId.length})
                           </Typography>
                         </Stack>
                         <List dense>
@@ -170,11 +170,11 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 <Receipt color="warning" />
                               </ListItemIcon>
                               <ListItemText
-                                primary={`Prescription #${idx + 1}`}
-                                secondary={prescription.created_at ? 
-                                  fDate(prescription.created_at) : 'Date not specified'}
+                                primary={`${t('Prescription')} #${idx + 1}`}
+                                secondary={prescription.created_at ?
+                                  fDate(prescription.created_at) : t('Date not specified')}
                               />
-                               
+
                             </ListItem>
                           ))}
                         </List>
@@ -189,7 +189,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                           <Assignment color="info" />
                           <Typography variant="subtitle1" fontWeight={600}>
-                            Medical Reports ({data.medicalReportId.length})
+                            {t('Medical Reports')} ({data.medicalReportId.length})
                           </Typography>
                         </Stack>
                         <List dense>
@@ -199,9 +199,9 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 <Assignment color="info" />
                               </ListItemIcon>
                               <ListItemText
-                                primary={report.name || `Report #${idx + 1}`}
-                                secondary={report.created_at ? 
-                                  fDate(report.created_at) : 'Date not specified'}
+                                primary={report.name || `${t('Report')} #${idx + 1}`}
+                                secondary={report.created_at ?
+                                  fDate(report.created_at) : t('Date not specified')}
                               />
                             </ListItem>
                           ))}
@@ -217,7 +217,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                           <EventBusy color="error" />
                           <Typography variant="subtitle1" fontWeight={600}>
-                            Sick Leaves ({data.sickLeavesId.length})
+                            {t('Sick Leaves')} ({data.sickLeavesId.length})
                           </Typography>
                         </Stack>
                         <List dense>
@@ -227,10 +227,10 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                                 <EventBusy color="error" />
                               </ListItemIcon>
                               <ListItemText
-                                primary={`Sick Leave #${idx + 1}`}
+                                primary={`${t('Sick Leave')} #${idx + 1}`}
                                 secondary={leave.Medical_sick_leave_start && leave.Medical_sick_leave_end ?
-                                  `${fDate(leave.Medical_sick_leave_start)} - ${fDate(leave.Medical_sick_leave_end)}` : 
-                                  'Dates not specified'}
+                                  `${fDate(leave.Medical_sick_leave_start)} - ${fDate(leave.Medical_sick_leave_end)}` :
+                                  t('Dates not specified')}
                               />
                             </ListItem>
                           ))}
@@ -246,20 +246,20 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                           <CalendarToday color="success" />
                           <Typography variant="subtitle1" fontWeight={600}>
-                            Appointment Details
+                            {t('Appointment Details')}
                           </Typography>
                         </Stack>
                         <List dense>
                           <ListItem>
                             <ListItemText
-                              primary="Date & Time"
-                              secondary={data.appointmentId.start_time ? 
-                                fDateTime(data.appointmentId.start_time) : 'Not specified'}
+                              primary={t('Date & Time')}
+                              secondary={data.appointmentId.start_time ?
+                                fDateTime(data.appointmentId.start_time) : t('Not specified')}
                             />
                           </ListItem>
                           <ListItem>
                             <ListItemText
-                              primary="Status"
+                              primary={t('Status')}
                               secondary={
                                 <Chip
                                   label={getAppointmentStatus(data.appointmentId)}
@@ -273,7 +273,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                           {data.appointmentId.note && (
                             <ListItem>
                               <ListItemText
-                                primary="Notes"
+                                primary={t('Notes')}
                                 secondary={data.appointmentId.note}
                               />
                             </ListItem>
@@ -284,7 +284,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                   )}
                 </Grid>
               </Grid>
-              
+
               <Grid item xs={12}>
                 <Divider sx={{ my: 2 }} />
               </Grid>
@@ -295,7 +295,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
           {data.activities?.length > 0 && (
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                Activities ({data.activities.length})
+                {t('Activities')} ({data.activities.length})
               </Typography>
               <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
                 <List>
@@ -308,24 +308,24 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                         primary={
                           curLangAr
                             ? activity.activity_id?.name_arabic
-                            : activity.activity_id?.name_english || `Activity ${idx + 1}`
+                            : activity.activity_id?.name_english || `${t('Activity')} ${idx + 1}`
                         }
                         secondary={
                           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 0.5 }}>
                             <Stack direction="row" spacing={0.5} alignItems="center">
                               <AccessTime sx={{ fontSize: 14 }} />
-                              <span>Start: {fDateTime(activity.start_time)}</span>
+                              <span>{t('Start')}: {fDateTime(activity.start_time)}</span>
                             </Stack>
                             {activity.end_time && (
                               <Stack direction="row" spacing={0.5} alignItems="center">
                                 <CheckCircle sx={{ fontSize: 14 }} />
-                                <span>End: {fDateTime(activity.end_time)}</span>
+                                <span>{t('End')}: {fDateTime(activity.end_time)}</span>
                               </Stack>
                             )}
                             {activity.duration && (
                               <Stack direction="row" spacing={0.5} alignItems="center">
                                 <Schedule sx={{ fontSize: 14 }} />
-                                <span>Duration: {activity.duration} min</span>
+                                <span>{t('Duration')}: {activity.duration} {t('min')}</span>
                               </Stack>
                             )}
                           </Stack>
@@ -333,7 +333,7 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
                       />
                       {activity.notes && (
                         <Typography variant="body2" color="text.secondary" sx={{ ml: 2, maxWidth: '30%' }}>
-                          Notes: {activity.notes}
+                          {t('Notes')}: {activity.notes}
                         </Typography>
                       )}
                     </ListItem>
@@ -344,19 +344,19 @@ const HistoryDetailsDialog = ({ open, onClose, data }) => {
           )}
         </Grid>
       </DialogContent>
-      
+
       <DialogActions sx={{ p: 2 }}>
-        <Button 
-          onClick={onClose} 
+        <Button
+          onClick={onClose}
           variant="contained"
-          sx={{ 
+          sx={{
             borderRadius: 2,
             px: 3,
             py: 1,
             fontWeight: 600
           }}
         >
-          Close
+          {t('Close')}
         </Button>
       </DialogActions>
     </Dialog>
