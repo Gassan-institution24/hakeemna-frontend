@@ -470,6 +470,7 @@ export const endpoints = {
   },
   attendence: {
     all: '/api/attendence',
+    checkin: '/api/attendence/checkin',
     create: '/api/attendence/create',
     leave: '/api/attendence/leave',
     lastAttendance: '/api/attendence/mylast',
