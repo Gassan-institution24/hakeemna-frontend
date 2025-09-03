@@ -411,61 +411,163 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
+    const trimmedName = name.trim().toLowerCase();
     inputData = inputData.filter(
       (data) =>
+        // Basic company names (English and Arabic)
         (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.name_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
         (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.name_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
         (data?.commercial_name &&
-          data?.commercial_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.province && data?.province?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country && data?.country?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city && data?.city?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.email && data?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.commercial_name?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        // Location fields (English and Arabic)
+        (data?.province_english && 
+          data?.province_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.province_arabic && 
+          data?.province_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.province && 
+          data?.province?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        (data?.country_english && 
+          data?.country_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.country_arabic && 
+          data?.country_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.country && 
+          data?.country?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        (data?.city_english && 
+          data?.city_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.city_arabic && 
+          data?.city_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.city && 
+          data?.city?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        // Service and sector fields (English and Arabic)
+        (data?.unit_service_type_english && 
+          data?.unit_service_type_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.unit_service_type_arabic && 
+          data?.unit_service_type_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.unit_service_type && 
+          data?.unit_service_type?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        (data?.sector_english && 
+          data?.sector_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.sector_arabic && 
+          data?.sector_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.sector && 
+          data?.sector?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        // Specialty fields (English and Arabic)
+        (data?.type_of_specialty_1_english && 
+          data?.type_of_specialty_1_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.type_of_specialty_1_arabic && 
+          data?.type_of_specialty_1_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.type_of_specialty_1 && 
+          data?.type_of_specialty_1?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        (data?.type_of_specialty_2_english && 
+          data?.type_of_specialty_2_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.type_of_specialty_2_arabic && 
+          data?.type_of_specialty_2_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.type_of_specialty_2 && 
+          data?.type_of_specialty_2?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        // Other fields
+        (data?.email && 
+          data?.email?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
         (data?.phone_number_1 &&
-          data?.phone_number_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.type_of_specialty_1 &&
-          data?.type_of_specialty_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.type_of_specialty_2 &&
-          data?.type_of_specialty_2?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.unit_service_type &&
-          data?.unit_service_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.sector && data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.info && data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.phone_number_1?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.info_english && 
+          data?.info_english?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.info_arabic && 
+          data?.info_arabic?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        (data?.info && 
+          data?.info?.trim()?.toLowerCase().indexOf(trimmedName) !== -1) ||
+        
+        // Exact matches
         data?.upload_record === name ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
   }
+  
   if (USType) {
+    const trimmedUSType = USType.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.unit_service_type?.toLowerCase().indexOf(USType.toLowerCase()) !== -1
+      (data) => 
+        (data?.unit_service_type_english && 
+          data?.unit_service_type_english?.trim()?.toLowerCase().indexOf(trimmedUSType) !== -1) ||
+        (data?.unit_service_type_arabic && 
+          data?.unit_service_type_arabic?.trim()?.toLowerCase().indexOf(trimmedUSType) !== -1) ||
+        (data?.unit_service_type && 
+          data?.unit_service_type?.trim()?.toLowerCase().indexOf(trimmedUSType) !== -1)
     );
   }
+  
   if (city) {
+    const trimmedCity = city.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.city?.toLowerCase().indexOf(city.toLowerCase()) !== -1
+      (data) => 
+        (data?.city_english && 
+          data?.city_english?.trim()?.toLowerCase().indexOf(trimmedCity) !== -1) ||
+        (data?.city_arabic && 
+          data?.city_arabic?.trim()?.toLowerCase().indexOf(trimmedCity) !== -1) ||
+        (data?.city && 
+          data?.city?.trim()?.toLowerCase().indexOf(trimmedCity) !== -1)
     );
   }
+  
   if (sector) {
+    const trimmedSector = sector.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.sector?.toLowerCase().indexOf(sector.toLowerCase()) !== -1
+      (data) => 
+        (data?.sector_english && 
+          data?.sector_english?.trim()?.toLowerCase().indexOf(trimmedSector) !== -1) ||
+        (data?.sector_arabic && 
+          data?.sector_arabic?.trim()?.toLowerCase().indexOf(trimmedSector) !== -1) ||
+        (data?.sector && 
+          data?.sector?.trim()?.toLowerCase().indexOf(trimmedSector) !== -1)
     );
   }
+  
   if (province) {
+    const trimmedProvince = province.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.province?.toLowerCase().indexOf(province.toLowerCase()) !== -1
+      (data) => 
+        (data?.province_english && 
+          data?.province_english?.trim()?.toLowerCase().indexOf(trimmedProvince) !== -1) ||
+        (data?.province_arabic && 
+          data?.province_arabic?.trim()?.toLowerCase().indexOf(trimmedProvince) !== -1) ||
+        (data?.province && 
+          data?.province?.trim()?.toLowerCase().indexOf(trimmedProvince) !== -1)
     );
   }
+  
   if (speciality1) {
+    const trimmedSpeciality1 = speciality1.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.type_of_specialty_1?.toLowerCase().indexOf(speciality1.toLowerCase()) !== -1
+      (data) => 
+        (data?.type_of_specialty_1_english && 
+          data?.type_of_specialty_1_english?.trim()?.toLowerCase().indexOf(trimmedSpeciality1) !== -1) ||
+        (data?.type_of_specialty_1_arabic && 
+          data?.type_of_specialty_1_arabic?.trim()?.toLowerCase().indexOf(trimmedSpeciality1) !== -1) ||
+        (data?.type_of_specialty_1 && 
+          data?.type_of_specialty_1?.trim()?.toLowerCase().indexOf(trimmedSpeciality1) !== -1)
     );
   }
+  
   if (speciality2) {
+    const trimmedSpeciality2 = speciality2.trim().toLowerCase();
     inputData = inputData.filter(
-      (data) => data.type_of_specialty_2?.toLowerCase().indexOf(speciality2.toLowerCase()) !== -1
+      (data) => 
+        (data?.type_of_specialty_2_english && 
+          data?.type_of_specialty_2_english?.trim()?.toLowerCase().indexOf(trimmedSpeciality2) !== -1) ||
+        (data?.type_of_specialty_2_arabic && 
+          data?.type_of_specialty_2_arabic?.trim()?.toLowerCase().indexOf(trimmedSpeciality2) !== -1) ||
+        (data?.type_of_specialty_2 && 
+          data?.type_of_specialty_2?.trim()?.toLowerCase().indexOf(trimmedSpeciality2) !== -1)
     );
   }
 
