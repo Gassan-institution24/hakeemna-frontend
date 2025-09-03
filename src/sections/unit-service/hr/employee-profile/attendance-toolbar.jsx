@@ -105,7 +105,7 @@ export default function AttendanceToolbar({
                 color="primary"
               />
             }
-            label={t('Find missing attendance dates')}
+            label={t('Find missing attendance records')}
             sx={{
               minWidth: { xs: 'auto', md: 200 },
               '& .MuiFormControlLabel-label': {
