@@ -92,7 +92,7 @@ export default function AttendanceRow({
             <TableCell align="center">{fTimeUnit(check_out_time)}</TableCell>
             <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
             <TableCell align="center">{fHourMin(workTime)}</TableCell>
-            <TableCell align="center">{checkOutLocation}</TableCell>
+            <TableCell align="center">{t(work_type)}</TableCell>
             <TableCell align="center">{t(leave)}</TableCell>
           </>
         )}
