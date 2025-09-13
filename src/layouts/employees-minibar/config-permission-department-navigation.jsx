@@ -28,10 +28,10 @@ export function usePermissionDepNavData() {
     }
     return employeesData.map((info, idx) => {
       const currpath = location.pathname.split('/');
-      currpath[6] = info._id;
+      currpath[6] = info?._id;
       const path = currpath.join('/');
       return {
-        title: curLangAr ? info.employee.name_arabic : info.employee.name_english,
+        title: curLangAr ? info.employee?.name_arabic : info.employee?.name_english,
         path,
         icon: <Iconify icon="ion:person" />,
       };
@@ -44,7 +44,7 @@ export function usePermissionDepNavData() {
       return [];
     }
 
-    if (user.role === 'admin') {
+    if (user?.role === 'admin') {
       return [
         {
           subheader: t('control panel'),
