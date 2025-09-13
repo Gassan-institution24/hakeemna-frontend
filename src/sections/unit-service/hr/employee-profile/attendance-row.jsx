@@ -21,7 +21,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import AttendanceEdit from './attendance-edit';
 
-
 // ----------------------------------------------------------------------
 
 export default function AttendanceRow({
@@ -41,7 +40,7 @@ export default function AttendanceRow({
     check_out_time,
     // leave_start,
     // leave_end,
-    leave,
+    // leave,
     work_type,
     note,
     leaveTime,
@@ -66,34 +65,46 @@ export default function AttendanceRow({
   const [checkInLocation, setCheckInLocation] = useState('Loading...');
   const [checkOutLocation, setCheckOutLocation] = useState('Loading...');
 
+  function shortenAddress(fullAddress) {
+    if (!fullAddress) return 'Unknown';
+    // نقسم العنوان بواسطة الفواصل
+    const parts = fullAddress.split(',').map((p) => p.trim());
+    // نختار أول 3 أجزاء فقط (ممكن تغير الرقم حسب رغبتك)
+    return parts.slice(1, 4).join(', ');
+  }
   useEffect(() => {
     if (row.check_in_coordinates?.coordinates?.length === 2) {
-      const [lng, lat] = row.check_in_coordinates.coordinates; 
-      getAddressFromCoordinatesOSM(lat, lng).then(setCheckInLocation);
+      const [lng, lat] = row.check_in_coordinates.coordinates;
+      getAddressFromCoordinatesOSM(lat, lng).then((full) =>
+        setCheckInLocation(shortenAddress(full))
+      );
     } else {
       setCheckInLocation('Unknown');
     }
 
     if (row.check_out_coordinates?.coordinates?.length === 2) {
       const [lng, lat] = row.check_out_coordinates.coordinates;
-      getAddressFromCoordinatesOSM(lat, lng).then(setCheckOutLocation);
+      getAddressFromCoordinatesOSM(lat, lng).then((full) =>
+        setCheckOutLocation(shortenAddress(full))
+      );
     } else {
       setCheckOutLocation('Unknown');
     }
   }, [row]);
+
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell align="center">{fDateUnit(date, 'EEEE, dd MMMMMMMM yyyy')}</TableCell>
+        <TableCell align="center">{fTimeUnit(date, 'EEE dd MMM', true)}</TableCell>
 
         {!showUnattendance && (
           <>
-            <TableCell align="center">{fTimeUnit(check_in_time)}</TableCell>
-            <TableCell align="center">{fTimeUnit(check_out_time)}</TableCell>
+            <TableCell align="center">{fTimeUnit(check_in_time, 'p', true)}</TableCell>
+            <TableCell align="center">{fTimeUnit(check_out_time, 'p', true)}</TableCell>
             <TableCell align="center">{fHourMin(leaveTime)}</TableCell>
             <TableCell align="center">{fHourMin(workTime)}</TableCell>
             <TableCell align="center">{t(work_type)}</TableCell>
-            <TableCell align="center">{t(leave)}</TableCell>
+            {/* <TableCell align="center">{t(leave)}</TableCell> */}
           </>
         )}
 
@@ -142,6 +153,10 @@ export default function AttendanceRow({
           fontSize: '14px',
         }}
       >
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('login location')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{checkInLocation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('logout location')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{checkOutLocation}</Box>
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
@@ -154,6 +169,7 @@ export default function AttendanceRow({
             }}
           />
         </Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
