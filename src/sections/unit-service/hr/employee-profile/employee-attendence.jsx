@@ -59,7 +59,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
         { id: 'leave_time', label: t('leave time') },
         { id: 'work_time', label: t('work time') },
         { id: 'work_type', label: t('work type') },
-        { id: 'leave', label: t('leave') },
+        // { id: 'leave', label: t('leave') },
         { id: 'note', label: t('note') },
         { id: '' },
       ].filter(Boolean);
