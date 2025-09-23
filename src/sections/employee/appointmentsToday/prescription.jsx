@@ -185,19 +185,6 @@ export default function Prescription({ Entrance }) {
 
       if (prescriptionDialog.value) {
         const historyId = localStorage.getItem('historyId');
-        
-        // await axiosInstance.post(endpoints.history.all, {
-        //   patient: patient?._id,
-        //   unit_service_patient: Entrance?.unit_service_patient,
-        //   name_english: 'a prescription has been added',
-        //   name_arabic: 'تم ارفاق وصفة طبية',
-        //   sub_english: `prescription from ${Entrance?.service_unit?.name_english}`,
-        //   sub_arabic: `وصفة طبية من ${Entrance?.service_unit?.name_arabic}`,
-        //   actual_date: Entrance?.created_at,
-        //   title: 'prescription',
-        //   service_unit: Entrance?.service_unit?._id,
-        // });
-        
         const prescription = await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
         await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
           Drugs_report_status: true,

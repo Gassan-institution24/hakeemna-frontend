@@ -181,14 +181,14 @@ export default function OldMedicalReports() {
     }
     try {
       await axios.post('/api/oldmedicalreports', formData);
-      await axios.post(endpoints.history.all, {
-        patient: user?.patient?._id,
-        name_english: 'a medical report has been created',
-        name_arabic: 'تم انشاء تقرير طبي',
-        sub_english: `${spName} medical report`,
-        sub_arabic: ` تقرير طبي لتخصص ال ${spName}`,
-        actual_date: data?.date,
-      });
+      // await axios.post(endpoints.history.all, {
+      //   patient: user?.patient?._id,
+      //   name_english: 'a medical report has been created',
+      //   name_arabic: 'تم انشاء تقرير طبي',
+      //   sub_english: `${spName} medical report`,
+      //   sub_arabic: ` تقرير طبي لتخصص ال ${spName}`,
+      //   actual_date: data?.date,
+      // });
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
       reset();

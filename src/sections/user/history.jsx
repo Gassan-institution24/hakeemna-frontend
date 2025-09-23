@@ -1,32 +1,25 @@
-import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
-import Table from '@mui/material/Table';
-import { Container } from '@mui/system';
-import TableRow from '@mui/material/TableRow';
-import TableHead from '@mui/material/TableHead';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import { Card, TableBody, CardHeader, IconButton } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import axios from 'src/utils/axios';
-import { fMonth } from 'src/utils/format-time';
+import { Timeline } from '@mui/icons-material';
+import {
+  Box,
+  Card,
+  Grid,
+  Chip,
+  Stack,
+  Button,
+  Divider,
+  Typography,
+} from '@mui/material';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatientHistoryData } from 'src/api/history';
-
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
+import HistoryInfo from 'src/pages/dashboard/user/historyinfo';
 
 export default function HistoryHead() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -34,16 +27,15 @@ export default function HistoryHead() {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { historyDataForPatient, refetch } = useGetPatientHistoryData(user?.patient?._id);
-
+  const { historyDataForPatient } = useGetPatientHistoryData(user?.patient?._id);
+  const [selectedData, setSelectedData] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   useEffect(() => {
     if (historyDataForPatient?.length > 0) {
       const initialData = historyDataForPatient.slice(0, 10);
       setDisplayedData(initialData);
       setSkip(10);
-      if (historyDataForPatient.length <= 10) {
-        setHasMore(false);
-      }
+      if (historyDataForPatient.length <= 10) setHasMore(false);
     }
   }, [historyDataForPatient]);
 
@@ -51,9 +43,7 @@ export default function HistoryHead() {
     const nextData = historyDataForPatient.slice(skip, skip + 5);
     setDisplayedData((prev) => [...prev, ...nextData]);
     setSkip((prev) => prev + nextData.length);
-    if (skip + 5 >= historyDataForPatient.length) {
-      setHasMore(false);
-    }
+    if (skip + 5 >= historyDataForPatient.length) setHasMore(false);
   };
 
   const handleScroll = (e) => {
@@ -63,85 +53,96 @@ export default function HistoryHead() {
     }
   };
 
-  const deletehistoryfeild = async (id) => {
-    try {
-      await axios.patch(`/api/history/${id}`);
-      refetch();
-      enqueueSnackbar('Deleted successfully', { variant: 'success' });
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar(
-        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
-      );
-    }
+  const handleView = (item) => {
+    setSelectedData(item);
+    setOpenDialog(true);
   };
-
-  const handleView = async (id) => {
-    router.push(paths.dashboard.user.historyinfo(id));
-  };
-
   return (
-    <Container sx={{ backgroundImage: 'linear-gradient(to bottom, #2788EF, white)', p: 2 }}>
-      <Card sx={{ borderRadius: 0 }}>
-        {curLangAr ? (
-          <CardHeader sx={{ mb: 4 }} title={`سجل ${user?.patient?.name_arabic}`} />
-        ) : (
-          <CardHeader sx={{ mb: 4 }} title={`${user?.patient?.name_english} ${t('History')}`} />
-        )}
+    <Box onScroll={handleScroll} sx={{ maxHeight: 600, overflowY: 'auto', p: 2 }}>
+      <Grid container spacing={2}>
+        {displayedData?.map((item) => (
+          <Grid item xs={12} key={item?._id}>
+            <Card
+              sx={{
+                borderRadius: 4,
+                backdropFilter: 'blur(8px)',
+                background: 'linear-gradient(135deg, #fdfdfd 0%, #f4f6f8 100%)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                p: 2,
+              }}
+            >
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6">
+                  {t('visit number')} #{item?.visit_number}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => handleView(item)}
+                  sx={{
+                    borderRadius: 2,
+                    px: 3,
+                    py: 1,
+                    fontWeight: 600,
+                    textTransform: 'none',
+                  }}
+                  endIcon={<Timeline />}
+                >
+                  {t('View Details')}
+                </Button>
+              </Stack>
 
-        <TableContainer onScroll={handleScroll} sx={{ mt: 3, mb: 2, maxHeight: 500 }}>
-          <Scrollbar>
-            <Table sx={{ minWidth: 400 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>{t('Date')}</TableCell>
-                  <TableCell>{t('Subject')}</TableCell>
-                  <TableCell>{t('Info')}</TableCell>
-                  <TableCell>
-                    {curLangAr ? (
-                      <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
-                    ) : (
-                      <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                {new Date(item?.actual_date).toLocaleString()}
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <Typography fontWeight={600}>{t('General')}</Typography>
+                  <Typography>
+                    {t('code')}: {item?.code}
+                  </Typography>
+                  <Typography>
+                    {t('Duration')}: {item?.duration} {t('min')}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                  <Typography fontWeight={600}>{t('activities')}</Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" mt={1}>
+                    {item?.appointment && (
+                      <Chip label={t('Appointment')} color="primary" size="small" />
                     )}
-                  </TableCell>
-                  <TableCell align="center">{t('Actions')}</TableCell>
-                </TableRow>
-              </TableHead>
+                    {item?.prescription && (
+                      <Chip label={t('Prescription')} color="success" size="small" />
+                    )}
+                    {item?.medical_report && (
+                      <Chip label={t('medical report')} color="warning" size="small" />
+                    )}
+                    {item?.sick_leave && (
+                      <Chip label={t('Sick Leave')} color="error" size="small" />
+                    )}
+                  </Stack>
+                </Grid>
 
-              <TableBody>
-                {displayedData.map((data, i) => (
-                  <TableRow key={i}>
-                    <TableCell>{fMonth(data?.created_at)}</TableCell>
-                    <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
-                    <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
-                    <TableCell>
-                      {curLangAr ? (
-                        <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
-                      ) : (
-                        <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton onClick={() => handleView(data?._id)}>
-                        <Iconify sx={{ cursor: 'pointer', color: '#2788EF' }} icon="carbon:view" />
-                      </IconButton>
-                      <IconButton onClick={() => deletehistoryfeild(data?._id)}>
-                        <Iconify
-                          sx={{ cursor: 'pointer', color: 'error.main' }}
-                          icon="solar:trash-bin-trash-bold"
-                        />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
-      </Card>
-    </Container>
+                <Grid item xs={12} md={4}>
+                  <Typography fontWeight={600}>{t('more')}</Typography>
+                  <Typography>
+                    {t('Service Unit')}:{' '}
+                    {curLangAr ? item?.service_unit?.name_arabic : item?.service_unit?.name_english}
+                  </Typography>
+                  <Typography>
+                    {t('work group')}:{' '}
+                    {curLangAr ? item?.work_group?.name_arabic : item?.work_group?.name_english}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <HistoryInfo open={openDialog} onClose={() => setOpenDialog(false)} data={selectedData} />
+    </Box>
   );
 }
