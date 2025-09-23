@@ -22,9 +22,9 @@ export default function OurPartners() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { unitservicesData } = useGetActiveUnitservices({
-    select: 'name_english name_arabic company_logo',
+    select: 'name_english name_arabic company_logo status',
   });
-
+  console.log(unitservicesData);
   return (
     <Box
       component={MotionViewport}
@@ -62,64 +62,66 @@ export default function OurPartners() {
             1024: { slidesPerView: 3 },
           }}
         >
-          {unitservicesData.map((partner, index) => (
-            <SwiperSlide key={index}>
-              <Box
-                sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
-                onClick={() => router.push(paths.pages.serviceUnit(partner?._id))}
-              >
-                <Paper
-                  elevation={3}
-                  sx={{
-                    width: 250, // Set width
-                    overflow: 'hidden',
-                    borderRadius: 3,
-                    textAlign: 'center',
-                    backgroundColor: 'white',
-                    position: 'relative',
-                  }}
+          {
+            unitservicesData.map((partner, index) => (
+              partner?.status === 'active' &&
+              <SwiperSlide key={index}>
+                <Box
+                  sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
+                  onClick={() => router.push(paths.pages.serviceUnit(partner?._id))}
                 >
-                  {partner.company_logo ? (
-                    <Image
-                      src={partner.company_logo}
-                      // src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
-                      alt={partner.name_english}
-                      sx={{
-                        width: '100%',
-                        height: 170,
-                        objectFit: 'cover',
-                      }}
-                    />
-                  ) : (
-                    <Box sx={{ width: '100%', height: 170 }} />
-                  )}
-
-                  {/* Green Overlay at the Bottom */}
-                  <Box
+                  <Paper
+                    elevation={3}
                     sx={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '80px',
-                      backgroundColor: '#2EA98D',
-                      clipPath: 'ellipse(100% 50% at center bottom)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      width: 250, // Set width
+                      overflow: 'hidden',
+                      borderRadius: 3,
+                      textAlign: 'center',
+                      backgroundColor: 'white',
+                      position: 'relative',
                     }}
                   >
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ fontWeight: 'bold', color: 'white', fontSize: 16, pt: 5 }}
+                    {partner.company_logo ? (
+                      <Image
+                        src={partner.company_logo}
+                        // src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                        alt={partner.name_english}
+                        sx={{
+                          width: '100%',
+                          height: 170,
+                          objectFit: 'cover',
+                        }}
+                      />
+                    ) : (
+                      <Box sx={{ width: '100%', height: 170 }} />
+                    )}
+
+                    {/* Green Overlay at the Bottom */}
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '80px',
+                        backgroundColor: '#2EA98D',
+                        clipPath: 'ellipse(100% 50% at center bottom)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      {curLangAr ? partner.name_arabic : partner.name_english}
-                    </Typography>
-                  </Box>
-                </Paper>
-              </Box>
-            </SwiperSlide>
-          ))}
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: 'bold', color: 'white', fontSize: 16, pt: 5 }}
+                      >
+                        {curLangAr ? partner.name_arabic : partner.name_english}
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Box>
+              </SwiperSlide>
+            ))}
         </Swiper>
 
         {/* Custom Pagination */}
