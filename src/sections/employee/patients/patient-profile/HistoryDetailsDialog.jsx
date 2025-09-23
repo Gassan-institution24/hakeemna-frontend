@@ -67,14 +67,6 @@ const getAppointmentColor = (appointment) => {
 const HistoryDetailsDialog = ({ open, onClose, data }) => {
   const { currentLang, t } = useTranslate();
   const curLangAr = currentLang?.value === 'ar';
-
-
-  const getDisplayName = (entity) => {
-    if (!entity) return '';
-    if (curLangAr && entity.name_arabic) return entity.name_arabic;
-    return entity.name_english || '';
-  };
-
   if (!data) return null;
 
   return (

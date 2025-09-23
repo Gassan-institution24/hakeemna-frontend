@@ -85,7 +85,7 @@ const HistoryCard = ({ record, onView }) => {
   const [expanded, setExpanded] = useState(false);
   const curLangAr = currentLang?.value === 'ar';
 
-  const recordType = recordTypeConfig[record.recordType] || recordTypeConfig.general;
+  const recordType = recordTypeConfig[record?.recordType] || recordTypeConfig?.general;
   const RecordIcon = recordType.icon;
 
 
@@ -220,7 +220,7 @@ const HistoryCard = ({ record, onView }) => {
               </Paper>
             </Grid>
 
-            {record.activitySummary.total_activities > 0 && (
+            {record.activitySummary?.total_activities > 0 && (
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom sx={{ fontWeight: 600 }}>
                   {t('Activities Progress')}
@@ -228,7 +228,7 @@ const HistoryCard = ({ record, onView }) => {
                 <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <Typography variant="body2">
-                      {record.activitySummary.completed_activities}/{record.activitySummary.total_activities} {t('completed')}
+                      {record.activitySummary.completed_activities}/{record.activitySummary?.total_activities} {t('completed')}
                     </Typography>
                     <LinearProgress
                       variant="determinate"
@@ -252,7 +252,7 @@ const HistoryCard = ({ record, onView }) => {
               </Typography>
               <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
                 <Stack direction="row" spacing={1} flexWrap="wrap">
-                  {record.servicesSummary.hasAppointment && (
+                  {record.servicesSummary?.hasAppointment && (
                     <Chip
                       icon={<CalendarToday />}
                       label={`${t('Appointment')}${record.servicesSummary.isEmergency ? ` (${t('Emergency')})` : ''}`}
@@ -262,30 +262,30 @@ const HistoryCard = ({ record, onView }) => {
                       sx={{ mb: 0.5 }}
                     />
                   )}
-                  {record.servicesSummary.medicalReports > 0 && (
+                  {record.servicesSummary?.medicalReports > 0 && (
                     <Chip
                       icon={<Assignment />}
-                      label={`${record.servicesSummary.medicalReports} ${t('Report')}${record.servicesSummary.medicalReports > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary?.medicalReports} ${t('Report')}${record.servicesSummary?.medicalReports > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="info"
                       sx={{ mb: 0.5 }}
                     />
                   )}
-                  {record.servicesSummary.prescriptions > 0 && (
+                  {record.servicesSummary?.prescriptions > 0 && (
                     <Chip
                       icon={<Receipt />}
-                      label={`${record.servicesSummary.prescriptions} ${t('Prescription')}${record.servicesSummary.prescriptions > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary?.prescriptions} ${t('Prescription')}${record.servicesSummary?.prescriptions > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="warning"
                       sx={{ mb: 0.5 }}
                     />
                   )}
-                  {record.servicesSummary.sickLeaves > 0 && (
+                  {record.servicesSummary?.sickLeaves > 0 && (
                     <Chip
                       icon={<EventBusy />}
-                      label={`${record.servicesSummary.sickLeaves} ${t('Sick Leave')}${record.servicesSummary.sickLeaves > 1 ? 's' : ''}`}
+                      label={`${record.servicesSummary?.sickLeaves} ${t('Sick Leave')}${record.servicesSummary?.sickLeaves > 1 ? 's' : ''}`}
                       size="small"
                       variant="filled"
                       color="error"
