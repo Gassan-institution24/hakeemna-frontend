@@ -52,7 +52,7 @@ export default function EmployeeSalaryRow({
         onClick={onViewRow}
         align="center"
       >
-        {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
+        {String(employee?.nationality?.code).padStart(3, '0')}-{employee?.sequence_number}
       </TableCell>
       <TableCell
         sx={{

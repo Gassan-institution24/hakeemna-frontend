@@ -334,13 +334,13 @@ export default function InvoiceListView() {
               />
 
               <TableBody>
-                {economecMovementsData.map((row) => (
+                {economecMovementsData?.map((row) => (
                   <InvoiceTableRow
                     key={row.id}
                     row={row}
                     selected={table.selected.includes(row.id)}
                     onSelectRow={() => table.onSelectRow(row.id)}
-                    onViewRow={() => handleViewRow(row.id)}
+                    onViewRow={() => handleViewRow(row?._id)}
                     refetch={refetch}
                     // onEditRow={() => handleEditRow(row.id)}
                   />
