@@ -128,13 +128,10 @@ export default function PatientProfile() {
           room_name: uniqueRoom,
         }),
       });
-
-      router.push(
-        `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(
-          user?.employee?.name_arabic || user?.employee?.name_english
-        )}&uniqueRoom=${encodeURIComponent(uniqueRoom)}`
+      window.open(
+        `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(user?.employee?.name_arabic || user?.employee?.name_english)}&uniqueRoom=${encodeURIComponent(uniqueRoom)}`,
+        '_blank'
       );
-
       const socket = io(process.env.REACT_APP_API_URL);
       socket.emit('callUser', {
         userId: patientData.user,
