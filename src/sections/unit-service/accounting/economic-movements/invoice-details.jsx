@@ -195,14 +195,15 @@ export default function InvoiceDetails({ invoice, refetch }) {
         statusOptions={INVOICE_STATUS_OPTIONS}
       />
 
-      <Card sx={{ pt: 5, px: 5 }}>
+      <Card sx={{ pt: 5, px: { xs: 2, sm: 4, md: 5 } }}>
+        {/* الصف الأول: اللوجو + الستاتس */}
         <Box
-          rowGap={5}
+          rowGap={3}
           display="grid"
           alignItems="center"
           gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
+            xs: '1fr',
+            sm: '1fr 1fr',
           }}
         >
           <Box
@@ -213,10 +214,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
                 ? invoice.unit_service?.company_logo
                 : '/logo/doc.svg'
             }
-            sx={{ width: 64, height: 64 }}
+            sx={{ width: 64, height: 64, mx: { xs: 'auto', sm: '0' } }} // بموبايل يكون بالنص
           />
 
-          <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
+          <Stack
+            spacing={1}
+            alignItems={{ xs: 'center', sm: 'flex-end' }} // بالموبايل بالنص
+            textAlign={{ xs: 'center', sm: 'right' }}
+          >
             <Label
               variant="soft"
               color={
@@ -231,7 +236,21 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
             <Typography variant="h6">{invoice.sequence_number}</Typography>
           </Stack>
+        </Box>
 
+        {/* الصف الثاني: تفاصيل الفاتورة */}
+        <Box
+          mt={4}
+          rowGap={3}
+          columnGap={3}
+          display="grid"
+          gridTemplateColumns={{
+            xs: '1fr',
+            sm: '1fr 1fr',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
+          }}
+        >
           {invoice?.stakeholder && (
             <Stack sx={{ typography: 'body2' }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -242,7 +261,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {invoice.stakeholder?.address}
               <br />
               {t('phone')}: {invoice.stakeholder?.phone}
-              <br />
             </Stack>
           )}
 
@@ -255,7 +273,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
             {invoice.unit_service.address}
             <br />
             {t('phone')}: {invoice.unit_service.phone}
-            <br />
           </Stack>
 
           {invoice?.patient && (
@@ -268,7 +285,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {invoice.patient?.address}
               <br />
               {t('phone')}: {invoice.patient?.mobile_num1}
-              <br />
             </Stack>
           )}
 
@@ -285,6 +301,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
                 {t('due date')}
               </Typography>
               {fDate(invoice.dueDate)}
+            </Stack>
+          )}
+          {invoice.invoiceId && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('envoicing system data')}
+              </Typography>
+              {t('invoice Id')}: {invoice.invoiceId}
             </Stack>
           )}
         </Box>

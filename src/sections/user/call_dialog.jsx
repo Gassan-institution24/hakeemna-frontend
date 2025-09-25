@@ -67,10 +67,10 @@ export default function CallDialog() {
       </DialogTitle>
       <DialogActions>
         <Button color="error" onClick={handleReject}>
-          رفض
+         {t("decline")}
         </Button>
         <Button color="primary" onClick={handleAccept}>
-          قبول
+          {t("accept")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -28,7 +28,6 @@ const INVOICE_STATUS_OPTIONS = [
 
 export default function InvoiceDetails({ invoice, refetch }) {
   // const [currentStatus, setCurrentStatus] = useState(invoice.status);
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -242,6 +241,14 @@ export default function InvoiceDetails({ invoice, refetch }) {
                 {t('due date')}
               </Typography>
               {fDate(invoice.dueDate)}
+            </Stack>
+          )}
+          {invoice.invoiceId && (
+            <Stack sx={{ typography: 'body2' }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('envoicing system data')}
+              </Typography>
+              {t('invoice Id')}: {invoice.invoiceId}
             </Stack>
           )}
         </Box>
