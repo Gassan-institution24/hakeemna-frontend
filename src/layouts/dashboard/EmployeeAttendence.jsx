@@ -28,7 +28,7 @@ function EmployeeAttendence() {
         );
       } else resolve({ lat: 0, lng: 0 });
     });
-
+  console.log(attendence?._id);
   const handleAction = async (type) => {
     try {
       setLoading(true);

@@ -1,3 +1,5 @@
+// import { useRouter } from 'src/routes/hooks';
+import QRCode from 'qrcode';
 import PropTypes from 'prop-types';
 import { pdf, PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 
@@ -9,8 +11,6 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
-
-// import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -27,24 +27,40 @@ import InvoicePDF from './invoice-pdf';
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
   // const router = useRouter();
   const view = useBoolean();
-
+  const qrString = invoice?.invoice_QR;
   const { t } = useTranslate();
-
-  // const handleEdit = useCallback(() => {
-  //   router.push(paths.unitservice.accounting.economicmovements.edit(invoice.id));
-  // }, [invoice.id, router]);
-
-  const printPdf = async () => {
-    const blob = await pdf(<InvoicePDF invoice={invoice} currentStatus={currentStatus} />).toBlob();
-    const url = URL.createObjectURL(blob);
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = url;
-    document.body.appendChild(iframe);
-    iframe.onload = () => {
-      iframe.contentWindow.print();
-    };
+  // eslint-disable-next-line consistent-return
+  const generateQrDataUrl = async (text) => {
+    try {
+      const dataUrl = await QRCode.toDataURL(text);
+      return dataUrl;
+    } catch (err) {
+      console.error('Failed to generate QR:', err);
+    }
   };
+  const qrDataUrl = generateQrDataUrl(qrString);
+  const printPdf = async () => {
+    try {
+      const blob = await pdf(<InvoicePDF invoice={invoice} />).toBlob();
+
+      const url = URL.createObjectURL(blob);
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+
+      iframe.onload = () => {
+        iframe.contentWindow.print();
+      };
+    } catch (error) {
+      console.error('Error printing PDF:', error);
+    }
+  };
+
+  const fileName = `invoice-${invoice?.sequence_number || 'unknown'}-${fDate(
+    new Date(invoice?.created_at || new Date()),
+    'yyyyMMdd'
+  )}.pdf`;
 
   return (
     <>
@@ -66,10 +82,9 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               <Iconify icon="solar:eye-bold" />
             </IconButton>
           </Tooltip>
-
           <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-            fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
+            document={<InvoicePDF invoice={invoice} qr={qrDataUrl} />}
+            fileName={fileName}
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
@@ -90,36 +105,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               <Iconify icon="solar:printer-minimalistic-bold" />
             </IconButton>
           </Tooltip>
-
-          {/* <Tooltip title="Send">
-            <IconButton>
-              <Iconify icon="iconamoon:send-fill" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Share">
-            <IconButton>
-              <Iconify icon="solar:share-bold" />
-            </IconButton>
-          </Tooltip> */}
         </Stack>
-
-        {/* <TextField
-          fullWidth
-          select
-          label={t('status')}
-          value={currentStatus}
-          onChange={onChangeStatus}
-          sx={{
-            maxWidth: 160,
-          }}
-        >
-          {statusOptions.map((option) => (
-            <MenuItem lang="ar" key={option.value} value={option.value}>
-              {t(option.value)}
-            </MenuItem>
-          ))}
-        </TextField> */}
       </Stack>
 
       <Dialog fullScreen open={view.value}>
