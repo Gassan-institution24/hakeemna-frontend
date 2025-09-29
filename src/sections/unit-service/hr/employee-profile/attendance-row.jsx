@@ -57,7 +57,7 @@ export default function AttendanceRow({
   const [open, setOpen] = useState(false);
   const checkAcl = useAclGuard();
 
-  const { fDateUnit, fTimeUnit } = useFDateTimeUnit();
+  const { fTimeUnit } = useFDateTimeUnit();
 
   const popover = usePopover();
   const DDL = usePopover();

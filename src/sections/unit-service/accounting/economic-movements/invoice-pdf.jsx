@@ -45,7 +45,6 @@ const useStyles = () =>
         page: {
           fontSize: 9,
           lineHeight: 1.6,
-          fontFamily: curLangAr ? 'IBMPlexSansArabic' : 'Roboto',
           backgroundColor: '#FFFFFF',
           textTransform: 'capitalize',
           textAlign: curLangAr ? 'right' : '',
@@ -100,7 +99,7 @@ const useStyles = () =>
 
 // ----------------------------------------------------------------------
 
-export default function InvoicePDF({ invoice, currentStatus }) {
+export default function InvoicePDF({ invoice, qr }) {
   const {
     provided_products,
     Provided_services,
@@ -114,7 +113,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     created_at,
     Total_Amount,
     unit_service,
-    sequence_number,
+    invoiceId,
     Subtotal_Amount,
   } = invoice;
 
@@ -127,16 +126,14 @@ export default function InvoicePDF({ invoice, currentStatus }) {
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image
-            source={
-              unit_service?.company_logo ? unit_service?.company_logo : '/logo/doc.svg'
-            }
+            source={unit_service?.company_logo ? unit_service?.company_logo : '/logo/doc.svg'}
             style={{ width: 54, height: 54 }}
           />
 
-          <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
+          {/* <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{t(currentStatus)}</Text>
             <Text> {sequence_number} </Text>
-          </View>
+          </View> */}
         </View>
 
         {stakeholder && (
@@ -158,6 +155,16 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             </Text>
             <Text style={styles.body2}>{unit_service.address}</Text>
             <Text style={styles.body2}>{unit_service.phone}</Text>
+          </View>
+          <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('envoicing system data')}</Text>
+            <Text style={styles.body2}>{invoiceId}</Text>
+            {qr && (
+              <Image
+                source={qr} // هذا الـ data URL
+                style={{ width: 100, height: 100, marginTop: 20 }}
+              />
+            )}
           </View>
 
           {patient && (
@@ -355,6 +362,6 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 }
 
 InvoicePDF.propTypes = {
-  currentStatus: PropTypes.string,
+  qr: PropTypes.string,
   invoice: PropTypes.object,
 };

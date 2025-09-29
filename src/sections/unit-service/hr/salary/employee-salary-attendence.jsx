@@ -61,6 +61,10 @@ export default function EmployeeSalaryAttendence({ employee }) {
   const confirm = useBoolean();
 
   const [filters, setFilters] = useState(defaultFilters);
+console.log('Filters before sending:', filters);
+
+
+
 
   const {
     attendence,
@@ -80,7 +84,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
     sortBy: table.orderBy,
     ...filters,
   });
-
+console.log('Filters (raw):', filters);
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -149,7 +153,11 @@ export default function EmployeeSalaryAttendence({ employee }) {
       </Stack>
       {filters.reported === null && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          <b>{t("Note:")}</b> {t("Rows highlighted in")} <span style={{ color: 'red' }}>{t("red")}</span> {t("are not assigned to a specific monthly report, and rows highlighted in")} <span style={{ color: 'green' }}>{t("green")}</span> {t("are assigned to a specific monthly report.")}
+          <b>{t('Note:')}</b> {t('Rows highlighted in')}{' '}
+          <span style={{ color: 'red' }}>{t('red')}</span>{' '}
+          {t('are not assigned to a specific monthly report, and rows highlighted in')}{' '}
+          <span style={{ color: 'green' }}>{t('green')}</span>{' '}
+          {t('are assigned to a specific monthly report.')}
         </Typography>
       )}
       <Card>
@@ -216,7 +224,6 @@ export default function EmployeeSalaryAttendence({ employee }) {
                     onDeleteRow={deleteHandler}
                     reported={row.reported}
                     selectedReported={filters.reported}
-                    
                   />
                 ))}
 

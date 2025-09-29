@@ -27,8 +27,8 @@ export function useGetMyLastAttendence() {
 
 export function useGetEmployeeAttendence(id, params) {
   const URL = [endpoints.attendence.employee(id), { params }];
-
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  console.log(params, 'params');
   const memoizedValue = useMemo(
     () => ({
       attendence: data?.data || [],
