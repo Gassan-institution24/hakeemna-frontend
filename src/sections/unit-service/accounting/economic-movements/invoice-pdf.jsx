@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/renderer';
+import RobotoRegular from 'src/assets/fonts/Roboto-Regular.ttf';
+import RobotoBold from 'src/assets/fonts/Roboto-Bold.ttf';
+import IBMPlexArabicRegular from 'src/assets/fonts/IBMPlexSansArabic-Regular.ttf';
+import IBMPlexArabicBold from 'src/assets/fonts/IBMPlexSansArabic-Bold.ttf';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
@@ -14,14 +18,17 @@ const curLangAr = currentLang.value === 'ar';
 
 Font.register({
   family: 'Roboto',
-  fonts: [{ src: '/fonts/Roboto-Regular.ttf' }, { src: '/fonts/Roboto-Bold.ttf' }],
+  fonts: [
+    { src: RobotoRegular, fontWeight: 'normal' },
+    { src: RobotoBold, fontWeight: 'bold' },
+  ],
 });
 
 Font.register({
-  family: 'IBMPlexSansArabic',
+  family: 'IBMPlexArabic',
   fonts: [
-    { src: '/fonts/IBMPlexSansArabic-Regular.ttf' },
-    { src: '/fonts/IBMPlexSansArabic-Regular.ttf' },
+    { src: IBMPlexArabicRegular, fontWeight: 'normal' },
+    { src: IBMPlexArabicBold, fontWeight: 'bold' },
   ],
 });
 
@@ -43,6 +50,7 @@ const useStyles = () =>
         subtitle2: { fontSize: 9, fontWeight: 700 },
         alignRight: { textAlign: curLangAr ? 'left' : 'right' },
         page: {
+          // fontFamily: curLangAr ? 'IBMPlexArabic' : 'Roboto', 
           fontSize: 9,
           lineHeight: 1.6,
           backgroundColor: '#FFFFFF',
@@ -156,16 +164,6 @@ export default function InvoicePDF({ invoice, qr }) {
             <Text style={styles.body2}>{unit_service.address}</Text>
             <Text style={styles.body2}>{unit_service.phone}</Text>
           </View>
-          <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('envoicing system data')}</Text>
-            <Text style={styles.body2}>{invoiceId}</Text>
-            {qr && (
-              <Image
-                source={qr} // هذا الـ data URL
-                style={{ width: 100, height: 100, marginTop: 20 }}
-              />
-            )}
-          </View>
 
           {patient && (
             <View style={styles.col6}>
@@ -177,6 +175,17 @@ export default function InvoicePDF({ invoice, qr }) {
               <Text style={styles.body2}>{patient.mobile_num1}</Text>
             </View>
           )}
+
+          <View style={styles.col6}>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('envoicing system data')}</Text>
+            <Text style={styles.body2}>{invoiceId}</Text>
+            {qr && (
+              <Image
+                source={qr} // هذا الـ data URL
+                style={{ width: 100, height: 100, marginTop: 20 }}
+              />
+            )}
+          </View>
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
