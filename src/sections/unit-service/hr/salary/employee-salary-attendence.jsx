@@ -63,7 +63,8 @@ export default function EmployeeSalaryAttendence({ employee }) {
   const [filters, setFilters] = useState(defaultFilters);
 console.log('Filters before sending:', filters);
 
-
+const formatDate = (date) => date instanceof Date ? date.toLocaleDateString('en-CA') : null;
+ 
 
 
   const {
@@ -82,9 +83,17 @@ console.log('Filters before sending:', filters);
     rowsPerPage: table.rowsPerPage,
     order: table.order,
     sortBy: table.orderBy,
+    startDate: formatDate(filters.startDate),
+    endDate: formatDate(filters.endDate),
     ...filters,
   });
 console.log('Filters (raw):', filters);
+console.log('Filters (formatted):', {
+  startDate: formatDate(filters.startDate),
+  endDate: formatDate(filters.endDate),
+  reported: filters.reported
+});
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()

@@ -49,8 +49,6 @@ export default function AttendanceToolbar({
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
-      const newDate = "2025-09-28T21:00:00.000Z"
-      console.log(newValue);
       if (error) setError('');
       onFilters('startDate', newValue);
     },
