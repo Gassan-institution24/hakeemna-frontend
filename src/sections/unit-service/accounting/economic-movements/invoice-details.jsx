@@ -210,11 +210,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           <Box
             component="img"
             alt="logo"
-            src={
-              invoice.unit_service?.company_logo
-                ? invoice.unit_service?.company_logo
-                : '/logo/doc.svg'
-            }
+            src="/logo/doc.webp"
             sx={{ width: 64, height: 64, mx: { xs: 'auto', sm: '0' } }} // بموبايل يكون بالنص
           />
 
@@ -311,13 +307,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
               </Typography>
               {t('invoice Id')}: {invoice.invoiceId}
               {invoice?.invoice_QR && (
-                <Box>
+                <Box sx={{ mt: 2 }}> 
                   <QRCodeCanvas
                     value={invoice?.invoice_QR}
-                    size={130}
+                    size={160}
                     bgColor="#f9f9f9"
-                    level="Q"
-                    includeMargin
                   />
                 </Box>
               )}

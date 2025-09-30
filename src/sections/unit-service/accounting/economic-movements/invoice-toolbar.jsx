@@ -41,7 +41,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
   const qrDataUrl = generateQrDataUrl(qrString);
   const printPdf = async () => {
     try {
-      const blob = await pdf(<InvoicePDF invoice={invoice} />).toBlob();
+      const blob = await pdf(<InvoicePDF invoice={invoice} qr={qrDataUrl} />).toBlob();
 
       const url = URL.createObjectURL(blob);
       const iframe = document.createElement('iframe');
@@ -71,12 +71,6 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
         sx={{ mb: { xs: 3, md: 5 } }}
       >
         <Stack direction="row" spacing={1} flexGrow={1} sx={{ width: 1 }}>
-          {/* <Tooltip title={t("edit")}>
-            <IconButton onClick={handleEdit}>
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>
-          </Tooltip> */}
-
           <Tooltip title={t('view')}>
             <IconButton onClick={view.onTrue}>
               <Iconify icon="solar:eye-bold" />
@@ -122,7 +116,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 
           <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
             <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-              <InvoicePDF invoice={invoice} currentStatus={currentStatus} />
+              <InvoicePDF invoice={invoice} qr={qrDataUrl} />
             </PDFViewer>
           </Box>
         </Box>
