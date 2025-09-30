@@ -87,7 +87,7 @@ export default function PatientTableView() {
           select: 'name_english name_arabic sequence_number',
           populate: { path: 'nationality', select: 'code' },
         },
-        { path: 'work_group', select: 'name_english name_arabic sequence_number' },
+        { path: 'work_groups', select: 'name_english name_arabic' },
       ],
       page: table.page || 0,
       sortBy: table.orderBy || 'code',

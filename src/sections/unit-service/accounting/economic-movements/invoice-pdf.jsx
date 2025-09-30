@@ -1,36 +1,15 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/renderer';
-import RobotoRegular from 'src/assets/fonts/Roboto-Regular.ttf';
-import RobotoBold from 'src/assets/fonts/Roboto-Bold.ttf';
-import IBMPlexArabicRegular from 'src/assets/fonts/IBMPlexSansArabic-Regular.ttf';
-import IBMPlexArabicBold from 'src/assets/fonts/IBMPlexSansArabic-Bold.ttf';
+import { Page, View, Text, Image, Document, StyleSheet } from '@react-pdf/renderer';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import { useLocales, useTranslate } from 'src/locales';
-
 // ----------------------------------------------------------------------
 // eslint-disable-next-line
 const { currentLang } = useLocales();
 const curLangAr = currentLang.value === 'ar';
-
-Font.register({
-  family: 'Roboto',
-  fonts: [
-    { src: RobotoRegular, fontWeight: 'normal' },
-    { src: RobotoBold, fontWeight: 'bold' },
-  ],
-});
-
-Font.register({
-  family: 'IBMPlexArabic',
-  fonts: [
-    { src: IBMPlexArabicRegular, fontWeight: 'normal' },
-    { src: IBMPlexArabicBold, fontWeight: 'bold' },
-  ],
-});
 
 const useStyles = () =>
   useMemo(
@@ -50,7 +29,6 @@ const useStyles = () =>
         subtitle2: { fontSize: 9, fontWeight: 700 },
         alignRight: { textAlign: curLangAr ? 'left' : 'right' },
         page: {
-          // fontFamily: curLangAr ? 'IBMPlexArabic' : 'Roboto', 
           fontSize: 9,
           lineHeight: 1.6,
           backgroundColor: '#FFFFFF',
@@ -58,17 +36,6 @@ const useStyles = () =>
           textAlign: curLangAr ? 'right' : '',
           padding: '40px 24px 120px 24px',
           direction: curLangAr ? 'rtl' : 'ltr',
-        },
-        footer: {
-          left: 0,
-          right: 0,
-          bottom: 0,
-          padding: 24,
-          margin: 'auto',
-          borderTopWidth: 1,
-          borderStyle: 'solid',
-          position: 'absolute',
-          borderColor: '#DFE3E8',
         },
         gridContainer: {
           justifyContent: 'space-between',
@@ -101,6 +68,15 @@ const useStyles = () =>
         tableCell_3: {
           width: '15%',
         },
+        footerText: {
+          color: '#7B7B7B',
+          fontSize: 10,
+          textAlign: 'center',
+          position: 'absolute',
+          bottom: 20, 
+          left: 0,
+          right: 0,
+        },
       }),
     []
   );
@@ -113,10 +89,7 @@ export default function InvoicePDF({ invoice, qr }) {
     Provided_services,
     Total_tax_Amount,
     Total_deduction_amount,
-    dueDate,
     Total_discount_amount,
-    // Total_deduction_amount,
-    stakeholder,
     patient,
     created_at,
     Total_Amount,
@@ -133,31 +106,12 @@ export default function InvoicePDF({ invoice, qr }) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
-          <Image
-            source={unit_service?.company_logo ? unit_service?.company_logo : '/logo/doc.svg'}
-            style={{ width: 54, height: 54 }}
-          />
-
-          {/* <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
-            <Text style={styles.h3}>{t(currentStatus)}</Text>
-            <Text> {sequence_number} </Text>
-          </View> */}
+          <Image source="/logo/doc.png" style={{ width: 54, height: 54 }} />
         </View>
-
-        {stakeholder && (
-          <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
-            <Text style={styles.body2}>
-              {curLangAr ? stakeholder.name_arabic : stakeholder.name_english}
-            </Text>
-            <Text style={styles.body2}>{stakeholder.address}</Text>
-            <Text style={styles.body2}>{stakeholder.phone}</Text>
-          </View>
-        )}
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
-            <Text style={[styles.subtitle2, styles.mb4]}>{t(stakeholder ? 'to' : 'from')}</Text>
+            <Text style={[styles.subtitle2, styles.mb4]}>{t('from')}</Text>
             <Text style={styles.body2}>
               {curLangAr ? unit_service.name_arabic : unit_service.name_english}
             </Text>
@@ -182,7 +136,7 @@ export default function InvoicePDF({ invoice, qr }) {
             {qr && (
               <Image
                 source={qr} // هذا الـ data URL
-                style={{ width: 100, height: 100, marginTop: 20 }}
+                style={{ width: 120, height: 120, marginTop: 13 }}
               />
             )}
           </View>
@@ -193,12 +147,6 @@ export default function InvoicePDF({ invoice, qr }) {
             <Text style={[styles.subtitle2, styles.mb4]}>{t('date')}</Text>
             <Text style={styles.body2}>{fDate(created_at)}</Text>
           </View>
-          {dueDate && (
-            <View style={styles.col6}>
-              <Text style={[styles.subtitle2, styles.mb4]}>{t('due date')}</Text>
-              <Text style={styles.body2}>{fDate(dueDate)}</Text>
-            </View>
-          )}
         </View>
 
         <Text style={[styles.subtitle1, styles.mb8]}>{t('details')}</Text>
@@ -303,19 +251,6 @@ export default function InvoicePDF({ invoice, qr }) {
                 <Text>{fCurrency(-Total_discount_amount)}</Text>
               </View>
             </View>
-
-            {/* <View style={[styles.tableRow, styles.noBorder]}>
-              <View style={styles.tableCell_1} />
-              <View style={styles.tableCell_2} />
-              <View style={styles.tableCell_3} />
-              <View style={styles.tableCell_3}>
-                <Text>{t('deductions')}</Text>
-              </View>
-              <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(Total_deduction_amount)}</Text>
-              </View>
-            </View> */}
-
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
@@ -353,18 +288,7 @@ export default function InvoicePDF({ invoice, qr }) {
           </View>
         </View>
 
-        {/* <View style={[styles.gridContainer, styles.footer]} fixed>
-          <View style={styles.col8}>
-            <Text style={styles.subtitle2}>NOTES</Text>
-            <Text>
-              We appreciate your business. Should you need us to add VAT or extra notes let us know!
-            </Text>
-          </View>
-          <View style={[styles.col4, styles.alignRight]}>
-            <Text style={styles.subtitle2}>Have a Question?</Text>
-            <Text>support@abcapp.com</Text>
-          </View>
-        </View> */}
+          <Text style={styles.footerText}>Powered by hakeemna</Text>
       </Page>
     </Document>
   );

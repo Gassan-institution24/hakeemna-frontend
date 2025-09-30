@@ -16,6 +16,7 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -24,13 +25,13 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
   const router = useRouter();
   const checkAcl = useAclGuard();
   const { enqueueSnackbar } = useSnackbar();
   const confirm = useBoolean();
   const popover = usePopover();
-
+  const { user } = useAuthContext();
+  console.log('row', user);
   const clickHandler = () => {
     if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
       router.push(paths.employee.patients.info(_id));
