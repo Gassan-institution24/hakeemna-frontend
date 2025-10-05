@@ -34,14 +34,28 @@ export default function AttendanceToolbar({
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
-      onFilters('startDate', newValue);
+      if (newValue) {
+        const utcDate = new Date(
+          Date.UTC(newValue.getFullYear(), newValue.getMonth(), newValue.getDate())
+        ).toISOString();
+        onFilters('startDate', utcDate);
+      } else {
+        onFilters('startDate', null);
+      }
     },
     [onFilters]
   );
 
   const handleFilterEndDate = useCallback(
     (newValue) => {
-      onFilters('endDate', newValue);
+      if (newValue) {
+        const utcDate = new Date(
+          Date.UTC(newValue.getFullYear(), newValue.getMonth(), newValue.getDate())
+        ).toISOString();
+        onFilters('endDate', utcDate);
+      } else {
+        onFilters('endDate', null);
+      }
     },
     [onFilters]
   );
@@ -74,27 +88,22 @@ export default function AttendanceToolbar({
         >
           <DatePicker
             label={t('start date')}
-            value={filters.startDate}
+            value={filters.startDate ? new Date(filters.startDate) : null}
             onChange={handleFilterStartDate}
-            slotProps={{ textField: { fullWidth: true } }}
-            sx={{
-              width: { xs: 1, md: 200 },
+            slotProps={{
+              textField: { fullWidth: true },
             }}
+            sx={{ width: { xs: 1, md: 200 } }}
           />
 
           <DatePicker
             label={t('end date')}
-            value={filters.endDate}
+            value={filters.endDate ? new Date(filters.endDate) : null}
             onChange={handleFilterEndDate}
             slotProps={{
-              textField: {
-                fullWidth: true,
-                error: dateError,
-              },
+              textField: { fullWidth: true },
             }}
-            sx={{
-              width: { xs: 1, md: 200 },
-            }}
+            sx={{ width: { xs: 1, md: 200 } }}
           />
 
           <FormControlLabel

@@ -61,12 +61,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
   const confirm = useBoolean();
 
   const [filters, setFilters] = useState(defaultFilters);
-console.log('Filters before sending:', filters);
-
-const formatDate = (date) => date instanceof Date ? date.toLocaleDateString('en-CA') : null;
  
-
-
   const {
     attendence,
     length,
@@ -83,21 +78,14 @@ const formatDate = (date) => date instanceof Date ? date.toLocaleDateString('en-
     rowsPerPage: table.rowsPerPage,
     order: table.order,
     sortBy: table.orderBy,
-    startDate: formatDate(filters.startDate),
-    endDate: formatDate(filters.endDate),
     ...filters,
   });
-console.log('Filters (raw):', filters);
-console.log('Filters (formatted):', {
-  startDate: formatDate(filters.startDate),
-  endDate: formatDate(filters.endDate),
-  reported: filters.reported
-});
+ 
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
+  // const dateError =
+  //   filters.startDate && filters.endDate
+  //     ? filters.startDate.getTime() > filters.endDate.getTime()
+  //     : false;
 
   const canReset = !!filters.startDate && !!filters.endDate;
 
@@ -184,7 +172,7 @@ console.log('Filters (formatted):', {
           length={length}
           showReported
           //
-          dateError={dateError}
+          // dateError={dateError}
         />
 
         {canReset && (
