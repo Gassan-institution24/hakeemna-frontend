@@ -288,7 +288,7 @@ export default function InvoicePDF({ invoice, qr }) {
           </View>
         </View>
 
-          <Text style={styles.footerText}>Powered by hakeemna</Text>
+          <Text style={styles.footerText}>Powered by hakeemna.com</Text>
       </Page>
     </Document>
   );
