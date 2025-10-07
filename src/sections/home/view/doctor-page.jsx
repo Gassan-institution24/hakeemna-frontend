@@ -46,7 +46,7 @@ export default function DoctorPage({ employeeData }) {
     setSignupDialog(true);
     // setTimeListItem(newValue);
   };
-
+  console.log(employeeData?.visibility_online_appointment);
   // const formatTextWithLineBreaks = (text, limit = 20) => {
   //   if (!text) return '';
 
@@ -144,27 +144,29 @@ export default function DoctorPage({ employeeData }) {
               )}
             </Stack>
           </Stack>
-          <Stack
-            direction={{ md: 'row' }}
-            alignItems="center"
-            justifyContent="center"
-            gap={{ md: 10 }}
-          >
-            {AppointDates.length > 0 && (
-              <BookDetails
-                selected={selected}
-                AppointDates={AppointDates}
-                loading={loading}
-                timeListChangeHandler={timeListChangeHandler}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                list={appointmentsData}
-              />
-            )}
-            {AppointDates.length < 1 && (
-              <Typography>{t('no online appointment for this doctor')}</Typography>
-            )}
-          </Stack>
+          {employeeData?.visibility_online_appointment && (
+            <Stack
+              direction={{ md: 'row' }}
+              alignItems="center"
+              justifyContent="center"
+              gap={{ md: 10 }}
+            >
+              {AppointDates.length > 0 && (
+                <BookDetails
+                  selected={selected}
+                  AppointDates={AppointDates}
+                  loading={loading}
+                  timeListChangeHandler={timeListChangeHandler}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  list={appointmentsData}
+                />
+              )}
+              {AppointDates.length < 1 && (
+                <Typography>{t('no online appointment for this doctor')}</Typography>
+              )}
+            </Stack>
+          )}
         </Stack>
         <Stack gap={3} marginX={{ md: 5 }} padding={{ md: 3 }}>
           <Stack gap={1} flex={1}>
