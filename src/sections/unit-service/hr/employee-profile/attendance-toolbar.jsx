@@ -91,7 +91,11 @@ export default function AttendanceToolbar({
             value={filters.startDate ? new Date(filters.startDate) : null}
             onChange={handleFilterStartDate}
             slotProps={{
-              textField: { fullWidth: true },
+              textField: {
+                fullWidth: true,
+                error: dateError, // ✅ لو التاريخ غلط، يظهر باللون الأحمر
+                helperText: dateError ? t('Start date cannot be after end date') : '', // ✅ رسالة الخطأ
+              },
             }}
             sx={{ width: { xs: 1, md: 200 } }}
           />
@@ -101,7 +105,11 @@ export default function AttendanceToolbar({
             value={filters.endDate ? new Date(filters.endDate) : null}
             onChange={handleFilterEndDate}
             slotProps={{
-              textField: { fullWidth: true },
+              textField: {
+                fullWidth: true,
+                error: dateError, // ✅ لو التاريخ غلط، يظهر باللون الأحمر
+                helperText: dateError ? t('Start date cannot be after end date') : '', // ✅ رسالة الخطأ
+              },
             }}
             sx={{ width: { xs: 1, md: 200 } }}
           />
