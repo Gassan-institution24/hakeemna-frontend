@@ -90,6 +90,7 @@
     "nprogress": "^0.2.0",
     "number-to-words": "^1.2.4",
     "numeral": "^2.0.6",
+    "pdfmake": "^0.2.20",
     "peerjs": "^1.5.4",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",

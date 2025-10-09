@@ -46,12 +46,10 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
 
   const [showUnattendance, setShowUnattendance] = useState(false);
 
-  const TABLE_HEAD = showUnattendance 
-    ? [
-        { id: 'date', label: t('Day') },
-        { id: 'note', label: t('note') },
-        { id: '' },
-      ].filter(Boolean)
+  const TABLE_HEAD = showUnattendance
+    ? [{ id: 'date', label: t('Day') }, { id: 'note', label: t('note') }, { id: '' }].filter(
+        Boolean
+      )
     : [
         { id: 'date', label: t('Day') },
         { id: 'check_in_time', label: t('check in') },
@@ -95,19 +93,20 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
     ...filters,
   });
 
-  const displayData = filters.showUnattendance ? (missingAttendanceData || []) : (attendence || []);
-  const displayLength = filters.showUnattendance ? (missingAttendanceDataLength || 0) : (length || 0);
+  const displayData = filters.showUnattendance ? missingAttendanceData || [] : attendence || [];
+  const displayLength = filters.showUnattendance ? missingAttendanceDataLength || 0 : length || 0;
 
-  const paginatedDisplayData = filters.showUnattendance && missingAttendanceData 
-    ? missingAttendanceData.slice(
-        table.page * table.rowsPerPage,
-        (table.page + 1) * table.rowsPerPage
-      )
-    : displayData;
+  const paginatedDisplayData =
+    filters.showUnattendance && missingAttendanceData
+      ? missingAttendanceData.slice(
+          table.page * table.rowsPerPage,
+          (table.page + 1) * table.rowsPerPage
+        )
+      : displayData;
 
   const finalDisplayData = filters.showUnattendance ? paginatedDisplayData : displayData;
-  const finalDisplayLength = filters.showUnattendance 
-    ? (missingAttendanceData?.length || 0) 
+  const finalDisplayLength = filters.showUnattendance
+    ? missingAttendanceData?.length || 0
     : displayLength;
 
   useEffect(() => {
@@ -123,7 +122,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
 
   const dateError =
     filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
+      ? new Date(filters.startDate).getTime() > new Date(filters.endDate).getTime()
       : false;
 
   const canReset = !!filters.startDate && !!filters.endDate;
@@ -145,10 +144,13 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
     setFilters(defaultFilters);
   }, []);
 
-  const handleShowUnattendanceChange = useCallback((isChecked) => {
-    setShowUnattendance(isChecked);
-    table.onResetPage();
-  }, [table]);
+  const handleShowUnattendanceChange = useCallback(
+    (isChecked) => {
+      setShowUnattendance(isChecked);
+      table.onResetPage();
+    },
+    [table]
+  );
 
   const deleteHandler = useCallback(
     async (id) => {
