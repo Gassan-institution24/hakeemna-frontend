@@ -80,22 +80,11 @@ export default function StartupCreating({ open, onClose }) {
           name_english: `consultant`,
           name_arabic: `استشارة`,
         });
-        const { data: accountingActivity } = await axiosInstance.post(endpoints.activities.all, {
-          unit_service: USData?._id,
-          name_english: `accounting`,
-          name_arabic: `المحاسبة`,
-        });
         await axiosInstance.post(endpoints.rooms.all, {
           unit_service: USData?._id,
           name_english: `consultation room`,
           name_arabic: `غرفة الاستشارات`,
           activities: consultanstActivity?._id,
-        });
-        await axiosInstance.post(endpoints.rooms.all, {
-          unit_service: USData?._id,
-          name_english: `accounting room`,
-          name_arabic: `غرفة المحاسبة`,
-          activities: accountingActivity?._id,
         });
       }
 
