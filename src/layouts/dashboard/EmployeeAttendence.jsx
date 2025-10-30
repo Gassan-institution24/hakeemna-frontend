@@ -20,20 +20,44 @@ function EmployeeAttendence() {
   const [loading, setLoading] = useState(false);
 
   const getCoordinates = () =>
-    new Promise((resolve) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-          () => resolve({ lat: 0, lng: 0 })
-        );
-      } else resolve({ lat: 0, lng: 0 });
+    new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported by your browser.'));
+        return;
+      }
+
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then((result) => {
+          if (result.state === 'denied') {
+            reject(
+              new Error(
+                'Location permission is blocked. Please enable it from your browser settings'
+              )
+            );
+          } else {
+            navigator.geolocation.getCurrentPosition(
+              (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+              (err) => reject(new Error('Please allow location access to proceed.'))
+            );
+          }
+        })
+        .catch(() => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+            (err) => reject(new Error('Please allow location access to proceed.'))
+          );
+        });
     });
 
   const handleAction = async (type) => {
     try {
       setLoading(true);
+
+      // يطلب الموقع أولاً
       const coordinates = await getCoordinates();
 
+      // إذا تم الحصول على الموقع
       switch (type) {
         case 'checkin':
           await axiosInstance.post(endpoints.attendence.checkin, { coordinates });
@@ -53,8 +77,9 @@ function EmployeeAttendence() {
 
       refetch();
       changingAttendence.onClose();
+      enqueueSnackbar(t('done'), { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(error.message || t('something went wrong'), { variant: 'error' });
     } finally {
       setLoading(false);
     }
