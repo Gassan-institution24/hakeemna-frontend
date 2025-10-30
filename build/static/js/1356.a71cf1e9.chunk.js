@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1356],{41356:(i,s,e)=>{e.r(s),e.d(s,{default:()=>c});var n=e(29490),r=e(67132),t=e(50575),a=e(70579);function c(){const i=(0,r.g)(),{id:s}=i;return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsx)(n.mg,{children:(0,a.jsx)("title",{children:" Dashboard: Offer Edit"})}),(0,a.jsx)(t.Ih,{id:"".concat(s)})]})}}}]);
+//# sourceMappingURL=1356.a71cf1e9.chunk.js.map
