@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -209,11 +210,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
           <Box
             component="img"
             alt="logo"
-            src={
-              invoice.unit_service?.company_logo
-                ? invoice.unit_service?.company_logo
-                : '/logo/doc.svg'
-            }
+            src="/logo/doc.webp"
             sx={{ width: 64, height: 64, mx: { xs: 'auto', sm: '0' } }} // بموبايل يكون بالنص
           />
 
@@ -309,6 +306,15 @@ export default function InvoiceDetails({ invoice, refetch }) {
                 {t('envoicing system data')}
               </Typography>
               {t('invoice Id')}: {invoice.invoiceId}
+              {invoice?.invoice_QR && (
+                <Box sx={{ mt: 2 }}> 
+                  <QRCodeCanvas
+                    value={invoice?.invoice_QR}
+                    size={160}
+                    bgColor="#f9f9f9"
+                  />
+                </Box>
+              )}
             </Stack>
           )}
         </Box>

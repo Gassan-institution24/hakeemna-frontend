@@ -34,7 +34,7 @@ export default function AttendanceToolbar({
   monthly,
   showReported,
   //
-  dateError,
+  // dateError,
   ids,
 }) {
   const { t } = useTranslate();
@@ -50,7 +50,14 @@ export default function AttendanceToolbar({
   const handleFilterStartDate = useCallback(
     (newValue) => {
       if (error) setError('');
-      onFilters('startDate', newValue);
+      if (newValue) {
+        const utcDate = new Date(
+          Date.UTC(newValue.getFullYear(), newValue.getMonth(), newValue.getDate())
+        ).toISOString();
+        onFilters('startDate', utcDate);
+      } else {
+        onFilters('startDate', null);
+      }
     },
     [onFilters, error]
   );
@@ -58,11 +65,17 @@ export default function AttendanceToolbar({
   const handleFilterEndDate = useCallback(
     (newValue) => {
       if (error) setError('');
-      onFilters('endDate', newValue);
+      if (newValue) {
+        const utcDate = new Date(
+          Date.UTC(newValue.getFullYear(), newValue.getMonth(), newValue.getDate())
+        ).toISOString();
+        onFilters('endDate', utcDate);
+      } else {
+        onFilters('endDate', null);
+      }
     },
     [onFilters, error]
   );
-
   const reportHandler = useCallback(() => {
     if (!filters.startDate || !filters.endDate) {
       setError(true);
@@ -70,7 +83,6 @@ export default function AttendanceToolbar({
     }
     report.onTrue();
   }, [filters.startDate, filters.endDate, report]);
-
 
   const { data: intervalData } = useGetMonthlyReportInterval(filters.startDate && filters.endDate, {
     startDate: filters.startDate,
@@ -95,71 +107,42 @@ export default function AttendanceToolbar({
           <Stack justifyContent="flex-start">
             <DatePicker
               label={t('start date')}
-              value={filters.startDate}
+              value={filters.startDate ? new Date(filters.startDate) : null}
               onChange={handleFilterStartDate}
               slotProps={{
-                textField: {
-                  fullWidth: true,
-                  sx: {
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: error ? 'error.main' : '' },
-                    },
-                  },
-                },
+                textField: { fullWidth: true },
               }}
-              sx={{
-                width: { xs: 1, md: 200 },
-              }}
+              sx={{ width: { xs: 1, md: 200 } }}
             />
-            {error && (
-              <Typography variant="caption" color="error">
-                {t('please select start and end date')}
-              </Typography>
-            )}
           </Stack>
 
           <Stack justifyContent="flex-start">
             <DatePicker
               label={t('end date')}
-              value={filters.endDate}
+              value={filters.endDate ? new Date(filters.endDate) : null}
               onChange={handleFilterEndDate}
               slotProps={{
-                textField: {
-                  fullWidth: true,
-                  error: dateError,
-                  sx: {
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: error ? 'error.main' : '' },
-                    },
-                  },
-                },
-              }}
-              sx={{
-                width: { xs: 1, md: 200 },
-              }}
-            />
-            {error && (
-              <Typography variant="caption" color="error">
-                {t('please select start and end date')}
-              </Typography>
-            )}
-          </Stack>
-          {showReported && (
-          <Stack justifyContent="flex-start">
-            <TextField
-              select
-              label={t('Reported Status')}
-              value={reportedValue}
-              onChange={e => {
-                const val = e.target.value;
-                if (val === 'reported') onFilters('reported', true);
-                else if (val === 'unreported') onFilters('reported', false);
-                else onFilters('reported', null);
+                textField: { fullWidth: true },
               }}
               sx={{ width: { xs: 1, md: 200 } }}
-            >
-              <MenuItem value="all">{t('All')}</MenuItem>
-              <MenuItem value="reported">{t('Reported')}</MenuItem>
+            />
+          </Stack>
+          {showReported && (
+            <Stack justifyContent="flex-start">
+              <TextField
+                select
+                label={t('Reported Status')}
+                value={reportedValue}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === 'reported') onFilters('reported', true);
+                  else if (val === 'unreported') onFilters('reported', false);
+                  else onFilters('reported', null);
+                }}
+                sx={{ width: { xs: 1, md: 200 } }}
+              >
+                <MenuItem value="all">{t('All')}</MenuItem>
+                <MenuItem value="reported">{t('Reported')}</MenuItem>
                 <MenuItem value="unreported">{t('Unreported')}</MenuItem>
               </TextField>
             </Stack>
@@ -194,7 +177,7 @@ export default function AttendanceToolbar({
             popover.onClose();
           }}
         >
-          <Iconify icon="solar:export-bold" /> 
+          <Iconify icon="solar:export-bold" />
           {t('export')}
         </MenuItem>
       </CustomPopover>
@@ -222,7 +205,7 @@ export default function AttendanceToolbar({
 }
 
 AttendanceToolbar.propTypes = {
-  dateError: PropTypes.bool,
+  // dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   refetch: PropTypes.func,
