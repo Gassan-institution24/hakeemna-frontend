@@ -58,7 +58,6 @@
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.5.1",
     "buffer": "^6.0.3",
-    "caniuse-lite": "^1.0.30001636",
     "cypress-real-events": "^1.13.0",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
