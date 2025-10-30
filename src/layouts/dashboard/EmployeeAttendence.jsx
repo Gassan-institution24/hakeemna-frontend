@@ -22,7 +22,7 @@ function EmployeeAttendence() {
   const getCoordinates = () =>
     new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
-        reject(new Error('Geolocation is not supported by your browser.'));
+        reject(new Error(t('Geolocation is not supported by your browser.')));
         return;
       }
 
@@ -32,20 +32,20 @@ function EmployeeAttendence() {
           if (result.state === 'denied') {
             reject(
               new Error(
-                'Location permission is blocked. Please enable it from your browser settings'
+                t('Location permission is blocked. Please enable it from your browser settings')
               )
             );
           } else {
             navigator.geolocation.getCurrentPosition(
               (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-              (err) => reject(new Error('Please allow location access to proceed.'))
+              (err) => reject(new Error(t('Please allow location access to proceed.')))
             );
           }
         })
         .catch(() => {
           navigator.geolocation.getCurrentPosition(
             (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-            (err) => reject(new Error('Please allow location access to proceed.'))
+            (err) => reject(new Error(t('Please allow location access to proceed.')))
           );
         });
     });
