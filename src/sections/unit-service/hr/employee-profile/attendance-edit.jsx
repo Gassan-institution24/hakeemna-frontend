@@ -44,15 +44,7 @@ export default function AttendanceEdit({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const attendanceSchema = Yup.object().shape({
-    date: Yup.date().nullable().test('check-last-attendance', t('There is already an attendance registered today.'), (value) => {
-      const lastAttendanceDate = lastAttendance?.date.split('T')[0];
-      const currentDate = value.toISOString().split('T')[0];
-
-      if(currentDate === lastAttendanceDate) {
-        return false;
-      }
-      return value && value.toString().length > 0;
-    }),
+    date: Yup.date(),
     check_in_time: Yup.date().nullable(),
     off: Yup.boolean().nullable(),
     check_out_time: Yup.date().nullable(),
