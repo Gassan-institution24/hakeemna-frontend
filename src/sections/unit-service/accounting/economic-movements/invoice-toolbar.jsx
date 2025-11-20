@@ -63,13 +63,13 @@ export default function InvoiceToolbar({ invoice }) {
           pointerEvents: 'none',
           width: '100%',
           maxWidth: 900,
-          minHeight: '100vh', // 👈 يضمن إنه ياخذ ارتفاع الصفحة بالكامل
+          minHeight: '100vh',
           p: { xs: 2, md: 4 },
           backgroundColor: 'background.paper',
           boxShadow: 3,
           borderRadius: 2,
-          display: 'flex', // 👈 ضروري
-          flexDirection: 'column', // 👈 ضروري
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         {/* Header */}
