@@ -37,7 +37,6 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import {
   RHFSelect,
   RHFTextField,
-  // RHFDatePicker,
   RHFRadioGroup,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
@@ -70,16 +69,9 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     sequence_number: Yup.string(),
     name_english: Yup.string(),
     name_arabic: Yup.string(),
-    // email: Yup.string(),
-    // identification_num: Yup.string(),
-    // birth_date: Yup.mixed().nullable(),
-    // marital_status: Yup.string().nullable(),
     nationality: Yup.string().required(t('required field')),
-    // country: Yup.string().nullable(),
-    // city: Yup.string().nullable(),
     mobile_num1: Yup.string().required(t('required field')),
     mobile_num2: Yup.string(),
-    // gender: Yup.string().nullable(),
     note: Yup.string(),
     work_shift: Yup.string().required(t('required field')),
     work_group: Yup.string().required(t('required field')),
@@ -93,19 +85,9 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
       sequence_number: '',
       name_english: '',
       name_arabic: '',
-      // email: '',
-      // identification_num: '',
-      // birth_date: null,
-      // marital_status: null,
       nationality: null,
-      // country:
-      //   user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-      //     .country._id,
-      // city: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-      //   .city._id,
       mobile_num1: '',
       mobile_num2: '',
-      // gender: null,
       note: '',
       appointment_type: appointmenttypesData?.[0]?._id,
       start_time: new Date(),
@@ -166,7 +148,6 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
   }, [errors, enqueueSnackbar]);
 
   const values = watch();
-  // const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const createAppointment = async () => {
     const appoint = await axiosInstance.post(endpoints.appointments.all, {
@@ -189,8 +170,6 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
     sequence_number: values.sequence_number,
     name_english: values.name_english,
     name_arabic: values.name_arabic,
-    // email: values.email.toLowerCase(),
-    // identification_num: values.identification_num,
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
     work_group: values.work_group,
@@ -374,7 +353,6 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
             name="patientExist"
             options={[
               { label: t('my patient'), value: 'my_patients' },
-              // { label: t('hakeemna patient'), value: 'exist' },
               { label: t('new patient'), value: 'new' },
             ]}
           />
@@ -491,15 +469,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="name_arabic"
                   label={t('patient name in arabic')}
                 />
-                {/* <RHFTextField type="email" name="email" label={t('email address')} /> */}
-                {/* <RHFTextField
-                  onChange={handleEnglishInputChange}
-                  name="identification_num"
-                  label={t('ID number')}
-                /> */}
                 <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
                 <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
-                {/* <RHFDatePicker name="birth_date" label={t('birth date')} /> */}
                 <RHFSelect name="nationality" label={t('nationality')}>
                   {countriesData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -507,46 +478,7 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                     </MenuItem>
                   ))}
                 </RHFSelect>
-                {/* <RHFSelect name="country" label={t('country of residence')}>
-                  {countriesData.map((option, idx) => (
-                    <MenuItem lang="ar" key={idx} value={option._id}>
-                      {curLangAr ? option?.name_arabic : option?.name_english}
-                    </MenuItem>
-                  ))}
-                </RHFSelect> */}
-
-                {/* <RHFSelect name="city" label={t('city of residence')}>
-                  {tableData.map((option, idx) => (
-                    <MenuItem lang="ar" key={idx} value={option._id}>
-                      {curLangAr ? option?.name_arabic : option?.name_english}
-                    </MenuItem>
-                  ))}
-                </RHFSelect> */}
-                {/* <RHFSelect name="marital_status" label={t('marital status')}>
-                  <MenuItem lang="ar" value="single">
-                    {t('single')}
-                  </MenuItem>
-                  <MenuItem lang="ar" value="married">
-                    {t('married')}
-                  </MenuItem>
-                  <MenuItem lang="ar" value="widowed">
-                    {t('widowed')}
-                  </MenuItem>
-                  <MenuItem lang="ar" value="separated">
-                    {t('separated')}
-                  </MenuItem>
-                  <MenuItem lang="ar" value="divorced">
-                    {t('divorced')}
-                  </MenuItem>
-                </RHFSelect>
-                <RHFSelect name="gender" label={t('gender')}>
-                  <MenuItem lang="ar" value="male">
-                    {t('male')}
-                  </MenuItem>
-                  <MenuItem lang="ar" value="female">
-                    {t('female')}
-                  </MenuItem>
-                </RHFSelect> */}
+               
               </Box>
               <RHFTextField multiline rows={2} name="note" label={t('note')} />
 
