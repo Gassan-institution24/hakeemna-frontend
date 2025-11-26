@@ -78,6 +78,7 @@ export default function AddressListDialog({
             },
           }}
         >
+          
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography variant="subtitle2">{address.name}</Typography>
 
