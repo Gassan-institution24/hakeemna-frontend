@@ -29,6 +29,7 @@ export default function CallDialog() {
       setCallerName(data.userName);
       setRoomUrl(data.roomUrl);
       setOpen(true);
+      console.log(data);
 
       window._roomUrlTemp = data.roomUrl;
       window._roomNameTemp = data.uniqueRoom;
