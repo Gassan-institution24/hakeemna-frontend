@@ -14,7 +14,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
-import MedicalReportPDF from './MedicalReportPDF';
+import PrescriptionPDF from './PrescriptionPDF';
 import PrescriptionUpload from './items/presecription/prescription-upload';
 
 export default function PatientPrescriptions({ patient }) {
@@ -74,8 +74,8 @@ export default function PatientPrescriptions({ patient }) {
               {/* PDF PRINT BUTTON */}
               <Box key={currentLang.value}>
                 <PDFDownloadLink
-                  document={<MedicalReportPDF prescription={one} />}
-                  fileName="MedicalReport.pdf"
+                  document={<PrescriptionPDF prescription={one} />}
+                  fileName="Prescription.pdf"
                   style={{ textDecoration: 'none' }}
                 >
                   {({ loading }) => (
