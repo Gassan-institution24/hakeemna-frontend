@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 import { Card, Stack, Button, Typography, IconButton } from '@mui/material';
 
@@ -15,6 +16,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFDatePicker } from 'src/components/hook-form';
+
+import SickLeavePDF from "./SickLeavePDF";
 
 export default function SickLeaveItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -57,6 +60,7 @@ export default function SickLeaveItem({ one, refetch }) {
       });
     }
   });
+console.log(one);
 
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
@@ -86,13 +90,28 @@ export default function SickLeaveItem({ one, refetch }) {
         </FormProvider>
       ) : (
         <>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton onClick={() => setEditting(true)}>
-              <Iconify icon="lets-icons:edit-fill" />
-            </IconButton>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>{fDate(one.created_at)}</Typography>
+
+            <Stack direction="row" gap={1}>
+                <PDFDownloadLink
+                  document={<SickLeavePDF sickleave={one} />}
+                  fileName="SickLeave.pdf"
+                  style={{ textDecoration: "none" }}
+                >
+                  {({ loading }) => (
+                    <IconButton color="primary" disabled={loading}>
+                      <Iconify icon="solar:printer-minimalistic-bold" />
+                    </IconButton>
+                  )}
+                </PDFDownloadLink>
+
+              <IconButton onClick={() => setEditting(true)}>
+                <Iconify icon="lets-icons:edit-fill" />
+              </IconButton>
+            </Stack>
           </Stack>
-          {/* <Typography variant='subtitle2'>{t('prescription')}:</Typography> */}
+
           <Stack mt={1} ml={1} gap={1}>
             <Stack direction="row" gap={3}>
               <Typography variant="body2" color="text.disabled">
