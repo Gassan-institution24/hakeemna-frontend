@@ -7,6 +7,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import { Stack, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -28,6 +29,7 @@ import {
 } from 'src/components/table';
 
 import EmployeeAttendenceRow from './attendance-row';
+import MyAttendenceMobile from './MyAttendenceMobile';
 import EmployeeAttendanceToolbar from './attendance-toolbar';
 import AtteendanceFiltersResult from './attendance-filters-result';
 
@@ -43,6 +45,9 @@ const defaultFilters = {
 export default function MyAttendence() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
+
+  const isMobile = useMediaQuery('(max-width: 899px)');
+
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
   const TABLE_HEAD = [
@@ -167,46 +172,56 @@ export default function MyAttendence() {
           />
         )}
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={attendence.length}
-            action={
-              <Tooltip title="Unbook all">
-                <IconButton color="error" onClick={confirm.onTrue}>
-                  <Iconify icon="mdi:bell-cancel" />
-                </IconButton>
-              </Tooltip>
-            }
-            color="error"
+
+        {isMobile ? (
+          <MyAttendenceMobile
+            attendence={attendence}
+            onDelete={deleteHandler}
+            refetch={refetch}
           />
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={attendence.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={attendence.length}
+              action={
+                <Tooltip title="Unbook all">
+                  <IconButton color="error" onClick={confirm.onTrue}>
+                    <Iconify icon="mdi:bell-cancel" />
+                  </IconButton>
+                </Tooltip>
+              }
+              color="error"
+            />
 
-              <TableBody>
-                {attendence.map((row, idx) => (
-                  <EmployeeAttendenceRow
-                    key={idx}
-                    row={row}
-                    refetch={refetch}
-                    onDeleteRow={deleteHandler}
-                  />
-                ))}
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={attendence.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                <TableBody>
+                  {attendence.map((row, idx) => (
+                    <EmployeeAttendenceRow
+                      key={idx}
+                      row={row}
+                      refetch={refetch}
+                      onDeleteRow={deleteHandler}
+                    />
+                  ))}
+
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={length}
