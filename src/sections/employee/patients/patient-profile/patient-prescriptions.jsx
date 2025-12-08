@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import { Box, Card, Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
@@ -13,6 +14,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
+import MedicalReportPDF from './MedicalReportPDF';
 import PrescriptionUpload from './items/presecription/prescription-upload';
 
 export default function PatientPrescriptions({ patient }) {
@@ -41,12 +43,14 @@ export default function PatientPrescriptions({ patient }) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, { variant: 'error' });
     }
   };
+
   return (
     <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
       <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
         <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
           {showAdd ? t('X') : t('new prescription')}
         </Button>
+
       </Stack>
       {showAdd && (
         <PrescriptionUpload
@@ -57,14 +61,40 @@ export default function PatientPrescriptions({ patient }) {
           }}
         />
       )}
+
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center">
-            <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton color="error" onClick={() => handleDelete(one?._id)}>
-              <Iconify icon="mdi:delete-outline" />
-            </IconButton>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {fDate(one.created_at)}
+            </Typography>
+
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {/* PDF PRINT BUTTON */}
+              <Box key={currentLang.value}>
+                <PDFDownloadLink
+                  document={<MedicalReportPDF prescription={one} />}
+                  fileName="MedicalReport.pdf"
+                  style={{ textDecoration: 'none' }}
+                >
+                  {({ loading }) => (
+                    <IconButton color="primary" disabled={loading}>
+                      <Iconify icon="solar:printer-minimalistic-bold" />
+                    </IconButton>
+                  )}
+                </PDFDownloadLink>
+              </Box>
+
+              {/* DELETE BUTTON */}
+              <IconButton color="error" onClick={() => handleDelete(one?._id)}>
+                <Iconify icon="mdi:delete-outline" />
+              </IconButton>
+            </Stack>
+
           </Stack>
+
+
           <Box
             mt={1}
             ml={1}
@@ -73,6 +103,7 @@ export default function PatientPrescriptions({ patient }) {
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(4, 1fr)' }}
           >
+
             <Typography variant="body2" color="text.disabled">
               {t('trade name')}
             </Typography>
