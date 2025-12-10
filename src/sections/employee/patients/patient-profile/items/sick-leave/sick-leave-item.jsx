@@ -60,7 +60,6 @@ export default function SickLeaveItem({ one, refetch }) {
       });
     }
   });
-console.log(one);
 
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
