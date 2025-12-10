@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Card, Link, Stack, Button, Typography, IconButton } from '@mui/material';
@@ -14,6 +15,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFUpload } from 'src/components/hook-form';
+
+import MedicalReportPDF from './MedicalReportPDF';
 
 export default function MedicalReportItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -75,7 +78,6 @@ export default function MedicalReportItem({ one, refetch }) {
       });
     }
   });
-
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
       {editting ? (
@@ -112,12 +114,29 @@ export default function MedicalReportItem({ one, refetch }) {
         </FormProvider>
       ) : (
         <>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton onClick={() => setEditting(true)}>
-              <Iconify icon="lets-icons:edit-fill" />
-            </IconButton>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 18 }}>
+              {fDate(one.created_at)}
+            </Typography>
+
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <PDFDownloadLink
+                document={<MedicalReportPDF report={one} />}
+                fileName="MedicalReport.pdf"
+              >
+                {({ loading }) => (
+                  <IconButton color="primary" disabled={loading}>
+                    <Iconify icon="solar:printer-minimalistic-bold" />
+                  </IconButton>
+                )}
+              </PDFDownloadLink>
+
+              <IconButton onClick={() => setEditting(true)}>
+                <Iconify icon="lets-icons:edit-fill" />
+              </IconButton>
+            </Stack>
           </Stack>
+
           <Stack gap={1} mt={1} ml={1}>
             <Typography
               textTransform="none"

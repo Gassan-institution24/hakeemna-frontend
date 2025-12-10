@@ -135,7 +135,7 @@ export default function PatientProfile() {
       const socket = io(process.env.REACT_APP_API_URL);
       socket.emit('callUser', {
         userId: patientData.user,
-        userName: curLangAr ? patientData?.name_arabic : patientData?.name_english,
+        userName: curLangAr ? user?.employee?.name_arabic : user?.employee?.name_english,
         roomUrl,
         uniqueRoom,
       });
