@@ -15,15 +15,7 @@ const formatTime = (dateStr) => {
     hours = hours % 12 || 12;
     return `${hours}:${minutes} ${ampm}`;
 };
-const fixURL = (url) => {
-    if (!url) return null;
 
-    let newUrl = url.replace(/\\/g, "/");
-
-    newUrl = newUrl.replace("https://localhost", "http://localhost");
-
-    return newUrl;
-};
 
 const useStyles = () =>
     useMemo(
@@ -334,7 +326,7 @@ export default function PrescriptionPDF({ prescription }) {
                     <View style={{ alignItems: 'center' }}>
                         {prescription?.employee?.signature && (
                             <Image
-                                src={fixURL(prescription.employee.signature)}
+                                src={prescription.employee.signature.replace(/\\/g, '/')}
                                 style={styles.signImage}
                             />
                         )}
@@ -345,7 +337,7 @@ export default function PrescriptionPDF({ prescription }) {
                     <View style={{ alignItems: 'center' }}>
                         {prescription?.employee?.stamp && (
                             <Image
-                                src={fixURL(prescription.employee.stamp)}
+                                src={prescription.employee.stamp.replace(/\\/g, '/')}
                                 style={styles.stampImage}
                             />
                         )}

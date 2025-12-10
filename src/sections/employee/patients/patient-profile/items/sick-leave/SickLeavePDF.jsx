@@ -15,15 +15,6 @@ const formatTime = (dateStr) => {
     hours = hours % 12 || 12;
     return `${hours}:${minutes} ${ampm}`;
 };
-const fixURL = (url) => {
-    if (!url) return null;
-
-    let newUrl = url.replace(/\\/g, "/");
-
-    newUrl = newUrl.replace("https://localhost", "http://localhost");
-
-    return newUrl;
-};
 
 const useStyles = () =>
     useMemo(
@@ -42,7 +33,7 @@ const useStyles = () =>
                     fontSize: 22,
                     fontWeight: 900,
                     color: '#2a5d71',
-                    marginBottom: 2,
+                    marginBottom: 6,
                 },
 
                 subtitle: {
@@ -343,7 +334,7 @@ export default function SickLeavePDF({ sickleave }) {
                         <View style={{ alignItems: 'center' }}>
                         {sickleave?.employee?.signature && (
                                 <Image
-                                src={fixURL(sickleave.employee.signature)}
+                                src={sickleave.employee.signature.replace(/\\/g, '/')}
                                     style={styles.signImage}
                                 />
                             )}
@@ -354,7 +345,7 @@ export default function SickLeavePDF({ sickleave }) {
                         <View style={{ alignItems: 'center' }}>
                         {sickleave?.employee?.stamp && (
                                 <Image
-                                src={fixURL(sickleave.employee.stamp)}
+                                src={sickleave.employee.stamp.replace(/\\/g, '/')}
                                     style={styles.stampImage}
                                 />
                             )}
