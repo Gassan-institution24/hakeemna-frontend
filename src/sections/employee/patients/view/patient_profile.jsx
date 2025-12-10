@@ -54,10 +54,10 @@ export default function PatientProfile() {
       { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
     ],
   });
-
+  
   const patientData = usPatientData.patient
-    ? { ...usPatientData.patient, ...usPatientData }
-    : usPatientData;
+  ? { ...usPatientData.patient, ...usPatientData }
+  : usPatientData;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -275,7 +275,7 @@ export default function PatientProfile() {
               >
                 {t('edit')}
               </Button>
-              {patientData && (
+              {patientData?.patient && (
                 <Button
                   sx={{ minWidth: 120 }}
                   variant="contained"
