@@ -159,7 +159,6 @@ export default function AppointmentsToday() {
       console.error(error.message);
       enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
-    console.log(info);
 
   };
   const StatusFunction = async (info, status, alert) => {
