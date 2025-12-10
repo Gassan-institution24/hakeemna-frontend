@@ -15,15 +15,6 @@ const formatTime = (dateStr) => {
   hours = hours % 12 || 12;
   return `${hours}:${minutes} ${ampm}`;
 };
-const fixURL = (url) => {
-  if (!url) return null;
-
-  let newUrl = url.replace(/\\/g, '/');
-
-  newUrl = newUrl.replace('https://localhost', 'http://localhost');
-
-  return newUrl;
-};
 
 const useStyles = () =>
   useMemo(
@@ -42,7 +33,7 @@ const useStyles = () =>
           fontSize: 22,
           fontWeight: 900,
           color: '#2a5d71',
-          marginBottom: 2,
+          marginBottom: 6,
         },
 
         subtitle: {
@@ -269,17 +260,12 @@ export default function MedicalReportPDF({ report }) {
 
             <View style={{ flexDirection: 'row', marginTop: 8 }}>
               <Text style={[styles.rightLabel, { width: '50%' }]}>
-                Name:{' '}
-                <Text style={styles.valueText}>
-                  {report?.patient?.name_english || ''}
-                </Text>
+                Name: <Text style={styles.valueText}>{report?.patient?.name_english || ''}</Text>
               </Text>
 
               <Text style={[styles.rightLabel, { width: '50%' }]}>
                 Age:{' '}
-                <Text style={styles.valueText}>
-                  {calculateAge(report?.patient?.birth_date)}
-                </Text>
+                <Text style={styles.valueText}>{calculateAge(report?.patient?.birth_date)}</Text>
               </Text>
             </View>
           </View>
@@ -291,19 +277,41 @@ export default function MedicalReportPDF({ report }) {
 
           <Text style={styles.commentText}>
             {report?.description
-              ?.replace(/<br\s*\/?>/gi, '\n') 
-              ?.replace(/&nbsp;/g, ' ') 
-              ?.replace(/<[^>]+>/g, '') ||
-              ''}
+              ?.replace(/<br\s*\/?>/gi, '\n')
+              ?.replace(/&nbsp;/g, ' ')
+              ?.replace(/<[^>]+>/g, '') || ''}
           </Text>
         </View>
+        {/* ATTACHED FILES */}
+        {report?.file && report.file.length > 0 && (
+          <View style={{ marginTop: 20 }}>
+            <Text style={styles.commentTitle}>Attached Files</Text>
 
+            {report?.file?.map((img, index) => (
+              <Image
+                key={index}
+                src={img}
+                style={{
+                  width: 400,
+                  height: 250,
+                  objectFit: 'contain',
+                  marginTop: 10,
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                }}
+              />
+            ))}
+          </View>
+        )}
         {/* SIGNATURE & STAMP */}
         <View style={styles.signStampContainer}>
           {/* SIGNATURE */}
           <View style={{ alignItems: 'center' }}>
             {report?.employee?.signature && (
-              <Image src={fixURL(report.employee.signature)} style={styles.signImage} />
+              <Image
+                src={report?.employee?.signature?.replace(/\\/g, '/')}
+                style={styles.signImage}
+              />
             )}
             <Text style={styles.signStampLabel}>SIGNATURE</Text>
           </View>
@@ -311,7 +319,7 @@ export default function MedicalReportPDF({ report }) {
           {/* STAMP */}
           <View style={{ alignItems: 'center' }}>
             {report?.employee?.stamp && (
-              <Image src={fixURL(report.employee.stamp)} style={styles.stampImage} />
+              <Image src={report?.employee?.stamp?.replace(/\\/g, '/')} style={styles.stampImage} />
             )}
             <Text style={styles.signStampLabel}>STAMP</Text>
           </View>
