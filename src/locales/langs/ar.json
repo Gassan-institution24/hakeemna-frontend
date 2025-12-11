@@ -1652,5 +1652,30 @@
   "Start": "البداية",
   "End": "النهاية",
   "min": "دقيقة",
-  "Close": "إغلاق"
+  "Close": "إغلاق",
+  "Frequency": "التكرار",
+  "report": {
+    "previewTitle": "معاينة التقرير الطبي",
+    "doctorName": "اسم الطبيب",
+    "majorName": "التخصص",
+    "medicalReport": "التقرير الطبي",
+    "patientInfo": "معلومات المريض",
+    "reportDetails": "تفاصيل التقرير",
+    "dateOfReport": "تاريخ التقرير",
+    "dateOfVisit": "تاريخ الزيارة",
+    "name": "الاسم",
+    "age": "العمر",
+    "description": "وصف التقرير",
+    "signature": "التوقيع",
+    "stamp": "الختم",
+    "phoneNumber": "رقم الهاتف",
+    "relativePhone": "رقم الهاتف البديل",
+    "email": "البريد الإلكتروني",
+    "workingHours": "ساعات العمل",
+    "address": "العنوان",
+    "downloadPdf": "تحميل PDF",
+    "descriptionTitle": "الوصف",
+    "sickLeave": "معاينة الإجازة المرضية ",
+    "prescription": "معاينة الوصفة الطبية"
+  }
 }
