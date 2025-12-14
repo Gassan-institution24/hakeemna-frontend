@@ -43,6 +43,7 @@ export default function PdfPreviewDialogPrescriptionPDF({ open, onClose, report 
     }
     return isArabic ? `${age} سنة` : `${age} years`;
   }
+  const hasManyMedicines = report?.medicines?.length > 1;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -249,8 +250,8 @@ export default function PdfPreviewDialogPrescriptionPDF({ open, onClose, report 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
           <Box
             sx={{
-              flexGrow: 1, // <--- THE MAGIC PART
-              minHeight: '335px', // baseline so it always looks correct
+              flexGrow: hasManyMedicines ? 0 : 1,
+              minHeight: hasManyMedicines ? '200px' : '335px',
             }}
           />
 
@@ -309,6 +310,7 @@ export default function PdfPreviewDialogPrescriptionPDF({ open, onClose, report 
             sx={{
               borderTop: '2px solid #2a5d71',
               pt: 3,
+              mt: 'auto', 
               display: 'flex',
               justifyContent: 'space-between',
               fontSize: 18,
