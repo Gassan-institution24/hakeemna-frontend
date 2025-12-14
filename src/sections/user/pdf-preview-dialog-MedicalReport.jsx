@@ -43,7 +43,9 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
     }
     return isArabic ? `${age} سنة` : `${age} years`;
   }
-  console.log('reprt,', report);
+  const hasImage =
+    Array.isArray(report?.file) &&
+    report.file.some((fileUrl) => /\.(jpg|jpeg|png|webp)$/i.test(fileUrl));
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -55,7 +57,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('report.previewTitle')}</Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('medical report')}</Typography>
 
           {/* SMALL BUTTON NEXT TO TITLE */}
           <Button
@@ -77,15 +79,23 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
         <Box
           ref={previewRef}
           sx={{
-            p: '40px 50px',
+            pt: '40px',
+            px: '50px',
+            pb: '20px',
             backgroundColor: '#F7FAFF',
             fontSize: '18px',
             position: 'relative',
-            minHeight: '1182px',
+            lineHeight: 1.7,
+            overflow: 'hidden',
+
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
-            lineHeight: 1.7,
+
+            height: '1182px',
+            boxSizing: 'border-box',
+
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
           }}
         >
           {/* ==== WATERMARK ==== */}
@@ -98,7 +108,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: '520px',
-              opacity: 0.14,
+              opacity: 0.05,
               pointerEvents: 'none',
             }}
           />
@@ -117,7 +127,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
           </Typography>
 
           {/* LINE */}
-          <Box sx={{ borderBottom: '2px solid #1f2c5b', mt: 2, mb: 4 }} />
+          <Box sx={{ borderBottom: '2px solid #2a5d71', mt: 2, mb: 4 }} />
 
           {/* ==== TOP INFO GRID ==== */}
           <Grid container spacing={5}>
@@ -158,117 +168,108 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13.5,
+                  mt: 2,
+                }}
+              >
                 {/* NAME */}
-                <Grid item xs={8}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {t('report.name')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
-                    </span>
-                  </Typography>
-                </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.name')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
+                  </span>
+                </Typography>
 
                 {/* AGE */}
-                <Grid item xs={4} sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {t('report.age')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {calculateAge(report?.patient?.birth_date)}
-                    </span>
-                  </Typography>
-                </Grid>
-              </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.age')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {calculateAge(report?.patient?.birth_date)}
+                  </span>
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
           {/* ==== DESCRIPTION ==== */}
-          <div
-            style={{
-              marginTop: '16px',
-              direction: isArabic ? 'rtl' : 'ltr',
-              textAlign: isArabic ? 'right' : 'left',
-              whiteSpace: 'pre-line',
-              wordBreak: 'break-word',
-              overflowWrap: 'break-word',
-              lineHeight: '1.7',
-              fontSize: '18px',
-              color: '#000',
-            }}
-          >
-            {/* DESCRIPTION TEXT */}
-            {report?.description
-              ?.replace(/<\/p>/gi, '\n')
-              ?.replace(/<br\s*\/?>/gi, '\n')
-              ?.replace(/&nbsp;/g, ' ')
-              ?.replace(/<[^>]+>/g, '')
-              ?.trim()}
+          {report?.description && (
+            <Box sx={{ mt: 4 }}>
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  lineHeight: 1.7,
+                  color: '#000',
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {report.description
+                  .replace(/<\/p>/gi, '\n')
+                  .replace(/<br\s*\/?>/gi, '\n')
+                  .replace(/&nbsp;/g, ' ')
+                  .replace(/<[^>]+>/g, '')
+                  .trim()}
+              </Typography>
+            </Box>
+          )}
 
-            {/* ==== ATTACHMENT FILE ==== */}
-            {report?.file?.length > 0 && (
-              <div style={{ marginTop: '20px' }}>
-                <div
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    color: '#1f2c5b',
-                    marginBottom: '8px',
-                  }}
-                >
-                  {isArabic ? 'الملف المرفق:' : 'Attached File:'}
-                </div>
+          {/* ==== ATTACHED FILES (IMAGES ONLY) ==== */}
+          {Array.isArray(report?.file) && report.file.length > 0 && (
+            <div style={{ marginTop: '24px' }}>
+              {report.file.map((fileUrl, index) => {
+                const fixedUrl = fixURL(fileUrl);
+                const isImage = /\.(jpg|jpeg|png|webp)$/i.test(fixedUrl);
+                if (!isImage) return null;
 
-                {/* PDF FILE */}
-                {report.file[0].endsWith('.pdf') ? (
-                  <a
-                    href={fixURL(report.file[0])}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      fontSize: '16px',
-                      color: '#0077cc',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    {isArabic ? 'اضغط هنا لفتح الملف' : 'Click here to open the file'}
-                  </a>
-                ) : (
-                  /* IMAGE FILE */
+                return (
                   <img
-                    alt=""
-                    src={fixURL(report.file[0])}
+                    key={index}
+                    src={fixedUrl}
+                    alt={`attachment-${index}`}
                     style={{
-                      width: '100%',
-                      maxWidth: '400px',
+                      maxWidth: '260px',
+                      maxHeight: '350px',
+                      objectFit: 'contain',
                       borderRadius: '8px',
-                      marginTop: '8px',
+                      border: '1px solid #ccc',
+
+                      float: isArabic ? 'right' : 'left', // 👈 هون السحر
+                      margin: isArabic ? '0 0 16px 24px' : '0 24px 16px 0',
                     }}
                   />
-                )}
-              </div>
-            )}
-          </div>
+                );
+              })}
+              <div style={{ clear: 'both' }} />
+            </div>
+          )}
 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
-          <Box
-            sx={{
-              flexGrow: 1, // <--- THE MAGIC PART
-              minHeight: '300px', // baseline so it always looks correct
-            }}
-          />
+          {!hasImage && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                minHeight: '400px',
+              }}
+            />
+          )}
+          {/* ==== SMALL SPACE WHEN IMAGE EXISTS ==== */}
+          {hasImage && <Box sx={{ height: '220px' }} />}
 
           {/* ==== SIGNATURE & STAMP ==== */}
           <Box
@@ -334,10 +335,18 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
           >
             {/* LEFT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.phoneNumber')}: {report?.unit_service?.phone || '---'}
               </Typography>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.workingHours')}: {formatTime(report?.unit_service?.work_start_time)}{' '}
                 {' — '}
                 {formatTime(report?.unit_service?.work_end_time)}
@@ -346,12 +355,20 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
 
             {/* MIDDLE COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.email')}: {report?.unit_service?.email || '---'}
               </Typography>
 
               {report?.unit_service?.mobile_nu && (
-                <Typography>
+                <Typography
+                  sx={{
+                    color: '#2a5d71',
+                  }}
+                >
                   {t('report.relativePhone')}: {report?.unit_service?.mobile_num || '---'}
                 </Typography>
               )}
@@ -359,7 +376,11 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
 
             {/* RIGHT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.address')}: {report?.unit_service?.address || '---'}
               </Typography>
             </Box>
@@ -372,7 +393,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
               fontSize: 16,
               fontWeight: 700,
               color: '#2a5d71',
-              mt: 2,
+              mt: 0,
             }}
           >
             {currentLang.value === 'ar' ? 'تم تطويره بواسطة حكيمنا ٣٦٠' : 'Powered by Hakeemna 360'}
