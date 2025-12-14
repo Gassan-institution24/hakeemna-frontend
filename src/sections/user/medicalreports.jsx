@@ -6,9 +6,6 @@ import { Page, Text, View, Document, StyleSheet, Image as PdfImage } from '@reac
 
 import { Box, Card, Stack, Avatar, Tooltip, Divider, Typography } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -18,7 +15,6 @@ import { useGetPatintmedicalreports } from 'src/api/medical_repots';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
-import Back from './imges/back2.png';
 import Doclogo from '../../components/logo/doc.png';
 import PdfPreviewDialog from './pdf-preview-dialog-MedicalReport';
 
@@ -303,22 +299,8 @@ MedicalReportPDF.propTypes = {
 export default function Medicalreports() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
-  const router = useRouter();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const handleHover = (id) => {
-    setHoveredButtonId(id);
-  };
-
-  const handleMouseOut = () => {
-    setHoveredButtonId(null);
-  };
-
-  const handleViewClick = (id) => {
-    router.push(paths.dashboard.user.medicalreportsview(id));
-  };
 
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
 
@@ -355,11 +337,8 @@ export default function Medicalreports() {
           <Card
             key={index}
             sx={{
-              backgroundImage: `url(${Back})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundColor: 'rgba(255, 255, 255, 0.800)',
-              backgroundBlendMode: 'lighten',
+              backgroundColor: 'rgba(247, 246, 246, 0.4)',
+              borderRadius: 2,
             }}
           >
             <Stack sx={{ p: 2, pb: 1, height: 150 }}>
@@ -394,13 +373,6 @@ export default function Medicalreports() {
                   onClick={() => openPdfDialog(info)}
                 />
               </Tooltip>
-              <Iconify
-                icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
-                onMouseOver={() => handleHover(info?._id)}
-                onMouseOut={handleMouseOut}
-                onClick={() => handleViewClick(info?._id)}
-                width={25}
-              />
             </Stack>
             <Divider
               sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 5 }}
@@ -410,7 +382,12 @@ export default function Medicalreports() {
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{ p: 3, justifyContent: 'space-between' }}
+              sx={{
+                p: 3,
+                justifyContent: 'space-between',
+                backgroundColor: 'rgba(247, 246, 246, 0.2)',
+                borderRadius: 2,
+              }}
             >
               {[
                 {

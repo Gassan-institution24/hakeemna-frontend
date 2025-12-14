@@ -18,9 +18,6 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
 
 import { useGetDrugs } from 'src/api';
@@ -30,10 +27,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
-import Back from './imges/back3.png';
 import Doclogo from '../../components/logo/doc.png';
 import PdfPreviewDialogPrescription from './pdf-preview-dialog-Prescription';
-
 
 Font.register({
   family: 'ArabicFont',
@@ -210,18 +205,6 @@ export default function Prescriptions() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
-  const [hoveredButtonId, setHoveredButtonId] = React.useState(null);
-  const router = useRouter();
-
-  const handleHover = (id) => {
-    setHoveredButtonId(id);
-  };
-  const handleMouseOut = () => {
-    setHoveredButtonId(null);
-  };
-  const handleViewClick = (id) => {
-    router.push(paths.dashboard.user.prescriptionview(id));
-  };
   const { drugs } = useGetDrugs(user?.patient?._id);
   const [openPreview, setOpenPreview] = React.useState(false);
   const [selectedReport, setSelectedReport] = React.useState(null);
@@ -237,11 +220,8 @@ export default function Prescriptions() {
           <Card
             key={index}
             sx={{
-              backgroundImage: `url(${Back})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundColor: 'rgba(255, 255, 255, 0.800)',
-              backgroundBlendMode: 'lighten',
+              backgroundColor: 'rgba(247, 246, 246, 0.4)',
+              borderRadius: 2,
             }}
           >
             <Stack sx={{ p: 2, pb: 1, height: 110 }}>
@@ -275,13 +255,6 @@ export default function Prescriptions() {
                   onClick={() => openPdfDialog(info)}
                 />
               </Tooltip>
-              <Iconify
-                icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
-                onMouseOver={() => handleHover(info?._id)}
-                onMouseOut={handleMouseOut}
-                onClick={() => handleViewClick(info?._id)}
-                width={25}
-              />
             </Stack>
             <Divider
               sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 10 }}
@@ -291,7 +264,12 @@ export default function Prescriptions() {
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{ p: 3, justifyContent: 'space-between' }}
+              sx={{
+                p: 3,
+                justifyContent: 'space-between',
+                backgroundColor: 'rgba(247, 246, 246, 0.2)', 
+                borderRadius: 2,
+              }}
             >
               {[
                 {
