@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import { Box, Card, Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
@@ -14,7 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
-import PrescriptionPDF from './PrescriptionPDF';
+import PdfPreviewDialogPrescriptionPDF from './PrescriptionPDF';
 import PrescriptionUpload from './items/presecription/prescription-upload';
 
 export default function PatientPrescriptions({ patient }) {
@@ -43,6 +42,13 @@ export default function PatientPrescriptions({ patient }) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, { variant: 'error' });
     }
   };
+  const [openPreview, setOpenPreview] = React.useState(false);
+  const [selectedReport, setSelectedReport] = React.useState(null);
+
+  const openPdfDialog = (report) => {
+    setSelectedReport(report);
+    setOpenPreview(true);
+  };
 
   return (
     <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
@@ -50,7 +56,6 @@ export default function PatientPrescriptions({ patient }) {
         <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
           {showAdd ? t('X') : t('new prescription')}
         </Button>
-
       </Stack>
       {showAdd && (
         <PrescriptionUpload
@@ -65,7 +70,6 @@ export default function PatientPrescriptions({ patient }) {
       {prescriptionData?.map((one, idx) => (
         <Card key={idx} sx={{ py: 3, px: 5, mb: 2 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               {fDate(one.created_at)}
             </Typography>
@@ -73,17 +77,9 @@ export default function PatientPrescriptions({ patient }) {
             <Stack direction="row" alignItems="center" spacing={1}>
               {/* PDF PRINT BUTTON */}
               <Box key={currentLang.value}>
-                <PDFDownloadLink
-                  document={<PrescriptionPDF prescription={one} />}
-                  fileName="Prescription.pdf"
-                  style={{ textDecoration: 'none' }}
-                >
-                  {({ loading }) => (
-                    <IconButton color="primary" disabled={loading}>
-                      <Iconify icon="solar:printer-minimalistic-bold" />
-                    </IconButton>
-                  )}
-                </PDFDownloadLink>
+                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
+                  <Iconify icon="solar:printer-minimalistic-bold" />
+                </IconButton>
               </Box>
 
               {/* DELETE BUTTON */}
@@ -91,9 +87,7 @@ export default function PatientPrescriptions({ patient }) {
                 <Iconify icon="mdi:delete-outline" />
               </IconButton>
             </Stack>
-
           </Stack>
-
 
           <Box
             mt={1}
@@ -103,7 +97,6 @@ export default function PatientPrescriptions({ patient }) {
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(4, 1fr)' }}
           >
-
             <Typography variant="body2" color="text.disabled">
               {t('trade name')}
             </Typography>
@@ -129,6 +122,11 @@ export default function PatientPrescriptions({ patient }) {
           </Box>
         </Card>
       ))}
+      <PdfPreviewDialogPrescriptionPDF
+        open={openPreview}
+        onClose={() => setOpenPreview(false)}
+        report={selectedReport}
+      />
     </Container>
   );
 }

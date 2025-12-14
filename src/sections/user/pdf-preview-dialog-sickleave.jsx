@@ -27,8 +27,6 @@ const fixURL = (url) => {
 };
 
 export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
-  console.log('report', report);
-
   const previewRef = useRef(null);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -46,6 +44,7 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
     return isArabic ? `${age} سنة` : `${age} years`;
   }
   const decodeHtml = (html) => {
+    if (!html) return '';
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
@@ -61,13 +60,13 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('report.sickLeave')}</Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('sick leave')}</Typography>
 
           {/* SMALL BUTTON NEXT TO TITLE */}
           <Button
             variant="contained"
             color="primary"
-            onClick={() => generatePdfFromElement(previewRef.current, 'sickLeave.pdf')}
+            onClick={() => generatePdfFromElement(previewRef.current, 'SickLeave.pdf')}
             sx={{
               textTransform: 'none',
               fontSize: '14px',
@@ -83,15 +82,23 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
         <Box
           ref={previewRef}
           sx={{
-            p: '40px 50px',
+            pt: '40px',
+            px: '50px',
+            pb: '20px',
             backgroundColor: '#F7FAFF',
             fontSize: '18px',
             position: 'relative',
-            minHeight: '1182px',
+            lineHeight: 1.7,
+            overflow: 'hidden',
+
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
-            lineHeight: 1.7,
+
+            height: '1182px',
+            boxSizing: 'border-box',
+
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
           }}
         >
           {/* ==== WATERMARK ==== */}
@@ -123,14 +130,14 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
           </Typography>
 
           {/* LINE */}
-          <Box sx={{ borderBottom: '2px solid #1f2c5b', mt: 2, mb: 4 }} />
+          <Box sx={{ borderBottom: '2px solid #2a5d71', mt: 2, mb: 4 }} />
 
           {/* ==== TOP INFO GRID ==== */}
           <Grid container spacing={5}>
             {/* LEFT COLUMN */}
             <Grid item xs={4}>
               <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
-                {t('report.medicalReport')}
+                {t('sick leave')}
               </Typography>
 
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
@@ -164,68 +171,90 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13.5,
+                  mt: 2,
+                }}
+              >
                 {/* NAME */}
-                <Grid item xs={8}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {t('report.name')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
-                    </span>
-                  </Typography>
-                </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.name')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
+                  </span>
+                </Typography>
 
                 {/* AGE */}
-                <Grid item xs={4} sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {t('report.age')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {calculateAge(report?.patient?.birth_date)}
-                    </span>
-                  </Typography>
-                </Grid>
-              </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.age')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {calculateAge(report?.patient?.birth_date)}
+                  </span>
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
-          {/* ==== DESCRIPTION ==== */}
-          <div
-            style={{
-              direction: isArabic ? 'rtl' : 'ltr',
-              textAlign: isArabic ? 'right' : 'left',
-              unicodeBidi: 'plaintext',
-              whiteSpace: 'pre-line',
-              lineHeight: '1.7',
-              fontSize: '18px',
-              color: '#000',
-            }}
-          >
-            {decodeHtml(report?.description || '')
-              .replace(/<\/p>/gi, '\n')
-              .replace(/<br\s*\/?>/gi, '\n')
-              .replace(/&nbsp;/g, ' ')
-              .replace(/<[^>]+>/g, '')
-              .trim()}
-          </div>
+          {/* ==== SICK LEAVE DETAILS ==== */}
+          <Box sx={{ mt: 4 }}>
+            {/* START DATE */}
+            <Typography sx={{ fontSize: 18, mb: 1 }}>
+              {t('start date')}:{' '}
+              <strong>{fDate(report?.Medical_sick_leave_start, 'dd/MM/yyyy')}</strong>
+            </Typography>
+
+            {/* END DATE */}
+            <Typography sx={{ fontSize: 18, mb: 2 }}>
+              {t('end date')}:{' '}
+              <strong>{fDate(report?.Medical_sick_leave_end, 'dd/MM/yyyy')}</strong>
+            </Typography>
+
+            {/* NOTE / DESCRIPTION (ONLY IF EXISTS) */}
+            {report?.description && (
+              <>
+                <Typography sx={{ fontSize: 18, fontWeight: 700, mt: 3 }}>
+                  {t('description')}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: 16,
+                    lineHeight: 1.7,
+                    whiteSpace: 'pre-line',
+                  }}
+                >
+                  {decodeHtml(report.description)
+                    .replace(/<\/p>/gi, '\n')
+                    .replace(/<br\s*\/?>/gi, '\n')
+                    .replace(/&nbsp;/g, ' ')
+                    .replace(/<[^>]+>/g, '')
+                    .trim()}
+                </Typography>
+              </>
+            )}
+          </Box>
 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
           <Box
             sx={{
               flexGrow: 1, // <--- THE MAGIC PART
-              minHeight: '300px', // baseline so it always looks correct
+              minHeight: '335px', // baseline so it always looks correct
             }}
           />
 
@@ -293,10 +322,18 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
           >
             {/* LEFT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.phoneNumber')}: {report?.unit_services?.phone || '---'}
               </Typography>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.workingHours')}: {formatTime(report?.unit_services?.work_start_time)}{' '}
                 {' — '}
                 {formatTime(report?.unit_services?.work_end_time)}
@@ -305,12 +342,20 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
 
             {/* MIDDLE COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.email')}: {report?.unit_services?.email || '---'}
               </Typography>
 
               {report?.unit_services?.mobile_nu && (
-                <Typography>
+                <Typography
+                  sx={{
+                    color: '#2a5d71',
+                  }}
+                >
                   {t('report.relativePhone')}: {report?.unit_services?.mobile_num || '---'}
                 </Typography>
               )}
@@ -318,7 +363,11 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
 
             {/* RIGHT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.address')}: {report?.unit_services?.address || '---'}
               </Typography>
             </Box>
@@ -337,8 +386,6 @@ export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
             {currentLang.value === 'ar' ? 'تم تطويره بواسطة حكيمنا ٣٦٠' : 'Powered by Hakeemna 360'}
           </Typography>
         </Box>
-
-      
       </DialogContent>
     </Dialog>
   );

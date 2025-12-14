@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PDFDownloadLink } from "@react-pdf/renderer";
 
-import { Card, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Box, Card, Stack, Button, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import { ConvertToHTML } from 'src/utils/convert-to-html';
@@ -17,7 +16,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFDatePicker } from 'src/components/hook-form';
 
-import SickLeavePDF from "./SickLeavePDF";
+import PdfPreviewDialogPrescriptionPDF from './SickLeavePDF';
 
 export default function SickLeaveItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -60,7 +59,13 @@ export default function SickLeaveItem({ one, refetch }) {
       });
     }
   });
+  const [openPreview, setOpenPreview] = React.useState(false);
+  const [selectedReport, setSelectedReport] = React.useState(null);
 
+  const openPdfDialog = (report) => {
+    setSelectedReport(report);
+    setOpenPreview(true);
+  };
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
       {editting ? (
@@ -90,20 +95,16 @@ export default function SickLeaveItem({ one, refetch }) {
       ) : (
         <>
           <Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>{fDate(one.created_at)}</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              {fDate(one.created_at)}
+            </Typography>
 
             <Stack direction="row" gap={1}>
-                <PDFDownloadLink
-                  document={<SickLeavePDF sickleave={one} />}
-                  fileName="SickLeave.pdf"
-                  style={{ textDecoration: "none" }}
-                >
-                  {({ loading }) => (
-                    <IconButton color="primary" disabled={loading}>
-                      <Iconify icon="solar:printer-minimalistic-bold" />
-                    </IconButton>
-                  )}
-                </PDFDownloadLink>
+              <Box key={currentLang.value}>
+                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
+                  <Iconify icon="solar:printer-minimalistic-bold" />
+                </IconButton>
+              </Box>
 
               <IconButton onClick={() => setEditting(true)}>
                 <Iconify icon="lets-icons:edit-fill" />
@@ -131,6 +132,11 @@ export default function SickLeaveItem({ one, refetch }) {
           </Stack>
         </>
       )}
+      <PdfPreviewDialogPrescriptionPDF
+        open={openPreview}
+        onClose={() => setOpenPreview(false)}
+        report={selectedReport}
+      />
     </Card>
   );
 }
