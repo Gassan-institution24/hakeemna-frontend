@@ -2,15 +2,7 @@ import * as React from 'react';
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
 import { convert } from 'html-to-text';
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  PDFDownloadLink,
-  Image as PdfImage,
-} from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image as PdfImage } from '@react-pdf/renderer';
 
 import { Box, Card, Stack, Avatar, Tooltip, Divider, Typography } from '@mui/material';
 
@@ -28,6 +20,7 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back2.png';
 import Doclogo from '../../components/logo/doc.png';
+import PdfPreviewDialog from './pdf-preview-dialog-MedicalReport';
 
 const styles = StyleSheet.create({
   page: {
@@ -143,28 +136,31 @@ const styles = StyleSheet.create({
 // Helper function to split text into chunks that fit on a page
 const splitTextIntoPages = (text, maxCharsPerPage = 2000) => {
   const sentences = text.split('. ');
-  
-  const result = sentences.reduce((acc, sentence) => {
-    const { pages, currentPage } = acc;
-    const potentialPage = `${currentPage}${sentence}. `;
-    
-    if (potentialPage.length > maxCharsPerPage && currentPage.length > 0) {
+
+  const result = sentences.reduce(
+    (acc, sentence) => {
+      const { pages, currentPage } = acc;
+      const potentialPage = `${currentPage}${sentence}. `;
+
+      if (potentialPage.length > maxCharsPerPage && currentPage.length > 0) {
+        return {
+          pages: [...pages, currentPage.trim()],
+          currentPage: `${sentence}. `,
+        };
+      }
+
       return {
-        pages: [...pages, currentPage.trim()],
-        currentPage: `${sentence}. `
+        pages,
+        currentPage: potentialPage,
       };
-    }
-    
-    return {
-      pages,
-      currentPage: potentialPage
-    };
-  }, { pages: [], currentPage: '' });
-  
-  const finalPages = result.currentPage.trim() 
+    },
+    { pages: [], currentPage: '' }
+  );
+
+  const finalPages = result.currentPage.trim()
     ? [...result.pages, result.currentPage.trim()]
     : result.pages;
-  
+
   return finalPages.length > 0 ? finalPages : [text];
 };
 
@@ -172,12 +168,12 @@ const splitTextIntoPages = (text, maxCharsPerPage = 2000) => {
 const distributeImages = (images, imagesPerPage = 2) => {
   const imagePages = [];
   let i = 0;
-  
+
   while (i < images.length) {
     imagePages.push(images.slice(i, i + imagesPerPage));
     i += imagesPerPage;
   }
-  
+
   return imagePages;
 };
 
@@ -206,9 +202,7 @@ const MedicalReportPDF = ({ report }) => {
     </View>
   );
 
-  const renderWatermark = () => (
-    <PdfImage src={Doclogo} style={styles.watermark} />
-  );
+  const renderWatermark = () => <PdfImage src={Doclogo} style={styles.watermark} />;
 
   const renderSignatureSection = () => (
     <View style={styles.signatureSection}>
@@ -230,7 +224,9 @@ const MedicalReportPDF = ({ report }) => {
   const renderFooter = (pageNumber) => (
     <>
       <Text style={styles.footer}>Powered by hakeemna</Text>
-      <Text style={styles.pageNumber}>Page {pageNumber} of {totalPages}</Text>
+      <Text style={styles.pageNumber}>
+        Page {pageNumber} of {totalPages}
+      </Text>
     </>
   );
 
@@ -240,7 +236,7 @@ const MedicalReportPDF = ({ report }) => {
       <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
         {renderHeader()}
         {renderWatermark()}
-        
+
         <View style={styles.content}>
           <Text style={styles.largeText}>Patient Information</Text>
           <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
@@ -258,7 +254,7 @@ const MedicalReportPDF = ({ report }) => {
       {textPages.slice(1).map((pageText, index) => (
         <Page key={`text-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
           {renderWatermark()}
-          
+
           <View style={styles.contentContinuation}>
             <Text style={styles.text}>{pageText}</Text>
           </View>
@@ -273,11 +269,15 @@ const MedicalReportPDF = ({ report }) => {
       {imagePages.map((pageImages, index) => {
         const currentPageNum = textPages.length + index + 1;
         const isLastPage = currentPageNum === totalPages;
-        
+
         return (
-          <Page key={`images-${index}`} size={{ width: 595.28, height: 841.89 }} style={styles.page}>
+          <Page
+            key={`images-${index}`}
+            size={{ width: 595.28, height: 841.89 }}
+            style={styles.page}
+          >
             {renderWatermark()}
-            
+
             <View style={isLastPage ? styles.content : styles.contentContinuation}>
               {pageImages.map((imageUrl, imgIndex) => (
                 <View key={imgIndex} style={styles.imageContainer}>
@@ -307,21 +307,21 @@ export default function Medicalreports() {
   const router = useRouter();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  
+
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
-  
+
   const handleMouseOut = () => {
     setHoveredButtonId(null);
   };
-  
+
   const handleViewClick = (id) => {
     router.push(paths.dashboard.user.medicalreportsview(id));
   };
-  
+
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
-  
+
   const formatTextWithLineBreaks = (text, id, limit = 20) => {
     if (!text) return '';
 
@@ -341,115 +341,141 @@ export default function Medicalreports() {
 
     return formattedText;
   };
+  const [openPreview, setOpenPreview] = React.useState(false);
+  const [selectedReport, setSelectedReport] = React.useState(null);
 
-  return medicalreportsdata?.length > 0 ? (
-    medicalreportsdata?.map((info, index) => (
-      <Card
-        key={index}
-        sx={{
-          backgroundImage: `url(${Back})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundColor: 'rgba(255, 255, 255, 0.800)',
-          backgroundBlendMode: 'lighten',
-        }}
-      >
-        <Stack sx={{ p: 2, pb: 1, height: 150 }}>
-          <Avatar
-            alt={info?.name_english}
-            src={user?.patient?.profile_picture}
-            variant="rounded"
-            sx={{ width: 48, height: 48, mb: 2 }}
-          />
-
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDateAndTime(info?.created_at)}
-          </Stack>
-          <Typography
-            dangerouslySetInnerHTML={{
-              __html: formatTextWithLineBreaks(info?.description, info?._id),
+  const openPdfDialog = (report) => {
+    setSelectedReport(report);
+    setOpenPreview(true);
+  };
+  return (
+    <>
+      {medicalreportsdata?.length > 0 ? (
+        medicalreportsdata?.map((info, index) => (
+          <Card
+            key={index}
+            sx={{
+              backgroundImage: `url(${Back})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundColor: 'rgba(255, 255, 255, 0.800)',
+              backgroundBlendMode: 'lighten',
             }}
-            sx={{ fontSize: 13 }}
-          />
-        </Stack>
-        <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
-          <PDFDownloadLink
-            style={styles.pdf}
-            document={<MedicalReportPDF report={info} />}
-            fileName={`${user?.patient?.name_english} MedicalReport.pdf`}
           >
-            <Tooltip title={t('Download')}>
-              <Iconify
-                icon="akar-icons:cloud-download"
-                width={23}
-                sx={{ color: 'info.main', mr: 2 }}
+            <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+              <Avatar
+                alt={info?.name_english}
+                src={user?.patient?.profile_picture}
+                variant="rounded"
+                sx={{ width: 48, height: 48, mb: 2 }}
               />
-            </Tooltip>
-          </PDFDownloadLink>
-          <Iconify
-            icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
-            onMouseOver={() => handleHover(info?._id)}
-            onMouseOut={handleMouseOut}
-            onClick={() => handleViewClick(info?._id)}
-            width={25}
-          />
-        </Stack>
-        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 5 }} />
 
-        <Box
-          rowGap={1.5}
-          display="grid"
-          gridTemplateColumns="repeat(2, 1fr)"
-          sx={{ p: 3, justifyContent: 'space-between' }}
-        >
-          {[
-            {
-              label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
-              icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
-              icon: <Iconify width={18} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english,
-              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
-            },
-            info?.file?.length > 0 && {
-              label: curLangAr ? (
-                <span style={{ color: '#22C55E', fontWeight: 600 }}>يحتوي على ملف</span>
-              ) : (
-                <span style={{ color: '#22C55E', fontWeight: 600 }}>File inside</span>
-              ),
-              icon: (
-                <Iconify width={20} icon="material-symbols:image-sharp" sx={{ flexShrink: 0 }} />
-              ),
-            },
-          ].map((item, idx) => (
-            <Stack
-              key={idx}
-              spacing={0.5}
-              flexShrink={0}
-              direction="row"
-              alignItems="center"
-              sx={{ color: 'black', minWidth: 0 }}
-            >
-              {item?.icon}
-              <Typography variant="caption" noWrap>
-                {item?.label}
-              </Typography>
+              <Stack
+                spacing={0.5}
+                direction="row"
+                alignItems="center"
+                sx={{ typography: 'caption' }}
+              >
+                {fDateAndTime(info?.created_at)}
+              </Stack>
+              <Typography
+                dangerouslySetInnerHTML={{
+                  __html: formatTextWithLineBreaks(info?.description, info?._id),
+                }}
+                sx={{ fontSize: 13 }}
+              />
             </Stack>
-          ))}
-        </Box>
-      </Card>
-    ))
-  ) : (
-    <EmptyContent
-      filled
-      title={t('No Data')}
-      sx={{
-        py: 10,
-      }}
-    />
+            <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
+              <Tooltip title={t('Download')}>
+                <Iconify
+                  icon="akar-icons:cloud-download"
+                  width={23}
+                  sx={{ color: 'info.main', mr: 2, cursor: 'pointer' }}
+                  onClick={() => openPdfDialog(info)}
+                />
+              </Tooltip>
+              <Iconify
+                icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
+                onMouseOver={() => handleHover(info?._id)}
+                onMouseOut={handleMouseOut}
+                onClick={() => handleViewClick(info?._id)}
+                width={25}
+              />
+            </Stack>
+            <Divider
+              sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 5 }}
+            />
+
+            <Box
+              rowGap={1.5}
+              display="grid"
+              gridTemplateColumns="repeat(2, 1fr)"
+              sx={{ p: 3, justifyContent: 'space-between' }}
+            >
+              {[
+                {
+                  label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
+                  icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+                },
+                {
+                  label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
+                  icon: <Iconify width={18} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+                },
+                {
+                  label: curLangAr
+                    ? info?.unit_service?.name_arabic
+                    : info?.unit_service?.name_english,
+                  icon: (
+                    <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />
+                  ),
+                },
+                info?.file?.length > 0 && {
+                  label: curLangAr ? (
+                    <span style={{ color: '#22C55E', fontWeight: 600 }}>يحتوي على ملف</span>
+                  ) : (
+                    <span style={{ color: '#22C55E', fontWeight: 600 }}>File inside</span>
+                  ),
+                  icon: (
+                    <Iconify
+                      width={20}
+                      icon="material-symbols:image-sharp"
+                      sx={{ flexShrink: 0 }}
+                    />
+                  ),
+                },
+              ].map((item, idx) => (
+                <Stack
+                  key={idx}
+                  spacing={0.5}
+                  flexShrink={0}
+                  direction="row"
+                  alignItems="center"
+                  sx={{ color: 'black', minWidth: 0 }}
+                >
+                  {item?.icon}
+                  <Typography variant="caption" noWrap>
+                    {item?.label}
+                  </Typography>
+                </Stack>
+              ))}
+            </Box>
+          </Card>
+        ))
+      ) : (
+        <EmptyContent
+          filled
+          title={t('No Data')}
+          sx={{
+            py: 10,
+          }}
+        />
+      )}
+      ;
+      <PdfPreviewDialog
+        open={openPreview}
+        onClose={() => setOpenPreview(false)}
+        report={selectedReport}
+      />
+    </>
   );
 }
