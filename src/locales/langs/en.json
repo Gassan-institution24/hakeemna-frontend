@@ -48,7 +48,32 @@
   "item_external_link": "item external link",
   "only_admin_can_see_this_item": "Only admin can see this item",
   "upgrade_to_pro": "Upgrade to Pro",
+  "Frequency": "Frequency",
   "demo": {
     "title": "English"
+  },
+  "report": {
+    "previewTitle": "Medical Report Preview",
+    "doctorName": "Doctor Name",
+    "majorName": "Major Name",
+    "medicalReport": "Medical Report",
+    "patientInfo": "Patient Information",
+    "reportDetails": "Report Details",
+    "dateOfReport": "Date of report",
+    "dateOfVisit": "Date of visit",
+    "name": "Name",
+    "age": "Age",
+    "description": "Report Description",
+    "signature": "SIGNATURE",
+    "stamp": "STAMP",
+    "phoneNumber": "Phone Number",
+    "relativePhone": "Relative Phone No.",
+    "email": "Email address",
+    "workingHours": "Working hours",
+    "address": "Address",
+    "downloadPdf": "Download PDF",
+    "descriptionTitle": "Description",
+    "sickLeave": "Sick Leave Preview",
+    "prescription": "Medical Prescription Preview"
   }
 }
