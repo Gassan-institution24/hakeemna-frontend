@@ -1,396 +1,394 @@
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Page, View, Text, Image, Document, StyleSheet } from '@react-pdf/renderer';
+import React, { useRef } from 'react';
+
+import { Box, Grid, Dialog, Button, Typography, DialogTitle, DialogContent } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
+
+import { generatePdfFromElement } from '../../../../components/pdf/generatePdf';
 
 const formatTime = (dateStr) => {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    let hours = d.getHours();
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    return `${hours}:${minutes} ${ampm}`;
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  let hours = d.getHours();
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes} ${ampm}`;
 };
 
+const fixURL = (url) => {
+  if (!url) return null;
+  let newUrl = url.replace(/\\/g, '/');
+  newUrl = newUrl.replace('https://localhost', 'http://localhost');
+  return newUrl;
+};
 
-const useStyles = () =>
-    useMemo(
-        () =>
-            StyleSheet.create({
-                page: {
-                    paddingTop: 35,
-                    paddingHorizontal: 40,
-                    fontSize: 11,
-                    backgroundColor: '#F7FAFF',
-                    position: 'relative',
-                },
+export default function PdfPreviewDialogPrescriptionPDF({ open, onClose, report }) {
+  const previewRef = useRef(null);
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const isArabic = currentLang.value === 'ar';
+  function calculateAge(birthDate) {
+    if (!birthDate) return '';
+    const today = new Date();
+    const dob = new Date(birthDate);
+    const age = today.getFullYear() - dob.getFullYear();
+    const months = today.getMonth() - dob.getMonth();
 
-                // HEADER
-                title: {
-                    fontSize: 22,
-                    fontWeight: 900,
-                    color: '#2a5d71',
-                    marginBottom: 2,
-                },
-
-                subtitle: {
-                    fontSize: 12,
-                    color: '#2a5d71',
-                    marginBottom: 8,
-                },
-
-                line: {
-                    borderBottomWidth: 1,
-                    borderColor: '#1f2c5b',
-                    marginTop: 6,
-                    marginBottom: 14,
-                },
-
-                // MAIN GRID
-                row: {
-                    flexDirection: 'row',
-                    marginTop: 6,
-                },
-
-                leftCol: {
-                    width: '38%',
-                },
-
-                rightCol: {
-                    width: '62%',
-                },
-
-                // LEFT TITLES
-                leftItemMain: {
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#2a5d71',
-                    marginBottom: 12,
-                },
-
-                leftItem: {
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: '#2a5d71',
-                    marginBottom: 9,
-                },
-
-                // RIGHT LABELS
-                rightLabel: {
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    color: '#1f2c5b',
-                    marginBottom: 10,
-                },
-
-                valueText: {
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    color: '#000',
-                },
-
-                // MEDICINE SECTION
-                medicineBlock: {
-                    marginBottom: 14,
-                    paddingBottom: 10,
-                    borderBottomWidth: 1,
-                    borderColor: '#D0D7E3',
-                },
-
-                medicineTitle: {
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: '#1f2c5b',
-                    marginBottom: 5,
-                },
-
-                medicineField: {
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#2a5d71',
-                    marginBottom: 3,
-                },
-
-                // DOCTOR COMMENT
-                commentTitle: {
-                    marginTop: 20,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: '#1f2c5b',
-                },
-
-                commentText: {
-                    fontSize: 12,
-                    color: '#000',
-                    marginTop: 4,
-                },
-
-                // WATERMARK
-                watermark: {
-                    position: 'absolute',
-                    top: 140,
-                    left: 10,
-                    width: 520,
-                    opacity: 0.14,
-                },
-
-                // SIGNATURE & STAMP
-                signStampContainer: {
-                    position: 'absolute',
-                    bottom: 115,
-                    left: 80,
-                    right: 80,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                },
-
-
-                signStampLabel: {
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: '#1f2c5b',
-                },
-
-                // FOOTER
-                footer: {
-                    position: 'absolute',
-                    bottom: 40,
-                    left: 40,
-                    right: 40,
-                    borderTopWidth: 1,
-                    borderColor: '#D0D7E3',
-                    paddingTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                },
-
-                footerText: {
-                    fontSize: 10,
-                    fontWeight: 600,
-                    color: '#2a5d71',
-                    marginBottom: 4,
-                },
-                signImage: {
-                    width: 120,
-                    height: 80,
-                    objectFit: "contain",
-                },
-
-                stampImage: {
-                    width: 120,
-                    height: 80,
-                    objectFit: "contain",
-                },
-
-            }),
-        []
-    );
-
-export default function PrescriptionPDF({ prescription }) {
-    const styles = useStyles();
-    const { currentLang } = useLocales();
-    const curLangAr = currentLang.value === 'ar';
-
-    function calculateAge(birthDate) {
-        if (birthDate) {
-            const today = new Date();
-            const dob = new Date(birthDate);
-
-            const age = today.getFullYear() - dob.getFullYear();
-            const months = today.getMonth() - dob.getMonth();
-
-            if (age === 0) {
-                return curLangAr ? `${months} شهر` : `${months} months`;
-            }
-            return curLangAr ? `${age} سنة` : `${age} years`;
-        }
-        return '';
+    if (age === 0) {
+      return isArabic ? `${months} شهر` : `${months} months`;
     }
-    const hasComments = prescription?.medicines?.some(
-        (med) => med.Doctor_Comments && med.Doctor_Comments.trim() !== ""
-    );
+    return isArabic ? `${age} سنة` : `${age} years`;
+  }
 
-    return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                {/* WATERMARK */}
-                <Image src="/favicon/512.png" style={styles.watermark} />
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('Prescription')}</Typography>
 
-                {/* HEADER */}
-                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                    <Text style={styles.title}>Doctor Name: </Text>
+          {/* SMALL BUTTON NEXT TO TITLE */}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => generatePdfFromElement(previewRef.current, 'Prescription.pdf')}
+            sx={{
+              textTransform: 'none',
+              fontSize: '14px',
+              padding: '4px 10px',
+            }}
+          >
+            {t('report.downloadPdf')}
+          </Button>
+        </Box>
+      </DialogTitle>
 
-                    <Text style={[styles.title, { fontSize: 20 }]}>
-                        {prescription?.employee?.name_english || ''}
-                    </Text>
-                </View>
+      <DialogContent sx={{ direction: 'ltr' }}>
+        <Box
+          ref={previewRef}
+          sx={{
+            pt: '40px',
+            px: '50px',
+            pb: '20px',
+            backgroundColor: '#F7FAFF',
+            fontSize: '18px',
+            position: 'relative',
+            lineHeight: 1.7,
+            overflow: 'hidden',
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                    <Text style={styles.subtitle}>Major Name: </Text>
+            display: 'flex',
+            flexDirection: 'column',
 
-                    <Text style={[styles.subtitle, { fontSize: 12, fontWeight: 700 }]}>
-                        {prescription?.employee?.speciality?.name_english || ''}
-                    </Text>
-                </View>
+            height: '1182px',
+            boxSizing: 'border-box',
 
-                <View style={styles.line} />
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
+          }}
+        >
+          {/* ==== WATERMARK ==== */}
+          <Box
+            component="img"
+            src="/favicon/512.png"
+            sx={{
+              position: 'absolute',
+              top: '40%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '520px',
+              opacity: 0.14,
+              pointerEvents: 'none',
+            }}
+          />
 
-                {/* MAIN SECTION */}
-                <View style={styles.row}>
-                    <View style={styles.leftCol}>
-                        <Text style={styles.leftItemMain}>Prescription</Text>
-                        <Text style={styles.leftItem}>Patient Information</Text>
-                        <Text style={styles.leftItem}>Report Details</Text>
-                    </View>
+          {/* ==== HEADER ==== */}
+          <Typography sx={{ fontSize: 30, fontWeight: 900, color: '#2a5d71' }}>
+            {t('report.doctorName')}:{' '}
+            {isArabic ? report?.employee?.name_arabic : report?.employee?.name_english}
+          </Typography>
 
-                    <View style={styles.rightCol}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={[styles.rightLabel, { width: '50%' }]}>
-                                Date of report:{' '}
-                                <Text style={styles.valueText}>
-                                    {prescription?.created_at ? fDate(prescription?.created_at, "dd MMM yyyy") : ''}
-                                </Text>
-                            </Text>
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mt: 1 }}>
+            {t('report.majorName')}:{' '}
+            {isArabic
+              ? report?.employee?.speciality?.name_arabic
+              : report?.employee?.speciality?.name_english}
+          </Typography>
 
-                            <Text style={[styles.rightLabel, { width: '50%' }]}>
-                                Date of visit:{' '}
-                                <Text style={styles.valueText}>
-                                    {prescription?.created_at ? fDate(prescription?.created_at, "dd MMM yyyy") : ''}
-                                </Text>
-                            </Text>
-                        </View>
+          {/* LINE */}
+          <Box sx={{ borderBottom: '2px solid #2a5d71', mt: 2, mb: 4 }} />
 
-                        <View style={{ flexDirection: 'row', marginTop: 8 }}>
-                            <Text style={[styles.rightLabel, { width: '50%' }]}>
-                                Name:{' '}
-                                <Text style={styles.valueText}>{prescription?.patient?.name_english || ''}</Text>
-                            </Text>
+          {/* ==== TOP INFO GRID ==== */}
+          <Grid container spacing={5}>
+            {/* LEFT COLUMN */}
+            <Grid item xs={4}>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
+                {t('Prescription')}
+              </Typography>
 
-                            <Text style={[styles.rightLabel, { width: '50%' }]}>
-                                Age: <Text style={styles.valueText}>{calculateAge(prescription?.patient?.birth_date)}</Text>
-                            </Text>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
+                {t('report.patientInfo')}
+              </Typography>
 
-                        </View>
-                    </View>
-                </View>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71' }}>
+                {t('report.reportDetails')}
+              </Typography>
+            </Grid>
 
-                {/* MEDICINES SECTION */}
-                <View style={{ marginTop: 25 }}>
-                    {prescription?.medicines?.map((med, idx) => (
-                        <View key={idx} style={styles.medicineBlock}>
-                            <Text style={[styles.medicineTitle, { color: "#000" }]}>
-                                {med.medicines?.trade_name || ''} {med.medicines?.concentration || ''}
-                            </Text>
+            {/* RIGHT COLUMN */}
+            <Grid item xs={8}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                    {t('report.dateOfReport')}:{' '}
+                    <span style={{ color: '#000', fontWeight: 700 }}>
+                      {fDate(report?.created_at, 'dd/MM/yyyy')}
+                    </span>
+                  </Typography>
+                </Grid>
 
-                            <Text style={[styles.medicineField, { color: "#000" }]}>
-                                Frequency: {med.Frequency_per_day || ''}
-                            </Text>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                    {t('report.dateOfVisit')}:{' '}
+                    <span style={{ color: '#000', fontWeight: 700 }}>
+                      {fDate(report?.created_at, 'dd/MM/yyyy')}
+                    </span>
+                  </Typography>
+                </Grid>
+              </Grid>
 
-                            <Text style={[styles.medicineField, { color: "#000" }]}>
-                                Start: {med.Start_time ? fDate(med.Start_time) : ''}
-                            </Text>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13.5,
+                  mt: 2,
+                }}
+              >
+                {/* NAME */}
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.name')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
+                  </span>
+                </Typography>
 
-                            <Text style={[styles.medicineField, { color: "#000" }]}>
-                                End: {med.End_time ? fDate(med.End_time) : ''}
-                            </Text>
-                        </View>
-                    ))}
-                </View>
+                {/* AGE */}
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.age')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {calculateAge(report?.patient?.birth_date)}
+                  </span>
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          {/* ==== PRESCRIPTION ==== */}
+          {report?.medicines?.length > 0 && (
+            <Box sx={{ mt: 4 }}>
+              {report.medicines.map((item, index) => (
+                <Box
+                  key={item._id}
+                  sx={{
+                    mb: 3,
+                    p: 2,
+                  }}
+                >
+                  {/* Medicine Name */}
+                  <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
+                    {item?.medicines?.trade_name}
+                  </Typography>
 
+                  {/* Dates */}
+                  <Typography sx={{ fontSize: 16, mt: 1 }}>
+                    {t('start date')}: {fDate(item?.Start_time, 'dd/MM/yyyy')}
+                  </Typography>
 
-                {/* DOCTOR COMMENT */}
-                {hasComments && (
-                    <View>
-                        <Text style={styles.commentTitle}>Doctor Comment</Text>
+                  <Typography sx={{ fontSize: 16 }}>
+                    {t('end date')}: {fDate(item?.End_time, 'dd/MM/yyyy')}
+                  </Typography>
 
-                        {prescription?.medicines?.map((med, idx) => (
-                            med.Doctor_Comments ? (
-                                <Text key={idx} style={styles.commentText}>
-                                    {med.Doctor_Comments}
-                                </Text>
-                            ) : null
-                        ))}
-                    </View>
-                )}
+                  {/* Frequency */}
+                  <Typography sx={{ fontSize: 16 }}>
+                    {t('frequency')}: {item?.Frequency_per_day}
+                  </Typography>
 
+                  {/* Doctor Comments (ONLY IF EXISTS) */}
+                  {item?.Doctor_Comments && item.Doctor_Comments.trim() !== '' && (
+                    <Typography sx={{ fontSize: 16, mt: 1 }}>
+                      {t('report.doctorComments')}: {item.Doctor_Comments}
+                    </Typography>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          )}
 
-                {/* SIGNATURE & STAMP */}
-                <View style={styles.signStampContainer}>
+          {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
+          <Box
+            sx={{
+              flexGrow: 1, // <--- THE MAGIC PART
+              minHeight: '335px', // baseline so it always looks correct
+            }}
+          />
 
-                    {/* SIGNATURE */}
-                    <View style={{ alignItems: 'center' }}>
-                        {prescription?.employee?.signature && (
-                            <Image
-                                src={prescription.employee.signature.replace(/\\/g, '/')}
-                                style={styles.signImage}
-                            />
-                        )}
-                        <Text style={styles.signStampLabel}>SIGNATURE</Text>
-                    </View>
+          {/* ==== SIGNATURE & STAMP ==== */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              px: 12,
+              mb: 4,
+            }}
+          >
+            {/* SIGNATURE */}
+            <Box sx={{ textAlign: 'center' }}>
+              {report?.employee?.signature && (
+                <Box
+                  component="img"
+                  src={fixURL(report.employee.signature)}
+                  sx={{
+                    width: 140,
+                    height: 80,
+                    objectFit: 'contain',
+                    mb: 1,
+                  }}
+                />
+              )}
 
-                    {/* STAMP */}
-                    <View style={{ alignItems: 'center' }}>
-                        {prescription?.employee?.stamp && (
-                            <Image
-                                src={prescription.employee.stamp.replace(/\\/g, '/')}
-                                style={styles.stampImage}
-                            />
-                        )}
-                        <Text style={styles.signStampLabel}>STAMP</Text>
-                    </View>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                {t('report.signature')}
+              </Typography>
+            </Box>
 
-                </View>
+            {/* STAMP */}
+            <Box sx={{ textAlign: 'center' }}>
+              {report?.employee?.stamp && (
+                <Box
+                  component="img"
+                  src={fixURL(report.employee.stamp)}
+                  sx={{
+                    width: 140,
+                    height: 80,
+                    objectFit: 'contain',
+                    mb: 1,
+                  }}
+                />
+              )}
 
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                {t('report.stamp')}
+              </Typography>
+            </Box>
+          </Box>
 
-                {/* FOOTER */}
-                <View style={styles.footer}>
+          {/* ==== FOOTER ==== */}
+          <Box
+            sx={{
+              borderTop: '2px solid #2a5d71',
+              pt: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: 18,
+              color: '#2a5d71',
+              fontWeight: 700,
+            }}
+          >
+            {/* LEFT COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.phoneNumber')}: {report?.unit_service?.phone || '---'}
+              </Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.workingHours')}: {formatTime(report?.unit_service?.work_start_time)}{' '}
+                {' — '}
+                {formatTime(report?.unit_service?.work_end_time)}
+              </Typography>
+            </Box>
 
-                    {/* COLUMN 1 */}
-                    <View>
-                        <Text style={styles.footerText}>
-                            Phone: {prescription?.unit_service?.phone || '---'}
-                        </Text>
+            {/* MIDDLE COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.email')}: {report?.unit_service?.email || '---'}
+              </Typography>
 
-                        <Text style={styles.footerText}>
-                            Working hours:
-                            {formatTime(prescription?.unit_service?.work_start_time)} {' — '}
-                            {formatTime(prescription?.unit_service?.work_end_time)}
-                        </Text>
+              {report?.unit_service?.mobile_nu && (
+                <Typography
+                  sx={{
+                    color: '#2a5d71',
+                  }}
+                >
+                  {t('report.relativePhone')}: {report?.unit_service?.mobile_num || '---'}
+                </Typography>
+              )}
+            </Box>
 
-                    </View>
+            {/* RIGHT COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.address')}: {report?.unit_service?.address || '---'}
+              </Typography>
+            </Box>
+          </Box>
 
-                    {/* COLUMN 2 */}
-                    <View>
-                        <Text style={styles.footerText}>
-                            Email: {prescription?.unit_service?.email || '---'}
-                        </Text>
-                        {prescription?.unit_service?.mobile_num && (
-                            <Text style={styles.footerText}>
-                                Relative Phone No.: {prescription.unit_service.mobile_num}
-                            </Text>
-                        )}
-
-                    </View>
-
-                    {/* COLUMN 3 */}
-                    <View>
-                        <Text style={styles.footerText}>
-                            Address: {prescription?.unit_service?.address || '---'}
-                        </Text>
-                    </View>
-
-                </View>
-
-            </Page>
-        </Document>
-    );
+          {/* ==== POWERED BY ==== */}
+          <Typography
+            sx={{
+              textAlign: 'center',
+              fontSize: 16,
+              fontWeight: 700,
+              color: '#2a5d71',
+              mt: 2,
+            }}
+          >
+            {currentLang.value === 'ar' ? 'تم تطويره بواسطة حكيمنا ٣٦٠' : 'Powered by Hakeemna 360'}
+          </Typography>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
-PrescriptionPDF.propTypes = {
-    prescription: PropTypes.object,
+PdfPreviewDialogPrescriptionPDF.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  report: PropTypes.object,
 };

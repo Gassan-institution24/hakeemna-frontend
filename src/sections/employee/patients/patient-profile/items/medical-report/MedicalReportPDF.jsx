@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Page, View, Text, Image, Document, StyleSheet } from '@react-pdf/renderer';
+import React, { useRef } from 'react';
+
+import { Box, Grid, Dialog, Button, Typography, DialogTitle, DialogContent } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
+
+import { generatePdfFromElement } from '../../../../../../components/pdf/generatePdf';
 
 const formatTime = (dateStr) => {
   if (!dateStr) return '';
@@ -16,348 +19,393 @@ const formatTime = (dateStr) => {
   return `${hours}:${minutes} ${ampm}`;
 };
 
-const useStyles = () =>
-  useMemo(
-    () =>
-      StyleSheet.create({
-        page: {
-          paddingTop: 35,
-          paddingHorizontal: 40,
-          fontSize: 11,
-          backgroundColor: '#F7FAFF',
-          position: 'relative',
-        },
+const fixURL = (url) => {
+  if (!url) return null;
+  let newUrl = url.replace(/\\/g, '/');
+  newUrl = newUrl.replace('https://localhost', 'http://localhost');
+  return newUrl;
+};
 
-        // HEADER
-        title: {
-          fontSize: 22,
-          fontWeight: 900,
-          color: '#2a5d71',
-          marginBottom: 6,
-        },
-
-        subtitle: {
-          fontSize: 12,
-          color: '#2a5d71',
-          marginBottom: 8,
-        },
-
-        line: {
-          borderBottomWidth: 1,
-          borderColor: '#1f2c5b',
-          marginTop: 6,
-          marginBottom: 14,
-        },
-
-        // MAIN GRID
-        row: {
-          flexDirection: 'row',
-          marginTop: 6,
-        },
-
-        leftCol: {
-          width: '38%',
-        },
-
-        rightCol: {
-          width: '62%',
-        },
-
-        // LEFT TITLES
-        leftItemMain: {
-          fontSize: 12,
-          fontWeight: 700,
-          color: '#2a5d71',
-          marginBottom: 12,
-        },
-
-        leftItem: {
-          fontSize: 11,
-          fontWeight: 600,
-          color: '#2a5d71',
-          marginBottom: 9,
-        },
-
-        // RIGHT LABELS
-        rightLabel: {
-          fontSize: 10.5,
-          fontWeight: 600,
-          color: '#1f2c5b',
-          marginBottom: 10,
-        },
-
-        valueText: {
-          fontSize: 10.5,
-          fontWeight: 600,
-          color: '#000',
-        },
-
-        // MEDICINE SECTION
-        medicineBlock: {
-          marginBottom: 14,
-          paddingBottom: 10,
-          borderBottomWidth: 1,
-          borderColor: '#D0D7E3',
-        },
-
-        medicineTitle: {
-          fontSize: 13,
-          fontWeight: 700,
-          color: '#1f2c5b',
-          marginBottom: 5,
-        },
-
-        medicineField: {
-          fontSize: 12,
-          fontWeight: 600,
-          color: '#2a5d71',
-          marginBottom: 3,
-        },
-
-        // DOCTOR COMMENT
-        commentTitle: {
-          marginTop: 20,
-          fontSize: 13,
-          fontWeight: 700,
-          color: '#1f2c5b',
-        },
-
-        commentText: {
-          fontSize: 12,
-          color: '#000',
-          marginTop: 4,
-        },
-
-        // WATERMARK
-        watermark: {
-          position: 'absolute',
-          top: 140,
-          left: 10,
-          width: 520,
-          opacity: 0.14,
-        },
-
-        // SIGNATURE & STAMP
-        signStampContainer: {
-          position: 'absolute',
-          bottom: 115,
-          left: 80,
-          right: 80,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        },
-
-        signStampLabel: {
-          fontSize: 11,
-          fontWeight: 700,
-          color: '#1f2c5b',
-        },
-
-        // FOOTER
-        footer: {
-          position: 'absolute',
-          bottom: 40,
-          left: 40,
-          right: 40,
-          borderTopWidth: 1,
-          borderColor: '#D0D7E3',
-          paddingTop: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-
-        footerText: {
-          fontSize: 10,
-          fontWeight: 600,
-          color: '#2a5d71',
-          marginBottom: 4,
-        },
-        signImage: {
-          width: 120,
-          height: 80,
-          objectFit: 'contain',
-        },
-
-        stampImage: {
-          width: 120,
-          height: 80,
-          objectFit: 'contain',
-        },
-      }),
-    []
-  );
-export default function MedicalReportPDF({ report }) {
-  const styles = useStyles();
+export default function MedicalReportPDF({ open, onClose, report }) {
+  const previewRef = useRef(null);
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
+  const isArabic = currentLang.value === 'ar';
   function calculateAge(birthDate) {
-    if (birthDate) {
-      const today = new Date();
-      const dob = new Date(birthDate);
+    if (!birthDate) return '';
+    const today = new Date();
+    const dob = new Date(birthDate);
+    const age = today.getFullYear() - dob.getFullYear();
+    const months = today.getMonth() - dob.getMonth();
 
-      const age = today.getFullYear() - dob.getFullYear();
-      const months = today.getMonth() - dob.getMonth();
-
-      if (age === 0) {
-        return curLangAr ? `${months} شهر` : `${months} months`;
-      }
-      return curLangAr ? `${age} سنة` : `${age} years`;
+    if (age === 0) {
+      return isArabic ? `${months} شهر` : `${months} months`;
     }
-    return '';
+    return isArabic ? `${age} سنة` : `${age} years`;
   }
+  const hasImage =
+    Array.isArray(report?.file) &&
+    report.file.some((fileUrl) => /\.(jpg|jpeg|png|webp)$/i.test(fileUrl));
 
   return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        {/* WATERMARK */}
-        <Image src="/favicon/512.png" style={styles.watermark} />
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('medical report')}</Typography>
 
-        {/* HEADER */}
-        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-          <Text style={styles.title}>Doctor Name: </Text>
+          {/* SMALL BUTTON NEXT TO TITLE */}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => generatePdfFromElement(previewRef.current, 'MedicalReport.pdf')}
+            sx={{
+              textTransform: 'none',
+              fontSize: '14px',
+              padding: '4px 10px',
+            }}
+          >
+            {t('report.downloadPdf')}
+          </Button>
+        </Box>
+      </DialogTitle>
 
-          <Text style={[styles.title, { fontSize: 20 }]}>
-            {report?.employee?.name_english || ''}
-          </Text>
-        </View>
+      <DialogContent sx={{ direction: 'ltr' }}>
+        <Box
+          ref={previewRef}
+          sx={{
+            pt: '40px',
+            px: '50px',
+            pb: '20px',
+            backgroundColor: '#F7FAFF',
+            fontSize: '18px',
+            position: 'relative',
+            lineHeight: 1.7,
+            overflow: 'hidden',
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-          <Text style={styles.subtitle}>Major Name: </Text>
+            display: 'flex',
+            flexDirection: 'column',
 
-          <Text style={[styles.subtitle, { fontSize: 12, fontWeight: 700 }]}>
-            {report?.employee?.speciality?.name_english || ''}
-          </Text>
-        </View>
+            height: '1182px',
+            boxSizing: 'border-box',
 
-        <View style={styles.line} />
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
+          }}
+        >
+          {/* ==== WATERMARK ==== */}
+          <Box
+            component="img"
+            src="/favicon/512.png"
+            sx={{
+              position: 'absolute',
+              top: '40%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '520px',
+              opacity: 0.05,
+              pointerEvents: 'none',
+            }}
+          />
 
-        {/* MAIN SECTION */}
-        <View style={styles.row}>
-          <View style={styles.leftCol}>
-            <Text style={styles.leftItemMain}>Medical Report</Text>
-            <Text style={styles.leftItem}>Patient Information</Text>
-            <Text style={styles.leftItem}>Report Details</Text>
-          </View>
+          {/* ==== HEADER ==== */}
+          <Typography sx={{ fontSize: 30, fontWeight: 900, color: '#2a5d71' }}>
+            {t('report.doctorName')}:{' '}
+            {isArabic ? report?.employee?.name_arabic : report?.employee?.name_english}
+          </Typography>
 
-          <View style={styles.rightCol}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[styles.rightLabel, { width: '50%' }]}>
-                Date of report:{' '}
-                <Text style={styles.valueText}>
-                  {report?.created_at ? fDate(report?.created_at, 'dd MMM yyyy') : ''}
-                </Text>
-              </Text>
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mt: 1 }}>
+            {t('report.majorName')}:{' '}
+            {isArabic
+              ? report?.employee?.speciality?.name_arabic
+              : report?.employee?.speciality?.name_english}
+          </Typography>
 
-              <Text style={[styles.rightLabel, { width: '50%' }]}>
-                Date of visit:{' '}
-                <Text style={styles.valueText}>
-                  {report?.created_at ? fDate(report?.created_at, 'dd MMM yyyy') : ''}
-                </Text>
-              </Text>
-            </View>
+          {/* LINE */}
+          <Box sx={{ borderBottom: '2px solid #2a5d71', mt: 2, mb: 4 }} />
 
-            <View style={{ flexDirection: 'row', marginTop: 8 }}>
-              <Text style={[styles.rightLabel, { width: '50%' }]}>
-                Name: <Text style={styles.valueText}>{report?.patient?.name_english || ''}</Text>
-              </Text>
+          {/* ==== TOP INFO GRID ==== */}
+          <Grid container spacing={5}>
+            {/* LEFT COLUMN */}
+            <Grid item xs={4}>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
+                {t('report.medicalReport')}
+              </Typography>
 
-              <Text style={[styles.rightLabel, { width: '50%' }]}>
-                Age:{' '}
-                <Text style={styles.valueText}>{calculateAge(report?.patient?.birth_date)}</Text>
-              </Text>
-            </View>
-          </View>
-        </View>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
+                {t('report.patientInfo')}
+              </Typography>
 
-        {/* REPORT DESCRIPTION */}
-        <View>
-          <Text style={styles.commentTitle}>Report Description</Text>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71' }}>
+                {t('report.reportDetails')}
+              </Typography>
+            </Grid>
 
-          <Text style={styles.commentText}>
-            {report?.description
-              ?.replace(/<br\s*\/?>/gi, '\n')
-              ?.replace(/&nbsp;/g, ' ')
-              ?.replace(/<[^>]+>/g, '') || ''}
-          </Text>
-        </View>
-        {/* ATTACHED FILES */}
-        {report?.file && report.file.length > 0 && (
-          <View style={{ marginTop: 20 }}>
-            <Text style={styles.commentTitle}>Attached Files</Text>
+            {/* RIGHT COLUMN */}
+            <Grid item xs={8}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                    {t('report.dateOfReport')}:{' '}
+                    <span style={{ color: '#000', fontWeight: 700 }}>
+                      {fDate(report?.created_at, 'dd/MM/yyyy')}
+                    </span>
+                  </Typography>
+                </Grid>
 
-            {report?.file?.map((img, index) => (
-              <Image
-                key={index}
-                src={img}
-                style={{
-                  width: 400,
-                  height: 250,
-                  objectFit: 'contain',
-                  marginTop: 10,
-                  borderWidth: 1,
-                  borderColor: '#ccc',
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                    {t('report.dateOfVisit')}:{' '}
+                    <span style={{ color: '#000', fontWeight: 700 }}>
+                      {fDate(report?.created_at, 'dd/MM/yyyy')}
+                    </span>
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13.5,
+                  mt: 2,
                 }}
-              />
-            ))}
-          </View>
-        )}
-        {/* SIGNATURE & STAMP */}
-        <View style={styles.signStampContainer}>
-          {/* SIGNATURE */}
-          <View style={{ alignItems: 'center' }}>
-            {report?.employee?.signature && (
-              <Image
-                src={report?.employee?.signature?.replace(/\\/g, '/')}
-                style={styles.signImage}
-              />
-            )}
-            <Text style={styles.signStampLabel}>SIGNATURE</Text>
-          </View>
+              >
+                {/* NAME */}
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.name')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
+                  </span>
+                </Typography>
 
-          {/* STAMP */}
-          <View style={{ alignItems: 'center' }}>
-            {report?.employee?.stamp && (
-              <Image src={report?.employee?.stamp?.replace(/\\/g, '/')} style={styles.stampImage} />
-            )}
-            <Text style={styles.signStampLabel}>STAMP</Text>
-          </View>
-        </View>
+                {/* AGE */}
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.age')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {calculateAge(report?.patient?.birth_date)}
+                  </span>
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          {/* ==== DESCRIPTION ==== */}
+          {report?.description && (
+            <Box sx={{ mt: 4 }}>
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  lineHeight: 1.7,
+                  color: '#000',
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {report.description
+                  .replace(/<\/p>/gi, '\n')
+                  .replace(/<br\s*\/?>/gi, '\n')
+                  .replace(/&nbsp;/g, ' ')
+                  .replace(/<[^>]+>/g, '')
+                  .trim()}
+              </Typography>
+            </Box>
+          )}
 
-        {/* FOOTER */}
-        <View style={styles.footer}>
-          {/* COLUMN 1 */}
-          <View>
-            <Text style={styles.footerText}>Phone: {report?.unit_service?.phone || '---'}</Text>
+          {/* ==== ATTACHED FILES (IMAGES ONLY) ==== */}
+          {Array.isArray(report?.file) && report.file.length > 0 && (
+            <div style={{ marginTop: '24px' }}>
+              {report.file.map((fileUrl, index) => {
+                const fixedUrl = fixURL(fileUrl);
+                const isImage = /\.(jpg|jpeg|png|webp)$/i.test(fixedUrl);
+                if (!isImage) return null;
 
-            <Text style={styles.footerText}>
-              Working hours:
-              {formatTime(report?.unit_service?.work_start_time)} {' — '}
-              {formatTime(report?.unit_service?.work_end_time)}
-            </Text>
-          </View>
+                return (
+                  <img
+                    key={index}
+                    src={fixedUrl}
+                    alt={`attachment-${index}`}
+                    style={{
+                      maxWidth: '260px',
+                      maxHeight: '350px',
+                      objectFit: 'contain',
+                      borderRadius: '8px',
+                      border: '1px solid #ccc',
 
-          {/* COLUMN 2 */}
-          <View>
-            <Text style={styles.footerText}>Email: {report?.unit_service?.email || '---'}</Text>
-            {report?.unit_service?.mobile_num && (
-              <Text style={styles.footerText}>
-                Relative Phone No.: {report.unit_service.mobile_num}
-              </Text>
-            )}
-          </View>
+                      float: isArabic ? 'right' : 'left', // 👈 هون السحر
+                      margin: isArabic ? '0 0 16px 24px' : '0 24px 16px 0',
+                    }}
+                  />
+                );
+              })}
+              <div style={{ clear: 'both' }} />
+            </div>
+          )}
 
-          {/* COLUMN 3 */}
-          <View>
-            <Text style={styles.footerText}>Address: {report?.unit_service?.address || '---'}</Text>
-          </View>
-        </View>
-      </Page>
-    </Document>
+          {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
+          {!hasImage && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                minHeight: '400px',
+              }}
+            />
+          )}
+          {/* ==== SMALL SPACE WHEN IMAGE EXISTS ==== */}
+          {hasImage && <Box sx={{ height: '220px' }} />}
+
+          {/* ==== SIGNATURE & STAMP ==== */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              px: 12,
+              mb: 4,
+            }}
+          >
+            {/* SIGNATURE */}
+            <Box sx={{ textAlign: 'center' }}>
+              {report?.employee?.signature && (
+                <Box
+                  component="img"
+                  src={fixURL(report.employee.signature)}
+                  sx={{
+                    width: 140,
+                    height: 80,
+                    objectFit: 'contain',
+                    mb: 1,
+                  }}
+                />
+              )}
+
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                {t('report.signature')}
+              </Typography>
+            </Box>
+
+            {/* STAMP */}
+            <Box sx={{ textAlign: 'center' }}>
+              {report?.employee?.stamp && (
+                <Box
+                  component="img"
+                  src={fixURL(report.employee.stamp)}
+                  sx={{
+                    width: 140,
+                    height: 80,
+                    objectFit: 'contain',
+                    mb: 1,
+                  }}
+                />
+              )}
+
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#1f2c5b' }}>
+                {t('report.stamp')}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* ==== FOOTER ==== */}
+          <Box
+            sx={{
+              borderTop: '2px solid #2a5d71',
+              pt: 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: 18,
+              color: '#2a5d71',
+              fontWeight: 700,
+            }}
+          >
+            {/* LEFT COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.phoneNumber')}: {report?.unit_service?.phone || '---'}
+              </Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.workingHours')}: {formatTime(report?.unit_service?.work_start_time)}{' '}
+                {' — '}
+                {formatTime(report?.unit_service?.work_end_time)}
+              </Typography>
+            </Box>
+
+            {/* MIDDLE COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.email')}: {report?.unit_service?.email || '---'}
+              </Typography>
+
+              {report?.unit_service?.mobile_nu && (
+                <Typography
+                  sx={{
+                    color: '#2a5d71',
+                  }}
+                >
+                  {t('report.relativePhone')}: {report?.unit_service?.mobile_num || '---'}
+                </Typography>
+              )}
+            </Box>
+
+            {/* RIGHT COLUMN */}
+            <Box>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
+                {t('report.address')}: {report?.unit_service?.address || '---'}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* ==== POWERED BY ==== */}
+          <Typography
+            sx={{
+              textAlign: 'center',
+              fontSize: 16,
+              fontWeight: 700,
+              color: '#2a5d71',
+              mt: 0,
+            }}
+          >
+            {currentLang.value === 'ar' ? 'تم تطويره بواسطة حكيمنا ٣٦٠' : 'Powered by Hakeemna 360'}
+          </Typography>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 MedicalReportPDF.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
   report: PropTypes.object,
 };
