@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Card, Link, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Box, Card, Link, Stack, Button, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -78,6 +77,13 @@ export default function MedicalReportItem({ one, refetch }) {
       });
     }
   });
+  const [openPreview, setOpenPreview] = React.useState(false);
+  const [selectedReport, setSelectedReport] = React.useState(null);
+
+  const openPdfDialog = (report) => {
+    setSelectedReport(report);
+    setOpenPreview(true);
+  };
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
       {editting ? (
@@ -120,17 +126,11 @@ export default function MedicalReportItem({ one, refetch }) {
             </Typography>
 
             <Stack direction="row" alignItems="center" spacing={1}>
-              <PDFDownloadLink
-                document={<MedicalReportPDF report={one} />}
-                fileName="MedicalReport.pdf"
-              >
-                {({ loading }) => (
-                  <IconButton color="primary" disabled={loading}>
-                    <Iconify icon="solar:printer-minimalistic-bold" />
-                  </IconButton>
-                )}
-              </PDFDownloadLink>
-
+              <Box key={currentLang.value}>
+                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
+                  <Iconify icon="solar:printer-minimalistic-bold" />
+                </IconButton>
+              </Box>
               <IconButton onClick={() => setEditting(true)}>
                 <Iconify icon="lets-icons:edit-fill" />
               </IconButton>
@@ -152,6 +152,14 @@ export default function MedicalReportItem({ one, refetch }) {
             </Stack>
           </Stack>
         </>
+      )}
+      {/* PDF PREVIEW DIALOG */}
+      {openPreview && selectedReport && (
+        <MedicalReportPDF
+          open={openPreview}
+          onClose={() => setOpenPreview(false)}
+          report={selectedReport}
+        />
       )}
     </Card>
   );

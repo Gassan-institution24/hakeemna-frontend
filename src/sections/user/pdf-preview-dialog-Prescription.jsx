@@ -27,8 +27,6 @@ const fixURL = (url) => {
 };
 
 export default function PdfPreviewDialogPrescription({ open, onClose, report }) {
-  console.log('report', report);
-
   const previewRef = useRef(null);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -45,9 +43,7 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
     }
     return isArabic ? `${age} سنة` : `${age} years`;
   }
-  const hasComments = report?.medicines?.some(
-    (med) => med.Doctor_Comments && med.Doctor_Comments.trim() !== ''
-  );
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>
@@ -58,13 +54,13 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('report.prescription')}</Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('Prescription')}</Typography>
 
           {/* SMALL BUTTON NEXT TO TITLE */}
           <Button
             variant="contained"
             color="primary"
-            onClick={() => generatePdfFromElement(previewRef.current, 'prescriptionReport.pdf')}
+            onClick={() => generatePdfFromElement(previewRef.current, 'Prescription.pdf')}
             sx={{
               textTransform: 'none',
               fontSize: '14px',
@@ -80,15 +76,23 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
         <Box
           ref={previewRef}
           sx={{
-            p: '40px 50px',
+            pt: '40px',
+            px: '50px',
+            pb: '20px',
             backgroundColor: '#F7FAFF',
             fontSize: '18px',
             position: 'relative',
-            minHeight: '1182px',
+            lineHeight: 1.7,
+            overflow: 'hidden',
+
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
-            lineHeight: 1.7,
+
+            height: '1182px',
+            boxSizing: 'border-box',
+
+            pageBreakInside: 'avoid',
+            breakInside: 'avoid',
           }}
         >
           {/* ==== WATERMARK ==== */}
@@ -120,14 +124,14 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
           </Typography>
 
           {/* LINE */}
-          <Box sx={{ borderBottom: '2px solid #1f2c5b', mt: 2, mb: 4 }} />
+          <Box sx={{ borderBottom: '2px solid #2a5d71', mt: 2, mb: 4 }} />
 
           {/* ==== TOP INFO GRID ==== */}
           <Grid container spacing={5}>
             {/* LEFT COLUMN */}
             <Grid item xs={4}>
               <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
-                {t('report.medicalReport')}
+                {t('Prescription')}
               </Typography>
 
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
@@ -161,82 +165,92 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
                 </Grid>
               </Grid>
 
-              <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 13.5,
+                  mt: 2,
+                }}
+              >
                 {/* NAME */}
-                <Grid item xs={8}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {t('report.name')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
-                    </span>
-                  </Typography>
-                </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.name')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {isArabic ? report?.patient?.name_arabic : report?.patient?.name_english}
+                  </span>
+                </Typography>
 
                 {/* AGE */}
-                <Grid item xs={4} sx={{ textAlign: isArabic ? 'left' : 'right' }}>
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      color: '#1f2c5b',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {t('report.age')}:{' '}
-                    <span style={{ color: '#000', fontWeight: 700 }}>
-                      {calculateAge(report?.patient?.birth_date)}
-                    </span>
-                  </Typography>
-                </Grid>
-              </Grid>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: '#1f2c5b',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t('report.age')}:{' '}
+                  <span style={{ color: '#000', fontWeight: 700 }}>
+                    {calculateAge(report?.patient?.birth_date)}
+                  </span>
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
-          {/* ==== DESCRIPTION ==== */}
-          <div style={{ marginTop: '25px' }}>
-            {report?.medicines?.map((med, idx) => (
-              <div key={idx}>
-                <div>
-                  {med.medicines?.trade_name || ''} {med.medicines?.concentration || ''}
-                </div>
+          {/* ==== PRESCRIPTION ==== */}
+          {report?.medicines?.length > 0 && (
+            <Box sx={{ mt: 4 }}>
+              {report.medicines.map((item, index) => (
+                <Box
+                  key={item._id}
+                  sx={{
+                    mb: 3,
+                    p: 2,
+                  }}
+                >
+                  {/* Medicine Name */}
+                  <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
+                    {item?.medicines?.trade_name}
+                  </Typography>
 
-                <div>
-                  {t('Frequency')}: {med.Frequency_per_day || ''}
-                </div>
+                  {/* Dates */}
+                  <Typography sx={{ fontSize: 16, mt: 1 }}>
+                    {t('start date')}: {fDate(item?.Start_time, 'dd/MM/yyyy')}
+                  </Typography>
 
-                <div>
-                  {t('Start')}: {med.Start_time ? fDate(med.Start_time) : ''}
-                </div>
+                  <Typography sx={{ fontSize: 16 }}>
+                    {t('end date')}: {fDate(item?.End_time, 'dd/MM/yyyy')}
+                  </Typography>
 
-                <div>
-                  {t('End')}: {med.End_time ? fDate(med.End_time) : ''}
-                </div>
-              </div>
-            ))}
-          </div>
+                  {/* Frequency */}
+                  <Typography sx={{ fontSize: 16 }}>
+                    {t('frequency')}: {item?.Frequency_per_day}
+                  </Typography>
 
-          {/* DOCTOR COMMENT */}
-          {hasComments && (
-            <div style={{ marginTop: '20px' }}>
-              <div>Doctor Comment</div>
-
-              {report?.medicines?.map((med, idx) =>
-                med.Doctor_Comments ? <div key={idx}>{med.Doctor_Comments}</div> : null
-              )}
-            </div>
+                  {/* Doctor Comments (ONLY IF EXISTS) */}
+                  {item?.Doctor_Comments && item.Doctor_Comments.trim() !== '' && (
+                    <Typography sx={{ fontSize: 16, mt: 1 }}>
+                      {t('report.doctorComments')}: {item.Doctor_Comments}
+                    </Typography>
+                  )}
+                </Box>
+              ))}
+            </Box>
           )}
 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
           <Box
             sx={{
               flexGrow: 1, // <--- THE MAGIC PART
-              minHeight: '300px', // baseline so it always looks correct
+              minHeight: '335px', // baseline so it always looks correct
             }}
           />
 
@@ -304,10 +318,18 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
           >
             {/* LEFT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.phoneNumber')}: {report?.unit_service?.phone || '---'}
               </Typography>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.workingHours')}: {formatTime(report?.unit_service?.work_start_time)}{' '}
                 {' — '}
                 {formatTime(report?.unit_service?.work_end_time)}
@@ -316,12 +338,20 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
 
             {/* MIDDLE COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.email')}: {report?.unit_service?.email || '---'}
               </Typography>
 
               {report?.unit_service?.mobile_nu && (
-                <Typography>
+                <Typography
+                  sx={{
+                    color: '#2a5d71',
+                  }}
+                >
                   {t('report.relativePhone')}: {report?.unit_service?.mobile_num || '---'}
                 </Typography>
               )}
@@ -329,7 +359,11 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
 
             {/* RIGHT COLUMN */}
             <Box>
-              <Typography>
+              <Typography
+                sx={{
+                  color: '#2a5d71',
+                }}
+              >
                 {t('report.address')}: {report?.unit_service?.address || '---'}
               </Typography>
             </Box>
