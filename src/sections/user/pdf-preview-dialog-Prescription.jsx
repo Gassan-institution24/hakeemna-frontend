@@ -209,43 +209,47 @@ export default function PdfPreviewDialogPrescription({ open, onClose, report }) 
           {/* ==== PRESCRIPTION ==== */}
           {report?.medicines?.length > 0 && (
             <Box sx={{ mt: 4 }}>
-              {report.medicines.map((item, index) => (
-                <Box
-                  key={item._id}
-                  sx={{
-                    mb: 3,
-                    p: 2,
-                  }}
-                >
-                  {/* Medicine Name */}
-                  <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
-                    {item?.medicines?.trade_name}
-                  </Typography>
+              <Grid container spacing={3}>
+                {report.medicines.map((item) => (
+                  <Grid item xs={6} key={item._id}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        height: '100%',
+                      }}
+                    >
+                      {/* Medicine Name */}
+                      <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
+                        {item?.medicines?.trade_name}
+                      </Typography>
 
-                  {/* Dates */}
-                  <Typography sx={{ fontSize: 16, mt: 1 }}>
-                    {t('start date')}: {fDate(item?.Start_time, 'dd/MM/yyyy')}
-                  </Typography>
+                      {/* Dates */}
+                      <Typography sx={{ fontSize: 16, mt: 1 }}>
+                        {t('start date')}: {fDate(item?.Start_time, 'dd/MM/yyyy')}
+                      </Typography>
 
-                  <Typography sx={{ fontSize: 16 }}>
-                    {t('end date')}: {fDate(item?.End_time, 'dd/MM/yyyy')}
-                  </Typography>
+                      <Typography sx={{ fontSize: 16 }}>
+                        {t('end date')}: {fDate(item?.End_time, 'dd/MM/yyyy')}
+                      </Typography>
 
-                  {/* Frequency */}
-                  <Typography sx={{ fontSize: 16 }}>
-                    {t('frequency')}: {item?.Frequency_per_day}
-                  </Typography>
+                      {/* Frequency */}
+                      <Typography sx={{ fontSize: 16 }}>
+                        {t('frequency')}: {item?.Frequency_per_day}
+                      </Typography>
 
-                  {/* Doctor Comments (ONLY IF EXISTS) */}
-                  {item?.Doctor_Comments && item.Doctor_Comments.trim() !== '' && (
-                    <Typography sx={{ fontSize: 16, mt: 1 }}>
-                      {t('report.doctorComments')}: {item.Doctor_Comments}
-                    </Typography>
-                  )}
-                </Box>
-              ))}
+                      {/* Doctor Comments */}
+                      {item?.Doctor_Comments?.trim() && (
+                        <Typography sx={{ fontSize: 16, mt: 1 }}>
+                          {t('Doctor Note')}: {item.Doctor_Comments}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
             </Box>
           )}
+
 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
           <Box
