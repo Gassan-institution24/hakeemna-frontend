@@ -1,16 +1,5 @@
 import * as React from 'react';
-import DOMPurify from 'dompurify';
-import PropTypes from 'prop-types';
-import { convert } from 'html-to-text';
-import {
-  Page,
-  Text,
-  Font,
-  View,
-  Document,
-  StyleSheet,
-  Image as PdfImage,
-} from '@react-pdf/renderer';
+import { Font } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -20,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -30,7 +19,6 @@ import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back.png';
-import Doclogo from '../../components/logo/doc.png';
 import PdfPreviewDialogSickLeave from './pdf-preview-dialog-sickleave';
 
 Font.register({
@@ -38,125 +26,6 @@ Font.register({
   src: '/fonts/IBMPlexSansArabic-Regular.ttf',
 });
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  headerImage: {
-    width: 80,
-    height: 80,
-  },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 10,
-    marginBottom: 4,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 10,
-    left: 20,
-    right: 20,
-    fontSize: 8,
-    color: '#777',
-    textAlign: 'center',
-  },
-  content: {
-    marginTop: 20,
-    paddingHorizontal: 20,
-  },
-  text: {
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  textAR: {
-    fontSize: 13,
-    marginBottom: 6,
-    fontFamily: 'ArabicFont',
-  },
-  largeText: {
-    fontSize: 15,
-    marginBottom: 7,
-    fontWeight: 'bold',
-  },
-  image: {
-    marginTop: 20,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  insideImage: {
-    width: '100%', // Make the image full width
-    height: 'auto', // Maintain the aspect ratio
-  },
-  watermark: {
-    position: 'absolute',
-    top: '30%', // Adjust the vertical position as needed
-    left: '25%', // Adjust the horizontal position as needed
-    width: '50%', // Adjust width for desired size
-    opacity: 0.2, // Set opacity to 30%
-    zIndex: -1,
-  },
-});
-
-const SickLeavePDF = ({ report }) => {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const { user } = useAuthContext();
-  const sanitizedHtmlString = DOMPurify.sanitize(report?.description || '');
-  const plainText = convert(sanitizedHtmlString, {
-    wordwrap: 130,
-  });
-  const result = convert(plainText);
-
-  return (
-    <Document>
-      <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <PdfImage src={report?.unit_services?.company_logo} style={styles.headerImage} />
-          <View>
-            <Text style={styles.headerText}>Sick Leave</Text>
-            <Text style={styles.headerText}>{report?.unit_services?.name_english}</Text>
-            <Text style={styles.headerText}>{report?.unit_services?.address}</Text>
-            <Text style={styles.headerText}>{report?.unit_services?.phone}</Text>
-          </View>
-        </View>
-
-        {/* Watermark Logo */}
-        <PdfImage src={Doclogo} style={styles.watermark} />
-
-        {/* Content */}
-        <View style={styles.content}>
-          <Text style={styles.largeText}>Patient Information</Text>
-
-          <Text style={styles.text}>
-            Name: {curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english}
-          </Text>
-          <Text style={styles.text}>
-            {' '}
-            from {fDmPdf(report?.Medical_sick_leave_start)} to{' '}
-            {fDmPdf(report?.Medical_sick_leave_end)}
-          </Text>
-          <Text style={styles.largeText}>Report Details</Text>
-          <Text style={styles.textAR}>{result}</Text>
-        </View>
-        {/* Footer */}
-        <Text style={styles.footer}>Made by hakeemna</Text>
-      </Page>
-    </Document>
-  );
-};
-SickLeavePDF.propTypes = {
-  report: PropTypes.object,
-};
 
 export default function SickLeaves() {
   const { t } = useTranslate();
@@ -191,11 +60,14 @@ export default function SickLeaves() {
           <Card
             key={index}
             sx={{
-              backgroundColor: 'rgba(247, 246, 246, 0.4)',
-              borderRadius: 2,
+              backgroundImage: `url(${Back})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundColor: 'rgba(255, 255, 255, 0.800)',
+              backgroundBlendMode: 'lighten',
             }}
           >
-            <Stack sx={{ p: 2, pb: 1, height: 120 }}>
+            <Stack sx={{ p: 2, pb: 1, height: 185 }}>
               <Avatar
                 alt={info?.name_english}
                 src={user?.patient?.profile_picture}
@@ -233,12 +105,7 @@ export default function SickLeaves() {
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{
-                p: 3,
-                justifyContent: 'space-between',
-                backgroundColor: 'rgba(247, 246, 246, 0.2)',
-                borderRadius: 2,
-              }}
+              sx={{ p: 3, justifyContent: 'space-between' }}
             >
               {[
                 {

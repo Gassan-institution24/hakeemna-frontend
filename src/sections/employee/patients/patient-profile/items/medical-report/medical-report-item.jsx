@@ -41,7 +41,7 @@ export default function MedicalReportItem({ one, refetch }) {
     defaultValues,
   });
 
-  const { handleSubmit, setValue, watch } = methods;
+  const { handleSubmit, setValue, watch, reset } = methods;
 
   const handleDrop = (acceptedFile) => {
     const oldFiles = watch('file');
@@ -131,7 +131,16 @@ export default function MedicalReportItem({ one, refetch }) {
                   <Iconify icon="solar:printer-minimalistic-bold" />
                 </IconButton>
               </Box>
-              <IconButton onClick={() => setEditting(true)}>
+              <IconButton
+                onClick={() => {
+                  reset({
+                    file: one?.file || [],
+                    description: one?.description || '',
+                  });
+                  setEditting(true);
+                }}
+              >
+
                 <Iconify icon="lets-icons:edit-fill" />
               </IconButton>
             </Stack>

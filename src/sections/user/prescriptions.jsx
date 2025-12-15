@@ -1,14 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  Font,
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Image as PdfImage,
-} from '@react-pdf/renderer';
+import { Font, } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -18,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { fDmPdf, fDateAndTime } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetDrugs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
@@ -27,7 +18,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
-import Doclogo from '../../components/logo/doc.png';
+import Back from "./imges/back3.png"
 import PdfPreviewDialogPrescription from './pdf-preview-dialog-Prescription';
 
 Font.register({
@@ -35,170 +26,6 @@ Font.register({
   src: '/fonts/IBMPlexSansArabic-Regular.ttf',
 });
 
-// Define the styles with the new font
-const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  headerImage: {
-    width: 80,
-    height: 80,
-  },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 10,
-    marginBottom: 4,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 10,
-    left: 20,
-    right: 20,
-    fontSize: 8,
-    color: '#777',
-    textAlign: 'center',
-  },
-  content: {
-    marginTop: 20,
-    paddingHorizontal: 20,
-  },
-  text: {
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  largeText: {
-    fontSize: 15,
-    marginBottom: 7,
-    fontWeight: 'bold',
-  },
-  arabicText: {
-    fontFamily: 'ArabicFont', // Apply Arabic font here
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  image: {
-    marginTop: 20,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  watermark: {
-    position: 'absolute',
-    top: '30%',
-    left: '25%',
-    width: '50%',
-    opacity: 0.2,
-    zIndex: -1,
-  },
-  table: {
-    border: '2px solid gray',
-    margin: 2,
-  },
-  insideTable: {
-    margin: 2,
-  },
-});
-
-const PrescriptionPDF = ({ report }) => (
-  <Document>
-    <Page size={{ width: 595.28, height: 841.89 }} style={styles.page}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerText}>Drug Report</Text>
-          <Text style={styles.headerText}>{report?.unit_service?.name_english}</Text>
-          <Text style={styles.headerText}>{report?.unit_service?.address}</Text>
-          <Text style={styles.headerText}>{report?.unit_service?.phone}</Text>
-        </View>
-      </View>
-
-      {/* Watermark Logo */}
-      <PdfImage src={Doclogo} style={styles.watermark} />
-
-      {/* Content */}
-      <View style={styles.content}>
-        <Text style={styles.largeText}>Patient Information</Text>
-        <Text style={styles.text}>Name: {report?.patient?.name_english}</Text>
-        <Text style={styles.text}>Age: {fDmPdf(report?.patient?.birth_date)}</Text>
-        <Text style={styles.largeText}>Report Details</Text>
-
-        {report?.medicines?.map((info, i) => (
-          <View key={i} style={styles.table}>
-            <View style={styles.insideTable}>
-              {info?.medicines?.trade_name && (
-                <>
-                  <Text>Medicines</Text>
-                  <Text style={styles.largeText}>{info.medicines.trade_name}</Text>
-                  <Text style={{ borderBottom: '1px solid gray' }} />
-                </>
-              )}
-            </View>
-            <View style={styles.insideTable}>
-              {info?.Start_time && (
-                <>
-                  <Text>Start Time</Text>
-                  <Text style={styles.largeText}>{fDmPdf(info.Start_time)}</Text>
-                  <Text style={{ borderBottom: '1px solid gray' }} />
-                </>
-              )}
-            </View>
-            <View style={styles.insideTable}>
-              {info?.End_time && (
-                <>
-                  <Text>End Time</Text>
-                  <Text style={styles.largeText}>{fDmPdf(info.End_time)}</Text>
-                  <Text style={{ borderBottom: '1px solid gray' }} />
-                </>
-              )}
-            </View>
-            <View style={styles.insideTable}>
-              {info?.Num_days && (
-                <>
-                  <Text>Num Days</Text>
-                  <Text style={styles.largeText}>{info.Num_days}</Text>
-                  <Text style={{ borderBottom: '1px solid gray' }} />
-                </>
-              )}
-            </View>
-            <View style={styles.insideTable}>
-              {info?.Frequency_per_day && (
-                <>
-                  <Text>Frequency/Day</Text>
-                  <Text style={styles.largeText}>{info.Frequency_per_day}</Text>
-                  <Text style={{ borderBottom: '1px solid gray' }} />
-                </>
-              )}
-            </View>
-            <View style={styles.insideTable}>
-              {info?.Doctor_Comments && (
-                <>
-                  <Text>Doctor Comments</Text>
-                  <Text style={styles.arabicText}>{info.Doctor_Comments}</Text>
-                  {/* Apply Arabic font style here */}
-                </>
-              )}
-            </View>
-          </View>
-        ))}
-      </View>
-
-      {/* Footer */}
-      <Text style={styles.footer}>Made by hakeemna</Text>
-    </Page>
-  </Document>
-);
-
-PrescriptionPDF.propTypes = {
-  report: PropTypes.object,
-};
 
 export default function Prescriptions() {
   const { t } = useTranslate();
@@ -220,8 +47,11 @@ export default function Prescriptions() {
           <Card
             key={index}
             sx={{
-              backgroundColor: 'rgba(247, 246, 246, 0.4)',
-              borderRadius: 2,
+              backgroundImage: `url(${Back})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundColor: 'rgba(255, 255, 255, 0.800)',
+              backgroundBlendMode: 'lighten',
             }}
           >
             <Stack sx={{ p: 2, pb: 1, height: 110 }}>
@@ -240,11 +70,29 @@ export default function Prescriptions() {
               >
                 {fDateAndTime(info?.created_at)}
               </Stack>
-              {info?.medicines?.map((medicine, ii) => (
-                <Typography key={ii} sx={{ pt: 1 }}>
-                  - {medicine?.medicines?.trade_name}
-                </Typography>
-              ))}
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, max-content)', // 👈 عمودين فقط
+                  columnGap: 1.5,
+                  rowGap: 1,
+                  mt: 2,
+                }}
+              >
+                {info?.medicines?.map((medicine, ii) => (
+                  <Typography
+                    key={ii}
+                    variant="body2"
+                    sx={{
+                      lineHeight: 1.2,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    - {medicine?.medicines?.trade_name}
+                  </Typography>
+                ))}
+              </Box>
+
             </Stack>
             <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
               <Tooltip title="Download">
@@ -264,12 +112,7 @@ export default function Prescriptions() {
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{
-                p: 3,
-                justifyContent: 'space-between',
-                backgroundColor: 'rgba(247, 246, 246, 0.2)', 
-                borderRadius: 2,
-              }}
+              sx={{ p: 3, justifyContent: 'space-between' }}
             >
               {[
                 {

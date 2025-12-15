@@ -269,7 +269,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
             />
           )}
           {/* ==== SMALL SPACE WHEN IMAGE EXISTS ==== */}
-          {hasImage && <Box sx={{ height: '220px' }} />}
+          {hasImage && <Box sx={{ height: '400px' }} />}
 
           {/* ==== SIGNATURE & STAMP ==== */}
           <Box
