@@ -21,7 +21,6 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { prescriptionData } = useGetCurrentPatientMedicines(user?.patient?._id);
-
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -469,7 +468,7 @@ export default function ProfileHome() {
       <Grid xs={12} md={4}>
         {renderOverview}
 
-        {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+        {user?.patient?.gender === 'female' ? [renderMoreInfoPregnant] : [renderMoreInfo]}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
