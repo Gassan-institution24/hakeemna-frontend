@@ -249,7 +249,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
                       borderRadius: '8px',
                       border: '1px solid #ccc',
 
-                      float: isArabic ? 'right' : 'left', // 👈 هون السحر
+                      float: isArabic ? 'right' : 'left',  
                       margin: isArabic ? '0 0 16px 24px' : '0 24px 16px 0',
                     }}
                   />

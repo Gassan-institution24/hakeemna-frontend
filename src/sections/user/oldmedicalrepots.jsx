@@ -1,4 +1,3 @@
-import JsPdf from 'jspdf';
 import * as Yup from 'yup';
 import { addDays } from 'date-fns';
 import React, { useState } from 'react';
@@ -30,12 +29,9 @@ import {
   TableContainer,
 } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axios, { endpoints } from 'src/utils/axios';
+import axios from 'src/utils/axios';
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -45,6 +41,8 @@ import { useGetSpecialties, useGetPatintoldmedicalreports } from 'src/api';
 import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+
+import PdfPreviewDialogPatint from "./PdfPreviewDialogPatint"
 
 export default function OldMedicalReports() {
   // Inside the OldMedicalReports component
@@ -60,29 +58,18 @@ export default function OldMedicalReports() {
   const [FileToDelete, setFileToDelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
-  const [spName, setspName] = useState();
-  const handleHover = (id) => {
-    setHoveredButtonId(id);
-  };
+  const [spName, setspName] = useState('');
+
   const [filtersbyname, setFiltersbyname] = useState();
 
   const dataFiltered = applyFilter({
     inputData: oldmedicalreportsdata,
     filtersbyname,
   });
-
-  const handleMouseOut = () => {
-    setHoveredButtonId(null);
-  };
-  const handleViewClick = (id) => {
-    router.push(paths.dashboard.user.oldmedicalreportsview(id));
-  };
 
   const delteeFile = async () => {
     try {
@@ -142,7 +129,7 @@ export default function OldMedicalReports() {
       const isExtensionAllowed = allowedExtensions.includes(fileExtension);
       return isExtensionAllowed;
     };
-    const isValidSize = (fileSize) => fileSize <= 3145728;
+    const isValidSize = (fileSize) => fileSize <= 5145728;
 
     return {
       validateFile: isValidFile,
@@ -218,66 +205,13 @@ export default function OldMedicalReports() {
     setShowAlert(false);
     dialog.onTrue();
   };
-  const downloadAsPDF = (report) => {
-    setShowAlert(false);
-    // Create a new PDF instance
-    const pdf = new JsPdf();
+  const [openPreview, setOpenPreview] = React.useState(false);
+  const [selectedReport, setSelectedReport] = React.useState(null);
 
-    // Load Arabic font
-    pdf.addFont('/fonts/IBMPlexSansArabic-Regular.ttf', 'ArabicFont', 'normal');
-
-    // Set font to the loaded Arabic font
-    pdf.setFont('ArabicFont');
-
-    // Add report details to the PDF
-    pdf.text(`File Name: ${report.name}`, 10, 10);
-    pdf.text(`Specialty: ${report.specialty.name_english}`, 10, 20);
-    pdf.text(`Date: ${fDateAndTime(report.date)}`, 10, 30);
-    pdf.text(`Note: `, 10, 40);
-
-    if (report.note) {
-      const maxLength = 50; // Maximum characters per line
-      let startY = 40;
-      let remainingText = report.note;
-      while (remainingText.length > 0) {
-        const currentLine = remainingText.substring(0, maxLength);
-        pdf.text(`${currentLine}`, 25, startY);
-        startY += 10; // Increment the y-position for the next line
-        remainingText = remainingText.substring(maxLength);
-      }
-    }
-    addImagesToPDF(pdf, report.file).then((modifiedPdf) => {
-      modifiedPdf.save(`${report.name}.pdf`);
-    });
+  const openPdfDialog = (report) => {
+    setSelectedReport(report);
+    setOpenPreview(true);
   };
-
-  const fetchImageAsBase64 = async (url) => {
-    const response = await fetch(
-      `http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`
-    );
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  };
-
-  const addImagesToPDF = async (doc, imageUrls) => {
-    const imagePromises = imageUrls.map((url) => fetchImageAsBase64(url));
-    const images = await Promise.all(imagePromises);
-
-    images.forEach((base64data, index) => {
-      doc.addImage(base64data, 'JPEG', 10, index * 10 + 60, 180, 200);
-      if (index < imageUrls.length - 1) {
-        doc.addPage();
-      }
-    });
-
-    return doc;
-  };
-
   return (
     <>
       {showAlert && (
@@ -411,17 +345,17 @@ export default function OldMedicalReports() {
               variant="outlined"
               onDrop={handleDrop}
               multiple
-              // onRemove={(inputFile) => {
-              //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
-              //     shouldValidate: true,
-              //   });
-              //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
-              // }}
-              // onRemoveAll={() => {
-              //   setValue('files', [], { shouldValidate: true });
-              //   setUploadedFiles([]);
-              // }}
-              // onUpload={onSubmit}
+            // onRemove={(inputFile) => {
+            //   setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
+            //     shouldValidate: true,
+            //   });
+            //   setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
+            // }}
+            // onRemoveAll={() => {
+            //   setValue('files', [], { shouldValidate: true });
+            //   setUploadedFiles([]);
+            // }}
+            // onUpload={onSubmit}
             />
 
             <RHFTextField name="note" label={t('More information')} />
@@ -509,35 +443,38 @@ export default function OldMedicalReports() {
                   </TableCell>
                 )}
                 <TableCell>
-                  <Button onClick={() => downloadAsPDF(info)} variant="outlined" sx={{ mr: 1 }}>
-                    {t('Download')} &nbsp; <Iconify icon="flat-color-icons:download" />
-                  </Button>
-                  <Button
-                    sx={{ mr: 1 }}
-                    onMouseOver={() => handleHover(info?._id)}
-                    onMouseOut={handleMouseOut}
-                    onClick={() => handleViewClick(info?._id)}
-                  >
-                    {t('View')} &nbsp;{' '}
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    {/* PRINT / PREVIEW */}
                     <Iconify
-                      icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
+                      icon="akar-icons:cloud-download"
+                      width={23}
+                      sx={{ color: 'info.main', cursor: 'pointer' }}
+                      onClick={() => openPdfDialog(info)}
                     />
-                  </Button>
 
-                  <Button
-                    onClick={() => {
-                      setFileToDelete(info);
-                      setShowAlert(true);
-                    }}
-                  >
-                    {t('Delete')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-                  </Button>
+                    {/* DELETE */}
+                    <Button
+                      onClick={() => {
+                        setFileToDelete(info);
+                        setShowAlert(true);
+                      }}
+                      sx={{ minWidth: 'unset', p: 0 }}
+                    >
+                      {t('Delete')} &nbsp;
+                      <Iconify icon="flat-color-icons:delete-database" />
+                    </Button>
+                  </Stack>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
       ))}
+      <PdfPreviewDialogPatint
+        open={openPreview}
+        onClose={() => setOpenPreview(false)}
+        report={selectedReport}
+      />
     </>
   );
 }
