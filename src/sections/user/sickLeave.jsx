@@ -191,12 +191,8 @@ export default function SickLeaves() {
           <Card
             key={index}
             sx={{
-              backgroundImage: `url(${Back})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundColor: 'rgba(255, 255, 255, 0.800)',
-              backgroundBlendMode: 'lighten',
-              mb: 2,
+              backgroundColor: 'rgba(247, 246, 246, 0.4)',
+              borderRadius: 2,
             }}
           >
             <Stack sx={{ p: 2, pb: 1, height: 120 }}>
@@ -237,7 +233,12 @@ export default function SickLeaves() {
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{ p: 3, justifyContent: 'space-between' }}
+              sx={{
+                p: 3,
+                justifyContent: 'space-between',
+                backgroundColor: 'rgba(247, 246, 246, 0.2)',
+                borderRadius: 2,
+              }}
             >
               {[
                 {
