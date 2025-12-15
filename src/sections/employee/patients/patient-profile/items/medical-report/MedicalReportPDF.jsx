@@ -234,7 +234,7 @@ export default function MedicalReportPDF({ open, onClose, report }) {
             <div style={{ marginTop: '24px' }}>
               {report.file.map((fileUrl, index) => {
                 const fixedUrl = fixURL(fileUrl);
-                const isImage = /\.(jpg|jpeg|png|webp)$/i.test(fixedUrl);
+                const isImage = /\.(jpg|jpeg|png|webp|jfif)$/i.test(fixedUrl);
                 if (!isImage) return null;
 
                 return (
@@ -272,12 +272,14 @@ export default function MedicalReportPDF({ open, onClose, report }) {
           {hasImage && <Box sx={{ height: '220px' }} />}
 
           {/* ==== SIGNATURE & STAMP ==== */}
+          {/* ==== SIGNATURE & STAMP (FIXED ABOVE FOOTER) ==== */}
           <Box
             sx={{
+              mt: 'auto',          // 👈 يدفعهم للأسفل
+              mb: 4,               // 👈 مسافة قبل الفوتر
               display: 'flex',
               justifyContent: 'space-between',
               px: 12,
-              mb: 4,
             }}
           >
             {/* SIGNATURE */}
@@ -321,11 +323,13 @@ export default function MedicalReportPDF({ open, onClose, report }) {
             </Box>
           </Box>
 
+
           {/* ==== FOOTER ==== */}
           <Box
             sx={{
               borderTop: '2px solid #2a5d71',
               pt: 3,
+              mt: 'auto',
               display: 'flex',
               justifyContent: 'space-between',
               fontSize: 18,

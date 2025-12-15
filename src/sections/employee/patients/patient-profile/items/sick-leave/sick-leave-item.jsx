@@ -44,7 +44,7 @@ export default function SickLeaveItem({ one, refetch }) {
     defaultValues,
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -66,6 +66,19 @@ export default function SickLeaveItem({ one, refetch }) {
     setSelectedReport(report);
     setOpenPreview(true);
   };
+  const htmlToPlainText = (html) => {
+    if (!html) return '';
+
+    // 1️⃣ decode HTML entities
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    const decoded = txt.value;
+
+    // 2️⃣ remove html tags
+    return decoded.replace(/<[^>]*>/g, '').trim();
+  };
+
+
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
       {editting ? (
@@ -106,7 +119,16 @@ export default function SickLeaveItem({ one, refetch }) {
                 </IconButton>
               </Box>
 
-              <IconButton onClick={() => setEditting(true)}>
+              <IconButton
+                onClick={() => {
+                  reset({
+                    Medical_sick_leave_start: one?.Medical_sick_leave_start || null,
+                    Medical_sick_leave_end: one?.Medical_sick_leave_end || null,
+                    description: htmlToPlainText(one?.description),
+                  });
+                  setEditting(true);
+                }}
+              >
                 <Iconify icon="lets-icons:edit-fill" />
               </IconButton>
             </Stack>
