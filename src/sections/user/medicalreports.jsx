@@ -11,8 +11,8 @@ import { useGetPatintmedicalreports } from 'src/api/medical_repots';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
-import Back from "./imges/back2.png"
-import PdfPreviewDialog from './pdf-preview-dialog-MedicalReport'
+import Back from './imges/back.webp';
+import PdfPreviewDialog from './pdf-preview-dialog-MedicalReport';
 
 export default function Medicalreports() {
   const { t } = useTranslate();
@@ -22,6 +22,7 @@ export default function Medicalreports() {
 
   const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
 
+  // ❌ لا تغيير على الفانكشن
   const formatTextWithLineBreaks = (text, id, limit = 20) => {
     if (!text) return '';
 
@@ -41,6 +42,7 @@ export default function Medicalreports() {
 
     return formattedText;
   };
+
   const [openPreview, setOpenPreview] = React.useState(false);
   const [selectedReport, setSelectedReport] = React.useState(null);
 
@@ -48,10 +50,11 @@ export default function Medicalreports() {
     setSelectedReport(report);
     setOpenPreview(true);
   };
+
   return (
     <>
       {medicalreportsdata?.length > 0 ? (
-        medicalreportsdata?.map((info, index) => (
+        medicalreportsdata.map((info, index) => (
           <Card
             key={index}
             sx={{
@@ -59,111 +62,172 @@ export default function Medicalreports() {
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
               backgroundColor: 'rgba(255, 255, 255, 0.800)',
-              backgroundBlendMode: 'lighten',
+              position: 'relative',
+              direction: curLangAr ? 'rtl' : 'ltr',
             }}
           >
-            <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+            {/* ================= Header ================= */}
+            <Stack
+              sx={{
+                p: 2,
+                pb: 1,
+                height: 150,
+                alignItems: 'flex-end',
+                textAlign: 'right',
+              }}
+            >
               <Avatar
                 alt={info?.name_english}
                 src={user?.patient?.profile_picture}
                 variant="rounded"
-                sx={{ width: 48, height: 48, mb: 2 }}
+                sx={{
+                  width: 48,
+                  height: 48,
+                  mb: 2,
+                  alignSelf: 'flex-end',
+                }}
               />
 
               <Stack
                 spacing={0.5}
                 direction="row"
-                alignItems="center"
-                sx={{ typography: 'caption' }}
+                justifyContent="flex-end"
+                sx={{
+                  fontWeight: 'bold',
+                  width: '100%',
+                  direction: curLangAr ? 'rtl' : 'ltr',
+                  unicodeBidi: 'plaintext',
+                }}
               >
                 {fDateAndTime(info?.created_at)}
               </Stack>
+
+              {/* ================= Description ================= */}
               <Typography
                 dangerouslySetInnerHTML={{
                   __html: formatTextWithLineBreaks(info?.description, info?._id),
                 }}
-                sx={{ fontSize: 13 }}
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  mt: 1,
+                  textAlign: 'right',
+
+                  direction: curLangAr ? 'rtl' : 'ltr',
+                  unicodeBidi: 'plaintext',
+                }}
               />
             </Stack>
-            <Stack sx={{ display: 'inline', m: 2, position: 'absolute', right: 0, top: 0 }}>
+
+            {/* ================= Download Icon ================= */}
+            <Stack
+              sx={{
+                position: 'absolute',
+                top: 8,
+                ...(curLangAr ? { right: 8 } : { left: 8 }),
+              }}
+            >
               <Tooltip title={t('Download')}>
                 <Iconify
                   icon="akar-icons:cloud-download"
                   width={23}
-                  sx={{ color: 'info.main', mr: 2, cursor: 'pointer' }}
+                  sx={{ color: 'info.main', cursor: 'pointer' }}
                   onClick={() => openPdfDialog(info)}
                 />
               </Tooltip>
             </Stack>
+
             <Divider
-              sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)', mt: 5 }}
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'rgba(128, 128, 128, 0.512)',
+                mt: 5,
+              }}
             />
 
+            {/* ================= Footer ================= */}
             <Box
               rowGap={1.5}
               display="grid"
               gridTemplateColumns="repeat(2, 1fr)"
-              sx={{ p: 3, justifyContent: 'space-between' }}
+              sx={{
+                p: 3,
+                textAlign: 'right',
+              }}
             >
               {[
                 {
-                  label: curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english,
-                  icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+                  label: curLangAr
+                    ? user?.patient?.name_arabic
+                    : user?.patient?.name_english,
+                  icon: <Iconify width={16} icon="fa:user" />,
                 },
                 {
-                  label: curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english,
-                  icon: <Iconify width={18} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+                  label: curLangAr
+                    ? info?.employee?.name_arabic
+                    : info?.employee?.name_english,
+                  icon: <Iconify width={18} icon="mdi:doctor" />,
                 },
                 {
                   label: curLangAr
                     ? info?.unit_service?.name_arabic
                     : info?.unit_service?.name_english,
-                  icon: (
-                    <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />
-                  ),
+                  icon: <Iconify width={16} icon="teenyicons:hospital-solid" />,
                 },
                 info?.file?.length > 0 && {
                   label: curLangAr ? (
-                    <span style={{ color: '#22C55E', fontWeight: 600 }}>يحتوي على ملف</span>
+                    <span style={{ color: '#22C55E', fontWeight: 600 }}>
+                      يحتوي على ملف
+                    </span>
                   ) : (
-                    <span style={{ color: '#22C55E', fontWeight: 600 }}>File inside</span>
+                    <span style={{ color: '#22C55E', fontWeight: 600 }}>
+                      File inside
+                    </span>
                   ),
                   icon: (
                     <Iconify
                       width={20}
                       icon="material-symbols:image-sharp"
-                      sx={{ flexShrink: 0 }}
                     />
                   ),
                 },
-              ].map((item, idx) => (
-                <Stack
-                  key={idx}
-                  spacing={0.5}
-                  flexShrink={0}
-                  direction="row"
-                  alignItems="center"
-                  sx={{ color: 'black', minWidth: 0 }}
-                >
-                  {item?.icon}
-                  <Typography variant="caption" noWrap>
-                    {item?.label}
-                  </Typography>
-                </Stack>
-              ))}
+              ]
+                .filter(Boolean)
+                .map((item, idx) => (
+                  <Stack
+                    key={idx}
+                    spacing={0.5}
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    sx={{
+                      color: 'black',
+                      minWidth: 0,
+                      direction: curLangAr ? 'rtl' : 'ltr',
+                    }}
+                  >
+                    {item.icon}
+                    <Typography
+                      sx={{
+                        fontSize: 10,
+                        fontWeight: 'bold',
+                        textAlign: 'right',
+                        direction: curLangAr ? 'rtl' : 'ltr',
+                        unicodeBidi: 'plaintext',
+                      }}
+                      noWrap
+                    >
+                      {item.label}
+                    </Typography>
+                  </Stack>
+                ))}
             </Box>
           </Card>
         ))
       ) : (
-        <EmptyContent
-          filled
-          title={t('No Data')}
-          sx={{
-            py: 10,
-          }}
-        />
+        <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />
       )}
-      ;
+
       <PdfPreviewDialog
         open={openPreview}
         onClose={() => setOpenPreview(false)}
