@@ -1,5 +1,6 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { pdf, PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf, PDFViewer } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -8,27 +9,26 @@ import Dialog from '@mui/material/Dialog';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
-import CircularProgress from '@mui/material/CircularProgress';
 
 // import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fDate } from 'src/utils/format-time';
-
-import { useTranslate } from 'src/locales';
 import { useGetIncomePaymentControl } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { generatePdfFromElement } from 'src/components/pdf/generatePdf';
 
 import InvoicePDF from './invoice-pdf';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
+export default function InvoiceToolbar({ invoice, currentStatus, invoiceRef  }) {
   // const router = useRouter();
   const view = useBoolean();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
   const { incomePaymentData } = useGetIncomePaymentControl({
@@ -44,24 +44,6 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
     return acc;
   }, 0);
 
-  // const handleEdit = useCallback(() => {
-  //   router.push(paths.unitservice.accounting.economicmovements.edit(invoice.id));
-  // }, [invoice.id, router]);
-
-  const printPdf = async () => {
-    const blob = await pdf(
-      <InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />
-    ).toBlob();
-    const url = URL.createObjectURL(blob);
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = url;
-    document.body.appendChild(iframe);
-    iframe.onload = () => {
-      iframe.contentWindow.print();
-    };
-  };
-
   return (
     <>
       <Stack
@@ -71,73 +53,24 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
         sx={{ mb: { xs: 3, md: 5 } }}
       >
         <Stack direction="row" spacing={1} flexGrow={1} sx={{ width: 1 }}>
-          {/* <Tooltip title={t("edit")}>
-            <IconButton onClick={handleEdit}>
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>
-          </Tooltip> */}
-
-          <Tooltip title={t('view')}>
-            <IconButton onClick={view.onTrue}>
-              <Iconify icon="solar:eye-bold" />
-            </IconButton>
-          </Tooltip>
-
-          <PDFDownloadLink
-            document={
-              <InvoicePDF invoice={invoice} currentStatus={currentStatus} paidAmount={paidAmount} />
-            }
-            fileName={`${fDate(new Date(invoice.created_at), 'yyyy')} - ${invoice.sequence_number}`}
-            style={{ textDecoration: 'none' }}
-          >
-            {({ loading }) => (
-              <Tooltip title={t('download')}>
-                <IconButton>
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    <Iconify icon="eva:cloud-download-fill" />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-          </PDFDownloadLink>
-
           <Tooltip title={t('print')}>
-            <IconButton onClick={printPdf}>
-              <Iconify icon="solar:printer-minimalistic-bold" />
+            <IconButton
+              color="primary"
+              onClick={() =>
+                generatePdfFromElement(
+                  invoiceRef.current,
+                  `invoice-${
+                    curLangAr
+                      ? invoice?.unit_service?.name_arabic
+                      : invoice?.unit_service?.name_english
+                  }-${invoice?.sequence_number}.pdf`
+                )
+              }
+            >
+              <Iconify icon="eva:cloud-download-fill" />
             </IconButton>
           </Tooltip>
-
-          {/* <Tooltip title="Send">
-            <IconButton>
-              <Iconify icon="iconamoon:send-fill" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Share">
-            <IconButton>
-              <Iconify icon="solar:share-bold" />
-            </IconButton>
-          </Tooltip> */}
         </Stack>
-
-        {/* <TextField
-          fullWidth
-          select
-          label={t('status')}
-          value={currentStatus}
-          onChange={onChangeStatus}
-          sx={{
-            maxWidth: 160,
-          }}
-        >
-          {statusOptions.map((option) => (
-            <MenuItem lang="ar" key={option.value} value={option.value}>
-              {t(option.value)}
-            </MenuItem>
-          ))}
-        </TextField> */}
       </Stack>
 
       <Dialog fullScreen open={view.value}>
@@ -166,6 +99,5 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
 InvoiceToolbar.propTypes = {
   currentStatus: PropTypes.string,
   invoice: PropTypes.object,
-  onChangeStatus: PropTypes.func,
-  statusOptions: PropTypes.array,
+  invoiceRef: PropTypes.func,
 };
