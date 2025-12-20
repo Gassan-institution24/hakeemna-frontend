@@ -35,7 +35,7 @@ export default function InvoiceToolbar({ invoice }) {
   const [qrDataUrl, setQrDataUrl] = useState(null);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
+  console.log(invoice, 'invoice');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   useEffect(() => {
@@ -109,7 +109,9 @@ export default function InvoiceToolbar({ invoice }) {
             >
               {t(invoice.status)}
             </Label>
-            <Typography variant="h6">{invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Typography>
+            <Typography variant="h6">
+              {invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}
+            </Typography>
           </Stack>
         </Box>
 
@@ -240,11 +242,9 @@ export default function InvoiceToolbar({ invoice }) {
                         {curLangAr ? row.service_type?.name_arabic : row.service_type?.name_english}
                       </TableCell>
                       <TableCell align="center">{row?.quantity || 0}</TableCell>
+                      <TableCell align="center">{fCurrency(row?.price_per_unit || 0)}</TableCell>
                       <TableCell align="center">
-                        {fCurrency(row.service_type?.Price_per_unit || 0)}
-                      </TableCell>
-                      <TableCell align="center">
-                        {fCurrency((row?.quantity || 1) * (row.service_type?.Price_per_unit || 0))}
+                        {fCurrency((row?.quantity || 1) * (row?.price_per_unit || 0))}
                       </TableCell>
                     </TableRow>
                   ))}
