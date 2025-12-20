@@ -109,7 +109,7 @@ export default function InvoiceToolbar({ invoice }) {
             >
               {t(invoice.status)}
             </Label>
-            <Typography variant="h6">{invoice.sequence_number}</Typography>
+            <Typography variant="h6">{invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Typography>
           </Stack>
         </Box>
 
