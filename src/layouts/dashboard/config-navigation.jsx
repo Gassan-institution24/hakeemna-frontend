@@ -38,8 +38,158 @@ export function useNavData() {
   const employees_number =
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
-
+      
   const data = useMemo(() => {
+    const permissions = user?.permissions || [];
+
+    const SUPER_ADMIN_ITEMS_MAP = {
+      confirming: {
+        title: t('confirming'),
+        path: paths.superadmin.confirming,
+        icon: <Iconify icon="line-md:confirm-square-twotone" />,
+      },
+
+      calendar: {
+        title: t('calender'),
+        path: paths.superadmin.ourCalendar,
+        icon: <Iconify icon="simple-line-icons:calender" />,
+      },
+
+      unit_services: {
+        title: t('units of service'),
+        path: paths.superadmin.unitservices.root,
+        icon: <Iconify icon="fa-solid:clinic-medical" />,
+      },
+
+      patients: {
+        title: t('patients'),
+        path: paths.superadmin.patients.root,
+        icon: <Iconify icon="iconamoon:profile-bold" />,
+      },
+
+      stakeholders: {
+        title: t('stakeholders'),
+        path: paths.superadmin.stakeholders.root,
+        icon: <Iconify icon="material-symbols:sell-sharp" />,
+      },
+
+      users: {
+        title: t('users'),
+        path: paths.superadmin.users.root,
+        icon: <Iconify icon="mdi:people-group-outline" />,
+      },
+
+      video_calls: {
+        title: t('video calls'),
+        path: paths.superadmin.videoCalls.root,
+        icon: <Iconify icon="mdi:video" />,
+      },
+
+      employees: {
+        title: t('employees'),
+        path: paths.superadmin.employees.root,
+        icon: <Iconify icon="fluent:people-20-filled" />,
+      },
+
+      accounting: {
+        title: t('accounting'),
+        path: paths.superadmin.accounting.root,
+        icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+      },
+
+      subscriptions: {
+        title: t('subscriptions'),
+        path: paths.superadmin.subscriptions.root,
+        icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+      },
+
+      quality_control: {
+        title: t('quality control'),
+        path: paths.superadmin.qualityControl.root,
+        icon: <Iconify icon="healthicons:world-care" />,
+        children: [
+          {
+            title: t('Doctorna online'),
+            path: paths.superadmin.qualityControl.doctorna,
+          },
+          {
+            title: t('units of service'),
+            path: paths.superadmin.qualityControl.unitservices,
+          },
+          {
+            title: t('Stakeholders'),
+            path: paths.superadmin.qualityControl.stakeholders,
+          },
+        ],
+      },
+      tables: {
+        title: t('management tables'),
+        path: paths.superadmin.tables.root,
+        icon: <Iconify icon="icon-park-twotone:data" />,
+      },
+
+      statistics: {
+        title: t('statistics'),
+        path: paths.superadmin.statistics.root,
+        icon: <Iconify icon="akar-icons:statistic-up" />,
+      },
+
+      acl: {
+        title: t('access control list'),
+        path: paths.superadmin.accessControlList.root,
+        icon: <Iconify icon="mdi:user-access-control" />,
+      },
+
+      customers_training: {
+        title: t('customers training'),
+        path: paths.superadmin.customersTraining.root,
+        icon: <Iconify icon="mdi:teach" />,
+      },
+
+      team_training: {
+        title: t('our team training'),
+        path: paths.superadmin.doctornaTeamTraining.root,
+        icon: <Iconify icon="healthicons:i-training-class" />,
+      },
+
+      adjustable_services: {
+        title: t('Adjustable Services Control'),
+        path: paths.superadmin.adjustableServices.root,
+        icon: <Iconify icon="ic:sharp-published-with-changes" />,
+      },
+
+      blogs: {
+        title: t('my blogs'),
+        path: paths.superadmin.blogs.root,
+        icon: <Iconify icon="ic:outline-library-books" />,
+      },
+
+      permissions: {
+        title: t('permissions'),
+        path: paths.superadmin.superAdminPermissions.root,
+        icon: <Iconify icon="mdi:account-secure" />,
+      },
+    };
+    const superAdminItems2 = [
+      {
+        subheader: t('overview'),
+        items:[
+          {
+            title: t('communications'),
+            path: paths.superadmin.communication.root,
+            icon: <Iconify icon="solar:call-chat-bold" />,
+            info: (
+              <Label color="info" startIcon={<Iconify icon="solar:bell-bing-bold-duotone" />}>
+                {messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
+              </Label>
+            ),
+          },
+          ...permissions
+          .map(key => SUPER_ADMIN_ITEMS_MAP[key])
+          .filter(Boolean),
+        ]
+      },
+    ];
     const superAdminItems = [
       {
         subheader: t('overview'),
@@ -154,6 +304,11 @@ export function useNavData() {
             path: paths.superadmin.blogs.root,
             icon: <Iconify icon="ic:outline-library-books" />,
           },
+          {
+            title: t('permissions'),
+            path: paths.superadmin.superAdminPermissions.root,
+            icon: <Iconify icon="mdi:account-secure" />,
+          }
         ],
       },
     ];
@@ -933,11 +1088,11 @@ export function useNavData() {
     if (!user || !user?.role) {
       router.replace('/');
     }
-    if (user?.role === 'superadmin') {
+    if (user?.role === 'superadmin' && user?.superadmin_level === 1) {
       return superAdminItems;
     }
-    if (user?.role === 'admin' && !isMedLab) {
-      return [...employeeDashboard, ...unitServicesDashboars];
+    if (user?.role === 'superadmin' && user?.superadmin_level === 2) {
+      return superAdminItems2;
     }
     if (user?.role === 'employee' && !isMedLab) {
       return [...employeeDashboard, ...unitServicesDashboars];

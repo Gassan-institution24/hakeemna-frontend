@@ -618,6 +618,11 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/product_categories/${id}/edit`,
       },
     },
+    superAdminPermissions: {
+      root: `${ROOTS.SUPERADMIN}/super-admin-permissions`,
+      sidebar: `${ROOTS.SUPERADMIN}/super-admin-permissions/sidebar`,
+      roles: `${ROOTS.SUPERADMIN}/super-admin-permissions/roles`,
+    },
   },
 
   // unit of service
@@ -857,7 +862,7 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/us/videocalls`,
     },
   },
-  
+
 
   employee: {
     root: ROOTS.SUPERADMIN,
@@ -886,7 +891,7 @@ export const paths = {
       all: `${ROOTS.SUPERADMIN}/mypatients`,
       new: `${ROOTS.SUPERADMIN}/mypatients/new`,
     },
-    
+
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
       new: `${ROOTS.SUPERADMIN}/entrancemanagement/new`,
@@ -943,7 +948,7 @@ export const paths = {
     blogs: `${ROOTS.SUPERADMIN}/browzeblogs`,
     previewBlog: (id) => `${ROOTS.SUPERADMIN}/browzeblogs/${id}`,
     appointmentsToday: `${ROOTS.SUPERADMIN}/appointmentsToday`,
-     qrCode: `${ROOTS.SUPERADMIN}/qr-code`,
+    qrCode: `${ROOTS.SUPERADMIN}/qr-code`,
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,
     Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,

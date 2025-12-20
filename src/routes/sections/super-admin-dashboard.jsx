@@ -4,9 +4,11 @@ import { Outlet } from 'react-router-dom';
 import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UnitServiceNav from 'src/layouts/service-unit-topbar';
+import SuperAdminDenyGuard from 'src/auth/guard/super-admin-deny-guard';
 import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+
 import VideoCallsHomePage from '../../pages/super-admin/videocalls';
 
 // ----------------------------------------------------------------------
@@ -497,6 +499,11 @@ const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
 
 // ----------------------------------------------------------------------
+const SuperAdminPermissionsPage = lazy(() =>
+  import(
+    'src/pages/super-admin/super-admin-permissions/superAdminPermissions'
+  )
+);
 
 export const dashboardRoutes = [
   {
@@ -632,6 +639,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'accounting',
+        element: (
+          <SuperAdminDenyGuard permission="accounting">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <AccountingHomePage />, index: true },
           { path: 'unitservice/:id', element: <AccountingUnitServicePage /> },
@@ -645,6 +657,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'statistics',
+        element: (
+          <SuperAdminDenyGuard permission="statistics">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <StatisticsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -654,6 +671,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'subscriptions',
+        element: (
+          <SuperAdminDenyGuard permission="subscriptions">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <SubscriptionsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -708,6 +730,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'users',
+        element: (
+          <SuperAdminDenyGuard permission="users">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <UsersPage />, index: true },
           { path: 'new', element: <AddUserPage /> },
@@ -717,12 +744,22 @@ export const dashboardRoutes = [
       },
       {
         path: 'videoCalls',
+        element: (
+          <SuperAdminDenyGuard permission="videoCalls">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <VideoCallsHomePage />, index: true },
         ],
       },
       {
         path: 'employees',
+        element: (
+          <SuperAdminDenyGuard permission="employees">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <EmployeesPage />, index: true },
           { path: 'new', element: <AddEmployeePage /> },
@@ -742,6 +779,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'patients',
+        element: (
+          <SuperAdminDenyGuard permission="patients">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <PatientsHomePage />, index: true },
           { path: ':id/info', element: <PatientsInfoPage /> },
@@ -763,7 +805,20 @@ export const dashboardRoutes = [
         ],
       },
       {
+        path: 'super-admin-permissions',
+        element: (
+          <SuperAdminDenyGuard permission="permissions">
+            <SuperAdminPermissionsPage />
+          </SuperAdminDenyGuard >
+        ),
+      },
+      {
         path: 'stakeholders',
+        element: (
+          <SuperAdminDenyGuard permission="stakeholders">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <StakeholdersHomePage />, index: true },
           { path: ':id/info', element: <StakeholdersInfoPage /> },
@@ -787,6 +842,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'tables',
+        element: (
+          <SuperAdminDenyGuard permission="tables">
+            <SuperAdminPermissionsPage />
+          </SuperAdminDenyGuard >
+        ),
         children: [
           { element: <TablesListPage />, index: true },
           { path: 'list', element: <TablesListPage /> },
