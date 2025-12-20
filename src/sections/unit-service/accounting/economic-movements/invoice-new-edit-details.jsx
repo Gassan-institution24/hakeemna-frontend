@@ -361,15 +361,13 @@ export default function InvoiceNewEditDetails() {
                     },
                   }}
                 />
-
                 <RHFTextField
-                  disabled
                   size="small"
                   type="number"
                   name={`items[${index}].price_per_unit`}
                   label={t('price')}
                   placeholder="0.00"
-                  // onChange={(event) => handleChangeItemDetails(event, index)}
+                  onChange={(event) => handleChangeItemDetails(event, index)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
