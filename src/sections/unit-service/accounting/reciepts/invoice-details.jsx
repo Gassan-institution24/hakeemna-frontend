@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -31,6 +31,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const invoiceRef = useRef(null);
 
   const { incomePaymentData } = useGetIncomePaymentControl({
     economic_movement: invoice.economic_movement?._id,
@@ -88,7 +89,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
           sx={{ borderBottom: '1px dashed', flex: 1, textAlign: 'center' }}
           variant="subtitle1"
         >
-          {fCurrency(invoice?.receipt_amount)} {NumberToText(invoice?.receipt_amount)}
+          {fCurrency(invoice?.receipt_amount)}{' '}
+          {NumberToText(Math.floor(invoice?.receipt_amount || 0))}
         </Typography>
       </Stack>
       <Stack direction="row" gap={2}>
@@ -141,9 +143,10 @@ export default function InvoiceDetails({ invoice, refetch }) {
         currentStatus={invoice.status || ''}
         onChangeStatus={handleChangeStatus}
         statusOptions={INVOICE_STATUS_OPTIONS}
+        invoiceRef={invoiceRef}
       />
 
-      <Card sx={{ pt: 5, px: 5 }}>
+      <Card sx={{ pt: 5, px: 5 }}  invoiceRef={invoiceRef}>
         <Typography textAlign="center" variant="h3">
           {t('receipt voucher')}
         </Typography>
@@ -181,7 +184,10 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {t(invoice.status)}
             </Label> */}
 
-            <Typography variant="h6">{invoice.sequence_number}</Typography>
+            <Typography variant="h6">
+              {' '}
+              {invoice?.economic_movement?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}
+            </Typography>
             <Box mt={4} p={1.5} border="1px solid">
               <Typography variant="h6">{fCurrency(invoice?.receipt_amount)}</Typography>
             </Box>

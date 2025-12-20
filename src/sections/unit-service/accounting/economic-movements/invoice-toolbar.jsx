@@ -126,25 +126,40 @@ export default function InvoiceToolbar({ invoice }) {
             <Typography variant="body2">
               {t('date')}: {fDate(invoice?.created_at)}
             </Typography>
-
-            {(invoice?.unit_service_patient || invoice?.patient) && (
-              <>
-                <Typography variant="body2" mt={2}>
-                  {t('to')}:{' '}
-                  {curLangAr
-                    ? invoice?.unit_service_patient?.name_arabic || invoice?.patient?.name_arabic
-                    : invoice?.unit_service_patient?.name_english || invoice?.patient?.name_english}
-                </Typography>
+            <>
+              <Typography variant="body2" mt={2}>
+                {t('from')}:{' '}
+                {curLangAr
+                  ? invoice?.unit_service?.name_arabic
+                  : invoice?.unit_service?.name_english}
+              </Typography>
+              {invoice?.unit_service?.address && (
                 <Typography variant="body2" mt={1}>
-                  {t('address')}:{' '}
-                  {invoice?.unit_service_patient?.address || invoice?.patient?.address}
+                  {t('address')}: {invoice?.unit_service?.address}
                 </Typography>
+              )}
+              <Typography variant="body2" mt={1}>
+                {t('mobile number')}: {invoice?.unit_service?.mobile_num1}
+              </Typography>
+            </>
+          </Box>
+          <Box flex={1} minWidth={250}>
+            <>
+              <Typography variant="body2" mt={2}>
+                {t('to')}:{' '}
+                {curLangAr
+                  ? invoice?.unit_service_patient?.name_arabic
+                  : invoice?.unit_service_patient?.name_english}
+              </Typography>
+              {invoice?.unit_service_patient?.address && (
                 <Typography variant="body2" mt={1}>
-                  {t('mobile number')}:{' '}
-                  {invoice?.unit_service_patient?.mobile_num1 || invoice?.patient?.mobile_num1}
+                  {t('address')}: {invoice?.unit_service_patient?.address}
                 </Typography>
-              </>
-            )}
+              )}
+              <Typography variant="body2" mt={1}>
+                {t('mobile number')}: {invoice?.unit_service_patient?.mobile_num1}
+              </Typography>
+            </>
           </Box>
 
           {qrDataUrl && (

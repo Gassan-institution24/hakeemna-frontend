@@ -51,7 +51,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
   const handleChangeStatus = useCallback(
     async (event) => {
       try {
@@ -231,7 +230,7 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {t(invoice.status)}
             </Label>
 
-            <Typography variant="h6">{invoice.sequence_number}</Typography>
+            <Typography variant="h6"> {invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Typography>
           </Stack>
         </Box>
 
@@ -263,27 +262,27 @@ export default function InvoiceDetails({ invoice, refetch }) {
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              {t(invoice?.stakeholder ? 'to' : 'from')}
+              {t(invoice?.unit_service && 'from')}
             </Typography>
             {curLangAr ? invoice.unit_service.name_arabic : invoice.unit_service.name_english}
             <br />
             {invoice.unit_service.address}
             <br />
-            {t('phone')}: {invoice.unit_service.phone}
+            {invoice.unit_service.phone}
           </Stack>
 
-          {invoice?.patient && (
-            <Stack sx={{ typography: 'body2' }}>
-              <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                {t('to')}
-              </Typography>
-              {curLangAr ? invoice?.patient?.name_arabic : invoice.patient?.name_english}
-              <br />
-              {invoice.patient?.address}
-              <br />
-              {t('phone')}: {invoice.patient?.mobile_num1}
-            </Stack>
-          )}
+          <Stack sx={{ typography: 'body2' }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {t('to')}
+            </Typography>
+            {curLangAr
+              ? invoice?.unit_service_patient?.name_arabic
+              : invoice.unit_service_patient?.name_english}
+            <br />
+            {invoice.unit_service_patient?.mobile_num1}
+            <br />
+            {invoice.unit_service_patient?.address}
+          </Stack>
 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -307,12 +306,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
               </Typography>
               {t('invoice Id')}: {invoice.invoiceId}
               {invoice?.invoice_QR && (
-                <Box sx={{ mt: 2 }}> 
-                  <QRCodeCanvas
-                    value={invoice?.invoice_QR}
-                    size={160}
-                    bgColor="#f9f9f9"
-                  />
+                <Box sx={{ mt: 2 }}>
+                  <QRCodeCanvas value={invoice?.invoice_QR} size={160} bgColor="#f9f9f9" />
                 </Box>
               )}
             </Stack>
