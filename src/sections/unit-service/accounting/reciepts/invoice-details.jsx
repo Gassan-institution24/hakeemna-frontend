@@ -207,12 +207,12 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {t('to')}
             </Typography>
             {curLangAr
-              ? invoice.unit_service_patientit?.name_arabic
-              : invoice.unit_service_patientit?.name_english}
+              ? invoice.unit_service_patient?.name_arabic
+              : invoice.unit_service_patient?.name_english}
             <br />
-            {invoice.unit_service_patientit?.address}
+            {invoice.unit_service_patient?.address}
             <br />
-            {t('phone')}: {invoice.unit_service_patientit?.mobile_num1}
+            {t('phone')}: {invoice.unit_service_patient?.mobile_num1}
             <br />
           </Stack>
 
