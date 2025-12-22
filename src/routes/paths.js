@@ -621,7 +621,7 @@ export const paths = {
     superAdminPermissions: {
       root: `${ROOTS.SUPERADMIN}/super-admin-permissions`,
       sidebar: `${ROOTS.SUPERADMIN}/super-admin-permissions/sidebar`,
-      roles: `${ROOTS.SUPERADMIN}/super-admin-permissions/roles`,
+      edit: (id) => `/dashboard/super-admin-permissions/${id}`,
     },
   },
 
@@ -862,7 +862,6 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/us/videocalls`,
     },
   },
-
 
   employee: {
     root: ROOTS.SUPERADMIN,
