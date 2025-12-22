@@ -14,51 +14,49 @@ import { useAuthContext } from '../hooks';
 // ----------------------------------------------------------------------
 
 export default function SuperAdminDenyGuard({ children, sx, permission }) {
-    const { user } = useAuthContext();
-    const { t } = useTranslate();
-    // مش superadmin
-    if (user?.role !== 'superadmin') {
-        return null;
-    }
+  const { user } = useAuthContext();
+  const { t } = useTranslate();
+  if (user?.role !== 'superadmin') {
+    return null;
+  }
 
-    // level 1 full access
-    if (user?.superadmin_level === 1) {
-        return children;
-    }
+  if (user?.superadmin_level === 1) {
+    return children;
+  }
+//   if (user?.role === 'superadmin') {
+//     return children;
+//   }
+  if (user?.permissions?.includes(permission)) {
+    return children;
+  }
+  return (
+    <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
+      <m.div variants={varBounce().in}>
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          {t('Permission Denied')}
+        </Typography>
+      </m.div>
 
-    // level 2 لازم permission
-    if (user?.permissions?.includes(permission)) {
-        return children;
-    }
-    return (
-        <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
-            <m.div variants={varBounce().in}>
-                <Typography variant="h3" sx={{ mb: 2 }}>
-                    {t('Permission Denied')}
-                </Typography>
-            </m.div>
+      <m.div variants={varBounce().in}>
+        <Typography sx={{ color: 'text.secondary' }}>
+          {t('You do not have permission to access this page')}
+        </Typography>
+      </m.div>
 
-            <m.div variants={varBounce().in}>
-                <Typography sx={{ color: 'text.secondary' }}>
-                    {t('You do not have permission to access this page')}
-                </Typography>
-            </m.div>
-
-            <m.div variants={varBounce().in}>
-                <ForbiddenIllustration
-                    sx={{
-                        height: 260,
-                        my: { xs: 5, sm: 10 },
-                    }}
-                />
-            </m.div>
-        </Container>
-    );
+      <m.div variants={varBounce().in}>
+        <ForbiddenIllustration
+          sx={{
+            height: 260,
+            my: { xs: 5, sm: 10 },
+          }}
+        />
+      </m.div>
+    </Container>
+  );
 }
 
-
 SuperAdminDenyGuard.propTypes = {
-    permission: PropTypes.string.isRequired,
-    children: PropTypes.node,
-    sx: PropTypes.object,
+  permission: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  sx: PropTypes.object,
 };
