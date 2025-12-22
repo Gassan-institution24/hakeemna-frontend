@@ -671,7 +671,7 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/training/${id}`),
   },
   videoCalls: {
-    all: '/api/video-call'
+    all: '/api/video-call',
   },
 
   tables: {
@@ -874,6 +874,9 @@ export const endpoints = {
     checkPassword: '/api/auth/checkpassword',
     toggleRole: '/api/auth/togglerole',
     newUser: '/api/auth/newuser',
+    superAdminsLevel2: '/api/auth/superadmins/level-2',
+    superAdmin: (id) => (!id ? null : `/api/auth/superadmins/${id}`),
+    superAdminPermissions: (id) => (!id ? null : `/api/auth/superadmins/${id}/permissions`),
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',
