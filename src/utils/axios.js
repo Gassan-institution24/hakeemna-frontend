@@ -877,6 +877,7 @@ export const endpoints = {
     superAdminsLevel2: '/api/auth/superadmins/level-2',
     superAdmin: (id) => (!id ? null : `/api/auth/superadmins/${id}`),
     superAdminPermissions: (id) => (!id ? null : `/api/auth/superadmins/${id}/permissions`),
+    createSuperAdminLevel2: '/api/auth/superadmins/level-2'
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',

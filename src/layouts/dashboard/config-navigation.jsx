@@ -1094,11 +1094,11 @@ export function useNavData() {
     if (user?.role === 'superadmin' && user?.superadmin_level === 2) {
       return superAdminItems2;
     }
-    if (user?.role === 'employee' && !isMedLab) {
+    if (user?.role === 'admin' && !isMedLab) {
       return [...employeeDashboard, ...unitServicesDashboars];
     }
-    if (user?.role === 'admin') {
-      return [...unitServicesDashboars];
+    if (user?.role === 'employee' && !isMedLab) {
+      return [...employeeDashboard, ...unitServicesDashboars];
     }
     if (user?.role === 'employee') {
       return [...unitServicesDashboars];
@@ -1108,6 +1108,5 @@ export function useNavData() {
     }
     return [...userItems];
   }, [t, user, router, checkAcl, employees_number, messages, isMedLab]);
-
   return data;
 }
