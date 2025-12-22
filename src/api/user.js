@@ -117,7 +117,18 @@ export async function updateSuperAdminPermissions(id, permissions) {
     { permissions }
   );
 
-  // إعادة تحميل البيانات
   mutate(endpoints.auth.superAdminsLevel2);
   mutate(endpoints.auth.superAdmin(id));
+}
+
+
+// Create Super Admin Level 2
+export async function createSuperAdminLevel2(payload) {
+  await axiosInstance.post(
+    endpoints.auth.createSuperAdminLevel2,
+    payload
+  );
+
+  // revalidate list
+  mutate(endpoints.auth.superAdminsLevel2);
 }
