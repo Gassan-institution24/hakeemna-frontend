@@ -4,9 +4,11 @@ import { Outlet } from 'react-router-dom';
 import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UnitServiceNav from 'src/layouts/service-unit-topbar';
+import SuperAdminDenyGuard from 'src/auth/guard/super-admin-deny-guard';
 import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+
 import VideoCallsHomePage from '../../pages/super-admin/videocalls';
 
 // ----------------------------------------------------------------------
@@ -498,6 +500,15 @@ const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
 
 // ----------------------------------------------------------------------
 
+// SUPER ADMIN PERMISSIONS
+
+const SuperAdminPermissionsPage = lazy(
+  () => import('src/pages/super-admin/super-admin-permissions/superAdminPermissions')
+);
+const SuperAdminPermissionsEditPage = lazy(
+  () => import('src/pages/super-admin/super-admin-permissions/SuperAdminPermissionsEdit')
+);
+
 export const dashboardRoutes = [
   {
     path: 'dashboard',
@@ -517,11 +528,19 @@ export const dashboardRoutes = [
       // { path: '', element: < /> },
       {
         path: 'ourcalender',
-        element: <CalenderPage />,
+        element: (
+          <SuperAdminDenyGuard permission="calendar">
+            <CalenderPage />
+          </SuperAdminDenyGuard>
+        ),
       },
       {
         path: 'confirming',
-        element: <ConfirmingPage />,
+        element: (
+          <SuperAdminDenyGuard permission="confirming">
+            <ConfirmingPage />
+          </SuperAdminDenyGuard>
+        ),
       },
       {
         path: 'mail',
@@ -529,6 +548,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'unitservices',
+        element: (
+          <SuperAdminDenyGuard permission="unit_services">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <UnitservicesPage />, index: true },
           { path: 'new', element: <UnitserviceAddAccountingPage /> },
@@ -623,6 +647,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'blogs',
+        element: (
+          <SuperAdminDenyGuard permission="blogs">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <BlogsPage />, index: true },
           { path: 'list', element: <BlogsPage /> },
@@ -632,6 +661,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'accounting',
+        element: (
+          <SuperAdminDenyGuard permission="accounting">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <AccountingHomePage />, index: true },
           { path: 'unitservice/:id', element: <AccountingUnitServicePage /> },
@@ -645,6 +679,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'statistics',
+        element: (
+          <SuperAdminDenyGuard permission="statistics">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <StatisticsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -654,6 +693,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'subscriptions',
+        element: (
+          <SuperAdminDenyGuard permission="subscriptions">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <SubscriptionsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -672,6 +716,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'acl',
+        element: (
+          <SuperAdminDenyGuard permission="acl">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <AccessControleListHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -681,6 +730,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'training',
+        element: (
+          <SuperAdminDenyGuard permission="customers_training">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <CustomerTrainingHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -690,6 +744,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'traineeship',
+        element: (
+          <SuperAdminDenyGuard permission="team_training">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <DoctornaTeamTrainingHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -699,6 +758,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'asc',
+        element: (
+          <SuperAdminDenyGuard permission="adjustable_services">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <AdjustableServicePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
@@ -708,6 +772,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'users',
+        element: (
+          <SuperAdminDenyGuard permission="users">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <UsersPage />, index: true },
           { path: 'new', element: <AddUserPage /> },
@@ -717,12 +786,20 @@ export const dashboardRoutes = [
       },
       {
         path: 'videoCalls',
-        children: [
-          { element: <VideoCallsHomePage />, index: true },
-        ],
+        element: (
+          <SuperAdminDenyGuard permission="video_calls">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
+        children: [{ element: <VideoCallsHomePage />, index: true }],
       },
       {
         path: 'employees',
+        element: (
+          <SuperAdminDenyGuard permission="employees">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <EmployeesPage />, index: true },
           { path: 'new', element: <AddEmployeePage /> },
@@ -732,6 +809,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'qc',
+        element: (
+          <SuperAdminDenyGuard permission="quality_control">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { path: 'doctorna', element: <QualityControlHomePage /> },
           { path: 'unitservices', element: <QualityControlUnitServicesPage /> },
@@ -742,6 +824,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'patients',
+        element: (
+          <SuperAdminDenyGuard permission="patients">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <PatientsHomePage />, index: true },
           { path: ':id/info', element: <PatientsInfoPage /> },
@@ -763,7 +850,30 @@ export const dashboardRoutes = [
         ],
       },
       {
+        path: 'super-admin-permissions',
+        element: (
+          <SuperAdminDenyGuard permission="permissions">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
+        children: [
+          {
+            index: true,
+            element: <SuperAdminPermissionsPage />,
+          },
+          {
+            path: ':id',
+            element: <SuperAdminPermissionsEditPage />,
+          },
+        ],
+      },
+      {
         path: 'stakeholders',
+        element: (
+          <SuperAdminDenyGuard permission="stakeholders">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <StakeholdersHomePage />, index: true },
           { path: ':id/info', element: <StakeholdersInfoPage /> },
@@ -787,6 +897,11 @@ export const dashboardRoutes = [
       },
       {
         path: 'tables',
+        element: (
+          <SuperAdminDenyGuard permission="tables">
+            <Outlet />
+          </SuperAdminDenyGuard>
+        ),
         children: [
           { element: <TablesListPage />, index: true },
           { path: 'list', element: <TablesListPage /> },

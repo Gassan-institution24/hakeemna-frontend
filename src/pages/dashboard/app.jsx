@@ -21,14 +21,20 @@ export default function OverviewAppPage() {
 
   useEffect(() => {
     if (user.role === 'superadmin') {
-      router.push(paths.superadmin.users.root);
+      if (user.superadmin_level === 1) {
+      router.replace(paths.superadmin.users.root);
+    } else if (user.superadmin_level === 2) {
+      router.replace(paths.superadmin.communication.root);
+    }else{
+      router.replace(paths.superadmin.users.root);
+    }
     } else if (user.role === 'admin') {
       router.push(paths.employee.calender);
     } else if (user.role === 'employee') {
       router.push(paths.employee.calender);
     }
     loading.onFalse();
-  }, [user.role, router, loading]);
+  }, [user.role, router, loading, user.superadmin_level]);
   return (
     <>
       <Helmet>
