@@ -128,9 +128,6 @@ export default function UsersNewEditForm({ currentSelected }) {
                 <MenuItem lang="ar" value="admin">
                   admin
                 </MenuItem>
-                <MenuItem lang="ar" value="superadmin">
-                  superadmin
-                </MenuItem>
                 <MenuItem lang="ar" value="employee">
                   employee
                 </MenuItem>
