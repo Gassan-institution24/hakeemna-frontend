@@ -1,41 +1,42 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
+import Stack from '@mui/material/Stack';
+import TableRow from '@mui/material/TableRow';
+import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
-import Scrollbar from 'src/components/scrollbar';
-import { fMinSec, fDate } from 'src/utils/format-time';
+
+import { paths } from 'src/routes/paths';
+
+import { fDate, fMinSec } from 'src/utils/format-time';
+
+import { useTranslate } from 'src/locales';
 import { useGetVideoCalls } from 'src/api/video_calls';
+
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Iconify from 'src/components/iconify';
-import { useTranslate } from 'src/locales';
-import { paths } from 'src/routes/paths';
-import MenuItem from '@mui/material/MenuItem';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import Box from '@mui/material/Box';
-import ListItemText from '@mui/material/ListItemText';
 import {
   useTable,
   TableNoData,
-  getComparator,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import MobileRow from '../../MobileRow';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'code' },
@@ -52,7 +53,11 @@ export default function VideoCallsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
   const { t } = useTranslate();
   const [search, setSearch] = useState('');
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const { data, isLoading } = useGetVideoCalls({
     page: 1,
     limit: 10,
@@ -65,10 +70,12 @@ export default function VideoCallsTableView() {
     return (data || []).filter(
       (row) =>
         (row.code && row.code.toString().toLowerCase().includes(lower)) ||
-        (row.unit_service?.name_english && row.unit_service.name_english.toLowerCase().includes(lower)) ||
+        (row.unit_service?.name_english &&
+          row.unit_service.name_english.toLowerCase().includes(lower)) ||
         (row.employee?.name_english && row.employee.name_english.toLowerCase().includes(lower)) ||
         (row.patient?.name_english && row.patient.name_english.toLowerCase().includes(lower)) ||
-        (row.work_group?.name_english && row.work_group.name_english.toLowerCase().includes(lower)) ||
+        (row.work_group?.name_english &&
+          row.work_group.name_english.toLowerCase().includes(lower)) ||
         (row.descriptionEn && row.descriptionEn.toLowerCase().includes(lower))
     );
   }, [search, data]);
@@ -122,32 +129,76 @@ export default function VideoCallsTableView() {
           </Stack>
         </Stack>
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, idx) => (
-                    <VideoCallTableRow row={row} idx={idx} t={t} />
-                  ))}
+        {isMobile ? (
+          <>
+            {dataFiltered
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  key={row?._id}
+                  title={row?.name_english}
+                  fields={[
+                    {
+                      label: 'Code',
+                      value: row?.code,
+                    },
+                    {
+                      label: 'Unit of Service',
+                      value: row?.unit_service?.name_english,
+                    },
+                    {
+                      label: 'Employee',
+                      value: row?.employee?.name_english,
+                    },
+                    { label: 'Patient', value: row?.patient?.name_english },
+                    { label: 'Work Group', value: row?.work_group?.name_english },
+                    { label: 'Duration', value: fMinSec(row?.duration) },
+                    { label: 'Description', value: row?.descriptionEn },
+                  ]}
+                  actions={[
+                    {
+                      label: 'DDL',
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={dataFiltered.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
+                <TableBody>
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row, idx) => (
+                      <VideoCallTableRow row={row} idx={idx} t={t} />
+                    ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={dataFiltered.length}
@@ -160,6 +211,63 @@ export default function VideoCallsTableView() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+      <CustomPopover
+        open={ddlOpen}
+          onClose={() => setDdlAnchorEl(null)}
+          anchorEl={ddlAnchorEl}
+          arrow="right-top"
+          sx={{
+            padding: 2,
+            fontSize: '14px',
+            minWidth: 260,
+          }}
+        >
+          {ddlRow && (
+            <>
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email || '-'}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {ddlRow.ip_address_user_creation || '-'}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {ddlRow.user_modification?.email || '-'}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor IP')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ddlRow.ip_address_user_modification || '-'}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('Modifications No')}: {ddlRow.modifications_nums || 0}
+        </Box>
+            </>
+          )}
+      </CustomPopover>
     </Container>
   );
 }
@@ -240,7 +348,7 @@ function applyFilter({ inputData, comparator }) {
 function VideoCallTableRow({ row, idx, t }) {
   const popover = usePopover();
   const DDL = usePopover();
-  
+
   return (
     <>
       <TableRow hover key={row.code || idx}>
@@ -295,7 +403,9 @@ function VideoCallTableRow({ row, idx, t }) {
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_creation?.email || '-'}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.ip_address_user_creation || '-'}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {row.ip_address_user_creation || '-'}
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
@@ -309,10 +419,16 @@ function VideoCallTableRow({ row, idx, t }) {
           />
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.user_modification?.email || '-'}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {row.user_modification?.email || '-'}
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Editor IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>{row.ip_address_user_modification || '-'}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('Modifications No')}: {row.modifications_nums || 0}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {row.ip_address_user_modification || '-'}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('Modifications No')}: {row.modifications_nums || 0}
+        </Box>
       </CustomPopover>
     </>
   );

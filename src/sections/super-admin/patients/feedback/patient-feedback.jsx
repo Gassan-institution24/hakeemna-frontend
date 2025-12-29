@@ -144,6 +144,7 @@ export default function PatientFeedbackView({ patientData }) {
   if (loading) {
     return <LoadingScreen />;
   }
+  const safeFeedbackData = Array.isArray(feedbackData) ? feedbackData : [];
 
   return (
     <Container maxWidth="xl">
@@ -191,11 +192,11 @@ export default function PatientFeedbackView({ patientData }) {
                     'default'
                   }
                 >
-                  {tab.value === 'all' && feedbackData.length}
+                  {tab.value === 'all' && safeFeedbackData.length}
                   {tab.value === 'read' &&
-                    feedbackData.filter((order) => order.status === 'read').length}
+                    safeFeedbackData.filter((order) => order.status === 'read').length}
                   {tab.value === 'unread' &&
-                    feedbackData.filter((order) => order.status === 'unread').length}
+                    safeFeedbackData.filter((order) => order.status === 'unread').length}
                 </Label>
               }
             />
@@ -284,7 +285,9 @@ export default function PatientFeedbackView({ patientData }) {
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name, rate } = filters;
-
+  if (!Array.isArray(inputData)) {
+    return [];
+  }
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {

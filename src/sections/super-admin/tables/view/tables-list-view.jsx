@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { useMediaQuery } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -41,6 +42,7 @@ const defaultFilters = {
 
 export default function TablesListView() {
   const table = useTable({ defaultOrderBy: 'code' });
+  const isMobile = useMediaQuery('(max-width: 899px)');
 
   // const settings = useSettingsContext();
 
@@ -179,38 +181,64 @@ export default function TablesListView() {
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
+          {isMobile ? (
+            <Container sx={{ py: 2 }}>
+              {dataFiltered.map((row, idx) => (
+                <Card
+                  key={idx}
+                  sx={{
+                    mb: 2,
+                    p: 2,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                  onClick={() => handleViewRow(row.tableName)}
+                >
+                  <div>
+                    <strong>{row.tableName}</strong>
+                    <div style={{ fontSize: 12, color: '#888' }}>Notes</div>
+                  </div>
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                />
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    ?.map((row, idx) => (
-                      <TablesTableRow
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row.id)}
-                        onViewRow={() => handleViewRow(row.tableName)}
-                      />
-                    ))}
+                  <Button size="small" variant="outlined">
+                    View
+                  </Button>
+                </Card>
+              ))}
+            </Container>
+          ) : (
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <Scrollbar>
+                <Table size={table.dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={dataFiltered.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                  />
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      ?.map((row, idx) => (
+                        <TablesTableRow
+                          key={idx}
+                          row={row}
+                          selected={table.selected.includes(row.id)}
+                          onViewRow={() => handleViewRow(row.tableName)}
+                        />
+                      ))}
 
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
 
           <TablePaginationCustom
             count={dataFiltered?.length}
