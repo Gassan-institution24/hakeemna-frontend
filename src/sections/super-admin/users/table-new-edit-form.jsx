@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -32,6 +32,26 @@ export default function UsersNewEditForm({ currentSelected }) {
   const [errorMsg, setErrorMsg] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
+  const [countries, setCountries] = useState([]);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCountries = async () => {
+      try {
+        const response = await axiosInstance.get('/api/countries');
+        if (isMounted) {
+          setCountries(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCountries();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const NewSchema = Yup.object().shape({
     userName: Yup.string().required('userName is required'),
@@ -39,6 +59,7 @@ export default function UsersNewEditForm({ currentSelected }) {
     password: Yup.string(),
     confirmPassword: Yup.string(),
     role: Yup.string().required('role is required'),
+    nationality: Yup.string().required('nationality is required'),
   });
 
   const defaultValues = useMemo(
@@ -49,6 +70,7 @@ export default function UsersNewEditForm({ currentSelected }) {
       password: currentSelected?.password || '',
       confirmPassword: currentSelected?.confirmPassword || '',
       role: currentSelected?.role || '',
+      nationality: currentSelected?.patient?.nationality?._id || '',
     }),
     [currentSelected]
   );
@@ -135,6 +157,15 @@ export default function UsersNewEditForm({ currentSelected }) {
                   patient
                 </MenuItem>
               </RHFSelect>
+
+              <RHFSelect name="nationality" label="Nationality">
+                {countries.map((country) => (
+                  <MenuItem key={country._id} value={country._id}>
+                    {country.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+
               {!currentSelected && (
                 <RHFTextField
                   name="password"
