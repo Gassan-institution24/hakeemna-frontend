@@ -20,6 +20,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function CountriesTableRow({ row, selected, onEditRow }) {
+  
   const {
     code,
     name_english,
@@ -108,9 +109,9 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
                   },
                 }}
               >
-                <Box sx={{ flex: 1 }}>{item.code}</Box>
-                <Box sx={{ flex: 1 }}>{item.name_english || item.name}</Box>
-                <Box sx={{ flex: 1 }}>{item.category?.name_english || item.category?.name}</Box>
+                <Box sx={{ flex: 1 }}>{item?.code}</Box>
+                <Box sx={{ flex: 1 }}>{item?.name_english || item?.name}</Box>
+                <Box sx={{ flex: 1 }}>{item?.category?.name_english || item?.category?.name}</Box>
               </Stack>
             ))}
           </Stack>
