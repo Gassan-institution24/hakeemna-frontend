@@ -81,7 +81,6 @@ function Searchbar() {
     inputData: getAllItems({ data: navData }),
     query: searchQuery,
   });
-
   const notFound = searchQuery && !dataFiltered.length;
 
   const renderItems = () => {

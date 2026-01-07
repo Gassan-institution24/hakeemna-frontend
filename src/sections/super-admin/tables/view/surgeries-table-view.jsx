@@ -3,11 +3,17 @@ import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -28,7 +34,12 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { fDate } from 'src/utils/format-time';
+
+import CustomPopover from 'src/components/custom-popover';
+
 import TableDetailRow from '../surgeries/table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -61,10 +72,16 @@ const defaultFilters = {
 export default function SurgeriesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const componentRef = useRef();
 
   const router = useRouter();
+  const [openDiseases, setOpenDiseases] = useState(false);
+  const [selectedDiseases, setSelectedDiseases] = useState([]);
 
   // const settings = useSettingsContext();
 
@@ -96,10 +113,10 @@ export default function SurgeriesTableView() {
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, data) => {
       acc.push({
-        code: data.code,
+        code: data?.code,
         name: data.name_english,
         description: data.description,
-        diseases: data.diseases?.map((disease, idx) => disease.name_english),
+        diseases: data.diseases?.map((disease, idx) => disease?.name_english),
       });
       return acc;
     }, []);
@@ -191,40 +208,102 @@ export default function SurgeriesTableView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
+        {isMobile ? (
+          <>
+            {dataFiltered
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  key={row?._id}
+                  title={row?.name_english}
+                  fields={[
+                    {
+                      label: 'Code',
+                      value: row.code,
+                    },
+                    {
+                      label: 'arabic name',
+                      value: row.name_arabic,
+                    },
+                    {
+                      label: 'description',
+                      value: row.description,
+                    },
+                    {
+                      label: 'Diseases',
+                      value: (
+                        <Box
+                          sx={{
+                            color: 'primary.main',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => {
+                            setSelectedDiseases(row.diseases || []);
+                            setOpenDiseases(true);
+                          }}
+                        >
+                          View Diseases ({row.diseases?.length || 0})
+                        </Box>
+                      ),
+                    },
+                  ]}
+                  actions={[
+                    {
+                      label: 'Edit',
+                      icon: 'fluent:edit-32-filled',
+                      onClick: () => handleEditRow(row._id),
+                    },
+                    {
+                      label: 'DDL',
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer>
+            <Scrollbar>
+              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={dataFiltered.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-        <TableContainer>
-          <Scrollbar>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+                <TableBody>
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row, idx) => (
+                      <TableDetailRow
+                        key={idx}
+                        row={row}
+                        selected={table.selected.includes(row?._id)}
+                        onSelectRow={() => table.onSelectRow(row?._id)}
+                        onEditRow={() => handleEditRow(row?._id)}
+                      />
+                    ))}
 
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, idx) => (
-                    <TableDetailRow
-                      key={idx}
-                      row={row}
-                      selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
-                    />
-                  ))}
-
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={dataFiltered.length}
@@ -237,6 +316,89 @@ export default function SurgeriesTableView() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+      <CustomPopover
+        open={ddlOpen}
+        onClose={() => setDdlAnchorEl(null)}
+        anchorEl={ddlAnchorEl}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {ddlRow && (
+          <>
+            <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.created_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.ip_address_user_creation}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.updated_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.user_modification?.email}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+              {ddlRow.ip_address_user_modification}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+          </>
+        )}
+      </CustomPopover>
+      <Dialog open={openDiseases} onClose={() => setOpenDiseases(false)} fullWidth>
+        <DialogTitle>Diseases</DialogTitle>
+
+        <DialogContent dividers>
+          {selectedDiseases.length ? (
+            selectedDiseases.map((disease) => (
+              <Box
+                key={disease?._id}
+                sx={{
+                  mb: 1.5,
+                  p: 1.5,
+                  borderRadius: 1,
+                  bgcolor: 'background.neutral',
+                }}
+              >
+                <Box sx={{ fontWeight: 600 }}>{disease?.code}</Box>
+                <Box>{disease?.name_english}</Box>
+                <Box sx={{ color: 'text.secondary', fontSize: 13 }}>
+                  {disease?.category?.name_english}
+                </Box>
+              </Box>
+            ))
+          ) : (
+            <Box sx={{ color: 'text.disabled' }}>No diseases</Box>
+          )}
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }
@@ -272,7 +434,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
             (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name
+        JSON.stringify(data?.code) === name
     );
   }
 
