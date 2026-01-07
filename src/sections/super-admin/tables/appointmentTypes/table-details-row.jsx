@@ -127,10 +127,6 @@ export default function TableDetailsRow({
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>
-        <MenuItem lang="ar" onClick={DDL.onOpen}>
-          <Iconify icon="carbon:data-quality-definition" />
-          DDL
-        </MenuItem>
       </CustomPopover>
 
       <CustomPopover

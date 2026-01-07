@@ -34,7 +34,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const sideEffectsMultiSelect = tableData?.reduce((acc, data) => {
     acc.push({
-      value: data._id,
+      value: data?._id,
       label: data.name_english || data.name,
     });
     return acc;
@@ -70,7 +70,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       packaging: currentSelected?.packaging || '',
       scientific_name: currentSelected?.scientific_name || '',
       barcode: currentSelected?.barcode || '',
-      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease._id) || [],
+      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease?._id) || [],
       family: currentSelected?.family?._id || '',
     }),
     [currentSelected]
@@ -91,7 +91,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.medicines.one(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.medicines.one(currentSelected?._id), data); /// edit
       } else {
         await axiosInstance.post(endpoints.medicines.all, data); /// edit
       }
@@ -146,7 +146,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFSelect name="country" label="country">
                 {countriesData?.map((country, idx) => (
-                  <MenuItem lang="ar" key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country?._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
@@ -154,7 +154,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
               <RHFSelect name="family" label="family">
                 {families?.map((family, idx) => (
-                  <MenuItem lang="ar" key={idx} value={family._id}>
+                  <MenuItem lang="ar" key={idx} value={family?._id}>
                     {family.name_english}
                   </MenuItem>
                 ))}

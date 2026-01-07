@@ -22,7 +22,7 @@ export default function MovementTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { unit_service, start_date, end_date, count, payments, user_no, status } = row;
+  const { unit_service, start_date, end_date, count, payments,  status } = row;
 
   const popover = usePopover();
 
@@ -33,7 +33,7 @@ export default function MovementTableRow({
       <TableCell align="center">
         <ListItemText
           primary={unit_service?.name_english}
-          secondary={unit_service?.city}
+          // secondary={unit_service?.city}
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{
             mt: 0.5,
@@ -68,7 +68,6 @@ export default function MovementTableRow({
           {status}
         </Label>
       </TableCell>
-      <TableCell align="center">{user_no} users</TableCell>
 
       <TableCell align="right" sx={{ px: 1 }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>

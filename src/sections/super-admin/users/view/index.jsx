@@ -4,6 +4,7 @@ import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -13,6 +14,7 @@ import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -39,9 +41,13 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { fDateTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import CustomPopover from 'src/components/custom-popover';
+
 import TableDetailRow from '../table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -78,7 +84,11 @@ export default function UsersTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   // const settings = useSettingsContext();
 
   const router = useRouter();
@@ -319,84 +329,152 @@ export default function UsersTableView() {
             />
           )}
 
-          <TableContainer>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row, idx) => row._id)
+          {isMobile ? (
+            <>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
                 )
-              }
-              action={
-                <>
-                  {dataFiltered
+                .map((row) => (
+                  <MobileRow
+                    key={row._id}
+                    title={row.userName}
+                    fields={[
+                      {
+                        label: 'Code',
+                        value: row.code,
+                      },
+                      {
+                        label: 'Email',
+                        value: row.email,
+                      },
+                      {
+                        label: 'Role',
+                        value: row.role,
+                      },
+                      {
+                        label: 'Online',
+                        value: (
+                          <Iconify
+                            icon={row.online ? 'noto:green-circle' : 'noto:red-circle'}
+                            sx={{ width: 12, height: 12 }}
+                          />
+                        ),
+                      },
+                      {
+                        label: 'Last View',
+                        value: row.last_online ? new Date(row.last_online).toLocaleString() : '-',
+                      },
+                      {
+                        label: 'Status',
+                        value: (
+                          <Label
+                            variant="soft"
+                            color={
+                              (row.status === 'active' && 'success') ||
+                              (row.status === 'inactive' && 'error') ||
+                              'default'
+                            }
+                          >
+                            {row.status}
+                          </Label>
+                        ),
+                      },
+                    ]}
+                    actions={[
+                      {
+                        label: 'DDL',
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ]}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer>
+              <TableSelectedAction
+                dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={dataFiltered.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    dataFiltered.map((row, idx) => row._id)
+                  )
+                }
+                action={
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                }
+                color={
+                  dataFiltered
                     .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
-              }
-              color={
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
+                    .some((data) => data.status === 'inactive')
+                    ? 'primary'
+                    : 'error'
+                }
+              />
 
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row, idx) => row._id)
-                  //   )
-                  // }
-                />
+              <Scrollbar>
+                <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={dataFiltered.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    // onSelectAllRows={(checked) =>
+                    //   table.onSelectAllRows(
+                    //     checked,
+                    //     dataFiltered.map((row, idx) => row._id)
+                    //   )
+                    // }
+                  />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((row, idx) => (
+                        <TableDetailRow
+                          key={idx}
+                          row={row}
+                          selected={table.selected.includes(row._id)}
+                          onSelectRow={() => table.onSelectRow(row._id)}
+                          onActivate={() => handleActivate(row._id)}
+                          onInactivate={() => handleInactivate(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
+                        />
+                      ))}
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
 
           <TablePaginationCustom
             count={dataFiltered.length}
@@ -455,6 +533,42 @@ export default function UsersTableView() {
           </Button>
         }
       />
+      <CustomPopover
+        open={ddlOpen}
+        onClose={() => setDdlAnchorEl(null)}
+        anchorEl={ddlAnchorEl}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {ddlRow && (
+          <>
+            <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(ddlRow.created_at)}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.ip_address_user_creation}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(ddlRow.updated_at)}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.user_modification?.email}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+              {ddlRow.ip_address_user_modification}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+          </>
+        )}
+      </CustomPopover>
     </>
   );
 }

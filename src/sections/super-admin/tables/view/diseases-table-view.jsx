@@ -3,11 +3,14 @@ import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -28,7 +31,12 @@ import {
 } from 'src/components/table'; /// edit
 import { useDebounce } from 'src/hooks/use-debounce';
 
+import { fDate } from 'src/utils/format-time';
+
+import CustomPopover from 'src/components/custom-popover';
+
 import TableDetailRow from '../diseases/table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -54,7 +62,11 @@ const defaultFilters = {
 export default function DiseasesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const componentRef = useRef();
 
   // const settings = useSettingsContext();
@@ -191,9 +203,56 @@ export default function DiseasesTableView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
-
-        <TableContainer>
-          {/* <TableSelectedAction
+        {isMobile ? (
+          <>
+            {tableData
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  key={row._id}
+                  title={row.Name}
+                  fields={[
+                    {
+                      label: 'Code',
+                      value: row.code,
+                    },
+                    {
+                      label: 'ICD Code',
+                      value: row.ICD_code,
+                    },
+                    {
+                      label: 'Parent',
+                      value: row?.Parent,
+                    },
+                    {
+                      label: 'Group',
+                      value: row?.Group,
+                    },
+                  ]}
+                  actions={[
+                    {
+                      label: 'Edit',
+                      icon: 'fluent:edit-32-filled',
+                      onClick: () => handleEditRow(row._id),
+                    },
+                    {
+                      label: 'DDL',
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer>
+            {/* <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
@@ -231,32 +290,37 @@ export default function DiseasesTableView() {
               }
             /> */}
 
-          <Scrollbar>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={tableData.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+            <Scrollbar>
+              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={tableData.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-              <TableBody>
-                {tableData
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, idx) => (
-                    <TableDetailRow key={idx} row={row} onEditRow={() => handleEditRow(row._id)} />
-                  ))}
+                <TableBody>
+                  {tableData
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row, idx) => (
+                      <TableDetailRow
+                        key={idx}
+                        row={row}
+                        onEditRow={() => handleEditRow(row._id)}
+                      />
+                    ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={tableData.length}
@@ -269,6 +333,62 @@ export default function DiseasesTableView() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+      <CustomPopover
+        open={ddlOpen}
+        onClose={() => setDdlAnchorEl(null)}
+        anchorEl={ddlAnchorEl}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {ddlRow && (
+          <>
+            <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.created_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.ip_address_user_creation}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.updated_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.user_modification?.email}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+              {ddlRow.ip_address_user_modification}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+          </>
+        )}
+      </CustomPopover>
     </Container>
   );
 }

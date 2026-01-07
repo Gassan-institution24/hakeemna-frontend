@@ -1,16 +1,21 @@
 import { useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import { alpha, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import { fDate } from 'src/utils/format-time';
 
 import { useGetTickets } from 'src/api';
 import { useGetUnreadMsgs } from 'src/api/chat';
@@ -18,6 +23,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
+import CustomPopover from 'src/components/custom-popover';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
@@ -27,6 +33,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import MobileRow from '../../MobileRow';
 import AppointmentsRow from '../ticket-row';
 import TicketsToolbar from '../tickets-toolbar';
 import HistoryFiltersResult from '../ticket-filters-result';
@@ -60,7 +67,11 @@ export default function AppointmentsView() {
   const theme = useTheme();
 
   const router = useRouter();
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const table = useTable({ defaultOrderBy: 'code' });
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -221,45 +232,190 @@ export default function AppointmentsView() {
           />
         )}
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={ticketsData.length}
-          />
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+        {isMobile ? (
+          <>
+            {ticketsData
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  key={row?._id}
+                  fields={[
+                    {
+                      label: 'Code',
+                      value: row?.code,
+                    },
+                    {
+                      label: 'Subject',
+                      value: row?.subject,
+                    },
+                    { label: 'Priority', value: row?.priority },
+                    { label: 'Category', value: row?.category?.name_english },
+                    { label: 'Assigned to', value: row?.assigned_to?.email },
+                    {
+                      label: 'Status',
+                      value: (
+                        <Label
+                          variant="soft"
+                          color={
+                            (row.status === 'pending' && 'warning') ||
+                            (row.status === 'waiting' && 'secondary') ||
+                            (row.status === 'processing' && 'info') ||
+                            (row.status === 'completed' && 'success') ||
+                            (row.status === 'closed' && 'error') ||
+                            'default'
+                          }
+                        >
+                          {row.status}
+                        </Label>
+                      ),
+                    },
+                    { label: 'User', value: row?.user_creation?.email },
+                    {
+                      label: 'Last Updated',
+                      value: (
+                        <ListItemText
+                          primary={fDate(row?.updated_at, 'dd MMMMMMMM yyyy')}
+                          secondary={fDate(row?.updated_at, 'p')}
+                          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                          secondaryTypographyProps={{
+                            component: 'span',
+                            typography: 'caption',
+                          }}
+                        />
+                      ),
+                    },
+                    {
+                      label: 'Created at',
+                      value: (
+                        <ListItemText
+                          primary={fDate(row?.created_at, 'dd MMMMMMMM yyyy')}
+                          secondary={fDate(row?.created_at, 'p')}
+                          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                          secondaryTypographyProps={{
+                            component: 'span',
+                            typography: 'caption',
+                          }}
+                        />
+                      ),
+                    },
+                  ]}
+                  actions={[
+                    {
+                      label: 'DDL',
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={ticketsData.length}
+            />
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-              <TableBody>
-                {ticketsData?.map((row, idx) => {
-                  const unreadCount = messages.find((one) => one._id === row.chat);
-                  return (
-                    <AppointmentsRow
-                      refetch={refetch}
-                      key={idx}
-                      row={row}
-                      unread={unreadCount?.messages?.length}
-                      onViewRow={() => handleViewTicket(row._id)}
-                      selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                    />
-                  );
-                })}
+                <TableBody>
+                  {ticketsData?.map((row, idx) => {
+                    const unreadCount = messages.find((one) => one._id === row.chat);
+                    return (
+                      <AppointmentsRow
+                        refetch={refetch}
+                        key={idx}
+                        row={row}
+                        unread={unreadCount?.messages?.length}
+                        onViewRow={() => handleViewTicket(row._id)}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                      />
+                    );
+                  })}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
+        <CustomPopover
+          open={ddlOpen}
+          onClose={() => setDdlAnchorEl(null)}
+          anchorEl={ddlAnchorEl}
+          arrow="right-top"
+          sx={{
+            padding: 2,
+            fontSize: '14px',
+            minWidth: 260,
+          }}
+        >
+          {ddlRow && (
+            <>
+              <Box sx={{ fontWeight: 600 }}>creation time:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.created_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_creation?.email}
+              </Box>
+
+              <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.ip_address_user_creation}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>editing time:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.updated_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>editor:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_modification?.email}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>editor IP:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                {ddlRow.ip_address_user_modification}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>
+                modifications no: {ddlRow.modifications_nums}
+              </Box>
+            </>
+          )}
+        </CustomPopover>
         <TablePaginationCustom
           count={length}
           page={table.page}
