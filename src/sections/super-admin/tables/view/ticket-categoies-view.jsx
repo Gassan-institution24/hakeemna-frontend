@@ -2,14 +2,17 @@ import { useRef, useState, useCallback } from 'react';
 
 // import Tab from '@mui/material/Tab';
 // import Tabs from '@mui/material/Tabs';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { ListItemText } from '@mui/material';
 // import Tooltip from '@mui/material/Tooltip';
 // import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 // import IconButton from '@mui/material/IconButton';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -39,8 +42,12 @@ import {
   // TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { fDate } from 'src/utils/format-time';
+
+import CustomPopover from 'src/components/custom-popover';
 
 import TableDetailRow from '../ticket_categories/table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -71,7 +78,11 @@ export default function TicketCategoriesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   // const settings = useSettingsContext();
 
   const router = useRouter();
@@ -243,9 +254,48 @@ export default function TicketCategoriesTableView() {
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
-
-          <TableContainer>
-            {/* <TableSelectedAction
+          {isMobile ? (
+            <>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
+                )
+                .map((row) => (
+                  <MobileRow
+                    key={row?._id}
+                    title={row?.name_english}
+                    fields={[
+                      {
+                        label: 'Code',
+                        value: row?.code,
+                      },
+                      {
+                        label: 'Name Arabic',
+                        value: row?.name_arabic,
+                      },
+                    ]}
+                    actions={[
+                      {
+                        label: 'Edit',
+                        icon: 'fluent:edit-32-filled',
+                        onClick: () => handleEditRow(row._id),
+                      },
+                      {
+                        label: 'DDL',
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ]}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer>
+              {/* <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
@@ -283,41 +333,93 @@ export default function TicketCategoriesTableView() {
               }
             /> */}
 
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                />
+              <Scrollbar>
+                <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={dataFiltered.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                  />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        selected={table.selected.includes(row._id)}
-                        // onSelectRow={() => table.onSelectRow(row._id)}
-                        // onActivate={() => handleActivate(row._id)}
-                        // onInactivate={() => handleInactivate(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((row, idx) => (
+                        <TableDetailRow
+                          key={idx}
+                          row={row}
+                          filters={filters}
+                          setFilters={setFilters}
+                          selected={table.selected.includes(row._id)}
+                          // onSelectRow={() => table.onSelectRow(row._id)}
+                          // onActivate={() => handleActivate(row._id)}
+                          // onInactivate={() => handleInactivate(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
+                        />
+                      ))}
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
+            <CustomPopover
+        open={ddlOpen}
+          onClose={() => setDdlAnchorEl(null)}
+          anchorEl={ddlAnchorEl}
+          arrow="right-top"
+          sx={{
+            padding: 2,
+            fontSize: '14px',
+            minWidth: 260,
+          }}
+        >
+          {ddlRow && (
+            <>
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ddlRow.ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+            </>
+          )}
+      </CustomPopover>
 
           <TablePaginationCustom
             count={dataFiltered.length}

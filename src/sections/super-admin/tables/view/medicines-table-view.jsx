@@ -4,15 +4,18 @@ import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -39,9 +42,13 @@ import {
 } from 'src/components/table'; /// edit
 import { useDebounce } from 'src/hooks/use-debounce';
 
+import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import CustomPopover from 'src/components/custom-popover';
+
 import TableDetailRow from '../medicines/table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -75,6 +82,15 @@ export default function MedicinesTableView() {
   const table = useTable({ defaultOrderBy: 'trade_name' });
 
   const componentRef = useRef();
+
+  const isMobile = useMediaQuery('(max-width: 899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
+  const ddlOpen = Boolean(ddlAnchorEl);
+  const [detailsAnchorEl, setDetailsAnchorEl] = useState(null);
+  const [detailsRow, setDetailsRow] = useState(null);
+
+  const detailsOpen = Boolean(detailsAnchorEl);
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -298,81 +314,161 @@ export default function MedicinesTableView() {
             />
           )}
 
-          <TableContainer>
-            <TableSelectedAction
-              // dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={medicinesData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  medicinesData.map((row, idx) => row._id)
+          {isMobile ? (
+            <>
+              {medicinesData
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
                 )
-              }
-              action={
-                <>
-                  {medicinesData
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
-              }
-              color={
-                medicinesData
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
+                .map((row) => (
+                  <MobileRow
+                    key={row?._id}
+                    fields={[
+                      {
+                        label: 'Code',
+                        value: row.code,
+                      },
+                      {
+                        label: 'Trade Name',
+                        value: row?.trade_name,
+                      },
+                      {
+                        label: 'Scientific Name',
+                        value: row?.scientific_name,
+                      },
+                      { label: 'Family', value: row.family?.name_english },
+                      {
+                        label: 'Status',
+                        value: (
+                          <Label
+                            variant="soft"
+                            color={
+                              (row.status === 'active' && 'success') ||
+                              (row.status === 'inactive' && 'error') ||
+                              'default'
+                            }
+                          >
+                            {row.status}
+                          </Label>
+                        ),
+                      },
+                      { label: 'Country', value: row?.country?.name_english },
+                      { label: 'ATCCODE', value: row.ATCCODE },
+                    ]}
+                    actions={[
+                      {
+                        label: row.status === 'active' ? 'Inactivate' : 'Activate',
+                        icon: row.status === 'active' ? 'ic:baseline-pause' : 'bi:play-fill',
+                        color: row.status === 'active' ? 'error.main' : 'success.main',
+                        onClick:
+                          row.status === 'active'
+                            ? () => handleInactivate(row?._id)
+                            : () => handleActivate(row?._id),
+                      },
+                      {
+                        label: 'Edit',
+                        icon: 'fluent:edit-32-filled',
+                        onClick: () => handleEditRow(row?._id),
+                      },
+                      {
+                        label: 'Details',
+                        icon: 'gg:details-more',
+                        onClick: (event) => {
+                          setDetailsRow(row);
+                          setDetailsAnchorEl(event.currentTarget);
+                        },
+                      },
 
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={medicinesData.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      medicinesData.map((row, idx) => row._id)
-                    )
-                  }
-                />
+                      {
+                        label: 'DDL',
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ]}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer>
+              <TableSelectedAction
+                // dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={medicinesData.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    medicinesData.map((row, idx) => row?._id)
+                  )
+                }
+                action={
+                  <>
+                    {medicinesData
+                      .filter((row) => table.selected.includes(row?._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                }
+                color={
+                  medicinesData
+                    .filter((row) => table.selected.includes(row?._id))
+                    .some((data) => data.status === 'inactive')
+                    ? 'primary'
+                    : 'error'
+                }
+              />
 
-                <TableBody>
-                  {medicinesData.map((row, idx) => (
-                    <TableDetailRow
-                      key={idx}
-                      row={row}
-                      filters={filters}
-                      setFilters={setFilters}
-                      selected={table.selected.includes(row._id)}
-                      onSelectRow={() => table.onSelectRow(row._id)}
-                      onActivate={() => handleActivate(row._id)}
-                      onInactivate={() => handleInactivate(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
-                    />
-                  ))}
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+              <Scrollbar>
+                <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={medicinesData.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    onSelectAllRows={(checked) =>
+                      table.onSelectAllRows(
+                        checked,
+                        medicinesData.map((row, idx) => row?._id)
+                      )
+                    }
+                  />
+
+                  <TableBody>
+                    {medicinesData.map((row, idx) => (
+                      <TableDetailRow
+                        key={idx}
+                        row={row}
+                        filters={filters}
+                        setFilters={setFilters}
+                        selected={table.selected.includes(row?._id)}
+                        onSelectRow={() => table.onSelectRow(row?._id)}
+                        onActivate={() => handleActivate(row?._id)}
+                        onInactivate={() => handleInactivate(row?._id)}
+                        onEditRow={() => handleEditRow(row?._id)}
+                      />
+                    ))}
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
 
           <TablePaginationCustom
             count={lengths?.AllCount}
@@ -431,6 +527,93 @@ export default function MedicinesTableView() {
           </Button>
         }
       />
+      <CustomPopover
+        open={ddlOpen}
+        onClose={() => setDdlAnchorEl(null)}
+        anchorEl={ddlAnchorEl}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {ddlRow && (
+          <>
+            <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.created_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+
+            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.ip_address_user_creation}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              <ListItemText
+                primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                secondary={fDate(ddlRow.updated_at, 'p')}
+                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                secondaryTypographyProps={{
+                  component: 'span',
+                  typography: 'caption',
+                }}
+              />
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+              {ddlRow.user_modification?.email}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+              {ddlRow.ip_address_user_modification}
+            </Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+          </>
+        )}
+      </CustomPopover>
+      <CustomPopover
+        open={detailsOpen}
+        onClose={() => setDetailsAnchorEl(null)}
+        anchorEl={detailsAnchorEl}
+        arrow="right-top"
+         sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {detailsRow && (
+          <>
+            <Box sx={{ fontWeight: 600 }}>Agent:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{detailsRow.agent}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Packaging:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{detailsRow.packaging}</Box>
+
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Price:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{detailsRow.price_1}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Price2:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{detailsRow.price_2}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Barcode:</Box>
+            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{detailsRow.barcode}</Box>
+            <Box sx={{ pt: 1, fontWeight: 600 }}>Side Effects:</Box>
+            {detailsRow.side_effects?.map((one, idx) => (
+              <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
+            ))}
+          </>
+        )}
+      </CustomPopover>
     </>
   );
 }

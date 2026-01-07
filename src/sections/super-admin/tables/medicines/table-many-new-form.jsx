@@ -147,10 +147,10 @@ export default function NewEditManyForm() {
 
         const insertedDataPromise = axiosInstance.post(
           endpoints.medicines.many,
-          chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+          chunkData.map((one) => ({ ...one, upload_record: uploadRec.data?._id }))
         );
         return insertedDataPromise.then((insertedData) =>
-          axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+          axiosInstance.patch(endpoints.upload_records.one(uploadRec.data?._id), {
             uploaded: insertedData.data,
           })
         );
@@ -202,7 +202,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {countriesData.map((country, idx) => (
-                    <MenuItem lang="ar" key={idx} value={country._id}>
+                    <MenuItem lang="ar" key={idx} value={country?._id}>
                       {country.name_english}
                     </MenuItem>
                   ))}
@@ -217,7 +217,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {families.map((family, idx) => (
-                    <MenuItem lang="ar" key={idx} value={family._id}>
+                    <MenuItem lang="ar" key={idx} value={family?._id}>
                       {family.name_english}
                     </MenuItem>
                   ))}
@@ -267,7 +267,7 @@ export default function NewEditManyForm() {
                           name="country"
                         >
                           {countriesData.map((country, idx) => (
-                            <MenuItem lang="ar" key={idx} value={country._id}>
+                            <MenuItem lang="ar" key={idx} value={country?._id}>
                               {country.name_english}
                             </MenuItem>
                           ))}
@@ -285,7 +285,7 @@ export default function NewEditManyForm() {
                           name="family"
                         >
                           {families.map((family, idx) => (
-                            <MenuItem lang="ar" key={idx} value={family._id}>
+                            <MenuItem lang="ar" key={idx} value={family?._id}>
                               {family.name_english}
                             </MenuItem>
                           ))}

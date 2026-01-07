@@ -29,7 +29,7 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
 
   const diseasesMultiSelect = tableData?.reduce((acc, data) => {
     acc.push({
-      value: data._id,
+      value: data?._id,
       label: data.name_english || data.name,
     });
     return acc;
@@ -50,7 +50,7 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
       description: currentSelected?.description || '',
-      diseases: currentSelected?.diseases?.map((disease, idx) => disease._id) || [],
+      diseases: currentSelected?.diseases?.map((disease, idx) => disease?._id) || [],
     }),
     [currentSelected]
   );
@@ -88,7 +88,7 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.surgeries.one(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.surgeries.one(currentSelected?._id), data); /// edit
       } else {
         await axiosInstance.post(endpoints.surgeries.all, data); /// edit
       }
