@@ -1,9 +1,13 @@
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
 import { alpha, useTheme } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
@@ -42,6 +46,8 @@ const TIME_LABELS = {
 export default function OverviewAnalyticsView() {
   const settings = useSettingsContext();
   const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
   const theme = useTheme();
   const {
     unitServicesNumber,
@@ -51,24 +57,33 @@ export default function OverviewAnalyticsView() {
     specialitiesEmployees,
   } = useGetStatistics();
   const { data } = useGetVideoCalls();
+
+  const availableYears = Array.from(
+    new Set(
+      (data || [])
+        .map((call) => call.created_at && new Date(call.created_at).getFullYear())
+        .filter(Boolean)
+    )
+  ).sort((a, b) => b - a);
+
   const videoCallsCount = data?.length || 0;
   const totalSeconds = data?.reduce((acc, call) => acc + (call.duration || 0), 0) || 0;
 
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   const isMobile = useMediaQuery('(max-width: 899px)');
-  const videoCallsThisYear = (data || []).filter((call) => {
-    if (!call.created_at) return false;
 
-    const callYear = new Date(call.created_at).getFullYear();
-    return callYear === currentYear;
+  const videoCallsForTable = (data || []).filter((call) => {
+    if (!call.created_at) return false;
+    return new Date(call.created_at).getFullYear() === selectedYear;
   });
-  const tableTotalSeconds = videoCallsThisYear.reduce((acc, call) => acc + (call.duration || 0), 0);
+
+  const tableTotalSeconds = videoCallsForTable.reduce((acc, call) => acc + (call.duration || 0), 0);
 
   const tableMinutes = Math.floor(tableTotalSeconds / 60);
   const tableSeconds = tableTotalSeconds % 60;
 
-  const videoCallsByUnit = videoCallsThisYear.reduce((acc, call) => {
+  const videoCallsByUnit = videoCallsForTable.reduce((acc, call) => {
     const unit = call.unit_service;
     if (!unit?._id) return acc;
 
@@ -323,8 +338,29 @@ export default function OverviewAnalyticsView() {
         </Grid>
         <Grid xs={12}>
           <Card sx={{ borderRadius: 2 }}>
-            <Box sx={{ p: 2 }}>
-              <Typography variant="h6">Video Calls by Unit Service for {currentYear}</Typography>
+            <Box
+              sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography variant="h6">Video Calls</Typography>
+
+              <TextField
+                select
+                size="small"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                sx={{ width: 120 }}
+              >
+                {availableYears.map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Box>
 
             <Divider />
