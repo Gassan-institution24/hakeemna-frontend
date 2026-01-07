@@ -14,6 +14,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useParams } from 'react-router';
+import { useFDateTimeUnit } from 'src/utils/format-time';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -29,16 +31,18 @@ import FormProvider, {
 
 // ----------------------------------------------------------------------
 
-export default function AttendanceEdit({ 
-  row, 
-  open, 
-  onClose, 
-  refetch, 
-  employeeId, 
+export default function AttendanceEdit({
+  row,
+  open,
+  onClose,
+  refetch,
+  employeeId,
   lastAttendance,
-  isMissingAttendance = false 
+  isMissingAttendance = false,
 }) {
   const { enqueueSnackbar } = useSnackbar();
+  const { timeZone } = useFDateTimeUnit();
+  const toUtc = (date) => (date ? zonedTimeToUtc(date, timeZone) : null);
   const { id } = useParams();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -58,18 +62,22 @@ export default function AttendanceEdit({
 
   const defaultValues = {
     date: row?.date || null,
-    check_in_time: row?.check_in_time || null,
+    check_in_time: row?.check_in_time
+      ? utcToZonedTime(new Date(row.check_in_time), timeZone)
+      : null,
+    check_out_time: row?.check_out_time
+      ? utcToZonedTime(new Date(row.check_out_time), timeZone)
+      : null,
+    leave_start: row?.leave_start ? utcToZonedTime(new Date(row.leave_start), timeZone) : null,
+    leave_end: row?.leave_end ? utcToZonedTime(new Date(row.leave_end), timeZone) : null,
+
     off: row?.off || !!row?.leave || false,
-    check_out_time: row?.check_out_time || null,
-    leave_end: row?.leave_end || null,
-    leave_start: row?.leave_start || null,
     leave: row?.leave || '',
     work_type: row?.work_type || '',
     note: isMissingAttendance ? '' : row?.note || '',
     employee_engagement: employeeId || '',
   };
 
-  
   const methods = useForm({
     resolver: yupResolver(attendanceSchema),
     defaultValues,
@@ -94,7 +102,10 @@ export default function AttendanceEdit({
       } else {
         data.leave = '';
       }
-      
+      data.check_in_time = toUtc(data.check_in_time);
+      data.check_out_time = toUtc(data.check_out_time);
+      data.leave_start = toUtc(data.leave_start);
+      data.leave_end = toUtc(data.leave_end);
       // If it's missing attendance data, always create a new record
       if (isMissingAttendance) {
         data.employee_engagement = id;
