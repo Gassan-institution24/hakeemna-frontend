@@ -2,13 +2,17 @@ import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -16,10 +20,13 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { fDate } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 import { useGetStakeholders } from 'src/api';
 
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
@@ -35,7 +42,10 @@ import {
 } from 'src/components/table'; /// edit
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import CustomPopover from 'src/components/custom-popover';
+
 import TableDetailRow from './table-details-row'; /// edit
+import MobileRow from '../../MobileRow';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -75,7 +85,11 @@ export default function StakeholderTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
+  const isMobile = useMediaQuery('(max-width:899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const componentRef = useRef();
 
   // const settings = useSettingsContext();
@@ -349,94 +363,237 @@ export default function StakeholderTableView() {
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
-
-          <TableContainer>
-            <TableSelectedAction
-              // dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row, idx) => row._id)
+          {isMobile ? (
+            <>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
                 )
-              }
-              // action={
-              //   <>
-              //     {dataFiltered
-              //       .filter((row) => table.selected.includes(row._id))
-              //       .some((data) => data.status === 'inactive') ? (
-              //       <Tooltip title="Activate all">
-              //         <IconButton color="primary" onClick={confirmActivate.onTrue}>
-              //           <Iconify icon="codicon:run-all" />
-              //         </IconButton>
-              //       </Tooltip>
-              //     ) : (
-              //       <Tooltip title="Inactivate all">
-              //         <IconButton color="error" onClick={confirmInactivate.onTrue}>
-              //           <Iconify icon="iconoir:pause-solid" />
-              //         </IconButton>
-              //       </Tooltip>
-              //     )}
-              //   </>
-              // }
-              color={
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((info) => info.status === 'inactive')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
+                .map((row) => (
+                  <MobileRow
+                    title={row.name_english}
+                    fields={[
+                      {
+                        label: 'Code',
+                        value: row.code,
+                      },
+                      {
+                        label: 'Name In Arabic',
+                        value: row.name_arabic,
+                      },
+                      {
+                        label: 'Status',
+                        value: (
+                          <Label
+                            variant="soft"
+                            color={row.status === 'active' ? 'success' : 'error'}
+                          >
+                            {row.status}
+                          </Label>
+                        ),
+                      },
+                      {
+                        label: 'General Info',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                            onClick={() => handleShowGeneralInfoRow(row._id)}
+                          >
+                            General Info
+                          </Typography>
+                        ),
+                      },
+                      {
+                        label: 'History',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                            onClick={() => handleShowHistoryRow(row._id)}
+                          >
+                            View History
+                          </Typography>
+                        ),
+                      },
+                      {
+                        label: 'communications',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                          >
+                            Communications
+                          </Typography>
+                        ),
+                      },
+                      {
+                        label: 'Feedback',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                            onClick={() => handleShowFeedbacksRow(row._id)}
+                          >
+                            Feedback
+                          </Typography>
+                        ),
+                      },
+                      {
+                        label: 'Insurance',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                            onClick={() => handleShowInsuranceRow(row._id)}
+                          >
+                            Insurance
+                          </Typography>
+                        ),
+                      },
+                      {
+                        label: 'Offers',
+                        value: (
+                          <Typography
+                            sx={{
+                              color: 'primary.main',
+                              cursor: 'pointer',
+                              fontWeight: 500,
+                            }}
+                            onClick={() => handleShowOffersRow(row._id)}
+                          >
+                            Offers 
+                          </Typography>
+                        ),
+                      },
+                    ]}
+                    actions={[
+                      {
+                        label: row.status === 'active' ? 'Inactivate' : 'Activate',
+                        icon: row.status === 'active' ? 'ic:baseline-pause' : 'bi:play-fill',
+                        color: row.status === 'active' ? 'error.main' : 'success.main',
+                        onClick:
+                          row.status === 'active'
+                            ? () => handleInactivate(row._id)
+                            : () => handleActivate(row._id),
+                      },
+                      {
+                        label: 'DDL',
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ]}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer>
+              <TableSelectedAction
+                // dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={dataFiltered.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    dataFiltered.map((row, idx) => row._id)
+                  )
+                }
+                // action={
+                //   <>
+                //     {dataFiltered
+                //       .filter((row) => table.selected.includes(row._id))
+                //       .some((data) => data.status === 'inactive') ? (
+                //       <Tooltip title="Activate all">
+                //         <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                //           <Iconify icon="codicon:run-all" />
+                //         </IconButton>
+                //       </Tooltip>
+                //     ) : (
+                //       <Tooltip title="Inactivate all">
+                //         <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                //           <Iconify icon="iconoir:pause-solid" />
+                //         </IconButton>
+                //       </Tooltip>
+                //     )}
+                //   </>
+                // }
+                color={
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((info) => info.status === 'inactive')
+                    ? 'primary'
+                    : 'error'
+                }
+              />
 
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row, idx) => row._id)
-                    )
-                  }
-                />
+              <Scrollbar>
+                <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={dataFiltered.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    onSelectAllRows={(checked) =>
+                      table.onSelectAllRows(
+                        checked,
+                        dataFiltered.map((row, idx) => row._id)
+                      )
+                    }
+                  />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={() => handleShowGeneralInfoRow(row._id)}
-                        showAccounting={() => handleShowHistoryRow(row._id)}
-                        showCommunications={() => handleShowCommunicationsRow(row._id)}
-                        showFeedback={() => handleShowFeedbacksRow(row._id)}
-                        showOffers={() => handleShowOffersRow(row._id)}
-                        showInsurance={() => handleShowInsuranceRow(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((row, idx) => (
+                        <TableDetailRow
+                          key={idx}
+                          row={row}
+                          filters={filters}
+                          setFilters={setFilters}
+                          selected={table.selected.includes(row._id)}
+                          onSelectRow={() => table.onSelectRow(row._id)}
+                          onActivate={() => handleActivate(row._id)}
+                          showGeneralInfo={() => handleShowGeneralInfoRow(row._id)}
+                          showAccounting={() => handleShowHistoryRow(row._id)}
+                          showCommunications={() => handleShowCommunicationsRow(row._id)}
+                          showFeedback={() => handleShowFeedbacksRow(row._id)}
+                          showOffers={() => handleShowOffersRow(row._id)}
+                          showInsurance={() => handleShowInsuranceRow(row._id)}
+                          onInactivate={() => handleInactivate(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
+                        />
+                      ))}
 
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
 
           <TablePaginationCustom
             count={dataFiltered.length}
@@ -495,6 +652,58 @@ export default function StakeholderTableView() {
           </Button>
         }
       />
+      <CustomPopover
+         open={ddlOpen}
+        onClose={() => setDdlAnchorEl(null)}
+        anchorEl={ddlAnchorEl}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+          minWidth: 260,
+        }}
+      >
+        {ddlRow && (
+          <>
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.created_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+            secondary={fDate(ddlRow.updated_at, 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ddlRow.ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
+          </>
+        )}
+      </CustomPopover>
     </>
   );
 }

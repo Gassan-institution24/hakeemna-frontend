@@ -75,7 +75,7 @@ export default function TableDetailsRow({
         }}
         onClick={() => setFilters({ ...filters, name: country.name_english })}
       >
-        {country?.name_english}
+        {country}
       </TableCell>
       <TableCell
         align="center"
@@ -86,7 +86,7 @@ export default function TableDetailsRow({
         }}
         onClick={() => setFilters({ ...filters, name: city.name_english })}
       >
-        {city?.name_english}
+        {city}
       </TableCell>
       <TableCell
         align="center"

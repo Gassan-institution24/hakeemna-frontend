@@ -1,3 +1,4 @@
+import { isValid } from 'date-fns';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -7,6 +8,7 @@ import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import { alpha, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -24,8 +26,10 @@ import {
   getComparator,
   TableHeadCustom,
   TablePaginationCustom,
-} from 'src/components/table';
+} from 'src/components/table'; /// edit
+import { fDate } from 'src/utils/format-time';
 
+import MobileRow from '../../MobileRow';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';
@@ -40,7 +44,6 @@ const TABLE_HEAD = [
   { id: 'count', label: 'Subscriptions no.' },
   { id: 'payment', label: 'Total Payment' },
   { id: 'End_date', label: 'Status' },
-  { id: 'Users_num', label: 'Users Number' },
   { id: '' },
 ];
 
@@ -57,6 +60,7 @@ export default function LicenseMovementsView() {
   // const settings = useSettingsContext();
 
   const router = useRouter();
+  const isMobile = useMediaQuery('(max-width: 899px)');
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -184,6 +188,15 @@ export default function LicenseMovementsView() {
     setFilters(defaultFilters);
   }, []);
 
+   const handleEditRow = useCallback(
+  (unitServiceId) => {
+    router.push(
+      paths.superadmin.accounting.unitservice.root(unitServiceId)
+    );
+  },
+  [router]
+);
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -238,38 +251,99 @@ export default function LicenseMovementsView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
+        {isMobile ? (
+          <>
+            {dataFiltered
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  key={row._id}
+                  title={row.name_english}
+                  fields={[
+                    {
+                      label: 'Code',
+                      value: row.unit_service?.code,
+                    },
+                    {
+                      label: 'Unit Service',
+                      value: row.unit_service?.name_english,
+                    },
+                    {
+                      label: 'Start Subscription',
+                      value: isValid(new Date(row.start_date))
+                        ? fDate(row.start_date, 'dd MMMMMMMM yyyy')
+                        : '-',
+                    },
+                    {
+                      label: 'End Subscription',
+                      value: isValid(new Date(row.end_date))
+                        ? fDate(row.end_date, 'dd MMMMMMMM yyyy')
+                        : '-',
+                    },
+                    {
+                      label: 'Subscriptions No.',
+                      value: row.count,
+                    },
+                    {
+                      label: 'Total Payment',
+                      value: `JOD ${row.payments}`,
+                    },
+                    {
+                      label: 'Status',
+                      value: (
+                        <Label
+                          variant="soft"
+                          color={
+                            (row.status === 'active' && 'success') ||
+                            (row.status === 'inactive' && 'error') ||
+                            'default'
+                          }
+                        >
+                          {row.status}
+                        </Label>
+                      ),
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={separateEachUsMovement().length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={separateEachUsMovement().length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+                <TableBody>
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row, idx) => (
+                      <AccountingTableRow
+                        key={idx}
+                        row={row}
+                        onViewRow={() => handleViewRow(row.id)}
+                        onEditRow={() => handleEditRow(row._id)}
+                      />
+                    ))}
 
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row, idx) => (
-                    <AccountingTableRow
-                      key={idx}
-                      row={row}
-                      onViewRow={() => handleViewRow(row.id)}
-                    />
-                  ))}
-
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={dataFiltered.length}

@@ -137,12 +137,6 @@ export default function InvoiceDetails({ invoice, refetch }) {
                     <Typography variant="subtitle2">
                       {curLangAr ? row.service_type?.name_arabic : row.service_type?.name_english}
                     </Typography>
-
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                      {curLangAr
-                        ? row.service_type?.description_arabic
-                        : row.service_type?.description_english}
-                    </Typography>
                   </Box>
                 </TableCell>
 
@@ -230,7 +224,10 @@ export default function InvoiceDetails({ invoice, refetch }) {
               {t(invoice.status)}
             </Label>
 
-            <Typography variant="h6"> {invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}</Typography>
+            <Typography variant="h6">
+              {' '}
+              {invoice?.sequence_number}-{fDate(invoice?.created_at, 'yyyy')}
+            </Typography>
           </Stack>
         </Box>
 
