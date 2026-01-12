@@ -5,8 +5,10 @@ import { Container } from '@mui/system';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
   Tab,
+  Box,
   Tabs,
   Table,
+  Stack,
   Button,
   Select,
   Dialog,
@@ -21,6 +23,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useMediaQuery,
   TableContainer,
 } from '@mui/material';
 
@@ -45,6 +48,7 @@ import {
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { MobileRow } from 'src/components/table';
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
@@ -72,6 +76,8 @@ export default function AppointmentsToday() {
   const dialog = useBoolean(false);
   const iddialog = useBoolean(false);
   const [newDialog, setNewDialog] = useState(false);
+
+  const isMobile = useMediaQuery('(max-width:899px)');
 
   const unitServiceId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
@@ -159,14 +165,13 @@ export default function AppointmentsToday() {
       console.error(error.message);
       enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
-
   };
   const StatusFunction = async (info, status, alert) => {
     try {
       const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
       refetch();
-      enqueueSnackbar(`${info?.patient?.name_english} ${alert}`, {
+      enqueueSnackbar(`${getPatientName(info)} ${t(alert)}`, {
         variant: 'success',
       });
     } catch (error) {
@@ -212,6 +217,19 @@ export default function AppointmentsToday() {
 
   const handlePatientClick = (info) => {
     router.push(`/dashboard/mypatients/${info?.unit_service_patient?._id}`);
+  };
+  const getPatientName = (info) => {
+    if (info?.patient?.name_english) {
+      return curLangAr ? info.patient.name_arabic : info.patient.name_english;
+    }
+
+    if (info?.unit_service_patient?.name_english) {
+      return curLangAr
+        ? info.unit_service_patient.name_arabic
+        : info.unit_service_patient.name_english;
+    }
+
+    return t('Patient');
   };
 
   const handleEndAppointment = async (appointmentdata) => {
@@ -324,7 +342,6 @@ export default function AppointmentsToday() {
       </IconButton>
     );
   };
-
   return (
     <>
       <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
@@ -390,7 +407,7 @@ export default function AppointmentsToday() {
               subcategory: 'appointments',
               acl: 'create',
             }) && (
-              <>
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="stretch">
                 <Button
                   sx={{ mr: 2 }}
                   component={RouterLink}
@@ -421,7 +438,7 @@ export default function AppointmentsToday() {
                 >
                   {t('Confirm Arrival')}
                 </Button>
-              </>
+              </Stack>
             )
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -444,194 +461,314 @@ export default function AppointmentsToday() {
         {currentTab === 'two' ? (
           <WaitingRoom />
         ) : (
-          <TableContainer sx={{ mt: 3, mb: 2 }}>
-            <Scrollbar>
-              <Table sx={{ minWidth: 400 }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t('Time')}</TableCell>
-                    <TableCell>{t('patient')}</TableCell>
-                    {currentTab !== 'three' && (
-                      <>
-                        <TableCell>{t('Coming')}</TableCell>
-                        <TableCell>{t('Arrived')}</TableCell>
-                      </>
-                    )}
-                    <TableCell>{t('Options')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {currentTabData?.data?.map((info, index) => {
-                    let patientName;
-                    if (info?.patient?.name_english) {
-                      patientName = curLangAr
-                        ? info?.patient?.name_arabic
-                        : info?.patient?.name_english;
-                    } else if (info.unit_service_patient) {
-                      patientName = curLangAr
-                        ? info?.unit_service_patient?.name_arabic
-                        : info?.unit_service_patient?.name_english;
-                    }
-                    return (
-                      <>
-                        <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                          <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
-                          <TableCell>
-                            {' '}
-                            <Button
-                              variant="text"
-                              onClick={() => handlePatientClick(info)}
-                              sx={{
-                                textTransform: 'none',
-                                padding: 0,
-                                minWidth: 0,
-                                color: 'primary.main',
-                              }}
-                            >
-                              {patientName}
-                            </Button>
-                          </TableCell>
-                          {currentTab !== 'three' && (
-                            <>
-                              <TableCell>
-                                <>
-                                  {info?.coming !== undefined ? (
-                                    <Iconify
-                                      width={22}
-                                      sx={{
-                                        cursor: 'pointer',
-                                        mr: 1,
-                                        color: info.coming ? 'info.main' : 'error.main',
-                                      }}
-                                      icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
-                                    />
-                                  ) : (
-                                    <>
-                                      <Button
-                                        sx={{ p: 2 }}
-                                        onClick={() => StatusFunction(info, true, 'coming')}
-                                      >
-                                        {t('Yes')}
-                                      </Button>
-                                      <Button
-                                        sx={{ p: 2 }}
-                                        onClick={() => StatusFunction(info, false, 'coming')}
-                                      >
-                                        {t('No')}
-                                      </Button>
-                                    </>
-                                  )}
-                                </>
-                              </TableCell>
-
-                              <TableCell>
-                                <>
-                                  {info?.arrived !== undefined ? (
-                                    <Iconify
-                                      width={22}
-                                      sx={{
-                                        cursor: 'pointer',
-                                        mr: 1,
-                                        color: info.arrived ? 'info.main' : 'error.main',
-                                      }}
-                                      icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
-                                    />
-                                  ) : (
-                                    <>
-                                      {info?.unit_service_patient?.identification_num ||
-                                      info?.patient?.identification_num ? (
-                                        <Button
-                                          sx={{ p: 2 }}
-                                          onClick={() => startAppointment(info)}
-                                        >
-                                          {t('Yes')}
-                                        </Button>
-                                      ) : (
-                                        <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
-                                          {t('Yes')}
-                                        </Button>
-                                      )}
-
-                                      <Button
-                                        sx={{ p: 2 }}
-                                        onClick={() => StatusFunction(info, false, 'arrived')}
-                                      >
-                                        {t('No')}
-                                      </Button>
-                                    </>
-                                  )}
-                                </>
-                              </TableCell>
-                            </>
-                          )}
-                          <TableCell>{renderOptions(info)}</TableCell>
-                        </TableRow>
-                        <Dialog
-                          open={iddialog.value}
-                          onClose={iddialog.onTrue}
-                          lang="ar"
-                          fullWidth
-                          maxWidth="xs"
+          <>
+            {isMobile ? (
+              <Box sx={{ mt: 3 }}>
+                {currentTabData?.data?.map((info) => {
+                  let patientName;
+                  if (info?.patient?.name_english) {
+                    patientName = curLangAr
+                      ? info?.patient?.name_arabic
+                      : info?.patient?.name_english;
+                  } else if (info.unit_service_patient) {
+                    patientName = curLangAr
+                      ? info?.unit_service_patient?.name_arabic
+                      : info?.unit_service_patient?.name_english;
+                  }
+                  return (
+                    <MobileRow
+                      key={info._id}
+                      title={
+                        <Box
+                          sx={{
+                            cursor: 'pointer',
+                            color: 'primary.main',
+                            fontWeight: 600,
+                          }}
+                          onClick={() => handlePatientClick(info)}
                         >
-                          <DialogTitle>{t('Proof number')}</DialogTitle>
-                          <DialogContent>
-                            <Typography>
-                              {t('Please enter the patient national number')}{' '}
-                              <span style={{ color: 'red' }}>
-                                {t('As entered in the proof document')}
-                              </span>
-                            </Typography>
-                            <TextField
-                              onChange={(e) => setAddingId(e.target.value)}
-                              sx={{ width: '100%', mt: 2 }}
-                              placeholder={curLangAr ? 'مثال: ٢٣٤٢****' : 'Ex: 2342****'}
-                            />
-                          </DialogContent>
+                          {patientName}
+                        </Box>
+                      }
+                      fields={[
+                        {
+                          label: t('Time'),
+                          value: fTimeUnit(info?.start_time, 'p', true),
+                        },
 
-                          <DialogActions>
-                            {/* زر الإضافة العادي */}
-                            <Button
-                              size="small"
-                              variant="contained"
+                        currentTab !== 'three' && {
+                          label: t('Coming'),
+                          value:
+                            info?.coming !== undefined ? (
+                              <Iconify
+                                width={20}
+                                sx={{ color: info.coming ? 'info.main' : 'error.main' }}
+                                icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
+                              />
+                            ) : (
+                              <Box>
+                                <Button
+                                  size="small"
+                                  onClick={() => StatusFunction(info, true, 'coming')}
+                                >
+                                  {t('Yes')}
+                                </Button>
+                                <Button
+                                  size="small"
+                                  onClick={() => StatusFunction(info, false, 'coming')}
+                                >
+                                  {t('No')}
+                                </Button>
+                              </Box>
+                            ),
+                        },
+
+                        currentTab !== 'three' && {
+                          label: t('Arrived'),
+                          value:
+                            info?.arrived !== undefined ? (
+                              <Iconify
+                                width={20}
+                                sx={{ color: info.arrived ? 'info.main' : 'error.main' }}
+                                icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
+                              />
+                            ) : (
+                              <Box>
+                                <Button size="small" onClick={() => startAppointment(info)}>
+                                  {t('Yes')}
+                                </Button>
+                                <Button
+                                  size="small"
+                                  onClick={() => StatusFunction(info, false, 'arrived')}
+                                >
+                                  {t('No')}
+                                </Button>
+                              </Box>
+                            ),
+                        },
+
+                        {
+                          label: t('Options'),
+                          value: () => (
+                            <Box
                               sx={{
-                                bgcolor: 'info.dark',
-                              }}
-                              onClick={() => {
-                                if (addingId) {
-                                  iddialog.onFalse();
-                                  startAppointment(info);
-                                } else {
-                                  enqueueSnackbar(t('Please enter the patient national number'), {
-                                    variant: 'error',
-                                  });
-                                }
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: 1,
+                                '& .MuiButton-root': {
+                                  minHeight: 30,
+                                  fontSize: '0.75rem',
+                                  px: 1,
+                                },
+                                '& .MuiSelect-select': {
+                                  py: 0.5,
+                                  fontSize: '0.75rem',
+                                },
                               }}
                             >
-                              {t('add')}
-                            </Button>
+                              {renderOptions(info)}
+                            </Box>
+                          ),
+                        },
+                      ].filter(Boolean)}
+                    />
+                  );
+                })}
+              </Box>
+            ) : (
+              <TableContainer sx={{ mt: 3, mb: 2 }}>
+                <Scrollbar>
+                  <Table sx={{ minWidth: 400 }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>{t('Time')}</TableCell>
+                        <TableCell>{t('patient')}</TableCell>
+                        {currentTab !== 'three' && (
+                          <>
+                            <TableCell>{t('Coming')}</TableCell>
+                            <TableCell>{t('Arrived')}</TableCell>
+                          </>
+                        )}
+                        <TableCell>{t('Options')}</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {currentTabData?.data?.map((info, index) => {
+                        let patientName;
+                        if (info?.patient?.name_english) {
+                          patientName = curLangAr
+                            ? info?.patient?.name_arabic
+                            : info?.patient?.name_english;
+                        } else if (info.unit_service_patient) {
+                          patientName = curLangAr
+                            ? info?.unit_service_patient?.name_arabic
+                            : info?.unit_service_patient?.name_english;
+                        }
+                        return (
+                          <>
+                            <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
+                              <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
+                              <TableCell>
+                                {' '}
+                                <Button
+                                  variant="text"
+                                  onClick={() => handlePatientClick(info)}
+                                  sx={{
+                                    textTransform: 'none',
+                                    padding: 0,
+                                    minWidth: 0,
+                                    color: 'primary.main',
+                                  }}
+                                >
+                                  {patientName}
+                                </Button>
+                              </TableCell>
+                              {currentTab !== 'three' && (
+                                <>
+                                  <TableCell>
+                                    <>
+                                      {info?.coming !== undefined ? (
+                                        <Iconify
+                                          width={22}
+                                          sx={{
+                                            cursor: 'pointer',
+                                            mr: 1,
+                                            color: info.coming ? 'info.main' : 'error.main',
+                                          }}
+                                          icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
+                                        />
+                                      ) : (
+                                        <>
+                                          <Button
+                                            sx={{ p: 2 }}
+                                            onClick={() => StatusFunction(info, true, 'coming')}
+                                          >
+                                            {t('Yes')}
+                                          </Button>
+                                          <Button
+                                            sx={{ p: 2 }}
+                                            onClick={() => StatusFunction(info, false, 'coming')}
+                                          >
+                                            {t('No')}
+                                          </Button>
+                                        </>
+                                      )}
+                                    </>
+                                  </TableCell>
 
-                            {/* زر جديد: ما عنده رقم هوية */}
-                            <Button
-                              size="small"
-                              color="warning"
-                              variant="contained"
-                              onClick={() => {
-                                iddialog.onFalse();
-                                setAddingId(''); // نضمن إنو ما يضل فيه قيمة قديمة
-                                startAppointment(info);
-                              }}
+                                  <TableCell>
+                                    <>
+                                      {info?.arrived !== undefined ? (
+                                        <Iconify
+                                          width={22}
+                                          sx={{
+                                            cursor: 'pointer',
+                                            mr: 1,
+                                            color: info.arrived ? 'info.main' : 'error.main',
+                                          }}
+                                          icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
+                                        />
+                                      ) : (
+                                        <>
+                                          {info?.unit_service_patient?.identification_num ||
+                                          info?.patient?.identification_num ? (
+                                            <Button
+                                              sx={{ p: 2 }}
+                                              onClick={() => startAppointment(info)}
+                                            >
+                                              {t('Yes')}
+                                            </Button>
+                                          ) : (
+                                            <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
+                                              {t('Yes')}
+                                            </Button>
+                                          )}
+
+                                          <Button
+                                            sx={{ p: 2 }}
+                                            onClick={() => StatusFunction(info, false, 'arrived')}
+                                          >
+                                            {t('No')}
+                                          </Button>
+                                        </>
+                                      )}
+                                    </>
+                                  </TableCell>
+                                </>
+                              )}
+                              <TableCell>{renderOptions(info)}</TableCell>
+                            </TableRow>
+                            <Dialog
+                              open={iddialog.value}
+                              onClose={iddialog.onTrue}
+                              lang="ar"
+                              fullWidth
+                              maxWidth="xs"
                             >
-                              {t("Doesn't have ID")}
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                      </>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                              <DialogTitle>{t('Proof number')}</DialogTitle>
+                              <DialogContent>
+                                <Typography>
+                                  {t('Please enter the patient national number')}{' '}
+                                  <span style={{ color: 'red' }}>
+                                    {t('As entered in the proof document')}
+                                  </span>
+                                </Typography>
+                                <TextField
+                                  onChange={(e) => setAddingId(e.target.value)}
+                                  sx={{ width: '100%', mt: 2 }}
+                                  placeholder={curLangAr ? 'مثال: ٢٣٤٢****' : 'Ex: 2342****'}
+                                />
+                              </DialogContent>
+
+                              <DialogActions>
+                                {/* زر الإضافة العادي */}
+                                <Button
+                                  size="small"
+                                  variant="contained"
+                                  sx={{
+                                    bgcolor: 'info.dark',
+                                  }}
+                                  onClick={() => {
+                                    if (addingId) {
+                                      iddialog.onFalse();
+                                      startAppointment(info);
+                                    } else {
+                                      enqueueSnackbar(
+                                        t('Please enter the patient national number'),
+                                        {
+                                          variant: 'error',
+                                        }
+                                      );
+                                    }
+                                  }}
+                                >
+                                  {t('add')}
+                                </Button>
+
+                                {/* زر جديد: ما عنده رقم هوية */}
+                                <Button
+                                  size="small"
+                                  color="warning"
+                                  variant="contained"
+                                  onClick={() => {
+                                    iddialog.onFalse();
+                                    setAddingId(''); // نضمن إنو ما يضل فيه قيمة قديمة
+                                    startAppointment(info);
+                                  }}
+                                >
+                                  {t("Doesn't have ID")}
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                          </>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Scrollbar>
+              </TableContainer>
+            )}
+          </>
         )}
       </Container>
       <NewAppointmentDialog refetch={refetch} open={newDialog} close={() => setNewDialog(false)} />

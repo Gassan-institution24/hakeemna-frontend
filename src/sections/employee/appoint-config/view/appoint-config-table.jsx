@@ -1,13 +1,17 @@
+import { isValid } from 'date-fns';
 import { useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import { alpha, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -16,7 +20,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
+import { fDate, fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -28,12 +32,14 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { LoadingScreen } from 'src/components/loading-screen';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
+  MobileRow,
   TableNoData,
   getComparator,
   TableHeadCustom,
@@ -70,7 +76,11 @@ export default function AppointConfigView() {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+  const isMobile = useMediaQuery('(max-width:899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
@@ -351,25 +361,110 @@ export default function AppointConfigView() {
             />
           )}
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row, idx) => row._id)
+          {isMobile ? (
+            <>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
                 )
-              }
-              action={
-                checkAcl({
-                  category: 'work_group',
-                  subcategory: 'appointment_configs',
-                  acl: 'update',
-                }) && (
-                  <>
-                    {/* {dataFiltered
+                .map((row) => (
+                  <MobileRow
+                    fields={[
+                      {
+                        label: t('number'),
+                        value: row.sequence_number,
+                      },
+                      {
+                        label: t('start date'),
+                        value: (
+                          <ListItemText
+                            primary={
+                              row.start_date
+                                ? isValid(new Date(row.start_date)) &&
+                                  fDate(row.start_date, 'dd MMMMMMMM yyyy')
+                                : null
+                            }
+                            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                          />
+                        ),
+                      },
+                      {
+                        label: t('end date'),
+                        value: (
+                          <ListItemText
+                            primary={
+                              row.end_date
+                                ? isValid(new Date(row.end_date)) &&
+                                  fDate(row.end_date, 'dd MMMMMMMM yyyy')
+                                : null
+                            }
+                            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                          />
+                        ),
+                      },
+                      {
+                        label: t('work shift'),
+                        value: curLangAr
+                          ? row.work_shift?.name_arabic
+                          : row.work_shift?.name_english,
+                      },
+                      {
+                        label: t('work group'),
+                        value: curLangAr
+                          ? row.work_group?.name_arabic
+                          : row.work_group?.name_english,
+                      },
+                      {
+                        label: t('status'),
+                        value: (
+                          <Label
+                            variant="soft"
+                            color={row.status === 'active' ? 'success' : 'error'}
+                          >
+                            {t(row.status)}
+                          </Label>
+                        ),
+                      },
+                    ]}
+                    actions={[
+                      {
+                        label: t('edit'),
+                        icon: 'fluent:edit-32-filled',
+                        onClick: () => handleViewRow(row._id),
+                      },
+                      {
+                        label: t('DDL'),
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ]}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <TableSelectedAction
+                dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={dataFiltered.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    dataFiltered.map((row, idx) => row._id)
+                  )
+                }
+                action={
+                  checkAcl({
+                    category: 'work_group',
+                    subcategory: 'appointment_configs',
+                    acl: 'update',
+                  }) && (
+                    <>
+                      {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -384,62 +479,124 @@ export default function AppointConfigView() {
                         </IconButton>
                       </Tooltip>
                     )} */}
-                  </>
-                )
-              }
-              color={
-                checkAcl({
-                  category: 'work_group',
-                  subcategory: 'appointment_configs',
-                  acl: 'update',
-                }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={appointmentConfigData.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row, idx) => row._id)
-                    )
-                  }
-                />
+                    </>
+                  )
+                }
+                color={
+                  checkAcl({
+                    category: 'work_group',
+                    subcategory: 'appointment_configs',
+                    acl: 'update',
+                  }) &&
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
+                    ? 'primary'
+                    : 'error'
+                }
+              />
+              <Scrollbar>
+                <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={appointmentConfigData.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    onSelectAllRows={(checked) =>
+                      table.onSelectAllRows(
+                        checked,
+                        dataFiltered.map((row, idx) => row._id)
+                      )
+                    }
+                  />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <AppointConfigRow
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
-                        onCancelRow={() => handleCancelRow(row)}
-                        onUnCancelRow={() => handleUnCancelRow(row)}
-                      />
-                    ))}
+                  <TableBody>
+                    {dataFiltered
+                      .slice(
+                        table.page * table.rowsPerPage,
+                        table.page * table.rowsPerPage + table.rowsPerPage
+                      )
+                      .map((row, idx) => (
+                        <AppointConfigRow
+                          key={idx}
+                          row={row}
+                          selected={table.selected.includes(row._id)}
+                          onSelectRow={() => table.onSelectRow(row._id)}
+                          onViewRow={() => handleViewRow(row._id)}
+                          onCancelRow={() => handleCancelRow(row)}
+                          onUnCancelRow={() => handleUnCancelRow(row)}
+                        />
+                      ))}
 
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
+
+          <CustomPopover
+            open={ddlOpen}
+            onClose={() => setDdlAnchorEl(null)}
+            anchorEl={ddlAnchorEl}
+            arrow="right-top"
+            sx={{
+              padding: 2,
+              fontSize: '14px',
+              minWidth: 260,
+            }}
+          >
+            {ddlRow && (
+              <>
+                <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.created_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_creation?.email}
+                </Box>
+
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.ip_address_user_creation}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.updated_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_modification?.email}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                  {ddlRow.ip_address_user_modification}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>
+                  {t('modifications no')}: {ddlRow.modifications_nums}
+                </Box>
+              </>
+            )}
+          </CustomPopover>
 
           <TablePaginationCustom
             count={dataFiltered.length}

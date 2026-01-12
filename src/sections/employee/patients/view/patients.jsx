@@ -1,10 +1,12 @@
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -16,6 +18,7 @@ import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
+  MobileRow,
   TableNoData,
   TableHeadCustom,
   TableSelectedAction,
@@ -26,19 +29,21 @@ import { useSnackbar } from 'notistack';
 
 import { Button } from '@mui/material';
 
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useDebounce } from 'src/hooks/use-debounce';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { addWorkGroupColors } from 'src/utils/workgroupColors';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
-import { addWorkGroupColors } from 'src/utils/workgroupColors';
 
 import TableDetailRow from '../patients_row'; /// edit
+
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -65,6 +70,7 @@ export default function PatientTableView() {
     { id: 'work_group', label: t('work group') },
     { id: 'file_code', label: t('file code') },
   ];
+  const isMobile = useMediaQuery('(max-width:899px)');
 
   const checkAcl = useAclGuard();
 
@@ -79,7 +85,7 @@ export default function PatientTableView() {
   const { patientsData, refetch, length } = useGetUSPatients(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
-      select: 'patient name_english name_arabic file_code',
+      select: 'code patient name_english name_arabic file_code',
       populate: [
         {
           path: 'patient',
@@ -97,6 +103,8 @@ export default function PatientTableView() {
     }
   );
 
+  const router = useRouter();
+
   const patientsDataWithColors = addWorkGroupColors(patientsData, 'hex');
 
   const canReset = !!filters?.name || filters.status !== 'active';
@@ -106,7 +114,13 @@ export default function PatientTableView() {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-
+  const clickHandler = (id) => {
+    if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
+      router.push(paths.employee.patients.info(id));
+    } else {
+      enqueueSnackbar(t('permission denide'), { variant: 'warning' });
+    }
+  };
   const handleFilters = useCallback(
     (name, value) => {
       table.onResetPage();
@@ -194,48 +208,92 @@ export default function PatientTableView() {
           />
         )}
 
-        <TableContainer>
-          <TableSelectedAction
-            numSelected={table.selected.length}
-            rowCount={patientsData.length}
-            color={
-              patientsData
-                .filter((row) => table.selected.includes(row._id))
-                .some((info) => info.status === 'inactive')
-                ? 'primary'
-                : 'error'
-            }
-          />
+        {isMobile ? (
+          <>
+            {patientsDataWithColors
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  title={
+                    <Box
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        fontWeight: 600,
+                      }}
+                      onClick={() => clickHandler(row._id)}
+                    >
+                      {row.name_english || row.patient?.name_english}
+                    </Box>
+                  }
+                  fields={[
+                    {
+                      label: t('number'),
+                      value: row.code,
+                    },
+                    {
+                      label: t('name in arabic'),
+                      value: row.name_arabic || row.patient?.name_arabic,
+                    },
+                    {
+                      label: t('work group'),
+                      value: curLangAr ? row.work_group?.name_arabic : row.work_group?.name_english,
+                    },
+                    {
+                      label: t('file code'),
+                      value: row.file_code,
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer>
+            <TableSelectedAction
+              numSelected={table.selected.length}
+              rowCount={patientsData.length}
+              color={
+                patientsData
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((info) => info.status === 'inactive')
+                  ? 'primary'
+                  : 'error'
+              }
+            />
 
-          <Scrollbar>
-            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={patientsData.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+            <Scrollbar>
+              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={patientsData.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-              <TableBody>
-                {patientsDataWithColors.map((row, idx) => (
-                  <TableDetailRow
-                    key={idx}
-                    row={row}
-                    filters={filters}
-                    setFilters={setFilters}
-                    selected={table.selected.includes(row._id)}
-                    onSelectRow={() => table.onSelectRow(row._id)}
-                    onDeleteRow={() => handleDeleteRow(row._id)}
-                  />
-                ))}
+                <TableBody>
+                  {patientsDataWithColors.map((row, idx) => (
+                    <TableDetailRow
+                      key={idx}
+                      row={row}
+                      filters={filters}
+                      setFilters={setFilters}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onDeleteRow={() => handleDeleteRow(row._id)}
+                    />
+                  ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
 
         <TablePaginationCustom
           count={length}
