@@ -1,32 +1,40 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
-import { Stack, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
+import { Stack, Typography, ListItemText } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { fDate, fHourMin, useFDateTimeUnit } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useGetEmployeeAttendence } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import CustomPopover from 'src/components/custom-popover';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import {
   useTable,
+  MobileRow,
   TableNoData,
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 
+import AttendanceEdit from './attendance-edit';
 import EmployeeAttendenceRow from './attendance-row';
 import EmployeeAttendanceToolbar from './attendance-toolbar';
 import AtteendanceFiltersResult from './attendance-filters-result';
@@ -61,8 +69,16 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
         { id: 'note', label: t('note') },
         { id: '' },
       ].filter(Boolean);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [deleteRow, setDeleteRow] = useState(null);
+  const isMobile = useMediaQuery('(max-width:899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const table = useTable({ defaultOrderBy: 'code' });
+  const { fTimeUnit } = useFDateTimeUnit();
+  const [open, setOpen] = useState(false);
 
   const confirm = useBoolean();
 
@@ -214,49 +230,216 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
+        {isMobile ? (
+          <>
+            {finalDisplayData
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  fields={[
+                    {
+                      label: t('Day'),
+                      value: fTimeUnit(row.date, 'EEE dd MMM', true),
+                    },
+                    {
+                      label: t('check in'),
+                      value: fTimeUnit(row.check_in_time, 'p', true),
+                    },
+                    {
+                      label: t('check out'),
+                      value: fTimeUnit(row.check_out_time, 'p', true),
+                    },
+                    {
+                      label: t('leave time'),
+                      value: fHourMin(row.leaveTime),
+                    },
+                    {
+                      label: t('work time'),
+                      value: fHourMin(row.workTime),
+                    },
+                    {
+                      label: t('work type'),
+                      value: t(row.work_type),
+                    },
+                    {
+                      label: t('note'),
+                      value: t(row.note),
+                    },
+                  ]}
+                  actions={[
+                    {
+                      label: t('DDL'),
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                    {
+                      label: t('Edit'),
+                      icon: 'fluent:edit-32-filled',
+                      onClick: () => {
+                        setSelectedRow(row);
+                        setOpen(true);
+                      },
+                    },
+                    {
+                      label: t('Delete'),
+                      icon: 'mdi:trash',
+                      color: 'error.main',
+                      onClick: () => {
+                        setDeleteRow(row);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={finalDisplayData.length}
+              action={
+                <Tooltip title="Unbook all">
+                  <IconButton color="error" onClick={confirm.onTrue}>
+                    <Iconify icon="mdi:bell-cancel" />
+                  </IconButton>
+                </Tooltip>
+              }
+              color="error"
+            />
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={finalDisplayData.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={finalDisplayData.length}
-            action={
-              <Tooltip title="Unbook all">
-                <IconButton color="error" onClick={confirm.onTrue}>
-                  <Iconify icon="mdi:bell-cancel" />
-                </IconButton>
-              </Tooltip>
-            }
-            color="error"
+                <TableBody>
+                  {finalDisplayData.map((row, idx) => (
+                    <EmployeeAttendenceRow
+                      key={idx}
+                      row={row}
+                      refetch={refetch}
+                      onDeleteRow={deleteHandler}
+                      showUnattendance={showUnattendance}
+                      isMissingAttendance={filters.showUnattendance}
+                    />
+                  ))}
+
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
+        {open && selectedRow && (
+          <AttendanceEdit
+            row={selectedRow}
+            open={open}
+            refetch={refetch}
+            onClose={() => {
+              setOpen(false);
+              setSelectedRow(null);
+            }}
+            isMissingAttendance={filters.showUnattendance}
           />
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={finalDisplayData.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+        )}
 
-              <TableBody>
-                {finalDisplayData.map((row, idx) => (
-                  <EmployeeAttendenceRow
-                    key={idx}
-                    row={row}
-                    refetch={refetch}
-                    onDeleteRow={deleteHandler}
-                    showUnattendance={showUnattendance}
-                    isMissingAttendance={filters.showUnattendance}
-                  />
-                ))}
+        <CustomPopover
+          open={ddlOpen}
+          onClose={() => setDdlAnchorEl(null)}
+          anchorEl={ddlAnchorEl}
+          arrow="right-top"
+          sx={{
+            padding: 2,
+            fontSize: '14px',
+            minWidth: 260,
+          }}
+        >
+          {ddlRow && (
+            <>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('login location')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.checkInLocation}</Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('logout location')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.checkOutLocation}</Box>
+              <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.created_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_creation?.email}
+              </Box>
+
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.ip_address_user_creation}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.updated_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_modification?.email}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                {ddlRow.ip_address_user_modification}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>
+                {t('modifications no')}: {ddlRow.modifications_nums}
+              </Box>
+            </>
+          )}
+        </CustomPopover>
+        <ConfirmDialog
+          open={Boolean(deleteRow)}
+          onClose={() => setDeleteRow(null)}
+          title={t('Deleting Attendence')}
+          content={t('Are you sure to delete this?')}
+          action={
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                if (deleteRow?._id) {
+                  deleteHandler(deleteRow._id);
+                }
+                setDeleteRow(null);
+              }}
+            >
+              {t('Delete')}
+            </Button>
+          }
+        />
 
         {finalDisplayLength > 0 && (
           <TablePaginationCustom

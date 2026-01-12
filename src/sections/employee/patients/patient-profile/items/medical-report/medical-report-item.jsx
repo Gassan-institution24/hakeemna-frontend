@@ -58,14 +58,16 @@ export default function MedicalReportItem({ one, refetch }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (Array.isArray(data[key])) {
-          data[key].forEach((item, index) => {
-            formData.append(`${key}[${index}]`, item);
-          });
-        }
-        formData.append(key, data[key]);
-      });
+      formData.append('description', data.description);
+
+      const existingFiles = data.file.filter((f) => !(f instanceof File));
+      formData.append('existingFiles', JSON.stringify(existingFiles));
+
+      data.file
+        .filter((f) => f instanceof File)
+        .forEach((file) => {
+          formData.append('file', file);
+        });
       await axiosInstance.patch(endpoints.medicalreports.one(one?._id), formData);
       setEditting(false);
       refetch();
@@ -140,7 +142,6 @@ export default function MedicalReportItem({ one, refetch }) {
                   setEditting(true);
                 }}
               >
-
                 <Iconify icon="lets-icons:edit-fill" />
               </IconButton>
             </Stack>
