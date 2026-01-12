@@ -764,6 +764,10 @@ export const paths = {
     accounting: {
       root: `${ROOTS.SUPERADMIN}/us/accounting`,
       invoicing: `${ROOTS.SUPERADMIN}/us/accounting/invoicing`,
+      claim: {
+        root: '/dashboard/us/accounting/claim',
+        company: (id) => `/dashboard/us/accounting/claim/${id}`,
+      },
       economicmovements: {
         root: `${ROOTS.SUPERADMIN}/us/accounting/economicmovements`,
         add: `${ROOTS.SUPERADMIN}/us/accounting/economicmovements/new`,
