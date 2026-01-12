@@ -5,6 +5,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
+import { useGetUnitservice } from 'src/api';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -38,7 +39,15 @@ export function useNavData() {
   const employees_number =
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
-      
+
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[
+      user?.employee?.selected_engagement
+    ]?.unit_service?._id;
+  const { data: unitServiceData } = useGetUnitservice(unitServiceId)
+  const claimRegistered =
+    unitServiceData?.claim_registered;
+
   const data = useMemo(() => {
     const permissions = user?.permissions || [];
 
@@ -173,7 +182,7 @@ export function useNavData() {
     const superAdminItems2 = [
       {
         subheader: t('overview'),
-        items:[
+        items: [
           {
             title: t('communications'),
             path: paths.superadmin.communication.root,
@@ -185,8 +194,8 @@ export function useNavData() {
             ),
           },
           ...permissions
-          .map(key => SUPER_ADMIN_ITEMS_MAP[key])
-          .filter(Boolean),
+            .map(key => SUPER_ADMIN_ITEMS_MAP[key])
+            .filter(Boolean),
         ]
       },
     ];
@@ -500,6 +509,20 @@ export function useNavData() {
             path: paths.unitservice.accounting.reciepts.root,
             'data-test': 'us-nav-item-accounting-reciepts',
           },
+          {
+            show:
+              checkAcl({
+                category: 'unit_service',
+                subcategory: 'accounting',
+                acl: 'read',
+              }) &&
+              claimRegistered,
+
+            title: t('claim'),
+            path: paths.unitservice.accounting.claim.root,
+            'data-test': 'us-nav-item-accounting-claim',
+          },
+
         ].filter((one) => one.show),
       },
       {
@@ -1107,6 +1130,6 @@ export function useNavData() {
       return stakeholderItems;
     }
     return [...userItems];
-  }, [t, user, router, checkAcl, employees_number, messages, isMedLab]);
+  }, [t, user, router, checkAcl, employees_number, messages, isMedLab, claimRegistered]);
   return data;
 }
