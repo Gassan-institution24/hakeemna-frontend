@@ -94,6 +94,8 @@ export default function AccountGeneral({ unitServiceData }) {
     Activity_Number: Yup.string(),
     ClientId: Yup.string(),
     CompanyID: Yup.string(),
+    claim_username: Yup.string(),
+    claim_password: Yup.string(),
     RegistrationName: Yup.string(),
     company_logo: Yup.mixed(),
     facebook: Yup.mixed(),
@@ -102,6 +104,7 @@ export default function AccountGeneral({ unitServiceData }) {
     has_tax: Yup.bool(),
     has_deduction: Yup.bool(),
     invoicing_system: Yup.bool(),
+    claim_registered: Yup.boolean(),
   });
 
   const defaultValues = {
@@ -137,6 +140,9 @@ export default function AccountGeneral({ unitServiceData }) {
     has_tax: data?.has_tax || false,
     has_deduction: data?.has_deduction || false,
     invoicing_system: data?.invoicing_system || false,
+    claim_registered: data?.claim_registered || false,
+    claim_username: data?.claim_username || '',
+    claim_password: '',
   };
 
   const methods = useForm({
@@ -329,6 +335,40 @@ export default function AccountGeneral({ unitServiceData }) {
                     }
                   }}
                 />
+                <RHFCheckbox
+                  name="claim_registered"
+                  label={t('Registered with insurance claim system')}
+                  onChange={async () => {
+                    const newValue = !values.claim_registered;
+                    setValue('claim_registered', newValue);
+
+                    try {
+                      await axios.patch(
+                        endpoints.unit_services.one(
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                            ?.unit_service._id
+                        ),
+                        { claim_registered: newValue }
+                      );
+                      enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
+
+                      socket.emit('updated', {
+                        user,
+                        link: paths.unitservice.profile.root,
+                        msg: `updated claim registered status`,
+                      });
+
+                      refetch(); // optional if you want to re-fetch fresh data
+                    } catch (error) {
+                      enqueueSnackbar(
+                        curLangAr
+                          ? `${error.arabic_message}` || `${error.message}`
+                          : `${error.message}`,
+                        { variant: 'error' }
+                      );
+                    }
+                  }}
+                />
               </Stack>
 
               <Stack alignItems="flex-start" gap={1}>
@@ -347,7 +387,7 @@ export default function AccountGeneral({ unitServiceData }) {
                       type="string"
                       variant="filled"
                       name="CompanyID"
-                      label={`${t('Company ID')} :`} 
+                      label={`${t('Company ID')} :`}
                     />
                     <RHFTextField
                       type="string"
@@ -366,6 +406,25 @@ export default function AccountGeneral({ unitServiceData }) {
                       variant="filled"
                       name="Secret_Key"
                       label={`${t('Secret Key')} :`}
+                    />
+                  </>
+                )}
+              </Stack>
+              <Stack alignItems="flex-start" gap={1}>
+
+                {values.claim_registered && (
+                  <>
+                    <RHFTextField
+                      variant="filled"
+                      name="claim_username"
+                      label={t('Claim Username')}
+                    />
+
+                    <RHFTextField
+                      variant="filled"
+                      name="claim_password"
+                      type="password"
+                      label={t('Claim Password')}
                     />
                   </>
                 )}
