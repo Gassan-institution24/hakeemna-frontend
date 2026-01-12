@@ -1,28 +1,34 @@
 import { useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
+import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { isAfter } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+import { fDate, isAfter } from 'src/utils/format-time';
 
 import { useGetReciepts } from 'src/api';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Scrollbar from 'src/components/scrollbar';
+import CustomPopover from 'src/components/custom-popover';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
+  MobileRow,
   TableNoData,
   TableHeadCustom,
   TablePaginationCustom,
@@ -62,8 +68,15 @@ export default function InvoiceListView() {
   const router = useRouter();
   const table = useTable({ defaultOrderBy: 'created_at' });
   const { user } = useAuthContext();
+  const isMobile = useMediaQuery('(max-width:899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+
+  const curLangAr = currentLang.value === 'ar';
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -284,9 +297,67 @@ export default function InvoiceListView() {
             sx={{ p: 2.5, pt: 0 }}
           />
         )}
-
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          {/* <TableSelectedAction
+        {isMobile ? (
+          <>
+            {receiptsData
+              .slice(
+                table.page * table.rowsPerPage,
+                table.page * table.rowsPerPage + table.rowsPerPage
+              )
+              .map((row) => (
+                <MobileRow
+                  fields={[
+                    {
+                      label: t('sequence'),
+                      value: row.sequence_number,
+                    },
+                    {
+                      label: t('date'),
+                      value: fDate(row.created_at),
+                    },
+                    {
+                      label: t('patient'),
+                      value: curLangAr ? row.patient?.name_arabic : row.patient?.name_english,
+                    },
+                    {
+                      label: t('stakeholder'),
+                      value: curLangAr
+                        ? row.stakeholder?.name_arabic
+                        : row.stakeholder?.name_english,
+                    },
+                    {
+                      label: t('amount'),
+                      value: fCurrency(
+                        row.receipt_amount || -row.payment_amount,
+                        row.Currency?.symbol
+                      ),
+                    },
+                    {
+                      label: t('economic movement'),
+                      value: `${row.economic_movement?.sequence_number} -${fDate(row.created_at, 'yyyy')}`,
+                    },
+                  ]}
+                  actions={[
+                    {
+                      label: t('view'),
+                      icon: 'solar:eye-bold',
+                      onClick: () => handleViewRow(row._id),
+                    },
+                    {
+                      label: t('DDL'),
+                      icon: 'carbon:data-quality-definition',
+                      onClick: (event) => {
+                        setDdlRow(row);
+                        setDdlAnchorEl(event.currentTarget);
+                      },
+                    },
+                  ]}
+                />
+              ))}
+          </>
+        ) : (
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            {/* <TableSelectedAction
             dense={table.dense}
             numSelected={table.selected.length}
             rowCount={receiptsData.length}
@@ -325,40 +396,102 @@ export default function InvoiceListView() {
             }
           /> */}
 
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={receiptsData.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     receiptsData.map((row) => row.id)
-                //   )
-                // }
-              />
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={receiptsData.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     receiptsData.map((row) => row.id)
+                  //   )
+                  // }
+                />
 
-              <TableBody>
-                {receiptsData.map((row) => (
-                  <InvoiceTableRow
-                    key={row.id}
-                    row={row}
-                    selected={table.selected.includes(row._id)}
-                    onSelectRow={() => table.onSelectRow(row._id)}
-                    onViewRow={() => handleViewRow(row._id)}
-                    // onEditRow={() => handleEditRow(row.id)}
-                  />
-                ))}
+                <TableBody>
+                  {receiptsData.map((row) => (
+                    <InvoiceTableRow
+                      key={row.id}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onViewRow={() => handleViewRow(row._id)}
+                      // onEditRow={() => handleEditRow(row.id)}
+                    />
+                  ))}
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                  <TableNoData notFound={notFound} />
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
+
+        <CustomPopover
+          open={ddlOpen}
+          onClose={() => setDdlAnchorEl(null)}
+          anchorEl={ddlAnchorEl}
+          arrow="right-top"
+          sx={{
+            padding: 2,
+            fontSize: '14px',
+            minWidth: 260,
+          }}
+        >
+          {ddlRow && (
+            <>
+              <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.created_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_creation?.email}
+              </Box>
+
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.ip_address_user_creation}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                <ListItemText
+                  primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                  secondary={fDate(ddlRow.updated_at, 'p')}
+                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                  secondaryTypographyProps={{
+                    component: 'span',
+                    typography: 'caption',
+                  }}
+                />
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                {ddlRow.user_modification?.email}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+              <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                {ddlRow.ip_address_user_modification}
+              </Box>
+              <Box sx={{ pt: 1, fontWeight: 600 }}>
+                {t('modifications no')}: {ddlRow.modifications_nums}
+              </Box>
+            </>
+          )}
+        </CustomPopover>
 
         <TablePaginationCustom
           count={lengths.length}
