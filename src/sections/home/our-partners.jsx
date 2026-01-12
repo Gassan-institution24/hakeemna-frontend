@@ -72,7 +72,7 @@ export default function OurPartners() {
                     <Paper
                       elevation={3}
                       sx={{
-                        width: 250, // Set width
+                        width: 240, // Set width
                         overflow: 'hidden',
                         borderRadius: 3,
                         textAlign: 'center',
