@@ -127,6 +127,12 @@ const PaymentControlHomePage = lazy(
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
 const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
 const InvoicingHomePage = lazy(() => import('src/pages/unit-service/accounting/invoicing/home'));
+const ClaimHomePage = lazy(
+  () => import('src/pages/unit-service/accounting/claim/home')
+);
+const ClaimCompanyPage = lazy(() =>
+  import('src/pages/unit-service/accounting/claim/companyPage')
+);
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
 // PRODUCTS
@@ -414,6 +420,19 @@ export const unitServiceDashboardRoutes = [
           {
             path: 'invoicing',
             element: <InvoicingHomePage />,
+          },
+          {
+            path: 'claim',
+            children: [
+              {
+                index: true,
+                element: <ClaimHomePage />, 
+              },
+              {
+                path: ':companyId',
+                element: <ClaimCompanyPage />,  
+              },
+            ],
           },
         ],
       },
