@@ -68,7 +68,9 @@ export default function MobileRow({ title, fields, actions, sx }) {
               }}
               sx={{ color: action.color }}
             >
-              {action.icon && <Iconify icon={action.icon} sx={{ mr: 1 }} width={18} />}
+              {action.icon && (
+                <Iconify icon={action.icon} sx={{ color: action.color, mr: 1 }} width={18} />
+              )}
               {action.label}
             </MenuItem>
           ))}
