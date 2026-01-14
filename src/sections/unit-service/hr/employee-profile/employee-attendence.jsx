@@ -67,6 +67,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
         { id: 'work_type', label: t('work type') },
         // { id: 'leave', label: t('leave') },
         { id: 'note', label: t('note') },
+        { id: 'task', label: t('Task') },
         { id: '' },
       ].filter(Boolean);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -83,6 +84,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const confirm = useBoolean();
 
   const [filters, setFilters] = useState(defaultFilters);
+  const [setExpandedRows] = useState({});
 
   // Synchronize showUnattendance state with filters
   useEffect(() => {
@@ -268,6 +270,12 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                       label: t('note'),
                       value: t(row.note),
                     },
+                    {
+                      label: t('Task'),
+                      value: (
+                        <MobileExpandableText text={row.task} hours={row.time_doing_the_task} />
+                      ),
+                    },
                   ]}
                   actions={[
                     {
@@ -333,6 +341,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                       onDeleteRow={deleteHandler}
                       showUnattendance={showUnattendance}
                       isMissingAttendance={filters.showUnattendance}
+                      setExpandedRows={setExpandedRows}
                     />
                   ))}
 
@@ -463,4 +472,62 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
 EmployeeAttendence.propTypes = {
   employee: PropTypes.object,
   setLastAttendance: PropTypes.func,
+};
+function MobileExpandableText({ text, hours }) {
+  const { t } = useTranslate();
+  const [expanded, setExpanded] = useState(false);
+
+  const MAX_CHARS = 6;
+
+  if (!text) return '-';
+
+  const isLong = text.length > MAX_CHARS;
+  const shortText = isLong ? `${text.slice(0, MAX_CHARS)}...` : text;
+
+  return (
+    <Box>
+      <Typography
+        variant="body2"
+        sx={{
+          whiteSpace: 'pre-line',
+          wordBreak: 'break-word',
+        }}
+      >
+        {expanded ? text : shortText}
+      </Typography>
+
+      {typeof hours === 'number' && (
+        <Typography
+          variant="caption"
+          sx={{
+            display: 'block',
+            mt: 0.5,
+          }}
+        >
+          {hours} {t('hours')}
+        </Typography>
+      )}
+
+      {/* View */}
+      {isLong && (
+        <Typography
+          variant="caption"
+          sx={{
+            display: 'block',
+            mt: 0.5,
+            cursor: 'pointer',
+            color: 'primary.main',
+          }}
+          onClick={() => setExpanded((prev) => !prev)}
+        >
+          {expanded ? t('View less') : t('View')}
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
+MobileExpandableText.propTypes = {
+  text: PropTypes.object,
+  hours: PropTypes.number,
 };

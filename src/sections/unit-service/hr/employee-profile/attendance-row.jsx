@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { Button, Typography } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 
 import { getAddressFromCoordinatesOSM } from 'src/utils/location';
@@ -52,10 +52,14 @@ export default function AttendanceRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    task,
   } = row;
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const checkAcl = useAclGuard();
+  const MAX_CHARS = 6;
+  const isLong = task && task.length > MAX_CHARS;
+  const shortTask = isLong ? `${task.slice(0, MAX_CHARS)}...` : task;
 
   const { fTimeUnit } = useFDateTimeUnit();
 
@@ -64,12 +68,11 @@ export default function AttendanceRow({
   const deleting = usePopover();
   const [checkInLocation, setCheckInLocation] = useState('Loading...');
   const [checkOutLocation, setCheckOutLocation] = useState('Loading...');
+  const [expanded, setExpanded] = useState(false);
 
   function shortenAddress(fullAddress) {
     if (!fullAddress) return 'Unknown';
-    // نقسم العنوان بواسطة الفواصل
     const parts = fullAddress.split(',').map((p) => p.trim());
-    // نختار أول 3 أجزاء فقط (ممكن تغير الرقم حسب رغبتك)
     return parts.slice(1, 4).join(', ');
   }
   useEffect(() => {
@@ -109,6 +112,50 @@ export default function AttendanceRow({
         )}
 
         <TableCell align="center">{t(note)}</TableCell>
+        <TableCell align="center" sx={{ maxWidth: 220 }}>
+          {task ? (
+            <>
+              <Typography
+                variant="body2"
+                sx={{
+                  whiteSpace: 'pre-line',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {expanded ? task : shortTask}
+              </Typography>
+
+              {typeof row.time_doing_the_task === 'number' && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'block',
+                    mt: 0.5,
+                  }}
+                >
+                  {row.time_doing_the_task} {t('hours')}
+                </Typography>
+              )}
+
+              {isLong && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'primary.main',
+                    display: 'block',
+                    mt: 0.5,
+                  }}
+                  onClick={() => setExpanded((prev) => !prev)}
+                >
+                  {expanded ? t('View less') : t('View')}
+                </Typography>
+              )}
+            </>
+          ) : (
+            '-'
+          )}
+        </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
