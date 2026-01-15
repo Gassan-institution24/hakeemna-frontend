@@ -33,6 +33,7 @@ export default function AttendanceRow({
   onDeleteRow,
   showUnattendance = false,
   isMissingAttendance = false,
+  onViewTask,
 }) {
   const {
     date,
@@ -52,14 +53,10 @@ export default function AttendanceRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
-    task,
   } = row;
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
   const checkAcl = useAclGuard();
-  const MAX_CHARS = 6;
-  const isLong = task && task.length > MAX_CHARS;
-  const shortTask = isLong ? `${task.slice(0, MAX_CHARS)}...` : task;
 
   const { fTimeUnit } = useFDateTimeUnit();
 
@@ -68,7 +65,6 @@ export default function AttendanceRow({
   const deleting = usePopover();
   const [checkInLocation, setCheckInLocation] = useState('Loading...');
   const [checkOutLocation, setCheckOutLocation] = useState('Loading...');
-  const [expanded, setExpanded] = useState(false);
 
   function shortenAddress(fullAddress) {
     if (!fullAddress) return 'Unknown';
@@ -113,44 +109,22 @@ export default function AttendanceRow({
 
         <TableCell align="center">{t(note)}</TableCell>
         <TableCell align="center" sx={{ maxWidth: 220 }}>
-          {task ? (
+          {row.task ? (
             <>
+              <Typography variant="body2">{row.task.slice(0, 6)}...</Typography>
+
               <Typography
-                variant="body2"
+                variant="caption"
                 sx={{
-                  whiteSpace: 'pre-line',
-                  wordBreak: 'break-word',
+                  cursor: 'pointer',
+                  color: 'primary.main',
+                  display: 'block',
+                  mt: 0.5,
                 }}
+                onClick={() => onViewTask(row.task, row.time_doing_the_task)}
               >
-                {expanded ? task : shortTask}
+                {t('View')}
               </Typography>
-
-              {typeof row.time_doing_the_task === 'number' && (
-                <Typography
-                  variant="caption"
-                  sx={{
-                    display: 'block',
-                    mt: 0.5,
-                  }}
-                >
-                  {row.time_doing_the_task} {t('hours')}
-                </Typography>
-              )}
-
-              {isLong && (
-                <Typography
-                  variant="caption"
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'primary.main',
-                    display: 'block',
-                    mt: 0.5,
-                  }}
-                  onClick={() => setExpanded((prev) => !prev)}
-                >
-                  {expanded ? t('View less') : t('View')}
-                </Typography>
-              )}
             </>
           ) : (
             '-'
@@ -287,4 +261,5 @@ AttendanceRow.propTypes = {
   selected: PropTypes.bool,
   showUnattendance: PropTypes.bool,
   isMissingAttendance: PropTypes.bool,
+  onViewTask: PropTypes.func,
 };

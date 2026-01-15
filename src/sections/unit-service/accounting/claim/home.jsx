@@ -22,8 +22,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -39,13 +39,10 @@ export default function ClaimHome() {
   const unitServiceId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
 
-  // 🔹 أولًا: شركات العيادة
   const { data, refetch } = useGetUnitservice(unitServiceId);
 
-  // 🔹 ثانيًا: كل شركات التأمين
   const { insuranseCosData } = useGetInsuranceCos();
 
-  // 🔹 ثالثًا: فلترة (نفس UnitServicesInsuranceView)
   const unitInsuranceCompanies = data?.insurance || [];
 
   const filteredInsuranceCos = insuranseCosData.filter((company) =>
@@ -138,6 +135,8 @@ export default function ClaimHome() {
                       if (!claimUsername || !claimPassword) {
                         setSelectedCompany(company);
                         setOpenDialog(true);
+                        setUsername(data?.claim_username || '');
+                        setPassword('');
                         refetch();
                         return;
                       }
@@ -183,6 +182,7 @@ export default function ClaimHome() {
               label={t('claim Username')}
               fullWidth
               value={username}
+              autoComplete="new-username"
               onChange={(e) => setUsername(e.target.value)}
             />
 
@@ -191,6 +191,7 @@ export default function ClaimHome() {
               type="password"
               fullWidth
               value={password}
+              autoComplete="new-password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </Stack>

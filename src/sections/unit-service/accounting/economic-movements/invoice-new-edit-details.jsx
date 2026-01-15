@@ -1,6 +1,7 @@
 import sum from 'lodash/sum';
 import { useEffect, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import Tooltip from '@mui/material/Tooltip';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -361,27 +362,64 @@ export default function InvoiceNewEditDetails() {
                     },
                   }}
                 />
-                <RHFTextField
-                  size="small"
-                  type="number"
-                  name={`items[${index}].price_per_unit`}
-                  label={t('price')}
-                  placeholder="0.00"
-                  onChange={(event) => handleChangeItemDetails(event, index)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    maxWidth: { md: 200 },
-                    [`& .${inputBaseClasses.input}`]: {
-                      textAlign: { md: 'right' },
+                <Tooltip
+                  title={
+                    <Box sx={{ textAlign: 'center' }}>
+                      <Typography variant="caption" display="block">
+                        {t('To change the value, click on the price field')}
+                      </Typography>
+                    </Box>
+                  }
+                  arrow
+                  placement="top-start"
+                  PopperProps={{ disablePortal: true }}
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: '#FFFFFF',
+                        color: '#000000',
+                        opacity: 1,
+                        fontSize: 13,
+                        fontWeight: 500,
+                        boxShadow: 2,
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: '#FFFFFF',
+                      },
                     },
                   }}
-                />
+                >
+                  <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <RHFTextField
+                      size="small"
+                      type="number"
+                      name={`items[${index}].price_per_unit`}
+                      label={t('price')}
+                      placeholder="0.00"
+                      disabled={!values.items[index]?.service_type}
+                      onChange={(event) => handleChangeItemDetails(event, index)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>JOD</Box>
+                          </InputAdornment>
+                        ),
+                      }}
+                      sx={{
+                        width: { md: 200 },
+                        '& .MuiInputBase-root': {
+                          height: 40, 
+                        },
+                        [`& .${inputBaseClasses.input}`]: {
+                          textAlign: { md: 'right' },
+                          py: 0, 
+                        },
+                      }}
+                    />
+                  </span>
+                </Tooltip>
                 <RHFTextField
                   disabled
                   size="small"
