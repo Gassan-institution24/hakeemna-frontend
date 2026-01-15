@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { Button, Typography } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 
 import { getAddressFromCoordinatesOSM } from 'src/utils/location';
@@ -33,6 +33,7 @@ export default function AttendanceRow({
   onDeleteRow,
   showUnattendance = false,
   isMissingAttendance = false,
+  onViewTask,
 }) {
   const {
     date,
@@ -67,9 +68,7 @@ export default function AttendanceRow({
 
   function shortenAddress(fullAddress) {
     if (!fullAddress) return 'Unknown';
-    // نقسم العنوان بواسطة الفواصل
     const parts = fullAddress.split(',').map((p) => p.trim());
-    // نختار أول 3 أجزاء فقط (ممكن تغير الرقم حسب رغبتك)
     return parts.slice(1, 4).join(', ');
   }
   useEffect(() => {
@@ -109,6 +108,28 @@ export default function AttendanceRow({
         )}
 
         <TableCell align="center">{t(note)}</TableCell>
+        <TableCell align="center" sx={{ maxWidth: 220 }}>
+          {row.task ? (
+            <>
+              <Typography variant="body2">{row.task.slice(0, 6)}...</Typography>
+
+              <Typography
+                variant="caption"
+                sx={{
+                  cursor: 'pointer',
+                  color: 'primary.main',
+                  display: 'block',
+                  mt: 0.5,
+                }}
+                onClick={() => onViewTask(row.task, row.time_doing_the_task)}
+              >
+                {t('View')}
+              </Typography>
+            </>
+          ) : (
+            '-'
+          )}
+        </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -240,4 +261,5 @@ AttendanceRow.propTypes = {
   selected: PropTypes.bool,
   showUnattendance: PropTypes.bool,
   isMissingAttendance: PropTypes.bool,
+  onViewTask: PropTypes.func,
 };

@@ -159,6 +159,9 @@ export default function AppointmentsTableRow({
         {/* <TableCell  align="center">
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell> */}
+        {status === 'finished' && (
+          <TableCell align="center">{row.entrance?.time_avareg || '-'}</TableCell>
+        )}
 
         <TableCell align="center">
           <Label
