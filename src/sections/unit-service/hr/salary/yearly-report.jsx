@@ -97,16 +97,16 @@ export default function YearlyReportsView({ employee }) {
     reported: 0,
   });
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
+  // const dateError =
+  //   filters?.startDate && filters?.endDate
+  //     ? filters?.startDate?.getTime() > filters?.endDate?.getTime()
+  //     : false;
 
   const dataFiltered = applyFilter({
     inputData: reportsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
-    dateError,
+    // dateError,
   });
 
   const canReset = !!filters?.name;
