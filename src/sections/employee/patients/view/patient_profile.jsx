@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Stack,
@@ -43,6 +43,7 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 export default function PatientProfile() {
   const { id } = useParams();
+  const socketRef = useRef(null);
   const router = useRouter();
   const { user } = useAuthContext();
   const { usPatientData } = useGetOneUSPatient(id, {
@@ -54,14 +55,37 @@ export default function PatientProfile() {
       { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
     ],
   });
-  
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const patientData = usPatientData.patient
-  ? { ...usPatientData.patient, ...usPatientData }
-  : usPatientData;
+    ? { ...usPatientData.patient, ...usPatientData }
+    : usPatientData;
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  // check online 
+  const [isPatientOnline, setIsPatientOnline] = useState(false);
+  useEffect(() => {
+    if (patientData?.user?.online !== undefined) {
+      setIsPatientOnline(patientData.user.online);
+    }
+  }, [patientData?.user?.online]);
+
+  useEffect(() => {
+    if (!patientData?.user) return;
+
+    socketRef.current = io(process.env.REACT_APP_API_URL);
+
+    socketRef.current.on('userOnlineStatus', ({ userId, online }) => {
+      if (userId === patientData.user._id) {
+        setIsPatientOnline(online);
+      }
+    });
+
+    // eslint-disable-next-line consistent-return
+    return () => socketRef.current.disconnect();
+  }, [patientData?.user]);
 
   const [currentTab, setCurrentTab] = useState('communication');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -132,9 +156,8 @@ export default function PatientProfile() {
         `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(user?.employee?.name_arabic || user?.employee?.name_english)}&uniqueRoom=${encodeURIComponent(uniqueRoom)}`,
         '_blank'
       );
-      const socket = io(process.env.REACT_APP_API_URL);
-      socket.emit('callUser', {
-        userId: patientData.user,
+      socketRef.current?.emit('callUser', {
+        userId: patientData.user._id,
         userName: curLangAr ? user?.employee?.name_arabic : user?.employee?.name_english,
         roomUrl,
         uniqueRoom,
@@ -281,6 +304,7 @@ export default function PatientProfile() {
                   variant="contained"
                   color="primary"
                   onClick={handleCall}
+                  disabled={!isPatientOnline}
                 >
                   {t('Call')}
                 </Button>

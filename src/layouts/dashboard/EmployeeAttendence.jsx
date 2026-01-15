@@ -201,9 +201,9 @@ function EmployeeAttendence() {
         <DialogContent sx={{ mt: 1 }}>
           <TextField
             fullWidth
-            multiline // 👈 يخليه متعدد الأسطر
-            rows={3} // 👈 عدد الأسطر الافتراضية (غيره حسب ما بدك)
-            label={t('Task')}
+            multiline   
+            rows={3} 
+            label={t("Activity")}
             value={task}
             onChange={(e) => setTask(e.target.value)}
             margin="normal"

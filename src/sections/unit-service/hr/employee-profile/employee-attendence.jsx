@@ -5,10 +5,14 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 import { Stack, Typography, ListItemText } from '@mui/material';
@@ -67,7 +71,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
         { id: 'work_type', label: t('work type') },
         // { id: 'leave', label: t('leave') },
         { id: 'note', label: t('note') },
-        { id: 'task', label: t('Task') },
+        { id: 'Activity', label: t('Activity') },
         { id: '' },
       ].filter(Boolean);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -146,6 +150,26 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const canReset = !!filters.startDate && !!filters.endDate;
 
   const notFound = (!finalDisplayData.length && canReset) || !finalDisplayData.length;
+  const [taskDialog, setTaskDialog] = useState({
+    open: false,
+    task: '',
+    hours: null,
+  });
+  const openTaskDialog = (task, taskHours) => {
+    setTaskDialog({
+      open: true,
+      task,
+      hours: taskHours,
+    });
+  };
+
+  const closeTaskDialog = () => {
+    setTaskDialog({
+      open: false,
+      task: '',
+      hours: null,
+    });
+  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -271,9 +295,26 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                       value: t(row.note),
                     },
                     {
-                      label: t('Task'),
+                      label: t('Activity'),
                       value: (
-                        <MobileExpandableText text={row.task} hours={row.time_doing_the_task} />
+                        <>
+                          <Typography variant="body2">
+                            {row.task ? `${row.task.slice(0, 6)}...` : '-'}
+                          </Typography>
+
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              cursor: 'pointer',
+                              color: 'primary.main',
+                              display: 'block',
+                              mt: 0.5,
+                            }}
+                            onClick={() => openTaskDialog(row.task, row.time_doing_the_task)}
+                          >
+                            {t('View')}
+                          </Typography>
+                        </>
                       ),
                     },
                   ]}
@@ -342,6 +383,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                       showUnattendance={showUnattendance}
                       isMissingAttendance={filters.showUnattendance}
                       setExpandedRows={setExpandedRows}
+                      onViewTask={openTaskDialog}
                     />
                   ))}
 
@@ -463,6 +505,67 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
           />
         )}
       </Card>
+      <Dialog open={taskDialog.open} onClose={closeTaskDialog} fullWidth maxWidth="sm">
+        {/* Title */}
+        <DialogTitle
+          sx={{
+            fontWeight: 600,
+            pb: 1,
+          }}
+        >
+          {t('Activity details')}
+        </DialogTitle>
+
+        <DialogContent dividers sx={{ pt: 2 }}>
+          {/* Task Text */}
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 1.5,
+              bgcolor: 'background.neutral',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                whiteSpace: 'pre-line',
+                wordBreak: 'break-word',
+                lineHeight: 1.7,
+              }}
+            >
+              {taskDialog.task || '-'}
+            </Typography>
+          </Box>
+
+          {/* Hours */}
+          {typeof taskDialog.hours === 'number' && (
+            <Box
+              sx={{
+                mt: 2,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <Iconify icon="mdi:clock-outline" width={20} />
+              <Typography variant="subtitle2" color="text.secondary">
+                {t('Time Spent (hours)')}:
+              </Typography>
+              <Typography variant="subtitle2" fontWeight={600}>
+                {taskDialog.hours} {t('hours')}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button onClick={closeTaskDialog} variant="contained">
+            {t('Close')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
@@ -472,62 +575,4 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
 EmployeeAttendence.propTypes = {
   employee: PropTypes.object,
   setLastAttendance: PropTypes.func,
-};
-function MobileExpandableText({ text, hours }) {
-  const { t } = useTranslate();
-  const [expanded, setExpanded] = useState(false);
-
-  const MAX_CHARS = 6;
-
-  if (!text) return '-';
-
-  const isLong = text.length > MAX_CHARS;
-  const shortText = isLong ? `${text.slice(0, MAX_CHARS)}...` : text;
-
-  return (
-    <Box>
-      <Typography
-        variant="body2"
-        sx={{
-          whiteSpace: 'pre-line',
-          wordBreak: 'break-word',
-        }}
-      >
-        {expanded ? text : shortText}
-      </Typography>
-
-      {typeof hours === 'number' && (
-        <Typography
-          variant="caption"
-          sx={{
-            display: 'block',
-            mt: 0.5,
-          }}
-        >
-          {hours} {t('hours')}
-        </Typography>
-      )}
-
-      {/* View */}
-      {isLong && (
-        <Typography
-          variant="caption"
-          sx={{
-            display: 'block',
-            mt: 0.5,
-            cursor: 'pointer',
-            color: 'primary.main',
-          }}
-          onClick={() => setExpanded((prev) => !prev)}
-        >
-          {expanded ? t('View less') : t('View')}
-        </Typography>
-      )}
-    </Box>
-  );
-}
-
-MobileExpandableText.propTypes = {
-  text: PropTypes.object,
-  hours: PropTypes.number,
 };
