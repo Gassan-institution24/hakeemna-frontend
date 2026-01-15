@@ -21,9 +21,6 @@ import {
   InputAdornment,
 } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -107,7 +104,6 @@ const languages = [
 
 export default function AccountGeneral({ employeeData, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
   const [page, setPage] = useState('information');
   const employeeEng = employeeData?.employee_engagements?.[employeeData.selected_engagement];
   const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id);
@@ -117,7 +113,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
-  // const { currencies } = useGetCurrencies();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -174,7 +169,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
     arabic_keywords: Yup.array(),
     fees: Yup.number().required(t('required field')),
     fees_after_discount: Yup.number(),
-    // currency: Yup.string().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -192,9 +186,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
       speciality: employeeData?.speciality?._id || null,
       gender: employeeData?.gender || '',
       birth_date: employeeData?.birth_date || null,
-      // Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
-      // University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
-      // University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
       scanned_identity: employeeData?.scanned_identity || null,
       signature: employeeData?.signature || null,
       stamp: employeeData?.stamp || null,
@@ -307,14 +298,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
-      router.push(
-        paths.pages.doctor(
-          `${employeeEng._id}_${employeeData?.[t('name_english')]?.replace(
-            / /g,
-            '-'
-          )}_${employeeData?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
-        )
-      );
+      setPage('information')
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

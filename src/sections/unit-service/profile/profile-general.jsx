@@ -417,14 +417,14 @@ export default function AccountGeneral({ unitServiceData }) {
                     <RHFTextField
                       variant="filled"
                       name="claim_username"
-                      label={t('Claim Username')}
+                      label={`${t('claim Username')} :`}
                     />
 
                     <RHFTextField
                       variant="filled"
                       name="claim_password"
                       type="password"
-                      label={t('Claim Password')}
+                      label={`${t('claim Password')} :`}
                     />
                   </>
                 )}

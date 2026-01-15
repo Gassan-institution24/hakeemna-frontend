@@ -30,7 +30,6 @@ export default function WebRTCComponent() {
       showLeaveButton: true,
       userName,
     });
-
     callFrameRef.current = callFrame;
 
     if (callFrame.iframe instanceof Node) {
