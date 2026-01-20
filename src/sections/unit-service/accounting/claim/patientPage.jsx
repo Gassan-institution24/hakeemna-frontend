@@ -13,7 +13,18 @@ import {
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import AddDiagnosis from 'src/components/clim/AddDiagnosis';
 
+
+const sections = [
+  'Add Diagnosis',
+  'Clinic / ER Procedures',
+  'Laboratory Orders',
+  'Radiology Orders',
+  'Medications Orders',
+  'Physiotherapy',
+  'Add Note / Attach Files',
+];
 /* ================= ضيف رقم تلفون للمريض واحذف الكومنت هاض بس تخلص (يزن)  ================= */
 
 export default function PatientPage() {
@@ -55,15 +66,7 @@ export default function PatientPage() {
       </Paper>
 
       {/* ================= SECTIONS ================= */}
-      {[
-        'Add Diagnosis',
-        'Clinic / ER Procedures',
-        'Laboratory Orders',
-        'Radiology Orders',
-        'Medications Orders',
-        'Physiotherapy',
-        'Add Note / Attach Files',
-      ].map((section) => (
+      {sections.map((section, index) => (
         <Accordion key={section} sx={{ mb: 1, borderRadius: 2 }}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <MedicalInformationIcon sx={{ mr: 1, color: 'primary.main' }} />
@@ -71,23 +74,19 @@ export default function PatientPage() {
           </AccordionSummary>
 
           <AccordionDetails>
-            <Typography color="text.secondary">No data added yet.</Typography>
+            {index === 0 ? (
+              <AddDiagnosis />
+            ) : (
+              <>
+                <Typography color="text.secondary">
+                  No data added yet.
+                </Typography>
 
-            <Button size="small" variant="contained" sx={{ mt: 2 }}>
-              Add {section}
-              {/* ================= راح نعمل كومبونانتس هون لكل واحد على حسب هضول
-      
-      'Add Diagnosis',
-        'Clinic / ER Procedures',
-        'Laboratory Orders',
-        'Radiology Orders',
-        'Medications Orders',
-        'Physiotherapy',
-        'Add Note / Attach Files',
-        بتقدر تستخدم index تبع الماب عشان تحدد كل كومبونانتس وتعملها شرط
-        احذف بعد ما تخلص (يزن)
-      ================= */}
-            </Button>
+                <Button size="small" variant="contained" sx={{ mt: 2 }}>
+                  Add {section}
+                </Button>
+              </>
+            )}
           </AccordionDetails>
         </Accordion>
       ))}

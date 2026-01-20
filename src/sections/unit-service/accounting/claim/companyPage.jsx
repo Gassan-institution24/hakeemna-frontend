@@ -21,7 +21,6 @@ import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
-/* 📦 Static Data */
 const DATA = [
   {
     _id: '1',
@@ -53,7 +52,6 @@ export default function CompanyPage() {
 
   const { t } = useTranslate();
 
-  /* 🔍 Search */
   useEffect(() => {
     if (!search.trim()) {
       setResults([]);
