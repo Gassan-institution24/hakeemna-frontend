@@ -122,7 +122,7 @@ export default function PatientProfile() {
           unit_service: usPatientData.unit_service,
           patient: patientData?._id,
           employee: user?.employee?._id,
-          work_group: patientData?.work_groups[0],
+          work_group: patientData?.work_groups?[0],
           descriptionEn: `Video call initiated by Dr. ${user?.employee?.name_english} with patient ${patientData?.name_english} at ${new Date().toLocaleString()}`,
           descriptionAR: `تم بدء مكالمة فيديو من قبل الدكتور ${user?.employee?.name_arabic} مع المريض ${patientData?.name_arabic} بتاريخ ${new Date().toLocaleString('ar-EG')}`,
           room_name: uniqueRoom,
