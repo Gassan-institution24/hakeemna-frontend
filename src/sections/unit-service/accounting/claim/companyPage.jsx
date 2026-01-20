@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import {
   Box,
   Table,
@@ -16,67 +12,80 @@ import {
   TableHead,
   Container,
   Typography,
-  IconButton,
+  Button,
   TableContainer,
 } from '@mui/material';
+
 import { useTranslate } from 'src/locales';
-
 import { useSnackbar } from 'src/components/snackbar';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
-const ALL_USERS = [
-  { _id: '1', name: 'Ahmad Ali', email: 'ahmad@test.com' },
-  { _id: '2', name: 'Sara Mohammad', email: 'sara@test.com' },
-  { _id: '3', name: 'Omar Khaled', email: 'omar@test.com' },
-  { _id: '4', name: 'Lina Hassan', email: 'lina@test.com' },
+/* 📦 Static Data */
+const DATA = [
+  {
+    _id: '1',
+    name: 'Ahmad Ali',
+    email: 'ahmad@test.com',
+    visitBefore: false,
+  },
+  {
+    _id: '2',
+    name: 'Sara Mohammad',
+    email: 'sara@test.com',
+    visitBefore: true,
+  },
+  {
+    _id: '3',
+    name: 'Omar Khaled',
+    email: 'omar@test.com',
+    visitBefore: false,
+  },
 ];
 
-export default function EmployeePage() {
+export default function CompanyPage() {
   const [search, setSearch] = useState('');
-  const [users, setUsers] = useState([]);
-  const [companyUsers, setCompanyUsers] = useState([]);
+  const [results, setResults] = useState([]);
+
   const { enqueueSnackbar } = useSnackbar();
+   const router = useRouter();
+ 
+
   const { t } = useTranslate();
 
   /* 🔍 Search */
   useEffect(() => {
     if (!search.trim()) {
-      setUsers([]);
+      setResults([]);
       return;
     }
 
-    const filtered = ALL_USERS.filter(
-      (u) =>
-        u.name.toLowerCase().includes(search.toLowerCase()) ||
-        u.email.toLowerCase().includes(search.toLowerCase())
-    );
+    const searchValue = search.toLowerCase().trim();
 
-    setUsers(filtered);
+    const filtered = DATA.filter((u) => {
+      const firstName = u.name.toLowerCase().split(' ')[0];
+
+      return firstName.startsWith(searchValue) || u.email.toLowerCase().startsWith(searchValue);
+    });
+
+    setResults(filtered);
   }, [search]);
 
-  /* ➕ Assign user */
-  const assignUser = (user) => {
-    if (companyUsers.find((u) => u._id === user._id)) return;
-
-    setCompanyUsers((prev) => [...prev, user]);
-    setUsers((prev) => prev.filter((u) => u._id !== user._id));
-    enqueueSnackbar(t('user Added Success'), {
-      variant: 'success',
-    });
+  const handleCreate = (user) => {
+    console.log('create', user);
+    enqueueSnackbar('Create clicked', { variant: 'success' });
   };
 
-  /* ➖ Remove user */
-  const removeUser = (id) => {
-    setCompanyUsers((prev) => prev.filter((u) => u._id !== id));
-    enqueueSnackbar(t('user Removed Success'), {
-      variant: 'success',
-    });
+  const handleView = (user) => {
+    enqueueSnackbar('View clicked', { variant: 'info' });
+    router.push(paths.unitservice.accounting.claim.patientVisitView(user._id));
   };
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f4f6f8', py: 5 }}>
       <Container maxWidth={false} sx={{ px: 3 }}>
         {/* Search */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3, width: '100%' }}>
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
           <TextField
             fullWidth
             label={t('search Users')}
@@ -86,30 +95,51 @@ export default function EmployeePage() {
         </Paper>
 
         {/* Search Results */}
-        {users.length > 0 && (
-          <Paper sx={{ mb: 5, borderRadius: 3 }}>
+        {results.length > 0 && (
+          <Paper sx={{ borderRadius: 3 }}>
             <Box sx={{ p: 2 }}>
               <Typography fontWeight="bold">{t('search Results')}</Typography>
             </Box>
             <Divider />
+
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
-                    <TableCell align="center">Action</TableCell>
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
-                  {users.map((user) => (
+                  {results.map((user) => (
                     <TableRow key={user._id}>
                       <TableCell>{user.name}</TableCell>
                       <TableCell>{user.email}</TableCell>
+
                       <TableCell align="center">
-                        <IconButton color="primary" onClick={() => assignUser(user)}>
-                          <PersonAddIcon />
-                        </IconButton>
+                        {/* Create (always visible) */}
+                        <Button
+                          size="small"
+                          variant="contained"
+                          onClick={() => handleCreate(user)}
+                          sx={{ mr: 1 }}
+                        >
+                          Create
+                        </Button>
+
+                        {/* View (ONLY if visitBefore !== true) */}
+                        {!user.visitBefore && (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            sx={{ color: 'orange', borderColor: 'orange' }}
+                            onClick={() => handleView(user)}
+                          >
+                            View
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -118,51 +148,6 @@ export default function EmployeePage() {
             </TableContainer>
           </Paper>
         )}
-
-        {/* Company Users */}
-        <Paper sx={{ borderRadius: 3 }}>
-          <Box sx={{ p: 2 }}>
-            <Typography fontWeight="bold">{t('users In This Company')}</Typography>
-          </Box>
-          <Divider />
-
-          {companyUsers.length === 0 ? (
-            <Box sx={{ p: 4 }}>
-              <Typography color="text.secondary">{t('no Users Assigned')}</Typography>
-            </Box>
-          ) : (
-            <TableContainer>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell align="center">{t('actions')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {companyUsers.map((user) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell align="center">
-                        <IconButton color="primary">
-                          <ReceiptLongIcon />
-                        </IconButton>
-                        <IconButton color="success">
-                          <EventAvailableIcon />
-                        </IconButton>
-                        <IconButton color="error" onClick={() => removeUser(user._id)}>
-                          <PersonRemoveIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Paper>
       </Container>
     </Box>
   );

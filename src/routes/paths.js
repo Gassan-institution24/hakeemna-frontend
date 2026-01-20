@@ -767,6 +767,7 @@ export const paths = {
       claim: {
         root: '/dashboard/us/accounting/claim',
         company: (id) => `/dashboard/us/accounting/claim/${id}`,
+        patientVisitView: (id) => `/dashboard/us/accounting/claim/user/${id}`,
       },
       economicmovements: {
         root: `${ROOTS.SUPERADMIN}/us/accounting/economicmovements`,
