@@ -14,6 +14,11 @@ export default function CallDialog() {
   const [open, setOpen] = useState(false);
   const [callerName, setCallerName] = useState('');
   const [roomUrl, setRoomUrl] = useState('');
+  const callerSocketRef = useRef(null);
+
+  // To track if the call was canceled before acceptance
+  const callCanceledRef = useRef(false);
+  const roomRef = useRef('');
   const { t } = useTranslation();
   const socketRef = useRef(null);
   const { user } = useAuthContext();
@@ -25,39 +30,71 @@ export default function CallDialog() {
 
     socket.on('callUser', (data) => {
       if (!data.roomUrl) return;
+      callCanceledRef.current = false;
 
       setCallerName(data.userName);
       setRoomUrl(data.roomUrl);
       setOpen(true);
-
+      roomRef.current = data.uniqueRoom;
+      callerSocketRef.current = data.from;
+      
       window._roomUrlTemp = data.roomUrl;
       window._roomNameTemp = data.uniqueRoom;
     });
+    // Listen for call canceled event
+    socket.on('call-canceled', ({ roomId }) => {
+      if (roomId !== window._roomNameTemp) return;
 
+      callCanceledRef.current = true;
+
+      setOpen(false);
+      setCallerName('');
+      setRoomUrl('');
+    });
+    // Listen for call ended event
+    socket.on('call-ended', ({ roomId }) => {
+      if (roomId === roomRef.current) {
+        setOpen(false);
+        roomRef.current = '';
+      }
+    });
     // eslint-disable-next-line consistent-return
     return () => {
+      socket.off('callUser');
+      socket.off('call-canceled');
+      socket.off('call-ended');
       socket.disconnect();
       socketRef.current = null;
     };
   }, []);
   const handleAccept = () => {
     setOpen(false);
-
-    const url = window._roomUrlTemp || roomUrl;
-    if (url) {
-      window.open(
-        `/call?roomUrl=${encodeURIComponent(url)}&userName=${encodeURIComponent(user?.patient?.name_arabic || user?.patient?.name_english)}&uniqueRoom=${encodeURIComponent(window._roomNameTemp)}`,
-        '_blank'
-      );
-    } else {
-      console.error('❌ No room URL available to join');
-    }
+    // If call was canceled before acceptance, do nothing
+    if (callCanceledRef.current) return;
+    // Emit event to notify caller that call is accepted
+    socketRef.current.emit('call-accepted', {
+      to: callerSocketRef.current,
+      roomId: window._roomNameTemp,
+    });
+    // add more data to url like role
+    window.open(
+      `/call?roomUrl=${encodeURIComponent(window._roomUrlTemp)}&userName=${encodeURIComponent(
+        user?.patient?.name_arabic || user?.patient?.name_english
+      )}&uniqueRoom=${encodeURIComponent(window._roomNameTemp)}&role=patient`,
+      '_blank'
+    );
   };
 
   const handleReject = () => {
     setOpen(false);
     setCallerName('');
     setRoomUrl('');
+    roomRef.current = '';
+    socketRef.current.emit('call-rejected', {
+      to: callerSocketRef.current,   // socket.id تبع الدكتور
+      roomId: window._roomNameTemp,
+    });
+
   };
 
   return (
@@ -67,10 +104,10 @@ export default function CallDialog() {
       </DialogTitle>
       <DialogActions>
         <Button color="error" onClick={handleReject}>
-         {t("decline")}
+          {t('decline')}
         </Button>
         <Button color="primary" onClick={handleAccept}>
-          {t("accept")}
+          {t('accept')}
         </Button>
       </DialogActions>
     </Dialog>
