@@ -82,10 +82,10 @@ export default function CompanyPage() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f4f6f8', py: 5 }}>
+    <Box sx={{ py: 5 }}>
       <Container maxWidth={false} sx={{ px: 3 }}>
         {/* Search */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 ,bgcolor:'#f4f6f8'}}>
           <TextField
             fullWidth
             label={t('search Users')}
