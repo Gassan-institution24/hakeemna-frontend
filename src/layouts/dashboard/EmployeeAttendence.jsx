@@ -2,7 +2,17 @@ import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Dialog,
+  Button,
+  TextField,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -18,6 +28,9 @@ function EmployeeAttendence() {
   const { attendence, refetch } = useGetMyLastAttendence();
   const changingAttendence = usePopover();
   const [loading, setLoading] = useState(false);
+  const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
+  const [task, setTask] = useState('');
+  const [taskTime, setTaskTime] = useState('');
 
   const getCoordinates = () =>
     new Promise((resolve, reject) => {
@@ -63,7 +76,11 @@ function EmployeeAttendence() {
           await axiosInstance.post(endpoints.attendence.checkin, { coordinates });
           break;
         case 'checkout':
-          await axiosInstance.post('/api/attendence/checkout', { coordinates });
+          await axiosInstance.post('/api/attendence/checkout', {
+            coordinates,
+            task,
+            time_doing_the_task: Number(taskTime),
+          });
           break;
         case 'startLeave':
           await axiosInstance.post('/api/attendence/leave/start', { coordinates });
@@ -164,7 +181,13 @@ function EmployeeAttendence() {
               loading={loading}
               variant="contained"
               color={mainBtn.color}
-              onClick={mainBtn.action}
+              onClick={() => {
+                if (mainBtn.label === t('check out')) {
+                  setOpenCheckoutDialog(true);
+                } else {
+                  mainBtn.action(); // check in
+                }
+              }}
               sx={{ mt: 1, minWidth: 150 }}
             >
               {mainBtn.label}
@@ -172,6 +195,53 @@ function EmployeeAttendence() {
           )}
         </Stack>
       </CustomPopover>
+      <Dialog open={openCheckoutDialog} onClose={() => setOpenCheckoutDialog(false)} fullWidth>
+        <DialogTitle>{t('check out')}</DialogTitle>
+
+        <DialogContent sx={{ mt: 1 }}>
+          <TextField
+            fullWidth
+            multiline   
+            rows={3} 
+            label={t("Activity")}
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            margin="normal"
+          />
+
+          <TextField
+            fullWidth
+            type="number"
+            label={t('Time Spent (hours)')}
+            value={taskTime}
+            onChange={(e) => setTaskTime(e.target.value)}
+            margin="normal"
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpenCheckoutDialog(false)}>{t('cancel')}</Button>
+
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            color="warning"
+            onClick={async () => {
+              if (!task || !taskTime) {
+                enqueueSnackbar(t('Please fill all fields'), { variant: 'warning' });
+                return;
+              }
+
+              await handleAction('checkout');
+              setOpenCheckoutDialog(false);
+              setTask('');
+              setTaskTime('');
+            }}
+          >
+            {t('save')}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
