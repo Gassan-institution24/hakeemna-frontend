@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { isValid } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
@@ -13,7 +14,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
 import { alpha, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -23,6 +26,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -35,12 +39,14 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
+  MobileRow,
   TableNoData,
   TableHeadCustom,
   TableSelectedAction,
@@ -73,6 +79,7 @@ export default function AppointmentsView({ employeeData }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { isMedLab } = useUSTypeGuard();
+  const [filters, setFilters] = useState(defaultFilters);
 
   const TABLE_HEAD = [
     { id: 'start_time', label: t('start time') },
@@ -85,10 +92,15 @@ export default function AppointmentsView({ employeeData }) {
       label: isMedLab ? t('medical analysis') : t('is coming'),
     },
     { id: 'work_group', label: t('work group') },
+    ...(filters?.status === 'finished' ? [{ id: 'duration', label: t('duration') }] : []),
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+  const isMobile = useMediaQuery('(max-width:899px)');
+  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
+  const [ddlRow, setDdlRow] = useState(null);
 
+  const ddlOpen = Boolean(ddlAnchorEl);
   const checkAcl = useAclGuard();
 
   const theme = useTheme();
@@ -110,7 +122,6 @@ export default function AppointmentsView({ employeeData }) {
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
-  const [filters, setFilters] = useState(defaultFilters);
   const [minToDelay, setMinToDelay] = useState(0);
 
   const { appointmentsData, refetch, lengths } = useGetEmployeeAppointments(
@@ -233,6 +244,17 @@ export default function AppointmentsView({ employeeData }) {
     },
     [router]
   );
+  const getPatientName = (row) => {
+    if (row.patient) {
+      return curLangAr ? row.patient.name_arabic : row.patient.name_english;
+    }
+    if (row.unit_service_patient) {
+      return curLangAr
+        ? row.unit_service_patient.name_arabic
+        : row.unit_service_patient.name_english;
+    }
+    return '-';
+  };
 
   const handleCancelRow = useCallback(
     async (row) => {
@@ -525,99 +547,399 @@ export default function AppointmentsView({ employeeData }) {
             />
           )}
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              // dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered?.map((row, idx) => row._id)
+          {isMobile ? (
+            <>
+              {dataFiltered
+                .slice(
+                  table.page * table.rowsPerPage,
+                  table.page * table.rowsPerPage + table.rowsPerPage
                 )
-              }
-              action={
-                checkAcl({
-                  category: 'work_group',
-                  subcategory: 'appointments',
-                  acl: 'update',
-                }) && (
-                  <>
-                    <Tooltip title="delay all">
-                      <IconButton color="info" onClick={confirmDelay.onTrue}>
-                        <Iconify icon="mdi:timer-sync" />
-                      </IconButton>
-                    </Tooltip>
+                .map((row) => (
+                  <MobileRow
+                    fields={[
+                      {
+                        label: t('start time'),
+                        value: (
+                          <ListItemText
+                            primary={
+                              isValid(new Date(row.start_time)) &&
+                              new Date(row.start_time).toLocaleTimeString(t('en-US'), {
+                                timeZone: row.unit_service?.country?.time_zone || 'Asia/Amman',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
+                            }
+                            secondary={
+                              isValid(new Date(row.start_time)) &&
+                              new Date(row.start_time).toLocaleDateString(t('en-US'), {
+                                timeZone: row.unit_service?.country?.time_zone || 'Asia/Amman',
+                              })
+                            }
+                            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                            secondaryTypographyProps={{
+                              mt: 0.5,
+                              component: 'span',
+                              typography: 'caption',
+                            }}
+                          />
+                        ),
+                      },
+                      {
+                        label: t('number'),
+                        value: row.appoint_number,
+                      },
+                      {
+                        label: t('appointment type'),
+                        value: curLangAr
+                          ? row.appointment_type?.name_arabic
+                          : row.appointment_type?.name_english,
+                      },
+                      {
+                        label: t('patient'),
+                        value: (
+                          <Box
+                            sx={{
+                              cursor: row.unit_service_patient ? 'pointer' : 'default',
+                              color: row.unit_service_patient ? '#3F54EB' : 'text.primary',
+                            }}
+                            onClick={() => {
+                              if (row.unit_service_patient) {
+                                router.push(
+                                  paths.employee.patients.info(row.unit_service_patient._id)
+                                );
+                              }
+                            }}
+                          >
+                            {getPatientName(row)}
+                          </Box>
+                        ),
+                      },
+                      {
+                        label: t('note'),
+                        value: row.note || '-',
+                      },
+                      {
+                        label: isMedLab ? t('medical analysis') : t('is coming'),
+                        value: !isMedLab ? (
+                          <Iconify
+                            icon={row.coming ? 'eva:checkmark-fill' : 'mingcute:close-line'}
+                            width={16}
+                          />
+                        ) : (
+                          <Iconify
+                            icon={
+                              row.medicalAnalysis ? 'eva:checkmark-fill' : 'mingcute:close-line'
+                            }
+                            width={16}
+                          />
+                        ),
+                      },
+                      {
+                        label: t('work group'),
+                        value: curLangAr
+                          ? row.work_group?.name_arabic
+                          : row.work_group?.name_english,
+                      },
+                      ...(filters.status === 'finished'
+                        ? [
+                            {
+                              label: t('duration'),
+                              value: row.entrance?.time_avareg || '-',
+                            },
+                          ]
+                        : []),
+                      {
+                        label: t('status'),
+                        value: (
+                          <Label
+                            variant="soft"
+                            color={
+                              (row.status === 'processing' && 'info') ||
+                              (row.status === 'arrived' && 'success') ||
+                              (row.status === 'late' && 'warning') ||
+                              (row.status === 'booked' && 'info') ||
+                              (row.status === 'finished' && 'success') ||
+                              (row.status === 'not arrived' && 'error') ||
+                              (row.status === 'canceled' && 'warning') ||
+                              (row.status === 'available' && 'secondary') ||
+                              (row.status === 'not booked' && 'secondary') ||
+                              'default'
+                            }
+                          >
+                            {t(row.status)}
+                          </Label>
+                        ),
+                      },
+                    ]}
+                    actions={[
+                      checkAcl({
+                        category: 'work_group',
+                        subcategory: 'appointments',
+                        acl: 'update',
+                      }) && {
+                        label: t('edit'),
+                        icon: 'fluent:edit-32-filled',
+                        onClick: () => {
+                          router.push(paths.employee.appointments.edit(row._id));
+                        },
+                      },
+
+                      ['finished'].includes(row.status) &&
+                        !row.invoiced &&
+                        checkAcl({
+                          category: 'work_group',
+                          subcategory: 'accounting',
+                          acl: 'create',
+                        }) && {
+                          label: t('make an invoice'),
+                          icon: 'hugeicons:invoice',
+                          color: 'info.main',
+                          onClick: () => {
+                            router.push(
+                              `${paths.unitservice.accounting.economicmovements.add}?appointment=${row._id}`
+                            );
+                          },
+                        },
+
+                      row.status === 'available' &&
+                        checkAcl({
+                          category: 'work_group',
+                          subcategory: 'appointments',
+                          acl: 'update',
+                        }) && {
+                          label: t('book manually'),
+                          icon: 'mdi:register',
+                          onClick: () => {
+                            handleBookRow(row);
+                          },
+                        },
+
+                      row.status === 'available' &&
+                        checkAcl({
+                          category: 'work_group',
+                          subcategory: 'appointments',
+                          acl: 'delete',
+                        }) && {
+                          label: t('cancel'),
+                          icon: 'mdi:bell-cancel',
+                          color: 'error.main',
+                          onClick: () => {
+                            handleCancelRow(row);
+                          },
+                        },
+
+                      row.status === 'processing' &&
+                        checkAcl({
+                          category: 'work_group',
+                          subcategory: 'appointments',
+                          acl: 'delete',
+                        }) && {
+                          label: t('end'),
+                          icon: 'mdi:done',
+                          color: 'success.main',
+                          onClick: () => {
+                            handleEndRow(row);
+                          },
+                        },
+
+                      row.status === 'canceled' &&
+                        checkAcl({
+                          category: 'work_group',
+                          subcategory: 'appointments',
+                          acl: 'update',
+                        }) && {
+                          label: t('uncancel'),
+                          icon: 'material-symbols-light:notifications-active-rounded',
+                          color: 'success.main',
+                          onClick: () => {
+                            handleUnCancelRow(row);
+                          },
+                        },
+
+                      checkAcl({
+                        category: 'work_group',
+                        subcategory: 'appointments',
+                        acl: 'update',
+                      }) &&
+                        !['finished', 'canceled', 'not booked'].includes(row.status) && {
+                          label: t('delay'),
+                          icon: 'mdi:timer-sync',
+                          color: 'warning.main',
+                          onClick: () => confirmDelay.onTrue(),
+                        },
+
+                      {
+                        label: t('DDL'),
+                        icon: 'carbon:data-quality-definition',
+                        onClick: (event) => {
+                          setDdlRow(row);
+                          setDdlAnchorEl(event.currentTarget);
+                        },
+                      },
+                    ].filter(Boolean)}
+                  />
+                ))}
+            </>
+          ) : (
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <TableSelectedAction
+                // dense={table.dense}
+                numSelected={table.selected.length}
+                rowCount={dataFiltered.length}
+                onSelectAllRows={(checked) =>
+                  table.onSelectAllRows(
+                    checked,
+                    dataFiltered?.map((row, idx) => row._id)
+                  )
+                }
+                action={
+                  checkAcl({
+                    category: 'work_group',
+                    subcategory: 'appointments',
+                    acl: 'update',
+                  }) && (
+                    <>
+                      <Tooltip title="delay all">
+                        <IconButton color="info" onClick={confirmDelay.onTrue}>
+                          <Iconify icon="mdi:timer-sync" />
+                        </IconButton>
+                      </Tooltip>
+                      {dataFiltered
+                        .filter((row) => table.selected.includes(row._id))
+                        .some((data) => data.status === 'canceled') ? (
+                        <Tooltip title="uncancel all">
+                          <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                            <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="cancel all">
+                          <IconButton color="error" onClick={confirm.onTrue}>
+                            <Iconify icon="mdi:bell-cancel" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </>
+                  )
+                }
+                color={
+                  checkAcl({
+                    category: 'work_group',
+                    subcategory: 'appointments',
+                    acl: 'update',
+                  }) &&
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
+                    ? 'primary'
+                    : 'error'
+                }
+              />
+              <Scrollbar>
+                <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                  <TableHeadCustom
+                    order={table.order}
+                    orderBy={table.orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={lengths?.length}
+                    numSelected={table.selected.length}
+                    onSort={table.onSort}
+                    onSelectAllRows={(checked) =>
+                      table.onSelectAllRows(
+                        checked,
+                        dataFiltered?.map((row, idx) => row._id)
+                      )
+                    }
+                  />
+
+                  <TableBody>
                     {dataFiltered
-                      .filter((row) => table.selected.includes(row._id))
-                      .some((data) => data.status === 'canceled') ? (
-                      <Tooltip title="uncancel all">
-                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
-                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="cancel all">
-                        <IconButton color="error" onClick={confirm.onTrue}>
-                          <Iconify icon="mdi:bell-cancel" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
-                )
-              }
-              color={
-                checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={lengths?.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered?.map((row, idx) => row._id)
-                    )
-                  }
-                />
+                      // .slice(
+                      //   table.page * table.rowsPerPage,
+                      //   table.page * table.rowsPerPage + table.rowsPerPage
+                      // )
+                      ?.map((row, idx) => (
+                        <AppointmentsRow
+                          refetch={refetch}
+                          key={idx}
+                          row={row}
+                          selected={table.selected.includes(row._id)}
+                          onSelectRow={() => table.onSelectRow(row._id)}
+                          onDelayRow={handleDelayRow}
+                          onCancelRow={() => handleCancelRow(row)}
+                          onBookAppoint={() => handleBookRow(row)}
+                          onEndAppoint={() => handleEndRow(row)}
+                          onUnCancelRow={() => handleUnCancelRow(row)}
+                        />
+                      ))}
 
-                <TableBody>
-                  {dataFiltered
-                    // .slice(
-                    //   table.page * table.rowsPerPage,
-                    //   table.page * table.rowsPerPage + table.rowsPerPage
-                    // )
-                    ?.map((row, idx) => (
-                      <AppointmentsRow
-                        refetch={refetch}
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onDelayRow={handleDelayRow}
-                        onCancelRow={() => handleCancelRow(row)}
-                        onBookAppoint={() => handleBookRow(row)}
-                        onEndAppoint={() => handleEndRow(row)}
-                        onUnCancelRow={() => handleUnCancelRow(row)}
-                      />
-                    ))}
+                    <TableNoData notFound={notFound} />
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </TableContainer>
+          )}
 
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
+          <CustomPopover
+            open={ddlOpen}
+            onClose={() => setDdlAnchorEl(null)}
+            anchorEl={ddlAnchorEl}
+            arrow="right-top"
+            sx={{
+              padding: 2,
+              fontSize: '14px',
+              minWidth: 260,
+            }}
+          >
+            {ddlRow && (
+              <>
+                <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.created_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_creation?.email}
+                </Box>
+
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.ip_address_user_creation}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.updated_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_modification?.email}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                  {ddlRow.ip_address_user_modification}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>
+                  {t('modifications no')}: {ddlRow.modifications_nums}
+                </Box>
+              </>
+            )}
+          </CustomPopover>
 
           <TablePaginationCustom
             count={lengths?.length}

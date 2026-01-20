@@ -1,29 +1,37 @@
 import io from 'socket.io-client';
-import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  Stack,
-  Button,
-  Container,
-  Typography,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  useMediaQuery,
-  Box,
-} from '@mui/material';
+import React, { useRef, useState, useEffect } from 'react';
+
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import {
+  Box,
+  List,
+  Stack,
+  Button,
+  Drawer,
+  Dialog,
+  ListItem,
+  Container,
+  Typography,
+  IconButton,
+  DialogTitle,
+  ListItemText,
+  useMediaQuery,
+  DialogActions,
+} from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
+
 import { fDate } from 'src/utils/format-time';
+
 import { useGetOneUSPatient } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import PageSelector from 'src/components/pageSelector';
 
 import PatientFile from '../patient-profile/patient-file';
@@ -43,7 +51,9 @@ import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 export default function PatientProfile() {
   const { id } = useParams();
+  const socketRef = useRef(null);
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { usPatientData } = useGetOneUSPatient(id, {
     populate: [
@@ -54,14 +64,74 @@ export default function PatientProfile() {
       { path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet' },
     ],
   });
-  
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const patientData = usPatientData.patient
-  ? { ...usPatientData.patient, ...usPatientData }
-  : usPatientData;
+    ? { ...usPatientData.patient, ...usPatientData }
+    : usPatientData;
+  console.log("patientData", patientData);
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const [calling, setCalling] = useState(false);
+  const [callData, setCallData] = useState(null);
+  const [dots, setDots] = useState('');
+
+  // check online
+  const [isPatientOnline, setIsPatientOnline] = useState(false);
+  // useEffect(() => {
+  //   if (patientData?.patient?.user?.online !== undefined) {
+  //     setIsPatientOnline(patientData.patient?.user.online);
+  //   }
+  // }, [patientData]);
+
+  useEffect(() => {
+    if (!patientData?.patient?._id) return;
+
+    socketRef.current = io(process.env.REACT_APP_API_URL);
+
+    socketRef.current.on('userOnlineStatus', ({ userId, online }) => {
+      if (userId === patientData?.patient?._id) {
+        setIsPatientOnline(online);
+      }
+    });
+
+    // eslint-disable-next-line consistent-return
+    return () => socketRef.current.disconnect();
+  }, [patientData?.patient?._id]);
+  useEffect(() => {
+    if (!callData?.uniqueRoom) return;
+
+    socketRef.current.on('call-accepted', ({ roomId }) => {
+      if (roomId !== callData.uniqueRoom) return;
+
+      setCalling(false);
+
+      window.open(
+        `/call?roomUrl=${encodeURIComponent(callData.roomUrl)}&userName=${encodeURIComponent(
+          user?.employee?.name_arabic || user?.employee?.name_english
+        )}&uniqueRoom=${encodeURIComponent(callData.uniqueRoom)}&role=host`,
+        '_blank'
+      );
+    });
+    socketRef.current.on('call-rejected', ({ roomId }) => {
+      if (roomId !== callData?.uniqueRoom) return;
+
+      setCalling(false);
+      setCallData(null);
+      enqueueSnackbar(curLangAr ? ' المريض رفض المكالمة' : ' The patient rejected the call', {
+        variant: 'warning',
+      });
+    });
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      socketRef.current.off('call-accepted');
+      socketRef.current.off('call-rejected');
+    };
+  }, [callData, user, enqueueSnackbar, curLangAr]);
 
   const [currentTab, setCurrentTab] = useState('communication');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -128,13 +198,16 @@ export default function PatientProfile() {
           room_name: uniqueRoom,
         }),
       });
-      window.open(
-        `/call?roomUrl=${encodeURIComponent(data.url)}&userName=${encodeURIComponent(user?.employee?.name_arabic || user?.employee?.name_english)}&uniqueRoom=${encodeURIComponent(uniqueRoom)}`,
-        '_blank'
-      );
-      const socket = io(process.env.REACT_APP_API_URL);
-      socket.emit('callUser', {
-        userId: patientData.user,
+
+      // add more data to url like role
+      setCalling(true);
+      setCallData({ roomUrl, uniqueRoom });
+      socketRef.current.emit('join-room', {
+        roomId: uniqueRoom,
+        role: 'host',
+      });
+      socketRef.current?.emit('callUser', {
+        userId: patientData.user._id,
         userName: curLangAr ? user?.employee?.name_arabic : user?.employee?.name_english,
         roomUrl,
         uniqueRoom,
@@ -143,6 +216,37 @@ export default function PatientProfile() {
       console.error('❌ handleCall error:', error);
     }
   };
+  useEffect(() => {
+    if (!calling) return;
+
+    const interval = setInterval(() => {
+      setDots((prev) => (prev.length === 3 ? '' : `${prev}.`));
+    }, 500);
+
+    // eslint-disable-next-line consistent-return
+    return () => clearInterval(interval);
+  }, [calling]);
+  useEffect(() => {
+    if (!callData?.uniqueRoom) return;
+
+    const socket = socketRef.current;
+
+    socket.on('call-ended', ({ roomId }) => {
+      if (roomId !== callData.uniqueRoom) return;
+
+      setCalling(false);
+      setCallData(null);
+
+      enqueueSnackbar(curLangAr ? '❌ تم إنهاء المكالمة' : '❌ The call has ended', {
+        variant: 'warning',
+      });
+    });
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      socket.off('call-ended');
+    };
+  }, [callData, enqueueSnackbar, curLangAr]);
 
   const renderTabContent = () => {
     switch (currentTab) {
@@ -275,12 +379,13 @@ export default function PatientProfile() {
               >
                 {t('edit')}
               </Button>
-              {patientData?.patient && (
+              {patientData?.patient?._id && (
                 <Button
                   sx={{ minWidth: 120 }}
                   variant="contained"
                   color="primary"
                   onClick={handleCall}
+                  disabled={!isPatientOnline}
                 >
                   {t('Call')}
                 </Button>
@@ -291,6 +396,40 @@ export default function PatientProfile() {
           <Box sx={{ px: { xs: 2, md: 10 }, pb: 4 }}>{renderTabContent()}</Box>
         </Stack>
       </Stack>
+      <Dialog open={calling}>
+        <DialogTitle>
+          📞 {curLangAr ? 'قيد الاتصال بالمريض' : 'Calling the patient'}
+          <span
+            style={{
+              width: 24,           // 👈 مساحة ثابتة
+              display: 'inline-block',
+              textAlign: 'left',
+              fontFamily: 'monospace',
+            }}
+          >
+            {dots}
+          </span>
+        </DialogTitle>
+
+        <DialogActions>
+          <Button
+            color="error"
+            onClick={() => {
+              socketRef.current.emit('cancel-call', {
+                roomId: callData?.uniqueRoom,
+              });
+
+              socketRef.current.emit('end-call-room', {
+                roomId: callData?.uniqueRoom,
+              });
+              setCalling(false);
+              setCallData(null);
+            }}
+          >
+            {curLangAr ? 'إلغاء' : 'Cancel'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

@@ -100,16 +100,11 @@ export default function MonthlyReportsView({ employee }) {
     reported: filters?.reported,
   });
 
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
 
   const dataFiltered = applyFilter({
     inputData: reportsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
-    dateError,
   });
 
   const canReset = !!filters?.name;
@@ -303,7 +298,7 @@ export default function MonthlyReportsView({ employee }) {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
+function applyFilter({ inputData, comparator, filters }) {
   const { name } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);

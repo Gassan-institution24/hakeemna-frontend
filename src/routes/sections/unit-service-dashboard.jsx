@@ -13,7 +13,7 @@ import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
-import { LoadingScreen } from 'src/components/loading-screen';  
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -127,12 +127,12 @@ const PaymentControlHomePage = lazy(
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
 const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
 const InvoicingHomePage = lazy(() => import('src/pages/unit-service/accounting/invoicing/home'));
-const ClaimHomePage = lazy(
-  () => import('src/pages/unit-service/accounting/claim/home')
+const ClaimHomePage = lazy(() => import('src/pages/unit-service/accounting/claim/home'));
+const ClaimCompanyPage = lazy(() => import('src/pages/unit-service/accounting/claim/companyPage'));
+const ClaimPatientVisitView = lazy(
+  () => import('src/pages/unit-service/accounting/claim/PatientVisitView')
 );
-const ClaimCompanyPage = lazy(() =>
-  import('src/pages/unit-service/accounting/claim/companyPage')
-);
+
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
 // PRODUCTS
@@ -426,11 +426,15 @@ export const unitServiceDashboardRoutes = [
             children: [
               {
                 index: true,
-                element: <ClaimHomePage />, 
+                element: <ClaimHomePage />,
               },
               {
                 path: ':companyId',
-                element: <ClaimCompanyPage />,  
+                element: <ClaimCompanyPage />,
+              },
+              {
+                path: 'user/:userId',
+                element: <ClaimPatientVisitView />,
               },
             ],
           },
