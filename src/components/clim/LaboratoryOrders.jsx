@@ -1,0 +1,227 @@
+import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import {
+  Box,
+  Grid,
+  List,
+  Paper,
+  TextField,
+  Typography,
+  ListItemText,
+  ListItemButton,
+} from '@mui/material';
+import { useLocales } from 'src/locales';
+
+const LAB_ORDERS_LIST = [
+  {
+    code: 'L001',
+    nameEn: 'Ferritin',
+    nameAr: 'الفيريتين',
+  },
+  {
+    code: 'L002',
+    nameEn: 'CBC Indices',
+    nameAr: 'مؤشرات CBC',
+  },
+  {
+    code: 'L003',
+    nameEn: 'CBC With Blood Film',
+    nameAr: 'CBC مع لطاخة دموية',
+  },
+  {
+    code: 'L004',
+    nameEn: 'CRP',
+    nameAr: 'البروتين المتفاعل C',
+  },
+  {
+    code: 'L005',
+    nameEn: 'KFT',
+    nameAr: 'وظائف الكلى',
+  },
+  {
+    code: 'L006',
+    nameEn: 'Vitamin B12',
+    nameAr: 'فيتامين B12',
+  },
+  {
+    code: 'L007',
+    nameEn: 'ESR',
+    nameAr: 'سرعة ترسيب الدم',
+  },
+];
+
+export default function LaboratoryOrders({ onDataChange }) {
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const [search, setSearch] = useState('');
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    if (onDataChange) {
+      onDataChange(orders.length > 0);
+    }
+  }, [orders, onDataChange]);
+
+  const filtered = LAB_ORDERS_LIST.filter((l) => {
+    const name = curLangAr ? l.nameAr : l.nameEn;
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const addOrder = (item) => {
+    if (orders.find((o) => o.code === item.code)) return;
+    setOrders((prev) => [
+      ...prev,
+      {
+        ...item,
+        frequency: 0,
+        howOften: curLangAr ? 'الآن' : 'NOW',
+      },
+    ]);
+  };
+
+  const removeOrder = (code) => {
+    setOrders((prev) => prev.filter((o) => o.code !== code));
+  };
+
+  return (
+    <Paper sx={{ p: 2, borderRadius: 2 }}>
+      <Grid container spacing={2}>
+        {/* LEFT */}
+        <Grid item xs={12} md={8}>
+          {/* ===== HEADER ===== */}
+          <Box
+            sx={{
+              mb: 1,
+              px: 2,
+              py: 1,
+              borderRadius: 1,
+              bgcolor: '#f4f6f8',
+              display: 'grid',
+              gridTemplateColumns: '1.8fr 2fr 1fr 1fr 80px',
+              fontWeight: 'bold',
+              fontSize: 14,
+            }}
+          >
+            <Typography>{curLangAr ? 'الخدمة' : 'Service'}</Typography>
+            <Typography>{curLangAr ? 'الطلب' : 'Order'}</Typography>
+            <Typography>{curLangAr ? 'العدد' : 'Frequency'}</Typography>
+            <Typography>{curLangAr ? 'التكرار' : 'How Often'}</Typography>
+            <Box />
+          </Box>
+
+          {/* ===== ROWS ===== */}
+          {orders.length === 0 ? (
+            <Box
+              sx={{
+                border: '2px dashed',
+                borderColor: 'divider',
+                borderRadius: 2,
+                minHeight: 180,
+                p: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  gridTemplateColumns: '1.5fr 2fr 1fr 1fr 80px',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'text.secondary',
+                }}
+              >
+                <DragIndicatorIcon fontSize="large" />
+                <Typography mt={1}>
+                  {curLangAr ? 'اسحب أو اختر طلب مختبر' : 'Drag or Select Laboratory Order'}
+                </Typography>
+              </Box>
+            </Box>
+          ) : (
+            orders.map((item, index) => (
+              <Box
+                key={item.code}
+                sx={{
+                  px: 2,
+                  py: 1.5,
+                  mb: 1,
+                  borderRadius: 1,
+                  bgcolor: '#eef5ff',
+                  display: 'grid',
+                  gridTemplateColumns: '1.8fr 2fr 1fr 1fr 80px',
+                  alignItems: 'center',
+                }}
+              >
+                {/* SERVICE */}
+                <Typography fontWeight="bold"> {index + 1}. {curLangAr ? 'مختبر' : 'Laboratory'}</Typography>
+
+                {/* ORDER */}
+                <Typography>{curLangAr ? item.nameAr : item.nameEn}</Typography>
+
+                {/* FREQUENCY */}
+                <Typography>{item.frequency}</Typography>
+
+                {/* HOW OFTEN */}
+                <Typography>{item.howOften}</Typography>
+
+                {/* ACTIONS */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: 'primary.main',
+                      cursor: 'pointer',
+                      fontSize: 14,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {curLangAr ? 'تعديل' : 'Edit'}
+                  </Typography>
+
+                  <DeleteIcon
+                    fontSize="small"
+                    sx={{ color: 'error.main', cursor: 'pointer' }}
+                    onClick={() => removeOrder(item.code)}
+                  />
+                </Box>
+              </Box>
+            ))
+          )}
+        </Grid>
+
+        {/* RIGHT */}
+        <Grid item xs={12} md={4}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder={curLangAr ? 'ابحث عن فحص مخبري' : 'Search laboratory order'}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <List dense sx={{ mt: 1, maxHeight: 220, overflow: 'auto' }}>
+            {filtered.map((item) => (
+              <ListItemButton key={item.code} onClick={() => addOrder(item)}>
+                <AddIcon fontSize="small" sx={{ mr: 1 }} />
+                <ListItemText primary={curLangAr ? item.nameAr : item.nameEn} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+}
+
+LaboratoryOrders.propTypes = {
+  onDataChange: PropTypes.func,
+};
