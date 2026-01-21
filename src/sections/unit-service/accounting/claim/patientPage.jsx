@@ -1,21 +1,32 @@
+import { useState } from 'react';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import {
   Box,
   Grid,
-  Paper,
-  Typography,
-  Button,
   Chip,
+  Paper,
+  Button,
+  Divider,
   Accordion,
+  Typography,
   AccordionSummary,
   AccordionDetails,
-  Divider,
 } from '@mui/material';
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import { useTranslate } from 'src/locales';
+
+import AddNotes from 'src/components/clim/AddNotes';
 import AddDiagnosis from 'src/components/clim/AddDiagnosis';
+import RadiologyOrders from 'src/components/clim/RadiologyOrders';
+import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
+import MedicationsOrders from 'src/components/clim/MedicationsOrders';
+import ClinicERProcedures from 'src/components/clim/ClinicERProcedures';
+import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
 
-
+/* ================= STATIC DATA ================= */
 const sections = [
   'Add Diagnosis',
   'Clinic / ER Procedures',
@@ -25,9 +36,37 @@ const sections = [
   'Physiotherapy',
   'Add Note / Attach Files',
 ];
+const indexToKey = {
+  0: 'diagnosis',
+  1: 'procedures',
+  2: 'lab',
+  3: 'radiology',
+  4: 'medications',
+  5: 'physiotherapy',
+  6: 'notes',
+};
+
 /* ================= ضيف رقم تلفون للمريض واحذف الكومنت هاض بس تخلص (يزن)  ================= */
 
 export default function PatientPage() {
+  const { t } = useTranslate();
+
+  const [sectionStatus, setSectionStatus] = useState({
+    diagnosis: false,
+    procedures: false,
+    lab: false,
+    radiology: false,
+    medications: false,
+    physiotherapy: false,
+    notes: false,
+  });
+  const updateSectionStatus = (key, hasData) => {
+    setSectionStatus((prev) => ({
+      ...prev,
+      [key]: hasData,
+    }));
+  };
+
   return (
     <Box sx={{ p: 3, bgcolor: '#f4f6f8', minHeight: '100vh' }}>
       {/* ================= HEADER ================= */}
@@ -35,33 +74,37 @@ export default function PatientPage() {
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
             <Typography fontWeight="bold" fontSize={18}>
-              Hakeemna Patient
+              {t('Hakeemna Patient')}
             </Typography>
-            <Typography color="text.secondary">24 Years • Male</Typography>
-            <Typography color="text.secondary">Patient No: 4000006200</Typography>
+
+            <Typography color="text.secondary">
+              {t('Age Gender', { age: 24, gender: t('Male') })}
+            </Typography>
+            <Typography color="text.secondary">{t('Patient No')}: 4000006200</Typography>
+            <Typography color="text.secondary">{t('Phone Number')}: 0791234567</Typography>
           </Grid>
 
           <Grid item xs={12} md={3}>
             <Typography fontSize={14}>
-              Member Card: <b>003256</b>
+              {t('Member Card')}: <b>003256</b>
             </Typography>
             <Typography fontSize={14}>
-              Deductible: <b>10.00 JOD</b>
+              {t('Deductible')}: <b>10.00 JOD</b>
             </Typography>
           </Grid>
 
           <Grid item xs={12} md={3} textAlign="right">
-            <Chip label="Eligible" color="success" sx={{ mr: 1 }} />
-            <Chip label="Pending" color="warning" />
+            <Chip label={t('Eligible')} color="success" sx={{ mr: 1 }} />
+            <Chip label={t('Pending')} color="warning" />
           </Grid>
         </Grid>
 
         <Divider sx={{ my: 2 }} />
 
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <Button variant="outlined">Patient Inquiry</Button>
-          <Button variant="outlined">Update Patient Data</Button>
-          <Button variant="contained">Recheck</Button>
+          <Button variant="outlined">{t('Patient Inquiry')}</Button>
+          <Button variant="outlined">{t('Update Patient Data')}</Button>
+          <Button variant="contained">{t('Recheck')}</Button>
         </Box>
       </Paper>
 
@@ -70,26 +113,80 @@ export default function PatientPage() {
         <Accordion key={section} sx={{ mb: 1, borderRadius: 2 }}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <MedicalInformationIcon sx={{ mr: 1, color: 'primary.main' }} />
-            <Typography fontWeight="bold">{section}</Typography>
+            <Typography fontWeight="bold" sx={{ flexGrow: 1 }}>
+              {t(section)}
+            </Typography>
+
+            {sectionStatus[indexToKey[index]] && <CheckCircleIcon sx={{ color: 'success.main' }} />}
           </AccordionSummary>
 
           <AccordionDetails>
-            {index === 0 ? (
-              <AddDiagnosis />
-            ) : (
+            {index === 0 && (
+              <AddDiagnosis onDataChange={(hasData) => updateSectionStatus('diagnosis', hasData)} />
+            )}
+
+            {index === 1 && (
+              <ClinicERProcedures
+                onDataChange={(hasData) => updateSectionStatus('procedures', hasData)}
+              />
+            )}
+            {index === 2 && (
+              <LaboratoryOrders onDataChange={(hasData) => updateSectionStatus('lab', hasData)} />
+            )}
+            {index === 3 && (
+              <RadiologyOrders
+                onDataChange={(hasData) => updateSectionStatus('radiology', hasData)}
+              />
+            )}
+
+            {index === 4 && (
+              <MedicationsOrders
+                onDataChange={(hasData) => updateSectionStatus('medications', hasData)}
+              />
+            )}
+
+            {index === 5 && (
+              <PhysiotherapyOrders
+                onDataChange={(hasData) => updateSectionStatus('physiotherapy', hasData)}
+              />
+            )}
+            {index === 6 && (
+              <AddNotes onDataChange={(hasData) => updateSectionStatus('notes', hasData)} />
+            )}
+
+            {/* {index > 5 && (
               <>
-                <Typography color="text.secondary">
-                  No data added yet.
-                </Typography>
+                <Typography color="text.secondary">No data added yet.</Typography>
 
                 <Button size="small" variant="contained" sx={{ mt: 2 }}>
                   Add {section}
                 </Button>
               </>
-            )}
+            )} */}
           </AccordionDetails>
         </Accordion>
       ))}
+      <Box
+        sx={{
+          mt: 4,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: 2,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button variant="text" color="error">
+          {t('Cancel Visit')}
+        </Button>
+
+        <Button variant="contained" color="primary">
+          {t('Send Orders')}
+        </Button>
+
+        <Button variant="contained" color="success">
+          {t('Close and Submit Claim')}
+        </Button>
+      </Box>
     </Box>
   );
 }
