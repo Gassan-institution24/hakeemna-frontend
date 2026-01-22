@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
+import React, { useRef, useState } from 'react';
 
 import { LoadingButton } from '@mui/lab';
 import {
@@ -9,6 +9,7 @@ import {
   Button,
   TextField,
   Typography,
+  IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -20,17 +21,33 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
 import { useGetMyLastAttendence } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 function EmployeeAttendence() {
   const { t } = useTranslate();
+  const lastTaskRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
   const { attendence, refetch } = useGetMyLastAttendence();
   const changingAttendence = usePopover();
   const [loading, setLoading] = useState(false);
   const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
-  const [task, setTask] = useState('');
-  const [taskTime, setTaskTime] = useState('');
+  // tasks state for check out
+  const [tasks, setTasks] = useState([{ activity: '', hours: '' }]);
+  // handle task change
+  const handleTaskChange = (index, field, value) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index][field] = value;
+    setTasks(updatedTasks);
+  };
+  // add new task
+  const addNewTask = () => {
+    setTasks([...tasks, { activity: '', hours: '' }]);
+  };
+  // remove task
+  const removeTask = (index) => {
+    setTasks(tasks.filter((_, i) => i !== index));
+  };
 
   const getCoordinates = () =>
     new Promise((resolve, reject) => {
@@ -78,8 +95,11 @@ function EmployeeAttendence() {
         case 'checkout':
           await axiosInstance.post('/api/attendence/checkout', {
             coordinates,
-            task,
-            time_doing_the_task: Number(taskTime),
+            // tasks data
+            tasks: tasks.map((task) => ({
+              activity: task.activity,
+              hours: Number(task.hours),
+            })),
           });
           break;
         case 'startLeave':
@@ -195,47 +215,121 @@ function EmployeeAttendence() {
           )}
         </Stack>
       </CustomPopover>
-      <Dialog open={openCheckoutDialog} onClose={() => setOpenCheckoutDialog(false)} fullWidth>
+      <Dialog
+        open={openCheckoutDialog}
+        onClose={() => {
+          setOpenCheckoutDialog(false);
+          setTasks([{ activity: '', hours: '' }]);
+        }}
+        fullWidth
+      >
         <DialogTitle>{t('check out')}</DialogTitle>
 
-        <DialogContent sx={{ mt: 1 }}>
-          <TextField
-            fullWidth
-            multiline   
-            rows={3} 
-            label={t("Activity")}
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            margin="normal"
-          />
+        <DialogContent
+          sx={{
+            mt: 1,
+            maxHeight: '60vh',
+            overflowY: 'auto',
+          }}
+        >
+          <Stack spacing={2}>
+            {tasks.map((item, index) => (
+              <Box
+                key={index}
+                ref={index === tasks.length - 1 ? lastTaskRef : null}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  position: 'relative',
+                  bgcolor: 'background.paper',
+                }}
+              >
+                {/* Header */}
+                <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
+                  {/*  Delete only for added activities */}
+                  {index > 0 && (
+                    <IconButton size="small" color="error" onClick={() => removeTask(index)}>
+                      <Iconify icon="mdi:trash-outline" />
+                    </IconButton>
+                  )}
+                </Stack>
 
-          <TextField
-            fullWidth
-            type="number"
-            label={t('Time Spent (hours)')}
-            value={taskTime}
-            onChange={(e) => setTaskTime(e.target.value)}
-            margin="normal"
-          />
+                {/* Activity text */}
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  label={t('Activity')}
+                  value={item.activity}
+                  onChange={(e) => handleTaskChange(index, 'activity', e.target.value)}
+                  margin="dense"
+                />
+
+                {/* Hours */}
+                <TextField
+                  fullWidth
+                  type="number"
+                  label={t('Time Spent (hours)')}
+                  value={item.hours}
+                  onChange={(e) => handleTaskChange(index, 'hours', e.target.value)}
+                  margin="dense"
+                />
+              </Box>
+            ))}
+
+            {/* ➕ Add new activity */}
+            <Button
+              variant="outlined"
+              startIcon={<Iconify icon="mdi:plus" />}
+              sx={{ alignSelf: 'flex-start' }}
+              onClick={() => {
+                addNewTask();
+
+                setTimeout(() => {
+                  lastTaskRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  });
+                }, 100);
+              }}
+            >
+              {t('Add another activity')}
+            </Button>
+          </Stack>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenCheckoutDialog(false)}>{t('cancel')}</Button>
+          <Button
+            onClick={() => {
+              setOpenCheckoutDialog(false);
+              setTasks([{ activity: '', hours: '' }]);
+            }}
+          >
+            {t('cancel')}
+          </Button>
 
           <LoadingButton
             loading={loading}
             variant="contained"
             color="warning"
             onClick={async () => {
-              if (!task || !taskTime) {
-                enqueueSnackbar(t('Please fill all fields'), { variant: 'warning' });
+              const hasEmptyFields = tasks.some(
+                (task) => !task.activity || !task.hours || Number(task.hours) <= 0
+              );
+
+              if (hasEmptyFields) {
+                enqueueSnackbar(t('Please fill all activities and hours'), {
+                  variant: 'warning',
+                });
                 return;
               }
 
               await handleAction('checkout');
               setOpenCheckoutDialog(false);
-              setTask('');
-              setTaskTime('');
+              setOpenCheckoutDialog(false);
+              setTasks([{ activity: '', hours: '' }]);
             }}
           >
             {t('save')}

@@ -152,22 +152,20 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
   const notFound = (!finalDisplayData.length && canReset) || !finalDisplayData.length;
   const [taskDialog, setTaskDialog] = useState({
     open: false,
-    task: '',
-    hours: null,
+    tasks: [],
   });
-  const openTaskDialog = (task, taskHours) => {
+
+  const openTaskDialog = (tasksArray) => {
     setTaskDialog({
       open: true,
-      task,
-      hours: taskHours,
+      tasks: Array.isArray(tasksArray) ? tasksArray : [],
     });
   };
 
   const closeTaskDialog = () => {
     setTaskDialog({
       open: false,
-      task: '',
-      hours: null,
+      tasks: [],
     });
   };
 
@@ -296,26 +294,41 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                     },
                     {
                       label: t('Activity'),
-                      value: (
-                        <>
-                          <Typography variant="body2">
-                            {row.task ? `${row.task.slice(0, 6)}...` : '-'}
-                          </Typography>
+                      value: (() => {
+                        // eslint-disable-next-line no-nested-ternary
+                        const normalizedTasks = row.tasks?.length
+                          ? row.tasks
+                          : row.task
+                            ? [{ activity: row.task, hours: row.time_doing_the_task }]
+                            : [];
 
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              cursor: 'pointer',
-                              color: 'primary.main',
-                              display: 'block',
-                              mt: 0.5,
-                            }}
-                            onClick={() => openTaskDialog(row.task, row.time_doing_the_task)}
-                          >
-                            {t('View')}
-                          </Typography>
-                        </>
-                      ),
+                        return (
+                          <>
+                            <Typography variant="body2">
+                              {normalizedTasks.length
+                                ? `${normalizedTasks[0].activity.slice(0, 6)}${
+                                    normalizedTasks.length > 1 ? '...' : ''
+                                  }`
+                                : '-'}
+                            </Typography>
+
+                            {normalizedTasks.length > 0 && (
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  cursor: 'pointer',
+                                  color: 'primary.main',
+                                  display: 'block',
+                                  mt: 0.5,
+                                }}
+                                onClick={() => openTaskDialog(normalizedTasks)}
+                              >
+                                {t('View')}
+                              </Typography>
+                            )}
+                          </>
+                        );
+                      })(),
                     },
                   ]}
                   actions={[
@@ -517,46 +530,48 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
         </DialogTitle>
 
         <DialogContent dividers sx={{ pt: 2 }}>
-          {/* Task Text */}
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 1.5,
-              bgcolor: 'background.neutral',
-              border: '1px solid',
-              borderColor: 'divider',
-            }}
-          >
-            <Typography
-              variant="body1"
-              sx={{
-                whiteSpace: 'pre-line',
-                wordBreak: 'break-word',
-                lineHeight: 1.7,
-              }}
-            >
-              {taskDialog.task || '-'}
-            </Typography>
-          </Box>
+          {taskDialog.tasks.length ? (
+            taskDialog.tasks.map((task, index) => (
+              <Box
+                key={task._id || index}
+                sx={{
+                  p: 2,
+                  mb: 2,
+                  borderRadius: 1.5,
+                  bgcolor: 'background.neutral',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    whiteSpace: 'pre-line',
+                    wordBreak: 'break-word',
+                    lineHeight: 1.7,
+                    fontWeight: 500,
+                  }}
+                >
+                  {task.activity}
+                </Typography>
 
-          {/* Hours */}
-          {typeof taskDialog.hours === 'number' && (
-            <Box
-              sx={{
-                mt: 2,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-              }}
-            >
-              <Iconify icon="mdi:clock-outline" width={20} />
-              <Typography variant="subtitle2" color="text.secondary">
-                {t('Time Spent (hours)')}:
-              </Typography>
-              <Typography variant="subtitle2" fontWeight={600}>
-                {taskDialog.hours} {t('hours')}
-              </Typography>
-            </Box>
+                <Box
+                  sx={{
+                    mt: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <Iconify icon="mdi:clock-outline" width={18} />
+                  <Typography variant="caption" color="text.secondary">
+                    {task.hours} {t('hours')}
+                  </Typography>
+                </Box>
+              </Box>
+            ))
+          ) : (
+            <Typography color="text.secondary">-</Typography>
           )}
         </DialogContent>
 

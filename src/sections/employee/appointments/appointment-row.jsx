@@ -198,18 +198,19 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
-        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem
-            lang="ar"
-            onClick={() => {
-              router.push(paths.employee.appointments.edit(_id));
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('edit')}
-          </MenuItem>
-        )}
+        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+          status !== 'finished' && (
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                router.push(paths.employee.appointments.edit(_id));
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="fluent:edit-32-filled" />
+              {t('edit')}
+            </MenuItem>
+          )}
         {['Processing', 'finished'].includes(status) &&
           !invoiced &&
           checkAcl({ category: 'work_group', subcategory: 'accounting', acl: 'create' }) && (
