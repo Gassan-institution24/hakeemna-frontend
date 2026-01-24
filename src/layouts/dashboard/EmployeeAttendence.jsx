@@ -315,17 +315,6 @@ function EmployeeAttendence() {
             variant="contained"
             color="warning"
             onClick={async () => {
-              const hasEmptyFields = tasks.some(
-                (task) => !task.activity || !task.hours || Number(task.hours) <= 0
-              );
-
-              if (hasEmptyFields) {
-                enqueueSnackbar(t('Please fill all activities and hours'), {
-                  variant: 'warning',
-                });
-                return;
-              }
-
               await handleAction('checkout');
               setOpenCheckoutDialog(false);
               setOpenCheckoutDialog(false);
