@@ -73,7 +73,7 @@ export default function AttendanceRow({
     const parts = fullAddress.split(',').map((p) => p.trim());
     return parts.slice(1, 4).join(', ');
   }
-// for old tasks and new tasks data
+  // for old tasks and new tasks data
   const normalizedTasks =
     // eslint-disable-next-line no-nested-ternary
     Array.isArray(tasks) && tasks.length
@@ -81,7 +81,6 @@ export default function AttendanceRow({
       : task
         ? [{ activity: task, hours: row.time_doing_the_task }]
         : [];
-
   useEffect(() => {
     if (row.check_in_coordinates?.coordinates?.length === 2) {
       const [lng, lat] = row.check_in_coordinates.coordinates;
@@ -121,10 +120,10 @@ export default function AttendanceRow({
         <TableCell align="center">{t(note)}</TableCell>
         {/* for tasks old and new data */}
         <TableCell align="center" sx={{ maxWidth: 220 }}>
-          {normalizedTasks.length ? (
+          {normalizedTasks[0]?.activity !== '' && normalizedTasks.length ? (
             <>
               <Typography variant="body2">
-                {normalizedTasks[0].activity.slice(0, 20)}
+                {normalizedTasks[0]?.activity.slice(0, 20)}
                 {normalizedTasks.length > 1 ? '...' : ''}
               </Typography>
 
@@ -142,7 +141,7 @@ export default function AttendanceRow({
               </Typography>
             </>
           ) : (
-            '-'
+            t('No Data')
           )}
         </TableCell>
 
