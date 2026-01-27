@@ -69,7 +69,6 @@ export default function PatientProfile() {
   const patientData = usPatientData.patient
     ? { ...usPatientData.patient, ...usPatientData }
     : usPatientData;
-  console.log("patientData", patientData);
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();

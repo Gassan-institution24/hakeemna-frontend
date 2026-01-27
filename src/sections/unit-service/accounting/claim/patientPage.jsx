@@ -46,7 +46,6 @@ const indexToKey = {
   6: 'notes',
 };
 
-/* ================= ضيف رقم تلفون للمريض واحذف الكومنت هاض بس تخلص (يزن)  ================= */
 
 export default function PatientPage() {
   const { t } = useTranslate();
@@ -153,16 +152,6 @@ export default function PatientPage() {
             {index === 6 && (
               <AddNotes onDataChange={(hasData) => updateSectionStatus('notes', hasData)} />
             )}
-
-            {/* {index > 5 && (
-              <>
-                <Typography color="text.secondary">No data added yet.</Typography>
-
-                <Button size="small" variant="contained" sx={{ mt: 2 }}>
-                  Add {section}
-                </Button>
-              </>
-            )} */}
           </AccordionDetails>
         </Accordion>
       ))}
