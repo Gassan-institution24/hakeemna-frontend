@@ -53,6 +53,8 @@ export default function AttendanceRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    tasks = [],
+    task,
   } = row;
   const { t } = useTranslate();
   const [open, setOpen] = useState(false);
@@ -71,6 +73,15 @@ export default function AttendanceRow({
     const parts = fullAddress.split(',').map((p) => p.trim());
     return parts.slice(1, 4).join(', ');
   }
+// for old tasks and new tasks data
+  const normalizedTasks =
+    // eslint-disable-next-line no-nested-ternary
+    Array.isArray(tasks) && tasks.length
+      ? tasks
+      : task
+        ? [{ activity: task, hours: row.time_doing_the_task }]
+        : [];
+
   useEffect(() => {
     if (row.check_in_coordinates?.coordinates?.length === 2) {
       const [lng, lat] = row.check_in_coordinates.coordinates;
@@ -108,10 +119,14 @@ export default function AttendanceRow({
         )}
 
         <TableCell align="center">{t(note)}</TableCell>
+        {/* for tasks old and new data */}
         <TableCell align="center" sx={{ maxWidth: 220 }}>
-          {row.task ? (
+          {normalizedTasks.length ? (
             <>
-              <Typography variant="body2">{row.task.slice(0, 6)}...</Typography>
+              <Typography variant="body2">
+                {normalizedTasks[0].activity.slice(0, 20)}
+                {normalizedTasks.length > 1 ? '...' : ''}
+              </Typography>
 
               <Typography
                 variant="caption"
@@ -121,7 +136,7 @@ export default function AttendanceRow({
                   display: 'block',
                   mt: 0.5,
                 }}
-                onClick={() => onViewTask(row.task, row.time_doing_the_task)}
+                onClick={() => onViewTask(normalizedTasks)}
               >
                 {t('View')}
               </Typography>
