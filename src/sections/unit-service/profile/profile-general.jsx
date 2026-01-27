@@ -105,6 +105,7 @@ export default function AccountGeneral({ unitServiceData }) {
     has_deduction: Yup.bool(),
     invoicing_system: Yup.bool(),
     claim_registered: Yup.boolean(),
+    show_on_homepage: Yup.bool(),
   });
 
   const defaultValues = {
@@ -143,6 +144,7 @@ export default function AccountGeneral({ unitServiceData }) {
     claim_registered: data?.claim_registered || false,
     claim_username: data?.claim_username || '',
     claim_password: '',
+    show_on_homepage: data?.show_on_homepage ?? true,
   };
 
   const methods = useForm({
@@ -290,16 +292,112 @@ export default function AccountGeneral({ unitServiceData }) {
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Divider />
               <Stack alignItems="flex-start" gap={1}>
+                <Typography variant="subtitle1">{t('visibility information')}</Typography>
+                <RHFCheckbox
+                  name="show_on_homepage"
+                  label={t('show on home page')}
+                  onChange={async () => {
+                    const newValue = !values.show_on_homepage;
+                    setValue('show_on_homepage', newValue);
+
+                    try {
+                      await axios.patch(
+                        endpoints.unit_services.one(
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                            ?.unit_service._id
+                        ),
+                        { show_on_homepage: newValue }
+                      );
+                      enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
+
+                      socket.emit('updated', {
+                        user,
+                        link: paths.unitservice.profile.root,
+                        msg: `update visibility information `,
+                      });
+
+                      refetch(); // optional if you want to re-fetch fresh data
+                    } catch (error) {
+                      enqueueSnackbar(
+                        curLangAr
+                          ? `${error.arabic_message}` || `${error.message}`
+                          : `${error.message}`,
+                        { variant: 'error' }
+                      );
+                    }
+                  }}
+                />
+              </Stack>
+
+              <Stack alignItems="flex-start" gap={1}>
                 <Typography variant="subtitle1">{t('financial information')}</Typography>
                 <RHFCheckbox
                   name="has_tax"
-                  onChange={() => setValue('has_tax', !values.has_tax)}
                   label={t('subject to sales tax')}
+                  onChange={async () => {
+                    const newValue = !values.has_tax;
+                    setValue('has_tax', newValue);
+
+                    try {
+                      await axios.patch(
+                        endpoints.unit_services.one(
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                            ?.unit_service._id
+                        ),
+                        { has_tax: newValue }
+                      );
+                      enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
+
+                      socket.emit('updated', {
+                        user,
+                        link: paths.unitservice.profile.root,
+                        msg: `updated sales tax status `,
+                      });
+
+                      refetch(); // optional if you want to re-fetch fresh data
+                    } catch (error) {
+                      enqueueSnackbar(
+                        curLangAr
+                          ? `${error.arabic_message}` || `${error.message}`
+                          : `${error.message}`,
+                        { variant: 'error' }
+                      );
+                    }
+                  }}
                 />
                 <RHFCheckbox
                   name="has_deduction"
-                  onChange={() => setValue('has_deduction', !values.has_deduction)}
                   label={t('subject to deductions - income tax or doctors syndicate')}
+                  onChange={async () => {
+                    const newValue = !values.has_deduction;
+                    setValue('has_deduction', newValue);
+
+                    try {
+                      await axios.patch(
+                        endpoints.unit_services.one(
+                          user?.employee?.employee_engagements?.[user?.employee.selected_engagement]
+                            ?.unit_service._id
+                        ),
+                        { has_deduction: newValue }
+                      );
+                      enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
+
+                      socket.emit('updated', {
+                        user,
+                        link: paths.unitservice.profile.root,
+                        msg: `updated has deduction status `,
+                      });
+
+                      refetch(); // optional if you want to re-fetch fresh data
+                    } catch (error) {
+                      enqueueSnackbar(
+                        curLangAr
+                          ? `${error.arabic_message}` || `${error.message}`
+                          : `${error.message}`,
+                        { variant: 'error' }
+                      );
+                    }
+                  }}
                 />
                 <RHFCheckbox
                   name="invoicing_system"
@@ -414,6 +512,9 @@ export default function AccountGeneral({ unitServiceData }) {
 
                 {values.claim_registered && (
                   <>
+                    <Typography variant="subtitle1">
+                      {t('Insurance Claim System Information')}
+                    </Typography>
                     <RHFTextField
                       variant="filled"
                       name="claim_username"

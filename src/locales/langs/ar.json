@@ -1704,6 +1704,9 @@
   "Cancel Visit": "إلغاء الزيارة",
   "Send Orders": "إرسال الطلبات",
   "Close and Submit Claim": "إغلاق وإرسال المطالبة",
+  "visibility information": "معلومات الظهور",
+  "show on home page": "إظهار في الصفحة الرئيسية",
+  "Insurance Claim System Information": "معلومات نظام مطالبات التأمين",
 
   "report": {
     "previewTitle": "معاينة التقرير الطبي",

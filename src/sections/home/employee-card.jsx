@@ -109,7 +109,9 @@ export default function EmployeeCard({ employee }) {
             backgroundColor: '#3CB099',
             borderRadius: 2,
             boxShadow: 3,
-            mx: { xs: 0, sm: 0, md: 15, lg: 15 },
+            maxWidth: '1400px',
+            mx: 'auto',
+            width: '100%',
           }}
         >
           <Stack

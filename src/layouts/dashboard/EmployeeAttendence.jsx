@@ -321,7 +321,7 @@ function EmployeeAttendence() {
               setTasks([{ activity: '', hours: '' }]);
             }}
           >
-            {t('save')}
+            {t('Save')}
           </LoadingButton>
         </DialogActions>
       </Dialog>
