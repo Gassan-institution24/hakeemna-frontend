@@ -80,11 +80,11 @@ export default function PatientProfile() {
 
   // check online
   const [isPatientOnline, setIsPatientOnline] = useState(false);
-  // useEffect(() => {
-  //   if (patientData?.patient?.user?.online !== undefined) {
-  //     setIsPatientOnline(patientData.patient?.user.online);
-  //   }
-  // }, [patientData]);
+  useEffect(() => {
+    if (patientData?.patient?.user?.online !== undefined) {
+      setIsPatientOnline(patientData.patient?.user.online);
+    }
+  }, [patientData]);
 
   useEffect(() => {
     if (!patientData?.patient?._id) return;
