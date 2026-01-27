@@ -102,6 +102,9 @@
   "Cancel Visit": "Cancel Visit",
   "Send Orders": "Send Orders",
   "Close and Submit Claim": "Close and Submit Claim",
+  "visibility_information": "Visibility Information",
+  "show_on_homepage": "Show on homepage",
+"Insurance Claim System Information": "Insurance Claim System Information", 
   "report": {
     "previewTitle": "Medical Report Preview",
     "doctorName": "Doctor Name",

@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import { useGetMonthlyReportInterval } from 'src/api/monthly_reports';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useParams } from 'react-router';
 
 import { useTranslate } from 'src/locales';
 
@@ -39,7 +40,7 @@ export default function AttendanceToolbar({
 }) {
   const { t } = useTranslate();
   const [error, setError] = useState('');
-
+  const { id } = useParams();
   const popover = usePopover();
   const report = useBoolean();
 
@@ -87,8 +88,9 @@ export default function AttendanceToolbar({
   const { data: intervalData } = useGetMonthlyReportInterval(filters.startDate && filters.endDate, {
     startDate: filters.startDate,
     endDate: filters.endDate,
+    id,
   });
-
+  
   return (
     <>
       <Stack direction="row" justifyContent="space-between">
@@ -149,9 +151,11 @@ export default function AttendanceToolbar({
           )}
         </Stack>
         <Stack justifyContent="center" mx={3}>
-          <Button variant="contained" color="primary" onClick={reportHandler}>
-            {monthly ? t('make yearly report') : t('make monthly report')}
-          </Button>
+          {id && (
+            <Button variant="contained" color="primary" onClick={reportHandler}>
+              {monthly ? t('make yearly report') : t('make monthly report')}
+            </Button>
+          )}
         </Stack>
       </Stack>
 

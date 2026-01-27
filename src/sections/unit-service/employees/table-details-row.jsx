@@ -13,7 +13,6 @@ import { fDate } from 'src/utils/format-time';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -110,16 +109,6 @@ export default function UnitServiceEmployeesRow({
       <TableCell align="center">
         <Iconify icon={adjust_schedual ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell>
-      <TableCell align="center">
-        <Label
-          variant="soft"
-          color={
-            (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
-          }
-        >
-          {t(status)}
-        </Label>
-      </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -141,31 +130,31 @@ export default function UnitServiceEmployeesRow({
       >
         {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onInactivate();
-                  popover.onClose();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
-              </MenuItem>
-            )
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onInactivate();
+                popover.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="ic:baseline-pause" />
+              {t('inactivate')}
+            </MenuItem>
+          )
           : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
-              <MenuItem
-                lang="ar"
-                onClick={() => {
-                  onActivate();
-                  popover.onClose();
-                }}
-                sx={{ color: 'success.main' }}
-              >
-                <Iconify icon="bi:play-fill" />
-                {t('activate')}
-              </MenuItem>
-            )}
+            <MenuItem
+              lang="ar"
+              onClick={() => {
+                onActivate();
+                popover.onClose();
+              }}
+              sx={{ color: 'success.main' }}
+            >
+              <Iconify icon="bi:play-fill" />
+              {t('activate')}
+            </MenuItem>
+          )}
         <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}

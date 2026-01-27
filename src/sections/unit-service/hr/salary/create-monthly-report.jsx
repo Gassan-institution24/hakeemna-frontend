@@ -86,6 +86,7 @@ export default function CreateMonthlyReport({
         try {
           const response = await axiosInstance.get(endpoints.monthlyReport.interval, {
             params: {
+              employee_engagement: id,
               startDate: start_date,
               endDate: end_date,
             },
@@ -102,7 +103,8 @@ export default function CreateMonthlyReport({
       // Clear interval data for monthly reports or when editing
       setYearlyIntervalData(null);
     }
-  }, [open, monthly, row, start_date, end_date]);
+  }, [open, monthly, row, start_date, end_date , id]);
+
 
   const defaultValues = {
     unit_service:
