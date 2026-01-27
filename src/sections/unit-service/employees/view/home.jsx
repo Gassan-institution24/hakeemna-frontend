@@ -79,7 +79,6 @@ export default function EmployeesTableView() {
     { id: 'visibility_online_appointment', label: t('visibility online appointment') },
     { id: 'visibility_US_page', label: t('visibility page') },
     { id: 'adjust_schedual', label: t('adjust schedual') },
-    { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
   const isMobile = useMediaQuery('(max-width:899px)');
@@ -528,17 +527,6 @@ export default function EmployeesTableView() {
                             }
                             width={16}
                           />
-                        ),
-                      },
-                      {
-                        label: t('status'),
-                        value: (
-                          <Label
-                            variant="soft"
-                            color={row.status === 'active' ? 'success' : 'error'}
-                          >
-                            {t(row.status)}
-                          </Label>
                         ),
                       },
                     ]}

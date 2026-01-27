@@ -22,7 +22,7 @@ export default function OurPartners() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { unitservicesData } = useGetActiveUnitservices({
-    select: 'name_english name_arabic company_logo status',
+    select: 'name_english name_arabic company_logo status show_on_homepage',
   });
   return (
     <Box
@@ -63,7 +63,7 @@ export default function OurPartners() {
         >
           {unitservicesData.map(
             (partner, index) =>
-              partner?.status === 'active' && (
+              partner?.status === 'active' && partner?.show_on_homepage && (
                 <SwiperSlide key={index}>
                   <Box
                     sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
@@ -72,7 +72,7 @@ export default function OurPartners() {
                     <Paper
                       elevation={3}
                       sx={{
-                        width: 240, // Set width
+                        // width: 240, // Set width
                         overflow: 'hidden',
                         borderRadius: 3,
                         textAlign: 'center',
@@ -93,7 +93,7 @@ export default function OurPartners() {
                       ) : (
                         <Box
                           sx={{ width: '100%', height: 170 }}
-                          src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                            src="https://hakeemna.com/static/media/3.dc47881bd18a4a9c90b3b7987f34e213.svg"
                           alt={partner.name_english}
                         />
                       )}
