@@ -672,6 +672,7 @@ export default function AppointmentsView({ employeeData }) {
                       },
                     ]}
                     actions={[
+                      row.status !== 'finished' &&
                       checkAcl({
                         category: 'work_group',
                         subcategory: 'appointments',
