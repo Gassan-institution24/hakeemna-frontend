@@ -30,8 +30,6 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const { enqueueSnackbar } = useSnackbar();
   const confirm = useBoolean();
   const popover = usePopover();
-  const { user } = useAuthContext();
-  console.log('row', user);
   const clickHandler = () => {
     if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
       router.push(paths.employee.patients.info(_id));
