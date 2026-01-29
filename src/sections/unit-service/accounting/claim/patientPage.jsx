@@ -25,6 +25,7 @@ import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
 import MedicationsOrders from 'src/components/clim/MedicationsOrders';
 import ClinicERProcedures from 'src/components/clim/ClinicERProcedures';
 import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
+import { submitClaim } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 const sections = [
@@ -46,7 +47,6 @@ const indexToKey = {
   6: 'notes',
 };
 
-
 export default function PatientPage() {
   const { t } = useTranslate();
 
@@ -64,6 +64,53 @@ export default function PatientPage() {
       ...prev,
       [key]: hasData,
     }));
+  };
+  const claimPayload = {
+    patient: {
+      nationalId: '4000026255',
+      memberId: '0000',
+    },
+
+    diagnosis: [
+      {
+        type: 'Principal',
+        code: 'V67.09',
+      },
+    ],
+
+    activities: [
+      {
+        type: '8',
+        code: 'JOR-99-05-006',
+        quantity: 1,
+        net: 413.1,
+        gross: 413.11,
+        observations: [
+          {
+            type: 'Text',
+            code: 'Activity-Description',
+            value: 'GENERAL PROCEDURE',
+            valueType: 'String',
+          },
+        ],
+      },
+    ],
+
+    totals: {
+      gross: 413.11,
+      net: 413.1,
+      patientShare: 0,
+    },
+  };
+  const handleSubmitClaim = async () => {
+    try {
+      const response = await submitClaim();
+      console.log('✅ Claim Sent:', response);
+      alert('Claim submitted successfully');
+    } catch (error) {
+      console.error('❌ Error:', error.response?.data || error.message);
+      alert('Failed to submit claim');
+    }
   };
 
   return (
@@ -171,8 +218,7 @@ export default function PatientPage() {
         <Button variant="contained" color="primary">
           {t('Send Orders')}
         </Button>
-
-        <Button variant="contained" color="success">
+        <Button variant="contained" color="success" onClick={handleSubmitClaim}>
           {t('Close and Submit Claim')}
         </Button>
       </Box>
