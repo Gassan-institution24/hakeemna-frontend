@@ -22,11 +22,17 @@ export default function CallDialog() {
   const { t } = useTranslation();
   const socketRef = useRef(null);
   const { user } = useAuthContext();
+
   useEffect(() => {
     if (socketRef.current) return;
 
     const socket = io(process.env.REACT_APP_API_URL);
     socketRef.current = socket;
+    if (user?._id) {
+      socket.emit('register-user', {
+        userId: user._id,
+      });
+    }
 
     socket.on('callUser', (data) => {
       if (!data.roomUrl) return;
@@ -37,7 +43,7 @@ export default function CallDialog() {
       setOpen(true);
       roomRef.current = data.uniqueRoom;
       callerSocketRef.current = data.from;
-      
+
       window._roomUrlTemp = data.roomUrl;
       window._roomNameTemp = data.uniqueRoom;
     });
@@ -66,7 +72,7 @@ export default function CallDialog() {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [  user?._id]);
   const handleAccept = () => {
     setOpen(false);
     // If call was canceled before acceptance, do nothing
@@ -91,10 +97,9 @@ export default function CallDialog() {
     setRoomUrl('');
     roomRef.current = '';
     socketRef.current.emit('call-rejected', {
-      to: callerSocketRef.current,   // socket.id تبع الدكتور
+      to: callerSocketRef.current, // socket.id تبع الدكتور
       roomId: window._roomNameTemp,
     });
-
   };
 
   return (

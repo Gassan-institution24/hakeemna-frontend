@@ -1,9 +1,12 @@
 import { useRef, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
+import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
 import { ListItemText } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -18,6 +21,7 @@ import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
+import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import CustomPopover from 'src/components/custom-popover';
 import {
@@ -29,6 +33,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { StatusOptions } from 'src/assets/data/status-options';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import EmployeeSalaryRow from './employee-salary-row';
@@ -39,6 +45,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -80,13 +87,15 @@ export default function EmployeeSalaryView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: employeesData.filter((one) => one.status === 'active'),
+    inputData: employeesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
   });
 
-  const canReset = !!filters?.name;
+  const canReset = !!filters?.name || filters.status !== 'active';
+
+  const { STATUS_OPTIONS } = StatusOptions();
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -111,7 +120,12 @@ export default function EmployeeSalaryView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
+  const handleFilterStatus = useCallback(
+    (event, newValue) => {
+      handleFilters('status', newValue);
+    },
+    [handleFilters]
+  );
   if (loading) {
     return <LoadingScreen />;
   }
@@ -119,6 +133,41 @@ export default function EmployeeSalaryView() {
   return (
     <Container maxWidth="xl">
       <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS.map((tab, idx) => (
+            <Tab
+              key={idx}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === 'active' && 'success') ||
+                    (tab.value === 'inactive' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && employeesData.length}
+                  {tab.value === 'active' &&
+                    employeesData.filter((employee) => employee.status === 'active').length}
+                  {tab.value === 'inactive' &&
+                    employeesData.filter((employee) => employee.status === 'inactive').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
         <TableDetailToolbar
           filters={filters}
           onFilters={handleFilters}
@@ -317,7 +366,7 @@ export default function EmployeeSalaryView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name } = filters;
+  const { name, status } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
@@ -358,6 +407,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
+  }
+
+  if (status !== 'all') {
+    inputData = inputData.filter((order) => order.status === status);
   }
 
   return inputData;
