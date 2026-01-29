@@ -41,7 +41,19 @@ export default function EmployeeSalaryRow({
 
   const popover = usePopover();
   const DDL = usePopover();
+const code = employee?.nationality?.code;
+const seq  = employee?.sequence_number;
 
+const codeResult =
+  // eslint-disable-next-line no-nested-ternary
+  code != null && seq != null
+    ? `${String(code).padStart(3, '0')}-${seq}`
+    // eslint-disable-next-line no-nested-ternary
+    : code != null
+      ? String(code).padStart(3, '0')
+      : seq != null
+        ? String(seq)
+        : '';
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell
@@ -52,7 +64,7 @@ export default function EmployeeSalaryRow({
         onClick={onViewRow}
         align="center"
       >
-        {String(employee?.nationality?.code).padStart(3, '0')}-{employee?.sequence_number}
+        {codeResult}
       </TableCell>
       <TableCell
         sx={{
