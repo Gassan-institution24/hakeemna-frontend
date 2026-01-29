@@ -56,6 +56,19 @@ export default function UnitServiceEmployeesRow({
 
   const popover = usePopover();
   const DDL = usePopover();
+const code = employee?.nationality?.code;
+const seq  = employee?.sequence_number;
+
+const codeResult =
+  // eslint-disable-next-line no-nested-ternary
+  code != null && seq != null
+    ? `${String(code).padStart(3, '0')}-${seq}`
+    // eslint-disable-next-line no-nested-ternary
+    : code != null
+      ? String(code).padStart(3, '0')
+      : seq != null
+        ? String(seq)
+        : '';
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -70,7 +83,7 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
+        {codeResult}
       </TableCell>
       <TableCell align="center">
         <Iconify
@@ -130,31 +143,31 @@ export default function UnitServiceEmployeesRow({
       >
         {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onInactivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="ic:baseline-pause" />
-              {t('inactivate')}
-            </MenuItem>
-          )
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                {t('inactivate')}
+              </MenuItem>
+            )
           : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onActivate();
-                popover.onClose();
-              }}
-              sx={{ color: 'success.main' }}
-            >
-              <Iconify icon="bi:play-fill" />
-              {t('activate')}
-            </MenuItem>
-          )}
+              <MenuItem
+                lang="ar"
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                {t('activate')}
+              </MenuItem>
+            )}
         <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}
