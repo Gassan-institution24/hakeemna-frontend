@@ -309,7 +309,7 @@ export default function EmployeeAttendence({ employee, setLastAttendance }) {
                                 ? `${normalizedTasks[0].activity.slice(0, 6)}${
                                     normalizedTasks.length > 1 ? '...' : ''
                                   }`
-                                : '-'}
+                                : t('No Data')}
                             </Typography>
 
                             {normalizedTasks.length > 0 && (

@@ -476,6 +476,7 @@ export const endpoints = {
     lastAttendance: '/api/attendence/mylast',
     one: (id) => (!id ? null : `/api/attendence/${id}`),
     employee: (id) => (!id ? null : `/api/attendence/employee/${id}`),
+    tasks: (id) => `/api/attendence/${id}/tasks`,
   },
   monthlyReport: {
     all: '/api/monthlyreport',

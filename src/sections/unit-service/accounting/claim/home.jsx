@@ -1,5 +1,8 @@
+import * as yup from 'yup';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import BusinessIcon from '@mui/icons-material/Business';
 import {
@@ -48,10 +51,28 @@ export default function ClaimHome() {
   const filteredInsuranceCos = insuranseCosData.filter((company) =>
     unitInsuranceCompanies.some((info) => info._id === company._id)
   );
+  const claimSchema = yup.object({
+    username: yup.string().trim().required('Username is required'),
+
+    password: yup
+      .string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters'),
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: yupResolver(claimSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [selectedCompany, setSelectedCompany] = useState(null);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -60,17 +81,18 @@ export default function ClaimHome() {
   const claimUsername = data?.claim_username;
   const claimPassword = data?.claim_password;
 
-  const handleSaveAndContinue = async () => {
+  const handleSaveAndContinue = async (formData) => {
     try {
       await axios.patch(endpoints.unit_services.one(unitServiceId), {
-        claim_username: username,
-        claim_password: password,
+        claim_username: formData.username.trim(),
+        claim_password: formData.password,
         claim_registered: true,
       });
 
       enqueueSnackbar(t('claim Save Success'), { variant: 'success' });
 
       setOpenDialog(false);
+      reset();
       navigate(paths.unitservice.accounting.claim.company(selectedCompany._id));
     } catch (error) {
       enqueueSnackbar(error?.message || t('claim Save Error'), {
@@ -135,9 +157,13 @@ export default function ClaimHome() {
                       if (!claimUsername || !claimPassword) {
                         setSelectedCompany(company);
                         setOpenDialog(true);
-                        setUsername(data?.claim_username || '');
-                        setPassword('');
+
+                        reset({
+                          username: data?.claim_username || '',
+                          password: '',
+                        });
                         refetch();
+
                         return;
                       }
                       router.push(paths.unitservice.accounting.claim.company(company._id));
@@ -171,7 +197,6 @@ export default function ClaimHome() {
           )}
         </Grid>
       </Box>
-
       {/* Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="xs">
         <DialogTitle>{t('claim System Credentials')}</DialogTitle>
@@ -181,28 +206,38 @@ export default function ClaimHome() {
             <TextField
               label={t('claim Username')}
               fullWidth
-              value={username}
               autoComplete="new-username"
-              onChange={(e) => setUsername(e.target.value)}
+              error={!!errors.username}
+              helperText={errors.username?.message}
+              {...register('username')}
             />
 
             <TextField
               label={t('claim Password')}
               type="password"
               fullWidth
-              value={password}
               autoComplete="new-password"
-              onChange={(e) => setPassword(e.target.value)}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              {...register('password')}
             />
           </Stack>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>{t('Cancel')}</Button>
+          <Button
+            onClick={() => {
+              setOpenDialog(false);
+              reset();
+            }}
+          >
+            {t('Cancel')}
+          </Button>
+
           <Button
             variant="contained"
-            onClick={handleSaveAndContinue}
-            disabled={!username || !password}
+            onClick={handleSubmit(handleSaveAndContinue)}
+            disabled={isSubmitting}
           >
             {t('continue')}
           </Button>
