@@ -102,7 +102,7 @@ export default function PatientTableView() {
       ...filtersToSend,
     }
   );
-
+// here adel
   const router = useRouter();
 
   const patientsDataWithColors = addWorkGroupColors(patientsData, 'hex');

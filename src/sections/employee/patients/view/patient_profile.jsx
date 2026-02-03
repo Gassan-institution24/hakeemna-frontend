@@ -81,10 +81,10 @@ export default function PatientProfile() {
   // check online
   const [isPatientOnline, setIsPatientOnline] = useState(false);
   useEffect(() => {
-    if (patientData?.patient?.user?.online !== undefined) {
-      setIsPatientOnline(patientData.patient?.user.online);
+    if (patientData?.patient?.online !== undefined) {
+      setIsPatientOnline(patientData.patient?.online);
     }
-  }, [patientData]);
+  }, [patientData?.patient?.online]);
 
   useEffect(() => {
     if (!patientData?.patient?._id) return;
@@ -359,9 +359,28 @@ export default function PatientProfile() {
               <IconButton onClick={() => router.back()}>
                 <Iconify icon="eva:arrow-ios-back-fill" />
               </IconButton>
-              <Typography variant="h6">
-                {curLangAr ? patientData?.name_arabic : patientData?.name_english}
-              </Typography>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Typography variant="h6">
+                  {curLangAr ? patientData?.name_arabic : patientData?.name_english}
+                </Typography>
+
+                {patientData?.patient?._id ? (
+                  <Iconify
+                    icon="eva:checkmark-circle-2-fill"
+                    width={20}
+                    sx={{ color: 'primary.main' }}
+                  />
+                ) : (
+                  <Typography
+                    variant="body2" 
+                    color="warning.main"
+                    fontWeight={600}
+                    sx={{ ml: 1 }} 
+                  >
+                    {curLangAr ? 'غير موثق' : 'Not Verified'}
+                  </Typography>
+                )}
+              </Stack>
             </Stack>
 
             <Stack direction="row" gap={2} flexWrap="wrap">
@@ -400,7 +419,7 @@ export default function PatientProfile() {
           📞 {curLangAr ? 'قيد الاتصال بالمريض' : 'Calling the patient'}
           <span
             style={{
-              width: 24,           // 👈 مساحة ثابتة
+              width: 24, // 👈 مساحة ثابتة
               display: 'inline-block',
               textAlign: 'left',
               fontFamily: 'monospace',

@@ -125,7 +125,22 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required(t('required field')),
-    email: Yup.string().required(t('required field')),
+    email: Yup.string()
+      .required(t('required field'))
+      .test(
+        'no-capital-letters',
+        t('Email must not contain capital letters'),
+        (value) => !value || !/[A-Z]/.test(value)
+      )
+      .test(
+        'valid-email',
+        t('Invalid email address'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z0-9]/.test(value) &&
+            !/\s/.test(value) &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+      ),
     title: Yup.string(),
     name_english: Yup.string()
       .required(t('required field'))
@@ -133,14 +148,34 @@ export default function AccountGeneral({ employeeData, refetch }) {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
-      }),
+      })
+      .test(
+        'valid-english-name',
+        t('English letters only'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z]/.test(value) &&
+            /^[A-Za-z\s.-]+$/.test(value) &&
+            /[A-Za-z]$/.test(value) &&
+            !/[-.]{2,}/.test(value))
+      ),
     name_arabic: Yup.string()
       .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
-      }),
+      })
+      .test(
+        'valid-arabic-name',
+        t('Arabic letters only'),
+        (value) =>
+          !value ||
+          (/^[\u0600-\u06FF]/.test(value) &&
+            /^[\u0600-\u06FF\s.-]+$/.test(value) &&
+            /[\u0600-\u06FF]$/.test(value) &&
+            !/[-.]{2,}/.test(value))
+      ),
     nationality: Yup.string().required(t('required field')),
     profrssion_practice_num: Yup.string(),
     identification_num: Yup.string(),
@@ -298,7 +333,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
-      setPage('information')
+      setPage('information');
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

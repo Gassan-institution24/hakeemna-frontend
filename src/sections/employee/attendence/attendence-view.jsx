@@ -1,14 +1,20 @@
+import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import Dialog from '@mui/material/Dialog';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
-import { Stack, Typography } from '@mui/material';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
+import { Stack, Button, TextField, Typography } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -45,6 +51,7 @@ const defaultFilters = {
 export default function MyAttendence() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const isMobile = useMediaQuery('(max-width: 899px)');
 
@@ -59,6 +66,7 @@ export default function MyAttendence() {
     { id: 'work_type', label: t('work type') },
     { id: 'leave', label: t('leave') },
     { id: 'note', label: t('note') },
+    { id: 'Activity', label: t('Activity') },
     { id: '' },
   ].filter(Boolean);
 
@@ -94,6 +102,65 @@ export default function MyAttendence() {
   const canReset = !!filters.startDate && !!filters.endDate;
 
   const notFound = (!attendence.length && canReset) || !attendence.length;
+  const [taskDialog, setTaskDialog] = useState({
+    open: false,
+    tasks: [],
+    attendanceId: null,
+  });
+
+  const openTaskDialog = (tasksArray, attendanceId) => {
+    setTaskDialog({
+      open: true,
+      attendanceId,
+      tasks: Array.isArray(tasksArray)
+        ? tasksArray.map((task) => ({ ...task })) // clone
+        : [{ activity: '', hours: '' }],
+    });
+  };
+
+  const closeTaskDialog = () => {
+    setTaskDialog({
+      open: false,
+      tasks: [],
+      attendanceId: null,
+    });
+  };
+  const handleTaskChange = (index, field, value) => {
+    setTaskDialog((prev) => {
+      const updated = [...prev.tasks];
+      updated[index][field] = value;
+      return { ...prev, tasks: updated };
+    });
+  };
+
+  const addTask = () => {
+    setTaskDialog((prev) => ({
+      ...prev,
+      tasks: [...prev.tasks, { activity: '', hours: '' }],
+    }));
+  };
+
+  const removeTask = (index) => {
+    setTaskDialog((prev) => ({
+      ...prev,
+      tasks: prev.tasks.filter((_, i) => i !== index),
+    }));
+  };
+  const saveTasks = async () => {
+    try {
+      await axiosInstance.patch(endpoints.attendence.tasks(taskDialog.attendanceId), {
+        tasks: taskDialog.tasks.map((task) => ({
+          activity: task.activity,
+          hours: Number(task.hours),
+        })),
+      });
+      enqueueSnackbar(t('Tasks updated successfully'), { variant: 'success' });
+      refetch();
+      closeTaskDialog();
+    } catch (error) {
+      enqueueSnackbar(t('Failed to update tasks'), { variant: 'error' });
+    }
+  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -172,12 +239,12 @@ export default function MyAttendence() {
           />
         )}
 
-
         {isMobile ? (
           <MyAttendenceMobile
             attendence={attendence}
             onDelete={deleteHandler}
             refetch={refetch}
+            onViewTask={(tasks, id) => openTaskDialog(tasks, id)}
           />
         ) : (
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -213,6 +280,7 @@ export default function MyAttendence() {
                       row={row}
                       refetch={refetch}
                       onDeleteRow={deleteHandler}
+                      onViewTask={(tasks, id) => openTaskDialog(tasks, id)}
                     />
                   ))}
 
@@ -234,6 +302,71 @@ export default function MyAttendence() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
+      <Dialog open={taskDialog.open} onClose={closeTaskDialog} fullWidth maxWidth="sm">
+        {/* Title */}
+        <DialogTitle
+          sx={{
+            fontWeight: 600,
+            pb: 1,
+          }}
+        >
+          {t('Activity details')}
+        </DialogTitle>
+
+        <DialogContent dividers>
+          <Stack spacing={2}>
+            {taskDialog.tasks.map((task, index) => (
+              <Box key={index} sx={{ p: 2, border: '1px solid', borderRadius: 2 }}>
+                {index > 0 && (
+                  <IconButton size="small" color="error" onClick={() => removeTask(index)}>
+                    <Iconify icon="mdi:trash-outline" />
+                  </IconButton>
+                )}
+
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  label={t('Activity')}
+                  value={task.activity}
+                  onChange={(e) => handleTaskChange(index, 'activity', e.target.value)}
+                  sx={{ mb: 1 }}
+                />
+
+                <TextField
+                  fullWidth
+                  type="number"
+                  label={t('hours')}
+                  value={task.hours}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    if (value === '' || Number(value) >= 0) {
+                      handleTaskChange(index, 'hours', value);
+                    }
+                  }}
+                />
+              </Box>
+            ))}
+
+            <Button
+              variant="outlined"
+              startIcon={<Iconify icon="mdi:plus" />}
+              sx={{ alignSelf: 'flex-start' }}
+              onClick={addTask}
+            >
+              {t('Add another activity')}
+            </Button>
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={closeTaskDialog}>{t('Cancel')}</Button>
+
+          <Button variant="contained" onClick={saveTasks}>
+            {t('Save')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

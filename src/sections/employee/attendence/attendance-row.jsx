@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -26,6 +27,7 @@ export default function AttendanceRow({
   onViewRow,
   onCancelRow,
   onDeleteRow,
+  onViewTask
 }) {
   const {
     date,
@@ -45,12 +47,20 @@ export default function AttendanceRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    tasks = [],
+    task,
   } = row;
   const { t } = useTranslate();
 
   const popover = usePopover();
   const DDL = usePopover();
-
+  const normalizedTasks =
+    // eslint-disable-next-line no-nested-ternary
+    Array.isArray(tasks) && tasks.length
+      ? tasks
+      : task
+        ? [{ activity: task, hours: row.time_doing_the_task }]
+        : [];
   return (
     <>
       <TableRow hover selected={selected}>
@@ -62,7 +72,31 @@ export default function AttendanceRow({
         <TableCell align="center">{t(work_type)}</TableCell>
         <TableCell align="center">{t(leave)}</TableCell>
         <TableCell align="center">{note}</TableCell>
+        <TableCell align="center" sx={{ maxWidth: 220 }}>
+          {normalizedTasks[0]?.activity !== '' && normalizedTasks.length ? (
+            <>
+              <Typography variant="body2">
+                {normalizedTasks[0]?.activity.slice(0, 20)}
+                {normalizedTasks.length > 1 ? '...' : ''}
+              </Typography>
 
+              <Typography
+                variant="caption"
+                sx={{
+                  cursor: 'pointer',
+                  color: 'primary.main',
+                  display: 'block',
+                  mt: 0.5,
+                }}
+                onClick={() => onViewTask(normalizedTasks, row._id)}
+              >
+                {t('edit')}
+              </Typography>
+            </>
+          ) : (
+            t('No Data')
+          )}
+        </TableCell>{' '}
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -133,6 +167,7 @@ AttendanceRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onViewTask: PropTypes.func,
   onViewRow: PropTypes.func,
   refetch: PropTypes.func,
   row: PropTypes.object,

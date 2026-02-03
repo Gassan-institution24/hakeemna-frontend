@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useState, useEffect, useCallback } from 'react';
 
 import { Container } from '@mui/system';
+import Tooltip from '@mui/material/Tooltip';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
   Tab,
@@ -266,6 +267,33 @@ export default function AppointmentsToday() {
     setCurrentTab(TABS[0].value);
     // eslint-disable-next-line
   }, []);
+  // check if the user can access rooms
+  const canAccessRooms = checkAcl({
+    category: 'unit_service',
+    subcategory: 'entrance',
+    acl: 'rooms',
+  });
+  // get the current room name
+  const getCurrentRoomName = (info) => {
+    if (!info?.entrance || !entrance?.length) return t('Reception');
+
+    const entranceRecord = entrance.find((e) => e._id === info.entrance);
+    if (!entranceRecord?.Next_activity) return t('Reception');
+
+    const room = roomsData.find((r) => r.activities?._id === entranceRecord.Next_activity);
+
+    return curLangAr ? room?.name_arabic : room?.name_english;
+  };
+  // check if the patient is in reception
+  const isInReception = (info) => {
+    const entranceRecord = entrance.find((e) => e._id === info.entrance);
+    if (!entranceRecord) return true;
+
+    return (
+      !entranceRecord.Next_activity ||
+      entranceRecord.Next_activity === receptionActivity?.activities?._id
+    );
+  };
 
   const renderOptions = (info) => {
     if (currentTab === 'three') {
@@ -298,39 +326,46 @@ export default function AppointmentsToday() {
 
     return info?.arrived ? (
       <>
-        <Select
-          sx={{
-            width: 150,
-            height: 35,
-          }}
-          value={selectedTitles[info._id] || ''}
-          displayEmpty
-          onChange={(e) => {
-            setSelectedTitles((prev) => ({
-              ...prev,
-              [info._id]: e.target.value,
-            }));
-            updateAppointmentactivity(e.target.value, info);
-          }}
-        >
-          <MenuItem value="" disabled sx={{ display: 'none' }}>
-            {t('Next activity')}
-          </MenuItem>
-          {roomsData.map((activity, index) =>
-            activity?.activities?.name_english !== receptionActivity?.activities?.name_english ? (
-              <MenuItem key={index} value={activity?.activities?._id}>
-                {curLangAr ? activity?.name_arabic : activity?.name_english}
-              </MenuItem>
-            ) : null
-          )}
-        </Select>
-        <Button
-          onClick={() => handleEndAppointment(info)}
-          variant="contained"
-          sx={{ bgcolor: 'error.main', ml: 2 }}
-        >
-          {t('end appointment')}
-        </Button>
+        {canAccessRooms ? (
+          <Select
+            sx={{ width: 150, height: 35 }}
+            value={selectedTitles[info._id] || ''}
+            displayEmpty
+            onChange={(e) => {
+              setSelectedTitles((prev) => ({
+                ...prev,
+                [info._id]: e.target.value,
+              }));
+              updateAppointmentactivity(e.target.value, info);
+            }}
+          >
+            <MenuItem value="" disabled sx={{ display: 'none' }}>
+              {t('Next activity')}
+            </MenuItem>
+
+            {roomsData.map(
+              (activity) =>
+                activity?.activities?.name_english !==
+                  receptionActivity?.activities?.name_english && (
+                  <MenuItem key={activity._id} value={activity?.activities?._id}>
+                    {curLangAr ? activity?.name_arabic : activity?.name_english}
+                  </MenuItem>
+                )
+            )}
+          </Select>
+        ) : (
+          <Label color="info">{getCurrentRoomName(info)}</Label>
+        )}
+
+        {isInReception(info) && (
+          <Button
+            onClick={() => handleEndAppointment(info)}
+            variant="contained"
+            sx={{ bgcolor: 'error.main', ml: 2 }}
+          >
+            {t('end appointment')}
+          </Button>
+        )}
       </>
     ) : (
       <IconButton sx={{ p: 2 }} onClick={() => dialogOnTrue(info?.patient)}>
@@ -546,7 +581,6 @@ export default function AppointmentsToday() {
                               </Box>
                             ),
                         },
-
                         {
                           label: t('Options'),
                           value: () => (
@@ -555,15 +589,6 @@ export default function AppointmentsToday() {
                                 display: 'flex',
                                 flexWrap: 'wrap',
                                 gap: 1,
-                                '& .MuiButton-root': {
-                                  minHeight: 30,
-                                  fontSize: '0.75rem',
-                                  px: 1,
-                                },
-                                '& .MuiSelect-select': {
-                                  py: 0.5,
-                                  fontSize: '0.75rem',
-                                },
                               }}
                             >
                               {renderOptions(info)}
@@ -610,18 +635,26 @@ export default function AppointmentsToday() {
                               <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
                               <TableCell>
                                 {' '}
-                                <Button
-                                  variant="text"
-                                  onClick={() => handlePatientClick(info)}
-                                  sx={{
-                                    textTransform: 'none',
-                                    padding: 0,
-                                    minWidth: 0,
-                                    color: 'primary.main',
-                                  }}
+                                <Tooltip
+                                  arrow
+                                  placement="top"
+                                  title={t(
+                                    "Click on the name to open the file and edit the patient's data"
+                                  )}
                                 >
-                                  {patientName}
-                                </Button>
+                                  <Button
+                                    variant="text"
+                                    onClick={() => handlePatientClick(info)}
+                                    sx={{
+                                      textTransform: 'none',
+                                      padding: 0,
+                                      minWidth: 0,
+                                      color: 'primary.main',
+                                    }}
+                                  >
+                                    {patientName}
+                                  </Button>
+                                </Tooltip>
                               </TableCell>
                               {currentTab !== 'three' && (
                                 <>

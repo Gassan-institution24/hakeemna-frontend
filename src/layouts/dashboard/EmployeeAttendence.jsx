@@ -273,7 +273,13 @@ function EmployeeAttendence() {
                   type="number"
                   label={t('Time Spent (hours)')}
                   value={item.hours}
-                  onChange={(e) => handleTaskChange(index, 'hours', e.target.value)}
+                  onChange={(e) => {
+                    // eslint-disable-next-line prefer-destructuring
+                    const value = e.target.value;
+                    if (value === '' || Number(value) >= 0) {
+                      handleTaskChange(index, 'hours', value);
+                    }
+                  }}
                   margin="dense"
                 />
               </Box>
