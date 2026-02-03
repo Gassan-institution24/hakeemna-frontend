@@ -125,7 +125,7 @@ export default function WaitingRoom() {
     <Card sx={{ mt: 3 }}>
       <Box sx={{ m: 2 }}>
         <Typography variant="" sx={{ color: 'text.secondary', mr: 3 }}>
-          {t('Select The room you are working in today')}{' '}
+          {t('Kindly select your assigned work area for today')}{' '}
         </Typography>
         <Select
           sx={{

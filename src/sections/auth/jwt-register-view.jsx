@@ -44,6 +44,7 @@ import FormProvider, {
   RHFDatePicker,
   RHFPhoneNumber,
 } from 'src/components/hook-form';
+import RHFPhoneNumberCustom from 'src/components/hook-form/rhfPhoneNumberCustom';
 
 // ----------------------------------------------------------------------
 
@@ -75,19 +76,45 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
   const RegisterSchema = Yup.object().shape({
     name_english: Yup.string()
       .required(t('required field'))
-      .test('at-least-three-words', t('must be at least three words'), (value) => {
-        if (!value) return false; // If no value, fail the validation
-        const words = value.trim().split(/\s+/); // Split the input by spaces
-        return words.length >= 3; // Return true if there are at least three words
-      }),
+      .test(
+        'only-english-letters',
+        t('English letters only'),
+        (value) => !value || /^[A-Za-z\s]+$/.test(value)
+      )
+      .test(
+        'three-words',
+        t('must be at least three words'),
+        (value) => !!value && value.trim().split(/\s+/).length >= 3 && !/\s$/.test(value) // ما ينتهي بسبيس
+      ),
+
     name_arabic: Yup.string()
       .required(t('required field'))
-      .test('at-least-three-words', t('must be at least three words'), (value) => {
-        if (!value) return false; // If no value, fail the validation
-        const words = value.trim().split(/\s+/); // Split the input by spaces
-        return words.length >= 3; // Return true if there are at least three words
-      }),
-    email: Yup.string().required(t('required field')).email(t('required field')),
+      .test(
+        'only-arabic-letters',
+        t('Arabic letters only'),
+        (value) => !value || /^[\u0600-\u06FF\s]+$/.test(value)
+      )
+      .test(
+        'three-words',
+        t('must be at least three words'),
+        (value) => !!value && value.trim().split(/\s+/).length >= 3 && !/\s$/.test(value)
+      ),
+    email: Yup.string()
+      .required(t('required field'))
+      .test(
+        'no-capital-letters',
+        t('Email must not contain capital letters'),
+        (value) => !value || !/[A-Z]/.test(value)
+      )
+      .test(
+        'valid-email',
+        t('Invalid email address'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z0-9]/.test(value) &&
+            !/\s/.test(value) &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+      ),
     password: Yup.string().required(t('required field')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), t('must be exactly as password')])
@@ -96,7 +123,11 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
     scanned_identification: Yup.mixed().required(t('required field')),
     mobile_num1: Yup.string()
       .required(t('required field'))
-      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
+      .test(
+        'is-valid-phone',
+        t('Invalid phone number'),
+        (value) => !!value && matchIsValidTel(value)
+      ),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.mixed()
       .required(t('required field'))
@@ -325,9 +356,11 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
             !values.nationality ||
             !values.country ||
             !values.city ||
-            !matchIsValidTel(values.mobile_num1) ||
+            !!methods.formState.errors.mobile_num1 ||
             !values.gender ||
-            !values.birth_date
+            !values.birth_date ||
+            !!methods.formState.errors.name_english ||
+            !!methods.formState.errors.name_arabic
           }
           color="inherit"
           size="large"
@@ -366,7 +399,9 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
             </Stack>
 
             <RHFTextField name="identification_num" label={t('Identification number')} />
-            <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+            {/* <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} /> */}
+            <RHFPhoneNumberCustom name="mobile_num1" label={t('mobile number')} />
+
             <RHFSelect name="nationality" label={t('nationality')}>
               {countriesData?.map((country, idx) => (
                 <MenuItem lang="ar" key={idx} value={country?._id}>
@@ -457,6 +492,7 @@ export default function JwtRegisterView({ afterSignUp, onSignIn, setPatientId })
               type="submit"
               variant="contained"
               loading={isSubmitting}
+              disabled={!!methods.formState.errors.email}
             >
               {t('create account')}
             </LoadingButton>

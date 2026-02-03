@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
+import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { Button, MenuItem } from '@mui/material';
@@ -45,26 +47,41 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
           {patient?.nationality?.code ? String(patient?.nationality?.code).padStart(3, '0') : ''}-
           {patient?.sequence_number}
         </TableCell>
-        <TableCell
-          sx={{
-            cursor: 'pointer',
-            color: '#3F54EB',
-          }}
-          onClick={clickHandler}
-          align="center"
-        >
-          {name_english || patient?.name_english}
+        <TableCell align="center">
+          <Tooltip
+            arrow
+            placement="top"
+            title={t("Click on the name to open the file and edit the patient's data")}
+          >
+            <Box
+              onClick={clickHandler}
+              sx={{
+                cursor: 'pointer',
+                color: '#3F54EB',
+              }}
+            >
+              {name_english || patient?.name_english}
+            </Box>
+          </Tooltip>
         </TableCell>
-        <TableCell
-          sx={{
-            cursor: 'pointer',
-            color: '#3F54EB',
-          }}
-          onClick={clickHandler}
-          align="center"
-        >
-          {name_arabic || patient?.name_arabic}
+        <TableCell align="center">
+          <Tooltip
+            arrow
+            placement="top"
+            title={t("Click on the name to open the file and edit the patient's data")}
+          >
+            <Box
+              onClick={clickHandler}
+              sx={{
+                cursor: 'pointer',
+                color: '#3F54EB',
+              }}
+            >
+              {name_arabic || patient?.name_arabic}
+            </Box>
+          </Tooltip>
         </TableCell>
+
         <TableCell
           sx={{
             cursor: 'pointer',

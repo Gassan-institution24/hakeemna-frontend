@@ -19,7 +19,7 @@ import FormProvider, {
   RHFTextField,
   RHFSelect,
   RHFPhoneNumber,
-  RHFDatePicker
+  RHFDatePicker,
 } from 'src/components/hook-form';
 import { MenuItem } from '@mui/material';
 import { useMemo, useEffect } from 'react';
@@ -51,47 +51,70 @@ export default function AddOnePatient() {
     }
   };
 
-  const NewPatientSchema = Yup.object().shape({
-    name_english: Yup.string(),
-    name_arabic: Yup.string(),
-    mobile_num1: Yup.string().required(t('required field')),
-    email: Yup.string().email(t('invalid email')),
-    gender: Yup.string()
-      .oneOf(['male', 'female', '',null], t('invalid gender')).nullable().transform((value) => value || null),
-    birth_date: Yup.date().nullable(),
-    marital_status: Yup.string()
-      .oneOf(['single', 'married', 'widowed', 'divorced', 'separated', '',null], t('invalid marital status')).nullable().transform((value) => value || null),
-    file_code: Yup.string(),
-    work_group: Yup.string().required(t('work group is required')),
-    identification_number: Yup.string(),
-    nationality: Yup.string().required(t('required field')),
-  }).test(
-    'at-least-one-name',
-    t('at least one name (Arabic or English) is required'),
-    (value) => {
+  const NewPatientSchema = Yup.object()
+    .shape({
+      name_english: Yup.string(),
+      name_arabic: Yup.string(),
+      mobile_num1: Yup.string().required(t('required field')),
+      email: Yup.string()
+        .email(t('invalid email'))
+        .test(
+          'no-capital-letters',
+          t('Email must not contain capital letters'),
+          (value) => !value || !/[A-Z]/.test(value)
+        )
+        .test(
+          'valid-email',
+          t('Invalid email address'),
+          (value) =>
+            !value ||
+            (/^[A-Za-z0-9]/.test(value) &&
+              !/\s/.test(value) &&
+              /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        ),
+      gender: Yup.string()
+        .oneOf(['male', 'female', '', null], t('invalid gender'))
+        .nullable()
+        .transform((value) => value || null),
+      birth_date: Yup.date().nullable(),
+      marital_status: Yup.string()
+        .oneOf(
+          ['single', 'married', 'widowed', 'divorced', 'separated', '', null],
+          t('invalid marital status')
+        )
+        .nullable()
+        .transform((value) => value || null),
+      file_code: Yup.string(),
+      work_group: Yup.string().required(t('work group is required')),
+      identification_number: Yup.string(),
+      nationality: Yup.string().required(t('required field')),
+    })
+    .test('at-least-one-name', t('at least one name (Arabic or English) is required'), (value) => {
       const { name_english, name_arabic } = value;
       return (name_english && name_english.trim()) || (name_arabic && name_arabic.trim());
-    }
+    });
+
+  const defaultWorkGroup = useMemo(
+    () => (workGroupsData?.length === 1 ? workGroupsData[0]?._id : ''),
+    [workGroupsData]
   );
 
-const defaultWorkGroup = useMemo(
-  () => workGroupsData?.length === 1 ? workGroupsData[0]?._id : '',
-  [workGroupsData]
-);
-
-  const defaultValues = useMemo(()=>({
-    name_english: '',
-    name_arabic: '',
-    mobile_num1: '',
-    email: '',
-    gender: '',
-    birth_date: null,
-    marital_status: '',
-    file_code: '',
-    work_group: defaultWorkGroup,
-    identification_number: '',
-    nationality: '',
-  }), [defaultWorkGroup]);
+  const defaultValues = useMemo(
+    () => ({
+      name_english: '',
+      name_arabic: '',
+      mobile_num1: '',
+      email: '',
+      gender: '',
+      birth_date: null,
+      marital_status: '',
+      file_code: '',
+      work_group: defaultWorkGroup,
+      identification_number: '',
+      nationality: '',
+    }),
+    [defaultWorkGroup]
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewPatientSchema),
@@ -112,8 +135,8 @@ const defaultWorkGroup = useMemo(
   }, [workGroupsData, setValue]);
 
   const onSubmit = async (data) => {
-    if(data.gender === null) delete data.gender;
-    if(data.marital_status === null) delete data.marital_status;
+    if (data.gender === null) delete data.gender;
+    if (data.marital_status === null) delete data.marital_status;
     try {
       await axiosInstance.post(endpoints.usPatients.addOne, [
         {
@@ -132,12 +155,11 @@ const defaultWorkGroup = useMemo(
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
-      <Card sx={{ pt: "24px",px:"40px",pb:"16px", width: '100%' }}>
-
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <Card sx={{ pt: '24px', px: '40px', pb: '16px', width: '100%' }}>
         <Typography variant="subtitle1" gutterBottom>
-            {t('work group')}
-          </Typography>
+          {t('work group')}
+        </Typography>
 
         <Box
           rowGap={3}
@@ -147,17 +169,23 @@ const defaultWorkGroup = useMemo(
             xs: 'repeat(1, 1fr)',
             sm: 'repeat(2, 1fr)',
           }}
-          sx={{ mb: 3 }}>
+          sx={{ mb: 3 }}
+        >
           {workGroupsData?.length === 1 ? (
-            <Typography variant="body1" sx={{ py: 1.5, px: 2, border: '1px solid #e0e0e0', borderRadius: 1, bgcolor: 'background.paper' }}>
+            <Typography
+              variant="body1"
+              sx={{
+                py: 1.5,
+                px: 2,
+                border: '1px solid #e0e0e0',
+                borderRadius: 1,
+                bgcolor: 'background.paper',
+              }}
+            >
               {curLangAr ? workGroupsData[0]?.name_arabic : workGroupsData[0]?.name_english}
             </Typography>
           ) : (
-            <RHFSelect
-              name="work_group"
-              SelectProps={{ native: false }}
-              sx={{ }}
-            >
+            <RHFSelect name="work_group" SelectProps={{ native: false }} sx={{}}>
               {workGroupsData?.map((group) => (
                 <MenuItem key={group._id} value={group._id}>
                   {curLangAr ? group.name_arabic : group.name_english}
@@ -166,7 +194,6 @@ const defaultWorkGroup = useMemo(
             </RHFSelect>
           )}
         </Box>
-
 
         <Typography variant="h6" gutterBottom>
           {t('patient information')}
@@ -181,27 +208,30 @@ const defaultWorkGroup = useMemo(
             sm: 'repeat(2, 1fr)',
           }}
         >
-
           <RHFTextField
             name="name_english"
             label={t('name english')}
-            onChange={(e) => {handleEnglishInputChange(e);}}
+            onChange={(e) => {
+              handleEnglishInputChange(e);
+            }}
           />
           <RHFTextField
             name="name_arabic"
             label={t('name arabic')}
-            onChange={(e) => {handleArabicInputChange(e);}}
+            onChange={(e) => {
+              handleArabicInputChange(e);
+            }}
           />
 
           <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
 
           <RHFSelect name="nationality" label={t('nationality')}>
-                  {countriesData?.map((option, idx) => (
-                    <MenuItem lang="ar" key={idx} value={option._id}>
-                      {curLangAr ? option?.name_arabic : option?.name_english}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
+            {countriesData?.map((option, idx) => (
+              <MenuItem lang="ar" key={idx} value={option._id}>
+                {curLangAr ? option?.name_arabic : option?.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
 
           <RHFTextField name="email" label={t('email')} />
 
@@ -240,11 +270,7 @@ const defaultWorkGroup = useMemo(
             InputLabelProps={{ shrink: true }}
           />
 
-          <RHFTextField
-            name="identification_number"
-            label={t('ID number')}
-          />
-
+          <RHFTextField name="identification_number" label={t('ID number')} />
         </Box>
 
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
