@@ -105,18 +105,38 @@ export default function JwtRegisterView() {
 
     em_name_english: Yup.string()
       .required(t('required field'))
-      .test('at-least-three-words', t('must be at least three words'), (value) => {
-        if (!value) return false; // If no value, fail the validation
-        const words = value.trim().split(/\s+/); // Split the input by spaces
-        return words.length >= 3; // Return true if there are at least three words
-      }),
+      .test(
+        'three-words',
+        t('must be at least three words'),
+        (value) => !!value && value.replace(/-/g, ' ').trim().split(/\s+/).length >= 3
+      )
+      .test(
+        'valid-english-name',
+        t('English letters only'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z]/.test(value) &&
+            /^[A-Za-z\s.-]+$/.test(value) &&
+            /[A-Za-z]$/.test(value) &&
+            !/[-.]{2,}/.test(value))
+      ),
     em_name_arabic: Yup.string()
       .required(t('required field'))
       .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
-      }),
+      })
+      .test(
+        'valid-arabic-name',
+        t('Arabic letters only'),
+        (value) =>
+          !value ||
+          (/^[\u0600-\u06FF]/.test(value) &&
+            /^[\u0600-\u06FF\s.-]+$/.test(value) &&
+            /[\u0600-\u06FF]$/.test(value) &&
+            !/[-.]{2,}/.test(value))
+      ),
     em_nationality: Yup.string().required(t('required field')),
     em_gender: Yup.string().required(t('required field')),
     em_identification_num: Yup.string()
@@ -134,7 +154,20 @@ export default function JwtRegisterView() {
 
     email: Yup.string()
       .required(t('required field'))
-      .email(t('Email must be a valid email address')),
+      .test(
+        'no-capital-letters',
+        t('Email must not contain capital letters'),
+        (value) => !value || !/[A-Z]/.test(value)
+      )
+      .test(
+        'valid-email',
+        t('Invalid email address'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z0-9]/.test(value) &&
+            !/\s/.test(value) &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+      ),
     password: Yup.string().min(8, `${t('must be at least')} 8`),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), t('must be exactly as password')], t('Passwords must match'))
@@ -267,21 +300,20 @@ export default function JwtRegisterView() {
         {curLangAr ? 'التسجيل كوحدة خدمة' : 'Sign up as unit of service'}
       </Typography>
       <Stack direction="column">
-       <Stack direction="row" spacing={0.5}>
-       <Typography sx={{ mb: 1 }} variant="body2">
-          {t('Already have an account?')}
-        </Typography>
-        <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          {t('login')}
-        </Link>
-       </Stack>
-  
-          <Typography variant="body2"  sx={{ mb: 3 }}>
-            <Link href="/" component={RouterLink} variant="subtitle2">
-              {t('Home page')}
-            </Link>
+        <Stack direction="row" spacing={0.5}>
+          <Typography sx={{ mb: 1 }} variant="body2">
+            {t('Already have an account?')}
           </Typography>
-   
+          <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
+            {t('login')}
+          </Link>
+        </Stack>
+
+        <Typography variant="body2" sx={{ mb: 3 }}>
+          <Link href="/" component={RouterLink} variant="subtitle2">
+            {t('Home page')}
+          </Link>
+        </Typography>
       </Stack>
       {values.US_type !== null && (
         <Stepper activeStep={page}>
@@ -658,7 +690,9 @@ export default function JwtRegisterView() {
           !values.em_phone ||
           !matchIsValidTel(values.em_phone) ||
           values.em_name_arabic.trim().split(/\s+/)?.length < 3 ||
-          values.em_name_english.trim().split(/\s+/)?.length < 3
+          values.em_name_english.trim().split(/\s+/)?.length < 3 ||
+          !!methods.formState.errors.em_name_arabic ||
+          !!methods.formState.errors.em_name_english
         }
         color="inherit"
         size="large"
@@ -768,7 +802,13 @@ export default function JwtRegisterView() {
       <LoadingButton
         sx={{ mt: 4 }}
         fullWidth
-        disabled={!values.email || !values.password || !values.confirmPassword || !agree}
+        disabled={
+          !values.email ||
+          !values.password ||
+          !values.confirmPassword ||
+          !agree ||
+          !!methods.formState.errors.email
+        }
         color="inherit"
         size="large"
         type="submit"

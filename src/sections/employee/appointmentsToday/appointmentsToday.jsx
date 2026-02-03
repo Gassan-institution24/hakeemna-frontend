@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useState, useEffect, useCallback } from 'react';
 
 import { Container } from '@mui/system';
+import Tooltip from '@mui/material/Tooltip';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
   Tab,
@@ -634,18 +635,26 @@ export default function AppointmentsToday() {
                               <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
                               <TableCell>
                                 {' '}
-                                <Button
-                                  variant="text"
-                                  onClick={() => handlePatientClick(info)}
-                                  sx={{
-                                    textTransform: 'none',
-                                    padding: 0,
-                                    minWidth: 0,
-                                    color: 'primary.main',
-                                  }}
+                                <Tooltip
+                                  arrow
+                                  placement="top"
+                                  title={t(
+                                    "Click on the name to open the file and edit the patient's data"
+                                  )}
                                 >
-                                  {patientName}
-                                </Button>
+                                  <Button
+                                    variant="text"
+                                    onClick={() => handlePatientClick(info)}
+                                    sx={{
+                                      textTransform: 'none',
+                                      padding: 0,
+                                      minWidth: 0,
+                                      color: 'primary.main',
+                                    }}
+                                  >
+                                    {patientName}
+                                  </Button>
+                                </Tooltip>
                               </TableCell>
                               {currentTab !== 'three' && (
                                 <>

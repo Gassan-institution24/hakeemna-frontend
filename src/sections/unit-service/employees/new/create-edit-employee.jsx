@@ -71,7 +71,22 @@ export default function TableNewEditForm({ currentTable }) {
     // unit_service: Yup.string().required(t('required field')),
     department: Yup.string().nullable(),
     employee_type: Yup.string().required(t('required field')),
-    email: Yup.string().required(t('required field')),
+    email: Yup.string()
+      .required(t('required field'))
+      .test(
+        'no-capital-letters',
+        t('Email must not contain capital letters'),
+        (value) => !value || !/[A-Z]/.test(value)
+      )
+      .test(
+        'valid-email',
+        t('Invalid email address'),
+        (value) =>
+          !value ||
+          (/^[A-Za-z0-9]/.test(value) &&
+            !/\s/.test(value) &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+      ),
     name_english: Yup.string().required(t('required field')),
     name_arabic: Yup.string().required(t('required field')),
     nationality: Yup.string().required(t('required field')),
