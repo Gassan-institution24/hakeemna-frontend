@@ -429,12 +429,12 @@ export const unitServiceDashboardRoutes = [
                 element: <ClaimHomePage />,
               },
               {
-                path: ':companyId',
-                element: <ClaimCompanyPage />,
+                path: 'visit/:visitId',
+                element: <ClaimPatientVisitView />,
               },
               {
-                path: 'user/:userId',
-                element: <ClaimPatientVisitView />,
+                path: 'company/:companyId',
+                element: <ClaimCompanyPage />,
               },
             ],
           },
