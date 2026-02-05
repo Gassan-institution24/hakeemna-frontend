@@ -127,10 +127,11 @@ export default function Rooms() {
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,
       });
-      const historyId = localStorage.getItem('historyId');
-      await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
-        end_time: new Date(),
-      });
+      // yazan here
+      // const historyId = localStorage.getItem('historyId');
+      // await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
+      //   end_time: new Date(),
+      // });
 
       enqueueSnackbar('appointment finished', { variant: 'success' });
       refetch();

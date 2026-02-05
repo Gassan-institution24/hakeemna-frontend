@@ -38,7 +38,7 @@ import {
   RHFSelect,
   RHFTextField,
   RHFRadioGroup,
-  RHFPhoneNumber,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
 
 import PatientsFound from './patients-found';
@@ -385,8 +385,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                 name="identification_num"
                 label={t('ID number')}
               />
-              <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
-              <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
+              <RHFPhoneNumberCustom name="mobile_num1" label={t('mobile number')} />
+              <RHFPhoneNumberCustom name="mobile_num2" label={t('alternative mobile number')} />
             </Box>
           )}
           {values.patientExist === 'exist' && (
@@ -427,8 +427,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="identification_num"
                   label={t('ID number')}
                 />
-                <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
-                <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
+                <RHFPhoneNumberCustom name="mobile_num1" label={t('mobile number')} />
+                <RHFPhoneNumberCustom name="mobile_num2" label={t('alternative mobile number')} />
               </Box>
             </>
           )}
@@ -469,8 +469,8 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                   name="name_arabic"
                   label={t('patient name in arabic')}
                 />
-                <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
-                <RHFPhoneNumber name="mobile_num2" label={t('alternative mobile number')} />
+                <RHFPhoneNumberCustom name="mobile_num1" label={t('mobile number')} />
+                <RHFPhoneNumberCustom name="mobile_num2" label={t('alternative mobile number')} />
                 <RHFSelect name="nationality" label={t('nationality')}>
                   {countriesData.map((option, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -478,7 +478,6 @@ export default function NewAppointmentDialog({ open, close, refetch }) {
                     </MenuItem>
                   ))}
                 </RHFSelect>
-               
               </Box>
               <RHFTextField multiline rows={2} name="note" label={t('note')} />
 
