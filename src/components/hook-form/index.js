@@ -15,3 +15,4 @@ export { default as RHFDatePicker } from './rhf-date-picker';
 export { default as RHFPatientCode } from './rhf-patient-code';
 export { default as RHFPhoneNumber } from './rhf-phone-number';
 export { default as RHFAutocomplete } from './rhf-autocomplete';
+export { default as RHFPhoneNumberCustom } from './rhfPhoneNumberCustom';

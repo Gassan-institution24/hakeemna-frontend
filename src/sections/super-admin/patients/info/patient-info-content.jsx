@@ -265,11 +265,14 @@ export default function PatientInfoContent({ patientData }) {
           value: blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-        {
-          label: 'Pregnant',
-          value: pregnant ? 'Yes' : 'No',
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
+        ...((gender === 'female') 
+      ? [
+          {
+            label: 'Pregnant',
+            value: pregnant ? 'Yes' : 'No',
+          },
+        ]
+      : []),
         {
           label: 'Height',
           value: height,

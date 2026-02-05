@@ -15,7 +15,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import FormProvider, { RHFTextField, RHFPhoneNumber } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFPhoneNumberCustom } from 'src/components/hook-form';
 
 import TrainingImage from './images/Video files-bro 1.svg';
 
@@ -144,7 +144,7 @@ export default function Training() {
           label={t('Email address')}
           InputLabelProps={{ style: { color: '#1F2C5C' } }}
         />
-        <RHFPhoneNumber
+        <RHFPhoneNumberCustom
           name="mobile_num1"
           label={t('Mobile number')}
           InputLabelProps={{ style: { color: '#1F2C5C' } }}

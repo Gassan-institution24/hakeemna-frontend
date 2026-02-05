@@ -22,8 +22,8 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
   RHFTextField,
-  RHFPhoneNumber,
   RHFUploadAvatar,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -219,7 +219,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 label={`${t('email')} :`}
                 value={values.email}
               />
-              <RHFPhoneNumber name="phone" label={t('phone number')} />
+              <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
             </Box>
           </Card>
         </Grid>
@@ -261,7 +261,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
-              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
+              <RHFPhoneNumberCustom name="mobile_num" label={t('alternative mobile number')} />
               {/* <RHFSelect
                 label={`${t('gender')} *`}
                 fullWidth

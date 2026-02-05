@@ -42,9 +42,8 @@ import FormProvider, {
   RHFUpload,
   RHFTextField,
   RHFDatePicker,
-  RHFPhoneNumber,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
-import RHFPhoneNumberCustom from 'src/components/hook-form/rhfPhoneNumberCustom';
 
 // ----------------------------------------------------------------------
 
