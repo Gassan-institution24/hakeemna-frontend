@@ -319,6 +319,14 @@ export default function ProfileHome() {
             : user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
+         ...(user?.patient?.gender === 'female' 
+      ? [
+          {
+            label: t('Pregnant'),
+            value: user?.patient?.pregnant ? t('Yes') : t('No'),
+          },
+        ]
+      : []),
         {
           label: t('Blood Type'),
           value: user?.patient?.blood_type,
@@ -370,66 +378,6 @@ export default function ProfileHome() {
       ))}
     </Stack>
   );
-
-  const renderMoreInfoPregnant = (
-    <Stack component={Card} spacing={4} sx={{ p: 3, marginBottom: 2 }}>
-      {[
-        {
-          label: t('Identification Number'),
-          value: user?.patient?.identification_num,
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: t('Blood Type'),
-          value: user?.patient?.blood_type,
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: t('Pregnant'),
-          value: user?.patient?.pregnant ? 'Yes' : 'No',
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: t('Marital Status'),
-          value: user?.patient?.marital_status,
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: t('Address'),
-          value: user?.patient?.address,
-          icon: <Iconify icon="solar:clock-circle-bold" />,
-        },
-        {
-          label: t('Mobile Number'),
-          value: user?.patient?.mobile_num1,
-          icon: <Iconify icon="carbon:skill-level-basic" />,
-        },
-        {
-          label: t('Second Mobile Number'),
-          value: user?.patient?.mobile_num2,
-          icon: <Iconify icon="carbon:skill-level-basic" />,
-        },
-      ].map((item, idx) => (
-        <>
-          {item.value && (
-            <Stack key={idx} spacing={2}>
-              <Typography sx={{ color: 'gray' }} variant="body1">
-                {item.label} : &nbsp;
-                <span
-                  style={{
-                    color: 'black',
-                    fontWeight: 600,
-                  }}
-                >
-                  {item.value}
-                </span>
-              </Typography>
-            </Stack>
-          )}
-        </>
-      ))}
-    </Stack>
-  );
   const renderCard = (
     <Stack
       component={Card}
@@ -468,7 +416,7 @@ export default function ProfileHome() {
       <Grid xs={12} md={4}>
         {renderOverview}
 
-        {user?.patient?.gender === 'female' ? [renderMoreInfoPregnant] : [renderMoreInfo]}
+        {renderMoreInfo}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 

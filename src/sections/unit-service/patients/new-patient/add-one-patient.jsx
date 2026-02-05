@@ -1,28 +1,32 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { MenuItem } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveWorkGroups, useGetCountries } from 'src/api';
-import { useSnackbar } from 'src/components/snackbar';
-import { useLocales, useTranslate } from 'src/locales';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetCountries, useGetUSActiveWorkGroups } from 'src/api';
+
+import { useSnackbar } from 'src/components/snackbar';
 // Components
 import FormProvider, {
-  RHFTextField,
   RHFSelect,
-  RHFPhoneNumber,
+  RHFTextField,
   RHFDatePicker,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
-import { MenuItem } from '@mui/material';
-import { useMemo, useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 export default function AddOnePatient() {
@@ -223,7 +227,7 @@ export default function AddOnePatient() {
             }}
           />
 
-          <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
+          <RHFPhoneNumberCustom name="mobile_num1" label={t('mobile number')} />
 
           <RHFSelect name="nationality" label={t('nationality')}>
             {countriesData?.map((option, idx) => (

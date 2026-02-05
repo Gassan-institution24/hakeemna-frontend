@@ -4,19 +4,29 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { Box, TextField, Typography, Autocomplete } from '@mui/material';
 
+import { useLocales } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
-export default function RHFPhoneNumberCustom({ name, helperText }) {
+export default function RHFPhoneNumberCustom({ name, helperText, label }) {
   const { control, setValue } = useFormContext();
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
+    const { currentLang } = useLocales();
+  
+  const curLangAr = currentLang.value === 'ar';
 
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all?fields=name,idd,cca2,flags')
       .then((res) => res.json())
       .then((data) => {
         const formatted = data
-          .filter((c) => c.idd?.root)
+          .filter(
+            (c) =>
+              c.idd?.root &&
+              c.cca2 !== 'IL' && // ❌ استبعاد إسرائيل
+              c.idd.root !== '+972' // ❌ أمان إضافي
+          )
           .map((c) => {
             const isUSA = c.cca2 === 'US';
 
@@ -27,22 +37,31 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
               callingCode: isUSA ? '+1' : c.idd.root + (c.idd.suffixes?.[0] || ''),
             };
           })
-
           .sort((a, b) => a.label.localeCompare(b.label));
 
         setCountries(formatted);
 
-        const jordan = formatted.find((c) => c.code === 'JO');
-        if (jordan) {
-          setSelectedCountry(jordan);
-          setValue(name, jordan.callingCode, {
-            shouldValidate: false,
-            shouldDirty: false,
-            shouldTouch: false,
-          });
+        const currentValue = control._formValues?.[name];
+
+        if (currentValue) {
+          const matchedCountry = formatted.find((c) => currentValue.startsWith(c.callingCode));
+
+          if (matchedCountry) {
+            setSelectedCountry(matchedCountry);
+          }
+        } else {
+          const jordan = formatted.find((c) => c.code === 'JO');
+          if (jordan) {
+            setSelectedCountry(jordan);
+            setValue(name, jordan.callingCode, {
+              shouldValidate: false,
+              shouldDirty: false,
+              shouldTouch: false,
+            });
+          }
         }
       });
-  }, [name, setValue]);
+  }, [name, setValue, control]);
 
   return (
     <Controller
@@ -78,7 +97,7 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
               </Box>
             )}
             renderInput={(params) => (
-              <TextField {...params} label="Country" placeholder="Search country" />
+              <TextField {...params} label={curLangAr ? 'مفتاح الدولة' : 'Key country'} placeholder="Search country" />
             )}
           />
 
@@ -86,8 +105,12 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
           <TextField
             {...field}
             fullWidth
+            label={label}
             dir="ltr"
             placeholder="7XXXXXXXX"
+            inputProps={{
+              inputMode: 'tel',
+            }}
             InputProps={{
               startAdornment: selectedCountry?.flag ? (
                 <Box
@@ -95,7 +118,7 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
                   src={selectedCountry.flag}
                   alt=""
                   sx={{
-                    width: 20,
+                    width: 25,
                     height: 14,
                     mr: 1,
                     borderRadius: '2px',
@@ -107,7 +130,10 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
             error={!!error}
             helperText={error ? error.message : helperText}
             onChange={(e) => {
-              const value = e.target.value.replace(/\s+/g, '');
+              let { value } = e.target;
+
+              value = value.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '');
+
               field.onChange(value);
             }}
           />
@@ -122,4 +148,5 @@ export default function RHFPhoneNumberCustom({ name, helperText }) {
 RHFPhoneNumberCustom.propTypes = {
   name: PropTypes.string.isRequired,
   helperText: PropTypes.node,
+  label: PropTypes.string,
 };

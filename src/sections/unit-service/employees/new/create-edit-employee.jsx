@@ -38,8 +38,8 @@ import FormProvider, {
   RHFSelect,
   RHFCheckbox,
   RHFTextField,
-  RHFPhoneNumber,
   RHFAutocomplete,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -246,7 +246,7 @@ export default function TableNewEditForm({ currentTable }) {
                 helperText={t('should include title like : doctor, specialist,...')}
               />
               <RHFTextField name="identification_num" label={t('National ID number')} />
-              <RHFPhoneNumber name="phone" label={t('phone number')} />
+              <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
 
               <RHFSelect name="nationality" label={t('nationality')}>
                 {countriesData.map((nationality, idx) => (

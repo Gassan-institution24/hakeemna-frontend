@@ -224,7 +224,9 @@ export default function PatientTableView() {
                       }}
                       onClick={() => clickHandler(row._id)}
                     >
-                      {row.name_english || row.patient?.name_english}
+                      {curLangAr
+                        ? row.name_arabic || row.name_english
+                        : row.name_english || row.name_arabic}
                     </Box>
                   }
                   fields={[
