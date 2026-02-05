@@ -52,8 +52,9 @@ import FormProvider, {
   RHFCheckbox,
   RHFTextField,
   RHFRadioGroup,
-  RHFPhoneNumber,
+  // RHFPhoneNumber,
   RHFAutocomplete,
+  RHFPhoneNumberCustom,
   // RHFSelectCard,
 } from 'src/components/hook-form';
 
@@ -652,7 +653,9 @@ export default function JwtRegisterView() {
           // </Tooltip>
         )}
         {/* <Tooltip placement="top" title="admin phone number"> */}
-        <RHFPhoneNumber name="em_phone" label={t('phone number')} />
+        {/* <RHFPhoneNumber name="em_phone" label={t('phone number')} /> */}
+        <RHFPhoneNumberCustom name="em_phone" label={t('phone number')} />
+
         <div>
           <RHFCheckbox
             sx={{ px: 2 }}

@@ -40,9 +40,9 @@ import FormProvider, {
   RHFEditor,
   RHFTextField,
   RHFUploadBox,
-  RHFPhoneNumber,
   RHFUploadAvatar,
   RHFAutocomplete,
+  RHFPhoneNumberCustom
 } from 'src/components/hook-form';
 
 import Others from './other';
@@ -500,8 +500,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField type="email" name="email" label={`${t('email')} :`} />
-              <RHFPhoneNumber name="phone" label={t('phone number')} />
-              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
+              <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
+              <RHFPhoneNumberCustom name="mobile_num" label={t('alternative mobile number')} />
               <RHFTextField name="identification_num" label={`${t('National ID number')} :`} />
               <RHFTextField
                 name="profrssion_practice_num"

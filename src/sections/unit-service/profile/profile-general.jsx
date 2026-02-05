@@ -35,9 +35,9 @@ import FormProvider, {
   RHFCheckbox,
   RHFTextField,
   RHFTimePicker,
-  RHFPhoneNumber,
   RHFAutocomplete,
   RHFUploadAvatar,
+  RHFPhoneNumberCustom,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -289,7 +289,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 label={`${t('institution email')} :`}
               />
 
-              <RHFPhoneNumber name="phone" label={t('phone number')} />
+              <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
               <Divider />
               <Stack alignItems="flex-start" gap={1}>
                 <Typography variant="subtitle1">{t('visibility information')}</Typography>
@@ -614,7 +614,7 @@ export default function AccountGeneral({ unitServiceData }) {
                   {t('Charity')}
                 </MenuItem>
               </TextField>
-              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
+              <RHFPhoneNumberCustom name="mobile_num" label={t('alternative mobile number')} />
               <RHFTextField name="web_page" label={t('webpage')} />
               <RHFTimePicker name="work_start_time" label={t('work start time')} />
               <RHFTimePicker
