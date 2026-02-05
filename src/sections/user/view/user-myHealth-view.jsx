@@ -13,6 +13,7 @@ import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Bmi from '../bmi';
+// import WhtRatio from '../whtRatio';
 import Instructions from '../instructions';
 import Mymentalhealth from '../mymentalhealth';
 
@@ -34,6 +35,11 @@ export default function MyHealth() {
       label: `${curLangAr ? 'مؤشر كتلة الجسم' : 'BMI'}`,
       icon: <Iconify icon="fluent:calculator-24-filled" width={24} />,
     },
+    // {
+    //   value: 'wht',
+    //   label: `${curLangAr ? 'نسبة الخصر للطول' : 'Waist to Height'}`,
+    //   icon: <Iconify icon="mdi:human-male-height" width={24} />,
+    // },
     {
       value: 'instructions',
       label: `${curLangAr ? 'ارشادات' : 'instructions'}`,
@@ -70,6 +76,7 @@ export default function MyHealth() {
       </Tabs>
 
       {currentTab === 'bmi' && <Bmi />}
+      {/* {currentTab === 'wht' && <WhtRatio />} */}
       {currentTab === 'mymentalhealth' && <Mymentalhealth />}
       {currentTab === 'instructions' && <Instructions />}
     </Container>
