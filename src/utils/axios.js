@@ -893,5 +893,6 @@ export const endpoints = {
   },
   clim: {
     all: '/api/claims',
+    register: '/visit/register',
   },
 };

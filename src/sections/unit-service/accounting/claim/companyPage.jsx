@@ -20,6 +20,8 @@ import { useTranslate } from 'src/locales';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { checkEligibility } from 'src/services/claimService';
+import { useNavigate } from 'react-router-dom';
 
 const DATA = [
   {
@@ -47,8 +49,7 @@ export default function CompanyPage() {
   const [results, setResults] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
-   const router = useRouter();
- 
+  const navigate = useNavigate();
 
   const { t } = useTranslate();
 
@@ -69,21 +70,30 @@ export default function CompanyPage() {
     setResults(filtered);
   }, [search]);
 
-  const handleCreate = (user) => {
-    console.log('create', user);
-    enqueueSnackbar('Create clicked', { variant: 'success' });
-  };
+  const handleCreate = async (user) => {
+    try {
+      const eligibilityRes = await checkEligibility({
+        patientId: '4000026255',
+        memberId: '0000',
+        payerId: 'JOR-I-000334',
+        encounterType: 1,
+      });
 
-  const handleView = (user) => {
-    enqueueSnackbar('View clicked', { variant: 'info' });
-    router.push(paths.unitservice.accounting.claim.patientVisitView(user._id));
+      const visitId = eligibilityRes?.response?.VisitID || 'ELG0001';
+
+      navigate(paths.unitservice.accounting.claim.patientVisitView(visitId));
+
+      enqueueSnackbar('Visit created successfully', { variant: 'success' });
+    } catch (error) {
+      enqueueSnackbar('Failed to create visit', { variant: 'error' });
+    }
   };
 
   return (
     <Box sx={{ py: 5 }}>
       <Container maxWidth={false} sx={{ px: 3 }}>
         {/* Search */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 ,bgcolor:'#f4f6f8'}}>
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 3, bgcolor: '#f4f6f8' }}>
           <TextField
             fullWidth
             label={t('search Users')}
@@ -124,20 +134,8 @@ export default function CompanyPage() {
                           onClick={() => handleCreate(user)}
                           sx={{ mr: 1 }}
                         >
-                          Create
+                          Create Visit
                         </Button>
-
-                        {/* View (ONLY if visitBefore !== true) */}
-                        {!user.visitBefore && (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            sx={{ color: 'orange', borderColor: 'orange' }}
-                            onClick={() => handleView(user)}
-                          >
-                            View
-                          </Button>
-                        )}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
+import { useParams } from 'react-router-dom';
 
 import AddNotes from 'src/components/clim/AddNotes';
 import AddDiagnosis from 'src/components/clim/AddDiagnosis';
@@ -25,7 +26,10 @@ import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
 import MedicationsOrders from 'src/components/clim/MedicationsOrders';
 import ClinicERProcedures from 'src/components/clim/ClinicERProcedures';
 import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
-import { submitClaim } from 'src/services/claimService';
+import {
+  createEncounter,
+  getNewAuthorizations,
+} from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 const sections = [
@@ -49,6 +53,29 @@ const indexToKey = {
 
 export default function PatientPage() {
   const { t } = useTranslate();
+  const [visitData, setVisitData] = useState(null);
+
+  const { visitId } = useParams();
+
+  useEffect(() => {
+    if (!visitId) return;
+
+    const startEncounter = async () => {
+      try {
+        const response = await createEncounter({
+          visitId,
+          encounterType: 1,
+          providerId: 'PROV001',
+        });
+
+        setVisitData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    startEncounter();
+  }, [visitId]);
 
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
@@ -104,11 +131,12 @@ export default function PatientPage() {
   };
   const handleSubmitClaim = async () => {
     try {
-      const response = await submitClaim();
-      console.log('✅ Claim Sent:', response);
+      await getNewAuthorizations({
+        claimPayload,
+      });
+
       alert('Claim submitted successfully');
     } catch (error) {
-      console.error('❌ Error:', error.response?.data || error.message);
       alert('Failed to submit claim');
     }
   };
@@ -126,7 +154,8 @@ export default function PatientPage() {
             <Typography color="text.secondary">
               {t('Age Gender', { age: 24, gender: t('Male') })}
             </Typography>
-            <Typography color="text.secondary">{t('Patient No')}: 4000006200</Typography>
+            <Typography>Patient No: {visitData?.patientId}</Typography>
+
             <Typography color="text.secondary">{t('Phone Number')}: 0791234567</Typography>
           </Grid>
 
@@ -139,8 +168,12 @@ export default function PatientPage() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={3} textAlign="right">
-            <Chip label={t('Eligible')} color="success" sx={{ mr: 1 }} />
+          <Grid item xs={12} md={3} gap={2} textAlign="right">
+            <Chip
+              label={visitData?.encounter?.eligibility?.status || 'Checking...'}
+              color={visitData?.encounter?.eligibilityStatus === 'ELIGIBLE' ? 'success' : 'warning'}
+            />
+
             <Chip label={t('Pending')} color="warning" />
           </Grid>
         </Grid>
