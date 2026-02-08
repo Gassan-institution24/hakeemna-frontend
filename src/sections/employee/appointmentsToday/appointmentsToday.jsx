@@ -90,6 +90,10 @@ export default function AppointmentsToday() {
   const { roomsData } = useGetUSRooms(unitServiceId);
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
   const receptionActivity = roomsData.find((activity) => activity?.name_english === 'Reception');
+  const roomsEntranceOnly = entrance?.filter(
+    (e) => e?.Next_activity && e?.Next_activity !== receptionActivity?.activities?._id
+  );
+
   const TABS = [
     checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) && {
       value: 'one',
@@ -102,7 +106,7 @@ export default function AppointmentsToday() {
       value: 'two',
       label: t('Rooms'),
       color: 'warning',
-      count: entrance?.length,
+      count: roomsEntranceOnly?.length,
       data: entrance,
     },
     checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' }) && {
@@ -117,7 +121,6 @@ export default function AppointmentsToday() {
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
-  const savedHistoryId = localStorage.getItem('historyId');
   const startAppointment = async (info) => {
     try {
       const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
@@ -147,7 +150,7 @@ export default function AppointmentsToday() {
 
       const historyId = historyRes.data?._id;
       if (historyId) {
-        localStorage.setItem('historyId', historyId);
+        localStorage.setItem(`historyId${info._id}`, historyId);
       }
       const dataToUpdate = {
         started: true,
@@ -187,6 +190,8 @@ export default function AppointmentsToday() {
 
   const updateAppointmentactivity = async (activityId, info) => {
     try {
+      const savedHistoryId = localStorage.getItem(`historyId${info._id}`);
+
       if (!info?.entrance) {
         enqueueSnackbar(t('Appointment must be started first before selecting next activity'), {
           variant: 'error',
@@ -200,7 +205,6 @@ export default function AppointmentsToday() {
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, {
         activityhappend: true,
       });
-      console.log('update activity', activityId);
       await axiosInstance.patch(endpoints.history.one(savedHistoryId), {
         activity_id: activityId,
         end_time: new Date().toISOString(),
@@ -208,7 +212,10 @@ export default function AppointmentsToday() {
       });
       refetch();
       refetch2();
-      setCurrentTab('two');
+      if (canAccessRooms) {
+        setCurrentTab('two');
+      }
+
       enqueueSnackbar(t('Appointment started'), { variant: 'success' });
     } catch (error) {
       console.error(error.message);
@@ -235,6 +242,8 @@ export default function AppointmentsToday() {
 
   const handleEndAppointment = async (appointmentdata) => {
     try {
+      const savedHistoryId = localStorage.getItem(`historyId${appointmentdata._id}`);
+
       await axiosInstance.patch(`/api/entrance/${appointmentdata?.entrance}`, {
         Patient_attended: true,
       });
@@ -250,7 +259,7 @@ export default function AppointmentsToday() {
       await axiosInstance.patch(`/api/history/${savedHistoryId}`, {
         end_date: new Date().toISOString(),
       });
-      localStorage.removeItem('historyId');
+      localStorage.removeItem(`historyId${appointmentdata._id}`);
 
       enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
@@ -296,6 +305,8 @@ export default function AppointmentsToday() {
   };
 
   const renderOptions = (info) => {
+    const canShowRoomSelect = isInReception(info);
+
     if (currentTab === 'three') {
       return (
         <>
@@ -326,7 +337,7 @@ export default function AppointmentsToday() {
 
     return info?.arrived ? (
       <>
-        {canAccessRooms ? (
+        {canShowRoomSelect ? (
           <Select
             sx={{ width: 150, height: 35 }}
             value={selectedTitles[info._id] || ''}
@@ -377,6 +388,7 @@ export default function AppointmentsToday() {
       </IconButton>
     );
   };
+
   return (
     <>
       <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
@@ -622,12 +634,14 @@ export default function AppointmentsToday() {
                         let patientName;
                         if (info?.patient?.name_english) {
                           patientName = curLangAr
-                            ? info?.patient?.name_arabic
-                            : info?.patient?.name_english;
+                            ? info?.patient?.name_arabic || info?.patient?.name_english
+                            : info?.patient?.name_english || info?.patient?.name_arabic;
                         } else if (info.unit_service_patient) {
                           patientName = curLangAr
-                            ? info?.unit_service_patient?.name_arabic
-                            : info?.unit_service_patient?.name_english;
+                            ? info?.unit_service_patient?.name_arabic ||
+                              info?.unit_service_patient?.name_english
+                            : info?.unit_service_patient?.name_english ||
+                              info?.unit_service_patient?.name_arabic;
                         }
                         return (
                           <>
@@ -690,42 +704,32 @@ export default function AppointmentsToday() {
                                   </TableCell>
 
                                   <TableCell>
-                                    <>
-                                      {info?.arrived !== undefined ? (
-                                        <Iconify
-                                          width={22}
-                                          sx={{
-                                            cursor: 'pointer',
-                                            mr: 1,
-                                            color: info.arrived ? 'info.main' : 'error.main',
-                                          }}
-                                          icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
-                                        />
-                                      ) : (
-                                        <>
-                                          {info?.unit_service_patient?.identification_num ||
-                                          info?.patient?.identification_num ? (
-                                            <Button
-                                              sx={{ p: 2 }}
-                                              onClick={() => startAppointment(info)}
-                                            >
-                                              {t('Yes')}
-                                            </Button>
-                                          ) : (
-                                            <Button sx={{ p: 2 }} onClick={iddialog.onTrue}>
-                                              {t('Yes')}
-                                            </Button>
-                                          )}
-
-                                          <Button
-                                            sx={{ p: 2 }}
-                                            onClick={() => StatusFunction(info, false, 'arrived')}
-                                          >
-                                            {t('No')}
-                                          </Button>
-                                        </>
-                                      )}
-                                    </>
+                                    {info?.arrived !== undefined ? (
+                                      <Iconify
+                                        width={22}
+                                        sx={{
+                                          cursor: 'pointer',
+                                          mr: 1,
+                                          color: info.arrived ? 'info.main' : 'error.main',
+                                        }}
+                                        icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
+                                      />
+                                    ) : (
+                                      <Box>
+                                        <Button
+                                          sx={{ p: 2 }}
+                                          onClick={() => startAppointment(info)}
+                                        >
+                                          {t('Yes')}
+                                        </Button>
+                                        <Button
+                                          sx={{ p: 2 }}
+                                          onClick={() => StatusFunction(info, false, 'arrived')}
+                                        >
+                                          {t('No')}
+                                        </Button>
+                                      </Box>
+                                    )}
                                   </TableCell>
                                 </>
                               )}

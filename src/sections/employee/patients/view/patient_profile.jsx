@@ -361,7 +361,9 @@ export default function PatientProfile() {
               </IconButton>
               <Stack direction="row" alignItems="center" gap={1}>
                 <Typography variant="h6">
-                  {curLangAr ? patientData?.name_arabic : patientData?.name_english}
+                  {curLangAr
+                    ? patientData?.name_arabic || patientData?.name_english
+                    : patientData?.name_english || patientData?.name_arabic}
                 </Typography>
 
                 {patientData?.patient?._id ? (
@@ -371,12 +373,7 @@ export default function PatientProfile() {
                     sx={{ color: 'primary.main' }}
                   />
                 ) : (
-                  <Typography
-                    variant="body2" 
-                    color="warning.main"
-                    fontWeight={600}
-                    sx={{ ml: 1 }} 
-                  >
+                  <Typography variant="body2" color="warning.main" fontWeight={600} sx={{ ml: 1 }}>
                     {curLangAr ? 'غير موثق' : 'Not Verified'}
                   </Typography>
                 )}

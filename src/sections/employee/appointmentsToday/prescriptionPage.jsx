@@ -116,14 +116,14 @@ export default function PrescriptionPage() {
       submitdata.Doctor_Comments = DoctorComment;
       await axiosInstance.patch(`/api/drugs/${id}`, submitdata);
 
-      enqueueSnackbar('Prescription updated successfully', { variant: 'success' });
+      enqueueSnackbar(t('Prescription updated successfully'), { variant: 'success' });
       navigate(-1);
 
       refetch();
       reset();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error uploading data', { variant: 'error' });
+      enqueueSnackbar(t('Error updating data'), { variant: 'error' });
     }
   };
 
@@ -139,93 +139,167 @@ export default function PrescriptionPage() {
         <Stack
           component={Card}
           sx={{
-            p: 3,
-            width: '80%',
-            display: 'grid',
-            gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
+            p: 4,
+            width: '85%',
+            borderRadius: 2,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
           }}
         >
-          <Box>
-            <Typography variant="h3">{prescriptionData?.patient?.name_english}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Date')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(prescriptionData?.created_at)}
-              </span>
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('name')}:&nbsp; &nbsp;
-              {prescriptionData?.medicines?.map((medicineName, index) => (
-                <span style={{ color: 'gray', fontWeight: 400 }} key={index}>
-                  ({medicineName?.medicines?.trade_name}){' '}
-                </span>
-              ))}
+          {/* Header */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+              pb: 2,
+              borderBottom: '1px solid #eee',
+            }}
+          >
+            <Typography variant="h4" fontWeight={700}>
+              {t('Prescription Details')}
             </Typography>
 
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Dr.')}&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {prescriptionData?.employee?.name_english}
-              </span>{' '}
-              &nbsp; {t('added a new prescription')}
+            <Typography sx={{ fontSize: 14, color: 'text.secondary' }}>
+              {t('creation time')} : {fDateTime(prescriptionData?.created_at)}
             </Typography>
-            {prescriptionData?.Doctor_Comments && (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>
-                {t('note')}:&nbsp;&nbsp;
-                <span style={{ color: 'gray', fontWeight: 400 }}>
-                  {prescriptionData?.Doctor_Comments}
-                </span>{' '}
-              </Typography>
-            )}
-
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
-              <Iconify icon="icon-park:back" />
-              &nbsp; {t('Back')}
-            </Button>
           </Box>
-          <Box>
-            <Typography variant="h3">{prescriptionData?.medicines?.trade_name}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Date')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(prescriptionData?.created_at)}
-              </span>
-            </Typography>
-            {prescriptionData?.Frequency_per_day && (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>
-                {t('Frequency')}:&nbsp; &nbsp;
-                <span style={{ color: 'gray', fontWeight: 400 }}>
-                  {prescriptionData?.Frequency_per_day}
-                </span>
+
+          {/* Doctor */}
+          <Box sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {t('doctor')} :
               </Typography>
-            )}
 
-            {prescriptionData?.chronic ? (
-              <Typography sx={{ fontWeight: 600, p: 2 }}>{t('Chronic: Yes')}</Typography>
-            ) : (
-              prescriptionData?.Num_days && (
-                <Typography sx={{ fontWeight: 600, p: 2 }}>
-                  {t('Duration')}:&nbsp;&nbsp;
-                  {prescriptionData?.Start_time && prescriptionData?.End_time ? (
-                    <>
-                      {t('From')} {fDateAndTime(prescriptionData?.Start_time)} {t('To')}{' '}
-                      {fDateAndTime(prescriptionData?.End_time)}
-                      <span style={{ color: '#2F88FF', fontWeight: 500 }}>
-                        &nbsp;{prescriptionData?.Num_days} day/s
-                      </span>
-                    </>
-                  ) : (
-                    `${prescriptionData?.Num_days} day/s`
-                  )}
-                </Typography>
-              )
-            )}
-
-            {/* <Button variant="outlined" sx={{ mt: 2 }} onClick={prescriptionDialog.onTrue}>
-              <Iconify icon="icon-park:edit-two" />
-              &nbsp; {t('Update')}
-            </Button> */}
+              <Typography sx={{ color: 'text.secondary' }}>
+                {curLangAr
+                  ? prescriptionData?.employee?.name_arabic
+                  : prescriptionData?.employee?.name_english}
+              </Typography>
+            </Box>
           </Box>
+          {/* Patient */}
+          <Box sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {t('patient')} :
+              </Typography>
+
+              <Typography sx={{ color: 'text.secondary' }}>
+                {curLangAr
+                  ? prescriptionData?.unit_service_patient?.name_arabic ||
+                    prescriptionData?.unit_service_patient?.name_english
+                  : prescriptionData?.unit_service_patient?.name_english ||
+                    prescriptionData?.unit_service_patient?.name_arabic}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Medicines */}
+          {prescriptionData?.medicines?.map((item, index) => (
+            <Box
+              key={index}
+              sx={{
+                mb: 4,
+                p: 3,
+                borderRadius: 2,
+                border: '1px solid #eee',
+                bgcolor: '#fafafa',
+              }}
+            >
+              {/* Medicine Name */}
+              <Typography variant="h6" fontWeight={700} mb={2}>
+                {item?.medicines?.trade_name}
+              </Typography>
+
+              {/* Frequency */}
+              {item?.Frequency_per_day && (
+                <Box sx={{ display: 'flex', mb: 1, gap: 1 }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {t('frequency')} :
+                  </Typography>
+
+                  <Typography sx={{ color: 'text.secondary' }}>
+                    {item?.Frequency_per_day}
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Duration */}
+              <Typography sx={{ fontWeight: 600 }}>{t('Duration')} :</Typography>
+
+              {item?.Start_time && item?.End_time ? (
+                <>
+                  <Typography sx={{ color: 'text.secondary' }}>
+                    {t('From')} {fDateAndTime(item?.Start_time)}
+                  </Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>
+                    {t('To')} {fDateAndTime(item?.End_time)}
+                  </Typography>
+                </>
+              ) : (
+                item?.chronic && (
+                  <Typography sx={{ color: 'success.main' }}> {t('Chronic Treatment')}</Typography>
+                )
+              )}
+
+              {/* Doctor Notes */}
+              {item?.Doctor_Comments && (
+                <Box
+                  sx={{
+                    mt: 2,
+                    p: 2,
+                    bgcolor: '#fff',
+                    borderLeft: '4px solid #4CAF50',
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography fontWeight={600} mb={0.5}>
+                    {t('doctor comment')}
+                  </Typography>
+                  <Typography color="text.secondary">{item?.Doctor_Comments}</Typography>
+                </Box>
+              )}
+            </Box>
+          ))}
+
+          {/* Back */}
+          <Button
+            variant="text"
+            sx={{ mt: 2, alignSelf: 'flex-start' }}
+            onClick={() => navigate(-1)}
+          >
+            <Iconify icon="icon-park:back" />
+            &nbsp; رجوع
+          </Button>
         </Stack>
       </Box>
 
