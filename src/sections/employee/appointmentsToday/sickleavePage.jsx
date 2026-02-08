@@ -67,13 +67,13 @@ export default function MdicalreportPage() {
     try {
       await axiosInstance.patch(`/api/sickleave/${id}`, submitdata);
 
-      enqueueSnackbar('Prescription updated successfully', { variant: 'success' });
+      enqueueSnackbar(t('Sick Leave updated successfully'), { variant: 'success' });
       navigate(-1);
       refetch();
       reset();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error updating data', { variant: 'error' });
+      enqueueSnackbar(t('Error updating data'), { variant: 'error' });
     }
   };
 
@@ -89,43 +89,115 @@ export default function MdicalreportPage() {
         <Stack
           component={Card}
           sx={{
-            p: 3,
-            width: '80%',
-            display: 'grid',
-            gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
+            p: 4,
+            width: '85%',
+            borderRadius: 2,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
           }}
         >
-          <Box>
-            <Typography variant="h3">{data?.patient?.name_english}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('from')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
+          {/* Header */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+              pb: 2,
+              borderBottom: '1px solid #eee',
+            }}
+          >
+            <Typography variant="h4" fontWeight={700}>
+              {t('Sick Leave Details')}
+            </Typography>
+
+            <Typography sx={{ fontSize: 14, color: 'text.secondary' }}>
+              {t('creation time')} : {fDateTime(data?.created_at)}
+            </Typography>
+          </Box>
+
+          {/* Doctor */}
+          <Box sx={{ mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {t('doctor')} :
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                {curLangAr ? data?.employee?.name_arabic : data?.employee?.name_english}
+              </Typography>
+            </Box>
+          </Box>
+          {/* Patient */}
+          <Box sx={{ mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {t('patient')} :
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                 {curLangAr
+                  ? data?.unit_service_patient?.name_arabic ||
+                    data?.unit_service_patient?.name_english
+                  : data?.unit_service_patient?.name_english ||
+                    data?.unit_service_patient?.name_arabic}
+              </Typography>
+            </Box>
+          </Box>
+
+
+          {/* Sick Leave Period */}
+          <Box
+            sx={{
+              mb: 3,
+              p: 3,
+              borderRadius: 2,
+              border: '1px solid #eee',
+              bgcolor: '#fafafa',
+            }}
+          >
+            <Typography variant="h6" fontWeight={700} mb={2}>
+              {t('Sick Leave Period')}
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+              <Typography sx={{ fontWeight: 600 }}>{t('from')} :</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
                 {fDateTime(data?.Medical_sick_leave_start)}
-              </span>
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('to')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600 }}>{t('to')} :</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
                 {fDateTime(data?.Medical_sick_leave_end)}
-              </span>
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Dr.')}&nbsp;
-              {curLangAr
-                ? `قام ${data?.employee?.name_arabic} باضافة اجازة مرضية`
-                : `${data?.employee?.name_english} added sick leave`}
-            </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('description')}:&nbsp;&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>{data?.description}</span>{' '}
-            </Typography>
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Description */}
+          {data?.description && (
+            <Box
+              sx={{
+                mb: 4,
+                p: 2,
+                bgcolor: '#fff',
+                borderLeft: '4px solid #4CAF50',
+                borderRadius: 1,
+              }}
+            >
+              <Typography fontWeight={600} mb={0.5}>
+                {t('description')}
+              </Typography>
+              <Typography color="text.secondary">{data?.description}</Typography>
+            </Box>
+          )}
+
+          {/* Actions */}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button variant="text" onClick={() => navigate(-1)}>
               <Iconify icon="icon-park:back" />
               &nbsp; {t('back')}
             </Button>
-          </Box>
-          <Box>
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={medicalReportDialog.onTrue}>
+
+            <Button variant="outlined" onClick={medicalReportDialog.onTrue}>
               <Iconify icon="icon-park:edit-two" />
               &nbsp; {t('update')}
             </Button>

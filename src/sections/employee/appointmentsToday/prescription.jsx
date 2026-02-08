@@ -147,7 +147,7 @@ export default function Prescription({ Entrance }) {
 
   const removePrescription = async (IdToremove) => {
     await axiosInstance.delete(endpoints.prescription.one(IdToremove));
-    const historyId = localStorage.getItem('historyId');
+    const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
     await axiosInstance.patch(endpoints.history.remove_id(historyId), {
       type: 'prescription',
       id: IdToremove,
@@ -184,7 +184,7 @@ export default function Prescription({ Entrance }) {
       }));
 
       if (prescriptionDialog.value) {
-        const historyId = localStorage.getItem('historyId');
+        const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
         const prescription = await axiosInstance.post('/api/drugs', prescriptionsToSubmit);
         await axiosInstance.patch(`/api/entrance/${Entrance?._id}`, {
           Drugs_report_status: true,

@@ -96,13 +96,13 @@ export default function MdicalreportPage() {
 
       await axiosInstance.patch(`/api/examination/${id}`, submitdata);
 
-      enqueueSnackbar('Prescription updated successfully', { variant: 'success' });
+      enqueueSnackbar(t('Medical report updated successfully'), { variant: 'success' });
       navigate(-1);
       refetch();
       reset();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error updating data', { variant: 'error' });
+      enqueueSnackbar(t('Error updating data'), { variant: 'error' });
     }
   };
 
@@ -165,45 +165,99 @@ export default function MdicalreportPage() {
         <Stack
           component={Card}
           sx={{
-            p: 3,
-            width: '80%',
-            display: 'grid',
-            gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
+            p: 4,
+            width: '85%',
+            borderRadius: 2,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
           }}
         >
-          <Box>
-            <Typography variant="h3">{medicalreports?.patient?.name_english}</Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Date')}:&nbsp; &nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {fDateTime(medicalreports?.created_at)}
-              </span>
+          {/* Header */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+              pb: 2,
+              borderBottom: '1px solid #eee',
+            }}
+          >
+            <Typography variant="h4" fontWeight={700}>
+              {t('Medical Report Details')}
             </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('Dr.')}&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
-                {medicalreports?.employee?.name_english}
-              </span>{' '}
-              &nbsp; added medical report
+
+            <Typography sx={{ fontSize: 14, color: 'text.secondary' }}>
+              {t('creation time')} : {fDateTime(medicalreports?.created_at)}
             </Typography>
-            <Typography sx={{ fontWeight: 600, p: 2 }}>
-              {t('description')}:&nbsp;&nbsp;
-              <span style={{ color: 'gray', fontWeight: 400 }}>
+          </Box>
+
+          {/* Doctor */}
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {t('doctor')} :
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                {curLangAr
+                  ? medicalreports?.employee?.name_arabic
+                  : medicalreports?.employee?.name_english}
+              </Typography>
+            </Box>
+          </Box>
+          {/* Patient */}
+          <Box sx={{ mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {t('patient')} :
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                {curLangAr
+                  ? medicalreports?.unit_service_patient?.name_arabic ||
+                    medicalreports?.unit_service_patient?.name_english
+                  : medicalreports?.unit_service_patient?.name_english ||
+                    medicalreports?.unit_service_patient?.name_arabic}
+              </Typography>
+            </Box>
+          </Box>
+          {/* Description */}
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Typography sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {t('description')} :
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
                 {medicalreports?.description}
-              </span>{' '}
-            </Typography>
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={() => navigate(-1)}>
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Files */}
+          {medicalreports?.file?.length > 0 && (
+            <Box sx={{ mb: 4 }}>
+              <Typography sx={{ fontWeight: 600, mb: 1 }}>{t('Attachments')}</Typography>
+
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
+                  gap: 1,
+                }}
+              >
+                {medicalreports?.file?.map((file, i) => (
+                  <Image key={i} src={file} sx={{ borderRadius: 1 }} />
+                ))}
+              </Box>
+            </Box>
+          )}
+
+          {/* Actions */}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button variant="text" onClick={() => navigate(-1)}>
               <Iconify icon="icon-park:back" />
               &nbsp; {t('Back')}
             </Button>
-          </Box>
-          <Box>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-              {medicalreports?.file?.map((file, i) => (
-                <Image key={i} src={file} sx={{ m: 1 }} />
-              ))}
-            </Box>
-            <Button variant="outlined" sx={{ mt: 2 }} onClick={medicalReportDialog.onTrue}>
+
+            <Button variant="outlined" onClick={medicalReportDialog.onTrue}>
               <Iconify icon="icon-park:edit-two" />
               &nbsp; {t('Update')}
             </Button>

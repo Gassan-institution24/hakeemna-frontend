@@ -30,7 +30,7 @@ import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function SickLeave({ patient, unit_service_patient, service_unit }) {
+export default function SickLeave({ patient, unit_service_patient, service_unit ,Entrance}) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const { id } = useParams();
@@ -75,12 +75,12 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
     await axiosInstance.delete(endpoints.sickleave.onee(IdToremove2), {
       Activation: false,
     });
-    const historyId = localStorage.getItem('historyId');
+    const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
     await axiosInstance.patch(endpoints.history.remove_id(historyId), {
       type: 'sickLeave',
       id: IdToremove2
     });
-    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    enqueueSnackbar(t('Feild removed successfully'), { variant: 'success' });
     refetch();
     reset();
   };
@@ -104,8 +104,8 @@ export default function SickLeave({ patient, unit_service_patient, service_unit 
   const onSubmit = async (submitdata) => {
     try {
       const leave =  await axiosInstance.post('/api/sickleave', submitdata);
-      enqueueSnackbar('sick leave created successfully', { variant: 'success' });
-      const historyId = localStorage.getItem('historyId');
+      enqueueSnackbar(t('Sick leave created successfully'), { variant: 'success' });
+      const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
       await axiosInstance.patch(endpoints.history.one(historyId), { 
         sick_leave: true,
         sickLeavesId: leave.data._id
@@ -217,4 +217,5 @@ SickLeave.propTypes = {
   patient: PropTypes.object,
   service_unit: PropTypes.string,
   unit_service_patient: PropTypes.string,
+  Entrance: PropTypes.object,
 };
