@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import io from 'socket.io-client';
 import DailyIframe from '@daily-co/daily-js';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function WebRTCComponent() {
@@ -124,7 +124,7 @@ export default function WebRTCComponent() {
         <div
           style={{
             position: 'absolute',
-            top: 50,
+            top: 160,
             right: 20,
             display: 'flex',
             alignItems: 'center',

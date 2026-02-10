@@ -177,12 +177,12 @@ export default function WaitingRoom() {
                     let patientName;
                     if (entranceData.patient) {
                       patientName = curLangAr
-                        ? entranceData?.patient?.name_arabic
-                        : entranceData?.patient?.name_english;
+                        ? entranceData?.patient?.name_arabic || entranceData?.patient?.name_english
+                        : entranceData?.patient?.name_english || entranceData?.patient?.name_arabic;
                     } else if (entranceData.unit_service_patient) {
                       patientName = curLangAr
-                        ? entranceData?.unit_service_patient?.name_arabic
-                        : entranceData?.unit_service_patient?.name_english;
+                        ? entranceData?.unit_service_patient?.name_arabic || entranceData?.unit_service_patient?.name_english
+                        : entranceData?.unit_service_patient?.name_english || entranceData?.unit_service_patient?.name_arabic;
                     }
                     return (
                       <TableRow key={i}>
