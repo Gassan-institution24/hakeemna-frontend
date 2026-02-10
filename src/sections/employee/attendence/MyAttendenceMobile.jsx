@@ -138,25 +138,17 @@ function MobileRow({ row, onDelete, refetch, onViewTask }) {
                 label={t('Activity')}
                 value={
                   hasActivities ? (
-                    <>
-                      <Typography component="span" variant="body2">
-                        {normalizedTasks.find((task1) => task1.activity?.trim())?.activity.slice(0, 20)}
-                        {normalizedTasks.filter((task1) => task1.activity?.trim()).length > 1 && '…'}
-                      </Typography>
-
-                      <Typography
-                        component="span"
-                        sx={{
-                          ml: 0.5,
-                          color: 'primary.main',
-                          cursor: 'pointer',
-                          fontWeight: 500,
-                        }}
-                        onClick={() => onViewTask(normalizedTasks, row._id)}
-                      >
-                        {t('View')}
-                      </Typography>
-                    </>
+                    <Typography component="span" variant="body2">
+                      {normalizedTasks[0]?.activity !== '' && normalizedTasks.length ? (
+                        <Typography variant="body2">
+                          {normalizedTasks[0]?.activity.slice(0, 10)}
+                          {normalizedTasks[0]?.activity.length > 10 ? '...' : ''}
+                        </Typography>
+                        
+                      ) : (
+                        t('No Data')
+                      )}
+                    </Typography>
                   ) : (
                     <Typography variant="caption" color="text.secondary">
                       {t('No Data')}
@@ -173,6 +165,10 @@ function MobileRow({ row, onDelete, refetch, onViewTask }) {
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
+        </MenuItem>
+        <MenuItem lang="ar" onClick={() => onViewTask(normalizedTasks, row._id)}>
+          <Iconify icon="carbon:edit" />
+          {t('edit activities')}
         </MenuItem>
       </CustomPopover>
 
