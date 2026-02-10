@@ -2,7 +2,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 
 export const submitClaim = async (claimData) => {
-  const response = await axiosInstance.post(endpoints.clim.all, claimData, {
+  const response = await axiosInstance.post("/api/claims/", claimData, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -11,6 +11,10 @@ export const submitClaim = async (claimData) => {
   return response.data;
 };
 
+export const radiology = async (payload) => {
+  const { data } = await axiosInstance.post('/api/claims/radiology', payload);
+  return data;
+};
 export const registerVisit = async (payload) => {
   const { data } = await axiosInstance.post('/api/claims/visit/register', payload);
   return data;
@@ -35,6 +39,6 @@ export const createEncounter = async (payload) => {
 
 
 export const getNewAuthorizations = async (payload) => {
-  const res = await axiosInstance.post('api/claims/authorization/get-new', payload);
+  const res = await axiosInstance.get('api/claims/authorization/get-new', payload);
   return res.data;
 };
