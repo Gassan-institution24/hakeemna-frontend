@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,7 +23,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedRecord, useGetEntranceDoctorReports, useGetOneEntranceManagement } from 'src/api';
+import { useGetMedRecord, useGetEntranceDoctorReports } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -30,12 +31,11 @@ import { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function Doctorreport() {
+export default function Doctorreport( {Entrance} ) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { medRecord } = useGetMedRecord(
     Entrance?.service_unit?._id,
     Entrance?.patient?._id,
@@ -106,7 +106,7 @@ export default function Doctorreport() {
       Activation: false,
     });
 
-    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    enqueueSnackbar(t('Feild removed successfully'), { variant: 'success' });
     refetch();
     reset();
   };
@@ -186,13 +186,13 @@ export default function Doctorreport() {
 
       await axiosInstance.post('/api/doctorreport', formData);
 
-      enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+      enqueueSnackbar(t('Doctor Report created successfully'), { variant: 'success' });
       refetch();
       doctoReportDialog.onFalse();
       reset();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error uploading data', { variant: 'error' });
+      enqueueSnackbar(t('Error uploading data'), { variant: 'error' });
     }
   };
 
@@ -286,3 +286,7 @@ export default function Doctorreport() {
     </>
   );
 }
+
+  Doctorreport.propTypes = {
+  Entrance: PropTypes.object,
+};

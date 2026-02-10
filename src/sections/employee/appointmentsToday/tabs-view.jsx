@@ -25,7 +25,7 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
     {
       value: 'one',
       title: 'Patient file',
-      label: <Doctorreport />,
+      label: <Doctorreport Entrance={Entrance} />,
     },
     {
       value: 'two',
@@ -35,7 +35,7 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
     {
       value: 'three',
       title: 'medical report',
-      label: <Medicalreport />,
+      label: <Medicalreport Entrance={Entrance} />,
     },
     {
       value: 'four',
@@ -45,6 +45,7 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
           patient={patient}
           service_unit={service_unit}
           unit_service_patient={unit_service_patient}
+          Entrance={Entrance}
         />
       ),
     },

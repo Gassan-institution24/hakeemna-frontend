@@ -63,6 +63,7 @@ export default function Rooms() {
   const methods = useForm({
     mode: 'all',
   });
+  
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
@@ -128,12 +129,13 @@ export default function Rooms() {
         Drugs_report: prescriptionIds,
       });
       // yazan here
-      // const historyId = localStorage.getItem('historyId');
-      // await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
-      //   end_time: new Date(),
-      // });
+      const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
+      await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
+        end_time: new Date(),
+      });
 
-      enqueueSnackbar('appointment finished', { variant: 'success' });
+      localStorage.removeItem(`historyId${Entrance?.appointmentId}`);
+      enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
       router.push(paths.employee.appointmentsToday);
     } catch (error) {

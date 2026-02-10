@@ -88,6 +88,7 @@ const QrCodePage = lazy(() => import('src/pages/employee/qr-code'));
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/employee/patients/patient-profile'));
 const PatientNewPage = lazy(() => import('src/pages/employee/patients/new-patient'));
+const VideoCallPage = lazy(() => import('src/pages/employee/patients/videoCallPage'));
 
 // CHECKLIST
 const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
@@ -299,4 +300,12 @@ export const unitServiceEmployeeDashboardRoutes = [
       },
     ],
   },
+  {
+  path: '/video-call/:id',
+  element: (
+    <AuthGuard>
+      <VideoCallPage />
+    </AuthGuard>
+  ),
+}
 ];

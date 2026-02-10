@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,7 +23,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetOneEntranceManagement, useGetEntranceExaminationReports } from 'src/api';
+import {  useGetEntranceExaminationReports } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -30,12 +31,11 @@ import { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function Medicalreport() {
+export default function Medicalreport( {Entrance} ) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
-  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
 
   const router = useRouter();
@@ -93,13 +93,13 @@ export default function Medicalreport() {
   }, [user, Entrance, reset]);
   const removemedicalrepoort = async (IdToremove2) => {
     await axiosInstance.delete(endpoints.medicalreports.one(IdToremove2));
-    const historyId = localStorage.getItem('historyId');
+    const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
     await axiosInstance.patch(endpoints.history.remove_id(historyId), {
           type: 'medicalReport',
           id: IdToremove2,
         });
 
-    enqueueSnackbar('Feild removed successfully', { variant: 'success' });
+    enqueueSnackbar(t('Feild removed successfully'), { variant: 'success' });
     refetch();
     reset();
   };
@@ -178,7 +178,7 @@ export default function Medicalreport() {
       });
            
       const medicalReport = await axiosInstance.post('/api/examination', formData);
-      const historyId = localStorage.getItem('historyId');
+      const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
       await axiosInstance.patch(endpoints.history.one(historyId), {
         medical_report: true,
         medicalReportId: medicalReport?.data?.data?.examinationreports?._id,
@@ -187,14 +187,14 @@ export default function Medicalreport() {
         medical_report_status: true,
       });
 
-      enqueueSnackbar('Medical report uploaded successfully', { variant: 'success' });
+      enqueueSnackbar(t('Medical report uploaded successfully'), { variant: 'success' });
       refetch();
       medicalReportDialog.onFalse();
 
       reset();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Error uploading data', { variant: 'error' });
+      enqueueSnackbar(t('Error uploading data'), { variant: 'error' });
     }
   };
 
@@ -283,3 +283,7 @@ export default function Medicalreport() {
     </>
   );
 }
+
+Medicalreport.propTypes = {
+  Entrance: PropTypes.object,
+};
