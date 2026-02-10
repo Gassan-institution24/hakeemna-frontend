@@ -48,10 +48,11 @@ export default function AddDiagnosis({ onDataChange }) {
   const curLangAr = currentLang.value === 'ar';
 
   useEffect(() => {
-    if (onDataChange) {
-      onDataChange(selected.length > 0);
-    }
-  }, [selected, onDataChange]);
+  if (onDataChange) {
+    onDataChange(selected);
+  }
+}, [selected, onDataChange]);
+
 
   const filtered = DIAGNOSIS_LIST.filter((d) => {
     const name = curLangAr ? d.nameAr : d.nameEn;

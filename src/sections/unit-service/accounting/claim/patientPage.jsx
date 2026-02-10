@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -26,10 +26,8 @@ import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
 import MedicationsOrders from 'src/components/clim/MedicationsOrders';
 import ClinicERProcedures from 'src/components/clim/ClinicERProcedures';
 import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
-import {
-  createEncounter,
-  getNewAuthorizations,
-} from 'src/services/claimService';
+import { createEncounter, getNewAuthorizations, radiology } from 'src/services/claimService';
+import axiosInstance from 'src/utils/axios';
 
 /* ================= STATIC DATA ================= */
 const sections = [
@@ -54,7 +52,11 @@ const indexToKey = {
 export default function PatientPage() {
   const { t } = useTranslate();
   const [visitData, setVisitData] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [diagnosisData, setDiagnosisData] = useState([]);
 
+  const pollingRef = useRef(null);
+  const retryRef = useRef(0);
   const { visitId } = useParams();
 
   useEffect(() => {
@@ -77,6 +79,63 @@ export default function PatientPage() {
     startEncounter();
   }, [visitId]);
 
+  /* ================= Authorization Polling ================= */
+
+  useEffect(() => {
+    if (!visitId) {
+      return undefined;
+    }
+
+    const MAX_RETRY = 20;
+
+    pollingRef.current = setInterval(async () => {
+      try {
+        retryRef.current += 1;
+
+        const response = await getNewAuthorizations();
+
+        if (response?.Entities?.length) {
+          setVisitData((prev) => ({
+            ...prev,
+            authorization: response.Entities[0],
+          }));
+
+          setCheckingAuth(false);
+          clearInterval(pollingRef.current);
+        }
+
+        if (retryRef.current >= MAX_RETRY) {
+          clearInterval(pollingRef.current);
+          setCheckingAuth(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }, 1000);
+
+    return () => clearInterval(pollingRef.current);
+  }, [visitId]);
+  const authStatus = useMemo(() => {
+    if (checkingAuth) {
+      return {
+        label: 'Checking Authorization...',
+        color: 'warning',
+      };
+    }
+
+    if (visitData?.authorization) {
+      return {
+        label: 'Authorized',
+        color: 'success',
+      };
+    }
+
+    return {
+      label: 'Not Authorized',
+      color: 'error',
+    };
+  }, [checkingAuth, visitData]);
+
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
     procedures: false,
@@ -92,53 +151,95 @@ export default function PatientPage() {
       [key]: hasData,
     }));
   };
-  const claimPayload = {
-    patient: {
-      nationalId: '4000026255',
-      memberId: '0000',
-    },
 
-    diagnosis: [
-      {
-        type: 'Principal',
-        code: 'V67.09',
+  const payload = {
+    LabRequest: {
+      Header: {
+        SenderID: 'JOR-P-000435',
+        ReceiverID: 'JOR-I-999994',
+        TransactionDate: '09/02/2026 12:00',
+        RecordCount: 1,
+        DispositionFlag: 'TEST',
+        PayerID: 'JOR-I-000334',
       },
-    ],
-
-    activities: [
-      {
-        type: '8',
-        code: 'JOR-99-05-006',
-        quantity: 1,
-        net: 413.1,
-        gross: 413.11,
-        observations: [
+      Order: {
+        ID: 'Lb_Test_223324',
+        Type: 'Request',
+        ReferenceNumber: 'string',
+        Clinician: 'CL3324',
+        Patient: {
+          MemberID: '441554112',
+          NationalIDNumber: '524865523',
+          ContactNumber: '524865523',
+          DateOfBirth: '09/02/2026',
+          Weight: '67.00',
+          Email: 'Example@tpo.com',
+        },
+        Encounter: {
+          EncounterID: '5325214214',
+          FacilityID: 'TEST_Clnc',
+          Type: '4',
+        },
+        Diagnosis: [
           {
-            type: 'Text',
-            code: 'Activity-Description',
-            value: 'GENERAL PROCEDURE',
-            valueType: 'String',
+            Type: 'Principal',
+            Code: 'C85.25',
+            DateOfOnset: '09/02/2026',
           },
         ],
+        Activity: [
+               {
+                 ID: "",
+                 Start: '09/02/2026 12:00',
+                 Type: '3',
+                 Code: 'JOR-99-05-006',
+                 Quantity: 1,
+                 Net: 0,
+                 Gross: 0,
+                 Clinician: 'JOR-P-000435',
+                 PriorAuthorizationID: '',
+                 Observation: [
+                   {
+                     Type: 'Text',
+                     Code: 'Activity-Description',
+                     Value: 'Specialist First Visit Fees',
+                     ValueType: 'String',
+                   },
+                   {
+                     Type: 'File',
+                     Code: 'QR-CODE-78992',
+                     Value: '68b838140437031ea47b9b7a',
+                     ValueType: 'File',
+                   },
+                   {
+                     Type: 'File',
+                     Code: 'INVOICE-PDF',
+                     Value: '68b838140437031ea47b9b7d',
+                     ValueType: 'File',
+                   },
+                 ],
+               },
+               {
+                 ID: "",
+                 Start: '09/02/2026 12:00',
+                 Type: '3',
+                 Code: 'JOR-99-05-006',
+                 Quantity: 1,
+                 Net: 413.1,
+                 Gross: 413.11,
+                 Clinician: 'JOR-P-000435',
+                 Observation: [
+                   {
+                     Type: 'Text',
+                     Code: 'Activity-Description',
+                     Value: 'GENERAL PROCEDURE',
+                     ValueType: 'String',
+                   },
+                 ],
+               },
+             ],
       },
-    ],
-
-    totals: {
-      gross: 413.11,
-      net: 413.1,
-      patientShare: 0,
     },
-  };
-  const handleSubmitClaim = async () => {
-    try {
-      await getNewAuthorizations({
-        claimPayload,
-      });
-
-      alert('Claim submitted successfully');
-    } catch (error) {
-      alert('Failed to submit claim');
-    }
   };
 
   return (
@@ -168,13 +269,8 @@ export default function PatientPage() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={3} gap={2} textAlign="right">
-            <Chip
-              label={visitData?.encounter?.eligibility?.status || 'Checking...'}
-              color={visitData?.encounter?.eligibilityStatus === 'ELIGIBLE' ? 'success' : 'warning'}
-            />
-
-            <Chip label={t('Pending')} color="warning" />
+          <Grid item xs={12} md={3} textAlign="right">
+            <Chip label={authStatus.label} color={authStatus.color} />
           </Grid>
         </Grid>
 
@@ -201,7 +297,12 @@ export default function PatientPage() {
 
           <AccordionDetails>
             {index === 0 && (
-              <AddDiagnosis onDataChange={(hasData) => updateSectionStatus('diagnosis', hasData)} />
+              <AddDiagnosis
+                onDataChange={(data) => {
+                  setDiagnosisData(data);
+                  updateSectionStatus('diagnosis', data.length > 0);
+                }}
+              />
             )}
 
             {index === 1 && (
@@ -251,7 +352,7 @@ export default function PatientPage() {
         <Button variant="contained" color="primary">
           {t('Send Orders')}
         </Button>
-        <Button variant="contained" color="success" onClick={handleSubmitClaim}>
+        <Button variant="contained" color="success" onClick={() => radiology(payload)}>
           {t('Close and Submit Claim')}
         </Button>
       </Box>
