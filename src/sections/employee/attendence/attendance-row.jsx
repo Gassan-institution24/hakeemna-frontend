@@ -27,7 +27,7 @@ export default function AttendanceRow({
   onViewRow,
   onCancelRow,
   onDeleteRow,
-  onViewTask
+  onViewTask,
 }) {
   const {
     date,
@@ -74,25 +74,10 @@ export default function AttendanceRow({
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center" sx={{ maxWidth: 220 }}>
           {normalizedTasks[0]?.activity !== '' && normalizedTasks.length ? (
-            <>
-              <Typography variant="body2">
-                {normalizedTasks[0]?.activity.slice(0, 20)}
-                {normalizedTasks.length > 1 ? '...' : ''}
-              </Typography>
-
-              <Typography
-                variant="caption"
-                sx={{
-                  cursor: 'pointer',
-                  color: 'primary.main',
-                  display: 'block',
-                  mt: 0.5,
-                }}
-                onClick={() => onViewTask(normalizedTasks, row._id)}
-              >
-                {t('edit')}
-              </Typography>
-            </>
+            <Typography variant="body2">
+              {normalizedTasks[0]?.activity.slice(0, 10)}
+              {normalizedTasks[0]?.activity.length > 10 ? '...' : ''}
+            </Typography>
           ) : (
             t('No Data')
           )}
@@ -108,6 +93,10 @@ export default function AttendanceRow({
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
+        </MenuItem>
+        <MenuItem lang="ar" onClick={() => onViewTask(normalizedTasks, row._id)}>
+          <Iconify icon="carbon:edit" />
+          {t('edit activities')}
         </MenuItem>
       </CustomPopover>
 
