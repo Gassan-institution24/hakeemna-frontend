@@ -1,16 +1,14 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { DatePicker } from '@mui/x-date-pickers';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useTheme, useMediaQuery, MenuItem } from '@mui/material';
+import { useTheme, MenuItem, useMediaQuery } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -18,7 +16,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFPhoneNumberCustom } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -28,8 +26,6 @@ export default function EditPatient({ patient }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const isArabic = currentLang.value === 'ar';
-  const [em_phone, setEMphone] = useState(patient.mobile_num1);
-  const [em_phone2, setEMphone2] = useState(patient.mobile_num2);
   
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -221,37 +217,17 @@ export default function EditPatient({ patient }) {
           />
 
           <Box sx={{ width: '100%' }}>
-            <MuiTelInput
-              label={t('Mobile Number')}
-              forceCallingCode
-              defaultCountry="JO"
-              value={em_phone}
-              onChange={(newPhone) => {
-                const cleanedPhone = newPhone.replace(/\s/g, '');
-                matchIsValidTel(cleanedPhone);
-                setEMphone(cleanedPhone);
-                methods.setValue('mobile_num1', cleanedPhone);
-              }}
-              size={isMobile ? 'small' : 'medium'}
-              sx={{ width: '100%' }}
-            />
+          <RHFPhoneNumberCustom
+            name="mobile_num1"
+            label={t('Mobile Number')}  
+          />
           </Box>
           
           <Box sx={{ width: '100%' }}>
-            <MuiTelInput
-              label={t('Alternative Mobile Number')}
-              forceCallingCode
-              defaultCountry="JO"
-              value={em_phone2}
-              onChange={(newPhone2) => {
-                const cleanedPhone = newPhone2.replace(/\s/g, '');
-                matchIsValidTel(cleanedPhone);
-                setEMphone2(cleanedPhone);
-                methods.setValue('mobile_num2', cleanedPhone);
-              }}
-              size={isMobile ? 'small' : 'medium'}
-              sx={{ width: '100%' }}
-            />
+          <RHFPhoneNumberCustom
+            name="mobile_num2"
+            label={t('Secondary Mobile Number')}  
+           />
           </Box>
           
           <RHFTextField
