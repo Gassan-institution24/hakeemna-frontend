@@ -435,7 +435,7 @@ export default function RoomsTableView() {
                       },
                       {
                         label: t('general info'),
-                        value:curLangAr ? row.general_info_arabic :row. general_info,
+                        value: curLangAr ? row.general_info_arabic : row.general_info,
                       },
                       {
                         label: t('status'),
@@ -450,6 +450,22 @@ export default function RoomsTableView() {
                       },
                     ]}
                     actions={[
+                      checkAcl({
+                        category: 'unit_service',
+                        subcategory: 'management_tables',
+                        acl: 'update',
+                      }) && {
+                        label: row.status === 'active' ? t('inactivate') : t('activate'),
+                        icon: row.status === 'active' ? 'ic:baseline-pause' : 'bi:play-fill',
+                        color: row.status === 'active' ? 'error.main' : 'success.main',
+                        onClick: () => {
+                          if (row.status === 'active') {
+                            handleInactivate(row);
+                          } else {
+                            handleActivate(row);
+                          }
+                        },
+                      },
                       {
                         label: t('edit'),
                         icon: 'fluent:edit-32-filled',
@@ -559,8 +575,8 @@ export default function RoomsTableView() {
             </TableContainer>
           )}
 
- <CustomPopover
-       open={ddlOpen}
+          <CustomPopover
+            open={ddlOpen}
             onClose={() => setDdlAnchorEl(null)}
             anchorEl={ddlAnchorEl}
             arrow="right-top"
@@ -572,47 +588,53 @@ export default function RoomsTableView() {
           >
             {ddlRow && (
               <>
-        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          <ListItemText
-            primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
-            secondary={fDate(ddlRow.created_at, 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
+                <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.created_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_creation?.email}
+                </Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          <ListItemText
-            primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
-            secondary={fDate(ddlRow.updated_at, 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
-          {ddlRow.ip_address_user_modification}
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>
-          {t('modifications no')}: {ddlRow.modifications_nums}
-        </Box>
-          </>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.ip_address_user_creation}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  <ListItemText
+                    primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
+                    secondary={fDate(ddlRow.updated_at, 'p')}
+                    primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      typography: 'caption',
+                    }}
+                  />
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+                  {ddlRow.user_modification?.email}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
+                <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+                  {ddlRow.ip_address_user_modification}
+                </Box>
+                <Box sx={{ pt: 1, fontWeight: 600 }}>
+                  {t('modifications no')}: {ddlRow.modifications_nums}
+                </Box>
+              </>
             )}
-      </CustomPopover>
+          </CustomPopover>
           <TablePaginationCustom
             count={dataFiltered.length}
             page={table.page}
