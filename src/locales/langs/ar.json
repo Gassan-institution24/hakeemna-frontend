@@ -1727,6 +1727,13 @@
   "Doctor Report updated successfully": "تم تحديث تقرير الطبيب بنجاح",
   "Doctor Report created successfully": "تم إنشاء تقرير الطبيب بنجاح",
   "Doctor Report Details": "تفاصيل تقرير الطبيب",
+  "new prescription": "وصفة طبية جديدة",
+  "medical analysises": "تحاليل طبية",
+  "radiology": "أشعة",
+  "manual entry": "إدخال يدوي",
+  "favorites": "المفضلة",
+  "medical services": "الخدمات الطبية",
+  "prescription added successfully": "تمت إضافة الوصفة الطبية بنجاح",
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",

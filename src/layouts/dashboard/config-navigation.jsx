@@ -41,12 +41,9 @@ export function useNavData() {
       ?.employees_number || 10;
 
   const unitServiceId =
-    user?.employee?.employee_engagements?.[
-      user?.employee?.selected_engagement
-    ]?.unit_service?._id;
-  const { data: unitServiceData } = useGetUnitservice(unitServiceId)
-  const claimRegistered =
-    unitServiceData?.claim_registered;
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
+  const { data: unitServiceData } = useGetUnitservice(unitServiceId);
+  const claimRegistered = unitServiceData?.claim_registered;
 
   const data = useMemo(() => {
     const permissions = user?.permissions || [];
@@ -193,10 +190,8 @@ export function useNavData() {
               </Label>
             ),
           },
-          ...permissions
-            .map(key => SUPER_ADMIN_ITEMS_MAP[key])
-            .filter(Boolean),
-        ]
+          ...permissions.map((key) => SUPER_ADMIN_ITEMS_MAP[key]).filter(Boolean),
+        ],
       },
     ];
     const superAdminItems = [
@@ -317,7 +312,7 @@ export function useNavData() {
             title: t('permissions'),
             path: paths.superadmin.superAdminPermissions.root,
             icon: <Iconify icon="mdi:account-secure" />,
-          }
+          },
         ],
       },
     ];
@@ -515,14 +510,12 @@ export function useNavData() {
                 category: 'unit_service',
                 subcategory: 'accounting',
                 acl: 'read',
-              }) &&
-              claimRegistered,
+              }) && claimRegistered,
 
             title: t('claim'),
             path: paths.unitservice.accounting.claim.root,
             'data-test': 'us-nav-item-accounting-claim',
           },
-
         ].filter((one) => one.show),
       },
       {
@@ -899,6 +892,37 @@ export function useNavData() {
         icon: <Iconify icon="ic:outline-library-books" />,
         navItemId: 'EMBlogsNav',
         'data-test': 'employee-nav-item-browzeblogs',
+      },
+      {
+        show: true,
+        title: t('medical services'),
+        path: paths.employee.medicalServices.root,
+        icon: <Iconify icon="mdi:stethoscope" />,
+        navItemId: 'EMMedicalServicesNav',
+        'data-test': 'employee-nav-item-medical-services',
+        children: [
+          {
+            show: true,
+            title: t('medical analysis'),
+            path: paths.employee.medicalServices.medicalAnalysis,
+            navItemId: 'EMMedicalAnalysisNav',
+            'data-test': 'employee-nav-item-profile-medical-analysis',
+          },
+          {
+            show: true,
+            title: t('medicines'),
+            path: paths.employee.medicalServices.medicines,
+            navItemId: 'EMMedicinesNav',
+            'data-test': 'employee-nav-item-profile-medicines',
+          },
+          {
+            show: true,
+            title: t('radiology'),
+            path: paths.employee.medicalServices.radiology,
+            navItemId: 'EMRadiologyNav',
+            'data-test': 'employee-nav-item-profile-radiology',
+          },
+        ],
       },
     ];
     const employeeDashboard = [

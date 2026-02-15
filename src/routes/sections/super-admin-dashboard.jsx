@@ -498,6 +498,11 @@ const BlogsPage = lazy(() => import('src/pages/super-admin/blogs/table'));
 const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
 
+
+// medical analysis
+const MedicalAnalysisPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_home'));
+const MedicalAnalysisNewPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_create'));
+const MedicalAnalysisEditPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_edit'));
 // ----------------------------------------------------------------------
 
 // SUPER ADMIN PERMISSIONS
@@ -1254,6 +1259,15 @@ export const dashboardRoutes = [
               { path: ':id/edit', element: <ProductCatEditPage /> },
             ],
           },
+          {
+            path: 'medical_analysis',
+            children: [
+              { element: <MedicalAnalysisPage />, index: true },
+              { path: 'list', element: <MedicalAnalysisPage /> },
+              { path: 'new', element: <MedicalAnalysisNewPage /> },
+              { path: ':id/edit', element: <MedicalAnalysisEditPage /> },
+            ],
+          }
         ],
       },
     ],

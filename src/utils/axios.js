@@ -41,6 +41,11 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/cities/${id}`),
     country: (id) => (!id ? null : `/api/cities/country/${id}`),
   },
+  medicalAnalysis: {
+    all: '/api/medicalanalysis/',
+    many: '/api/medicalanalysis/many',
+    one: (id) => (!id ? null : `/api/medicalanalysis/${id}`),
+  },
   products: {
     all: '/api/products/',
     many: '/api/products/many',
@@ -894,5 +899,9 @@ export const endpoints = {
   clim: {
     all: '/api/claims',
     register: '/visit/register',
+  },
+  favoriteMedication: { 
+    all: '/api/favorite-medication',
+    one: (id) => (!id ? null : `/api/favorite-medication/${id}`),
   },
 };
