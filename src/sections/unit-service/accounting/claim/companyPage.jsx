@@ -20,7 +20,7 @@ import { useTranslate } from 'src/locales';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-import { checkEligibility } from 'src/services/claimService';
+import { getNewAuthorizations } from 'src/services/claimService';
 import { useNavigate } from 'react-router-dom';
 
 const DATA = [
@@ -70,9 +70,9 @@ export default function CompanyPage() {
     setResults(filtered);
   }, [search]);
 
-  const handleCreate = async (user) => {
+  const handleCreate = async () => {
     try {
-      const eligibilityRes = await checkEligibility({
+      const eligibilityRes = await getNewAuthorizations({
         patientId: '4000026255',
         memberId: '0000',
         payerId: 'JOR-I-000334',

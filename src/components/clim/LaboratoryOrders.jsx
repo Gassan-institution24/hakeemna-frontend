@@ -15,6 +15,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
+import { lab } from 'src/services/claimService';
 
 const LAB_ORDERS_LIST = [
   {
@@ -59,6 +60,8 @@ export default function LaboratoryOrders({ onDataChange }) {
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
+  const [sending, setSending] = useState(false);
+
   useEffect(() => {
     if (onDataChange) {
       onDataChange(orders.length > 0);
@@ -70,8 +73,13 @@ export default function LaboratoryOrders({ onDataChange }) {
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-  const addOrder = (item) => {
-    if (orders.find((o) => o.code === item.code)) return;
+const addOrder = async (item) => {
+  if (orders.find((o) => o.code === item.code)) return;
+
+  try {
+    setSending(true);
+
+    // أضف في UI أول
     setOrders((prev) => [
       ...prev,
       {
@@ -80,7 +88,17 @@ export default function LaboratoryOrders({ onDataChange }) {
         howOften: curLangAr ? 'الآن' : 'NOW',
       },
     ]);
-  };
+
+    // CALL BACKEND (STATIC PAYLOAD)
+    await lab();
+
+    console.log('Lab sent successfully');
+  } catch (e) {
+    console.error('Lab send failed', e);
+  } finally {
+    setSending(false);
+  }
+};
 
   const removeOrder = (code) => {
     setOrders((prev) => prev.filter((o) => o.code !== code));

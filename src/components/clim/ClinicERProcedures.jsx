@@ -17,6 +17,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
+import { ERX } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
@@ -134,22 +135,38 @@ export default function ClinicERProcedures({ onDataChange }) {
 
   const [search, setSearch] = useState('');
   const [procedures, setProcedures] = useState([]);
+  const [sending, setSending] = useState(false);
+
   useEffect(() => {
     if (onDataChange) {
       onDataChange(procedures.length > 0);
     }
   }, [procedures, onDataChange]);
   const filtered = PROCEDURES_LIST.filter((p) => {
-  const name = curLangAr ? p.nameAr : p.nameEn;
-  return name.toLowerCase().includes(search.toLowerCase());
-});
-
+    const name = curLangAr ? p.nameAr : p.nameEn;
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
 
   const hasProcedures = procedures.length > 0;
 
-  const addProcedure = (item) => {
+  const addProcedure = async (item) => {
     if (procedures.find((p) => p.code === item.code)) return;
-    setProcedures((prev) => [...prev, item]);
+
+    try {
+      setSending(true);
+
+      // update UI أولاً
+      setProcedures((prev) => [...prev, item]);
+
+      // call backend
+      await ERX();
+
+      console.log('ERX sent successfully');
+    } catch (e) {
+      console.error('ERX send failed', e);
+    } finally {
+      setSending(false);
+    }
   };
 
   const removeProcedure = (code) => {
