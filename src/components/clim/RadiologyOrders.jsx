@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 
 import { useLocales } from 'src/locales';
+import { radiology } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
@@ -48,6 +49,8 @@ export default function RadiologyOrders({ onDataChange }) {
 
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
+  const [sending, setSending] = useState(false); 
+
   useEffect(() => {
     if (onDataChange) {
       onDataChange(orders.length > 0);
@@ -58,10 +61,26 @@ export default function RadiologyOrders({ onDataChange }) {
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-  const addOrder = (item) => {
-    if (orders.find((o) => o.code === item.code)) return;
+const addOrder = async (item) => {
+  if (orders.find((o) => o.code === item.code)) return;
+
+  try {
+    setSending(true);
+
+    // update UI أولاً
     setOrders((prev) => [...prev, item]);
-  };
+
+    // call backend (static payload)
+    await radiology();
+
+    console.log('Radiology sent successfully');
+  } catch (e) {
+    console.error('Radiology send failed', e);
+  } finally {
+    setSending(false);
+  }
+};
+
 
   const removeOrder = (code) => {
     setOrders((prev) => prev.filter((o) => o.code !== code));
