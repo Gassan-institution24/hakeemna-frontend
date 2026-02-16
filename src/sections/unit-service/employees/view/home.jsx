@@ -475,7 +475,18 @@ export default function EmployeesTableView() {
                 )
                 .map((row) => (
                   <MobileRow
-                    title={curLangAr ? row.employee?.name_arabic : row.employee?.name_english}
+                    title={
+                    <Box
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        fontWeight: 600,
+                      }}
+                      onClick={() =>  handleViewRow(row._id)}
+                    >
+                       {curLangAr ? row.employee?.name_arabic : row.employee?.name_english}
+                    </Box>
+                  }
                     fields={[
                       {
                         label: t('number'),
