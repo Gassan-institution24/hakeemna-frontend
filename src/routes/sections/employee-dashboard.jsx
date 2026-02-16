@@ -109,6 +109,13 @@ const BrowseBlogs = lazy(() => import('src/pages/employee/blogs/browse-blogs'));
 const PreviewBlogs = lazy(() => import('src/pages/employee/blogs/preview-blogs'));
 
 const MyAttendencePage = lazy(() => import('src/pages/employee/attendence/my_attendence'));
+
+// medical-services
+const MedicalAnalysisPage = lazy(
+  () => import('src/pages/employee/medical-services/medical-analysis')
+);
+const MedicinesPage = lazy(() => import('src/pages/employee/medical-services/medicines'));
+const RadiologyPage = lazy(() => import('src/pages/employee/medical-services/radiology'));
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -298,14 +305,23 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'qr-code',
         element: <QrCodePage />,
       },
+      {
+        path: 'medical-services',
+        children: [
+          { element: <MedicalAnalysisPage />, index: true },
+          { path: 'medical-analysis', element: <MedicalAnalysisPage /> },
+          { path: 'medicines', element: <MedicinesPage /> },
+          { path: 'radiology', element: <RadiologyPage /> },
+        ],
+      },
     ],
   },
   {
-  path: '/video-call/:id',
-  element: (
-    <AuthGuard>
-      <VideoCallPage />
-    </AuthGuard>
-  ),
-}
+    path: '/video-call/:id',
+    element: (
+      <AuthGuard>
+        <VideoCallPage />
+      </AuthGuard>
+    ),
+  },
 ];

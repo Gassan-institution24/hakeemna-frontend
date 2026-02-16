@@ -552,6 +552,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/imaging/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/imaging/${id}/edit`,
       },
+      medicalAnalysis: {
+        root: `${ROOTS.SUPERADMIN}/tables/medical_analysis`,
+        new: `${ROOTS.SUPERADMIN}/tables/medical_analysis/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medical_analysis/${id}/edit`,
+      },
       employeetypes: {
         root: `${ROOTS.SUPERADMIN}/tables/employee_types`,
         new: `${ROOTS.SUPERADMIN}/tables/employee_types/new`,
@@ -962,6 +967,12 @@ export const paths = {
       parent: `${ROOTS.SUPERADMIN}/profile`,
       root: `${ROOTS.SUPERADMIN}/profile/settings`,
       edit: `${ROOTS.SUPERADMIN}/edit`,
+    },
+    medicalServices: {
+      root: `${ROOTS.SUPERADMIN}/medical-services`,
+      medicalAnalysis: `${ROOTS.SUPERADMIN}/medical-services/medical-analysis`,
+      medicines: `${ROOTS.SUPERADMIN}/medical-services/medicines`,
+      radiology: `${ROOTS.SUPERADMIN}/medical-services/radiology`,
     },
   },
 };

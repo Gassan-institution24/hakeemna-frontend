@@ -6,14 +6,24 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import React, { useMemo, useState, useEffect } from 'react';
 
 import {
+  Tab,
+  Box,
   Card,
+  Tabs,
+  List,
   Stack,
   Button,
+  Dialog,
   Divider,
   TextField,
   IconButton,
   Typography,
+  DialogTitle,
   Autocomplete,
+  ListItemText,
+  DialogContent,
+  DialogActions,
+  ListItemButton,
 } from '@mui/material';
 
 import { useDebounce } from 'src/hooks/use-debounce';
@@ -23,6 +33,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetMedicines } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetFavoriteMedication } from 'src/api/doctorFavorite';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -31,14 +42,20 @@ import { RHFCheckbox, RHFTextField, RHFDatePicker } from 'src/components/hook-fo
 export default function PrescriptionUpload({ patient, refetch }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-
+  const { favoriteMedication } = useGetFavoriteMedication();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const [tab, setTab] = useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [medSerach, setMedSerach] = useState();
   const [loading, setloading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedFav, setSelectedFav] = useState(null);
+  const dialogMethods = useForm({
+    defaultValues: { drugs: [] },
+  });
 
   const debouncedQuery = useDebounce(medSerach);
 
@@ -137,7 +154,12 @@ export default function PrescriptionUpload({ patient, refetch }) {
     <FormProvider methods={methods}>
       <Card sx={{ p: 2, mb: 4 }}>
         <Typography variant="subtitle1">{t('prescription')}</Typography>
-        {!loading &&
+        <Tabs value={tab} onChange={(e, v) => setTab(v)}>
+          <Tab label={t('manual entry')} />
+          {favoriteMedication?.length && <Tab label={t('favorites')} />}
+        </Tabs>
+        {tab === 0 &&
+          !loading &&
           fields.map((one, index) => (
             <Stack direction="row" flexWrap="wrap" rowGap={2} columnGap={1} mt={2}>
               <Stack>
@@ -201,17 +223,150 @@ export default function PrescriptionUpload({ patient, refetch }) {
               </IconButton>
             </Stack>
           ))}
-        <Divider sx={{ mt: 2 }} />
-        <Button color="success" onClick={appendDrug}>
-          <Iconify width={20} icon="ri:add-line" />
-          {t('add')}
-        </Button>
-        <Stack alignItems="end">
-          <Button variant="contained" onClick={() => handleSubmit('prescription')} sx={{ mt: 2 }}>
+        {tab === 1 && (
+          <Box mt={2}>
+            <List>
+              {favoriteMedication?.map((fav) => (
+                <ListItemButton
+                  key={fav._id}
+                  onClick={() => {
+                    const mapped = fav.medicines.map((med) => ({
+                      medicines: med.medicine?._id,
+                      Frequency_per_day: med.Frequency_per_day,
+                      Doctor_Comments: med.Doctor_Comments,
+                      chronic: med.chronic,
+                    }));
+
+                    dialogMethods.reset({ drugs: mapped });
+                    setSelectedFav(fav);
+                    setOpenDialog(true);
+                  }}
+                >
+                  <ListItemText
+                    primary={curLangAr ? fav.favorite_name_ar : fav.favorite_name}
+                    secondary={`${fav.medicines.length} ${t('medicines')}`}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Box>
+        )}
+        {tab === 0 && (
+          <>
+            <Divider sx={{ mt: 2 }} />
+            <Button color="success" onClick={appendDrug}>
+              <Iconify width={20} icon="ri:add-line" />
+              {t('add')}
+            </Button>
+            <Stack alignItems="end">
+              <Button
+                variant="contained"
+                onClick={() => handleSubmit('prescription')}
+                sx={{ mt: 2 }}
+              >
+                {t('save')}
+              </Button>
+            </Stack>
+          </>
+        )}
+      </Card>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="lg" fullWidth>
+        <DialogTitle>
+          {curLangAr ? selectedFav?.favorite_name_ar : selectedFav?.favorite_name}
+        </DialogTitle>
+
+        <FormProvider methods={dialogMethods}>
+          <DialogContent dividers>
+            {dialogMethods.watch('drugs')?.map((one, index) => {
+              const medInfo = selectedFav?.medicines[index]?.medicine;
+
+              return (
+                <Card
+                  key={index}
+                  sx={{
+                    p: 2,
+                    mb: 3,
+                    borderRadius: 2,
+                    border: '1px solid #eee',
+                  }}
+                >
+                  <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                    {medInfo?.trade_name} {medInfo?.concentration}
+                  </Typography>
+
+                  <Divider sx={{ mb: 2 }} />
+
+                  <Stack direction="row" flexWrap="wrap" rowGap={2} columnGap={1}>
+                    {dialogMethods.watch(`drugs[${index}].Frequency_per_day`) && (
+                      <RHFTextField
+                        name={`drugs[${index}].Frequency_per_day`}
+                        label={t('frequency')}
+                        disabled
+                        sx={{ minWidth: 250, flex: 1 }}
+                      />
+                    )}
+                    {dialogMethods.watch(`drugs[${index}].Doctor_Comments`) && (
+                      <RHFTextField
+                        name={`drugs[${index}].Doctor_Comments`}
+                        label={t('doctor comment')}
+                        disabled
+                        multiline
+                        sx={{ minWidth: 300, flex: 1 }}
+                      />
+                    )}
+                    <RHFDatePicker
+                      sx={{ minWidth: 200, flex: 1 }}
+                      name={`drugs[${index}].Start_time`}
+                      label={t('start date')}
+                    />
+                    <RHFDatePicker
+                      sx={{ minWidth: 200, flex: 1 }}
+                      name={`drugs[${index}].End_time`}
+                      label={t('end date')}
+                      shouldDisableDate={(date) =>
+                        date < new Date(dialogMethods.watch(`drugs[${index}].Start_time`))
+                      }
+                    />
+                    <RHFCheckbox
+                      name={`drugs[${index}].chronic`}
+                      label={t('chronic')}
+                      disabled
+                      sx={{ minWidth: 150 }}
+                    />
+                  </Stack>
+                </Card>
+              );
+            })}
+          </DialogContent>
+        </FormProvider>
+
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>{t('cancel')}</Button>
+
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const drugs = dialogMethods.getValues('drugs');
+
+              const mappedDrugs = drugs.map((med) => ({
+                unit_service: employee?.unit_service?._id,
+                employee: user?._id,
+                patient: patient?.patient?._id,
+                unit_service_patient: patient?._id,
+                ...med,
+              }));
+
+              await axiosInstance.post(endpoints.prescription.all, mappedDrugs);
+
+              enqueueSnackbar(t('prescription added successfully'));
+              setOpenDialog(false);
+              refetch();
+            }}
+          >
             {t('save')}
           </Button>
-        </Stack>
-      </Card>
+        </DialogActions>
+      </Dialog>
     </FormProvider>
   );
 }

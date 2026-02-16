@@ -108,6 +108,7 @@ export default function TablesListView() {
       { tableName: 'product_categories', documents: [] }, //
       { tableName: 'imaging', documents: [] }, //
       { tableName: 'doctors', documents: [] }, //
+      { tableName: 'medical_analysis', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,
