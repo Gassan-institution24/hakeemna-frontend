@@ -42,6 +42,7 @@ import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
+import PatientMedicalAnalyses from '../patient-profile/patient_medical_analyses';
 
 // ----------------------------------------------------------------------
 
@@ -199,6 +200,8 @@ export default function PatientProfile() {
         return <EditPatient patient={usPatientData} />;
       case 'checklist':
         return <PatientCheckList patient={usPatientData} />;
+        case 'medical_analyses':
+          return <PatientMedicalAnalyses patient={usPatientData}/>
       default:
         return null;
     }
