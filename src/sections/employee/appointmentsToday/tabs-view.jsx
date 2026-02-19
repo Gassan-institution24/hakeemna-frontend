@@ -8,9 +8,11 @@ import { useTranslate } from 'src/locales';
 import { useGetOneEntranceManagement } from 'src/api';
 
 import SickLeave from './sickLeave';
+import Radiology from './radiology';
 import Prescription from './prescription';
 import Doctorreport from './doctorReport';
 import Medicalreport from './medicalreport';
+import MedicalAnalysis from './medical-analysis';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +50,16 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
           Entrance={Entrance}
         />
       ),
+    },
+    {
+      value: 'five',
+      title: 'medical analysis',
+      label: <MedicalAnalysis Entrance={Entrance} />,
+    },
+    {
+      value: 'six',
+      title: 'radiology',
+      label: <Radiology Entrance={Entrance} />,
     },
   ];
 
