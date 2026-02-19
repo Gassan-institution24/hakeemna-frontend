@@ -36,6 +36,8 @@ const FinancilMovmentInfo = lazy(() => import('src/pages/dashboard/user/Financil
 const Family = lazy(() => import('src/pages/dashboard/user/Family'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
+const PatientMedicalAnalysis = lazy(() => import('src/pages/dashboard/user/medicalAnalysis'));
+const PatientRadiology = lazy(() => import('src/pages/dashboard/user/radiology'))
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const ContactUS = lazy(() => import('src/pages/dashboard/user/contaactus'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
@@ -104,6 +106,8 @@ export const userRoutes = [
           { path: 'emergency', element: <Emergency /> },
           { path: 'watingroom', element: <Watingroom /> },
           { path: 'documents/prescriptions', element: <PatientPrescriptions /> },
+          { path: 'documents/medicalAnalysis', element: <PatientMedicalAnalysis /> },
+          { path: 'documents/radiology', element: <PatientRadiology /> },
           { path: 'bmi', element: <BMI /> },
           { path: 'myhealth', element: <Myhealth /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },

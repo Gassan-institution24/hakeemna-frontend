@@ -895,7 +895,7 @@ export function useNavData() {
       },
       {
         show: true,
-        title: t('medical services'),
+        title: t('favorite lists'),
         path: paths.employee.medicalServices.root,
         icon: <Iconify icon="mdi:stethoscope" />,
         navItemId: 'EMMedicalServicesNav',
@@ -904,21 +904,21 @@ export function useNavData() {
           {
             show: true,
             title: t('medical analysis'),
-            path: paths.employee.medicalServices.medicalAnalysis,
+            path: paths.employee.medicalServices.medicalAnalysis.root,
             navItemId: 'EMMedicalAnalysisNav',
             'data-test': 'employee-nav-item-profile-medical-analysis',
           },
           {
             show: true,
             title: t('medicines'),
-            path: paths.employee.medicalServices.medicines,
+            path: paths.employee.medicalServices.medication.root,
             navItemId: 'EMMedicinesNav',
             'data-test': 'employee-nav-item-profile-medicines',
           },
           {
             show: true,
             title: t('radiology'),
-            path: paths.employee.medicalServices.radiology,
+            path: paths.employee.medicalServices.radiology.root,
             navItemId: 'EMRadiologyNav',
             'data-test': 'employee-nav-item-profile-radiology',
           },
@@ -976,6 +976,13 @@ export function useNavData() {
                 title: t('prescriptions'),
                 path: paths.dashboard.user.prescriptions,
                 // icon: <Iconify icon="material-symbols:prescriptions-outline" />,
+              },
+              {
+                title: t('medical analysis'),
+                path: paths.dashboard.user.medicalAnalysis,
+              },{
+                title: t('radiology'),
+                path: paths.dashboard.user.radiology,
               },
             ],
           },
