@@ -21,11 +21,12 @@ import {
 import { useTranslate } from 'src/locales';
 import {
   submitClaim,
-  getNewAuthorizations,
   setDownloaded,
   viewAuthorizations,
+  getNewAuthorizations,
 } from 'src/services/claimService';
 
+import Iconify from 'src/components/iconify';
 import AddNotes from 'src/components/clim/AddNotes';
 import AddDiagnosis from 'src/components/clim/AddDiagnosis';
 import RadiologyOrders from 'src/components/clim/RadiologyOrders';
@@ -33,7 +34,6 @@ import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
 import MedicationsOrders from 'src/components/clim/MedicationsOrders';
 import ClinicERProcedures from 'src/components/clim/ClinicERProcedures';
 import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
-import Iconify from 'src/components/iconify';
 
 /* ================= STATIC DATA ================= */
 const sections = [
@@ -57,7 +57,7 @@ const indexToKey = {
 
 export default function PatientPage() {
   const { t } = useTranslate();
-  const [visitData, setVisitData] = useState(null);
+  const [visitData, setVisitData] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -84,18 +84,17 @@ export default function PatientPage() {
       return undefined;
     }
 
-    const MAX_RETRY = 20;
+    const MAX_RETRY = 5;
 
     pollingRef.current = setInterval(async () => {
       try {
         retryRef.current += 1;
 
-        const response = await getNewAuthorizations();
+        const response = await viewAuthorizations();
+        console.log(response.data.result);
 
-        if (response?.success === true) {
-          setVisitData(() => ({
-            authorization: response?.success,
-          }));
+        if (response?.data?.result === 'Yes') {
+          setVisitData(true);
 
           setCheckingAuth(false);
           clearInterval(pollingRef.current);
@@ -121,7 +120,7 @@ export default function PatientPage() {
       };
     }
 
-    if (visitData?.authorization) {
+    if (visitData) {
       return {
         label: 'elegible',
         color: 'success',
@@ -202,9 +201,9 @@ export default function PatientPage() {
             sx={{
               alignItems: 'center',
             }}
-            onClick={() => {
-              viewAuthorizations();
-            }}
+            // onClick={() => {
+            //   viewAuthorizations();
+            // }}
           >
             {' '}
             <Iconify icon="solar:refresh-bold" sx={{ mr: 1 }} />
