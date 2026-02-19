@@ -56,7 +56,7 @@ export default function MedicalAnalysis() {
     { id: 'code', label: t('code') },
     { id: 'favorite_name', label: t('name in english') },
     { id: 'favorite_name_ar', label: t('name in arabic') },
-    { id: 'medical_analyses', label: t('medical analyses') },
+    { id: 'medical_analysis', label: t('medical_analysis') },
     { id: 'note', label: t('note') },
 
     { id: '', width: 88 },
@@ -136,7 +136,7 @@ export default function MedicalAnalysis() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('medical analyses')} /// edit
+        heading={t('medical analysis')} /// edit
         links={[
           {
             name: t('dashboard'),
@@ -208,8 +208,8 @@ export default function MedicalAnalysis() {
                     { label: t('code'), value: row.code },
                     { label: t('name arabic'), value: row.favorite_name_ar },
                     {
-                      label: t('medical analyses'),
-                      value: row.medical_analyses
+                      label: t('medical analysis'),
+                      value: row.medical_analysis
                         ?.map((i) => (curLangAr ? i.name_arabic : i.name_english))
                         .join(', '),
                     },
@@ -374,7 +374,7 @@ function applyFilter({ inputData = [], comparator, filters }) {
       const code = String(data.code || '');
 
       const analysesMatch =
-        data.medical_analyses?.some(
+        data.medical_analysis?.some(
           (analysis) =>
             analysis.name_english?.toLowerCase().includes(search) ||
             analysis.name_arabic?.toLowerCase().includes(search)
