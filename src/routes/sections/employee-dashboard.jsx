@@ -111,11 +111,44 @@ const PreviewBlogs = lazy(() => import('src/pages/employee/blogs/preview-blogs')
 const MyAttendencePage = lazy(() => import('src/pages/employee/attendence/my_attendence'));
 
 // medical-services
+
+// medical analysis
 const MedicalAnalysisPage = lazy(
-  () => import('src/pages/employee/medical-services/medical-analysis')
+  () => import('src/pages/employee/medical-services/medical-analysis/medical-analysis')
 );
-const MedicinesPage = lazy(() => import('src/pages/employee/medical-services/medicines'));
-const RadiologyPage = lazy(() => import('src/pages/employee/medical-services/radiology'));
+const MedicalAnalysisViewPage = lazy(
+  () => import('src/pages/employee/medical-services/medical-analysis/medical-analysis_view')
+);
+const MedicalAnalysisEditPage = lazy(
+  () => import('src/pages/employee/medical-services/medical-analysis/medical-analysis_edit')
+);
+const MedicalAnalysisCreatePage = lazy(
+  () => import('src/pages/employee/medical-services/medical-analysis/medical-analysis_create')
+);
+// medicines
+const MedicinesPage = lazy(
+  () => import('src/pages/employee/medical-services/medication/medication')
+);
+const MedicationViewPage = lazy(
+  () => import('src/pages/employee/medical-services/medication/medication_view')
+);
+const MedicationEditPage = lazy(
+  () => import('src/pages/employee/medical-services/medication/medication_edit')
+);
+const MedicationCreatePage = lazy(
+  () => import('src/pages/employee/medical-services/medication/medication_create')
+);
+// radiology
+const RadiologyPage = lazy(() => import('src/pages/employee/medical-services/radiology/radiology'));
+const RadiologyViewPage = lazy(
+  () => import('src/pages/employee/medical-services/radiology/radiology_view')
+);
+const RadiologyEditPage = lazy(
+  () => import('src/pages/employee/medical-services/radiology/radiology_edit')
+);
+const RadiologyCreatePage = lazy(
+  () => import('src/pages/employee/medical-services/radiology/radiology_create')
+);
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -309,9 +342,33 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'medical-services',
         children: [
           { element: <MedicalAnalysisPage />, index: true },
-          { path: 'medical-analysis', element: <MedicalAnalysisPage /> },
-          { path: 'medicines', element: <MedicinesPage /> },
-          { path: 'radiology', element: <RadiologyPage /> },
+          {
+            path: 'medical-analysis',
+            children: [
+              { element: <MedicalAnalysisPage />, index: true },
+              { path: 'new', element: <MedicalAnalysisCreatePage /> },
+              { path: ':id', element: <MedicalAnalysisViewPage /> },
+              { path: ':id/edit', element: <MedicalAnalysisEditPage /> },
+            ],
+          },
+          {
+            path: 'medicines',
+            children: [
+              { element: <MedicinesPage />, index: true },
+              { path: ':id', element: <MedicationViewPage /> },
+              { path: ':id/edit', element: <MedicationEditPage /> },
+              { path: 'new', element: <MedicationCreatePage /> },
+            ],
+          },
+          {
+            path: 'radiology',
+            children: [
+              { element: <RadiologyPage />, index: true },
+              { path: ':id', element: <RadiologyViewPage /> },
+              { path: ':id/edit', element: <RadiologyEditPage /> },
+              { path: 'new', element: <RadiologyCreatePage /> },
+            ],
+          },
         ],
       },
     ],
