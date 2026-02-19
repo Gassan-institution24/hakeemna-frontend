@@ -36,12 +36,14 @@ import PatientHistory from '../patient-profile/patient-hy';
 import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
 import PatientCheckList from '../patient-profile/patient-checklist';
+import PatientRadiology from '../patient-profile/patient-radiology';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
 import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
+import PatientMedicalAnalyses from '../patient-profile/patient_medical_analyses';
 
 // ----------------------------------------------------------------------
 
@@ -114,6 +116,7 @@ export default function PatientProfile() {
     { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analyses', label: t('medical analyses') },
+    { value: 'radiology', label: t('radiology') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -199,6 +202,10 @@ export default function PatientProfile() {
         return <EditPatient patient={usPatientData} />;
       case 'checklist':
         return <PatientCheckList patient={usPatientData} />;
+      case 'medical_analyses':
+        return <PatientMedicalAnalyses patient={usPatientData} />;
+      case 'radiology':
+        return <PatientRadiology patient={usPatientData} />;
       default:
         return null;
     }

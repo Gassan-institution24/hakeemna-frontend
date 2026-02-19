@@ -350,7 +350,7 @@ export default function PrescriptionUpload({ patient, refetch }) {
 
               const mappedDrugs = drugs.map((med) => ({
                 unit_service: employee?.unit_service?._id,
-                employee: user?._id,
+                employee: user?.employee?._id,
                 patient: patient?.patient?._id,
                 unit_service_patient: patient?._id,
                 ...med,

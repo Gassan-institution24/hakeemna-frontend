@@ -104,6 +104,8 @@ export const paths = {
       share: `${ROOTS.DASHBOARD}/user/share`,
       blogs: `${ROOTS.DASHBOARD}/user/blogs`,
       health: `${ROOTS.DASHBOARD}/user/myhealth`,
+      medicalAnalysis: `${ROOTS.DASHBOARD}/user/documents/medicalAnalysis`,
+      radiology: `${ROOTS.DASHBOARD}/user/documents/radiology`,
       products: {
         all: `${ROOTS.DASHBOARD}/user/financial/products/all`,
         offer: (id) => `${ROOTS.DASHBOARD}/user/financial/products/offer/${id}`,
@@ -970,9 +972,24 @@ export const paths = {
     },
     medicalServices: {
       root: `${ROOTS.SUPERADMIN}/medical-services`,
-      medicalAnalysis: `${ROOTS.SUPERADMIN}/medical-services/medical-analysis`,
-      medicines: `${ROOTS.SUPERADMIN}/medical-services/medicines`,
-      radiology: `${ROOTS.SUPERADMIN}/medical-services/radiology`,
+      medicalAnalysis: {
+        root: `${ROOTS.SUPERADMIN}/medical-services/medical-analysis`,
+        new: `${ROOTS.SUPERADMIN}/medical-services/medical-analysis/new`,
+        view: (id) => `${ROOTS.SUPERADMIN}/medical-services/medical-analysis/${id}`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/medical-services/medical-analysis/${id}/edit`,
+      },
+      medication: {
+        root: `${ROOTS.SUPERADMIN}/medical-services/medicines`,
+        new: `${ROOTS.SUPERADMIN}/medical-services/medicines/new`,
+        view: (id) => `${ROOTS.SUPERADMIN}/medical-services/medicines/${id}`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/medical-services/medicines/${id}/edit`,
+      },
+      radiology: {
+        root: `${ROOTS.SUPERADMIN}/medical-services/radiology`,
+        new: `${ROOTS.SUPERADMIN}/medical-services/radiology/new`,
+        view: (id) => `${ROOTS.SUPERADMIN}/medical-services/radiology/${id}`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/medical-services/radiology/${id}/edit`,
+      },
     },
   },
 };
