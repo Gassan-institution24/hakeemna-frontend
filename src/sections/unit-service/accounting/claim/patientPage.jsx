@@ -19,7 +19,12 @@ import {
 } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
-import { submitClaim, createEncounter, getNewAuthorizations } from 'src/services/claimService';
+import {
+  submitClaim,
+  getNewAuthorizations,
+  setDownloaded,
+  viewAuthorizations,
+} from 'src/services/claimService';
 
 import AddNotes from 'src/components/clim/AddNotes';
 import AddDiagnosis from 'src/components/clim/AddDiagnosis';
@@ -71,21 +76,6 @@ export default function PatientPage() {
   const pollingRef = useRef(null);
   const retryRef = useRef(0);
   const { visitId } = useParams();
-
-  useEffect(() => {
-    if (!visitId) return;
-
-    const startEncounter = async () => {
-      try {
-        const response = await createEncounter();
-        setVisitData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    startEncounter();
-  }, [visitId]);
 
   /* ================= Authorization Polling ================= */
 
@@ -194,12 +184,15 @@ export default function PatientPage() {
 
         <Divider sx={{ my: 2 }} />
 
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           {/* <Button variant="outlined">{t('Patient Inquiry')}</Button> */}
           <Button
             variant="outlined"
             sx={{
               alignItems: 'center',
+            }}
+            onClick={() => {
+              setDownloaded();
             }}
           >
             {t('Update Patient Data')}
@@ -208,6 +201,9 @@ export default function PatientPage() {
             variant="contained"
             sx={{
               alignItems: 'center',
+            }}
+            onClick={() => {
+              viewAuthorizations();
             }}
           >
             {' '}
