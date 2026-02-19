@@ -20,7 +20,7 @@ import { useTranslate } from 'src/locales';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-import { getNewAuthorizations } from 'src/services/claimService';
+import { createEncounter, getNewAuthorizations } from 'src/services/claimService';
 import { useNavigate } from 'react-router-dom';
 
 const DATA = [
@@ -72,16 +72,9 @@ export default function CompanyPage() {
 
   const handleCreate = async () => {
     try {
-      const eligibilityRes = await getNewAuthorizations({
-        patientId: '4000026255',
-        memberId: '0000',
-        payerId: 'JOR-I-000334',
-        encounterType: 1,
-      });
+      await createEncounter();
 
-      const visitId = eligibilityRes?.response?.VisitID || 'ELG0001';
-
-      navigate(paths.unitservice.accounting.claim.patientVisitView(visitId));
+      navigate(paths.unitservice.accounting.claim.patientVisitView('ELG0001'));
 
       enqueueSnackbar('Visit created successfully', { variant: 'success' });
     } catch (error) {
