@@ -103,7 +103,7 @@ export default function MedicalAnalysis() {
                   width: '100%',
                 }}
               >
-                {info?.medical_analyses?.map((analyses, ii) => (
+                {info?.medical_analysis?.map((analyses, ii) => (
                   <Typography
                     key={ii}
                     sx={{
