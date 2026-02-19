@@ -912,6 +912,7 @@ export const endpoints = {
     all: '/api/favorite-radiology',
     one: (id) => (!id ? null : `/api/favorite-radiology/${id}`),
   },
+
   medicalAnalysisPatient: {
     all: '/api/medical-analysis-patient',
     unitServicePatient: (unitServicePatientId) =>
@@ -920,5 +921,16 @@ export const endpoints = {
       !unitServicePatientId || !analysisId
         ? null
         : `/api/medical-analysis-patient/${unitServicePatientId}/${analysisId}`,
+    patient: (patientId) => `/api/medical-analysis-patient/patient/${patientId}`,
+  },
+  radiologyPatient: {
+    all: '/api/radiology-patient',
+    unitServicePatient: (unitServicePatientId) => `/api/radiology-patient/${unitServicePatientId}`,
+    one: (unitServicePatientId, radiologyId) =>
+      !unitServicePatientId || !radiologyId
+        ? null
+        : `/api/radiology-patient/${unitServicePatientId}/${radiologyId}`,
+    patient: (patientId) => `/api/radiology-patient/patient/${patientId}`,
+
   },
 };

@@ -1756,6 +1756,11 @@
   "radiology is required":"الأشعة مطلوب",
   "new radiology":"أشعة جديدة",
   "update radiology":"تحديث الأشعة",
+  "medical analysis added successfully":"تم اضافة التحليل الطبي بنجاح",
+  "radiology added successfully":"تم اضافة الأشعة بنجاح",
+  "group":"المجموعة",
+  "My medical analysis":"تحاليلي الطبية",
+  "My radiology":"تقارير الأشعة",
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",
