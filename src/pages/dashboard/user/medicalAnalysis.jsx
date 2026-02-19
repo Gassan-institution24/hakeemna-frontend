@@ -1,14 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 
-import MedicalAnalysis from 'src/sections/employee/medical-services/medical-analysis';
+import { useTranslate } from 'src/locales';
+
+import { MedicalAnalysis } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
 export default function MedicalAnalysisPage() {
+  const { t } = useTranslate();
+
   return (
     <>
       <Helmet>
-        <title> Dashboard: medical analysis</title>
+        <title> {t('Medical Reports')} </title>
         <meta name="description" content="meta" />
       </Helmet>
 

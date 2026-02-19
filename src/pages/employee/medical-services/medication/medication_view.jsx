@@ -1,17 +1,16 @@
 import { Helmet } from 'react-helmet-async';
 
-import Medicines from 'src/sections/employee/medical-services/medicines';
+import TableMedicationView from 'src/sections/employee/medical-services/medication/medication_view';
 
 // ----------------------------------------------------------------------
-
-export default function medicinesPage() {
+export default function MedicationViewPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: medicines</title>
+        <title> Dashboard: medicine details</title>
         <meta name="description" content="meta" />
       </Helmet>
-      <Medicines />
+      <TableMedicationView />
     </>
   );
 }
