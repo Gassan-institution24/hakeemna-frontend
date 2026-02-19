@@ -21,7 +21,7 @@ export default function MedicalAnalysisTableRow({ row, onEditRow, onViewRow }) {
     code,
     favorite_name,
     favorite_name_ar,
-    medical_analyses,
+    medical_analysis,
     note,
     created_at,
     updated_at,
@@ -73,7 +73,7 @@ export default function MedicalAnalysisTableRow({ row, onEditRow, onViewRow }) {
         {favorite_name_ar}
       </TableCell>
       <TableCell align="center">
-        {medical_analyses?.map((i) => (curLangAr ? i.name_arabic : i.name_english)).join(', ')}
+        {medical_analysis?.map((i) => (curLangAr ? i.name_arabic : i.name_english)).join(', ')}
       </TableCell>
       <TableCell align="center">{note}</TableCell>
       <TableCell align="center">

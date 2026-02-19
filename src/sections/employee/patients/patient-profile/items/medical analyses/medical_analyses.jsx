@@ -37,7 +37,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
   const [editing, setEditing] = useState(false);
 
   const schema = Yup.object().shape({
-    medical_analyses: Yup.array().of(
+    medical_analysis: Yup.array().of(
       Yup.object().shape({
         medical_analysis: Yup.string().required(t('required field')),
         Doctor_Comments: Yup.string(),
@@ -48,7 +48,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      medical_analyses: one.medical_analyses.map((m) => ({
+      medical_analysis: one.medical_analysis.map((m) => ({
         medical_analysis: m.medical_analysis._id,
         Doctor_Comments: m.Doctor_Comments,
       })),
@@ -59,7 +59,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'medical_analyses',
+    name: 'medical_analysis',
   });
 
   const handleDelete = async (id) => {
@@ -77,7 +77,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await axiosInstance.patch(endpoints.medicalAnalysisPatient.one(patient?._id, one?._id), {
-        medical_analyses: data.medical_analyses,
+        medical_analysis: data.medical_analysis,
       });
 
       enqueueSnackbar(t('updated successfully!'));
@@ -101,12 +101,12 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
                   fullWidth
                   value={
                     medicalAnalysisData?.find(
-                      (item) => item._id === watch(`medical_analyses.${index}.medical_analysis`)
+                      (item) => item._id === watch(`medical_analysis.${index}.medical_analysis`)
                     ) || null
                   }
                   options={medicalAnalysisData || []}
                   onChange={(e, newValue) =>
-                    setValue(`medical_analyses.${index}.medical_analysis`, newValue?._id, {
+                    setValue(`medical_analysis.${index}.medical_analysis`, newValue?._id, {
                       shouldValidate: true,
                     })
                   }
@@ -119,7 +119,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
                 <TextField
                   fullWidth
                   label={t('doctor comment')}
-                  {...methods.register(`medical_analyses.${index}.Doctor_Comments`)}
+                  {...methods.register(`medical_analysis.${index}.Doctor_Comments`)}
                 />
 
                 <IconButton color="error" onClick={() => remove(index)}>
@@ -189,7 +189,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
               {t('doctor comment')}
             </Typography>
             {/* ANALYSES LIST */}
-            {one.medical_analyses?.map((med, indx) => (
+              {one.medical_analysis?.map((med, indx) => (
               <React.Fragment key={indx}>
                 <Typography variant="body2">{med?.medical_analysis?.name_english}</Typography>
 

@@ -377,7 +377,7 @@ function applyFilter({ inputData = [], comparator, filters }) {
       const code = String(data.code || '');
 
       const analysesMatch =
-        data.medical_analyses?.some(
+        data.medical_analysis?.some(
           (analysis) =>
             analysis.name_english?.toLowerCase().includes(search) ||
             analysis.name_arabic?.toLowerCase().includes(search)
