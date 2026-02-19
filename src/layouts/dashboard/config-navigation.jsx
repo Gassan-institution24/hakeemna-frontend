@@ -977,6 +977,13 @@ export function useNavData() {
                 path: paths.dashboard.user.prescriptions,
                 // icon: <Iconify icon="material-symbols:prescriptions-outline" />,
               },
+              {
+                title: t('medical analysis'),
+                path: paths.dashboard.user.medicalAnalysis,
+              },{
+                title: t('radiology'),
+                path: paths.dashboard.user.radiology,
+              },
             ],
           },
           {

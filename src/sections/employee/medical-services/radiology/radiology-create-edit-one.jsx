@@ -37,8 +37,8 @@ export default function RadiologyNewEditForm({ currentFavorite }) {
     note: Yup.string(),
   });
 
-    const { imagingData, loading } = useGetImagings();
-  
+  const { imagingData, loading } = useGetImagings();
+
   const defaultValues = useMemo(
     () => ({
       name_arabic: currentFavorite?.favorite_name_ar || '',
@@ -88,10 +88,7 @@ export default function RadiologyNewEditForm({ currentFavorite }) {
       };
 
       if (currentFavorite) {
-        await axiosInstance.patch(
-          endpoints.favoriteRadiology.one(currentFavorite._id),
-          payload
-        );
+        await axiosInstance.patch(endpoints.favoriteRadiology.one(currentFavorite._id), payload);
       } else {
         await axiosInstance.post(endpoints.favoriteRadiology.all, payload);
       }
@@ -115,7 +112,7 @@ export default function RadiologyNewEditForm({ currentFavorite }) {
 
     return imagingData.filter((analysis) => !selectedIds.includes(analysis._id));
   }, [imagingData, selectedAnalyses]);
-if (loading) return <LoadingScreen />;
+  if (loading) return <LoadingScreen />;
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -145,9 +142,7 @@ if (loading) return <LoadingScreen />;
                 name="radiology"
                 label={t('radiology')}
                 options={filteredOptions}
-                getOptionLabel={(option) =>
-                 option?.diagnostic_test || '' 
-                }
+                getOptionLabel={(option) => option?.diagnostic_test || ''}
                 isOptionEqualToValue={(option, value) => option._id === value._id}
               />
 

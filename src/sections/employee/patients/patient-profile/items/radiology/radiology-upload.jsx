@@ -29,15 +29,15 @@ import {
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetImagings } from 'src/api/imaging';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicalAnalysis } from 'src/api/medicalAnalysis';
-import { useGetFavoriteMedicalAnalysis } from 'src/api/doctorFavorite';
+import { useGetFavoriteRadiology } from 'src/api/doctorFavorite';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
-export default function MedicalAnalysesUpload({ patient, refetch }) {
+export default function RadiologyUpload({ patient, refetch }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { currentLang } = useLocales();
@@ -45,37 +45,39 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
   const [tab, setTab] = useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { favoriteMedicalAnalysis } = useGetFavoriteMedicalAnalysis();
+  const { favoriteRadiology } = useGetFavoriteRadiology();
 
   const [loading, setloading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFav, setSelectedFav] = useState(null);
   const dialogMethods = useForm({
-    defaultValues: { analyses: [] },
+    defaultValues: { radiology: [] },
   });
 
-  const { medicalAnalysisData } = useGetMedicalAnalysis();
+  const { imagingData } = useGetImagings();
+
   const employee = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
 
-  const defaultAnalysis = useMemo(
+  const defaultRadiology = useMemo(
     () => ({
       patient: patient?.patient?._id,
-      medical_analysis: null,
+      radiology: null,
       Doctor_Comments: '',
     }),
     [patient?.patient?._id]
   );
   const schema = yup.object().shape({
-    analyses: yup.array().of(
+    radiology: yup.array().of(
       yup.object().shape({
-        medical_analysis: yup.string().required(t('required field')),
+        radiology: yup.string().required(t('required field')),
         Doctor_Comments: yup.string(),
       })
     ),
   });
+
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { analyses: [defaultAnalysis] },
+    defaultValues: { radiology: [defaultRadiology] },
   });
 
   const {
@@ -84,10 +86,10 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
     formState: { errors },
   } = methods;
 
-  const { fields, append, remove } = useFieldArray({ control, name: 'analyses' });
+  const { fields, append, remove } = useFieldArray({ control, name: 'radiology' });
 
   const appendDrug = () => {
-    append(defaultAnalysis);
+    append(defaultRadiology);
   };
 
   const removeDrug = (index) => {
@@ -100,40 +102,39 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
 
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
-      if (!data.analyses?.length || data.analyses.some((one) => !one.medical_analysis)) {
-        enqueueSnackbar(t('please choose medical analysis'), { variant: 'error' });
+      if (!data.radiology?.length || data.radiology.some((one) => !one.radiology)) {
+        enqueueSnackbar(t('please choose radiology'), { variant: 'error' });
         return;
       }
 
       const payload = {
         unit_service_patient: patient?._id,
         patient: patient?.patient?._id,
-        medical_analyses: data.analyses.map((one) => ({
-          medical_analysis: one.medical_analysis,
+        radiology: data.radiology.map((one) => ({
+          radiology: one.radiology,
           Doctor_Comments: one.Doctor_Comments || '',
         })),
       };
 
-      await axiosInstance.post(endpoints.medicalAnalysisPatient.all, payload);
+      await axiosInstance.post(endpoints.radiologyPatient.all, payload);
 
-      methods.reset({ analyses: [defaultAnalysis] });
+      methods.reset({ radiology: [defaultRadiology] });
 
       refetch();
-      enqueueSnackbar(t('medical analysis added successfully'));
+      enqueueSnackbar(t('radiology added successfully'));
     } catch (e) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, { variant: 'error' });
     }
   });
-
-  const watchAnalyses = methods.watch('analyses');
+  const watchRadiology = methods.watch('radiology');
 
   return (
     <FormProvider methods={methods}>
       <Card sx={{ p: 2, mb: 4 }}>
-        <Typography variant="subtitle1">{t('medical analysis')}</Typography>
+        <Typography variant="subtitle1">{t('radiology')}</Typography>
         <Tabs value={tab} onChange={(e, v) => setTab(v)}>
           <Tab label={t('manual entry')} />
-          {favoriteMedicalAnalysis?.length && <Tab label={t('favorites')} />}
+          {favoriteRadiology?.length && <Tab label={t('favorites')} />}
         </Tabs>
         {tab === 0 &&
           !loading &&
@@ -146,41 +147,39 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                     flex: 1,
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: errors.analyses?.[index]?.medical_analysis ? 'error.main' : '',
+                        borderColor: errors.radiology?.[index]?.radiology ? 'error.main' : '',
                       },
                     },
                   }}
                   value={
-                    medicalAnalysisData?.find(
-                      (item) => item._id === watchAnalyses?.[index]?.medical_analysis
+                    imagingData?.find(
+                      (item) => item._id === methods.watch(`radiology[${index}].radiology`)
                     ) || null
                   }
-                  options={(medicalAnalysisData || []).filter(
+                  options={(imagingData || []).filter(
                     (option) =>
-                      !watchAnalyses?.some(
-                        (selected, i) => i !== index && selected?.medical_analysis === option._id
+                      !watchRadiology?.some(
+                        (selected, i) => i !== index && selected?.radiology === option._id
                       )
                   )}
                   onChange={(event, newValue) =>
-                    setValue(`analyses[${index}].medical_analysis`, newValue?._id, {
+                    setValue(`radiology[${index}].radiology`, newValue?._id, {
                       shouldValidate: true,
                     })
                   }
                   // eslint-disable-next-line
-                  getOptionLabel={(option) =>
-                    curLangAr ? option.name_arabic : option.name_english
-                  }
+                  getOptionLabel={(option) => option.diagnostic_test}
                   renderInput={(params) => (
-                    <TextField {...params} label={t('medical analysis')} variant="outlined" />
+                    <TextField {...params} label={t('radiology')} variant="outlined" />
                   )}
                 />
                 <Typography variant="caption" sx={{ color: 'error.main' }}>
-                  {errors.analyses?.[index]?.medical_analysis?.message}
+                  {errors.radiology?.[index]?.radiology?.message}
                 </Typography>
               </Stack>
               <RHFTextField
                 sx={{ minWidth: 350, flex: 1 }}
-                name={`analyses[${index}].Doctor_Comments`}
+                name={`radiology[${index}].Doctor_Comments`}
                 label={t('doctor comment')}
               />
               <IconButton color="error" onClick={() => removeDrug(index)}>
@@ -191,23 +190,23 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
         {tab === 1 && (
           <Box mt={2}>
             <List>
-              {favoriteMedicalAnalysis?.map((fav) => (
+              {favoriteRadiology?.map((fav) => (
                 <ListItemButton
                   key={fav._id}
                   onClick={() => {
-                    const mapped = fav.medical_analyses.map((med) => ({
-                      medical_analysis: med._id,
+                    const mapped = fav.radiology.map((med) => ({
+                      radiology: med._id,
                       Doctor_Comments: '',
                     }));
 
-                    dialogMethods.reset({ analyses: mapped });
+                    dialogMethods.reset({ radiology: mapped });
                     setSelectedFav(fav);
                     setOpenDialog(true);
                   }}
                 >
                   <ListItemText
                     primary={curLangAr ? fav.favorite_name_ar : fav.favorite_name}
-                    secondary={`${fav.medical_analyses.length} ${t('medical analysis')}`}
+                    secondary={`${fav.radiology.length} ${t('radiology')}`}
                   />
                 </ListItemButton>
               ))}
@@ -236,8 +235,8 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
 
         <FormProvider methods={dialogMethods}>
           <DialogContent dividers>
-            {dialogMethods.watch('analyses')?.map((one, index) => {
-              const medInfo = selectedFav?.medical_analyses?.[index];
+            {dialogMethods.watch('radiology')?.map((one, index) => {
+              const medInfo = selectedFav?.radiology?.[index];
               return (
                 <Card
                   key={index}
@@ -249,7 +248,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                   }}
                 >
                   <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
-                    {curLangAr ? medInfo.name_arabic : medInfo.name_english}
+                    {medInfo.diagnostic_test}
                   </Typography>
                 </Card>
               );
@@ -272,9 +271,9 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
           <Button
             variant="contained"
             onClick={async () => {
-              const analyses = dialogMethods.getValues('analyses');
+              const radiology = dialogMethods.getValues('radiology');
 
-              const mappedDrugs = analyses.map((med) => ({
+              const mappedDrugs = radiology.map((med) => ({
                 unit_service: employee?.unit_service?._id,
                 employee: user?.employee?._id,
                 patient: patient?.patient?._id,
@@ -282,16 +281,16 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 ...med,
               }));
 
-              await axiosInstance.post(endpoints.medicalAnalysisPatient.all, {
+              await axiosInstance.post(endpoints.radiologyPatient.all, {
                 unit_service_patient: patient?._id,
                 patient: patient?.patient?._id,
-                medical_analyses: mappedDrugs.map((med) => ({
-                  medical_analysis: med.medical_analysis,
+                radiology: mappedDrugs.map((med) => ({
+                  radiology: med.radiology,
                   Doctor_Comments: med.Doctor_Comments || '',
                 })),
               });
 
-              enqueueSnackbar(t('medical analysis added successfully'));
+              enqueueSnackbar(t('radiology added successfully'));
               setOpenDialog(false);
               refetch();
             }}
@@ -303,4 +302,4 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
     </FormProvider>
   );
 }
-MedicalAnalysesUpload.propTypes = { patient: PropTypes.object, refetch: PropTypes.func };
+RadiologyUpload.propTypes = { patient: PropTypes.object, refetch: PropTypes.func };

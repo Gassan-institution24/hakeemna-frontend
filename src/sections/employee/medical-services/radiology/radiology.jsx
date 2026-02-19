@@ -77,7 +77,6 @@ export default function Radiology() {
   const router = useRouter();
   const { favoriteRadiology, loading } = useGetFavoriteRadiology();
   const [filters, setFilters] = useState(defaultFilters);
-console.log("favoriteRadiology",favoriteRadiology);
 
   const dateError =
     filters.startDate && filters.endDate

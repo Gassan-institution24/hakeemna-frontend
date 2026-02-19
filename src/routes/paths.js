@@ -104,6 +104,8 @@ export const paths = {
       share: `${ROOTS.DASHBOARD}/user/share`,
       blogs: `${ROOTS.DASHBOARD}/user/blogs`,
       health: `${ROOTS.DASHBOARD}/user/myhealth`,
+      medicalAnalysis: `${ROOTS.DASHBOARD}/user/documents/medicalAnalysis`,
+      radiology: `${ROOTS.DASHBOARD}/user/documents/radiology`,
       products: {
         all: `${ROOTS.DASHBOARD}/user/financial/products/all`,
         offer: (id) => `${ROOTS.DASHBOARD}/user/financial/products/offer/${id}`,

@@ -3,13 +3,13 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetMedicalAnalysisPatient(unitServicePatientId) {
-  const URL = endpoints.medicalAnalysisPatient.unitServicePatient(unitServicePatientId);
+export function useGetRadiologyPatient(unitServicePatientId) {
+  const URL = endpoints.radiologyPatient.unitServicePatient(unitServicePatientId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      medicalAnalysisData: data || [],
+      radiologyData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -25,14 +25,15 @@ export function useGetMedicalAnalysisPatient(unitServicePatientId) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetAllPatientMedicalAnalyses(id) {
-  const URL = endpoints.medicalAnalysisPatient.patient(id);
+
+export function useGetAllRadiologyPatient(id) {
+  const URL = endpoints.radiologyPatient.patient(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      analysisData: data || [],
+      radiologyData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
