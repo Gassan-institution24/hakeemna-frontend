@@ -962,6 +962,8 @@ export const paths = {
     qrCode: `${ROOTS.SUPERADMIN}/qr-code`,
     recored: (id) => `${ROOTS.SUPERADMIN}/recored/${id}`,
     prescription: (id) => `${ROOTS.SUPERADMIN}/prescription/${id}`,
+    medicalAnalysis: (id) => `${ROOTS.SUPERADMIN}/medicalAnalysis/${id}`,
+    radiology: (id) => `${ROOTS.SUPERADMIN}/radiology/${id}`,
     Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,
     Doctorreport: (id) => `${ROOTS.SUPERADMIN}/docreport/${id}`,
     sickleave: (id) => `${ROOTS.SUPERADMIN}/sickleave/${id}`,

@@ -1764,6 +1764,7 @@
   "add radiology": "اضافة أشعة",
   "remove radiology": "حذف الأشعة",
   "remove medical analysis": "حذف التحليل الطبي",
+  "Select Favorite":"اختر من المفضلة",
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",
