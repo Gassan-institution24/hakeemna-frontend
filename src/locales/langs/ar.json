@@ -1769,6 +1769,7 @@
   "File deleted successfully": "تم حذف الملف بنجاح",
   "Upload Files": "تحميل الملفات",
   "radiology uploaded successfully": "تم رفع الأشعة بنجاح",
+  "download all":"تنزيل الكل",
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",
