@@ -23,12 +23,12 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useDebounce } from 'src/hooks/use-debounce';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetFavoriteMedication } from 'src/api/doctorFavorite';
 import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -40,11 +40,8 @@ export default function Prescription({ Entrance }) {
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
 
-  const [medSerach, setMedSerach] = useState();
-  const debouncedQuery = useDebounce(medSerach);
   const { medicinesData } = useGetMedicines({
     select: 'trade_name concentration',
-    search: debouncedQuery,
   });
 
   const { t } = useTranslate();
@@ -52,6 +49,7 @@ export default function Prescription({ Entrance }) {
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [prescriptions, setPrescriptions] = useState([{ id: 0 }]);
+  const { favoriteMedication } = useGetFavoriteMedication();
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -226,7 +224,56 @@ export default function Prescription({ Entrance }) {
       ],
     });
   }, [user, Entrance, reset]);
+  const handleSelectFavorite = (favorite) => {
+    if (!favorite?.medicines?.length) return;
 
+    const mappedPrescriptions = favorite.medicines.map((med, index) => ({
+      id: index,
+      employee: user?.employee?._id || '',
+      patient: Entrance?.patient?._id || '',
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
+      entrance_mangament: Entrance?._id || '',
+      Start_time: new Date(),
+      End_time: new Date(),
+      Frequency_per_day: med.Frequency_per_day || '',
+      Num_days: 0,
+      medicines: med.medicine,
+      Doctor_Comments: med.Doctor_Comments || '',
+      chronic: med.chronic || false,
+    }));
+
+    setPrescriptions(mappedPrescriptions);
+
+    reset({
+      prescriptions: mappedPrescriptions,
+    });
+  };
+  const resetDialogState = () => {
+    setPrescriptions([{ id: 0 }]);
+    reset({
+      prescriptions: [
+        {
+          employee: user?.employee?._id || '',
+          patient: Entrance?.patient?._id || '',
+          unit_service:
+            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+              ?._id,
+          unit_service_patient: Entrance?.unit_service_patient,
+          entrance_mangament: Entrance?._id || '',
+          Start_time: new Date(),
+          End_time: new Date(),
+          Frequency_per_day: '',
+          Num_days: 0,
+          medicines: null,
+          Doctor_Comments: '',
+          chronic: false,
+        },
+      ],
+    });
+  };
   return (
     <>
       <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ m: 2 }}>
@@ -274,29 +321,44 @@ export default function Prescription({ Entrance }) {
           </Button>
         </Typography>
       ))}
-      <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
+      <Dialog
+        open={prescriptionDialog.value}
+        onClose={() => {
+          prescriptionDialog.onFalse();
+          resetDialogState();
+        }}
+      >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
             {curLangAr ? 'اضافة وصفة طبية' : 'add prescription'}
           </DialogTitle>
           <DialogContent>
+            <Autocomplete
+              sx={{ minWidth: 300, my: 2 }}
+              options={favoriteMedication || []}
+              getOptionLabel={(option) =>
+                curLangAr ? option.favorite_name_ar : option.favorite_name
+              }
+              onChange={(event, selectedFavorite) => {
+                if (!selectedFavorite) return;
+
+                handleSelectFavorite(selectedFavorite);
+              }}
+              renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
+            />
             {prescriptions?.map((prescription, index) => (
               <div key={prescription.id}>
                 <Autocomplete
-                  sx={{ minWidth: 300, flex: 1, my: 2 }}
-                  options={medicinesData}
-                  onBlur={() => setMedSerach()}
+                  options={medicinesData || []}
+                  value={watch(`prescriptions[${index}].medicines`) || null}
                   onChange={(event, newValue) =>
-                    setValue(`prescriptions[${index}].medicines`, newValue?._id)
+                    setValue(`prescriptions[${index}].medicines`, newValue)
                   }
-                  // eslint-disable-next-line
-                  getOptionLabel={(option) => option.trade_name + ' ' + option.concentration || ''}
-                  onInputChange={(event, newInputValue) => {
-                    setMedSerach(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('medicine')} variant="outlined" />
-                  )}
+                  isOptionEqualToValue={(option, value) => option?._id === value?._id}
+                  getOptionLabel={(option) =>
+                    option?.trade_name ? `${option.trade_name} ${option.concentration}` : ''
+                  }
+                  renderInput={(params) => <TextField {...params} label={t('medicine')} />}
                 />
                 <RHFTextField
                   name={`prescriptions[${index}].Frequency_per_day`}
@@ -411,7 +473,14 @@ export default function Prescription({ Entrance }) {
             <Divider />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={() => {
+                prescriptionDialog.onFalse();
+                resetDialogState();
+              }}
+            >
               {t('Cancel')}
             </Button>
             <Button type="submit" loading={isSubmitting} variant="contained">
