@@ -1764,6 +1764,12 @@
   "add radiology": "اضافة أشعة",
   "remove radiology": "حذف الأشعة",
   "remove medical analysis": "حذف التحليل الطبي",
+  "Select Favorite": "اختر من المفضلة",
+  "Medical analysis uploaded successfully": "تم رفع التحاليل الطبية بنجاح",
+  "File deleted successfully": "تم حذف الملف بنجاح",
+  "Upload Files": "تحميل الملفات",
+  "radiology uploaded successfully": "تم رفع الأشعة بنجاح",
+  "download all":"تنزيل الكل",
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",
