@@ -14,8 +14,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-// import { useBoolean } from 'src/hooks/use-boolean';
-
 import { isAfter } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
@@ -44,11 +42,9 @@ const TABLE_HEAD = [
   { id: 'sequence_number', label: 'sequence' },
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
-  { id: 'stakeholder', label: 'stakeholder' },
   { id: 'Balance', label: 'total amount' },
   { id: 'invoiceId', label: 'invoiceId' },
   { id: 'sent_to_the_envoicing_system', label: 'sent to the envoicing system' },
-  // { id: 'sent', label: 'Sent', align: 'center' },
   { id: 'status', label: 'status' },
   { id: '' },
 ];
@@ -69,7 +65,6 @@ export default function InvoiceListView() {
   const settings = useSettingsContext();
   const router = useRouter();
   const table = useTable({ defaultOrderBy: 'created_at' });
-  // const confirm = useBoolean();
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
@@ -121,7 +116,6 @@ export default function InvoiceListView() {
       ],
       ...filters,
     });
-
   const dateError = isAfter(filters.startDate, filters.endDate);
 
   const canReset = !!filters.startDate || !!filters.endDate;
@@ -148,12 +142,6 @@ export default function InvoiceListView() {
       color: 'info',
       count: lengths.insuranceLength || 0,
     },
-    // {
-    //   value: 'draft',
-    //   label: 'draft',
-    //   color: 'default',
-    //   count: lengths.draftLength || 0,
-    // },
   ];
 
   const handleFilters = useCallback(
@@ -170,13 +158,6 @@ export default function InvoiceListView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
-  // const handleEditRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.unitservice.accounting.economicmovements.edit(id));
-  //   },
-  //   [router]
-  // );
 
   const handleViewRow = useCallback(
     (id) => {
@@ -195,26 +176,16 @@ export default function InvoiceListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading={t('invoices')}
+        heading={t('accounting')}
         links={[
           {
             name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {
-            name: t('invoices'),
+            name: t('economic movements'),
           },
         ]}
-        // action={
-        //   <Button
-        //     component={RouterLink}
-        //     href={paths.unitservice.accounting.economicmovements.add}
-        //     variant="contained"
-        //     startIcon={<Iconify icon="mingcute:add-line" />}
-        //   >
-        //     {t('new invoice')}
-        //   </Button>
-        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
