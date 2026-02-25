@@ -151,9 +151,9 @@ export default function MovementTableRow({
 
         <TableCell align="center">{patientName}</TableCell>
 
-        <TableCell align="center">
+        {/* <TableCell align="center">
           {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="center">
           {fCurrency(stakeholder ? -Balance : Balance, Currency?.symbol)}

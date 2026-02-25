@@ -22,7 +22,7 @@ export default function InvoiceTableToolbar({
   dateError,
   unitServices,
   patients,
-  stakeholders,
+  // stakeholders,
 }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -34,12 +34,12 @@ export default function InvoiceTableToolbar({
     },
     [onFilters]
   );
-  const handleFilterStakeholder = useCallback(
-    (event) => {
-      onFilters('stakeholder', event.target.value);
-    },
-    [onFilters]
-  );
+  // const handleFilterStakeholder = useCallback(
+  //   (event) => {
+  //     onFilters('stakeholder', event.target.value);
+  //   },
+  //   [onFilters]
+  // );
   const handleFilterType = useCallback(
     (event) => {
       onFilters('type', event.target.value);
@@ -127,7 +127,7 @@ export default function InvoiceTableToolbar({
           ))}
         </Select>
       </FormControl>
-
+{/* 
       <FormControl
         sx={{
           flexShrink: 0,
@@ -150,7 +150,7 @@ export default function InvoiceTableToolbar({
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
 
       <FormControl
         sx={{
@@ -182,5 +182,5 @@ InvoiceTableToolbar.propTypes = {
   onFilters: PropTypes.func,
   unitServices: PropTypes.array,
   patients: PropTypes.array,
-  stakeholders: PropTypes.array,
+  // stakeholders: PropTypes.array,
 };

@@ -24,6 +24,7 @@ import {
   setDownloaded,
   viewAuthorizations,
   getNewAuthorizations,
+  cancellation,
 } from 'src/services/claimService';
 
 import Iconify from 'src/components/iconify';
@@ -79,38 +80,38 @@ export default function PatientPage() {
 
   /* ================= Authorization Polling ================= */
 
-  useEffect(() => {
-    if (!visitId) {
-      return undefined;
-    }
+  // useEffect(() => {
+  //   if (!visitId) {
+  //     return undefined;
+  //   }
 
-    const MAX_RETRY = 5;
+  //   const MAX_RETRY = 1;
 
-    pollingRef.current = setInterval(async () => {
-      try {
-        retryRef.current += 1;
+  //   pollingRef.current = setInterval(async () => {
+  //     try {
+  //       retryRef.current += 1;
 
-        const response = await viewAuthorizations();
-        console.log(response.data.result);
+  //       const response = await getNewAuthorizations();
+  //       console.log(response.data.result);
 
-        if (response?.data?.result === 'Yes') {
-          setVisitData(true);
+  //       if (response?.data?.result === 'Yes') {
+  //         setVisitData(true);
 
-          setCheckingAuth(false);
-          clearInterval(pollingRef.current);
-        }
+  //         setCheckingAuth(false);
+  //         clearInterval(pollingRef.current);
+  //       }
 
-        if (retryRef.current >= MAX_RETRY) {
-          clearInterval(pollingRef.current);
-          setCheckingAuth(false);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }, 5000);
+  //       if (retryRef.current >= MAX_RETRY) {
+  //         clearInterval(pollingRef.current);
+  //         setCheckingAuth(false);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }, 5000);
 
-    return () => clearInterval(pollingRef.current);
-  }, [visitId]);
+  //   return () => clearInterval(pollingRef.current);
+  // }, [visitId]);
 
   const authStatus = useMemo(() => {
     if (checkingAuth) {
@@ -201,9 +202,9 @@ export default function PatientPage() {
             sx={{
               alignItems: 'center',
             }}
-            // onClick={() => {
-            //   viewAuthorizations();
-            // }}
+            onClick={() => {
+              viewAuthorizations();
+            }}
           >
             {' '}
             <Iconify icon="solar:refresh-bold" sx={{ mr: 1 }} />
@@ -273,7 +274,7 @@ export default function PatientPage() {
           flexWrap: 'wrap',
         }}
       >
-        <Button variant="text" color="error">
+        <Button variant="text" color="error" onClick={() => cancellation()}>
           {t('Cancel Visit')}
         </Button>
 
