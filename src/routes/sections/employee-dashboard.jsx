@@ -79,6 +79,11 @@ const RecordPage = lazy(() => import('src/pages/employee/appointmentsToday/recor
 const PrescriotionPage = lazy(
   () => import('src/pages/employee/appointmentsToday/prescriotionPage')
 );
+const MedicalAnalysisPageview = lazy(
+  () => import('src/pages/employee/appointmentsToday/medical-analysisPage')
+);const RadiologyPageview = lazy(
+  () => import('src/pages/employee/appointmentsToday/radiologyPage')
+);
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 const SickleavePage = lazy(() => import('src/pages/employee/appointmentsToday/sickleavePage'));
 const DoctorReportPage = lazy(() => import('src/pages/employee/appointmentsToday/docreport'));
@@ -321,6 +326,14 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'prescription/:id',
         element: <PrescriotionPage />,
+      },
+      {
+        path: 'medicalAnalysis/:id',
+        element: <MedicalAnalysisPageview />,
+      },
+      {
+        path: 'radiology/:id',
+        element: <RadiologyPageview />,
       },
       {
         path: 'examination/:id',

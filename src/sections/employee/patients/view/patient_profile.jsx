@@ -115,7 +115,7 @@ export default function PatientProfile() {
     { value: 'requests', label: t('requests') },
     { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
-    { value: 'medical_analyses', label: t('medical analyses') },
+    { value: 'medical_analysis', label: t('medical analysis') },
     { value: 'radiology', label: t('radiology') },
   ].filter(Boolean);
 
@@ -202,7 +202,7 @@ export default function PatientProfile() {
         return <EditPatient patient={usPatientData} />;
       case 'checklist':
         return <PatientCheckList patient={usPatientData} />;
-      case 'medical_analyses':
+      case 'medical_analysis':
         return <PatientMedicalAnalyses patient={usPatientData} />;
       case 'radiology':
         return <PatientRadiology patient={usPatientData} />;

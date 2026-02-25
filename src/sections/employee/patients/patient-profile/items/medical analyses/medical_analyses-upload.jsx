@@ -108,7 +108,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
       const payload = {
         unit_service_patient: patient?._id,
         patient: patient?.patient?._id,
-        medical_analyses: data.analyses.map((one) => ({
+        medical_analysis: data.analyses.map((one) => ({
           medical_analysis: one.medical_analysis,
           Doctor_Comments: one.Doctor_Comments || '',
         })),
@@ -195,7 +195,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 <ListItemButton
                   key={fav._id}
                   onClick={() => {
-                    const mapped = fav.medical_analyses.map((med) => ({
+                    const mapped = fav.medical_analysis.map((med) => ({
                       medical_analysis: med._id,
                       Doctor_Comments: '',
                     }));
@@ -207,7 +207,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 >
                   <ListItemText
                     primary={curLangAr ? fav.favorite_name_ar : fav.favorite_name}
-                    secondary={`${fav.medical_analyses.length} ${t('medical analysis')}`}
+                    secondary={`${fav.medical_analysis.length} ${t('medical analysis')}`}
                   />
                 </ListItemButton>
               ))}
@@ -237,7 +237,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
         <FormProvider methods={dialogMethods}>
           <DialogContent dividers>
             {dialogMethods.watch('analyses')?.map((one, index) => {
-              const medInfo = selectedFav?.medical_analyses?.[index];
+              const medInfo = selectedFav?.medical_analysis?.[index];
               return (
                 <Card
                   key={index}
@@ -285,7 +285,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
               await axiosInstance.post(endpoints.medicalAnalysisPatient.all, {
                 unit_service_patient: patient?._id,
                 patient: patient?.patient?._id,
-                medical_analyses: mappedDrugs.map((med) => ({
+                medical_analysis: mappedDrugs.map((med) => ({
                   medical_analysis: med.medical_analysis,
                   Doctor_Comments: med.Doctor_Comments || '',
                 })),

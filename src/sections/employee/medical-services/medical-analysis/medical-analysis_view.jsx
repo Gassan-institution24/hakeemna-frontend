@@ -29,7 +29,7 @@ export default function MedicalAnalysisViewPage() {
         heading={t('medical analysis details')}
         links={[
           {
-            name: t('medical analyses'),
+            name: t('medical analysis'),
             href: paths.employee.medicalServices.medicalAnalysis.root,
           },
           { name: curLangAr ? favorite.favorite_name_ar : favorite.favorite_name },
@@ -44,11 +44,11 @@ export default function MedicalAnalysisViewPage() {
 
           <Box>
             <Typography variant="subtitle2" color="text.secondary">
-              {t('medical analyses')}
+              {t('medical analysis')}
             </Typography>
 
             <Typography>
-              {favorite.medical_analyses
+              {favorite.medical_analysis
                 ?.map((a) => (curLangAr ? a.name_arabic : a.name_english))
                 .join(', ') || '-'}
             </Typography>

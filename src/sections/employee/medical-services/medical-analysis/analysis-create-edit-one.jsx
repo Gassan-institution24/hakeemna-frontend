@@ -34,7 +34,7 @@ export default function MedicalAnalysisNewEditForm({ currentFavorite }) {
   const NewMedicalAnalysis = Yup.object().shape({
     name_arabic: Yup.string().required(t('arabic name is required')),
     name_english: Yup.string().required(t('english name is required')),
-    medical_analyses: Yup.array().min(1, t('medical analyses is required')),
+    medical_analysis: Yup.array().min(1, t('medical analysis is required')),
     note: Yup.string(),
   });
 
@@ -43,7 +43,7 @@ export default function MedicalAnalysisNewEditForm({ currentFavorite }) {
     () => ({
       name_arabic: currentFavorite?.favorite_name_ar || '',
       name_english: currentFavorite?.favorite_name || '',
-      medical_analyses: currentFavorite?.medical_analyses || [],
+      medical_analysis: currentFavorite?.medical_analysis || [],
       note: currentFavorite?.note || '',
     }),
     [currentFavorite]
@@ -83,7 +83,7 @@ export default function MedicalAnalysisNewEditForm({ currentFavorite }) {
       const payload = {
         favorite_name: data.name_english,
         favorite_name_ar: data.name_arabic,
-        medical_analyses: data.medical_analyses.map((a) => a._id),
+        medical_analysis: data.medical_analysis.map((a) => a._id),
         note: data.note,
       };
 
@@ -106,7 +106,7 @@ export default function MedicalAnalysisNewEditForm({ currentFavorite }) {
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);
-  const selectedAnalyses = methods.watch('medical_analyses');
+  const selectedAnalyses = methods.watch('medical_analysis');
 
   const filteredOptions = useMemo(() => {
     if (!medicalAnalysisData) return [];
@@ -142,8 +142,8 @@ export default function MedicalAnalysisNewEditForm({ currentFavorite }) {
               />
               <RHFAutocomplete
                 multiple
-                name="medical_analyses"
-                label={t('medical analyses')}
+                name="medical_analysis"
+                label={t('medical analysis')}
                 options={filteredOptions}
                 getOptionLabel={(option) =>
                   curLangAr ? option?.name_arabic || '' : option?.name_english || ''
