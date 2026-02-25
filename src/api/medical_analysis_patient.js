@@ -47,3 +47,25 @@ export function useGetAllPatientMedicalAnalyses(id) {
 
   return { ...memoizedValue, refetch };
 }
+export function useGetOnePatientMedicalAnalyses(id) {
+  const URL = endpoints.medicalAnalysisPatient.oneMedicalAnalysis(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      analysisData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
