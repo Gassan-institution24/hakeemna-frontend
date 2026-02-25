@@ -895,6 +895,14 @@ export function useNavData() {
       },
       {
         show: true,
+        title: t('kpis'),
+        path: paths.employee.kpis,
+        icon: <Iconify icon="ic:outline-trending-up" />,
+        navItemId: 'EMKpisNav',
+        'data-test': 'employee-nav-item-kpis',
+      },
+      {
+        show: true,
         title: t('favorite lists'),
         path: paths.employee.medicalServices.root,
         icon: <Iconify icon="mdi:stethoscope" />,
