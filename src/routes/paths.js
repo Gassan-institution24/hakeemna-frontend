@@ -795,6 +795,9 @@ export const paths = {
         info: (id) => `${ROOTS.SUPERADMIN}/us/accounting/reciepts/${id}/info`,
       },
     },
+    myClaim: {
+      root: `${ROOTS.SUPERADMIN}/us/myclaim`,
+    },
     insurance: {
       root: `${ROOTS.SUPERADMIN}/us/profile/insurance`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/profile/insurance/${id}/info`,

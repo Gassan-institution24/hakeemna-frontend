@@ -472,6 +472,7 @@ export function useNavData() {
         navItemId: 'EMAppointConfigNav',
         'data-test': 'us-nav-item-appointments-configuration',
       },
+
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
@@ -518,6 +519,23 @@ export function useNavData() {
           },
         ].filter((one) => one.show),
       },
+      {
+        show: claimRegistered,
+        title: t('claims'),
+        path: paths.unitservice.myClaim.root,
+        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        navItemId: 'USClaimNav',
+        'data-test': 'us-nav-item-claim',
+        children: [
+          {
+            show: claimRegistered,
+            title: t('my claims'),
+            path: paths.unitservice.myClaim.root,
+            'data-test': 'us-nav-item-claim-claim',
+          },
+        ].filter((one) => one.show),
+      },
+
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
         title: t("institution's patients"),
@@ -988,7 +1006,8 @@ export function useNavData() {
               {
                 title: t('medical analysis'),
                 path: paths.dashboard.user.medicalAnalysis,
-              },{
+              },
+              {
                 title: t('radiology'),
                 path: paths.dashboard.user.radiology,
               },
