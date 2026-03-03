@@ -15,6 +15,7 @@ import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-work
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
+
 // ----------------------------------------------------------------------
 // DEPARTMENTS
 const DepartmentsHomePage = lazy(() => import('src/pages/unit-service/departments/home'));
@@ -135,6 +136,8 @@ const ClaimPatientVisitView = lazy(
 
 // INSURANCE
 const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
+// MY CLAIMS
+const MyClaimsPage = lazy(() => import('src/pages/unit-service/claim/claim'));
 // PRODUCTS
 const ProductsHomePage = lazy(() => import('src/pages/unit-service/products/stakeholders'));
 const OfferInfoPage = lazy(() => import('src/pages/unit-service/products/offer-info'));
@@ -436,6 +439,17 @@ export const unitServiceDashboardRoutes = [
                 path: 'company/:companyId',
                 element: <ClaimCompanyPage />,
               },
+            ],
+          },
+        ],
+      },
+       {
+        path: 'myclaim',
+        children: [
+          {
+            children: [
+              { element: <MyClaimsPage />, index: true },
+              // { path: ':id/info', element: <PaymentControlInfoPage /> },
             ],
           },
         ],
