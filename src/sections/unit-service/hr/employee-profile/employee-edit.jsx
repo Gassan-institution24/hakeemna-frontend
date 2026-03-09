@@ -34,6 +34,8 @@ export default function EditEmployee({ employee, refetch }) {
     end_time: employee?.end_time || null,
     salary: employee?.salary || 0,
     monthly_hours: employee?.monthly_hours || 0,
+    company_contribution: employee?.company_contribution || 0,
+    employee_contribution: employee?.employee_contribution || 0,
   };
 
   const methods = useForm({
@@ -74,6 +76,8 @@ export default function EditEmployee({ employee, refetch }) {
               <RHFTimePicker name="end_time" label={t('work end time')} />
               <RHFTextField type="number" name="salary" label={t('salary')} />
               <RHFTextField type="number" name="monthly_hours" label={t('work hours / month')} />
+              <RHFTextField type="number" name="company_contribution" label={t('company contribution')} />
+              <RHFTextField type="number" name="employee_contribution" label={t('employee contribution')} />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
