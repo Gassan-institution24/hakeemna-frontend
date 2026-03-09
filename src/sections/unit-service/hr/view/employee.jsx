@@ -48,6 +48,8 @@ export default function EmployeeProfile() {
     { title: 'start time', value: fTime(data?.start_time) },
     { title: 'end time', value: fTime(data?.end_time) },
     { title: 'work hours / month', value: data?.monthly_hours },
+    { title: 'company contribution', value: fCurrency(data?.company_contribution) },
+    { title: 'employee contribution', value: fCurrency(data?.employee_contribution) },
   ];
 
   return (
