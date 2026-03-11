@@ -51,7 +51,6 @@ const defaultFilters = {
 
 export default function EmployeeSalaryAttendence({ employee }) {
   const { t } = useTranslate();
-
   const TABLE_HEAD = [
     { id: 'date', label: t('Day') },
     { id: 'check_in_time', label: t('check in') },
@@ -94,7 +93,7 @@ export default function EmployeeSalaryAttendence({ employee }) {
     sortBy: table.orderBy,
     ...filters,
   });
-  // here
+  // here 1
   // const dateError =
   //   filters.startDate && filters.endDate
   //     ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -182,6 +181,9 @@ export default function EmployeeSalaryAttendence({ employee }) {
           hours={hours}
           annual={annual}
           sick={sick}
+          company_contribution={employee?.company_contribution}
+          employee_contribution={employee?.employee_contribution}
+          salary={employee?.salary}
           unpaid={unpaid}
           publicHolidays={publicHolidays}
           other={other}
