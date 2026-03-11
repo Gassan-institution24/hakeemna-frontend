@@ -36,6 +36,8 @@ export function useGetEmployeeAttendence(id, params) {
       annual: data?.annual || 0,
       public: data?.public || 0,
       sick: data?.sick || 0,
+      company_contribution: data?.company_contribution || 0,
+      employee_contribution: data?.employee_contribution || 0,
       unpaid: data?.unpaid || 0,
       other: data?.other || 0,
       ids: data?.ids || [],

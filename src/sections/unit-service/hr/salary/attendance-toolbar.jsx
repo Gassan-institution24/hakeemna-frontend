@@ -19,11 +19,13 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import CreateMonthlyReport from './create-monthly-report';
 
 // ----------------------------------------------------------------------
-  // here
+// here2
 export default function AttendanceToolbar({
   filters,
   onFilters,
-  onAdd,
+  company_contribution,
+  employee_contribution,
+  salary,
   hours,
   length,
   annual,
@@ -43,6 +45,7 @@ export default function AttendanceToolbar({
   const { id } = useParams();
   const popover = usePopover();
   const report = useBoolean();
+
 
   let reportedValue = 'all';
   if (filters.reported === true) reportedValue = 'reported';
@@ -90,7 +93,7 @@ export default function AttendanceToolbar({
     endDate: filters.endDate,
     id,
   });
-  
+
   return (
     <>
       <Stack direction="row" justifyContent="space-between">
@@ -191,6 +194,9 @@ export default function AttendanceToolbar({
           end_date={filters.endDate}
           hours={hours}
           annual={annual}
+          company_contribution={company_contribution}
+          employee_contribution={employee_contribution}
+          salary={salary}
           sick={sick}
           unpaid={unpaid}
           publicHolidays={publicHolidays}
@@ -213,7 +219,9 @@ AttendanceToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   refetch: PropTypes.func,
-  onAdd: PropTypes.func,
+  company_contribution: PropTypes.number,
+  employee_contribution: PropTypes.number,
+  salary: PropTypes.number,
   hours: PropTypes.number,
   annual: PropTypes.number,
   length: PropTypes.number,
