@@ -54,6 +54,7 @@ export const paths = {
     unit: `/units`,
     UsPricing: `/UsPricing`,
     About: `/about`,
+    digital: `/digitaltrust`,
     Training: `/training`,
     Faq: `/faq`,
     blogs: `/blogs`,

@@ -77,6 +77,51 @@
   "demo": {
     "title": "English"
   },
+
+  "digitalTrust": {
+    "hero": {
+      "title": "Building Digital Trust.. Your First Gateway to Attract Patients",
+      "description": "In today’s digital age, patients no longer search for doctors through traditional methods. Their journey often begins on social media platforms. A strong digital presence for your medical institution and clinic has become the primary standard for building a professional image and enhancing credibility. The content you provide is what drives patients to make the actual decision to book an appointment and visit your clinic.",
+      "consultation": "Request Free Consultation",
+      "packages": "View Packages"
+    },
+    "services": {
+      "title": "What do we offer through our digital marketing service \"Social Media Management\"?",
+      "description": "We believe that managing medical content requires precision and planning unlike any other field, therefore our services include:",
+      "planning": {
+        "title": "Strategic Planning",
+        "text": "Building an educational and interactive medical content agenda."
+      },
+      "execution": {
+        "title": "Professional Execution",
+        "text": "Creating visual and written content that reflects your professional standing."
+      },
+      "analysis": {
+        "title": "Monitoring and Analysis",
+        "text": "Tracking results and engaging with the audience to achieve real growth."
+      }
+    },
+    "integration": {
+      "title": "Smart Integration",
+      "description": "Our services feature direct integration with the \"Comprehensive Medical Platform - Hakimna 360\", ensuring unified communication channels and improving the quality of patient account management and interactions in one place."
+    },
+    "why": {
+      "title": "Why Choose Us to Manage Your Digital Presence?",
+      "visibility": "Enhance Visibility: We ensure you reach potential patients at the right time and place.",
+      "impact": "Create Impact: We turn followers into loyal patients through trust-building content.",
+      "management": "Comprehensive Management: We handle publishing and follow-ups so you can focus on caring for your patients."
+    },
+    "additional": {
+      "title": "Additional Services to Enhance Excellence and Digital Presence",
+      "website": "Designing a dedicated website for the clinic or medical institution with integrated features.",
+      "appointments": "Displaying available appointments and enabling online booking with patient file creation.",
+      "clinicBot": "The smart assistant \"Clinic Bot\" works 24/7 and can be integrated into your website. It can answer questions, assist in automatic appointment booking based on the patient’s medical condition, send appointment reminders, provide automated responses, collect preliminary medical data needed to evaluate the patient’s condition and medical history, provide general information about diseases or medical procedures, and follow up with patients after medical procedures.",
+      "aiDiagnosis": "Initial AI-powered diagnosis to assess the severity of the medical condition.",
+      "telemedicine": "Telemedicine services and electronic payments.",
+      "blog": "Medical articles through an integrated blog."
+    }
+  },
+
   "Hakeemna Patient": "Hakeemna Patient",
   "Patient Inquiry": "Patient Inquiry",
   "Update Patient Data": "Update Patient Data",
@@ -104,7 +149,7 @@
   "Close and Submit Claim": "Close and Submit Claim",
   "visibility_information": "Visibility Information",
   "show_on_homepage": "Show on homepage",
-"Insurance Claim System Information": "Insurance Claim System Information", 
+  "Insurance Claim System Information": "Insurance Claim System Information",
   "report": {
     "previewTitle": "Medical Report Preview",
     "doctorName": "Doctor Name",

@@ -26,6 +26,7 @@ const Blogs = lazy(() => import('src/sections/home/Blogs'));
 const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
 const ViewBlogs = lazy(() => import('src/pages/home/view-blog'));
+const DigitalTrust = lazy(() => import('src/pages/home/DigitalTrust'));
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +47,7 @@ export const mainRoutes = [
       { path: 'units', element: <Unitservices /> },
       { path: 'UsPricing', element: <UsPricing /> },
       { path: 'about', element: <AboutUs /> },
+      { path: 'digitaltrust', element: <DigitalTrust /> },
       { path: 'about', element: <AboutUs /> },
       { path: 'training', element: <Training /> },
       { path: 'faq', element: <FAQ /> },
