@@ -25,6 +25,7 @@ export default function HomeHero() {
     t('Electronic innovation for a healthier future'),
     t('beneficiary'),
     t('unit of service'),
+    t('Building Digital Trust'),
   ];
 
   const texts = [
@@ -37,13 +38,17 @@ export default function HomeHero() {
     t(
       'Hakeemna 360 platform enables healthcare providers to manage patient records electronically and manage their organizations efficiently and easily, paving the way for focusing on the most important things in your business, enhancing excellence and competitiveness. The platform meets the needs of medical institutions, clinics, laboratories, specialized medical centers, radiology centers, and others.'
     ),
+    t(
+      'In the current digital age, patients no longer search for doctors through traditional methods, but rather begin their journey on social media platforms. A strong digital presence for your medical institution and clinic has become the primary criterion for building a professional image and enhancing credibility. The content you provide is what drives patients to make the actual decision to book an appointment and attend the clinic.'
+    ),
   ];
 
-  const backgroundImages = [photo, photo2, photo3];
+  const backgroundImages = [photo, photo2, photo3, '']; 
   const buttonInfo = [
     null,
     { label: t('Learn More'), path: '/patients' },
     { label: t('Get Started'), path: '/units' },
+    { label: t('Get Started'), path: '/digitaltrust' },
   ];
   const capitalizedText = (texts[currentIndex] || '').replace(/^([a-zA-Z\u0600-\u06FF])/, (c) =>
     c.toUpperCase()
@@ -113,7 +118,7 @@ export default function HomeHero() {
         }}
       >
         {/* Content Markers */}
-        {[0, 1, 2].map((index) => (
+        {[0, 1, 2, 3].map((index) => (
           <Box
             key={index}
             onClick={() => setCurrentIndex(index)}
