@@ -307,7 +307,7 @@ export default function CreateMonthlyReport({
                 {!yearlyIntervalData && (
                   <RHFTextField name="employee_contribution_amount" label={t('Employee contribution')} />
                 )}
-                <RHFTextField type="number" name="tax" label={t('tax')} />
+                <RHFTextField type="number" name="tax" label={t('Tax')} />
                 <RHFTextField type="number" name="deduction" label={t('deduction')} />
 
                 <RHFTextField type="number" name="total" label={t('net salary')} disabled />

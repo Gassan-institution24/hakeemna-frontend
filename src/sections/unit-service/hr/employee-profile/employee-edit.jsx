@@ -97,7 +97,7 @@ export default function EditEmployee({ employee, refetch }) {
               <RHFTextField
                 type="number"
                 name="company_contribution"
-                label="Company Contribution"
+                label={t('Company contribution')}
                 InputProps={{
                   endAdornment: <span>%</span>,
                 }}
@@ -106,7 +106,7 @@ export default function EditEmployee({ employee, refetch }) {
               <RHFTextField
                 type="number"
                 name="employee_contribution"
-                label={t('employee contribution')}
+                label={t('Employee contribution')}
                 InputProps={{
                   endAdornment: <span>%</span>,
                 }}
