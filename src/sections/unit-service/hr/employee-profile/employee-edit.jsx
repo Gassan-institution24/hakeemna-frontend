@@ -48,10 +48,28 @@ export default function EditEmployee({ employee, refetch }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (profileData) => {
+  const onSubmit = async (data) => {
     try {
-      await axios.patch(`${endpoints.employee_engagements.one(employee?._id)}`, profileData);
-      enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
+      const companyAmount = Number(((data.salary * data.company_contribution) / 100).toFixed(2));
+
+      const employeeAmount = Number(((data.salary * data.employee_contribution) / 100).toFixed(2));
+
+      const payload = {
+        ...data,
+
+        company_contribution: data.company_contribution,
+        employee_contribution: data.employee_contribution,
+
+        company_contribution_amount: companyAmount,
+        employee_contribution_amount: employeeAmount,
+      };
+
+      await axios.patch(`${endpoints.employee_engagements.one(employee?._id)}`, payload);
+
+      enqueueSnackbar(`${t('Profile updated successfully')}`, {
+        variant: 'success',
+      });
+
       refetch();
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -76,8 +94,23 @@ export default function EditEmployee({ employee, refetch }) {
               <RHFTimePicker name="end_time" label={t('work end time')} />
               <RHFTextField type="number" name="salary" label={t('salary')} />
               <RHFTextField type="number" name="monthly_hours" label={t('work hours / month')} />
-              <RHFTextField type="number" name="company_contribution" label={t('company contribution')} />
-              <RHFTextField type="number" name="employee_contribution" label={t('employee contribution')} />
+              <RHFTextField
+                type="number"
+                name="company_contribution"
+                label="Company Contribution"
+                InputProps={{
+                  endAdornment: <span>%</span>,
+                }}
+              />
+
+              <RHFTextField
+                type="number"
+                name="employee_contribution"
+                label={t('employee contribution')}
+                InputProps={{
+                  endAdornment: <span>%</span>,
+                }}
+              />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

@@ -38,8 +38,8 @@ export default function CreateMonthlyReport({
   annual,
   sick,
   unpaid,
-  company_contribution,
-  employee_contribution,
+  company_contribution_amount,
+  employee_contribution_amount,
   salary,
   publicHolidays,
   other,
@@ -168,10 +168,10 @@ export default function CreateMonthlyReport({
     note: row?.note || '',
     days: row?.days || (monthly ? yearlyIntervalData?.days : intervalData?.days) || length || 0,
     // salary: row?.salary || (monthly ? yearlyIntervalData?.salary : intervalData?.salary) || 0,
-    company_contribution: company_contribution || 0,
+    company_contribution_amount: company_contribution_amount || 0,
     over_time: row?.over_time || 0,
     extras: row?.extras || 0,
-    employee_contribution: employee_contribution || 0,
+    employee_contribution_amount: employee_contribution_amount || 0,
     salary: salary || 0,
   };
 
@@ -218,8 +218,8 @@ export default function CreateMonthlyReport({
           note: row.note,
           days: row.days,
           // salary: row.salary,
-          company_contribution: company_contribution || 0,
-          employee_contribution: employee_contribution || 0,
+          company_contribution_amount: company_contribution_amount || 0,
+          employee_contribution_amount: employee_contribution_amount || 0,
           salary: salary || 0,
           over_time: row?.over_time || 0,
           extras: row?.extras || 0,
@@ -252,8 +252,8 @@ export default function CreateMonthlyReport({
           note: '',
           days: monthly ? yearlyIntervalData?.days || length || 0 : length || 0,
           // salary: monthly ? yearlyIntervalData?.salary || 0 : 0,
-          company_contribution: company_contribution || 0,
-          employee_contribution: employee_contribution || 0,
+          company_contribution_amount: company_contribution_amount || 0,
+          employee_contribution_amount: employee_contribution_amount || 0,
           salary: salary || 0,
           over_time: 0,
           extras: 0,
@@ -278,8 +278,8 @@ export default function CreateMonthlyReport({
     user,
     monthly,
     yearlyIntervalData,
-    company_contribution,
-    employee_contribution,
+    company_contribution_amount,
+    employee_contribution_amount,
     salary,
   ]);
 
@@ -327,8 +327,8 @@ export default function CreateMonthlyReport({
             values.deduction -
             values.tax -
             values.social_security -
-            values.employee_contribution -
-            values.company_contribution
+            values.employee_contribution_amount -
+            values.company_contribution_amount
         : 0
     );
     // eslint-disable-next-line
@@ -339,8 +339,8 @@ export default function CreateMonthlyReport({
     values.deduction,
     values.tax,
     values.social_security,
-    values.employee_contribution,
-    values.company_contribution,
+    values.employee_contribution_amount,
+    values.company_contribution_amount,
   ]);
 
   // Generate unique key to force re-mounting when switching employees
@@ -412,16 +412,16 @@ export default function CreateMonthlyReport({
                 label={t('Other equivalent')}
               />
               <RHFTextField
-                // disabled={monthly && ids.length > 0}
+                disabled={monthly && ids.length > 0}
                 type="number"
-                name="company_contribution"
+                name="company_contribution_amount"
                 label={t('company contribution')}
               />
 
               <RHFTextField
-                // disabled={monthly && ids.length > 0}
+                disabled={monthly && ids.length > 0}
                 type="number"
-                name="employee_contribution"
+                name="employee_contribution_amount"
                 label={t('employee contribution')}
               />
             </Box>
@@ -524,8 +524,8 @@ CreateMonthlyReport.propTypes = {
   hours: PropTypes.number,
   annual: PropTypes.number,
   sick: PropTypes.number,
-  company_contribution: PropTypes.number,
-  employee_contribution: PropTypes.number,
+  company_contribution_amount: PropTypes.number,
+  employee_contribution_amount: PropTypes.number,
   salary: PropTypes.number,
   unpaid: PropTypes.number,
   publicHolidays: PropTypes.number,
