@@ -23,8 +23,8 @@ import CreateMonthlyReport from './create-monthly-report';
 export default function AttendanceToolbar({
   filters,
   onFilters,
-  company_contribution,
-  employee_contribution,
+  company_contribution_amount,
+  employee_contribution_amount,
   salary,
   hours,
   length,
@@ -194,8 +194,8 @@ export default function AttendanceToolbar({
           end_date={filters.endDate}
           hours={hours}
           annual={annual}
-          company_contribution={company_contribution}
-          employee_contribution={employee_contribution}
+          company_contribution_amount={company_contribution_amount}
+          employee_contribution_amount={employee_contribution_amount}
           salary={salary}
           sick={sick}
           unpaid={unpaid}
@@ -219,8 +219,8 @@ AttendanceToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   refetch: PropTypes.func,
-  company_contribution: PropTypes.number,
-  employee_contribution: PropTypes.number,
+  company_contribution_amount: PropTypes.number,
+  employee_contribution_amount: PropTypes.number,
   salary: PropTypes.number,
   hours: PropTypes.number,
   annual: PropTypes.number,

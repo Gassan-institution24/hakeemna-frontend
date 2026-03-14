@@ -181,8 +181,8 @@ export default function EmployeeSalaryAttendence({ employee }) {
           hours={hours}
           annual={annual}
           sick={sick}
-          company_contribution={employee?.company_contribution}
-          employee_contribution={employee?.employee_contribution}
+          company_contribution_amount={employee?.company_contribution_amount}
+          employee_contribution_amount={employee?.employee_contribution_amount}
           salary={employee?.salary}
           unpaid={unpaid}
           publicHolidays={publicHolidays}

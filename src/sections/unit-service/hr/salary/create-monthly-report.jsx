@@ -42,8 +42,8 @@ export default function CreateMonthlyReport({
   publicHolidays,
   other,
   salary,
-  company_contribution,
-  employee_contribution,
+  company_contribution_amount,
+  employee_contribution_amount,
   ids,
   monthly,
   length,
@@ -69,8 +69,8 @@ export default function CreateMonthlyReport({
     deduction: Yup.number(),
     social_security: Yup.number(),
 
-    company_contribution: Yup.number(),
-    employee_contribution: Yup.number(),
+    company_contribution_amount: Yup.number(),
+    employee_contribution_amount: Yup.number(),
 
     over_time: Yup.number(),
     extras: Yup.number(),
@@ -139,8 +139,8 @@ export default function CreateMonthlyReport({
     tax: row?.tax || 0,
     deduction: row?.deduction || 0,
 
-    employee_contribution: employee_contribution || 0,
-    company_contribution: company_contribution || 0,
+    employee_contribution_amount: employee_contribution_amount || 0,
+    company_contribution_amount: company_contribution_amount || 0,
 
     total: row?.total || 0,
 
@@ -168,7 +168,7 @@ export default function CreateMonthlyReport({
     const tax = Number(values.tax) || 0;
     const deduction = Number(values.deduction) || 0;
     const social = Number(values.social_security) || 0;
-    const employee = Number(values.employee_contribution) || 0;
+    const employee = Number(values.employee_contribution_amount) || 0;
 
     const total = salary + overtime + extras - tax - deduction - social - employee ;
 
@@ -181,8 +181,8 @@ export default function CreateMonthlyReport({
     values.tax,
     values.deduction,
     values.social_security,
-    values.employee_contribution,
-    values.company_contribution,
+    values.employee_contribution_amount,
+    values.company_contribution_amount,
     methods,
   ]);
   useEffect(() => {
@@ -305,7 +305,7 @@ export default function CreateMonthlyReport({
                 <RHFTextField type="number" name="over_time" label={t('Over Time')} />
                 <RHFTextField type="number" name="extras" label={t('Extras')} />
                 {!yearlyIntervalData && (
-                  <RHFTextField name="employee_contribution" label={t('Employee contribution')} />
+                  <RHFTextField name="employee_contribution_amount" label={t('Employee contribution')} />
                 )}
                 <RHFTextField type="number" name="tax" label={t('tax')} />
                 <RHFTextField type="number" name="deduction" label={t('deduction')} />
@@ -316,8 +316,8 @@ export default function CreateMonthlyReport({
 
               {!yearlyIntervalData && (
                 <>
-                  {/* <RHFTextField name="employee_contribution" label={t('Employee contribution')} /> */}
-                  <RHFTextField name="company_contribution" label={t('Company contribution')} />
+                  {/* <RHFTextField name="employee_contribution_amount" label={t('Employee contribution')} /> */}
+                  <RHFTextField name="company_contribution_amount" label={t('Company contribution')} />
                 </>
               )}
             </Stack>
@@ -356,8 +356,8 @@ CreateMonthlyReport.propTypes = {
   end_date: PropTypes.instanceOf(Date),
   hours: PropTypes.number,
   salary: PropTypes.number,
-  company_contribution: PropTypes.number,
-  employee_contribution: PropTypes.number,
+  company_contribution_amount: PropTypes.number,
+  employee_contribution_amount: PropTypes.number,
   annual: PropTypes.number,
   sick: PropTypes.number,
   unpaid: PropTypes.number,

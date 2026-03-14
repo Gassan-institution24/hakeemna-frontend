@@ -13,7 +13,7 @@ export const navConfig = [
     path: '/',
   },
   {
-    title: 'Digital Trust',
+    title: 'Digital Marketing',
     icon: <Iconify icon="mdi:about" />,
     path: paths.pages.digital,
   },
