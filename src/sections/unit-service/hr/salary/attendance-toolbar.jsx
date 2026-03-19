@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
+import { useGetEmployeeEngagement } from 'src/api';
 import { useGetMonthlyReportInterval } from 'src/api/monthly_reports';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -45,7 +46,8 @@ export default function AttendanceToolbar({
   const { id } = useParams();
   const popover = usePopover();
   const report = useBoolean();
-
+  const {data: employeeEngagementData} = useGetEmployeeEngagement(id);
+  console.log('employeeEngagementData', employeeEngagementData);
 
   let reportedValue = 'all';
   if (filters.reported === true) reportedValue = 'reported';
@@ -208,6 +210,7 @@ export default function AttendanceToolbar({
           monthly={monthly}
           length={length}
           intervalData={intervalData}
+          employeeEngagementData={employeeEngagementData}
         />
       )}
     </>
@@ -215,7 +218,6 @@ export default function AttendanceToolbar({
 }
 
 AttendanceToolbar.propTypes = {
-  // dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   refetch: PropTypes.func,
