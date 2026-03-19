@@ -39,18 +39,9 @@ export default function DigitalTrust() {
   ];
 
   const why = [
-    {
-      icon: 'solar:eye-bold',
-      text: t('digitalTrust.why.visibility'),
-    },
-    {
-      icon: 'solar:heart-bold',
-      text: t('digitalTrust.why.impact'),
-    },
-    {
-      icon: 'solar:settings-bold',
-      text: t('digitalTrust.why.management'),
-    },
+    { icon: 'solar:eye-bold', text: t('digitalTrust.why.visibility') },
+    { icon: 'solar:heart-bold', text: t('digitalTrust.why.impact') },
+    { icon: 'solar:settings-bold', text: t('digitalTrust.why.management') },
   ];
 
   const additional = [
@@ -69,57 +60,28 @@ export default function DigitalTrust() {
 
       <LazyMotion features={domAnimation}>
         {/* HERO */}
-
         <Box
           sx={{
             pt: { xs: 22, md: 22 },
             pb: { xs: 12, md: 14 },
-            background: 'linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #ecfeff 100%)',
+            background:
+              'linear-gradient(rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))',
             position: 'relative',
             overflow: 'hidden',
+            borderBottomLeftRadius: '60px',
+            borderBottomRightRadius: '60px',
           }}
         >
           <Container maxWidth="lg">
             <Stack spacing={5} textAlign="center" alignItems="center">
-              <m.div initial="hidden" animate="show" variants={fadeUp}>
-                <Box
-                  sx={{
-                    px: 3,
-                    py: 0.7,
-                    borderRadius: 20,
-                    background: 'rgba(79,70,229,0.1)',
-                    color: 'primary.main',
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  Trusted Digital Healthcare Solutions
-                </Box>
-              </m.div>
-              {/* Title */}
-              <Typography
-                variant="h2"
-                sx={{
-                  fontWeight: 900,
-                  lineHeight: 1.2,
-                  maxWidth: 900,
-                }}
-              >
+              <Typography variant="h2" sx={{ fontWeight: 900, lineHeight: 1.2, maxWidth: 900 }}>
                 {t('digitalTrust.hero.title')}
               </Typography>
 
-              {/* Description */}
-              <Typography
-                sx={{
-                  fontSize: 18,
-                  color: 'text.secondary',
-                  maxWidth: 720,
-                }}
-              >
+              <Typography sx={{ fontSize: 18, color: 'text.secondary', maxWidth: 720 }}>
                 {t('digitalTrust.hero.description')}
               </Typography>
 
-              {/* CTA */}
               <Button
                 variant="contained"
                 size="large"
@@ -129,6 +91,7 @@ export default function DigitalTrust() {
                   borderRadius: 3,
                   fontWeight: 700,
                   fontSize: 16,
+                  boxShadow: '0 8px 20px rgba(60,176,153,0.4)',
                 }}
               >
                 {t('digitalTrust.hero.consultation')}
@@ -138,7 +101,6 @@ export default function DigitalTrust() {
         </Box>
 
         {/* SERVICES */}
-
         <Container sx={{ py: { xs: 10, md: 10 } }}>
           <Stack spacing={6}>
             <Typography variant="h3" fontWeight={800} textAlign="center">
@@ -159,14 +121,11 @@ export default function DigitalTrust() {
                         borderRadius: 4,
                         height: '100%',
                         textAlign: 'center',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+                        boxShadow: '0 10px 30px rgba(60,176,153,0.15)',
+                        border: '1px solid rgba(60,176,153,0.15)',
                       }}
                     >
-                      <Iconify
-                        icon={service.icon}
-                        width={40}
-                        sx={{ mb: 2, color: 'primary.main' }}
-                      />
+                      <Iconify icon={service.icon} width={40} sx={{ mb: 2, color: 'primary.main' }} />
 
                       <Typography fontWeight={700} fontSize={20} mb={1}>
                         {service.title}
@@ -182,7 +141,6 @@ export default function DigitalTrust() {
         </Container>
 
         {/* HAKIMNA */}
-
         <Container sx={{ py: { xs: 12, md: 10 } }}>
           <Grid container spacing={8} alignItems="center">
             <Grid item xs={12} md={6}>
@@ -203,7 +161,7 @@ export default function DigitalTrust() {
                 style={{
                   width: '100%',
                   borderRadius: 18,
-                  boxShadow: '0 25px 60px rgba(0,0,0,0.12)',
+                  boxShadow: '0 25px 60px rgba(60,176,153,0.25)',
                 }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -214,8 +172,13 @@ export default function DigitalTrust() {
         </Container>
 
         {/* WHY TRUST US */}
-
-        <Box sx={{ background: '#f8fafc', py: { xs: 10, md: 10 } }}>
+        <Box
+          sx={{
+            background:
+              'linear-gradient(rgba(60,176,153,0.08), rgba(112,216,192,0.08))',
+            py: { xs: 10, md: 10 },
+          }}
+        >
           <Container>
             <Stack spacing={6}>
               <Typography variant="h3" fontWeight={800} textAlign="center">
@@ -225,10 +188,16 @@ export default function DigitalTrust() {
               <Grid container spacing={4}>
                 {why.map((item, index) => (
                   <Grid item xs={12} md={4} key={index}>
-                    <Card sx={{ p: 5, borderRadius: 4 }}>
+                    <Card
+                      sx={{
+                        p: 5,
+                        borderRadius: 4,
+                        border: '1px solid rgba(60,176,153,0.15)',
+                        boxShadow: '0 10px 25px rgba(60,176,153,0.1)',
+                      }}
+                    >
                       <Stack spacing={2}>
                         <Iconify icon={item.icon} width={36} sx={{ color: 'primary.main' }} />
-
                         <Typography>{item.text}</Typography>
                       </Stack>
                     </Card>
@@ -240,35 +209,24 @@ export default function DigitalTrust() {
         </Box>
 
         {/* ADDITIONAL SERVICES */}
-
         <Container sx={{ py: { xs: 12, md: 10 } }}>
           <Stack spacing={3}>
             <Typography variant="h3" fontWeight={800}>
               {t('digitalTrust.additional.title')}
             </Typography>
+
             <Typography variant="h6" color="text.secondary" mb={4}>
               {t('digitalTrust.additional.website')}
             </Typography>
 
-            {/* <Grid container spacing={3}> */}
             {additional.map((item, index) => (
               <Grid item xs={12} md={6} key={index}>
                 <Stack direction="row" spacing={2} alignItems="flex-start">
-                  <Box
-                    sx={{
-                      minWidth: 26,
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      mt: '3px',
-                    }}
-                  >
+                  <Box sx={{ minWidth: 26, mt: '3px' }}>
                     <Iconify
                       icon="solar:check-circle-bold"
                       width={24}
-                      sx={{
-                        color: 'success.main',
-                        flexShrink: 0,
-                      }}
+                      sx={{ color: 'primary.main' }}
                     />
                   </Box>
 
@@ -276,29 +234,21 @@ export default function DigitalTrust() {
                 </Stack>
               </Grid>
             ))}
-            {/* </Grid> */}
           </Stack>
         </Container>
 
         {/* CTA */}
-
-        <Box
-          sx={{
-            py: { xs: 12, md: 16 },
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
+        <Box sx={{ py: { xs: 12, md: 16 } }}>
           <Container maxWidth="md">
             <Card
               sx={{
                 p: { xs: 5, md: 8 },
                 borderRadius: 5,
                 textAlign: 'center',
-                background: 'linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)',
+                background:
+                  'linear-gradient(rgba(60, 176, 153, 0.9), rgba(112, 216, 192, 0.6))',
                 color: 'white',
-                position: 'relative',
-                boxShadow: '0 30px 80px rgba(0,0,0,0.15)',
+                boxShadow: '0 30px 80px rgba(60,176,153,0.3)',
               }}
             >
               <Stack spacing={4} alignItems="center">
@@ -306,13 +256,7 @@ export default function DigitalTrust() {
                   {t('hakeemna360')}
                 </Typography>
 
-                {/* Features */}
-                <Stack
-                  direction={{ xs: 'column', sm: 'row' }}
-                  spacing={4}
-                  justifyContent="center"
-                  alignItems="center"
-                >
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4}>
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:graph-up-bold" width={20} />
                     <Typography variant="body2">Stronger Online Presence</Typography>
@@ -329,19 +273,18 @@ export default function DigitalTrust() {
                   </Stack>
                 </Stack>
 
-                {/* CTA */}
                 <Button
                   size="large"
                   variant="contained"
                   sx={{
-                    background: 'white',
-                    color: '#111',
+                    background: '#ffffff',
+                    color: 'primary.main',
                     px: 5,
                     py: 1.6,
                     borderRadius: 3,
                     fontWeight: 700,
                     '&:hover': {
-                      background: '#f3f4f6',
+                      background: '#f0fdfc',
                     },
                   }}
                 >
