@@ -259,17 +259,17 @@ export default function DigitalTrust() {
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4}>
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:graph-up-bold" width={20} />
-                    <Typography variant="body2">Stronger Online Presence</Typography>
+                    <Typography variant="body2">{t("Stronger Online Presence")}</Typography>
                   </Stack>
 
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:users-group-rounded-bold" width={20} />
-                    <Typography variant="body2">Reach More Patients</Typography>
+                    <Typography variant="body2">{t("Reach More Patients")}</Typography>
                   </Stack>
 
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:target-bold" width={20} />
-                    <Typography variant="body2">Better Visibility on Google</Typography>
+                    <Typography variant="body2">{t("Better Visibility on Google")}</Typography>
                   </Stack>
                 </Stack>
 

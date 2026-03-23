@@ -15,7 +15,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
-import { lab } from 'src/services/claimService';
+import { lab, cancellation } from 'src/services/claimService';
 
 const LAB_ORDERS_LIST = [
   {
@@ -73,35 +73,53 @@ export default function LaboratoryOrders({ onDataChange }) {
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-const addOrder = async (item) => {
-  if (orders.find((o) => o.code === item.code)) return;
+  const addOrder = async (item) => {
+    if (orders.find((o) => o.code === item.code)) return;
 
-  try {
-    setSending(true);
+    const confirmed = window.confirm(
+      curLangAr ? 'هل أنت متأكد من إضافة هذا الطلب؟' : 'Are you sure you want to add this order?'
+    );
 
-    // أضف في UI أول
-    setOrders((prev) => [
-      ...prev,
-      {
-        ...item,
-        frequency: 0,
-        howOften: curLangAr ? 'الآن' : 'NOW',
-      },
-    ]);
+    if (!confirmed) return;
 
-    // CALL BACKEND (STATIC PAYLOAD)
-    await lab();
+    try {
+      setSending(true);
 
-    console.log('Lab sent successfully');
-  } catch (e) {
-    console.error('Lab send failed', e);
-  } finally {
-    setSending(false);
-  }
-};
+      setOrders((prev) => [
+        ...prev,
+        {
+          ...item,
+          frequency: 0,
+          howOften: curLangAr ? 'الآن' : 'NOW',
+        },
+      ]);
 
-  const removeOrder = (code) => {
-    setOrders((prev) => prev.filter((o) => o.code !== code));
+      await lab();
+
+      console.log('Lab sent successfully');
+    } catch (e) {
+      console.error('Lab send failed', e);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const removeOrder = async (code) => {
+    const confirmed = window.confirm(
+      curLangAr ? 'هل أنت متأكد من حذف هذا الطلب؟' : 'Are you sure you want to delete this order?'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setOrders((prev) => prev.filter((o) => o.code !== code));
+
+      await cancellation(); // 🔥 call backend cancel
+
+      console.log('Cancelled successfully');
+    } catch (e) {
+      console.error('Cancel failed', e);
+    }
   };
 
   return (
@@ -174,7 +192,10 @@ const addOrder = async (item) => {
                 }}
               >
                 {/* SERVICE */}
-                <Typography fontWeight="bold"> {index + 1}. {curLangAr ? 'مختبر' : 'Laboratory'}</Typography>
+                <Typography fontWeight="bold">
+                  {' '}
+                  {index + 1}. {curLangAr ? 'مختبر' : 'Laboratory'}
+                </Typography>
 
                 {/* ORDER */}
                 <Typography>{curLangAr ? item.nameAr : item.nameEn}</Typography>
@@ -194,7 +215,7 @@ const addOrder = async (item) => {
                     gap: 1,
                   }}
                 >
-                  <Typography
+                  {/* <Typography
                     sx={{
                       color: 'primary.main',
                       cursor: 'pointer',
@@ -203,7 +224,7 @@ const addOrder = async (item) => {
                     }}
                   >
                     {curLangAr ? 'تعديل' : 'Edit'}
-                  </Typography>
+                  </Typography> */}
 
                   <DeleteIcon
                     fontSize="small"

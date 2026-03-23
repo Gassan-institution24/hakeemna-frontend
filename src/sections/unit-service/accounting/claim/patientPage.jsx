@@ -39,21 +39,19 @@ import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
 /* ================= STATIC DATA ================= */
 const sections = [
   'Add Diagnosis',
-  'Clinic / ER Procedures',
+  // 'Clinic / ER Procedures',
   'Laboratory Orders',
   'Radiology Orders',
   'Medications Orders',
   'Physiotherapy',
-  'Add Note / Attach Files',
 ];
 const indexToKey = {
   0: 'diagnosis',
-  1: 'procedures',
-  2: 'lab',
-  3: 'radiology',
-  4: 'medications',
-  5: 'physiotherapy',
-  6: 'notes',
+  // 1: 'procedures',
+  1: 'lab',
+  2: 'radiology',
+  3: 'medications',
+  4: 'physiotherapy',
 };
 
 export default function PatientPage() {
@@ -136,12 +134,11 @@ export default function PatientPage() {
 
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
-    procedures: false,
+    // procedures: false,
     lab: false,
     radiology: false,
     medications: false,
     physiotherapy: false,
-    notes: false,
   });
   const updateSectionStatus = (key, hasData) => {
     setSectionStatus((prev) => ({
@@ -234,33 +231,30 @@ export default function PatientPage() {
               />
             )}
 
-            {index === 1 && (
+            {/* {index === 1 && (
               <ClinicERProcedures
                 onDataChange={(hasData) => updateSectionStatus('procedures', hasData)}
               />
-            )}
-            {index === 2 && (
+            )} */}
+            {index === 1 && (
               <LaboratoryOrders onDataChange={(hasData) => updateSectionStatus('lab', hasData)} />
             )}
-            {index === 3 && (
+            {index === 2 && (
               <RadiologyOrders
                 onDataChange={(hasData) => updateSectionStatus('radiology', hasData)}
               />
             )}
 
-            {index === 4 && (
+            {index === 3 && (
               <MedicationsOrders
                 onDataChange={(hasData) => updateSectionStatus('medications', hasData)}
               />
             )}
 
-            {index === 5 && (
+            {index === 4 && (
               <PhysiotherapyOrders
                 onDataChange={(hasData) => updateSectionStatus('physiotherapy', hasData)}
               />
-            )}
-            {index === 6 && (
-              <AddNotes onDataChange={(hasData) => updateSectionStatus('notes', hasData)} />
             )}
           </AccordionDetails>
         </Accordion>
