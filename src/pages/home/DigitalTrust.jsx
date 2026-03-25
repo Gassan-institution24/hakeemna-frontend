@@ -1,10 +1,28 @@
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet-async';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 
-import { Box, Container, Typography, Button, Grid, Stack, Card } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Stack,
+  Card,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useTranslate } from 'src/locales';
 
 import digital from '../../sections/home/images/digital.jpg';
 
@@ -19,7 +37,16 @@ const fadeUp = {
 
 export default function DigitalTrust() {
   const { t } = useTranslate();
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    number: '',
+    message: '',
+  });
+  const handleOpen = () => setOpenDialog(true);
+  const handleClose = () => setOpenDialog(false);
+  const { enqueueSnackbar } = useSnackbar();
   const services = [
     {
       icon: 'solar:clipboard-text-bold',
@@ -54,6 +81,71 @@ export default function DigitalTrust() {
 
   return (
     <>
+      <Dialog open={openDialog} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>{t('Request Consultation')}</DialogTitle>
+
+        <DialogContent>
+          <Stack spacing={3} mt={1}>
+            <TextField
+              label={t('Name')}
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+            <TextField
+              label={t('email')}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+            <TextField
+              label={t('Phone Number')}
+              value={form.number}
+              onChange={(e) => setForm({ ...form, number: e.target.value })}
+            />
+            <TextField
+              label={t('Message')}
+              value={form.Body}
+              onChange={(e) => setForm({ ...form, Body: e.target.value })}
+              multiline
+              rows={4}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose}>{t('Cancel')}</Button>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              try {
+                await axiosInstance.post(endpoints.userContact.all, form);
+
+                enqueueSnackbar(
+                  t('Your request has been sent successfully. We will contact you soon.'),
+                  { variant: 'success' }
+                );
+                handleClose();
+
+                // reset form
+                setForm({
+                  name: '',
+                  email: '',
+                  phone: '',
+                  Body: '',
+                });
+              } catch (e) {
+                enqueueSnackbar(t('Something went wrong'), {
+                  variant: 'error',
+                });
+                console.log(e);
+              }
+            }}
+          >
+            {t('send')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Helmet>
         <title>Digital Trust</title>
       </Helmet>
@@ -64,8 +156,7 @@ export default function DigitalTrust() {
           sx={{
             pt: { xs: 22, md: 22 },
             pb: { xs: 12, md: 14 },
-            background:
-              'linear-gradient(rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))',
+            background: 'linear-gradient(rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))',
             position: 'relative',
             overflow: 'hidden',
             borderBottomLeftRadius: '60px',
@@ -85,6 +176,7 @@ export default function DigitalTrust() {
               <Button
                 variant="contained"
                 size="large"
+                onClick={handleOpen}
                 sx={{
                   px: 6,
                   py: 1.8,
@@ -125,7 +217,11 @@ export default function DigitalTrust() {
                         border: '1px solid rgba(60,176,153,0.15)',
                       }}
                     >
-                      <Iconify icon={service.icon} width={40} sx={{ mb: 2, color: 'primary.main' }} />
+                      <Iconify
+                        icon={service.icon}
+                        width={40}
+                        sx={{ mb: 2, color: 'primary.main' }}
+                      />
 
                       <Typography fontWeight={700} fontSize={20} mb={1}>
                         {service.title}
@@ -174,8 +270,7 @@ export default function DigitalTrust() {
         {/* WHY TRUST US */}
         <Box
           sx={{
-            background:
-              'linear-gradient(rgba(60,176,153,0.08), rgba(112,216,192,0.08))',
+            background: 'linear-gradient(rgba(60,176,153,0.08), rgba(112,216,192,0.08))',
             py: { xs: 10, md: 10 },
           }}
         >
@@ -245,8 +340,7 @@ export default function DigitalTrust() {
                 p: { xs: 5, md: 8 },
                 borderRadius: 5,
                 textAlign: 'center',
-                background:
-                  'linear-gradient(rgba(60, 176, 153, 0.9), rgba(112, 216, 192, 0.6))',
+                background: 'linear-gradient(rgba(60, 176, 153, 0.9), rgba(112, 216, 192, 0.6))',
                 color: 'white',
                 boxShadow: '0 30px 80px rgba(60,176,153,0.3)',
               }}
@@ -259,23 +353,24 @@ export default function DigitalTrust() {
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4}>
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:graph-up-bold" width={20} />
-                    <Typography variant="body2">{t("Stronger Online Presence")}</Typography>
+                    <Typography variant="body2">{t('Stronger Online Presence')}</Typography>
                   </Stack>
 
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:users-group-rounded-bold" width={20} />
-                    <Typography variant="body2">{t("Reach More Patients")}</Typography>
+                    <Typography variant="body2">{t('Reach More Patients')}</Typography>
                   </Stack>
 
                   <Stack alignItems="center" spacing={1}>
                     <Iconify icon="solar:target-bold" width={20} />
-                    <Typography variant="body2">{t("Better Visibility on Google")}</Typography>
+                    <Typography variant="body2">{t('Better Visibility on Google')}</Typography>
                   </Stack>
                 </Stack>
 
                 <Button
                   size="large"
                   variant="contained"
+                  onClick={handleOpen}
                   sx={{
                     background: '#ffffff',
                     color: 'primary.main',

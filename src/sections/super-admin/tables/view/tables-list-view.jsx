@@ -93,7 +93,7 @@ export default function TablesListView() {
       { tableName: 'appointment_types', documents: [] }, //
       { tableName: 'free_subscriptions', documents: [] }, //
       { tableName: 'symptoms', documents: [] }, //
-      // { tableName: 'patients', documents: [] },
+      { tableName: 'userContact', documents: [] },
       { tableName: 'diets', documents: [] }, //
       { tableName: 'currencies', documents: [] }, //
       { tableName: 'analyses', documents: [] }, //

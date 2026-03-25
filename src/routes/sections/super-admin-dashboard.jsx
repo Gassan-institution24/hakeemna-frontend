@@ -133,6 +133,10 @@ const AppoinTypeEditPage = lazy(
 const FreeSubTablePage = lazy(
   () => import('src/pages/super-admin/tables/free-subscriptions/table')
 );
+// UserContactsPage
+const UserContactsPage = lazy(
+  () => import('src/pages/super-admin/tables/userContact/table')
+);
 const FreeSubCreatePage = lazy(() => import('src/pages/super-admin/tables/free-subscriptions/new'));
 const FreeSubEditPage = lazy(() => import('src/pages/super-admin/tables/free-subscriptions/edit'));
 // ADDED VALUE TAXES
@@ -926,6 +930,13 @@ export const dashboardRoutes = [
               { path: 'list', element: <CountriesTablePage /> },
               { path: 'new', element: <CountryCreatePage /> },
               { path: ':id/edit', element: <CountryEditPage /> },
+            ],
+          },
+          {
+            path: 'userContact',
+            children: [
+              { element: <UserContactsPage />, index: true },
+
             ],
           },
           {
