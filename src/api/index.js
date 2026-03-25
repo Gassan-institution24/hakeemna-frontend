@@ -23,6 +23,7 @@ export function useGetTables() {
 
 export * from './user';
 export * from './blogs';
+export * from './userContact';
 export * from './diets';
 export * from './rooms';
 export * from './drugs';

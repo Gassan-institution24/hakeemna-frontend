@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
+import { TableFooter } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
@@ -47,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function InvoiceDetails({ invoice, refetch }) {
   // const [currentStatus, setCurrentStatus] = useState(invoice.status);
-
+  console.log(invoice, 'invoice');
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -312,8 +313,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
         </Box>
 
         {renderList}
-
-        <Divider sx={{ mt: 5, borderStyle: 'dashed' }} />
+        {invoice.concept && (
+          <Typography variant="h5" sx={{ m: 3, color: 'text.secondary', textAlign: 'start' }}>
+            {t('Note')}: {invoice.concept}
+          </Typography>
+        )}
       </Card>
     </>
   );
