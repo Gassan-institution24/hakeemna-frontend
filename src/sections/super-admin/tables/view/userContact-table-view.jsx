@@ -1,5 +1,4 @@
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
@@ -19,9 +18,11 @@ import { RouterLink } from 'src/routes/components';
 
 import { useGetuserContact } from 'src/api';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -31,12 +32,14 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 import { fDate } from 'src/utils/format-time';
+import MenuItem from '@mui/material/MenuItem';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import IconButton from '@mui/material/IconButton';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import CustomPopover from 'src/components/custom-popover';
-
-import TableDetailRow from '../appointmentTypes/table-details-row'; /// edit
 import MobileRow from '../../MobileRow';
-import TableDetailToolbar from '../table-details-toolbar';
+
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 const TABLE_HEAD = [
@@ -57,8 +60,13 @@ const defaultFilters = {
 
 export default function AppointmentTypesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
+  const popover = usePopover();
+  const DDL = usePopover();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const componentRef = useRef();
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslate();
 
   const isMobile = useMediaQuery('(max-width: 899px)');
   const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
@@ -68,7 +76,7 @@ export default function AppointmentTypesTableView() {
 
   const router = useRouter();
 
-  const { userContactData, loading } = useGetuserContact();
+  const { userContactData, loading, refetch } = useGetuserContact();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -91,26 +99,6 @@ export default function AppointmentTypesTableView() {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-
-  // const handleDownload = () => {
-  //   const excelBody = dataFiltered.reduce((acc, data) => {
-  //     acc.push({
-  //       code: data.code,
-  //       name: data.name_english,
-  //       country: data.country?.name_english,
-  //       status: data.status,
-  //     });
-  //     return acc;
-  //   }, []);
-  //   const wb = XLSX.utils.book_new();
-  //   const ws = XLSX.utils.json_to_sheet(excelBody);
-  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
-  //   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  //   const data = new Blob([excelBuffer], {
-  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  //   });
-  //   saveAs(data, 'appointmentTypesTable.xlsx'); /// edit
-  // };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -138,6 +126,22 @@ export default function AppointmentTypesTableView() {
     return <LoadingScreen />;
   }
 
+  const handleStatusChange = async (id, status) => {
+    try {
+      await axiosInstance.patch(`/api/userContact/${id}`, { status });
+
+      enqueueSnackbar(`Status updated to ${status}`, {
+        variant: 'success',
+      });
+      refetch(); // تحديث البيانات بعد التعديل
+      popover.onClose(); // 🔥
+    } catch (e) {
+      enqueueSnackbar('Error updating status', {
+        variant: 'error',
+      });
+    }
+  };
+
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
@@ -159,16 +163,6 @@ export default function AppointmentTypesTableView() {
       />
 
       <Card>
-        <TableDetailToolbar
-          onPrint={printHandler}
-          filters={filters}
-          onFilters={handleFilters}
-          // onDownload={handleDownload}
-          //
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
-        />
-
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
@@ -244,14 +238,51 @@ export default function AppointmentTypesTableView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        selected={table.selected.includes(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
+                      <TableRow hover>
+                        <TableCell align="center">
+                          <Box>{row.code}</Box>
+                        </TableCell>
+                        <TableCell align="center">{row.Body}</TableCell>
+                        <TableCell align="center">{row.email}</TableCell>
+                        <TableCell align="center">{row.number}</TableCell>
+                        <TableCell align="center">{row.status}</TableCell>
+
+                        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+                          <IconButton
+                            onClick={(e) => {
+                              popover.onOpen(e);
+                              setSelectedRow(row); // 🔥 هاي أهم سطر
+                            }}
+                          >
+                            <Iconify icon="eva:more-vertical-fill" />
+                          </IconButton>
+
+                          <CustomPopover
+                            open={popover.open}
+                            onClose={popover.onClose}
+                            arrow="right-top"
+                            sx={{ width: 140 }}
+                          >
+                            <MenuItem
+                              onClick={() => handleStatusChange(selectedRow._id, 'pending')}
+                            >
+                              Pending
+                            </MenuItem>
+
+                            <MenuItem
+                              onClick={() => handleStatusChange(selectedRow._id, 'in progress')}
+                            >
+                              In Progress
+                            </MenuItem>
+
+                            <MenuItem
+                              onClick={() => handleStatusChange(selectedRow._id, 'resolved')}
+                            >
+                              Resolved
+                            </MenuItem>
+                          </CustomPopover>
+                        </TableCell>
+                      </TableRow>
                     ))}
 
                   <TableNoData notFound={notFound} />
