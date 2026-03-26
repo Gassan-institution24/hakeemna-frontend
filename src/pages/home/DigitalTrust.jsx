@@ -97,7 +97,7 @@ export default function DigitalTrust() {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <TextField
-              label={t('Phone Number')t("optional")}
+              label={`${t('Phone Number')} (${t('optional')})`}
               value={form.number}
               onChange={(e) => setForm({ ...form, number: e.target.value })}
             />
@@ -118,6 +118,14 @@ export default function DigitalTrust() {
             variant="contained"
             onClick={async () => {
               try {
+                // validation
+                if (!form.name.trim() || !form.email.trim()) {
+                  enqueueSnackbar(t('Name and Email are required'), {
+                    variant: 'warning',
+                  });
+                  return;
+                }
+
                 await axiosInstance.post(endpoints.userContact.all, form);
 
                 enqueueSnackbar(
