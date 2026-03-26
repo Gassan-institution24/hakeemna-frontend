@@ -620,6 +620,8 @@ export const endpoints = {
   },
   userContact: {
     all: '/api/userContact',
+      one: (id) => (!id ? null : `/api/userContact/${id}`),
+
   },
   income_payment: {
     all: '/api/incomepayment',
