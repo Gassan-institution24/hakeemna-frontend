@@ -42,7 +42,7 @@ export default function DigitalTrust() {
     name: '',
     email: '',
     number: '',
-    message: '',
+    Body: '',
   });
   const handleOpen = () => setOpenDialog(true);
   const handleClose = () => setOpenDialog(false);
