@@ -97,7 +97,7 @@ export default function DigitalTrust() {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <TextField
-              label={t('Phone Number')}
+              label={t('Phone Number')t("optional")}
               value={form.number}
               onChange={(e) => setForm({ ...form, number: e.target.value })}
             />
