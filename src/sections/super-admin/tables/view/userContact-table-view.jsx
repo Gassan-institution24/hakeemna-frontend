@@ -1,28 +1,22 @@
 import { useSnackbar } from 'notistack';
-import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import { ListItemText, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
-import { useGetuserContact } from 'src/api';
+import axiosInstance from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { LoadingScreen } from 'src/components/loading-screen';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -31,19 +25,21 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { fDate } from 'src/utils/format-time';
+import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { alpha } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+
+import { fDate } from 'src/utils/format-time';
+
+import { useGetuserContact } from 'src/api';
 
 import Label from 'src/components/label';
-import IconButton from '@mui/material/IconButton';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import TableDetailToolbar from '../table-details-toolbar';
 
 import MobileRow from '../../MobileRow';
-
+import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 const TABLE_HEAD = [
@@ -53,7 +49,7 @@ const TABLE_HEAD = [
   { id: 'Body', label: 'Body' },
   { id: 'email', label: 'email' },
   { id: 'number', label: 'number' },
-  { id: 'status', label: 'status' },
+  { id: 'created_at', label: 'Date' },
   { id: '', width: 88 },
 ];
 
@@ -73,12 +69,6 @@ export default function AppointmentTypesTableView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const isMobile = useMediaQuery('(max-width: 899px)');
-  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
-  const [ddlRow, setDdlRow] = useState(null);
-
-  const ddlOpen = Boolean(ddlAnchorEl);
-
-  const router = useRouter();
 
   const { userContactData, loading, refetch } = useGetuserContact();
 
@@ -115,12 +105,6 @@ export default function AppointmentTypesTableView() {
       handleFilters('status', newValue);
     },
     [handleFilters]
-  );
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.appointypes.edit(id));
-    },
-    [router]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -274,6 +258,14 @@ export default function AppointmentTypesTableView() {
                         </Label>
                       ),
                     },
+                    {
+                      label: 'Date',
+                      value: () => (
+                        <Box>
+                          <Box sx={{ fontWeight: 500 }}>{fDate(row.created_at, 'dd MMM yyyy')}</Box>
+                        </Box>
+                      ),
+                    },
                   ]}
                   actions={[
                     {
@@ -324,7 +316,7 @@ export default function AppointmentTypesTableView() {
                         <TableCell align="center">{row.email}</TableCell>
                         <TableCell align="center">{row.number}</TableCell>
                         <TableCell align="center">
-                          <Label
+                          {/* <Label
                             color={
                               (row.status === 'pending' && 'warning') ||
                               (row.status === 'in progress' && 'info') ||
@@ -332,7 +324,8 @@ export default function AppointmentTypesTableView() {
                             }
                           >
                             {row.status}
-                          </Label>
+                            </Label> */}
+                          {fDate(row.created_at, 'dd MMM yyyy')}
                         </TableCell>
 
                         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -400,62 +393,6 @@ export default function AppointmentTypesTableView() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
-      <CustomPopover
-        open={ddlOpen}
-        onClose={() => setDdlAnchorEl(null)}
-        anchorEl={ddlAnchorEl}
-        arrow="right-top"
-        sx={{
-          padding: 2,
-          fontSize: '14px',
-          minWidth: 260,
-        }}
-      >
-        {ddlRow && (
-          <>
-            <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-              <ListItemText
-                primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
-                secondary={fDate(ddlRow.created_at, 'p')}
-                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-                secondaryTypographyProps={{
-                  component: 'span',
-                  typography: 'caption',
-                }}
-              />
-            </Box>
-            <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ddlRow.user_creation?.email}</Box>
-
-            <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-              {ddlRow.ip_address_user_creation}
-            </Box>
-            <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-              <ListItemText
-                primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
-                secondary={fDate(ddlRow.updated_at, 'p')}
-                primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-                secondaryTypographyProps={{
-                  component: 'span',
-                  typography: 'caption',
-                }}
-              />
-            </Box>
-            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-              {ddlRow.user_modification?.email}
-            </Box>
-            <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
-            <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
-              {ddlRow.ip_address_user_modification}
-            </Box>
-            <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {ddlRow.modifications_nums}</Box>
-          </>
-        )}
-      </CustomPopover>
     </Container>
   );
 }
