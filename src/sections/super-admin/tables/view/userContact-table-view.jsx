@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import { ListItemText } from '@mui/material';
+import { ListItemText, Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -35,8 +35,12 @@ import { fDate } from 'src/utils/format-time';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { alpha } from '@mui/material/styles';
+
+import Label from 'src/components/label';
 import IconButton from '@mui/material/IconButton';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import TableDetailToolbar from '../table-details-toolbar';
 
 import MobileRow from '../../MobileRow';
 
@@ -45,6 +49,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
+  { id: 'name', label: 'name' },
   { id: 'Body', label: 'Body' },
   { id: 'email', label: 'email' },
   { id: 'number', label: 'number' },
@@ -54,6 +59,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
+  status: 'all',
 };
 
 // ----------------------------------------------------------------------
@@ -61,12 +67,10 @@ const defaultFilters = {
 export default function AppointmentTypesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
   const popover = usePopover();
-  const DDL = usePopover();
   const [selectedRow, setSelectedRow] = useState(null);
 
   const componentRef = useRef();
   const { enqueueSnackbar } = useSnackbar();
-  const { t } = useTranslate();
 
   const isMobile = useMediaQuery('(max-width: 899px)');
   const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
@@ -96,10 +100,6 @@ export default function AppointmentTypesTableView() {
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
-  const printHandler = useReactToPrint({
-    content: () => componentRef.current,
-  });
-
   const handleFilters = useCallback(
     (name, value) => {
       table.onResetPage();
@@ -110,7 +110,12 @@ export default function AppointmentTypesTableView() {
     },
     [table]
   );
-
+  const handleFilterStatus = useCallback(
+    (event, newValue) => {
+      handleFilters('status', newValue);
+    },
+    [handleFilters]
+  );
   const handleEditRow = useCallback(
     (id) => {
       router.push(paths.superadmin.tables.appointypes.edit(id));
@@ -141,6 +146,12 @@ export default function AppointmentTypesTableView() {
       });
     }
   };
+  const TABS = [
+    { value: 'all', label: 'All' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'in progress', label: 'In Progress' },
+    { value: 'resolved', label: 'Resolved' },
+  ];
 
   return (
     <Container maxWidth="xl">
@@ -163,6 +174,51 @@ export default function AppointmentTypesTableView() {
       />
 
       <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {TABS.map((tab) => (
+            <Tab
+              key={tab.value}
+              value={tab.value}
+              label={tab.label}
+              iconPosition="end"
+              icon={
+                <Label
+                  variant={(tab.value === filters.status && 'filled') || 'soft'}
+                  color={
+                    (tab.value === 'pending' && 'warning') ||
+                    (tab.value === 'in progress' && 'info') ||
+                    (tab.value === 'resolved' && 'success') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && userContactData.length}
+
+                  {tab.value === 'pending' &&
+                    userContactData.filter((item) => item.status === 'pending').length}
+
+                  {tab.value === 'in progress' &&
+                    userContactData.filter((item) => item.status === 'in progress').length}
+
+                  {tab.value === 'resolved' &&
+                    userContactData.filter((item) => item.status === 'resolved').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+        <TableDetailToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
+        />
         {canReset && (
           <TableDetailFiltersResult
             filters={filters}
@@ -185,34 +241,55 @@ export default function AppointmentTypesTableView() {
               .map((row) => (
                 <MobileRow
                   key={row?._id}
-                  title={row?.name_english}
+                  title={row?.name}
                   fields={[
                     {
                       label: 'Code',
                       value: row?.code,
                     },
                     {
-                      label: 'Name Arabic',
-                      value: row?.name_arabic,
+                      label: 'email',
+                      value: row?.email,
                     },
                     {
-                      label: 'Description',
-                      value: row?.description,
+                      label: 'number',
+                      value: row?.number,
+                    },
+                    {
+                      label: 'body',
+                      value: row?.Body,
+                    },
+                    {
+                      label: 'Status',
+                      value: () => (
+                        <Label
+                          color={
+                            (row.status === 'pending' && 'warning') ||
+                            (row.status === 'in progress' && 'info') ||
+                            (row.status === 'resolved' && 'success') ||
+                            'default'
+                          }
+                        >
+                          {row.status}
+                        </Label>
+                      ),
                     },
                   ]}
                   actions={[
                     {
-                      label: 'Edit',
-                      icon: 'fluent:edit-32-filled',
-                      onClick: () => handleEditRow(row._id),
+                      label: 'Pending',
+                      show: row.status !== 'pending',
+                      onClick: () => handleStatusChange(row._id, 'pending'),
                     },
                     {
-                      label: 'DDL',
-                      icon: 'carbon:data-quality-definition',
-                      onClick: (event) => {
-                        setDdlRow(row);
-                        setDdlAnchorEl(event.currentTarget);
-                      },
+                      label: 'In Progress',
+                      show: row.status !== 'in progress',
+                      onClick: () => handleStatusChange(row._id, 'in progress'),
+                    },
+                    {
+                      label: 'Resolved',
+                      show: row.status !== 'resolved',
+                      onClick: () => handleStatusChange(row._id, 'resolved'),
                     },
                   ]}
                 />
@@ -242,10 +319,21 @@ export default function AppointmentTypesTableView() {
                         <TableCell align="center">
                           <Box>{row.code}</Box>
                         </TableCell>
+                        <TableCell align="center">{row.name}</TableCell>
                         <TableCell align="center">{row.Body}</TableCell>
                         <TableCell align="center">{row.email}</TableCell>
                         <TableCell align="center">{row.number}</TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align="center">
+                          <Label
+                            color={
+                              (row.status === 'pending' && 'warning') ||
+                              (row.status === 'in progress' && 'info') ||
+                              (row.status === 'resolved' && 'success')
+                            }
+                          >
+                            {row.status}
+                          </Label>
+                        </TableCell>
 
                         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
                           <IconButton
@@ -263,23 +351,32 @@ export default function AppointmentTypesTableView() {
                             arrow="right-top"
                             sx={{ width: 140 }}
                           >
-                            <MenuItem
-                              onClick={() => handleStatusChange(selectedRow._id, 'pending')}
-                            >
-                              Pending
-                            </MenuItem>
-
-                            <MenuItem
-                              onClick={() => handleStatusChange(selectedRow._id, 'in progress')}
-                            >
-                              In Progress
-                            </MenuItem>
-
-                            <MenuItem
-                              onClick={() => handleStatusChange(selectedRow._id, 'resolved')}
-                            >
-                              Resolved
-                            </MenuItem>
+                            {[
+                              {
+                                label: 'Pending',
+                                value: 'pending',
+                                show: selectedRow?.status !== 'pending',
+                              },
+                              {
+                                label: 'In Progress',
+                                value: 'in progress',
+                                show: selectedRow?.status !== 'in progress',
+                              },
+                              {
+                                label: 'Resolved',
+                                value: 'resolved',
+                                show: selectedRow?.status !== 'resolved',
+                              },
+                            ]
+                              .filter((a) => a.show !== false)
+                              .map((action) => (
+                                <MenuItem
+                                  key={action.value}
+                                  onClick={() => handleStatusChange(selectedRow._id, action.value)}
+                                >
+                                  {action.label}
+                                </MenuItem>
+                              ))}
                           </CustomPopover>
                         </TableCell>
                       </TableRow>
@@ -365,10 +462,10 @@ export default function AppointmentTypesTableView() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name } = filters;
+function applyFilter({ inputData, comparator, filters }) {
+  const { name, status } = filters;
 
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -376,18 +473,20 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el, idx) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
+    const search = name.toLowerCase();
+
     inputData = inputData?.filter(
       (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?._id === name ||
-        JSON.stringify(data.code) === name
+        (data?.name && data.name.toLowerCase().includes(search)) ||
+        (data?.email && data.email.toLowerCase().includes(search)) ||
+        (data?.number && String(data.number).includes(search))
     );
+  }
+  if (status && status !== 'all') {
+    inputData = inputData?.filter((data) => data.status === status);
   }
 
   return inputData;
