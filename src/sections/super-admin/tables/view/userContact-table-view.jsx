@@ -48,7 +48,8 @@ const TABLE_HEAD = [
   { id: 'name', label: 'name' },
   { id: 'Body', label: 'Body' },
   { id: 'email', label: 'email' },
-  { id: 'number', label: 'number' },
+  { id: 'country', label: 'Country' },
+  { id: 'number', label: 'Number' },
   { id: 'created_at', label: 'Date' },
   { id: '', width: 88 },
 ];
@@ -85,7 +86,6 @@ export default function AppointmentTypesTableView() {
     filters,
     dateError,
   });
-
   const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
@@ -240,6 +240,10 @@ export default function AppointmentTypesTableView() {
                       value: row?.number,
                     },
                     {
+                      label: 'country',
+                      value: row?.country?.name_english,
+                    },
+                    {
                       label: 'body',
                       value: row?.Body,
                     },
@@ -314,17 +318,9 @@ export default function AppointmentTypesTableView() {
                         <TableCell align="center">{row.name}</TableCell>
                         <TableCell align="center">{row.Body}</TableCell>
                         <TableCell align="center">{row.email}</TableCell>
+                        <TableCell align="center">{row.country?.name_english}</TableCell>
                         <TableCell align="center">{row.number}</TableCell>
                         <TableCell align="center">
-                          {/* <Label
-                            color={
-                              (row.status === 'pending' && 'warning') ||
-                              (row.status === 'in progress' && 'info') ||
-                              (row.status === 'resolved' && 'success')
-                            }
-                          >
-                            {row.status}
-                            </Label> */}
                           {fDate(row.created_at, 'dd MMM yyyy')}
                         </TableCell>
 

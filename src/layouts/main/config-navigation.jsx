@@ -14,7 +14,7 @@ export const navConfig = [
   },
   {
     title: 'Digital Marketing',
-    icon: <Iconify icon="mdi:about" />,
+    icon: <Iconify icon="solar:chart-square-bold" />,
     path: paths.pages.digital,
   },
   {
