@@ -16,9 +16,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  MenuItem,
 } from '@mui/material';
 
+import { useGetCountries } from 'src/api';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import PhoneWithCountry from 'src/components/hook-form/phoneNumber';
 
 import { useTranslate } from 'src/locales';
 
@@ -38,11 +41,14 @@ const fadeUp = {
 export default function DigitalTrust() {
   const { t } = useTranslate();
   const [openDialog, setOpenDialog] = useState(false);
+  const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
+
   const [form, setForm] = useState({
     name: '',
     email: '',
     number: '',
     Body: '',
+    country: '',
   });
   const handleOpen = () => setOpenDialog(true);
   const handleClose = () => setOpenDialog(false);
@@ -87,7 +93,7 @@ export default function DigitalTrust() {
         <DialogContent>
           <Stack spacing={3} mt={1}>
             <TextField
-              label={t('Name')}
+              label={t('Name/Clinic Name')}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
@@ -96,11 +102,19 @@ export default function DigitalTrust() {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-            <TextField
+            <PhoneWithCountry
+              countries={countriesData}
+              value={{ number: form.number, country: form.country }}
               label={`${t('Phone Number')} (${t('optional')})`}
-              value={form.number}
-              onChange={(e) => setForm({ ...form, number: e.target.value })}
+              onChange={(val) =>
+                setForm({
+                  ...form,
+                  number: val.number,
+                  country: val.country,
+                })
+              }
             />
+
             <TextField
               label={t('Message')}
               value={form.Body}
@@ -138,8 +152,9 @@ export default function DigitalTrust() {
                 setForm({
                   name: '',
                   email: '',
-                  phone: '',
+                  number: '',
                   Body: '',
+                  country: '',
                 });
               } catch (e) {
                 enqueueSnackbar(t('Something went wrong'), {
@@ -155,7 +170,7 @@ export default function DigitalTrust() {
       </Dialog>
 
       <Helmet>
-        <title>Digital Trust</title>
+        <title>Digital Marketing</title>
       </Helmet>
 
       <LazyMotion features={domAnimation}>
