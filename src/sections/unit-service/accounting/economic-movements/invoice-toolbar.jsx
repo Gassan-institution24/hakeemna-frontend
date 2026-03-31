@@ -283,6 +283,11 @@ export default function InvoiceToolbar({ invoice }) {
               <b>{t('total')}:</b> {fCurrency(invoice?.Total_Amount)}
             </Typography>
           )}
+          {invoice?.concept && (
+            <Typography variant="h6" sx={{mt:6}}>
+              <b>{t('Note')}:</b> {invoice?.concept}
+            </Typography>
+          )}
         </Stack>
 
         {/* Footer */}
