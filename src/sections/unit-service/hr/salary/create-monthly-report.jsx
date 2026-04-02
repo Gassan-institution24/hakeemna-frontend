@@ -56,10 +56,9 @@ export default function CreateMonthlyReport({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
   const [activeStep, setActiveStep] = useState(0);
   const [yearlyIntervalData, setYearlyIntervalData] = useState(null);
-
+console.log('employeeEngagementData', employeeEngagementData);
   const attendanceSchema = Yup.object().shape({
     start_date: Yup.date().required(),
     end_date: Yup.date().required(),
@@ -133,8 +132,8 @@ export default function CreateMonthlyReport({
     deduction: 0,
     social_security: 0,
 
-    employee_contribution_amount: employee_contribution_amount || 0,
-    company_contribution_amount: company_contribution_amount || 0,
+    employee_contribution_amount: employeeEngagementData?.employee_contribution_amount || 0,
+    company_contribution_amount: employeeEngagementData?.company_contribution_amount || 0,
 
     total: 0,
     note: '',
