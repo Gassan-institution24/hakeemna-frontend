@@ -47,7 +47,6 @@ export default function AttendanceToolbar({
   const popover = usePopover();
   const report = useBoolean();
   const {data: employeeEngagementData} = useGetEmployeeEngagement(id);
-  console.log('employeeEngagementData', employeeEngagementData);
 
   let reportedValue = 'all';
   if (filters.reported === true) reportedValue = 'reported';
