@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
@@ -42,8 +42,6 @@ export default function CreateMonthlyReport({
   publicHolidays,
   other,
   salary,
-  company_contribution_amount,
-  employee_contribution_amount,
   ids,
   monthly,
   length,
@@ -56,21 +54,22 @@ export default function CreateMonthlyReport({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
   const [activeStep, setActiveStep] = useState(0);
   const [yearlyIntervalData, setYearlyIntervalData] = useState(null);
-console.log('employeeEngagementData', employeeEngagementData);
+
   const attendanceSchema = Yup.object().shape({
     start_date: Yup.date().required(),
     end_date: Yup.date().required(),
   });
 
-  // ✅ تحويل دقائق → ساعات
   const formatMinutesToHours = (minutes) => {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
     return `${h}h ${m}m`;
   };
 
+  // ✅ fetch (فقط create)
   useEffect(() => {
     if (open && monthly && !row) {
       const fetchYearlyData = async () => {
@@ -87,57 +86,74 @@ console.log('employeeEngagementData', employeeEngagementData);
           setYearlyIntervalData(null);
         }
       };
-
       fetchYearlyData();
     }
   }, [open, monthly, row, start_date, end_date, id]);
 
-  const defaultValues = {
-    unit_service:
-      row?.unit_service ||
-      user?.employee?.employee_engagements?.[user.employee.selected_engagement].unit_service?._id,
+  const defaultValues = useMemo(
+    () => ({
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
 
-    employee_engagement: row?.employee_engagement || id,
+      employee_engagement: id,
 
-    start_date: row?.start_date || start_date || null,
-    end_date: row?.end_date || end_date || null,
+      start_date: start_date || null,
+      end_date: end_date || null,
 
-    working_time:
-      row?.working_time ||
-      (monthly ? yearlyIntervalData?.working_time : intervalData?.working_time) ||
-      hours ||
-      0,
+      working_time:
+        (monthly ? yearlyIntervalData?.working_time : intervalData?.working_time) || hours || 0,
 
-    days: row?.days || (monthly ? yearlyIntervalData?.days : intervalData?.days) || length || 0,
+      days: (monthly ? yearlyIntervalData?.days : intervalData?.days) || length || 0,
 
-    annual: row?.annual || annual || 0,
-    sick: row?.sick || sick || 0,
-    unpaid: row?.unpaid || unpaid || 0,
-    public: row?.public || publicHolidays || 0,
-    other: row?.other || other || 0,
+      annual: annual || 0,
+      sick: sick || 0,
+      unpaid: unpaid || 0,
+      public: publicHolidays || 0,
+      other: other || 0,
 
-    annual_equivalent: 0,
-    sick_equivalent: 0,
-    unpaid_equivalent: 0,
-    public_equivalent: 0,
-    other_equivalent: 0,
+      annual_equivalent: 0,
+      sick_equivalent: 0,
+      unpaid_equivalent: 0,
+      public_equivalent: 0,
+      other_equivalent: 0,
 
-    calculated_time: 0,
+      calculated_time: 0,
 
-    salary: salary || 0,
-    over_time: 0,
-    extras: 0,
-    working_hours_to_work_system: 0,
-    tax: 0,
-    deduction: 0,
-    social_security: 0,
+      salary: salary || 0,
+      over_time: 0,
+      extras: 0,
+      working_hours_to_work_system: 0,
+      tax: 0,
+      deduction: 0,
+      social_security: 0,
 
-    employee_contribution_amount: employeeEngagementData?.employee_contribution_amount || 0,
-    company_contribution_amount: employeeEngagementData?.company_contribution_amount || 0,
+      employee_contribution_amount: employeeEngagementData?.employee_contribution_amount || 0,
 
-    total: 0,
-    note: '',
-  };
+      company_contribution_amount: employeeEngagementData?.company_contribution_amount || 0,
+
+      total: 0,
+      note: '',
+    }),
+    [
+      user,
+      id,
+      start_date,
+      end_date,
+      monthly,
+      yearlyIntervalData,
+      intervalData,
+      hours,
+      length,
+      annual,
+      sick,
+      unpaid,
+      publicHolidays,
+      other,
+      salary,
+      employeeEngagementData,
+    ]
+  );
 
   const methods = useForm({
     resolver: yupResolver(attendanceSchema),
@@ -148,11 +164,21 @@ console.log('employeeEngagementData', employeeEngagementData);
     watch,
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = methods;
 
   const values = watch();
 
-  // ✅ calculated_time AUTO (بالدقائق)
+  useEffect(() => {
+    if (open && row) {
+      reset({
+        ...defaultValues,
+        ...row,
+      });
+    }
+  }, [row, open, defaultValues, reset]);
+
+  // ✅ calculated_time
   useEffect(() => {
     const calculated =
       (Number(values.working_time) || 0) +
@@ -163,15 +189,7 @@ console.log('employeeEngagementData', employeeEngagementData);
       (Number(values.annual_equivalent) || 0);
 
     methods.setValue('calculated_time', calculated);
-  }, [
-    values.working_time,
-    values.unpaid_equivalent,
-    values.other_equivalent,
-    values.public_equivalent,
-    values.sick_equivalent,
-    values.annual_equivalent,
-    methods,
-  ]);
+  }, [values, methods]);
 
   // ✅ total
   useEffect(() => {
@@ -192,12 +210,17 @@ console.log('employeeEngagementData', employeeEngagementData);
     const company = (Number(values.salary) || 0) * 0.14;
     methods.setValue('company_contribution_amount', Number(company.toFixed(2)));
   }, [values.salary, methods]);
+
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axiosInstance.post(endpoints.monthlyReport.all, { ...data, ids });
+      if (row?._id) {
+        await axiosInstance.patch(endpoints.monthlyReport.one(row._id), data);
+      } else {
+        await axiosInstance.post(endpoints.monthlyReport.all, { ...data, ids });
+      }
 
       enqueueSnackbar(t('Success'));
       refetch();
@@ -211,7 +234,7 @@ console.log('employeeEngagementData', employeeEngagementData);
     <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between' }}>
-          <DialogTitle>{t('Create Monthly report')}</DialogTitle>
+          <DialogTitle>{row ? t('Edit Monthly report') : t('Create Monthly report')}</DialogTitle>
 
           <DialogTitle>
             {t('employee')}:{' '}
@@ -248,34 +271,12 @@ console.log('employeeEngagementData', employeeEngagementData);
           {/* STEP 2 */}
           {activeStep === 1 && (
             <Stack spacing={2}>
-              {/* 🔹 SMALL SUMMARY */}
-              <Box sx={{ p: 1.5, border: '1px solid #ddd', borderRadius: 1.5 }}>
-                <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={1}>
-                  <Typography variant="caption">
-                    {t('Days')}: {values.days}
-                  </Typography>
-                  <Typography variant="caption">
-                    {t('Annual')}: {values.annual}
-                  </Typography>
-                  <Typography variant="caption">
-                    {t('Sick')}: {values.sick}
-                  </Typography>
-                  <Typography variant="caption">
-                    {t('Unpaid')}: {values.unpaid}
-                  </Typography>
-                  <Typography variant="caption">
-                    {t('Public')}: {values.public}
-                  </Typography>
-                </Box>
-              </Box>
-
               <Box display="grid" gap={2} gridTemplateColumns="repeat(2,1fr)">
                 <RHFHoursMins name="annual_equivalent" label={t('Annual equivalent')} />
                 <RHFHoursMins name="sick_equivalent" label={t('Sick equivalent')} />
                 <RHFHoursMins name="unpaid_equivalent" label={t('Unpaid equivalent')} />
                 <RHFHoursMins name="public_equivalent" label={t('Public equivalent')} />
                 <RHFHoursMins name="other_equivalent" label={t('Other equivalent')} />
-
                 <RHFHoursMins name="calculated_time" label={t('Calculated time')} disabled />
               </Box>
             </Stack>
@@ -284,29 +285,15 @@ console.log('employeeEngagementData', employeeEngagementData);
           {/* STEP 3 */}
           {activeStep === 2 && (
             <Stack spacing={2}>
-              {/* 🔹 calculated time display */}
-              <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2} alignItems="center">
-                {/* 🔹 Display calculated time */}
-                <Box
-                  sx={{
-                    p: 1.5,
-                    border: '1px solid #ddd',
-                    borderRadius: 1.5,
-                    height: '56px',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="body2">
-                    {t('Calculated time')}: {formatMinutesToHours(values.calculated_time)}
-                  </Typography>
-                </Box>
+              <Box display="grid" gridTemplateColumns="1fr 1fr" gap={2}>
+                <Typography>
+                  {t('Calculated time')}: {formatMinutesToHours(values.calculated_time)}
+                </Typography>
 
-                {/* 🔹 Editable input */}
                 <RHFTextField
                   type="number"
                   name="working_hours_to_work_system"
-                  label={t('Working Hours according to Work System')}
+                  label={t('Working Hours')}
                 />
               </Box>
 
@@ -319,13 +306,12 @@ console.log('employeeEngagementData', employeeEngagementData);
                   label={t('Employee contribution')}
                 />
                 <RHFTextField type="number" name="tax" label={t('Tax')} />
-                <RHFTextField type="number" name="deduction" label={t('deduction')} />
-                <RHFTextField type="number" name="total" label={t('net salary')} disabled />
+                <RHFTextField type="number" name="deduction" label={t('Deduction')} />
+                <RHFTextField type="number" name="total" label={t('Net')} disabled />
               </Box>
 
-              {/* 🔹 company contribution */}
-              <Box sx={{ p: 2, border: '1px solid #ddd', borderRadius: 2 }}>
-                <Typography variant="subtitle1">{t('Company contribution')}</Typography>
+              <Box>
+                <Typography>{t('Company contribution')}:</Typography>
                 <Typography>{values.company_contribution_amount}</Typography>
               </Box>
 
