@@ -134,9 +134,11 @@ const FreeSubTablePage = lazy(
   () => import('src/pages/super-admin/tables/free-subscriptions/table')
 );
 // UserContactsPage
-const UserContactsPage = lazy(
-  () => import('src/pages/super-admin/tables/userContact/table')
-);
+const UserContactsPage = lazy(() => import('src/pages/super-admin/tables/userContact/table'));
+
+// diagnosisPage
+const DiagnosisPage = lazy(() => import('src/pages/super-admin/tables/diagnosis/table'));
+
 const FreeSubCreatePage = lazy(() => import('src/pages/super-admin/tables/free-subscriptions/new'));
 const FreeSubEditPage = lazy(() => import('src/pages/super-admin/tables/free-subscriptions/edit'));
 // ADDED VALUE TAXES
@@ -502,11 +504,16 @@ const BlogsPage = lazy(() => import('src/pages/super-admin/blogs/table'));
 const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
 
-
 // medical analysis
-const MedicalAnalysisPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_home'));
-const MedicalAnalysisNewPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_create'));
-const MedicalAnalysisEditPage = lazy(() => import('src/pages/super-admin/tables/medical_analysis/medical_edit'));
+const MedicalAnalysisPage = lazy(
+  () => import('src/pages/super-admin/tables/medical_analysis/medical_home')
+);
+const MedicalAnalysisNewPage = lazy(
+  () => import('src/pages/super-admin/tables/medical_analysis/medical_create')
+);
+const MedicalAnalysisEditPage = lazy(
+  () => import('src/pages/super-admin/tables/medical_analysis/medical_edit')
+);
 // ----------------------------------------------------------------------
 
 // SUPER ADMIN PERMISSIONS
@@ -934,10 +941,11 @@ export const dashboardRoutes = [
           },
           {
             path: 'userContact',
-            children: [
-              { element: <UserContactsPage />, index: true },
-
-            ],
+            children: [{ element: <UserContactsPage />, index: true }],
+          },
+          {
+            path: 'diagnosis',
+            children: [{ element: <DiagnosisPage />, index: true }],
           },
           {
             path: 'added_value_tax_GD',
@@ -1278,7 +1286,7 @@ export const dashboardRoutes = [
               { path: 'new', element: <MedicalAnalysisNewPage /> },
               { path: ':id/edit', element: <MedicalAnalysisEditPage /> },
             ],
-          }
+          },
         ],
       },
     ],

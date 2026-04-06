@@ -9,6 +9,7 @@ import { useGetOneEntranceManagement } from 'src/api';
 
 import SickLeave from './sickLeave';
 import Radiology from './radiology';
+import Diagnosis from './diagnosis';
 import Prescription from './prescription';
 import Doctorreport from './doctorReport';
 import Medicalreport from './medicalreport';
@@ -24,23 +25,28 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
 
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
   const TABS = [
-    {
+     {
       value: 'one',
+      title: 'diagnosis',
+      label: <Diagnosis Entrance={Entrance} />,
+    },
+    {
+      value: 'two',
       title: 'Patient file',
       label: <Doctorreport Entrance={Entrance} />,
     },
     {
-      value: 'two',
+      value: 'three',
       title: 'prescription',
       label: <Prescription Entrance={Entrance} />,
     },
     {
-      value: 'three',
+      value: 'four',
       title: 'medical report',
       label: <Medicalreport Entrance={Entrance} />,
     },
     {
-      value: 'four',
+      value: 'five',
       title: 'sick leave',
       label: (
         <SickLeave
@@ -52,15 +58,16 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
       ),
     },
     {
-      value: 'five',
+      value: 'six',
       title: 'medical analysis',
       label: <MedicalAnalysis Entrance={Entrance} />,
     },
     {
-      value: 'six',
+      value: 'seven',
       title: 'radiology',
       label: <Radiology Entrance={Entrance} />,
     },
+   
   ];
 
   const handleChangeTab = useCallback((event, newValue) => {

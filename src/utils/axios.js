@@ -620,8 +620,11 @@ export const endpoints = {
   },
   userContact: {
     all: '/api/userContact',
-      one: (id) => (!id ? null : `/api/userContact/${id}`),
-
+    one: (id) => (!id ? null : `/api/userContact/${id}`),
+  },
+  diagnosis: {
+    all: '/api/diagnosis',
+    one: (id) => (!id ? null : `/api/diagnosis/${id}`),
   },
   income_payment: {
     all: '/api/incomepayment',
@@ -928,7 +931,8 @@ export const endpoints = {
         : `/api/medical-analysis-patient/${unitServicePatientId}/${analysisId}`,
     patient: (patientId) => `/api/medical-analysis-patient/patient/${patientId}`,
     entrance: (id) => (!id ? null : `/api/medical-analysis-patient/entrance/${id}`),
-    oneMedicalAnalysis:(id) => (!id ? null : `/api/medical-analysis-patient/oneMedicalAnalysis/${id}`),
+    oneMedicalAnalysis: (id) =>
+      !id ? null : `/api/medical-analysis-patient/oneMedicalAnalysis/${id}`,
   },
   radiologyPatient: {
     all: '/api/radiology-patient',
@@ -939,6 +943,6 @@ export const endpoints = {
         : `/api/radiology-patient/${unitServicePatientId}/${radiologyId}`,
     patient: (patientId) => `/api/radiology-patient/patient/${patientId}`,
     entrance: (id) => (!id ? null : `/api/radiology-patient/entrance/${id}`),
-    oneRadiology:(id) => (!id ? null : `/api/radiology-patient/oneRadiology/${id}`),
+    oneRadiology: (id) => (!id ? null : `/api/radiology-patient/oneRadiology/${id}`),
   },
 };

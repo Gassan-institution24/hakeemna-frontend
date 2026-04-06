@@ -95,3 +95,4 @@ export * from './unit_service_patient';
 export * from './employee_engagements';
 export * from './income_payment_control';
 export * from './patient-medical-analysis';
+export * from './diagnosis';
