@@ -311,7 +311,7 @@ export default function CreateMonthlyReport({
               </Box>
 
               <Box>
-                <RHFTextField type="number" name="company_contribution_amount" label={t('Company contribution')} disabled />
+                <RHFTextField type="number" name="company_contribution_amount" label={t('Company contribution')}  />
 
                 {/* <Typography>{t('Company contribution')}:</Typography>
                 <Typography>{values.company_contribution_amount}</Typography> */}
