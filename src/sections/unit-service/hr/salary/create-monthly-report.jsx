@@ -311,8 +311,10 @@ export default function CreateMonthlyReport({
               </Box>
 
               <Box>
-                <Typography>{t('Company contribution')}:</Typography>
-                <Typography>{values.company_contribution_amount}</Typography>
+                <RHFTextField type="number" name="company_contribution_amount" label={t('Company contribution')} disabled />
+
+                {/* <Typography>{t('Company contribution')}:</Typography>
+                <Typography>{values.company_contribution_amount}</Typography> */}
               </Box>
 
               <RHFTextField name="note" label={t('Note')} multiline rows={3} />
