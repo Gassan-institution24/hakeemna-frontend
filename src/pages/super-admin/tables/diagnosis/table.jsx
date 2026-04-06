@@ -1,18 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 
-import TableCreateView from 'src/sections/super-admin/tables/freeSubscriptions/table-create-view';
+import { DiagnosisTableView } from 'src/sections/super-admin/tables/view'; 
 
 // ----------------------------------------------------------------------
 
-export default function TableCreatePage() {
+export default function TableDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> super: Create a new Free Subscription</title>
+        <title> Dashboard: Free Subscriptions Table</title>
         <meta name="description" content="meta" />
       </Helmet>
 
-      <TableCreateView />
+      <DiagnosisTableView />
     </>
   );
 }

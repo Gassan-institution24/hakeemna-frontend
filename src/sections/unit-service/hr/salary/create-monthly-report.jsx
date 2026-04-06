@@ -205,11 +205,11 @@ export default function CreateMonthlyReport({
     methods.setValue('total', total);
   }, [values, methods]);
 
-  // ✅ company contribution
-  useEffect(() => {
-    const company = (Number(values.salary) || 0) * 0.14;
-    methods.setValue('company_contribution_amount', Number(company.toFixed(2)));
-  }, [values.salary, methods]);
+
+  // useEffect(() => {
+  //   const company = (Number(values.salary) || 0) * 0.14;
+  //   methods.setValue('company_contribution_amount', Number(company.toFixed(2)));
+  // }, [values.salary, methods]);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);

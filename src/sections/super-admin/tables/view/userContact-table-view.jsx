@@ -61,7 +61,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentTypesTableView() {
+export default function UserContactTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
   const popover = usePopover();
   const [selectedRow, setSelectedRow] = useState(null);

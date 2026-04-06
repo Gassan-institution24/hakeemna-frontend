@@ -94,6 +94,7 @@ export default function TablesListView() {
       { tableName: 'free_subscriptions', documents: [] }, //
       { tableName: 'symptoms', documents: [] }, //
       { tableName: 'userContact', documents: [] },
+      { tableName: 'diagnosis', documents: [] },
       { tableName: 'diets', documents: [] }, //
       { tableName: 'currencies', documents: [] }, //
       { tableName: 'analyses', documents: [] }, //

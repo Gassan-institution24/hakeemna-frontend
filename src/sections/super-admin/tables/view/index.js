@@ -4,6 +4,7 @@ export { default as userContact } from './userContact-table-view';
 export { default as TablesDetailsView } from './cities-table-view';
 export { default as UploadsTableView } from './uploads-table-view';
 export { default as BlogCategoryView } from './Blog_category_table';
+export { default as DiagnosisTableView } from './diagnosis-table-view';
 export { default as ChecklistTableView } from './checklist-table-view';
 export { default as HospitalsTableView } from './hospitals-table-view';
 export { default as ActivitiesTableView } from './activities-table-view';
