@@ -625,6 +625,7 @@ export const endpoints = {
   diagnosis: {
     all: '/api/diagnosis',
     one: (id) => (!id ? null : `/api/diagnosis/${id}`),
+    entrance: (id) => (!id ? null : `/api/patient-diagnosis/entrance/${id}`),
   },
   income_payment: {
     all: '/api/incomepayment',
