@@ -1,25 +1,28 @@
+import React from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { enqueueSnackbar } from 'notistack';
-import React from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { enqueueSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Button,
   Dialog,
+  MenuItem,
   TextField,
   DialogTitle,
   Autocomplete,
   DialogActions,
   DialogContent,
-  MenuItem,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+
 import axiosInstance from 'src/utils/axios';
+
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetdiagnosis } from 'src/api';
+import { useGetdiagnosis, useGetEntranceDiagnosis } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -28,6 +31,9 @@ export default function Diagnosis({ Entrance }) {
   const { user } = useAuthContext();
   const dialog = useBoolean();
   const { diagnosisData } = useGetdiagnosis();
+  const { EntranceDiagnosis } = useGetEntranceDiagnosis(Entrance?._id);
+  console.log('EntranceDiagnosis', Entrance);
+  const { t } = useTranslate();
   // ✅ validation
   const schema = Yup.object().shape({
     primary_diagnosis: Yup.object().required('Primary diagnosis is required'),
@@ -58,11 +64,12 @@ export default function Diagnosis({ Entrance }) {
         appointment: Entrance?.appointmentId,
         entrance: Entrance?._id,
         unit_service_patient: Entrance?.unit_service_patient,
+        patient: Entrance?.patient?._id,
         given_by: user?._id,
         level: data.level,
         note: data.note,
       };
-      
+
       await axiosInstance.post('/api/patient-diagnosis', payload);
 
       enqueueSnackbar('Diagnosis added successfully', {
@@ -80,16 +87,18 @@ export default function Diagnosis({ Entrance }) {
 
   return (
     <>
+ 
       {/* ✅ Button */}
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ m: 2 }}>
-        Add Diagnosis
+        {t('Add Diagnosis')}
         <Iconify icon="mingcute:add-line" />
       </Button>
 
+   {EntranceDiagnosis  && ( <div>{t('Existing Diagnosis')}:</div> )}
       {/* ✅ Dialog */}
       <Dialog open={dialog.value} onClose={dialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>Add Diagnosis</DialogTitle>
+          <DialogTitle>{t('Add Diagnosis')}</DialogTitle>
 
           <DialogContent sx={{ width: 400 }}>
             {/* 🔥 Primary */}
@@ -104,7 +113,7 @@ export default function Diagnosis({ Entrance }) {
               getOptionLabel={(option) => option.name || ''}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               renderInput={(params) => (
-                <TextField {...params} label="Primary Diagnosis" sx={{ my: 2 }} />
+                <TextField {...params} label={t('Primary Diagnosis')} sx={{ my: 2 }} />
               )}
             />
 
@@ -120,33 +129,33 @@ export default function Diagnosis({ Entrance }) {
               getOptionLabel={(option) => option.name || ''}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               renderInput={(params) => (
-                <TextField {...params} label="Secondary Diagnosis" sx={{ mb: 2 }} />
+                <TextField {...params} label={t('Secondary Diagnosis')} sx={{ mb: 2 }} />
               )}
             />
 
             {/* 🔥 Level */}
             <TextField
               select
-              label="Level"
+              label={t('Level')}
               value={watch('level')}
               onChange={(e) => setValue('level', e.target.value)}
               fullWidth
               sx={{ mb: 2 }}
             >
-              <MenuItem value="low">Low</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="high">High</MenuItem>
-              <MenuItem value="critical">Critical</MenuItem>
+              <MenuItem value="low">{t('Low')}</MenuItem>
+              <MenuItem value="medium">{t('Medium')}</MenuItem>
+              <MenuItem value="high">{t('High')}</MenuItem>
+              <MenuItem value="critical">{t('Critical')}</MenuItem>
             </TextField>
 
             {/* 🔥 Note */}
-            <RHFTextField name="note" label="Doctor Note" multiline rows={3} />
+            <RHFTextField name="note" label={t('Doctor Note')} multiline rows={3} />
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={dialog.onFalse}>Cancel</Button>
+            <Button onClick={dialog.onFalse}>{t('Cancel')}</Button>
             <Button type="submit" variant="contained">
-              Save
+              {t('Save')}
             </Button>
           </DialogActions>
         </FormProvider>
