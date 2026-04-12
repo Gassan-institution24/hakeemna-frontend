@@ -1,31 +1,29 @@
 import { useSnackbar } from 'notistack';
 import { useState, useEffect, useCallback } from 'react';
 
-import { Container } from '@mui/system';
-import Tooltip from '@mui/material/Tooltip';
 import { alpha, useTheme } from '@mui/material/styles';
 import {
-  Tab,
   Box,
-  Tabs,
-  Table,
+  Tab,
+  Card,
+  Chip,
+  Grid,
   Stack,
+  Paper,
+  Tabs,
+  Avatar,
   Button,
   Select,
   Dialog,
+  Divider,
   MenuItem,
-  TableRow,
-  TableHead,
-  TableCell,
-  TableBody,
-  TextField,
-  IconButton,
+  Tooltip,
+  Container,
   Typography,
+  CardContent,
   DialogTitle,
   DialogContent,
   DialogActions,
-  useMediaQuery,
-  TableContainer,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -49,13 +47,35 @@ import {
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { MobileRow } from 'src/components/table';
-import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import WaitingRoom from 'src/sections/employee/appointmentsToday/rooms';
 
 import NewAppointmentDialog from './new-patient/new-patient';
+
+// ─── Helper ──────────────────────────────────────────────────────────────────
+
+function getInitials(name = '') {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((n) => n[0] || '')
+    .join('')
+    .toUpperCase();
+}
+
+// ─── Avatar colour palette (cycles by index) ─────────────────────────────────
+
+const AVATAR_COLORS = [
+  'primary',
+  'secondary',
+  'info',
+  'success',
+  'warning',
+  'error',
+];
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function AppointmentsToday() {
   const checkAcl = useAclGuard();
@@ -69,26 +89,21 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
+
   const [selectedTitles, setSelectedTitles] = useState({});
   const [pateintInfo, setPatientInfo] = useState('');
-  const [addingId, setAddingId] = useState('');
-  const { fullWidth } = useState(false);
-  const { maxWidth } = useState('xs');
+  const addingId = '';
   const dialog = useBoolean(false);
-  const iddialog = useBoolean(false);
   const [newDialog, setNewDialog] = useState(false);
-
-  const isMobile = useMediaQuery('(max-width:899px)');
 
   const unitServiceId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
 
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(unitServiceId);
-
   const { entrance, refetch2 } = useGetEntranceManagement(unitServiceId);
-
   const { roomsData } = useGetUSRooms(unitServiceId);
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
+
   const receptionActivity = roomsData.find((activity) => activity?.name_english === 'Reception');
   const roomsEntranceOnly = entrance?.filter(
     (e) => e?.Next_activity && e?.Next_activity !== receptionActivity?.activities?._id
@@ -112,15 +127,35 @@ export default function AppointmentsToday() {
     checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' }) && {
       value: 'three',
       label: t('Finished'),
-      color: 'error',
+      color: 'success',
       count: finishedAppointmentsData?.length,
       data: finishedAppointmentsData,
     },
   ].filter(Boolean);
 
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
-
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
+
+  const canAccessRooms = checkAcl({
+    category: 'unit_service',
+    subcategory: 'entrance',
+    acl: 'rooms',
+  });
+
+  // ─── Business logic (unchanged) ────────────────────────────────────────────
+
+  const getPatientName = (info) => {
+    if (info?.patient?.name_english) {
+      return curLangAr ? info.patient.name_arabic : info.patient.name_english;
+    }
+    if (info?.unit_service_patient?.name_english) {
+      return curLangAr
+        ? info.unit_service_patient.name_arabic
+        : info.unit_service_patient.name_english;
+    }
+    return t('Patient');
+  };
+
   const startAppointment = async (info) => {
     try {
       const entranceData = await axiosInstance.post(endpoints.entranceManagement.all, {
@@ -162,28 +197,26 @@ export default function AppointmentsToday() {
       }
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, dataToUpdate);
       refetch();
-      enqueueSnackbar(t('Appointment started'), {
-        variant: 'success',
-      });
+      enqueueSnackbar(t('Appointment started'), { variant: 'success' });
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
   };
+
   const StatusFunction = async (info, status, alert) => {
     try {
       const updateField = alert === 'coming' ? { coming: status } : { arrived: status };
       await axiosInstance.patch(`${endpoints.appointments.one(info?._id)}`, updateField);
       refetch();
-      enqueueSnackbar(`${getPatientName(info)} ${t(alert)}`, {
-        variant: 'success',
-      });
+      enqueueSnackbar(`${getPatientName(info)} ${t(alert)}`, { variant: 'success' });
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(t('Error updating status'), { variant: 'error' });
     }
   };
-  const dialogOnTrue = async (info) => {
+
+  const dialogOnTrue = (info) => {
     dialog.onTrue();
     setPatientInfo(info);
   };
@@ -191,14 +224,12 @@ export default function AppointmentsToday() {
   const updateAppointmentactivity = async (activityId, info) => {
     try {
       const savedHistoryId = localStorage.getItem(`historyId${info._id}`);
-
       if (!info?.entrance) {
         enqueueSnackbar(t('Appointment must be started first before selecting next activity'), {
           variant: 'error',
         });
         return;
       }
-
       await axiosInstance.patch(`${endpoints.entranceManagement.one(info?.entrance)}`, {
         Next_activity: activityId,
       });
@@ -215,7 +246,6 @@ export default function AppointmentsToday() {
       if (canAccessRooms) {
         setCurrentTab('two');
       }
-
       enqueueSnackbar(t('Appointment started'), { variant: 'success' });
     } catch (error) {
       console.error(error.message);
@@ -226,24 +256,10 @@ export default function AppointmentsToday() {
   const handlePatientClick = (info) => {
     router.push(`/dashboard/mypatients/${info?.unit_service_patient?._id}`);
   };
-  const getPatientName = (info) => {
-    if (info?.patient?.name_english) {
-      return curLangAr ? info.patient.name_arabic : info.patient.name_english;
-    }
-
-    if (info?.unit_service_patient?.name_english) {
-      return curLangAr
-        ? info.unit_service_patient.name_arabic
-        : info.unit_service_patient.name_english;
-    }
-
-    return t('Patient');
-  };
 
   const handleEndAppointment = async (appointmentdata) => {
     try {
       const savedHistoryId = localStorage.getItem(`historyId${appointmentdata._id}`);
-
       await axiosInstance.patch(`/api/entrance/${appointmentdata?.entrance}`, {
         Patient_attended: true,
       });
@@ -260,7 +276,6 @@ export default function AppointmentsToday() {
         end_date: new Date().toISOString(),
       });
       localStorage.removeItem(`historyId${appointmentdata._id}`);
-
       enqueueSnackbar(t('appointment finished'), { variant: 'success' });
       refetch();
       refetch2();
@@ -272,168 +287,473 @@ export default function AppointmentsToday() {
     }
   };
 
-  useEffect(() => {
-    setCurrentTab(TABS[0].value);
-    // eslint-disable-next-line
-  }, []);
-  // check if the user can access rooms
-  const canAccessRooms = checkAcl({
-    category: 'unit_service',
-    subcategory: 'entrance',
-    acl: 'rooms',
-  });
-  // get the current room name
   const getCurrentRoomName = (info) => {
     if (!info?.entrance || !entrance?.length) return t('Reception');
-
     const entranceRecord = entrance.find((e) => e._id === info.entrance);
     if (!entranceRecord?.Next_activity) return t('Reception');
-
     const room = roomsData.find((r) => r.activities?._id === entranceRecord.Next_activity);
-
     return curLangAr ? room?.name_arabic : room?.name_english;
   };
-  // check if the patient is in reception
+
   const isInReception = (info) => {
     const entranceRecord = entrance.find((e) => e._id === info.entrance);
     if (!entranceRecord) return true;
-
     return (
       !entranceRecord.Next_activity ||
       entranceRecord.Next_activity === receptionActivity?.activities?._id
     );
   };
 
-  const renderOptions = (info) => {
-    const canShowRoomSelect = isInReception(info);
+  useEffect(() => {
+    setCurrentTab(TABS[0].value);
+    // eslint-disable-next-line
+  }, []);
 
-    if (currentTab === 'three') {
+  // ─── UI helpers ────────────────────────────────────────────────────────────
+
+  const getStatusChip = (info) => {
+    if (info?.arrived)
       return (
-        <>
-          <IconButton
-            sx={{ p: 2 }}
-            onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
-          >
-            <Iconify
-              width={20}
-              sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
-              icon="carbon:view"
-            />
-            <span style={{ fontSize: 16 }}>{t('View')}</span>
-          </IconButton>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              router.push(
-                `${paths.unitservice.accounting.economicmovements.add}?appointment=${info?.appointmentId}&&entrance=${info?._id}`
-              )
-            }
-          >
-            {t('make an invoice')}
-          </Button>
-        </>
-      );
-    }
-
-    return info?.arrived ? (
-      <>
-        {canShowRoomSelect ? (
-          <Select
-            sx={{ width: 150, height: 35 }}
-            value={selectedTitles[info._id] || ''}
-            displayEmpty
-            onChange={(e) => {
-              setSelectedTitles((prev) => ({
-                ...prev,
-                [info._id]: e.target.value,
-              }));
-              updateAppointmentactivity(e.target.value, info);
-            }}
-          >
-            <MenuItem value="" disabled sx={{ display: 'none' }}>
-              {t('Next activity')}
-            </MenuItem>
-
-            {roomsData.map(
-              (activity) =>
-                activity?.activities?.name_english !==
-                  receptionActivity?.activities?.name_english && (
-                  <MenuItem key={activity._id} value={activity?.activities?._id}>
-                    {curLangAr ? activity?.name_arabic : activity?.name_english}
-                  </MenuItem>
-                )
-            )}
-          </Select>
-        ) : (
-          <Label color="info">{getCurrentRoomName(info)}</Label>
-        )}
-
-        {isInReception(info) && (
-          <Button
-            onClick={() => handleEndAppointment(info)}
-            variant="contained"
-            sx={{ bgcolor: 'error.main', ml: 2 }}
-          >
-            {t('end appointment')}
-          </Button>
-        )}
-      </>
-    ) : (
-      <IconButton sx={{ p: 2 }} onClick={() => dialogOnTrue(info?.patient)}>
-        <Iconify
-          width={20}
-          sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
-          icon="material-symbols:call"
+        <Chip
+          size="small"
+          label={t('Arrived')}
+          color="success"
+          icon={<Iconify icon="solar:check-circle-bold" width={14} />}
+          sx={{ fontWeight: 700, fontSize: '0.68rem' }}
         />
-      </IconButton>
+      );
+    if (info?.coming === true)
+      return (
+        <Chip
+          size="small"
+          label={t('Coming')}
+          color="info"
+          icon={<Iconify icon="solar:walking-bold" width={14} />}
+          sx={{ fontWeight: 700, fontSize: '0.68rem' }}
+        />
+      );
+    if (info?.coming === false)
+      return (
+        <Chip
+          size="small"
+          label={t('Not Coming')}
+          color="error"
+          icon={<Iconify icon="solar:close-circle-bold" width={14} />}
+          sx={{ fontWeight: 700, fontSize: '0.68rem' }}
+        />
+      );
+    return (
+      <Chip
+        size="small"
+        label={t('Pending')}
+        color="warning"
+        variant="outlined"
+        icon={<Iconify icon="solar:clock-circle-outline" width={14} />}
+        sx={{ fontWeight: 700, fontSize: '0.68rem' }}
+      />
     );
   };
 
-  return (
-    <>
-      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
-        <div
-          style={{
+  // ─── Card renderer ─────────────────────────────────────────────────────────
+
+  const renderAppointmentCard = (info, index) => {
+    const patientName = getPatientName(info);
+    const isFinishedTab = currentTab === 'three';
+    const canShowRoomSelect = isInReception(info);
+    const avatarColor = AVATAR_COLORS[index % AVATAR_COLORS.length];
+
+    return (
+      <Grid item xs={12} sm={6} md={4} xl={3} key={info._id || index}>
+        <Card
+          sx={{
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            margin: '10px',
+            border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
+            borderRadius: 2.5,
+            boxShadow: 'none',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: `0 12px 32px ${alpha(theme.palette.grey[500], 0.2)}`,
+            },
           }}
         >
-          <DialogTitle>{t('Contact patient')}</DialogTitle>
-          <Typography sx={{ mb: 1, fontSize: 15 }}>
-            {t('Thoos are some data the pateint provide to contact')}
-          </Typography>
-        </div>
-        <DialogContent>
-          <Typography sx={{ mb: 1, fontSize: 15, m: 2 }}>
-            {' '}
-            <Iconify
-              width={20}
-              sx={{ cursor: 'pointer', color: 'success.main' }}
-              icon="material-symbols:call"
-            />
-            {pateintInfo?.mobile_num1}
-          </Typography>
-          <Typography sx={{ mb: 1, fontSize: 15, m: 2 }}>
-            {' '}
-            <Iconify
-              width={20}
-              sx={{ cursor: 'pointer', color: 'success.main' }}
-              icon="material-symbols:call"
-            />
-            {pateintInfo?.mobile_num2}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            size="small"
-            color="info"
-            variant="contained"
+          {/* Coloured top accent bar */}
+          <Box
             sx={{
-              bgcolor: 'info.dark',
+              height: 4,
+              borderRadius: '10px 10px 0 0',
+              bgcolor: `${avatarColor}.main`,
+              opacity: 0.7,
             }}
+          />
+
+          <CardContent sx={{ p: 2.5, pb: '20px !important', flex: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* ── Header ── */}
+            <Stack direction="row" alignItems="flex-start" justifyContent="space-between" mb={2}>
+              <Stack direction="row" spacing={1.5} alignItems="center" flex={1} minWidth={0}>
+                <Avatar
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    bgcolor: alpha(theme.palette[avatarColor]?.main || theme.palette.primary.main, 0.12),
+                    color: `${avatarColor}.main`,
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    flexShrink: 0,
+                  }}
+                >
+                  {getInitials(patientName)}
+                </Avatar>
+
+                <Box minWidth={0} flex={1}>
+                  <Tooltip title={t("Click to view patient file")} placement="top" arrow>
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={700}
+                      noWrap
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                      onClick={() => handlePatientClick(info)}
+                    >
+                      {patientName}
+                    </Typography>
+                  </Tooltip>
+
+                  <Stack direction="row" alignItems="center" spacing={0.5} mt={0.3}>
+                    <Iconify icon="solar:clock-circle-outline" width={13} sx={{ color: 'text.disabled' }} />
+                    <Typography variant="caption" color="text.disabled" fontWeight={500}>
+                      {fTimeUnit(info?.start_time, 'p', true)}
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+
+              {!isFinishedTab && getStatusChip(info)}
+            </Stack>
+
+            <Divider sx={{ mb: 2 }} />
+
+            {/* ── Body ── */}
+            <Box flex={1}>
+              {isFinishedTab ? (
+                // ── Finished tab ──
+                <Stack spacing={1}>
+                  <Button
+                    size="small"
+                    fullWidth
+                    variant="outlined"
+                    color="info"
+                    startIcon={<Iconify icon="solar:eye-bold" width={15} />}
+                    onClick={() =>
+                      router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)
+                    }
+                    sx={{ fontSize: '0.75rem' }}
+                  >
+                    {t('View')}
+                  </Button>
+
+                  <Button
+                    size="small"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Iconify icon="solar:bill-list-bold" width={15} />}
+                    onClick={() =>
+                      router.push(
+                        `${paths.unitservice.accounting.economicmovements.add}?appointment=${info?.appointmentId}&&entrance=${info?._id}`
+                      )
+                    }
+                    sx={{ fontSize: '0.75rem' }}
+                  >
+                    {t('make an invoice')}
+                  </Button>
+                </Stack>
+              ) : (
+                <>
+                  {/* ── Coming / Arrived status row ── */}
+                  <Stack direction="row" spacing={2} mb={2}>
+                    {/* Coming */}
+                    <Box flex={1}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        fontWeight={600}
+                        sx={{
+                          display: 'block',
+                          mb: 0.75,
+                          textTransform: 'uppercase',
+                          letterSpacing: 0.6,
+                          fontSize: '0.62rem',
+                        }}
+                      >
+                        {t('Coming')}
+                      </Typography>
+
+                      {info?.coming !== undefined ? (
+                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                          <Iconify
+                            icon={info.coming ? 'solar:check-circle-bold' : 'solar:close-circle-bold'}
+                            width={18}
+                            sx={{ color: info.coming ? 'success.main' : 'error.main' }}
+                          />
+                          <Typography
+                            variant="caption"
+                            color={info.coming ? 'success.main' : 'error.main'}
+                            fontWeight={700}
+                          >
+                            {info.coming ? t('Yes') : t('No')}
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <Stack direction="row" spacing={0.5}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            onClick={() => StatusFunction(info, true, 'coming')}
+                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                          >
+                            {t('Yes')}
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            onClick={() => StatusFunction(info, false, 'coming')}
+                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                          >
+                            {t('No')}
+                          </Button>
+                        </Stack>
+                      )}
+                    </Box>
+
+                    {/* Arrived */}
+                    <Box flex={1}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        fontWeight={600}
+                        sx={{
+                          display: 'block',
+                          mb: 0.75,
+                          textTransform: 'uppercase',
+                          letterSpacing: 0.6,
+                          fontSize: '0.62rem',
+                        }}
+                      >
+                        {t('Arrived')}
+                      </Typography>
+
+                      {info?.arrived !== undefined ? (
+                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                          <Iconify
+                            icon={info.arrived ? 'solar:check-circle-bold' : 'solar:close-circle-bold'}
+                            width={18}
+                            sx={{ color: info.arrived ? 'success.main' : 'error.main' }}
+                          />
+                          <Typography
+                            variant="caption"
+                            color={info.arrived ? 'success.main' : 'error.main'}
+                            fontWeight={700}
+                          >
+                            {info.arrived ? t('Yes') : t('No')}
+                          </Typography>
+                        </Stack>
+                      ) : (
+                        <Stack direction="row" spacing={0.5}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            onClick={() => startAppointment(info)}
+                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                          >
+                            {t('Yes')}
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            onClick={() => StatusFunction(info, false, 'arrived')}
+                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                          >
+                            {t('No')}
+                          </Button>
+                        </Stack>
+                      )}
+                    </Box>
+                  </Stack>
+
+                  {/* ── Room / End appointment ── */}
+                  {info?.arrived ? (
+                    <Stack spacing={1}>
+                      {canShowRoomSelect ? (
+                        <Select
+                          size="small"
+                          fullWidth
+                          value={selectedTitles[info._id] || ''}
+                          displayEmpty
+                          onChange={(e) => {
+                            setSelectedTitles((prev) => ({ ...prev, [info._id]: e.target.value }));
+                            updateAppointmentactivity(e.target.value, info);
+                          }}
+                          sx={{ fontSize: '0.8rem' }}
+                        >
+                          <MenuItem value="" disabled sx={{ display: 'none' }}>
+                            {t('Next activity')}
+                          </MenuItem>
+                          {roomsData.map(
+                            (activity) =>
+                              activity?.activities?.name_english !==
+                                receptionActivity?.activities?.name_english && (
+                                <MenuItem key={activity._id} value={activity?.activities?._id}>
+                                  {curLangAr ? activity?.name_arabic : activity?.name_english}
+                                </MenuItem>
+                              )
+                          )}
+                        </Select>
+                      ) : (
+                        <Chip
+                          size="small"
+                          color="info"
+                          icon={<Iconify icon="solar:door-open-bold" width={14} />}
+                          label={getCurrentRoomName(info)}
+                          sx={{ alignSelf: 'flex-start', fontWeight: 600 }}
+                        />
+                      )}
+
+                      {isInReception(info) && (
+                        <Button
+                          size="small"
+                          fullWidth
+                          variant="contained"
+                          color="error"
+                          startIcon={<Iconify icon="solar:close-circle-bold" width={16} />}
+                          onClick={() => handleEndAppointment(info)}
+                          sx={{ fontSize: '0.75rem' }}
+                        >
+                          {t('end appointment')}
+                        </Button>
+                      )}
+                    </Stack>
+                  ) : (
+                    <Button
+                      size="small"
+                      fullWidth
+                      variant="outlined"
+                      color="success"
+                      startIcon={<Iconify icon="material-symbols:call" width={16} />}
+                      onClick={() => dialogOnTrue(info?.patient)}
+                      sx={{ fontSize: '0.75rem' }}
+                    >
+                      {t('Contact')}
+                    </Button>
+                  )}
+                </>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  };
+
+  // ─── Empty state ───────────────────────────────────────────────────────────
+
+  const renderEmptyState = () => (
+    <Box
+      sx={{
+        py: 10,
+        textAlign: 'center',
+        borderRadius: 3,
+        border: `1.5px dashed ${alpha(theme.palette.grey[500], 0.24)}`,
+        bgcolor: alpha(theme.palette.grey[500], 0.04),
+      }}
+    >
+      <Iconify
+        icon="solar:calendar-search-bold-duotone"
+        width={72}
+        sx={{ color: 'text.disabled', mb: 2 }}
+      />
+      <Typography variant="h6" color="text.secondary" gutterBottom>
+        {t('No appointments found')}
+      </Typography>
+      <Typography variant="body2" color="text.disabled">
+        {t('There are no appointments scheduled for today')}
+      </Typography>
+    </Box>
+  );
+
+  // ─── Render ────────────────────────────────────────────────────────────────
+
+  return (
+    <>
+      {/* ── Contact Patient Dialog ── */}
+      <Dialog open={dialog.value} maxWidth="xs" onClose={dialog.onFalse} fullWidth>
+        <DialogTitle sx={{ pb: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Box
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: '50%',
+                bgcolor: alpha(theme.palette.success.main, 0.12),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Iconify icon="material-symbols:call" sx={{ color: 'success.main' }} width={22} />
+            </Box>
+            <Box>
+              <Typography variant="subtitle1" fontWeight={700}>
+                {t('Contact patient')}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {t('Thoos are some data the pateint provide to contact')}
+              </Typography>
+            </Box>
+          </Stack>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: '8px !important' }}>
+          <Stack spacing={1.5}>
+            {[pateintInfo?.mobile_num1, pateintInfo?.mobile_num2]
+              .filter(Boolean)
+              .map((num, idx) => (
+                <Paper
+                  key={idx}
+                  variant="outlined"
+                  sx={{
+                    p: 1.75,
+                    borderRadius: 1.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    borderColor: alpha(theme.palette.success.main, 0.3),
+                    bgcolor: alpha(theme.palette.success.main, 0.04),
+                  }}
+                >
+                  <Iconify icon="material-symbols:call" sx={{ color: 'success.main' }} width={20} />
+                  <Typography variant="body1" fontWeight={600}>
+                    {num}
+                  </Typography>
+                </Paper>
+              ))}
+          </Stack>
+        </DialogContent>
+
+        <DialogActions sx={{ pt: 2 }}>
+          <Button
+            variant="contained"
+            color="inherit"
             onClick={() => {
               dialog.onFalse();
               setPatientInfo('');
@@ -444,7 +764,8 @@ export default function AppointmentsToday() {
         </DialogActions>
       </Dialog>
 
-      <Container>
+      {/* ── Page ── */}
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('Appointments Today')}
           links={[{ name: curLangAr ? user.employee?.name_arabic : user.employee?.name_english }]}
@@ -454,9 +775,8 @@ export default function AppointmentsToday() {
               subcategory: 'appointments',
               acl: 'create',
             }) && (
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="stretch">
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap">
                 <Button
-                  sx={{ mr: 2 }}
                   component={RouterLink}
                   href={paths.employee.appointments.book}
                   variant="contained"
@@ -464,8 +784,8 @@ export default function AppointmentsToday() {
                 >
                   {t('book appointment')}
                 </Button>
+
                 <Button
-                  component={RouterLink}
                   onClick={() => setNewDialog(true)}
                   variant="contained"
                   color="primary"
@@ -473,6 +793,7 @@ export default function AppointmentsToday() {
                 >
                   {t('create & book appointment')}
                 </Button>
+
                 <Button
                   component={RouterLink}
                   href={paths.employee.qrCode}
@@ -481,7 +802,6 @@ export default function AppointmentsToday() {
                   variant="contained"
                   color="success"
                   startIcon={<Iconify icon="eva:qr-code-fill" />}
-                  sx={{ ml: 2 }}
                 >
                   {t('Confirm Arrival')}
                 </Button>
@@ -490,10 +810,16 @@ export default function AppointmentsToday() {
           }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
+
+        {/* ── Tabs ── */}
         <Tabs
           value={currentTab}
           onChange={handleChangeTab}
-          sx={{ px: 2.5, boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}` }}
+          sx={{
+            px: 2.5,
+            mb: 3,
+            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
         >
           {TABS.map((tab, idx) => (
             <Tab
@@ -505,309 +831,23 @@ export default function AppointmentsToday() {
             />
           ))}
         </Tabs>
+
+        {/* ── Tab content ── */}
         {currentTab === 'two' ? (
           <WaitingRoom />
         ) : (
           <>
-            {isMobile ? (
-              <Box sx={{ mt: 3 }}>
-                {currentTabData?.data?.map((info) => {
-                  let patientName;
-                  if (info?.patient?.name_english) {
-                    patientName = curLangAr
-                      ? info?.patient?.name_arabic
-                      : info?.patient?.name_english;
-                  } else if (info.unit_service_patient) {
-                    patientName = curLangAr
-                      ? info?.unit_service_patient?.name_arabic
-                      : info?.unit_service_patient?.name_english;
-                  }
-                  return (
-                    <MobileRow
-                      key={info._id}
-                      title={
-                        <Box
-                          sx={{
-                            cursor: 'pointer',
-                            color: 'primary.main',
-                            fontWeight: 600,
-                          }}
-                          onClick={() => handlePatientClick(info)}
-                        >
-                          {patientName}
-                        </Box>
-                      }
-                      fields={[
-                        {
-                          label: t('Time'),
-                          value: fTimeUnit(info?.start_time, 'p', true),
-                        },
-
-                        currentTab !== 'three' && {
-                          label: t('Coming'),
-                          value:
-                            info?.coming !== undefined ? (
-                              <Iconify
-                                width={20}
-                                sx={{ color: info.coming ? 'info.main' : 'error.main' }}
-                                icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
-                              />
-                            ) : (
-                              <Box>
-                                <Button
-                                  size="small"
-                                  onClick={() => StatusFunction(info, true, 'coming')}
-                                >
-                                  {t('Yes')}
-                                </Button>
-                                <Button
-                                  size="small"
-                                  onClick={() => StatusFunction(info, false, 'coming')}
-                                >
-                                  {t('No')}
-                                </Button>
-                              </Box>
-                            ),
-                        },
-
-                        currentTab !== 'three' && {
-                          label: t('Arrived'),
-                          value:
-                            info?.arrived !== undefined ? (
-                              <Iconify
-                                width={20}
-                                sx={{ color: info.arrived ? 'info.main' : 'error.main' }}
-                                icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
-                              />
-                            ) : (
-                              <Box>
-                                <Button size="small" onClick={() => startAppointment(info)}>
-                                  {t('Yes')}
-                                </Button>
-                                <Button
-                                  size="small"
-                                  onClick={() => StatusFunction(info, false, 'arrived')}
-                                >
-                                  {t('No')}
-                                </Button>
-                              </Box>
-                            ),
-                        },
-                        {
-                          label: t('Options'),
-                          value: () => (
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                gap: 1,
-                              }}
-                            >
-                              {renderOptions(info)}
-                            </Box>
-                          ),
-                        },
-                      ].filter(Boolean)}
-                    />
-                  );
-                })}
-              </Box>
+            {!currentTabData?.data?.length ? (
+              renderEmptyState()
             ) : (
-              <TableContainer sx={{ mt: 3, mb: 2 }}>
-                <Scrollbar>
-                  <Table sx={{ minWidth: 400 }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>{t('Time')}</TableCell>
-                        <TableCell>{t('patient')}</TableCell>
-                        {currentTab !== 'three' && (
-                          <>
-                            <TableCell>{t('Coming')}</TableCell>
-                            <TableCell>{t('Arrived')}</TableCell>
-                          </>
-                        )}
-                        <TableCell>{t('Options')}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {currentTabData?.data?.map((info, index) => {
-                        let patientName;
-                        if (info?.patient?.name_english) {
-                          patientName = curLangAr
-                            ? info?.patient?.name_arabic || info?.patient?.name_english
-                            : info?.patient?.name_english || info?.patient?.name_arabic;
-                        } else if (info.unit_service_patient) {
-                          patientName = curLangAr
-                            ? info?.unit_service_patient?.name_arabic ||
-                              info?.unit_service_patient?.name_english
-                            : info?.unit_service_patient?.name_english ||
-                              info?.unit_service_patient?.name_arabic;
-                        }
-                        return (
-                          <>
-                            <TableRow sx={{ borderBottom: '2px #91edff ridge' }} key={index}>
-                              <TableCell>{fTimeUnit(info?.start_time, 'p', true)}</TableCell>
-                              <TableCell>
-                                {' '}
-                                <Tooltip
-                                  arrow
-                                  placement="top"
-                                  title={t(
-                                    "Click on the name to open the file and edit the patient's data"
-                                  )}
-                                >
-                                  <Button
-                                    variant="text"
-                                    onClick={() => handlePatientClick(info)}
-                                    sx={{
-                                      textTransform: 'none',
-                                      padding: 0,
-                                      minWidth: 0,
-                                      color: 'primary.main',
-                                    }}
-                                  >
-                                    {patientName}
-                                  </Button>
-                                </Tooltip>
-                              </TableCell>
-                              {currentTab !== 'three' && (
-                                <>
-                                  <TableCell>
-                                    <>
-                                      {info?.coming !== undefined ? (
-                                        <Iconify
-                                          width={22}
-                                          sx={{
-                                            cursor: 'pointer',
-                                            mr: 1,
-                                            color: info.coming ? 'info.main' : 'error.main',
-                                          }}
-                                          icon={info.coming ? 'dashicons:yes' : 'dashicons:no'}
-                                        />
-                                      ) : (
-                                        <>
-                                          <Button
-                                            sx={{ p: 2 }}
-                                            onClick={() => StatusFunction(info, true, 'coming')}
-                                          >
-                                            {t('Yes')}
-                                          </Button>
-                                          <Button
-                                            sx={{ p: 2 }}
-                                            onClick={() => StatusFunction(info, false, 'coming')}
-                                          >
-                                            {t('No')}
-                                          </Button>
-                                        </>
-                                      )}
-                                    </>
-                                  </TableCell>
-
-                                  <TableCell>
-                                    {info?.arrived !== undefined ? (
-                                      <Iconify
-                                        width={22}
-                                        sx={{
-                                          cursor: 'pointer',
-                                          mr: 1,
-                                          color: info.arrived ? 'info.main' : 'error.main',
-                                        }}
-                                        icon={info.arrived ? 'dashicons:yes' : 'dashicons:no'}
-                                      />
-                                    ) : (
-                                      <Box>
-                                        <Button
-                                          sx={{ p: 2 }}
-                                          onClick={() => startAppointment(info)}
-                                        >
-                                          {t('Yes')}
-                                        </Button>
-                                        <Button
-                                          sx={{ p: 2 }}
-                                          onClick={() => StatusFunction(info, false, 'arrived')}
-                                        >
-                                          {t('No')}
-                                        </Button>
-                                      </Box>
-                                    )}
-                                  </TableCell>
-                                </>
-                              )}
-                              <TableCell>{renderOptions(info)}</TableCell>
-                            </TableRow>
-                            <Dialog
-                              open={iddialog.value}
-                              onClose={iddialog.onTrue}
-                              lang="ar"
-                              fullWidth
-                              maxWidth="xs"
-                            >
-                              <DialogTitle>{t('Proof number')}</DialogTitle>
-                              <DialogContent>
-                                <Typography>
-                                  {t('Please enter the patient national number')}{' '}
-                                  <span style={{ color: 'red' }}>
-                                    {t('As entered in the proof document')}
-                                  </span>
-                                </Typography>
-                                <TextField
-                                  onChange={(e) => setAddingId(e.target.value)}
-                                  sx={{ width: '100%', mt: 2 }}
-                                  placeholder={curLangAr ? 'مثال: ٢٣٤٢****' : 'Ex: 2342****'}
-                                />
-                              </DialogContent>
-
-                              <DialogActions>
-                                {/* زر الإضافة العادي */}
-                                <Button
-                                  size="small"
-                                  variant="contained"
-                                  sx={{
-                                    bgcolor: 'info.dark',
-                                  }}
-                                  onClick={() => {
-                                    if (addingId) {
-                                      iddialog.onFalse();
-                                      startAppointment(info);
-                                    } else {
-                                      enqueueSnackbar(
-                                        t('Please enter the patient national number'),
-                                        {
-                                          variant: 'error',
-                                        }
-                                      );
-                                    }
-                                  }}
-                                >
-                                  {t('add')}
-                                </Button>
-
-                                {/* زر جديد: ما عنده رقم هوية */}
-                                <Button
-                                  size="small"
-                                  color="warning"
-                                  variant="contained"
-                                  onClick={() => {
-                                    iddialog.onFalse();
-                                    setAddingId(''); // نضمن إنو ما يضل فيه قيمة قديمة
-                                    startAppointment(info);
-                                  }}
-                                >
-                                  {t("Doesn't have ID")}
-                                </Button>
-                              </DialogActions>
-                            </Dialog>
-                          </>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </Scrollbar>
-              </TableContainer>
+              <Grid container spacing={2.5}>
+                {currentTabData?.data?.map((info, index) => renderAppointmentCard(info, index))}
+              </Grid>
             )}
           </>
         )}
       </Container>
+
       <NewAppointmentDialog refetch={refetch} open={newDialog} close={() => setNewDialog(false)} />
     </>
   );
