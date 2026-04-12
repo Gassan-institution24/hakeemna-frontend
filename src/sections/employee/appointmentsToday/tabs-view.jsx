@@ -2,10 +2,13 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
 import { useState, useCallback } from 'react';
 
-import { Tab, Box, Tabs, Card, Stack, Container } from '@mui/material';
+import { Tab, Box, Tabs, Stack } from '@mui/material';
+import { alpha, useTheme } from '@mui/material/styles';
 
 import { useTranslate } from 'src/locales';
 import { useGetOneEntranceManagement } from 'src/api';
+
+import Iconify from 'src/components/iconify';
 
 import SickLeave from './sickLeave';
 import Radiology from './radiology';
@@ -15,40 +18,49 @@ import Doctorreport from './doctorReport';
 import Medicalreport from './medicalreport';
 import MedicalAnalysis from './medical-analysis';
 
-// ----------------------------------------------------------------------
+// ─── Tab definitions ──────────────────────────────────────────────────────────
+
+const TAB_META = [
+  { value: 'one',   title: 'diagnosis',        icon: 'solar:stethoscope-bold-duotone' },
+  { value: 'two',   title: 'Patient file',      icon: 'solar:user-id-bold-duotone' },
+  { value: 'three', title: 'prescription',      icon: 'solar:pill-bold-duotone' },
+  { value: 'four',  title: 'medical report',    icon: 'healthicons:medical-records-outline' },
+  { value: 'five',  title: 'sick leave',        icon: 'solar:document-medicine-bold-duotone' },
+  { value: 'six',   title: 'medical analysis',  icon: 'solar:test-tube-bold-duotone' },
+  { value: 'seven', title: 'radiology',         icon: 'solar:bone-bold-duotone' },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function TabsView({ patient, unit_service_patient, service_unit }) {
   const [currentTab, setCurrentTab] = useState('one');
   const params = useParams();
   const { id } = params;
   const { t } = useTranslate();
+  const theme = useTheme();
 
   const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
+
   const TABS = [
-     {
+    {
       value: 'one',
-      title: 'diagnosis',
-      label: <Diagnosis Entrance={Entrance} />,
+      content: <Diagnosis Entrance={Entrance} />,
     },
     {
       value: 'two',
-      title: 'Patient file',
-      label: <Doctorreport Entrance={Entrance} />,
+      content: <Doctorreport Entrance={Entrance} />,
     },
     {
       value: 'three',
-      title: 'prescription',
-      label: <Prescription Entrance={Entrance} />,
+      content: <Prescription Entrance={Entrance} />,
     },
     {
       value: 'four',
-      title: 'medical report',
-      label: <Medicalreport Entrance={Entrance} />,
+      content: <Medicalreport Entrance={Entrance} />,
     },
     {
       value: 'five',
-      title: 'sick leave',
-      label: (
+      content: (
         <SickLeave
           patient={patient}
           service_unit={service_unit}
@@ -59,51 +71,77 @@ export default function TabsView({ patient, unit_service_patient, service_unit }
     },
     {
       value: 'six',
-      title: 'medical analysis',
-      label: <MedicalAnalysis Entrance={Entrance} />,
+      content: <MedicalAnalysis Entrance={Entrance} />,
     },
     {
       value: 'seven',
-      title: 'radiology',
-      label: <Radiology Entrance={Entrance} />,
+      content: <Radiology Entrance={Entrance} />,
     },
-   
   ];
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
 
-  return (
-    <Card sx={{ mt: 3 }}>
-      <Container sx={{ my: 2 }}>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <Tabs value={currentTab} onChange={handleChangeTab}>
-            {TABS.map((tab) => (
-              <Tab key={tab.value} value={tab.value} label={t(tab.title)} />
-            ))}
-          </Tabs>
+  const activeContent = TABS.find((tab) => tab.value === currentTab)?.content;
 
-          {TABS.map(
-            (tab) =>
-              tab.value === currentTab && (
-                <Box
-                  key={tab.value}
-                  sx={{
-                    p: 2,
-                    borderRadius: 1,
-                    bgcolor: 'background.neutral',
-                  }}
-                >
-                  {tab.label}
-                </Box>
-              )
-          )}
-        </Stack>
-      </Container>
-    </Card>
+  return (
+    <Stack spacing={0}>
+      {/* Scrollable tab bar */}
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile
+        sx={{
+          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+          mb: 0,
+          '& .MuiTab-root': {
+            minHeight: 52,
+            fontSize: '0.78rem',
+            fontWeight: 600,
+            textTransform: 'none',
+            gap: 0.75,
+            px: 2,
+          },
+          '& .Mui-selected': {
+            color: 'primary.main',
+          },
+          '& .MuiTabs-indicator': {
+            height: 3,
+            borderRadius: '3px 3px 0 0',
+          },
+        }}
+      >
+        {TAB_META.map((tab) => (
+          <Tab
+            key={tab.value}
+            value={tab.value}
+            label={t(tab.title)}
+            icon={<Iconify icon={tab.icon} width={18} />}
+            iconPosition="start"
+          />
+        ))}
+      </Tabs>
+
+      {/* Tab content */}
+      <Box
+        sx={{
+          mt: 2.5,
+          p: 2.5,
+          borderRadius: 2,
+          bgcolor: alpha(theme.palette.grey[500], 0.04),
+          border: `1px solid ${alpha(theme.palette.divider, 0.12)}`,
+          minHeight: 120,
+        }}
+      >
+        {activeContent}
+      </Box>
+    </Stack>
   );
 }
+
 TabsView.propTypes = {
   patient: PropTypes.object,
   unit_service_patient: PropTypes.string,
