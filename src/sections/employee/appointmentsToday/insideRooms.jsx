@@ -2,16 +2,19 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import {
   Box,
   Card,
+  Chip,
+  Grid,
+  Stack,
   Button,
-  Select,
   Dialog,
-  MenuItem,
+  Divider,
   TextField,
   Typography,
+  CardContent,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -34,9 +37,9 @@ import {
   useGetEntranceExaminationReports,
 } from 'src/api';
 
-import Image from 'src/components/image';
+import Iconify from 'src/components/iconify';
 
-import next from './images/next.png';
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const formatTextWithLineBreaks = (text) => {
   if (!text) return '';
@@ -48,22 +51,27 @@ const formatTextWithLineBreaks = (text) => {
   );
 };
 
+// ─── Main Component ───────────────────────────────────────────────────────────
+
 export default function Rooms() {
   const [noteContent, setNoteContent] = useState('');
-  const [Confirmdroomsdata, setConfirmRoomsdata] = useState('');
+  const [confirmRoomsdata, setConfirmRoomsdata] = useState(null);
   const dialog = useBoolean(false);
-  const [selectedValue] = useState('');
+  const endDialog = useBoolean(false);
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
+  const theme = useTheme();
+
   const { Entrance, refetch } = useGetOneEntranceManagement(id, { populate: 'all' });
   const { user } = useAuthContext();
   const router = useRouter();
-  const methods = useForm({
-    mode: 'all',
-  });
-  
+
+  const methods = useForm({ mode: 'all' });
+  const { reset } = methods;
+
   const { roomsData } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
@@ -76,7 +84,19 @@ export default function Rooms() {
   const doctorReportIds = doctorreportsdata?.map((report) => report._id);
   const prescriptionIds = prescriptionData?.map((report) => report._id);
 
-  const { reset } = methods;
+  useEffect(() => {
+    reset({
+      employee: user?.employee?._id,
+      patient: Entrance?.patient?._id,
+      unit_service_patient: Entrance?.unit_service_patient,
+      service_unit: Entrance?.service_unit?._id,
+      unit_service:
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+      appointment: Entrance?.appointmentId,
+    });
+  }, [user, Entrance, reset]);
+
+  // ─── Actions ──────────────────────────────────────────────────────────────
 
   const processingPage = async (rooms) => {
     try {
@@ -108,19 +128,17 @@ export default function Rooms() {
       });
       await axiosInstance.post('/api/feedback', {
         unit_service:
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-            ?._id,
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
         appointment: Entrance?.appointmentId,
         employee: user?.employee?._id,
         patient: Entrance?.patient?._id,
         unit_service_patient: Entrance?.unit_service_patient,
       });
-      await axiosInstance.post(`/api/medrecord/`, {
+      await axiosInstance.post('/api/medrecord/', {
         appointmentId: Entrance?.appointmentId,
         Appointment_date: Entrance?.Appointment_date,
         unit_service:
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-            ?._id,
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
         service_unit: Entrance?.service_unit,
         patient: Entrance?.patient?._id,
         unit_service_patient: Entrance?.unit_service_patient,
@@ -128,9 +146,9 @@ export default function Rooms() {
         doctor_report: doctorReportIds,
         Drugs_report: prescriptionIds,
       });
-      // yazan here
+
       const historyId = localStorage.getItem(`historyId${Entrance?.appointmentId}`);
-      await axiosInstance.patch(endpoints.history.end_appointment(historyId),{
+      await axiosInstance.patch(endpoints.history.end_appointment(historyId), {
         end_time: new Date(),
       });
 
@@ -144,71 +162,82 @@ export default function Rooms() {
     }
   };
 
-  useEffect(() => {
-    reset({
-      employee: user?.employee?._id,
-      patient: Entrance?.patient?._id,
-      unit_service_patient: Entrance?.unit_service_patient,
-      service_unit: Entrance?.service_unit?._id,
-      unit_service:
-        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-          ?._id,
-      appointment: Entrance?.appointmentId,
-    });
-  }, [user, Entrance, reset]);
+  // ─── Derived ──────────────────────────────────────────────────────────────
+
+  const currentActivityName = curLangAr
+    ? Entrance?.Current_activity?.name_arabic || Entrance?.Current_activity?.name_english
+    : Entrance?.Current_activity?.name_english;
+
+  const lastActivityName = curLangAr
+    ? Entrance?.Last_activity_atended?.name_arabic || Entrance?.Last_activity_atended?.name_english
+    : Entrance?.Last_activity_atended?.name_english;
+
+  // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <>
-      <Dialog open={dialog.value} maxWidth="md" onClose={dialog.onTrue}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            margin: '10px',
-            width: curLangAr ? '250px' : '400px',
-          }}
-        >
-          <DialogTitle>{t('Are you sure')}</DialogTitle>
-          <Image
-            src={next}
-            alt="Processing"
+      {/* ── Move to room confirmation dialog ── */}
+      <Dialog open={dialog.value} maxWidth="xs" onClose={dialog.onFalse} fullWidth>
+        <DialogTitle sx={{ pb: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Box
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: '50%',
+                bgcolor: alpha(theme.palette.info.main, 0.12),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Iconify icon="solar:transfer-horizontal-bold-duotone" sx={{ color: 'info.main' }} width={22} />
+            </Box>
+            <Box>
+              <Typography variant="subtitle1" fontWeight={700}>
+                {t('Are you sure')}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {t('please confirm moving the patient to ')}{' '}
+                <strong>
+                  {curLangAr ? confirmRoomsdata?.name_arabic : confirmRoomsdata?.name_english}
+                </strong>
+              </Typography>
+            </Box>
+          </Stack>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: '8px !important' }}>
+          <Box
             sx={{
-              width: '200px',
-              height: '200px',
+              p: 2,
+              borderRadius: 2,
+              bgcolor: alpha(theme.palette.info.main, 0.06),
+              border: `1px solid ${alpha(theme.palette.info.main, 0.18)}`,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
             }}
-          />
-        </div>
-        <DialogContent>
-          <Typography sx={{ mb: 1, fontSize: 15 }}>
-            {t('please confirm moving the patient to ')}{' '}
-            {curLangAr ? Confirmdroomsdata?.name_arabic : Confirmdroomsdata?.name_english}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            color="inherit"
-            size="small"
-            variant="outlined"
-            sx={{
-              mr: 1,
-              border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-            }}
-            onClick={() => dialog.onFalse()}
           >
+            <Iconify icon="solar:door-open-bold" sx={{ color: 'info.main' }} width={24} />
+            <Typography variant="body2" fontWeight={600}>
+              {curLangAr ? confirmRoomsdata?.name_arabic : confirmRoomsdata?.name_english}
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions sx={{ pt: 2 }}>
+          <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>
             {t('Cancel')}
           </Button>
           <Button
-            size="small"
-            color="info"
             variant="contained"
-            sx={{
-              bgcolor: 'info.dark',
-            }}
+            color="info"
+            startIcon={<Iconify icon="solar:arrow-right-bold" width={16} />}
             onClick={() => {
               dialog.onFalse();
-              processingPage(Confirmdroomsdata);
+              processingPage(confirmRoomsdata);
             }}
           >
             {t('Confirm')}
@@ -216,95 +245,292 @@ export default function Rooms() {
         </DialogActions>
       </Dialog>
 
-      <Card
-        sx={{
-          display: { md: 'flex', xs: 'grid' },
-          gridTemplateColumns: '1fr',
-          gap: { md: 15, xs: 1 },
-        }}
-      >
-        <Box sx={{ m: 2 }}>
-          <Typography variant="h6">{t('Last activity')}</Typography>
-          <Typography>{Entrance?.Last_activity_atended?.name_english}</Typography>
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            {t('Doctor Message')}
-          </Typography>
-          <Typography
-            dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance?.note || '') }}
-          />
-        </Box>
-
-        <Box sx={{ m: 2 }}>
-          <Typography variant="h6">{t('Next Activity')}</Typography>
-          <Box sx={{ mb: 9 }}>
+      {/* ── End appointment confirmation dialog ── */}
+      <Dialog open={endDialog.value} maxWidth="xs" onClose={endDialog.onFalse} fullWidth>
+        <DialogTitle sx={{ pb: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Box
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: '50%',
+                bgcolor: alpha(theme.palette.error.main, 0.12),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <Iconify icon="solar:check-circle-bold-duotone" sx={{ color: 'error.main' }} width={22} />
+            </Box>
             <Box>
+              <Typography variant="subtitle1" fontWeight={700}>
+                {t('End Appointment')}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {t('This will finalize the appointment')}
+              </Typography>
+            </Box>
+          </Stack>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: '8px !important' }}>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              bgcolor: alpha(theme.palette.error.main, 0.06),
+              border: `1px solid ${alpha(theme.palette.error.main, 0.18)}`,
+            }}
+          >
+            <Typography variant="body2" color="error.dark">
+              {t('Are you sure you want to end this appointment? This action cannot be undone.')}
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions sx={{ pt: 2 }}>
+          <Button variant="outlined" color="inherit" onClick={endDialog.onFalse}>
+            {t('Cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<Iconify icon="solar:check-circle-bold" width={16} />}
+            onClick={() => {
+              endDialog.onFalse();
+              handleEndAppointment();
+            }}
+          >
+            {t('end appointment')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Page body ── */}
+      <Grid container spacing={3}>
+
+        {/* ── Left panel: Activity info ── */}
+        <Grid item xs={12} md={5}>
+          <Stack spacing={2.5} height="100%">
+
+            {/* Current room card */}
+            <Card
+              sx={{
+                border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
+                borderRadius: 2.5,
+                boxShadow: 'none',
+              }}
+            >
+              {/* top accent */}
+              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'info.main', opacity: 0.7 }} />
+              <CardContent sx={{ p: 2.5 }}>
+                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                  <Iconify icon="solar:map-point-bold-duotone" sx={{ color: 'info.main' }} width={22} />
+                  <Typography variant="subtitle1" fontWeight={700}>
+                    {t('Current Location')}
+                  </Typography>
+                </Stack>
+                <Chip
+                  icon={<Iconify icon="solar:door-open-bold" width={16} />}
+                  label={currentActivityName || t('Reception')}
+                  color="info"
+                  sx={{ fontWeight: 700, fontSize: '0.8rem', px: 0.5 }}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Last activity card */}
+            <Card
+              sx={{
+                border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
+                borderRadius: 2.5,
+                boxShadow: 'none',
+              }}
+            >
+              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'warning.main', opacity: 0.7 }} />
+              <CardContent sx={{ p: 2.5 }}>
+                <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
+                  <Iconify icon="solar:history-bold-duotone" sx={{ color: 'warning.main' }} width={22} />
+                  <Typography variant="subtitle1" fontWeight={700}>
+                    {t('Last activity')}
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  {lastActivityName || '—'}
+                </Typography>
+              </CardContent>
+            </Card>
+
+            {/* Doctor message card */}
+            <Card
+              sx={{
+                flex: 1,
+                border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
+                borderRadius: 2.5,
+                boxShadow: 'none',
+              }}
+            >
+              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'secondary.main', opacity: 0.7 }} />
+              <CardContent sx={{ p: 2.5 }}>
+                <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
+                  <Iconify icon="solar:stethoscope-bold-duotone" sx={{ color: 'secondary.main' }} width={22} />
+                  <Typography variant="subtitle1" fontWeight={700}>
+                    {t('Doctor Message')}
+                  </Typography>
+                </Stack>
+
+                {Entrance?.note ? (
+                  <Box
+                    sx={{
+                      p: 1.75,
+                      borderRadius: 1.5,
+                      bgcolor: alpha(theme.palette.secondary.main, 0.06),
+                      border: `1px solid ${alpha(theme.palette.secondary.main, 0.15)}`,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance.note) }}
+                    />
+                  </Box>
+                ) : (
+                  <Typography variant="body2" color="text.disabled" fontStyle="italic">
+                    {t('No message')}
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Stack>
+        </Grid>
+
+        {/* ── Right panel: Next activity actions ── */}
+        <Grid item xs={12} md={7}>
+          <Card
+            sx={{
+              height: '100%',
+              border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
+              borderRadius: 2.5,
+              boxShadow: 'none',
+            }}
+          >
+            <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'primary.main', opacity: 0.7 }} />
+            <CardContent sx={{ p: 2.5 }}>
+              <Stack direction="row" alignItems="center" spacing={1} mb={2.5}>
+                <Iconify icon="solar:arrow-right-up-bold-duotone" sx={{ color: 'primary.main' }} width={22} />
+                <Typography variant="subtitle1" fontWeight={700}>
+                  {t('Next Activity')}
+                </Typography>
+              </Stack>
+
+              {/* Note field */}
               <TextField
                 onChange={(e) => setNoteContent(e.target.value)}
                 placeholder={t('Add Message')}
                 fullWidth
                 multiline
-                rows={2}
-                sx={{ mb: 2 }}
-              />
-              <Select
-                sx={{
-                  width: 150,
-                  height: 35,
+                rows={3}
+                sx={{ mb: 3 }}
+                InputProps={{
+                  sx: { borderRadius: 1.5 },
                 }}
-                value={selectedValue}
-                displayEmpty
-              >
-                <MenuItem value="" disabled sx={{ display: 'none' }}>
-                  {t('Choose')}
-                </MenuItem>
+              />
+
+              <Divider sx={{ mb: 2.5 }}>
+                <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ textTransform: 'uppercase', letterSpacing: 0.6, fontSize: '0.65rem' }}>
+                  {t('Choose next room')}
+                </Typography>
+              </Divider>
+
+              {/* Room buttons grid */}
+              <Grid container spacing={1.5} mb={3}>
                 {roomsData?.map((rooms, index) => {
+                  const isCurrent =
+                    Entrance?.Current_activity?.name_english === rooms?.activities?.name_english;
+
                   const employeeNames = Array.isArray(rooms.employee)
-                    ? rooms.employee.map((employee) => employee.name_english).join(', ')
+                    ? rooms.employee.map((emp) => emp.name_english).filter(Boolean).join(', ')
                     : '';
 
+                  const roomLabel = curLangAr ? rooms?.name_arabic : rooms?.name_english;
+
                   return (
-                    <MenuItem
-                      key={index}
-                      onClick={() => {
-                        if (
-                          Entrance?.Current_activity?.name_english !==
-                          rooms?.activities?.name_english
-                        ) {
-                          setConfirmRoomsdata(rooms);
-                          dialog.onTrue();
+                    <Grid item xs={12} sm={6} key={index}>
+                      <Button
+                        fullWidth
+                        variant={isCurrent ? 'outlined' : 'contained'}
+                        color={isCurrent ? 'inherit' : 'primary'}
+                        disabled={isCurrent}
+                        startIcon={
+                          <Iconify
+                            icon={isCurrent ? 'solar:map-point-bold' : 'solar:door-open-bold'}
+                            width={18}
+                          />
                         }
-                      }}
-                      variant="contained"
-                      sx={{
-                        bgcolor:
-                          Entrance?.Current_activity?.name_english ===
-                          rooms?.activities?.name_english
-                            ? ''
-                            : 'success.main',
-                        m: 2,
-                      }}
-                      disabled={
-                        Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                      }
-                    >
-                      {Entrance?.Current_activity?.name_english === rooms?.activities?.name_english
-                        ? `${rooms?.name_english} (Current) ${employeeNames}`
-                        : `Go to ${rooms?.name_english} ${employeeNames}`}
-                    </MenuItem>
+                        onClick={() => {
+                          if (!isCurrent) {
+                            setConfirmRoomsdata(rooms);
+                            dialog.onTrue();
+                          }
+                        }}
+                        sx={{
+                          justifyContent: 'flex-start',
+                          px: 2,
+                          py: 1.25,
+                          borderRadius: 1.5,
+                          textAlign: 'left',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: 0.25,
+                          height: 'auto',
+                          ...(isCurrent && {
+                            borderColor: alpha(theme.palette.grey[500], 0.32),
+                            bgcolor: alpha(theme.palette.grey[500], 0.06),
+                            color: 'text.disabled',
+                          }),
+                        }}
+                      >
+                        <Typography variant="body2" fontWeight={700} noWrap>
+                          {isCurrent ? `${roomLabel} (${t('Current')})` : roomLabel}
+                        </Typography>
+                        {employeeNames && (
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              opacity: 0.75,
+                              fontSize: '0.65rem',
+                              whiteSpace: 'normal',
+                              lineHeight: 1.3,
+                            }}
+                          >
+                            {employeeNames}
+                          </Typography>
+                        )}
+                      </Button>
+                    </Grid>
                   );
                 })}
-              </Select>
+              </Grid>
+
+              <Divider sx={{ mb: 2.5 }} />
+
+              {/* End appointment */}
               <Button
-                onClick={() => handleEndAppointment()}
+                fullWidth
                 variant="contained"
-                sx={{ bgcolor: 'error.main', ml: 2 }}
+                color="error"
+                size="large"
+                startIcon={<Iconify icon="solar:check-circle-bold" width={20} />}
+                onClick={endDialog.onTrue}
+                sx={{ borderRadius: 1.5, py: 1.5, fontSize: '0.9rem' }}
               >
                 {t('end appointment')}
               </Button>
-            </Box>
-          </Box>
-        </Box>
-      </Card>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </>
   );
 }
