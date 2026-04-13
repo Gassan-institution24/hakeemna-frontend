@@ -75,10 +75,7 @@ function SectionCard({ icon, color, title, children, theme }) {
               height: 38,
               borderRadius: '50%',
               flexShrink: 0,
-              bgcolor: alpha(
-                theme.palette[color]?.main || theme.palette.primary.main,
-                0.12
-              ),
+              bgcolor: alpha(theme.palette[color]?.main || theme.palette.primary.main, 0.12),
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -162,11 +159,7 @@ export default function Processing() {
           sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'primary.main', opacity: 0.8 }}
         />
         <CardContent sx={{ p: 2.5 }}>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            alignItems={{ sm: 'center' }}
-            spacing={2}
-          >
+          <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} spacing={2}>
             <Avatar
               sx={{
                 width: 56,
@@ -185,7 +178,16 @@ export default function Processing() {
               <Typography variant="h6" fontWeight={700} gutterBottom>
                 {patientName || t('Patient')}
               </Typography>
+
               <Stack direction="row" flexWrap="wrap" gap={1}>
+                {Entrance?.Appointment_date && (
+                  <Chip
+                    size="small"
+                    label={firstSequenceNumber ? `${t('Visit')} #${firstSequenceNumber}` : t('First visit')}
+                    variant="outlined"
+                    sx={{ fontWeight: 500, fontSize: '0.72rem' }}
+                  />
+                )}
                 {currentRoomName && (
                   <Chip
                     size="small"
@@ -215,7 +217,7 @@ export default function Processing() {
         <SectionCard
           icon="healthicons:medical-records-outline"
           color="success"
-          title={`${t('Visits history')} ${firstSequenceNumber ? `— ${t('Visit')} #${firstSequenceNumber}` : ''}`}
+          title={t('Visits history')}
           theme={theme}
         >
           <Box
