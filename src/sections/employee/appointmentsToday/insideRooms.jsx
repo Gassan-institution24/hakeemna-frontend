@@ -91,7 +91,8 @@ export default function Rooms() {
       unit_service_patient: Entrance?.unit_service_patient,
       service_unit: Entrance?.service_unit?._id,
       unit_service:
-        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+          ?._id,
       appointment: Entrance?.appointmentId,
     });
   }, [user, Entrance, reset]);
@@ -128,7 +129,8 @@ export default function Rooms() {
       });
       await axiosInstance.post('/api/feedback', {
         unit_service:
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+            ?._id,
         appointment: Entrance?.appointmentId,
         employee: user?.employee?._id,
         patient: Entrance?.patient?._id,
@@ -138,7 +140,8 @@ export default function Rooms() {
         appointmentId: Entrance?.appointmentId,
         Appointment_date: Entrance?.Appointment_date,
         unit_service:
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+            ?._id,
         service_unit: Entrance?.service_unit,
         patient: Entrance?.patient?._id,
         unit_service_patient: Entrance?.unit_service_patient,
@@ -192,7 +195,11 @@ export default function Rooms() {
                 flexShrink: 0,
               }}
             >
-              <Iconify icon="solar:transfer-horizontal-bold-duotone" sx={{ color: 'info.main' }} width={22} />
+              <Iconify
+                icon="solar:transfer-horizontal-bold-duotone"
+                sx={{ color: 'info.main' }}
+                width={22}
+              />
             </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight={700}>
@@ -261,7 +268,11 @@ export default function Rooms() {
                 flexShrink: 0,
               }}
             >
-              <Iconify icon="solar:check-circle-bold-duotone" sx={{ color: 'error.main' }} width={22} />
+              <Iconify
+                icon="solar:check-circle-bold-duotone"
+                sx={{ color: 'error.main' }}
+                width={22}
+              />
             </Box>
             <Box>
               <Typography variant="subtitle1" fontWeight={700}>
@@ -309,37 +320,9 @@ export default function Rooms() {
 
       {/* ── Page body ── */}
       <Grid container spacing={3}>
-
         {/* ── Left panel: Activity info ── */}
         <Grid item xs={12} md={5}>
           <Stack spacing={2.5} height="100%">
-
-            {/* Current room card */}
-            <Card
-              sx={{
-                border: `1px solid ${alpha(theme.palette.divider, 0.14)}`,
-                borderRadius: 2.5,
-                boxShadow: 'none',
-              }}
-            >
-              {/* top accent */}
-              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'info.main', opacity: 0.7 }} />
-              <CardContent sx={{ p: 2.5 }}>
-                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                  <Iconify icon="solar:map-point-bold-duotone" sx={{ color: 'info.main' }} width={22} />
-                  <Typography variant="subtitle1" fontWeight={700}>
-                    {t('Current Location')}
-                  </Typography>
-                </Stack>
-                <Chip
-                  icon={<Iconify icon="solar:door-open-bold" width={16} />}
-                  label={currentActivityName || t('Reception')}
-                  color="info"
-                  sx={{ fontWeight: 700, fontSize: '0.8rem', px: 0.5 }}
-                />
-              </CardContent>
-            </Card>
-
             {/* Last activity card */}
             <Card
               sx={{
@@ -348,10 +331,21 @@ export default function Rooms() {
                 boxShadow: 'none',
               }}
             >
-              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'warning.main', opacity: 0.7 }} />
+              <Box
+                sx={{
+                  height: 4,
+                  borderRadius: '10px 10px 0 0',
+                  bgcolor: 'warning.main',
+                  opacity: 0.7,
+                }}
+              />
               <CardContent sx={{ p: 2.5 }}>
                 <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
-                  <Iconify icon="solar:history-bold-duotone" sx={{ color: 'warning.main' }} width={22} />
+                  <Iconify
+                    icon="solar:history-bold-duotone"
+                    sx={{ color: 'warning.main' }}
+                    width={22}
+                  />
                   <Typography variant="subtitle1" fontWeight={700}>
                     {t('Last activity')}
                   </Typography>
@@ -359,6 +353,24 @@ export default function Rooms() {
                 <Typography variant="body2" color="text.secondary">
                   {lastActivityName || '—'}
                 </Typography>
+
+                {Entrance?.note && (
+                  <>
+                    <Stack direction="row" alignItems="center" spacing={1} mb={1.5} mt={3}>
+                      <Iconify
+                        icon="solar:stethoscope-bold-duotone"
+                        sx={{ color: 'secondary.main' }}
+                        width={22}
+                      />
+                      <Typography variant="subtitle1" fontWeight={700}>
+                        {t('Doctor Message')}
+                      </Typography>
+                    </Stack>
+                    <Typography variant="body2" color="text.secondary">
+                      {Entrance?.note}
+                    </Typography>
+                  </>
+                )}
               </CardContent>
             </Card>
 
@@ -371,34 +383,56 @@ export default function Rooms() {
                 boxShadow: 'none',
               }}
             >
-              <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'secondary.main', opacity: 0.7 }} />
+              <Box
+                sx={{
+                  height: 4,
+                  borderRadius: '10px 10px 0 0',
+                  bgcolor: 'secondary.main',
+                  opacity: 0.7,
+                }}
+              />
               <CardContent sx={{ p: 2.5 }}>
-                <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
-                  <Iconify icon="solar:stethoscope-bold-duotone" sx={{ color: 'secondary.main' }} width={22} />
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  mb={1.5}
+                  // flexDirection="column"
+                >
                   <Typography variant="subtitle1" fontWeight={700}>
-                    {t('Doctor Message')}
+                    {t('Add New Message')}
                   </Typography>
                 </Stack>
 
                 {Entrance?.note ? (
-                  <Box
-                    sx={{
-                      p: 1.75,
-                      borderRadius: 1.5,
-                      bgcolor: alpha(theme.palette.secondary.main, 0.06),
-                      border: `1px solid ${alpha(theme.palette.secondary.main, 0.15)}`,
+                  <TextField
+                    onChange={(e) => setNoteContent(e.target.value)}
+                    placeholder={t('Message')}
+                    fullWidth
+                    multiline
+                    rows={3}
+                    sx={{ mb: 3 }}
+                    InputProps={{
+                      sx: { borderRadius: 1.5 },
                     }}
-                  >
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      dangerouslySetInnerHTML={{ __html: formatTextWithLineBreaks(Entrance.note) }}
-                    />
-                  </Box>
+                  />
                 ) : (
-                  <Typography variant="body2" color="text.disabled" fontStyle="italic">
-                    {t('No message')}
-                  </Typography>
+                  <>
+                    <Typography variant="body2" color="text.disabled" fontStyle="italic">
+                      {t('No message')}
+                    </Typography>
+                    <TextField
+                      onChange={(e) => setNoteContent(e.target.value)}
+                      placeholder={t('Add Message')}
+                      fullWidth
+                      multiline
+                      rows={3}
+                      sx={{ mb: 3 }}
+                      InputProps={{
+                        sx: { borderRadius: 1.5 },
+                      }}
+                    />
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -415,30 +449,35 @@ export default function Rooms() {
               boxShadow: 'none',
             }}
           >
-            <Box sx={{ height: 4, borderRadius: '10px 10px 0 0', bgcolor: 'primary.main', opacity: 0.7 }} />
+            <Box
+              sx={{
+                height: 4,
+                borderRadius: '10px 10px 0 0',
+                bgcolor: 'primary.main',
+                opacity: 0.7,
+              }}
+            />
             <CardContent sx={{ p: 2.5 }}>
               <Stack direction="row" alignItems="center" spacing={1} mb={2.5}>
-                <Iconify icon="solar:arrow-right-up-bold-duotone" sx={{ color: 'primary.main' }} width={22} />
+                <Iconify
+                  icon="solar:arrow-right-up-bold-duotone"
+                  sx={{ color: 'primary.main' }}
+                  width={22}
+                />
                 <Typography variant="subtitle1" fontWeight={700}>
                   {t('Next Activity')}
                 </Typography>
               </Stack>
 
               {/* Note field */}
-              <TextField
-                onChange={(e) => setNoteContent(e.target.value)}
-                placeholder={t('Add Message')}
-                fullWidth
-                multiline
-                rows={3}
-                sx={{ mb: 3 }}
-                InputProps={{
-                  sx: { borderRadius: 1.5 },
-                }}
-              />
 
               <Divider sx={{ mb: 2.5 }}>
-                <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ textTransform: 'uppercase', letterSpacing: 0.6, fontSize: '0.65rem' }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  fontWeight={600}
+                  sx={{ textTransform: 'uppercase', letterSpacing: 0.6, fontSize: '0.65rem' }}
+                >
                   {t('Choose next room')}
                 </Typography>
               </Divider>
@@ -450,7 +489,10 @@ export default function Rooms() {
                     Entrance?.Current_activity?.name_english === rooms?.activities?.name_english;
 
                   const employeeNames = Array.isArray(rooms.employee)
-                    ? rooms.employee.map((emp) => emp.name_english).filter(Boolean).join(', ')
+                    ? rooms.employee
+                        .map((emp) => emp.name_english)
+                        .filter(Boolean)
+                        .join(', ')
                     : '';
 
                   const roomLabel = curLangAr ? rooms?.name_arabic : rooms?.name_english;
@@ -480,7 +522,7 @@ export default function Rooms() {
                           py: 1.25,
                           borderRadius: 1.5,
                           textAlign: 'left',
-                          flexDirection: 'column',
+                          // flexDirection: 'column',
                           alignItems: 'flex-start',
                           gap: 0.25,
                           height: 'auto',
@@ -492,9 +534,9 @@ export default function Rooms() {
                         }}
                       >
                         <Typography variant="body2" fontWeight={700} noWrap>
-                          {isCurrent ? `${roomLabel} (${t('Current')})` : roomLabel}
+                          {isCurrent ? `${roomLabel} (${t('current')})` : roomLabel}
                         </Typography>
-                        {employeeNames && (
+                        {/* {employeeNames && (
                           <Typography
                             variant="caption"
                             sx={{
@@ -506,7 +548,7 @@ export default function Rooms() {
                           >
                             {employeeNames}
                           </Typography>
-                        )}
+                        )} */}
                       </Button>
                     </Grid>
                   );
