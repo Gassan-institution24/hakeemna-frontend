@@ -15,7 +15,7 @@ import { History as HistoryIcon } from '@mui/icons-material';
 
 import { useTranslate } from 'src/locales';
 
-import HistoryCard from './HistoryCard';
+import HistoryCard from './history-card';
 
 const HistoryList = ({ history, onView, currentPage, totalPages, onPageChange }) => {
   const { t } = useTranslate();

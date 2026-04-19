@@ -13,13 +13,13 @@ import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatintSickLeaves } from 'src/api/sickleave';
+import { useGetPatintSickLeaves } from 'src/api/sick_leave';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back.webp';
-import PdfPreviewDialogSickLeave from './pdf-preview-dialog-sickleave';
+import PdfPreviewDialogSickLeave from './pdf-preview-dialog-sick-leave';
 
 Font.register({
   family: 'ArabicFont',

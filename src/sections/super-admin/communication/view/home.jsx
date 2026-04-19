@@ -33,7 +33,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import AppointmentsRow from '../ticket-row';
 import TicketsToolbar from '../tickets-toolbar';
 import HistoryFiltersResult from '../ticket-filters-result';

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -48,8 +49,7 @@ export default function RadiologyOrders({ onDataChange }) {
   const curLangAr = currentLang.value === 'ar';
 
   const [search, setSearch] = useState('');
-  const [orders, setOrders] = useState([]);
-  const [sending, setSending] = useState(false); 
+  const [orders, setOrders] = useState([]); 
 
   useEffect(() => {
     if (onDataChange) {
@@ -65,19 +65,18 @@ const addOrder = async (item) => {
   if (orders.find((o) => o.code === item.code)) return;
 
   try {
-    setSending(true);
-
     // update UI أولاً
     setOrders((prev) => [...prev, item]);
 
     // call backend (static payload)
     await radiology();
 
-    console.log('Radiology sent successfully');
+    enqueueSnackbar('Radiology order sent successfully', { variant: 'success' });
   } catch (e) {
     console.error('Radiology send failed', e);
-  } finally {
-    setSending(false);
+    enqueueSnackbar('Failed to send radiology order', { variant: 'error' });
+    // Remove from UI if failed
+    setOrders((prev) => prev.filter((o) => o.code !== item.code));
   }
 };
 

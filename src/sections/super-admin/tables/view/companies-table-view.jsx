@@ -38,7 +38,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import TableDetailFilters from './table-details-filters';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailRow from '../companies_list/table-details-row';

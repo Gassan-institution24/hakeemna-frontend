@@ -4,7 +4,7 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
-import {  useGetOneFavoriteMedication } from 'src/api/doctorFavorite';
+import {  useGetOneFavoriteMedication } from 'src/api/doctor_favorite';
 
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

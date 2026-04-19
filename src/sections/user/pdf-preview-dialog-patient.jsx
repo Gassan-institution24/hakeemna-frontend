@@ -8,7 +8,7 @@ import { fDate } from 'src/utils/format-time';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
-import { generatePdfFromElement } from '../../components/pdf/generatePdf';
+import { generatePdfFromElement } from '../../components/pdf/generate-pdf';
 
 /* ================= helpers ================= */
 const fixURL = (url) => {

@@ -29,7 +29,7 @@ import { Box, Card, Stack, MenuItem } from '@mui/material';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';

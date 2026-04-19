@@ -29,7 +29,7 @@ import {
 } from 'src/components/table'; /// edit
 import { fDate } from 'src/utils/format-time';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';

@@ -10,7 +10,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustable_document';
 
 export default function Adjustabledocument({ patient, unit_service_patient }) {
   const { t } = useTranslate();

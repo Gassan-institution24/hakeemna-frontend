@@ -32,7 +32,7 @@ import {
 } from 'src/components/table'; /// edit
 import { fDate } from 'src/utils/format-time';
 
-import { useGetMedicalAnalysis } from 'src/api/medicalAnalysis';
+import { useGetMedicalAnalysis } from 'src/api/medical_analysis';
 
 import CustomPopover from 'src/components/custom-popover';
 

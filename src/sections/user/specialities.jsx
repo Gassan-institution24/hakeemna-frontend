@@ -12,7 +12,7 @@ import { useGetSpecialties, useGetPatientFeedbacks } from 'src/api';
 
 import Image from 'src/components/image/image';
 
-import RatingRoomDialog from './ratingDialog';
+import RatingRoomDialog from './rating-dialog';
 
 export default function Specialities() {
   const router = useRouter();

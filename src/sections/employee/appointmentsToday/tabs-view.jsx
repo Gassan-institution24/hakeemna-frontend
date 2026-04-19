@@ -14,8 +14,8 @@ import SickLeave from './sickLeave';
 import Radiology from './radiology';
 import Diagnosis from './diagnosis';
 import Prescription from './prescription';
-import Doctorreport from './doctorReport';
-import Medicalreport from './medicalreport';
+import Doctorreport from './doctor-report';
+import Medicalreport from './medical-report';
 import MedicalAnalysis from './medical-analysis';
 
 // ─── Tab definitions ──────────────────────────────────────────────────────────

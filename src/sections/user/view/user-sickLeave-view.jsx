@@ -7,7 +7,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import SickLeaves from '../sickLeave';
+import SickLeaves from '../sick-leave';
 // ----------------------------------------------------------------------
 
 export default function SickLeave() {

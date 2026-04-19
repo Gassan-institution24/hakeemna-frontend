@@ -35,8 +35,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicy';
-import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
+import Privacypolicy from 'src/components/terms-condition-privacy-policy/privacyPolicy';
+import TermsAndCondition from 'src/components/terms-condition-privacy-policy/termsAndCondition';
 import FormProvider, {
   RHFSelect,
   RHFUpload,

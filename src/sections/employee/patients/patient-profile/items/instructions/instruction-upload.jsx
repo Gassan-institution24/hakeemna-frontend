@@ -9,7 +9,7 @@ import axiosInstance from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustable_document';
 
 import FormProvider from 'src/components/hook-form/form-provider';
 

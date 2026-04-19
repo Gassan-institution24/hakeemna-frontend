@@ -1,5 +1,5 @@
-import Whydoc from '../aboutUs';
-import OurMission from '../ourMission';
+import Whydoc from '../about-us';
+import OurMission from '../our-mission';
 import HomeHero from '../hero/home-hero';
 import OurPartners from '../our-partners';
 // ----------------------------------------------------------------------

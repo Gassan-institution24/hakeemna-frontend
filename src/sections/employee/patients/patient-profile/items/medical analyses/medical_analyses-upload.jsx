@@ -30,8 +30,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicalAnalysis } from 'src/api/medicalAnalysis';
-import { useGetFavoriteMedicalAnalysis } from 'src/api/doctorFavorite';
+import { useGetMedicalAnalysis } from 'src/api/medical_analysis';
+import { useGetFavoriteMedicalAnalysis } from 'src/api/doctor_favorite';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';

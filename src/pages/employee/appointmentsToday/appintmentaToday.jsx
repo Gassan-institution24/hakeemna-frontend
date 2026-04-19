@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useTranslate } from 'src/locales';
 
-import AppointmentsToday from 'src/sections/employee/appointmentsToday/appointmentsToday';
+import AppointmentsToday from 'src/sections/employee/appointmentsToday/appointments-today';
 
 // ----------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
 
-import Familymem from '../familymem';
+import Familymem from '../family-member';
 
 export default function Family() {
   const dialog = useBoolean(false);

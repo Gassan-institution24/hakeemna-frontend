@@ -25,7 +25,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import PageSelector from 'src/components/pageSelector';
+import PageSelector from 'src/components/page-selector';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 

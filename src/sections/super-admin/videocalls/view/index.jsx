@@ -36,7 +36,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'code' },

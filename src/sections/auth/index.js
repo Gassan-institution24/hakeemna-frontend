@@ -6,5 +6,5 @@ export { default as JwtActivationView } from './activation-view';
 export { default as PatientNewUserView } from './patient-new-user';
 export { default as JwtNewPasswordView } from './new-password-view';
 export { default as JwtForgetPasswordView } from './forgot-password-view';
-export { default as JwtUSRegisterView } from './unitservice-register-view';
+export { default as JwtUSRegisterView } from './unit-service-register-view';
 export { default as JwtStakeholderRegisterView } from './stakeholder-register-view';

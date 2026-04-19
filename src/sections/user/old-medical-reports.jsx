@@ -42,7 +42,7 @@ import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
 
-import PdfPreviewDialogPatint from "./PdfPreviewDialogPatint"
+import PdfPreviewDialogPatint from "./pdf-preview-dialog-patient"
 
 export default function OldMedicalReports() {
   // Inside the OldMedicalReports component

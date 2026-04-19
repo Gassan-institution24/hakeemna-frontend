@@ -34,7 +34,7 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import PageSelector from 'src/components/pageSelector';
+import PageSelector from 'src/components/page-selector';
 import FormProvider, {
   RHFSelect,
   RHFEditor,

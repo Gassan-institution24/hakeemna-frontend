@@ -33,7 +33,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 
-import {useGetFavoriteRadiology } from 'src/api/doctorFavorite';
+import {useGetFavoriteRadiology } from 'src/api/doctor_favorite';
 
 import TableDetailRow from './radiology_row'; /// edit
 

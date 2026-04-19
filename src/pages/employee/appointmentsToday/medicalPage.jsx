@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import MediaclreportPage from 'src/sections/employee/appointmentsToday/medicalreportPage';
+import MediaclreportPage from 'src/sections/employee/appointmentsToday/medical-report-page';
 
 // ----------------------------------------------------------------------
 

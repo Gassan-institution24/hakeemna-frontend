@@ -13,7 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
-import PdfPreviewDialogPrescriptionPDF from './PrescriptionPDF';
+import PdfPreviewDialogPrescriptionPDF from './prescription-pdf';
 import PrescriptionUpload from './items/presecription/prescription-upload';
 
 export default function PatientPrescriptions({ patient }) {

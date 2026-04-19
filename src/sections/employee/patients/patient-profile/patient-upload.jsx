@@ -24,7 +24,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetMedicines } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustable_document';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';

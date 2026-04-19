@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicalAnalysis } from 'src/api/medicalAnalysis';
+import { useGetMedicalAnalysis } from 'src/api/medical_analysis';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';

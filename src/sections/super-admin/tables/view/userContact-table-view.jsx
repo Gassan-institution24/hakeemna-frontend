@@ -38,7 +38,7 @@ import { useGetuserContact } from 'src/api';
 import Label from 'src/components/label';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 

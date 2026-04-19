@@ -5,7 +5,7 @@ import { Box, Menu, Link, Stack, Button, AppBar, Toolbar, Divider, MenuItem } fr
 
 import { paths } from 'src/routes/paths';
 
-import { useOffSetTop } from 'src/hooks/use-off-set-top';
+import { useOffSetTop } from 'src/hooks/use-offset-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useLocales, useTranslate } from 'src/locales';

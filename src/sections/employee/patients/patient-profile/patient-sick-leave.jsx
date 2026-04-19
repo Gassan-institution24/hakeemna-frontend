@@ -5,7 +5,7 @@ import { Stack, Button, Container } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetSickLeaves } from 'src/api/sickleave';
+import { useGetSickLeaves } from 'src/api/sick_leave';
 
 import SickLeaveItem from './items/sick-leave/sick-leave-item';
 import SickLeaveUpload from './items/sick-leave/sick-leave-upload';

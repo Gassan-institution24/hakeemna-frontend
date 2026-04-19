@@ -28,7 +28,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetFavoriteMedication } from 'src/api/doctorFavorite';
+import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
 import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
 
 import Iconify from 'src/components/iconify';

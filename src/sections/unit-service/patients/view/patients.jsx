@@ -35,7 +35,7 @@ import { RouterLink } from 'src/routes/components';
 import { useDebounce } from 'src/hooks/use-debounce';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { addWorkGroupColors } from 'src/utils/workgroupColors';
+import { addWorkGroupColors } from 'src/utils/workgroup_colors';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';

@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useGetEconomicMovements } from 'src/api/economic-movements';
+import { useGetEconomicMovements } from 'src/api/economic_movements';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';

@@ -16,6 +16,6 @@ export { default as UserProfileView } from './user-profile-view';
 export { default as UserListView } from './user-prescriptions-view';
 export { default as Medicalreports } from './user-medicalreports-view';
 export { default as UserAppointmentsBook } from './appointments-single';
-export { default as OldmedicalrepotView } from '../oldmedicalrepotView';
+export { default as OldmedicalrepotView } from '../old-medical-report-view';
 export { default as FinancilMovment } from './user-financilMovment-view';
 export { default as MedicalAnalysis } from './user-medicalAnalysis-view';

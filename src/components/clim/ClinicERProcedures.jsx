@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -135,7 +136,6 @@ export default function ClinicERProcedures({ onDataChange }) {
 
   const [search, setSearch] = useState('');
   const [procedures, setProcedures] = useState([]);
-  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (onDataChange) {
@@ -153,19 +153,18 @@ export default function ClinicERProcedures({ onDataChange }) {
     if (procedures.find((p) => p.code === item.code)) return;
 
     try {
-      setSending(true);
-
       // update UI أولاً
       setProcedures((prev) => [...prev, item]);
 
       // call backend
       await ERX();
 
-      console.log('ERX sent successfully');
+      enqueueSnackbar('Procedure order sent successfully', { variant: 'success' });
     } catch (e) {
       console.error('ERX send failed', e);
-    } finally {
-      setSending(false);
+      enqueueSnackbar('Failed to send procedure order', { variant: 'error' });
+      // Remove from UI if failed
+      setProcedures((prev) => prev.filter((p) => p.code !== item.code));
     }
   };
 

@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useOffSetTop } from 'src/hooks/use-off-set-top';
+import { useOffSetTop } from 'src/hooks/use-offset-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import socket from 'src/socket';
@@ -22,12 +22,12 @@ import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
-import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
+import WebRTCComponent from 'src/components/video-call/webRTC';
+import { useWebRTC } from 'src/components/video-call/use-web-rtc';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
-import EmployeeAttendence from './EmployeeAttendence';
+import EmployeeAttendence from './employee-attendance';
 import AccountPopover from '../common/account-popover';
 import LanguagePopover from '../common/language-popover';
 import ServiceUnitPopover from '../common/service-unit-popover';

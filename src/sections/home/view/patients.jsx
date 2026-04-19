@@ -2,7 +2,7 @@
 // import { useResponsive } from 'src/hooks/use-responsive';
 
 import PatientsHero from '../hero/patients-hero';
-import PatientsServices from '../patientservices';
+import PatientsServices from '../patient-services';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {

@@ -15,7 +15,7 @@ import { paths } from 'src/routes/paths';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';

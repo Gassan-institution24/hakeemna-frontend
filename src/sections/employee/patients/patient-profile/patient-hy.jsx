@@ -15,10 +15,10 @@ import { useGetPatientHistoryDataForUs } from 'src/api';
 import { useTranslate } from 'src/locales';
 
 
-import HistorySummary from './HistorySummary';
-import HistoryFilters from './HistoryFilters';
-import HistoryList from './HistoryList';
-import HistoryDetailsDialog from './HistoryDetailsDialog';
+import HistorySummary from './history-summary';
+import HistoryFilters from './history-filters';
+import HistoryList from './history-list';
+import HistoryDetailsDialog from './history-details-dialog';
 
 function PatientHistory({ patient }) {
   const { t } = useTranslate();

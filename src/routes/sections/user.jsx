@@ -2,12 +2,12 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
-import UserDashboardLayout from 'src/layouts/dashboard/indexUser';
+import UserDashboardLayout from 'src/layouts/dashboard/index-user';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import ArrivalPage from 'src/pages/dashboard/user/arrival/arrival';
-import CallDialog from '../../sections/user/call_dialog';
+import CallDialog from '../../sections/user/call-dialog';
 // import TableCreatePage from 'src/pages/dashboard/tables/new';
 // import TableEditPage from 'src/pages/dashboard/tables/edit';
 
@@ -19,9 +19,9 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const Sidebar = lazy(() => import('src/sections/user/view/siedBarmd'));
-const OldmedicalrepotView = lazy(() => import('src/sections/user/oldmedicalrepotView'));
-const PrescriptionView = lazy(() => import('src/sections/user/prescriptionView'));
-const MedicalrepotView = lazy(() => import('src/sections/user/medicalreportsView'));
+const OldmedicalrepotView = lazy(() => import('src/sections/user/old-medical-report-view'));
+const PrescriptionView = lazy(() => import('src/sections/user/prescription-view'));
+const MedicalrepotView = lazy(() => import('src/sections/user/medical-reports-view'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Exist = lazy(() => import('src/pages/dashboard/user/existmember'));
@@ -31,21 +31,21 @@ const Insurance = lazy(() => import('src/pages/dashboard/user/insurance'));
 const History = lazy(() => import('src/pages/dashboard/user/history'));
 const HistoryInfo = lazy(() => import('src/pages/dashboard/user/historyinfo'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
-const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
-const FinancilMovmentInfo = lazy(() => import('src/pages/dashboard/user/FinancilMovmentInfo'));
-const Family = lazy(() => import('src/pages/dashboard/user/Family'));
+const FinancilMovment = lazy(() => import('src/pages/dashboard/user/financial-movement'));
+const FinancilMovmentInfo = lazy(() => import('src/pages/dashboard/user/financial-movement-info'));
+const Family = lazy(() => import('src/pages/dashboard/user/family'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
-const PatientMedicalAnalysis = lazy(() => import('src/pages/dashboard/user/medicalAnalysis'));
+const PatientMedicalAnalysis = lazy(() => import('src/pages/dashboard/user/medical-analysis'));
 const PatientRadiology = lazy(() => import('src/pages/dashboard/user/radiology'))
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const ContactUS = lazy(() => import('src/pages/dashboard/user/contaactus'));
-const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
+const ContactUS = lazy(() => import('src/pages/dashboard/user/contact-us'));
+const Medicalreports = lazy(() => import('src/pages/dashboard/user/medical-reports'));
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
-const Watingroom = lazy(() => import('src/pages/dashboard/user/waitingroom'));
+const Watingroom = lazy(() => import('src/pages/dashboard/user/waiting-room'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
 const Myhealth = lazy(() => import('src/sections/user/view/user-myHealth-view'));
-const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
+const Oldpatientsdata = lazy(() => import('src/sections/user/old-patients-data'));
 const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
 const SickLeave = lazy(() => import('src/sections/user/view/user-sickLeave-view'));
 
