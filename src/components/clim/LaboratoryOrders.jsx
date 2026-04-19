@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -60,7 +61,6 @@ export default function LaboratoryOrders({ onDataChange }) {
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
-  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (onDataChange) {
@@ -83,8 +83,6 @@ export default function LaboratoryOrders({ onDataChange }) {
     if (!confirmed) return;
 
     try {
-      setSending(true);
-
       setOrders((prev) => [
         ...prev,
         {
@@ -96,11 +94,12 @@ export default function LaboratoryOrders({ onDataChange }) {
 
       await lab();
 
-      console.log('Lab sent successfully');
+      enqueueSnackbar('Laboratory order sent successfully', { variant: 'success' });
     } catch (e) {
       console.error('Lab send failed', e);
-    } finally {
-      setSending(false);
+      enqueueSnackbar('Failed to send laboratory order', { variant: 'error' });
+      // Remove from UI if failed
+      setOrders((prev) => prev.filter((o) => o.code !== item.code));
     }
   };
 

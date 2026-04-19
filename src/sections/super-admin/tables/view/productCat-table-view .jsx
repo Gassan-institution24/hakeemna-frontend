@@ -39,7 +39,7 @@ import { useGetProductCategories } from 'src/api/product';
 import CustomPopover from 'src/components/custom-popover';
 
 import TableDetailRow from '../subspecialties/table-details-row'; /// edit
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 

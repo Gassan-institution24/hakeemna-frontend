@@ -7,7 +7,7 @@ import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import { generatePdfFromElement } from '../../components/pdf/generatePdf';
+import { generatePdfFromElement } from '../../components/pdf/generate-pdf';
 
 const formatTime = (dateStr) => {
   if (!dateStr) return '';
@@ -26,7 +26,7 @@ const fixURL = (url) => {
   return newUrl;
 };
 
-export default function PdfPreviewDialog({ open, onClose, report }) {
+export default function PdfPreviewDialogSickLeave({ open, onClose, report }) {
   const previewRef = useRef(null);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -43,9 +43,12 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
     }
     return isArabic ? `${age} سنة` : `${age} years`;
   }
-  const hasImage =
-    Array.isArray(report?.file) &&
-    report.file.some((fileUrl) => /\.(jpg|jpeg|png|webp)$/i.test(fileUrl));
+  const decodeHtml = (html) => {
+    if (!html) return '';
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -57,13 +60,13 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('medical report')}</Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 900 }}>{t('sick leave')}</Typography>
 
           {/* SMALL BUTTON NEXT TO TITLE */}
           <Button
             variant="contained"
             color="primary"
-            onClick={() => generatePdfFromElement(previewRef.current, 'MedicalReport.pdf')}
+            onClick={() => generatePdfFromElement(previewRef.current, 'SickLeave.pdf')}
             sx={{
               textTransform: 'none',
               fontSize: '14px',
@@ -108,7 +111,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: '520px',
-              opacity: 0.05,
+              opacity: 0.14,
               pointerEvents: 'none',
             }}
           />
@@ -134,7 +137,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
             {/* LEFT COLUMN */}
             <Grid item xs={4}>
               <Typography sx={{ fontSize: 20, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
-                {t('report.medicalReport')}
+                {t('sick leave')}
               </Typography>
 
               <Typography sx={{ fontSize: 18, fontWeight: 700, color: '#2a5d71', mb: 2 }}>
@@ -208,68 +211,52 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
               </Box>
             </Grid>
           </Grid>
-          {/* ==== DESCRIPTION ==== */}
-          {report?.description && (
-            <Box sx={{ mt: 4 }}>
-              <Typography
-                sx={{
-                  fontSize: 18,
-                  lineHeight: 1.7,
-                  color: '#000',
-                  whiteSpace: 'pre-line',
-                }}
-              >
-                {report.description
-                  .replace(/<\/p>/gi, '\n')
-                  .replace(/<br\s*\/?>/gi, '\n')
-                  .replace(/&nbsp;/g, ' ')
-                  .replace(/<[^>]+>/g, '')
-                  .trim()}
-              </Typography>
-            </Box>
-          )}
+          {/* ==== SICK LEAVE DETAILS ==== */}
+          <Box sx={{ mt: 4 }}>
+            {/* START DATE */}
+            <Typography sx={{ fontSize: 18, mb: 1 }}>
+              {t('start date')}:{' '}
+              <strong>{fDate(report?.Medical_sick_leave_start, 'dd/MM/yyyy')}</strong>
+            </Typography>
 
-          {/* ==== ATTACHED FILES (IMAGES ONLY) ==== */}
-          {Array.isArray(report?.file) && report.file.length > 0 && (
-            <div style={{ marginTop: '24px' }}>
-              {report.file.map((fileUrl, index) => {
-                const fixedUrl = fixURL(fileUrl);
-                const isImage = /\.(jpg|jpeg|png|webp)$/i.test(fixedUrl);
-                if (!isImage) return null;
+            {/* END DATE */}
+            <Typography sx={{ fontSize: 18, mb: 2 }}>
+              {t('end date')}:{' '}
+              <strong>{fDate(report?.Medical_sick_leave_end, 'dd/MM/yyyy')}</strong>
+            </Typography>
 
-                return (
-                  <img
-                    key={index}
-                    src={fixedUrl}
-                    alt={`attachment-${index}`}
-                    style={{
-                      maxWidth: '260px',
-                      maxHeight: '350px',
-                      objectFit: 'contain',
-                      borderRadius: '8px',
-                      border: '1px solid #ccc',
+            {/* NOTE / DESCRIPTION (ONLY IF EXISTS) */}
+            {report?.description && (
+              <>
+                <Typography sx={{ fontSize: 18, fontWeight: 700, mt: 3 }}>
+                  {t('description')}
+                </Typography>
 
-                      float: isArabic ? 'right' : 'left',  
-                      margin: isArabic ? '0 0 16px 24px' : '0 24px 16px 0',
-                    }}
-                  />
-                );
-              })}
-              <div style={{ clear: 'both' }} />
-            </div>
-          )}
+                <Typography
+                  sx={{
+                    fontSize: 16,
+                    lineHeight: 1.7,
+                    whiteSpace: 'pre-line',
+                  }}
+                >
+                  {decodeHtml(report.description)
+                    .replace(/<\/p>/gi, '\n')
+                    .replace(/<br\s*\/?>/gi, '\n')
+                    .replace(/&nbsp;/g, ' ')
+                    .replace(/<[^>]+>/g, '')
+                    .trim()}
+                </Typography>
+              </>
+            )}
+          </Box>
 
           {/* ==== AUTO WHITE SPACE (PERFECT PDF MIDDLE AREA) ==== */}
-          {!hasImage && (
-            <Box
-              sx={{
-                flexGrow: 1,
-                minHeight: '400px',
-              }}
-            />
-          )}
-          {/* ==== SMALL SPACE WHEN IMAGE EXISTS ==== */}
-          {hasImage && <Box sx={{ height: '400px' }} />}
+          <Box
+            sx={{
+              flexGrow: 1, // <--- THE MAGIC PART
+              minHeight: '335px', // baseline so it always looks correct
+            }}
+          />
 
           {/* ==== SIGNATURE & STAMP ==== */}
           <Box
@@ -340,16 +327,16 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
                   color: '#2a5d71',
                 }}
               >
-                {t('report.phoneNumber')}: {report?.unit_service?.phone || '---'}
+                {t('report.phoneNumber')}: {report?.unit_services?.phone || '---'}
               </Typography>
               <Typography
                 sx={{
                   color: '#2a5d71',
                 }}
               >
-                {t('report.workingHours')}: {formatTime(report?.unit_service?.work_start_time)}{' '}
+                {t('report.workingHours')}: {formatTime(report?.unit_services?.work_start_time)}{' '}
                 {' — '}
-                {formatTime(report?.unit_service?.work_end_time)}
+                {formatTime(report?.unit_services?.work_end_time)}
               </Typography>
             </Box>
 
@@ -360,16 +347,16 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
                   color: '#2a5d71',
                 }}
               >
-                {t('report.email')}: {report?.unit_service?.email || '---'}
+                {t('report.email')}: {report?.unit_services?.email || '---'}
               </Typography>
 
-              {report?.unit_service?.mobile_nu && (
+              {report?.unit_services?.mobile_nu && (
                 <Typography
                   sx={{
                     color: '#2a5d71',
                   }}
                 >
-                  {t('report.relativePhone')}: {report?.unit_service?.mobile_num || '---'}
+                  {t('report.relativePhone')}: {report?.unit_services?.mobile_num || '---'}
                 </Typography>
               )}
             </Box>
@@ -381,7 +368,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
                   color: '#2a5d71',
                 }}
               >
-                {t('report.address')}: {report?.unit_service?.address || '---'}
+                {t('report.address')}: {report?.unit_services?.address || '---'}
               </Typography>
             </Box>
           </Box>
@@ -393,7 +380,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
               fontSize: 16,
               fontWeight: 700,
               color: '#2a5d71',
-              mt: 0,
+              mt: 2,
             }}
           >
             {currentLang.value === 'ar' ? 'تم تطويره بواسطة حكيمنا ٣٦٠' : 'Powered by Hakeemna 360'}
@@ -404,7 +391,7 @@ export default function PdfPreviewDialog({ open, onClose, report }) {
   );
 }
 
-PdfPreviewDialog.propTypes = {
+PdfPreviewDialogSickLeave.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   report: PropTypes.object,

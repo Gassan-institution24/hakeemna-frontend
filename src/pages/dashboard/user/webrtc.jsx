@@ -6,7 +6,7 @@ import { useSearchParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
+import WebRTCComponent from 'src/components/video-call/webRTC';
 
 // ----------------------------------------------------------------------
 

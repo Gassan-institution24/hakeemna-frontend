@@ -8,7 +8,7 @@ import { useTranslate } from 'src/locales';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import WatingRoom from 'src/sections/user/waitingRoom';
+import WatingRoom from 'src/sections/user/waiting-room';
 
 // ----------------------------------------------------------------------
 

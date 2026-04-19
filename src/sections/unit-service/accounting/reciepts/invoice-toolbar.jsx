@@ -18,7 +18,7 @@ import { useGetIncomePaymentControl } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { generatePdfFromElement } from 'src/components/pdf/generatePdf';
+import { generatePdfFromElement } from 'src/components/pdf/generate-pdf';
 
 import InvoicePDF from './invoice-pdf';
 

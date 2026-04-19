@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Medicalreports from '../medicalreports';
-import OldMedicalReports from '../oldmedicalrepots';
+import OldMedicalReports from '../old-medical-reports';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {

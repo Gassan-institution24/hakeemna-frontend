@@ -5,7 +5,7 @@ import { useParams } from 'src/routes/hooks';
 
 // import { useSettingsContext } from 'src/components/settings';
 import { useTranslate } from 'src/locales';
-import { useGetAdjustabledDocument } from 'src/api/adjustabledocument';
+import { useGetAdjustabledDocument } from 'src/api/adjustable_document';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 

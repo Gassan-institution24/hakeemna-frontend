@@ -31,7 +31,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetImagings } from 'src/api/imaging';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetFavoriteRadiology } from 'src/api/doctorFavorite';
+import { useGetFavoriteRadiology } from 'src/api/doctor_favorite';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';

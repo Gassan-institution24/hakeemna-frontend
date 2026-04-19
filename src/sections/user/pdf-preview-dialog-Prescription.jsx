@@ -7,7 +7,7 @@ import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
-import { generatePdfFromElement } from '../../components/pdf/generatePdf';
+import { generatePdfFromElement } from '../../components/pdf/generate-pdf';
 
 const formatTime = (dateStr) => {
   if (!dateStr) return '';

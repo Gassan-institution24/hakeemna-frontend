@@ -26,7 +26,7 @@ import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicalAnalysis } from 'src/api/medicalAnalysis';
+import { useGetMedicalAnalysis } from 'src/api/medical_analysis';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';

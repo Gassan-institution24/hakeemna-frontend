@@ -36,7 +36,7 @@ import { fDate } from 'src/utils/format-time';
 import CustomPopover from 'src/components/custom-popover';
 
 import TableDetailRow from '../currency/table-details-row'; /// edit
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 

@@ -9,7 +9,7 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';

@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetMedicalAnalysisById } from 'src/api/medicalAnalysis';
+import { useGetMedicalAnalysisById } from 'src/api/medical_analysis';
 
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

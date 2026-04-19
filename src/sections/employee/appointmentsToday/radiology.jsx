@@ -27,7 +27,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetImagings } from 'src/api/imaging';
-import { useGetFavoriteRadiology } from 'src/api/doctorFavorite';
+import { useGetFavoriteRadiology } from 'src/api/doctor_favorite';
 import { useGeEntranceRadiologyPatient } from 'src/api/radiology_patient';
 
 import Iconify from 'src/components/iconify';

@@ -7,7 +7,7 @@ import { fDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetSickLeaves } from 'src/api/sickleave';
+import { useGetSickLeaves } from 'src/api/sick_leave';
 
 export default function PatientSickLeaves({ patient }) {
   const { t } = useTranslate();

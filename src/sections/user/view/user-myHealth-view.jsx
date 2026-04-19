@@ -13,9 +13,9 @@ import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Bmi from '../bmi';
-import WhtRatio from '../whtRatio';
+import WhtRatio from '../wht-ratio';
 import Instructions from '../instructions';
-import Mymentalhealth from '../mymentalhealth';
+import Mymentalhealth from '../my-mental-health';
 
 // ----------------------------------------------------------------------
 

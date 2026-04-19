@@ -5,9 +5,9 @@ import MainLayout from 'src/layouts/main';
 import CompactLayout from 'src/layouts/compact';
 
 import { SplashScreen } from 'src/components/loading-screen';
-import Privacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicy';
-import USPrivacypolicy from 'src/components/terms_conditionAndPrivacy_policy/privacyPolicyUs';
-import TermsAndCondition from 'src/components/terms_conditionAndPrivacy_policy/termsAndCondition';
+import Privacypolicy from 'src/components/terms-condition-privacy-policy/privacyPolicy';
+import USPrivacypolicy from 'src/components/terms-condition-privacy-policy/privacyPolicyUs';
+import TermsAndCondition from 'src/components/terms-condition-privacy-policy/termsAndCondition';
 
 // ----------------------------------------------------------------------
 
@@ -15,14 +15,14 @@ export const HomePage = lazy(() => import('src/pages/home/home'));
 
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
 const UsPricing = lazy(() => import('src/sections/home/view/usPricing'));
-const AboutUs = lazy(() => import('src/sections/home/moreInfoAboutUs'));
+const AboutUs = lazy(() => import('src/sections/home/more-info-about-us'));
 
 const Patientsservices = lazy(() => import('src/pages/home/patients'));
 const Unitservices = lazy(() => import('src/pages/home/unit'));
 const ServiceUnitPage = lazy(() => import('src/pages/home/service-unit'));
 const Training = lazy(() => import('src/sections/home/training'));
-const FAQ = lazy(() => import('src/sections/home/FAQ'));
-const Blogs = lazy(() => import('src/sections/home/Blogs'));
+const FAQ = lazy(() => import('src/sections/home/faq'));
+const Blogs = lazy(() => import('src/sections/home/blogs'));
 const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
 const ViewBlogs = lazy(() => import('src/pages/home/view-blog'));

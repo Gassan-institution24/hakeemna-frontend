@@ -25,7 +25,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { generatePdfFromElement } from 'src/components/pdf/generatePdf';
+import { generatePdfFromElement } from 'src/components/pdf/generate-pdf';
 
 // ----------------------------------------------------------------------
 

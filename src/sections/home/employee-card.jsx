@@ -11,7 +11,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import { fCurrency } from 'src/utils/format-number';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 

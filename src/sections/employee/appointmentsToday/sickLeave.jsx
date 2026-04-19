@@ -24,7 +24,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEntranceSickLeaves } from 'src/api/sickleave';
+import { useGetEntranceSickLeaves } from 'src/api/sick_leave';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';

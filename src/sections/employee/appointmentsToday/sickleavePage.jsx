@@ -25,7 +25,7 @@ import axiosInstance from 'src/utils/axios';
 import { fDateTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetOneSickLeaves } from 'src/api/sickleave';
+import { useGetOneSickLeaves } from 'src/api/sick_leave';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';

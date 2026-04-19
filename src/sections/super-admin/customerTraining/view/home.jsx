@@ -34,7 +34,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import MobileRow from '../../MobileRow';
+import MobileRow from '../../mobile-row';
 import TrainingRow from '../training-row';
 import TrainingToolbar from '../training-toolbar';
 import TrainingFiltersResult from '../training-filters-result';

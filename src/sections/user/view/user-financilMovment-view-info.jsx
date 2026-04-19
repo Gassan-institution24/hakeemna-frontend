@@ -7,7 +7,7 @@ import { useTranslate } from 'src/locales';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import FinancilMovmentInfo from '../FinancilMovmentInfo';
+import FinancilMovmentInfo from '../financial-movement-info';
 
 // ----------------------------------------------------------------------
 

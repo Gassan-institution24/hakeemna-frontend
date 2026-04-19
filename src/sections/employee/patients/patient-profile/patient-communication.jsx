@@ -5,7 +5,7 @@ import { Stack, Button, Container, Tabs, Tab, Box } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSPCommunication } from 'src/api/uspcommunication';
+import { useGetUSPCommunication } from 'src/api/usp_communication';
 
 import UnitServiceVideoCallsTableView from 'src/sections/unit-service/videocalls/UnitServiceVideoCallsTableView';
 

@@ -6,13 +6,13 @@ import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatintmedicalreports } from 'src/api/medical_repots';
+import { useGetPatintmedicalreports } from 'src/api/medical_reports';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back.webp';
-import PdfPreviewDialog from './pdf-preview-dialog-MedicalReport';
+import PdfPreviewDialog from './pdf-preview-dialog-medical-report';
 
 export default function Medicalreports() {
   const { t } = useTranslate();

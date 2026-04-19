@@ -19,7 +19,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustable_document';
 import {
   useGetPatient,
   useGetMedRecord,
@@ -30,9 +30,9 @@ import {
 
 import Iconify from 'src/components/iconify';
 
-import Rooms from './insideRooms';
+import Rooms from './inside-rooms';
 import TabsView from './tabs-view';
-import CheckList from './checkList';
+import CheckList from './check-list';
 import ServicesProvided from './servicesProvided';
 import Adjustabledocument from './adjustabledocument';
 

@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 // import { paths } from 'src/routes/paths';
 // import { RouterLink } from 'src/routes/components';
 
-import { useOffSetTop } from 'src/hooks/use-off-set-top';
+import { useOffSetTop } from 'src/hooks/use-offset-top';
 
 import { bgBlur } from 'src/theme/css';
 

@@ -22,7 +22,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 

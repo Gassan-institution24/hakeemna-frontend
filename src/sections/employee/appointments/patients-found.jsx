@@ -7,7 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { addToCalendar } from 'src/utils/calender';
+import { addToCalendar } from 'src/utils/calendar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';

@@ -1,5 +1,5 @@
 
-import USServices from '../usservices';
+import USServices from '../us-services';
 import UnitServiceHero from '../hero/unit-service-hero';
 // ----------------------------------------------------------------------
 

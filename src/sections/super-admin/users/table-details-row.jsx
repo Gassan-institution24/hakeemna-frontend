@@ -12,8 +12,8 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import WebRTCComponent from 'src/components/vedio-call/webRTC';
-import { useWebRTC } from 'src/components/vedio-call/use-web-rtc';
+import WebRTCComponent from 'src/components/video-call/webRTC';
+import { useWebRTC } from 'src/components/video-call/use-web-rtc';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------

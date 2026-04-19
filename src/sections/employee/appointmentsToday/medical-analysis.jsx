@@ -26,8 +26,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetFavoriteMedicalAnalysis } from 'src/api/doctorFavorite';
-import { useGetMedicalAnalysis, useGeEntranceMedicalAnalysis } from 'src/api/medicalAnalysis';
+import { useGetFavoriteMedicalAnalysis } from 'src/api/doctor_favorite';
+import { useGetMedicalAnalysis, useGeEntranceMedicalAnalysis } from 'src/api/medical_analysis';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';

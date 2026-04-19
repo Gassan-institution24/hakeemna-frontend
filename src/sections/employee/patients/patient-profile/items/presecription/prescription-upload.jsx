@@ -33,7 +33,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetMedicines } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetFavoriteMedication } from 'src/api/doctorFavorite';
+import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
 
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';

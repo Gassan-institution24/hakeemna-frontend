@@ -7,7 +7,7 @@ import { paths } from 'src/routes/paths';
 import { fDate } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetOneFavoriteMedicalAnalysis } from 'src/api/doctorFavorite';
+import { useGetOneFavoriteMedicalAnalysis } from 'src/api/doctor_favorite';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

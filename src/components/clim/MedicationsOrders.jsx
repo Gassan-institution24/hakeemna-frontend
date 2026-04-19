@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,6 +18,7 @@ import {
 } from '@mui/material';
 
 import { useLocales } from 'src/locales';
+import { ERX } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
@@ -65,19 +67,29 @@ export default function MedicationsOrders({ onDataChange }) {
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-  const addOrder = (item) => {
+  const addOrder = async (item) => {
     if (orders.find((o) => o.code === item.code)) return;
-    setOrders((prev) => [
-      ...prev,
-      {
-        ...item,
-        dosage: 1,
-        schedule: 'Q12H',
-        duration: 1,
-        packQty: 1,
-        fillQty: 1,
-      },
-    ]);
+    try {
+      setOrders((prev) => [
+        ...prev,
+        {
+          ...item,
+          dosage: 1,
+          schedule: 'Q12H',
+          duration: 1,
+          packQty: 1,
+          fillQty: 1,
+        },
+      ]);
+
+      await ERX();
+      enqueueSnackbar('Medication order sent successfully', { variant: 'success' });
+    } catch (e) {
+      console.error('ERX send failed', e);
+      enqueueSnackbar('Failed to send medication order', { variant: 'error' });
+      // Remove from UI if failed
+      setOrders((prev) => prev.filter((o) => o.code !== item.code));
+    }
   };
 
   const removeOrder = (code) => {

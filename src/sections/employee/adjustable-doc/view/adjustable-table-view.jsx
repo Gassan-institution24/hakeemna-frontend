@@ -27,7 +27,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeAdjustabledocument } from 'src/api/adjustabledocument';
+import { useGetEmployeeAdjustabledocument } from 'src/api/adjustable_document';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
