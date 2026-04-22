@@ -27,7 +27,9 @@ import {
   checkFormNumber,
   submitFormNumber,
 } from 'src/services/claimService';
+
 import Iconify from 'src/components/iconify';
+
 import AddDiagnosis from 'src/components/clim/AddDiagnosis';
 import RadiologyOrders from 'src/components/clim/RadiologyOrders';
 import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
@@ -117,7 +119,6 @@ export default function PatientPage() {
         if (data?.requestId) {
           setRequestId(data.requestId);
           enqueueSnackbar(t('Request submitted, awaiting insurer approval'), { variant: 'info' });
-          return;
         }
       } else {
         // Check existing request
@@ -135,7 +136,6 @@ export default function PatientPage() {
         }
         if (!data?.success) {
           enqueueSnackbar(data?.error || t('Authorization not approved'), { variant: 'warning' });
-          return;
         }
       }
     } catch (err) {
