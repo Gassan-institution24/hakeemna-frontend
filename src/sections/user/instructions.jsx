@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientInstructionsData } from 'src/api/instructions';
+import { useGetPatientInstructionsData } from 'src/api/Instructions';
 
 import Iconify from 'src/components/iconify';
 

@@ -19,7 +19,7 @@ import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
 
 import Back from './imges/back.webp';
-import PdfPreviewDialogPrescription from './pdf-preview-dialog-prescription';
+import PdfPreviewDialogPrescription from './pdf-preview-dialog-Prescription';
 
 Font.register({
   family: 'ArabicFont',

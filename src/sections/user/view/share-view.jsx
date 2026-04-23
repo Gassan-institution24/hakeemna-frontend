@@ -7,7 +7,7 @@ import { useTranslate } from 'src/locales';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import Share from '../share';
+import Share from '../Share';
 
 // ----------------------------------------------------------------------
 

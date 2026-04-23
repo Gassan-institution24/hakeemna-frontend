@@ -61,7 +61,7 @@ export * from './specialities';
 export * from './stakeholders';
 export * from './appointments';
 export * from './doctor_report';
-export * from './blog_category';
+export * from './Blog_category';
 export * from './hospital_list';
 export * from './service_types';
 export * from './unit_services';

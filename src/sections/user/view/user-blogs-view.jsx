@@ -1,4 +1,4 @@
-import BlogsView from 'src/sections/home/blogs';
+import BlogsView from 'src/sections/home/Blogs';
 
 // ----------------------------------------------------------------------
 

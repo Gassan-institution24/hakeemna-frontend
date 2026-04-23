@@ -33,7 +33,7 @@ const HistoryInfo = lazy(() => import('src/pages/dashboard/user/historyinfo'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/financial-movement'));
 const FinancilMovmentInfo = lazy(() => import('src/pages/dashboard/user/financial-movement-info'));
-const Family = lazy(() => import('src/pages/dashboard/user/family'));
+const Family = lazy(() => import('src/pages/dashboard/user/Family'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
 const PatientMedicalAnalysis = lazy(() => import('src/pages/dashboard/user/medical-analysis'));
