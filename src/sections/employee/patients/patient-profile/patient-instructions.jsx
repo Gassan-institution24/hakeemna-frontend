@@ -5,7 +5,7 @@ import { Stack, Button, Container } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetInstructions } from 'src/api/instructions';
+import { useGetInstructions } from 'src/api/Instructions';
 
 import InstructionItem from './items/instructions/instruction-item';
 import InstructionUpload from './items/instructions/instruction-upload';
