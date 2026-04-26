@@ -1,4 +1,4 @@
-import axiosInstance from 'src/utils/axios';
+import axiosInstance from '../utils/axios';
 
 // Functions making actual API calls to backend
 export const createEncounter = () => axiosInstance.post('/api/claims/encounter');

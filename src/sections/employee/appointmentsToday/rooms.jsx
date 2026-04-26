@@ -66,7 +66,10 @@ export default function WaitingRoom() {
 
   const [selectedTitle, setSelectedTitle] = useState();
   const { data } = useGetRoom(selectedTitle);
-  const { EntranceByActivity } = useGetEntranceManagementByActivity(data?.activities, unitServiceId);
+  const { EntranceByActivity } = useGetEntranceManagementByActivity(
+    data?.activities,
+    unitServiceId
+  );
 
   useEffect(() => {
     setSelectedTitle(employeeRoomsData?._id);
@@ -88,9 +91,7 @@ export default function WaitingRoom() {
 
   const updateRoom = async (roomId) => {
     try {
-      const { data: allRooms } = await axiosInstance.get(
-        `/api/rooms/unitservice/${unitServiceId}`
-      );
+      const { data: allRooms } = await axiosInstance.get(`/api/rooms/unitservice/${unitServiceId}`);
 
       const currentRoom = allRooms.find((room) =>
         room.employee?.some((emp) => emp._id === user?.employee?._id)
@@ -200,9 +201,6 @@ export default function WaitingRoom() {
           <Typography variant="h6" color="text.secondary" gutterBottom>
             {t('No patients waiting')}
           </Typography>
-          <Typography variant="body2" color="text.disabled">
-            {t('No patients are currently assigned to this room')}
-          </Typography>
         </Box>
       ) : (
         <Grid container spacing={2.5}>
@@ -248,7 +246,13 @@ export default function WaitingRoom() {
                   />
 
                   <CardContent
-                    sx={{ p: 2.5, pb: '20px !important', flex: 1, display: 'flex', flexDirection: 'column' }}
+                    sx={{
+                      p: 2.5,
+                      pb: '20px !important',
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
                   >
                     {/* Header */}
                     <Stack direction="row" alignItems="center" spacing={1.5} mb={2}>

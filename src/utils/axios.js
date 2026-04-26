@@ -626,6 +626,7 @@ export const endpoints = {
     all: '/api/diagnosis',
     one: (id) => (!id ? null : `/api/diagnosis/${id}`),
     entrance: (id) => (!id ? null : `/api/patient-diagnosis/entrance/${id}`),
+    patientDiagnosisOne: (id) => (!id ? null : `/api/patient-diagnosis/${id}`),
   },
   income_payment: {
     all: '/api/incomepayment',
@@ -916,6 +917,10 @@ export const endpoints = {
   favoriteMedicalAnalysis: {
     all: '/api/favorite-medical-analysis',
     one: (id) => (!id ? null : `/api/favorite-medical-analysis/${id}`),
+  },
+  favoriteDiagnosis: {
+    all: '/api/favorite-diagnosis',
+    one: (id) => (!id ? null : `/api/favorite-diagnosis/${id}`),
   },
   favoriteRadiology: {
     all: '/api/favorite-radiology',

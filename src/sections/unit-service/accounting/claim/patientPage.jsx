@@ -20,21 +20,19 @@ import {
   AccordionDetails,
 } from '@mui/material';
 
-import { useTranslate } from 'src/locales';
+import { useTranslate } from '../../../../locales';
+import Iconify from '../../../../components/iconify';
+import AddDiagnosis from '../../../../components/clim/AddDiagnosis';
+import RadiologyOrders from '../../../../components/clim/RadiologyOrders';
+import LaboratoryOrders from '../../../../components/clim/LaboratoryOrders';
+import MedicationsOrders from '../../../../components/clim/MedicationsOrders';
+import PhysiotherapyOrders from '../../../../components/clim/PhysiotherapyOrders';
 import {
   submitClaim,
   cancellation,
   checkFormNumber,
   submitFormNumber,
-} from 'src/services/claimService';
-
-import Iconify from 'src/components/iconify';
-
-import AddDiagnosis from 'src/components/clim/AddDiagnosis';
-import RadiologyOrders from 'src/components/clim/RadiologyOrders';
-import LaboratoryOrders from 'src/components/clim/LaboratoryOrders';
-import MedicationsOrders from 'src/components/clim/MedicationsOrders';
-import PhysiotherapyOrders from 'src/components/clim/PhysiotherapyOrders';
+} from '../../../../services/claimService';
 
 // Demo insurance/patient data — replace with real values from visit context
 const DEMO_FORM_PAYLOAD = {
@@ -234,7 +232,13 @@ export default function PatientPage() {
           <Button
             variant="contained"
             disabled={loadingFormNumber}
-            startIcon={loadingFormNumber ? <CircularProgress size={16} /> : <Iconify icon="solar:refresh-bold" />}
+            startIcon={
+              loadingFormNumber ? (
+                <CircularProgress size={16} />
+              ) : (
+                <Iconify icon="solar:refresh-bold" />
+              )
+            }
             onClick={handleRecheck}
           >
             {t('Recheck')}

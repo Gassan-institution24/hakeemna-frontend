@@ -948,6 +948,13 @@ export function useNavData() {
             navItemId: 'EMRadiologyNav',
             'data-test': 'employee-nav-item-profile-radiology',
           },
+          {
+            show: true,
+            title: t('diagnosis'),
+            path: paths.employee.medicalServices.diagnosis.root,
+            navItemId: 'EMDiagnosisNav',
+            'data-test': 'employee-nav-item-profile-diagnosis',
+          },
         ],
       },
     ];

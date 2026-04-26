@@ -5,10 +5,10 @@ import { useState, useCallback } from 'react';
 import { Tab, Box, Tabs, Stack } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 
-import { useTranslate } from 'src/locales';
-import { useGetOneEntranceManagement } from 'src/api';
+import { useTranslate } from '../../../locales';
+import { useGetOneEntranceManagement } from '../../../api';
 
-import Iconify from 'src/components/iconify';
+import Iconify from '../../../components/iconify';
 
 import SickLeave from './sickLeave';
 import Radiology from './radiology';

@@ -66,14 +66,7 @@ function getInitials(name = '') {
 
 // ─── Avatar colour palette (cycles by index) ─────────────────────────────────
 
-const AVATAR_COLORS = [
-  'primary',
-  'secondary',
-  'info',
-  'success',
-  'warning',
-  'error',
-];
+const AVATAR_COLORS = ['primary', 'secondary', 'info', 'success', 'warning', 'error'];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -389,7 +382,15 @@ export default function AppointmentsToday() {
             }}
           />
 
-          <CardContent sx={{ p: 2.5, pb: '20px !important', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <CardContent
+            sx={{
+              p: 2.5,
+              pb: '20px !important',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
             {/* ── Header ── */}
             <Stack direction="row" alignItems="flex-start" justifyContent="space-between" mb={2}>
               <Stack direction="row" spacing={1.5} alignItems="center" flex={1} minWidth={0}>
@@ -397,7 +398,10 @@ export default function AppointmentsToday() {
                   sx={{
                     width: 44,
                     height: 44,
-                    bgcolor: alpha(theme.palette[avatarColor]?.main || theme.palette.primary.main, 0.12),
+                    bgcolor: alpha(
+                      theme.palette[avatarColor]?.main || theme.palette.primary.main,
+                      0.12
+                    ),
                     color: `${avatarColor}.main`,
                     fontWeight: 700,
                     fontSize: '0.9rem',
@@ -408,7 +412,7 @@ export default function AppointmentsToday() {
                 </Avatar>
 
                 <Box minWidth={0} flex={1}>
-                  <Tooltip title={t("Click to view patient file")} placement="top" arrow>
+                  <Tooltip title={t('Click to view patient file')} placement="top" arrow>
                     <Typography
                       variant="subtitle2"
                       fontWeight={700}
@@ -425,7 +429,11 @@ export default function AppointmentsToday() {
                   </Tooltip>
 
                   <Stack direction="row" alignItems="center" spacing={0.5} mt={0.3}>
-                    <Iconify icon="solar:clock-circle-outline" width={13} sx={{ color: 'text.disabled' }} />
+                    <Iconify
+                      icon="solar:clock-circle-outline"
+                      width={13}
+                      sx={{ color: 'text.disabled' }}
+                    />
                     <Typography variant="caption" color="text.disabled" fontWeight={500}>
                       {fTimeUnit(info?.start_time, 'p', true)}
                     </Typography>
@@ -497,7 +505,9 @@ export default function AppointmentsToday() {
                       {info?.coming !== undefined ? (
                         <Stack direction="row" alignItems="center" spacing={0.5}>
                           <Iconify
-                            icon={info.coming ? 'solar:check-circle-bold' : 'solar:close-circle-bold'}
+                            icon={
+                              info.coming ? 'solar:check-circle-bold' : 'solar:close-circle-bold'
+                            }
                             width={18}
                             sx={{ color: info.coming ? 'success.main' : 'error.main' }}
                           />
@@ -516,7 +526,13 @@ export default function AppointmentsToday() {
                             variant="contained"
                             color="success"
                             onClick={() => StatusFunction(info, true, 'coming')}
-                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                            sx={{
+                              minWidth: 0,
+                              px: 1.5,
+                              py: 0.4,
+                              fontSize: '0.7rem',
+                              lineHeight: 1.5,
+                            }}
                           >
                             {t('Yes')}
                           </Button>
@@ -525,7 +541,13 @@ export default function AppointmentsToday() {
                             variant="outlined"
                             color="error"
                             onClick={() => StatusFunction(info, false, 'coming')}
-                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                            sx={{
+                              minWidth: 0,
+                              px: 1.5,
+                              py: 0.4,
+                              fontSize: '0.7rem',
+                              lineHeight: 1.5,
+                            }}
                           >
                             {t('No')}
                           </Button>
@@ -553,7 +575,9 @@ export default function AppointmentsToday() {
                       {info?.arrived !== undefined ? (
                         <Stack direction="row" alignItems="center" spacing={0.5}>
                           <Iconify
-                            icon={info.arrived ? 'solar:check-circle-bold' : 'solar:close-circle-bold'}
+                            icon={
+                              info.arrived ? 'solar:check-circle-bold' : 'solar:close-circle-bold'
+                            }
                             width={18}
                             sx={{ color: info.arrived ? 'success.main' : 'error.main' }}
                           />
@@ -572,7 +596,13 @@ export default function AppointmentsToday() {
                             variant="contained"
                             color="success"
                             onClick={() => startAppointment(info)}
-                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                            sx={{
+                              minWidth: 0,
+                              px: 1.5,
+                              py: 0.4,
+                              fontSize: '0.7rem',
+                              lineHeight: 1.5,
+                            }}
                           >
                             {t('Yes')}
                           </Button>
@@ -581,7 +611,13 @@ export default function AppointmentsToday() {
                             variant="outlined"
                             color="error"
                             onClick={() => StatusFunction(info, false, 'arrived')}
-                            sx={{ minWidth: 0, px: 1.5, py: 0.4, fontSize: '0.7rem', lineHeight: 1.5 }}
+                            sx={{
+                              minWidth: 0,
+                              px: 1.5,
+                              py: 0.4,
+                              fontSize: '0.7rem',
+                              lineHeight: 1.5,
+                            }}
                           >
                             {t('No')}
                           </Button>
@@ -793,18 +829,19 @@ export default function AppointmentsToday() {
                 >
                   {t('create & book appointment')}
                 </Button>
-
-                <Button
-                  component={RouterLink}
-                  href={paths.employee.qrCode}
-                  target="_blank"
-                  rel="noopener"
-                  variant="contained"
-                  color="success"
-                  startIcon={<Iconify icon="eva:qr-code-fill" />}
-                >
-                  {t('Confirm Arrival')}
-                </Button>
+                {appointmentsData?.length > 0 && (
+                  <Button
+                    component={RouterLink}
+                    href={paths.employee.qrCode}
+                    target="_blank"
+                    rel="noopener"
+                    variant="contained"
+                    color="success"
+                    startIcon={<Iconify icon="eva:qr-code-fill" />}
+                  >
+                    {t('Confirm Arrival')}
+                  </Button>
+                )}
               </Stack>
             )
           }

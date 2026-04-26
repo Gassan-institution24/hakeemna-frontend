@@ -13,30 +13,26 @@ import TableBody from '@mui/material/TableBody';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
-import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-
-import { useGetBlog_category } from 'src/api';
-
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { LoadingScreen } from 'src/components/loading-screen';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { paths } from '../../../../routes/paths';
+import Iconify from '../../../../components/iconify';
+import Scrollbar from '../../../../components/scrollbar';
+import { LoadingScreen } from '../../../../components/loading-screen';
+import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import {
   useTable,
   TableNoData,
   getComparator,
   TableHeadCustom,
   TablePaginationCustom,
-} from 'src/components/table'; /// edit
-import { fDate } from 'src/utils/format-time';
-
-import CustomPopover from 'src/components/custom-popover';
-
-import TableDetailRow from '../Blog_category/table-details-row'; /// edit
+} from '../../../../components/table'; /// edit
+import { useGetBlog_category } from '../../../../api';
+import { fDate } from '../../../../utils/format-time';
+import { RouterLink } from '../../../../routes/components';
+import TableDetailRow from '../Blog_category/table-details-row';
+import { useRouter, useSearchParams } from '../../../../routes/hooks'; /// edit
 import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
+import CustomPopover from '../../../../components/custom-popover';
 
 // ----------------------------------------------------------------------
 

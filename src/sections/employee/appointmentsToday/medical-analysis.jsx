@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
 import {
+  Box,
   Button,
   Dialog,
   Divider,
@@ -158,7 +159,7 @@ export default function MedicalAnalysis({ Entrance }) {
         medicalAnalysisId: response.data._id,
       });
 
-      enqueueSnackbar('medical analysis added successfully', {
+      enqueueSnackbar(t('Medical analysis added successfully'), {
         variant: 'success',
       });
 
@@ -168,7 +169,7 @@ export default function MedicalAnalysis({ Entrance }) {
       setMedicalAnalyses([{ id: 0 }]);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Error uploading data', {
+      enqueueSnackbar(t('Error uploading data'), {
         variant: 'error',
       });
     }
@@ -220,50 +221,51 @@ export default function MedicalAnalysis({ Entrance }) {
       </Button>
 
       {medicalAnalysis?.map((info, i) => (
-        <Typography
-          variant="h6"
+        <Box
+          key={info?._id || i}
           sx={{
             bgcolor: '#fff',
-            m: 2,
             border: 2,
             borderRadius: 2,
             borderColor: '#EDEFF2',
             p: 2,
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 1,
           }}
-          key={i}
         >
-          {info?.medical_analysis?.map((item, index) => (
-            <ul
-              key={index}
-              style={{
-                listStyleType: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <li>{item?.medical_analysis?.name_english}</li>
-            </ul>
-          ))}
-          <br />
-          <Button
-            onMouseOver={() => handleHover(info?._id)}
-            onMouseOut={handleMouseOut}
-            onClick={() => handleViewClick(info?._id)}
-            sx={{ m: 1 }}
-          >
-            {t('View')} &nbsp;{' '}
-            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
-          </Button>
+          <Box sx={{ flex: 1 }}>
+            {info?.medical_analysis?.map((item, index) => (
+              <Typography key={index} variant="body2" color="text.secondary">
+                {item?.medical_analysis?.name_english || item?.medical_analysis?.name_arabic}
+              </Typography>
+            ))}
+          </Box>
 
-          <Button onClick={() => removeMedicalAalysis(info?._id)}>
-            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-          </Button>
-        </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button size="small" color="error" onClick={() => removeMedicalAalysis(info?._id)}>
+              {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            </Button>
+            <Button
+              size="small"
+              onMouseOver={() => handleHover(info?._id)}
+              onMouseOut={handleMouseOut}
+              onClick={() => handleViewClick(info?._id)}
+              sx={{ m: 0.5 }}
+            >
+              {t('View')} &nbsp;
+              <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+            </Button>
+          </Box>
+        </Box>
       ))}
       <Dialog open={prescriptionDialog.value} onClose={handleCloseDialog}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
-            {t('Add medical report')}
+            {t('add medical analysis')}
           </DialogTitle>
           <DialogContent>
             <Autocomplete

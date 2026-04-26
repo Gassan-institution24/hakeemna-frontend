@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState, useEffect, useCallback } from 'react';
 
 import {
+  Box,
   Button,
   Dialog,
   Typography,
@@ -213,41 +214,54 @@ export default function Doctorreport( {Entrance} ) {
         <Iconify icon="mingcute:add-line" />
       </Button>
       {doctorreportsdata?.map((info, i) => (
-        <Typography
-          key={i}
-          variant="h6"
+        <Box
+          key={info?._id || i}
           sx={{
             bgcolor: '#fff',
-            m: 2,
             border: 2,
             borderRadius: 2,
             borderColor: '#EDEFF2',
             p: 2,
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 1,
           }}
         >
-          {curLangAr
-            ? `قام ${info?.employee?.name_arabic} باضافات تقرير جديد الى ملف المريض`
-            : `${info?.employee?.name_english} has add ${info?.description} medical report`}
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              {curLangAr ? info?.employee?.name_arabic : info?.employee?.name_english}
+            </Typography>
+            {info?.description && (
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                {info.description}
+              </Typography>
+            )}
+          </Box>
 
-          <br />
-          <Button onClick={() => removemedicalrepoort(info?._id)}>
-            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-          </Button>
-          <Button
-            onMouseOver={() => handleHover(info?._id)}
-            onMouseOut={handleMouseOut}
-            onClick={() => handleViewClick(info?._id)}
-            sx={{ m: 1 }}
-          >
-            {t('View')} &nbsp;{' '}
-            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
-          </Button>
-        </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button size="small" color="error" onClick={() => removemedicalrepoort(info?._id)}>
+              {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            </Button>
+            <Button
+              size="small"
+              onMouseOver={() => handleHover(info?._id)}
+              onMouseOut={handleMouseOut}
+              onClick={() => handleViewClick(info?._id)}
+              sx={{ m: 0.5 }}
+            >
+              {t('View')} &nbsp;
+              <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+            </Button>
+          </Box>
+        </Box>
       ))}
       <Dialog open={doctoReportDialog.value} onClose={doctoReportDialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
-            {curLangAr ? 'اضف الى ملف المريض' : 'add to patient file'}
+            {t('Add to patient file')}
           </DialogTitle>
           <DialogContent>
             <RHFTextField

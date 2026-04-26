@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 import { DatePicker } from '@mui/x-date-pickers';
 import {
+  Box,
   Button,
   Dialog,
   Divider,
@@ -281,45 +282,46 @@ export default function Prescription({ Entrance }) {
         <Iconify icon="mingcute:add-line" />
       </Button>
       {prescriptionData?.map((info, i) => (
-        <Typography
-          variant="h6"
+        <Box
+          key={info?._id || i}
           sx={{
             bgcolor: '#fff',
-            m: 2,
             border: 2,
             borderRadius: 2,
             borderColor: '#EDEFF2',
             p: 2,
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 1,
           }}
-          key={i}
         >
-          {info?.medicines?.map((medicineName, index) => (
-            <ul
-              style={{
-                listStyleType: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
+          <Box sx={{ flex: 1 }}>
+            {info?.medicines?.map((medicineName, index) => (
+              <Typography key={index} variant="body2" color="text.secondary">
+                {medicineName?.medicines?.trade_name}
+              </Typography>
+            ))}
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button size="small" color="error" onClick={() => removePrescription(info?._id)}>
+              {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+            </Button>
+            <Button
+              size="small"
+              onMouseOver={() => handleHover(info?._id)}
+              onMouseOut={handleMouseOut}
+              onClick={() => handleViewClick(info?._id)}
+              sx={{ m: 0.5 }}
             >
-              <li key={index}>{medicineName?.medicines?.trade_name}</li>
-            </ul>
-          ))}
-
-          <br />
-          <Button
-            onMouseOver={() => handleHover(info?._id)}
-            onMouseOut={handleMouseOut}
-            onClick={() => handleViewClick(info?._id)}
-            sx={{ m: 1 }}
-          >
-            {t('View')} &nbsp;{' '}
-            <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
-          </Button>
-
-          <Button onClick={() => removePrescription(info?._id)}>
-            {t('Remove')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-          </Button>
-        </Typography>
+              {t('View')} &nbsp;
+              <Iconify icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'} />
+            </Button>
+          </Box>
+        </Box>
       ))}
       <Dialog
         open={prescriptionDialog.value}
@@ -330,7 +332,7 @@ export default function Prescription({ Entrance }) {
       >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
-            {curLangAr ? 'اضافة وصفة طبية' : 'add prescription'}
+            {t('Add prescription')}
           </DialogTitle>
           <DialogContent>
             <Autocomplete
