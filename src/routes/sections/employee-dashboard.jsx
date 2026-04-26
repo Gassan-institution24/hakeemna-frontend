@@ -87,6 +87,7 @@ const MedicalAnalysisPageview = lazy(
 const MedicalreportPage = lazy(() => import('src/pages/employee/appointmentsToday/medicalPage'));
 const SickleavePage = lazy(() => import('src/pages/employee/appointmentsToday/sickleavePage'));
 const DoctorReportPage = lazy(() => import('src/pages/employee/appointmentsToday/docreport'));
+const DiagnosisPageView = lazy(() => import('src/pages/employee/appointmentsToday/diagnosisPage'));
 const QrCodePage = lazy(() => import('src/pages/employee/qr-code'));
 
 // PATIENT
@@ -132,6 +133,19 @@ const MedicalAnalysisEditPage = lazy(
 );
 const MedicalAnalysisCreatePage = lazy(
   () => import('src/pages/employee/medical-services/medical-analysis/medical-analysis_create')
+);
+// favorite diagnosis
+const FavoriteDiagnosisPage = lazy(
+  () => import('src/pages/employee/medical-services/diagnosis/diagnosis')
+);
+const FavoriteDiagnosisViewPage = lazy(
+  () => import('src/pages/employee/medical-services/diagnosis/diagnosis_view')
+);
+const FavoriteDiagnosisEditPage = lazy(
+  () => import('src/pages/employee/medical-services/diagnosis/diagnosis_edit')
+);
+const FavoriteDiagnosisCreatePage = lazy(
+  () => import('src/pages/employee/medical-services/diagnosis/diagnosis_create')
 );
 // medicines
 const MedicinesPage = lazy(
@@ -355,6 +369,10 @@ export const unitServiceEmployeeDashboardRoutes = [
         element: <DoctorReportPage />,
       },
       {
+        path: 'diagnosis/:id',
+        element: <DiagnosisPageView />,
+      },
+      {
         path: 'qr-code',
         element: <QrCodePage />,
       },
@@ -387,6 +405,15 @@ export const unitServiceEmployeeDashboardRoutes = [
               { path: ':id', element: <RadiologyViewPage /> },
               { path: ':id/edit', element: <RadiologyEditPage /> },
               { path: 'new', element: <RadiologyCreatePage /> },
+            ],
+          },
+          {
+            path: 'diagnosis',
+            children: [
+              { element: <FavoriteDiagnosisPage />, index: true },
+              { path: 'new', element: <FavoriteDiagnosisCreatePage /> },
+              { path: ':id', element: <FavoriteDiagnosisViewPage /> },
+              { path: ':id/edit', element: <FavoriteDiagnosisEditPage /> },
             ],
           },
         ],

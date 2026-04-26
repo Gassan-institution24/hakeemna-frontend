@@ -41,7 +41,26 @@ export function useGetEntranceDiagnosis(id) {
     [data, error, isLoading, isValidating]
   );
   const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetOnePatientDiagnosis(id) {
+  const URL = endpoints.diagnosis.patientDiagnosisOne(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      patientDiagnosis: data || null,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
     await mutate(URL);
   };
 

@@ -971,6 +971,7 @@ export const paths = {
     radiology: (id) => `${ROOTS.SUPERADMIN}/radiology/${id}`,
     Mediaclreport: (id) => `${ROOTS.SUPERADMIN}/examination/${id}`,
     Doctorreport: (id) => `${ROOTS.SUPERADMIN}/docreport/${id}`,
+    diagnosis: (id) => `${ROOTS.SUPERADMIN}/diagnosis/${id}`,
     sickleave: (id) => `${ROOTS.SUPERADMIN}/sickleave/${id}`,
     profile: {
       parent: `${ROOTS.SUPERADMIN}/profile`,
@@ -996,6 +997,12 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/medical-services/radiology/new`,
         view: (id) => `${ROOTS.SUPERADMIN}/medical-services/radiology/${id}`,
         edit: (id) => `${ROOTS.SUPERADMIN}/medical-services/radiology/${id}/edit`,
+      },
+      diagnosis: {
+        root: `${ROOTS.SUPERADMIN}/medical-services/diagnosis`,
+        new: `${ROOTS.SUPERADMIN}/medical-services/diagnosis/new`,
+        view: (id) => `${ROOTS.SUPERADMIN}/medical-services/diagnosis/${id}`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/medical-services/diagnosis/${id}/edit`,
       },
     },
   },

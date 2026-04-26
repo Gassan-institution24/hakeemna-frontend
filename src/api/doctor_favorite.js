@@ -125,6 +125,52 @@ export function useGetFavoriteRadiology() {
 }
 
 // ----------------------------------------------------------------------
+// Get Favorite Diagnosis
+export function useGetFavoriteDiagnosis() {
+  const URL = endpoints.favoriteDiagnosis.all;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      favoriteDiagnosis: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+// ----------------------------------------------------------------------
+// Get One Favorite Diagnosis
+export function useGetOneFavoriteDiagnosis(id) {
+  const URL = endpoints.favoriteDiagnosis.one(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(id ? URL : null, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      favorite: data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      notFound: !isLoading && !data,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+// ----------------------------------------------------------------------
 // Get one Favorite Radiology
 export function useGetOneFavoriteRadiology(id) {
   const URL = endpoints.favoriteRadiology.one(id);
