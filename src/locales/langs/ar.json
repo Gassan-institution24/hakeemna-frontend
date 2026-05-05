@@ -11,6 +11,7 @@
   "institution control panel": "لوحة التحكم للمنشأة",
   "departments": "الأقسام",
   "Field removed successfully": "تم ازالة الوصفة الطبية",
+  "adel": "عادل",
   "Negligence in treatment": "الاهمال في المعاملة",
   "Staff behavior": "سلوك الموظفين",
   "Cleanliness": "النظافة",
@@ -1039,7 +1040,7 @@
   "What medical specialty are you looking for?": "ما هو التخصص الطبي الذي تبحث عنه؟ ",
   "Request To Add": "طلب الاضافة",
   "emergency": "الطوارئ",
-  "Emergency": "الطوارئ",
+  "Emergency": "طوارئ",
   "Drug Report": "وصفة طبية",
   "Remove Prescription": "حذف الوصفة الطبية",
   "Add more": "اضف وصفة اخرى",
@@ -1190,7 +1191,7 @@
   "Surgeries": " العمليات الجراحية",
   "Alcohol Consumption": " استهلاك الكحول",
   "Eating Diet": " الحمية الغذائية",
-  "Notes": " ملاحظات",
+  "Notes": "ملاحظات",
   "Gender": " الجنس",
   "send to jordanian envoicing system": "الارسال لنظام الفوترة الوطني الاردني",
   "Identification Number": "الرقم الوطني",
@@ -1475,7 +1476,7 @@
   "Introduction": "نبذة تعريفية",
   "Personal Authentication Elements": "عناصر التوثيق الشخصية",
   "Character authentication elements in documents": "عناصر توثيق الشخصية في المستندات",
-  "General Information": "المعلومات الاساسية",
+  "General Information": "معلومات عامة",
   "Profession Practice Profile": "ملف التعريف المهني",
   "Verification Document": "عناصر التوثيق الشخصية",
   "Examination price": "سعر الكشفية",
@@ -1665,23 +1666,18 @@
   "Sort by Date": "ترتيب حسب التاريخ",
   "No records found": "لم يتم العثور على سجلات",
   "Try adjusting your search or filter criteria": "حاول تعديل معايير البحث أو الفلتر",
-  "Completed": "مكتمل",
-  "Cancelled": "ملغي",
   "Attended": "حضر",
   "Scheduled": "مجدول",
-  "Service Unit": "وحدة الخدمة",
   "Activities Progress": "تقدم الأنشطة",
   "hakeemna360": "حكيمنا 360",
   "ongoing activities": "أنشطة جارية",
   "Services & Documents": "الخدمات والمستندات",
   "Appointment": "موعد",
-  "Emergency": "طوارئ",
   "Report": "تقرير",
   "Prescription": "وصفة طبية",
   "Visit Timeline": "الجدول الزمني للزيارة",
   "Ended": "انتهى",
   "View Details": "عرض التفاصيل",
-  "General Information": "معلومات عامة",
   "Visit": "الزيارة",
   "Date & Time": "التاريخ والوقت",
   "Duration": "المدة",
@@ -1733,7 +1729,6 @@
   "Member Card": "رقم البطاقة",
   "Deductible": "التحمل",
   "Phone Number": "رقم الهاتف",
-
   "Add Diagnosis": "إضافة تشخيص",
   "Clinic / ER Procedures": "إجراءات العيادة / الطوارئ",
   "Laboratory Orders": "طلبات المختبر",
@@ -1741,7 +1736,6 @@
   "Medications Orders": "طلبات الأدوية",
   "Physiotherapy": "العلاج الطبيعي",
   "Add Note / Attach Files": "إضافة ملاحظة / مرفقات",
-  "Notes": "ملاحظات",
   "Write your notes here": "اكتب ملاحظاتك هنا",
   "Eligible": "مؤهل",
   "Pending": "قيد الانتظار",
@@ -1817,7 +1811,6 @@
   "Upload Files": "تحميل الملفات",
   "radiology uploaded successfully": "تم رفع الأشعة بنجاح",
   "download all": "تنزيل الكل",
-
   "Diagnosis added successfully": "تم إضافة التشخيص بنجاح",
   "Error saving diagnosis": "خطأ في حفظ التشخيص",
   "Error removing diagnosis": "خطأ في حذف التشخيص",
@@ -1837,7 +1830,6 @@
   "Favorite Diagnosis Details": "تفاصيل التشخيصات المفضلة",
   "New Favorite Diagnosis": "إضافة تشخيص مفضل",
   "Update Favorite Diagnosis": "تحديث التشخيص المفضل",
-
   "digitalTrust": {
     "hero": {
       "title": "بناء الثقة الرقمية.. بوابتك الأولى لجذب المرضى",
@@ -1881,7 +1873,6 @@
       "blog": "المقالات الطبية من خلال استخدام المدونة."
     }
   },
-
   "report": {
     "previewTitle": "معاينة التقرير الطبي",
     "doctorName": "اسم الطبيب",
@@ -1905,5 +1896,17 @@
     "descriptionTitle": "الوصف",
     "sickLeave": "معاينة الإجازة المرضية ",
     "prescription": "معاينة الوصفة الطبية"
-  }
+  },
+  "Customize view": "تخصيص العرض",
+  "Choose what sections to display": "اختر الأقسام التي تريد عرضها",
+  "visible": "ظاهر",
+  "hidden": "مخفي",
+  "Sections": "الأقسام",
+  "Patient info and room navigation are always visible and cannot be hidden.": "معلومات المريض وتنقل الغرف تظهر دائماً ولا يمكن إخفاؤها.",
+  "View previous visits for this patient": "عرض الزيارات السابقة لهذا المريض",
+  "Medical checklist for this visit": "قائمة التحقق الطبية لهذه الزيارة",
+  "Upload clinical forms and documents": "رفع النماذج والوثائق السريرية",
+  "Optional adjustable forms for this patient": "نماذج قابلة للتعديل اختيارية لهذا المريض",
+  "Record services rendered during this visit": "تسجيل الخدمات المقدمة خلال هذه الزيارة",
+  "Done": "تم"
 }

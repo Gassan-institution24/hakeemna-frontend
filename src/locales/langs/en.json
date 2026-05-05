@@ -77,7 +77,6 @@
   "demo": {
     "title": "English"
   },
-
   "digitalTrust": {
     "hero": {
       "title": "Building Digital Trust.. Your First Gateway to Attract Patients",
@@ -121,7 +120,6 @@
       "blog": "Medical articles through an integrated blog."
     }
   },
-
   "Hakeemna Patient": "Hakeemna Patient",
   "Patient Inquiry": "Patient Inquiry",
   "Update Patient Data": "Update Patient Data",
@@ -132,7 +130,6 @@
   "Member Card": "Member Card",
   "Deductible": "Deductible",
   "Phone Number": "Phone Number",
-
   "Add Diagnosis": "Add Diagnosis",
   "Clinic / ER Procedures": "Clinic / ER Procedures",
   "Laboratory Orders": "Laboratory Orders",
@@ -173,5 +170,17 @@
     "descriptionTitle": "Description",
     "sickLeave": "Sick Leave Preview",
     "prescription": "Medical Prescription Preview"
-  }
+  },
+  "Customize view": "Customize view",
+  "Choose what sections to display": "Choose what sections to display",
+  "visible": "visible",
+  "hidden": "hidden",
+  "Sections": "Sections",
+  "Patient info and room navigation are always visible and cannot be hidden.": "Patient info and room navigation are always visible and cannot be hidden.",
+  "View previous visits for this patient": "View previous visits for this patient",
+  "Medical checklist for this visit": "Medical checklist for this visit",
+  "Upload clinical forms and documents": "Upload clinical forms and documents",
+  "Optional adjustable forms for this patient": "Optional adjustable forms for this patient",
+  "Record services rendered during this visit": "Record services rendered during this visit",
+  "Done": "Done"
 }
