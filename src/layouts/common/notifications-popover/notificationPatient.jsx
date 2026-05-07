@@ -13,101 +13,95 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-
 import { useSnackbar } from 'src/components/snackbar';
+
 // ----------------------------------------------------------------------
 
-export default function NotificationItem({ notification, handleClick }) {
+export default function NotificationPatient({ notification, handleClick }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
-
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
-  const defaultValues = {
-    sender: notification?.patient,
-    patient: notification?.sender,
-    title: `${user?.patient?.name_english} accept your invitation`,
-    title_arabic: `${user?.patient?.name_arabic} وافق على الانظمام`,
-    photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
-    category: 'accept',
-    type: 'accept',
-  };
 
+  const isUnread = notification.status === 'UNREAD';
+
+  // recipient = the patient who received the invite (current user)
+  // sender    = the patient who sent the invite
   const handleAddFamily = async () => {
     try {
+      const relation = notification?.metadata?.RelativeRelation;
+
       await axios.patch(endpoints.patients.one(user?.patient?._id), {
         family_members: [
           { patient: notification?.sender },
-          { RelativeRelation: notification?.members },
+          { RelativeRelation: relation },
           { isendit: 'no' },
         ],
       });
       await axios.patch(endpoints.patients.one(notification?.sender), {
         family_members: [
-          { patient: notification?.patient },
-          { RelativeRelation: notification?.members },
+          { patient: notification?.recipient },
+          { RelativeRelation: relation },
           { isendit: 'yes' },
         ],
       });
-      await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
+
+      await axios.post(`${endpoints.notifications.all}/accept`, {
+        sender: notification?.recipient,
+        sender_model: 'patients',
+        recipient: notification?.sender,
+        recipient_model: 'patients',
+        title: `${user?.patient?.name_english} accepted your invitation`,
+        title_ar: `${user?.patient?.name_arabic} وافق على الانظمام`,
+        image: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
+        category: 'SYSTEM',
+        type: 'FAMILY_ACCEPTED',
+      });
+
       enqueueSnackbar(t('Invitation Accepted'));
     } catch (error) {
-      // error emitted in backend
       enqueueSnackbar(
-        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        curLangAr ? `${error.arabic_message || error.message}` : `${error.message}`,
+        { variant: 'error' }
       );
       console.error(error);
     }
   };
 
   const handleConfirmation = async (id) => {
-    await axios.patch(`${endpoints.appointments.one(id)}/coming`, {
-      coming: 'true',
-    });
+    await axios.patch(`${endpoints.appointments.one(id)}/coming`, { coming: 'true' });
   };
+
   const handleUnConfirmation = async (id) => {
-    await axios.patch(`${endpoints.appointments.one(id)}/coming`, {
-      coming: 'false',
-    });
+    await axios.patch(`${endpoints.appointments.one(id)}/coming`, { coming: 'false' });
   };
 
   const renderAvatar = (
     <ListItemAvatar>
-      {notification.photo_URL ? (
-        <Avatar src={notification.photo_URL} sx={{ bgcolor: 'background.neutral' }} />
+      {notification.image ? (
+        <Avatar src={notification.image} sx={{ bgcolor: 'background.neutral' }} />
       ) : (
         <Stack
           alignItems="center"
           justifyContent="center"
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            bgcolor: 'background.neutral',
-          }}
+          sx={{ width: 40, height: 40, borderRadius: '50%', bgcolor: 'background.neutral' }}
         >
           <Box
             component="img"
-            src={`/assets/icons/notification/${notification.type === 'request' && 'request'}.svg`}
+            src={`/assets/icons/notification/${notification.type === 'FAMILY_INVITE' ? 'request' : 'created'}.svg`}
             sx={{ width: 24, height: 24 }}
           />
         </Stack>
       )}
     </ListItemAvatar>
   );
+
+  const appointments = notification?.metadata?.appointments || [];
+
   const beAmember = (
     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
-      <Button
-        size="small"
-        variant="contained"
-        onClick={() => {
-          handleAddFamily();
-        }}
-      >
+      <Button size="small" variant="contained" onClick={handleAddFamily}>
         {t('Accept')}
       </Button>
       <Button size="small" variant="outlined">
@@ -115,6 +109,7 @@ export default function NotificationItem({ notification, handleClick }) {
       </Button>
     </Stack>
   );
+
   const medicineTaken = (
     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
       <Button
@@ -122,9 +117,9 @@ export default function NotificationItem({ notification, handleClick }) {
         variant="contained"
         onClick={async () => {
           try {
-            await axios.post(endpoints.drugs.taken, notification?.onAccept?.body);
+            await axios.post(endpoints.drugs.taken, notification?.action?.payload);
           } catch (e) {
-            console.log(e);
+            console.error(e);
           }
         }}
       >
@@ -135,74 +130,43 @@ export default function NotificationItem({ notification, handleClick }) {
       </Button>
     </Stack>
   );
+
   const confirmation = (
     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
-      {notification?.content?.map((info, i) => (
-        <Button
-          key={i}
-          size="small"
-          variant="contained"
-          onClick={() => {
-            handleConfirmation(info?._id);
-          }}
-        >
+      {appointments.map((info, i) => (
+        <Button key={i} size="small" variant="contained" onClick={() => handleConfirmation(info?._id)}>
           {t('yes')}
         </Button>
       ))}
-
-      {notification?.content?.map((info, i) => (
-        <Button
-          key={i}
-          size="small"
-          variant="contained"
-          onClick={() => {
-            handleUnConfirmation(info?._id);
-          }}
-        >
+      {appointments.map((info, i) => (
+        <Button key={`no-${i}`} size="small" variant="outlined" onClick={() => handleUnConfirmation(info?._id)}>
           {t('no')}
         </Button>
       ))}
     </Stack>
   );
+
   const renderText = (
     <ListItemText
       disableTypography
-      primary={reader(curLangAr ? notification.title_arabic : notification.title)}
+      primary={renderHtml(curLangAr ? notification.title_ar : notification.title)}
       secondary={
         <Stack
           direction="row"
           alignItems="center"
-          sx={{
-            typography: 'caption',
-            color: 'text.disabled',
-            flexWrap: 'wrap',
-            wordWrap: 'break-word',
-          }}
+          sx={{ typography: 'caption', color: 'text.disabled', flexWrap: 'wrap', wordWrap: 'break-word' }}
           divider={
-            <Box
-              sx={{
-                width: 2,
-                height: 2,
-                bgcolor: 'currentColor',
-                mx: 0.5,
-                borderRadius: '50%',
-              }}
-            />
+            <Box sx={{ width: 2, height: 2, bgcolor: 'currentColor', mx: 0.5, borderRadius: '50%' }} />
           }
         >
-          {fToNow(notification.created_at, curLangAr)}
-          {/* {t(notification.category)} */}
+          {fToNow(notification.createdAt, curLangAr)}
         </Stack>
       }
-      primaryTypographyProps={{
-        flexWrap: 'wrap',
-        wordWrap: 'break-word',
-        whiteSpace: 'wrap',
-      }}
+      primaryTypographyProps={{ flexWrap: 'wrap', wordWrap: 'break-word', whiteSpace: 'wrap' }}
     />
   );
 
-  const renderUnReadBadge = notification.isUnRead && (
+  const renderUnreadBadge = isUnread && (
     <Box
       sx={{
         top: 15,
@@ -218,9 +182,8 @@ export default function NotificationItem({ notification, handleClick }) {
 
   return (
     <ListItemButton
-      key={notification._id}
       disableRipple
-      onClick={() => handleClick(notification._id, notification.link)}
+      onClick={() => handleClick(notification._id, notification.action?.url)}
       sx={{
         p: 2.5,
         alignItems: 'flex-start',
@@ -228,43 +191,45 @@ export default function NotificationItem({ notification, handleClick }) {
         borderBottom: (theme) => `dashed 1px ${theme.palette.divider}`,
       }}
     >
-      {renderUnReadBadge}
-
+      {renderUnreadBadge}
       {renderAvatar}
-      {/* eslint-disable-next-line */}
-      {notification.type === 'invite' ? (
-        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
-          {renderText}
-          {notification?.isUnRead === true ? beAmember : ''}
-        </Stack>
-      ) : notification.type === 'took' ? (
-        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
-          {renderText}
-          {notification?.isUnRead === true ? medicineTaken : ''}
-        </Stack>
-      ) : (
-        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>
-      )}
 
-      {notification.type === 'upcoming' ? (
-        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
-          {notification?.isUnRead === true ? confirmation : ''}
-        </Stack>
-      ) : (
-        ''
-      )}
+      {(() => {
+        if (notification.type === 'FAMILY_INVITE') {
+          return (
+            <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
+              {renderText}
+              {isUnread && beAmember}
+            </Stack>
+          );
+        }
+        if (notification.type === 'MEDICINE_REMINDER') {
+          return (
+            <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
+              {renderText}
+              {isUnread && medicineTaken}
+            </Stack>
+          );
+        }
+        return (
+          <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
+            {renderText}
+            {notification.type === 'APPOINTMENT_REMINDER' && isUnread && confirmation}
+          </Stack>
+        );
+      })()}
     </ListItemButton>
   );
 }
 
-NotificationItem.propTypes = {
+NotificationPatient.propTypes = {
   notification: PropTypes.object,
   handleClick: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------
 
-function reader(data) {
+function renderHtml(data) {
   return (
     <Box
       dangerouslySetInnerHTML={{ __html: data }}

@@ -11,7 +11,6 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-// import { Button, ListItemText } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -35,14 +34,9 @@ import NotificationItem from './notification-item';
 
 export default function NotificationsPopover() {
   const router = useRouter();
-
   const drawer = useBoolean();
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
-  // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
-
   const smUp = useResponsive('up', 'sm');
 
   const [page, setPage] = useState(1);
@@ -54,28 +48,15 @@ export default function NotificationsPopover() {
     shid: user?.stakeholder?._id,
     page,
   });
+
   const handleClick = async (id, link) => {
     drawer.onFalse();
-    router.push(link);
+    if (link) router.push(link);
     await axios.patch(endpoints.notifications.readOne(id));
     setAllNotifications([]);
     setPage(1);
     refetch();
   };
-
-  // const handleAddFamily = async (id) => {
-  //   try {
-  //     await axios.patch(endpoints.patients.one(id), {
-  //       family_members: user?.patient?._id,
-  //     });
-
-  //     alert(t('Invitation sent successfully'));
-  //   } catch (error) {
-  //     // error emitted in backend
-  //     alert(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-  //     console.error(error);
-  //   }
-  // };
 
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.notifications.all}/read`, { ids: unread });
@@ -83,58 +64,32 @@ export default function NotificationsPopover() {
     setPage(1);
     refetch();
   };
-  /* eslint-disable */
+
+  // Register user in socket rooms and listen for targeted notifications
   useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('sendUser', user);
-    });
-    socket.on('checkUsers', () => {
-      socket.emit('sendUser', user);
-    });
-    socket.on('error', () => {
-      if (user?.role === 'superadmin') {
-        setAllNotifications([]);
-        setPage(1);
-        refetch();
-      }
-    });
-    socket.on('created', ({ stakeholder, employees }) => {
-      if (
-        user?.stakeholder?._id === stakeholder ||
-        employees?.includes(
-          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
-        )
-      ) {
-        setAllNotifications([]);
-        setPage(1);
-        refetch();
-      }
-    });
-    socket.on('updated', ({ stakeholder, employees }) => {
-      if (
-        user?.stakeholder?._id === stakeholder ||
-        employees?.includes(
-          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
-        )
-      ) {
-        setAllNotifications([]);
-        setPage(1);
-        refetch();
-      }
-    });
-    socket.on('request', () => {
+    const onConnect = () => socket.emit('sendUser', user);
+    const onCheckUsers = () => socket.emit('sendUser', user);
+    const onNewNotification = () => {
       setAllNotifications([]);
       setPage(1);
       refetch();
-    });
+    };
+
+    socket.on('connect', onConnect);
+    socket.on('checkUsers', onCheckUsers);
+    socket.on('notification:new', onNewNotification);
+
     return () => {
+      socket.off('connect', onConnect);
+      socket.off('checkUsers', onCheckUsers);
+      socket.off('notification:new', onNewNotification);
       socket.emit('disconnected');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-  /* eslint-enable */
 
   useEffect(() => {
-    setAllNotifications((prevNotifications) => [...prevNotifications, ...notifications]);
+    setAllNotifications((prev) => [...prev, ...notifications]);
   }, [notifications]);
 
   return (
@@ -156,12 +111,8 @@ export default function NotificationsPopover() {
         open={drawer.value}
         onClose={drawer.onFalse}
         anchor="right"
-        slotProps={{
-          backdrop: { invisible: true },
-        }}
-        PaperProps={{
-          sx: { width: 1, maxWidth: 420 },
-        }}
+        slotProps={{ backdrop: { invisible: true } }}
+        PaperProps={{ sx: { width: 1, maxWidth: 420 } }}
       >
         <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
           <Typography lang="ar" variant="h6" sx={{ flexGrow: 1 }}>
@@ -174,7 +125,6 @@ export default function NotificationsPopover() {
               </IconButton>
             </Tooltip>
           )}
-
           {!smUp && (
             <IconButton onClick={drawer.onFalse}>
               <Iconify icon="mingcute:close-line" />
@@ -183,10 +133,15 @@ export default function NotificationsPopover() {
         </Stack>
 
         <Divider />
+
         <Scrollbar>
           <List disablePadding>
-            {allNotifications.map((notification, idx) => (
-              <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
+            {allNotifications.map((notification) => (
+              <NotificationItem
+                key={notification._id}
+                notification={notification}
+                handleClick={handleClick}
+              />
             ))}
           </List>
 
@@ -195,10 +150,7 @@ export default function NotificationsPopover() {
               <LoadingButton
                 fullWidth
                 loading={loading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage((prev) => prev + 1);
-                }}
+                onClick={() => setPage((prev) => prev + 1)}
                 size="large"
               >
                 {t('see more')}
@@ -210,16 +162,3 @@ export default function NotificationsPopover() {
     </>
   );
 }
-// function reader(data) {
-//   return (
-//     <Box
-//       dangerouslySetInnerHTML={{ __html: data }}
-//       sx={{
-//         mb: 0.5,
-//         '& p': { typography: 'body2', m: 0 },
-//         '& a': { color: 'inherit', textDecoration: 'none' },
-//         '& strong': { typography: 'subtitle2' },
-//       }}
-//     />
-//   );
-// }

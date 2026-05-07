@@ -47,12 +47,13 @@ export default function ExistPatientRow({ row, selected }) {
   const handleAddFamily = async (members) => {
     const defaultValues = {
       sender: user?.patient?._id,
+      sender_model: 'patients',
       patient: row?._id,
       title: `${user?.patient?.name_english} want to add you as a family member`,
-      title_arabic: `${user?.patient?.name_arabic} يريد اضافتك كفرد عائلة`,
-      photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
-      category: 'invite',
-      type: 'invite',
+      title_ar: `${user?.patient?.name_arabic} يريد اضافتك كفرد عائلة`,
+      image: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
+      category: 'SYSTEM',
+      type: 'FAMILY_INVITE',
       members,
     };
 

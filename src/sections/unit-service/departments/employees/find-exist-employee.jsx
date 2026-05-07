@@ -94,15 +94,18 @@ export default function TableNewEditForm({ departmentData }) {
         user?.employee.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
       const SelectedUser = await axios.get(endpoints.auth.users, { params: { employee: row._id } });
       await axios.post(`${endpoints.notifications.all}/invite`, {
-        user: SelectedUser.data[0]?._id,
+        recipient: SelectedUser.data[0]?._id,
+        recipient_model: 'User',
+        sender_model: 'employee_engagement',
         title: `<p><strong>${user?.employee?.name_english}</strong> want to add you to his institution <strong>${unitServiceData?.name_english}</strong> as an employee</p>`,
-        title_arabic: `<p><strong>${user?.employee?.name_arabic}</strong> يريد اظافتك كموظف في منشأته <strong>${unitServiceData?.name_arabic}</strong></p>`,
-        category: 'invite',
-        type: 'invite',
-        onAccept: {
-          method: 'post',
-          route: endpoints.employee_engagements.all,
-          body: {
+        title_ar: `<p><strong>${user?.employee?.name_arabic}</strong> يريد اظافتك كموظف في منشأته <strong>${unitServiceData?.name_arabic}</strong></p>`,
+        category: 'HR',
+        type: 'FAMILY_INVITE',
+        action: {
+          type: 'API',
+          method: 'POST',
+          url: endpoints.employee_engagements.all,
+          payload: {
             unit_service: unitServiceData?._id,
             department: departmentData._id,
             employee: row._id,
