@@ -360,7 +360,7 @@ export const endpoints = {
     readOne: (id) => (!id ? null : `/api/notifications/${id}/read`),
     readMany: '/api/notifications/read',
     my: `/api/notifications/my`,
-    pateint: (id) => (!id ? null : `/api/notifications/patient/${id}`),
+    patient: (id) => (!id ? null : `/api/notifications/patient/${id}`),
   },
   appointment_types: {
     all: '/api/appointments/types',
