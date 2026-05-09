@@ -94,15 +94,18 @@ export default function TableNewEditForm() {
     try {
       const SelectedUser = await axios.get(endpoints.auth.users, { params: { employee: row._id } });
       const data = {
-        user: SelectedUser.data[0]?._id,
-        title: `${user?.employee?.name_english} want to add you to his institution ${unitServiceData?.name_english} as an employee `,
-        title_arabic: `${user?.employee?.name_arabic} يريد اظافتك كموظف في منشأته ${unitServiceData?.name_arabic}`,
-        category: 'invite',
-        type: 'invite',
-        onAccept: {
-          method: 'post',
-          route: endpoints.employee_engagements.all,
-          body: {
+        recipient: SelectedUser.data[0]?._id,
+        recipient_model: 'User',
+        sender_model: 'employee_engagement',
+        title: `${user?.employee?.name_english} want to add you to his institution ${unitServiceData?.name_english} as an employee`,
+        title_ar: `${user?.employee?.name_arabic} يريد اظافتك كموظف في منشأته ${unitServiceData?.name_arabic}`,
+        category: 'HR',
+        type: 'FAMILY_INVITE',
+        action: {
+          type: 'API',
+          method: 'POST',
+          url: endpoints.employee_engagements.all,
+          payload: {
             unit_service: unitServiceData?._id,
             employee: row._id,
           },

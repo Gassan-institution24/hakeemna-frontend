@@ -49,7 +49,7 @@ export function useGetMyNotifications(params) {
   return { ...memoizedValue, refetch };
 }
 export function useGetPatientNotifications(id) {
-  const URL = endpoints.notifications.pateint(id);
+  const URL = endpoints.notifications.patient(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
