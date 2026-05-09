@@ -31,3 +31,9 @@ export const labCancelation = () =>
 
 // ✅ CLAIM
 export const submitClaim = () => axiosInstance.post('/api/claims/claim');
+
+// ✅ VISIT APPROVAL (Prior Authorization / Eligibility)
+export const submitVisitApproval = (data) =>
+  axiosInstance.post('/api/claims/visit-approval/submit', data);
+export const checkVisitApproval = (requestId) =>
+  axiosInstance.get('/api/claims/visit-approval/check', { params: { requestId } });
