@@ -1,4 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
+
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -19,8 +22,8 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { submitVisitApproval, checkVisitApproval } from 'src/services/visitApprovalService';
+
+import { submitVisitApproval, checkVisitApproval } from '../../services/visitApprovalService';
 
 /**
  * VisitApprovalForm Component
@@ -97,6 +100,7 @@ export default function VisitApprovalForm({
       }
     }, 3000); // Poll every 3 seconds
 
+    // eslint-disable-next-line consistent-return
     return () => clearInterval(pollTimer);
   }, [pollingState, pollAttempt]);
 
