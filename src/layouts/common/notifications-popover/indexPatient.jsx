@@ -34,92 +34,52 @@ import NotificationPatient from './notificationPatient';
 
 export default function NotificationsPopoverPatient() {
   const router = useRouter();
-
   const drawer = useBoolean();
   const { t } = useTranslate();
   const { user } = useAuthContext();
+  const smUp = useResponsive('up', 'sm');
+
+  const [page, setPage] = useState(1);
+  const [allNotifications, setAllNotifications] = useState([]);
+
   const { patientNotifications, hasMore, unread, refetch, loading } = useGetPatientNotifications(
     user?.patient?._id
   );
-  const smUp = useResponsive('up', 'sm');
-
-  // const [page, setPage] = useState(1);
-  const [allNotifications, setAllNotifications] = useState([]);
 
   const handleClick = async (id, link) => {
     drawer.onFalse();
-    router.push(link);
+    if (link) router.push(link);
     await axios.patch(endpoints.notifications.readOne(id));
     setAllNotifications([]);
-    // setPage(1);
+    setPage(1);
     refetch();
   };
 
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.notifications.all}/read`, { ids: unread });
     setAllNotifications([]);
-    // setPage(1);
+    setPage(1);
     refetch();
   };
-  /* eslint-disable */
+
+  // Single effect: register in socket rooms and listen for targeted notifications
   useEffect(() => {
-    socket.on('request', (data) => {
+    const onNewNotification = () => {
       setAllNotifications([]);
-      // setPage(1);
+      setPage(1);
       refetch();
-    });
-  }, []);
-  useEffect(() => {
-    socket.on('invite', ({ patient }) => {
-      if (user?.patient?._id === patient) {
-        setAllNotifications([]);
-        // setPage(1);
-        refetch();
-      }
-    });
-  }, []);
-  useEffect(() => {
-    socket.on('accept', ({ patient }) => {
-      if (user?.patient?._id === patient) {
-        setAllNotifications([]);
-        // setPage(1);
-        refetch();
-      }
-    });
-  }, []);
-  useEffect(() => {
-    socket.on('patientbooking', ({ patient }) => {
-      if (user?.patient?._id === patient) {
-        setAllNotifications([]);
-        // setPage(1);
-        refetch();
-      }
-    });
+    };
+
+    socket.on('notification:new', onNewNotification);
+
+    return () => {
+      socket.off('notification:new', onNewNotification);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    socket.on('appointmentcancel', ({ patient }) => {
-      if (user?.patient?._id === patient) {
-        setAllNotifications([]);
-        // setPage(1);
-        refetch();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    socket.on('upcoming', ({ patient }) => {
-      if (user?.patient?._id === patient) {
-        setAllNotifications([]);
-        // setPage(1);
-        refetch();
-      }
-    });
-  }, []);
-  /* eslint-enable */
-
-  useEffect(() => {
-    setAllNotifications((prevNotifications) => [...prevNotifications, ...patientNotifications]);
+    setAllNotifications((prev) => [...prev, ...patientNotifications]);
   }, [patientNotifications]);
 
   return (
@@ -141,12 +101,8 @@ export default function NotificationsPopoverPatient() {
         open={drawer.value}
         onClose={drawer.onFalse}
         anchor="right"
-        slotProps={{
-          backdrop: { invisible: true },
-        }}
-        PaperProps={{
-          sx: { width: 1, maxWidth: 420 },
-        }}
+        slotProps={{ backdrop: { invisible: true } }}
+        PaperProps={{ sx: { width: 1, maxWidth: 420 } }}
       >
         <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -159,7 +115,6 @@ export default function NotificationsPopoverPatient() {
               </IconButton>
             </Tooltip>
           )}
-
           {!smUp && (
             <IconButton onClick={drawer.onFalse}>
               <Iconify icon="mingcute:close-line" />
@@ -168,14 +123,15 @@ export default function NotificationsPopoverPatient() {
         </Stack>
 
         <Divider />
+
         <Scrollbar>
           <List disablePadding>
             {!loading &&
-              allNotifications.map((notification, idx) => (
+              allNotifications.map((notification) => (
                 <NotificationPatient
-                  handleClick={handleClick}
-                  key={idx}
+                  key={notification._id}
                   notification={notification}
+                  handleClick={handleClick}
                   unread={unread}
                 />
               ))}
@@ -186,10 +142,7 @@ export default function NotificationsPopoverPatient() {
               <LoadingButton
                 fullWidth
                 loading={loading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  // setPage((prev) => prev + 1);
-                }}
+                onClick={() => setPage((prev) => prev + 1)}
                 size="large"
               >
                 {t('see more')}
