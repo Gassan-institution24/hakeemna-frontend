@@ -37,3 +37,8 @@ export const submitVisitApproval = (data) =>
   axiosInstance.post('/api/claims/visit-approval/submit', data);
 export const checkVisitApproval = (requestId) =>
   axiosInstance.get('/api/claims/visit-approval/check', { params: { requestId } });
+
+// ✅ VISIT AUTHORIZATION (WATANIA only — step 2, triggered on "Create Visit")
+// Sends Authorization with EncounterID = IDPayer. Poll /visit-approval/check for result.
+export const submitVisitAuthorization = (data) =>
+  axiosInstance.post('/api/claims/visit-authorization/submit', data);
