@@ -156,7 +156,7 @@ export default function PatientPage() {
         }
       } catch { /* will retry next tick */ }
     }, 5000);
-    return () => clearInterval(timer);
+    clearInterval(timer)
   }, [requestId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── recheck: poll for insurer approval ───────────────────────────── */
@@ -294,7 +294,7 @@ export default function PatientPage() {
 
       {/* ── SECTIONS ───────────────────────────────────────────────── */}
       {sections.map((section, index) => (
-        <Accordion key={section} sx={{ mb: 1, borderRadius: 2 }} defaultExpanded>
+        <Accordion key={section} sx={{ mb: 1, borderRadius: 2 }}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <MedicalInformationIcon sx={{ mr: 1, color: 'primary.main' }} />
             <Typography fontWeight="bold" sx={{ flexGrow: 1 }}>
