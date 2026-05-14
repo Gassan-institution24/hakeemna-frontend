@@ -258,23 +258,33 @@ export default function Prescription({ Entrance }) {
     });
   };
   const handleSaveFavorite = async () => {
+    if (!favName.trim() || !favNameAr.trim()) {
+      enqueueSnackbar(t('Please enter favorite name in both languages'), { variant: 'warning' });
+      return;
+    }
     const currentPrescriptions = methods.getValues('prescriptions') || [];
     const medicines = currentPrescriptions
       .filter((p) => p.medicines)
-      .map((p) => ({
-        medicine: p.medicines?._id || p.medicines,
-        Frequency_per_day: p.Frequency_per_day || '',
-        Doctor_Comments: p.Doctor_Comments || '',
-        chronic: p.chronic || false,
-      }));
+      .map((p) => {
+        const entry = {
+          medicine: p.medicines?._id || p.medicines,
+          Doctor_Comments: p.Doctor_Comments || '',
+          chronic: p.chronic || false,
+        };
+        const freq = Number(p.Frequency_per_day);
+        if (!Number.isNaN(freq) && freq > 0) entry.Frequency_per_day = freq;
+        const days = Number(p.Num_days);
+        if (!Number.isNaN(days) && days > 0) entry.Num_days = days;
+        return entry;
+      });
     if (!medicines.length) {
       enqueueSnackbar(t('Select at least one medicine first'), { variant: 'warning' });
       return;
     }
     try {
       await axiosInstance.post(endpoints.favoriteMedication.all, {
-        favorite_name: favName,
-        favorite_name_ar: favNameAr,
+        favorite_name: favName.trim(),
+        favorite_name_ar: favNameAr.trim(),
         medicines,
       });
       enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
