@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 import {
   Box,
+  Stack,
   Button,
   Dialog,
   Divider,
@@ -39,12 +40,16 @@ export default function Radiology({ Entrance }) {
   const router = useRouter();
   const { radiologyData, refetch } = useGeEntranceRadiologyPatient(Entrance?._id);
   const prescriptionDialog = useBoolean();
+  const saveDialog = useBoolean();
   const { imagingData } = useGetImagings();
-  const { favoriteRadiology } = useGetFavoriteRadiology();
+  const { favoriteRadiology, refetch: refetchFavorites } = useGetFavoriteRadiology();
 
   const { t } = useTranslate();
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [radiology, setradiology] = useState([{ id: 0 }]);
+  const [favName, setFavName] = useState('');
+  const [favNameAr, setFavNameAr] = useState('');
+  const [selectedFavorite, setSelectedFavorite] = useState(null);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -206,9 +211,32 @@ const handleCloseDialog = () => {
   });
 
   setradiology([{ id: 0 }]);
-
+  setSelectedFavorite(null);
   prescriptionDialog.onFalse();
 };
+  const handleSaveFavorite = async () => {
+    const currentValues = methods.getValues('radiology') || [];
+    const radiologyIds = currentValues.map((item) => item.radiology).filter(Boolean);
+    if (!radiologyIds.length) {
+      enqueueSnackbar(t('Select at least one radiology item first'), { variant: 'warning' });
+      return;
+    }
+    try {
+      await axiosInstance.post(endpoints.favoriteRadiology.all, {
+        favorite_name: favName,
+        favorite_name_ar: favNameAr,
+        radiology: radiologyIds,
+      });
+      enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
+      saveDialog.onFalse();
+      setFavName('');
+      setFavNameAr('');
+      refetchFavorites();
+    } catch {
+      enqueueSnackbar(t('Error saving favorite'), { variant: 'error' });
+    }
+  };
+
   useEffect(() => {
     reset({
       radiology: [
@@ -275,43 +303,89 @@ const handleCloseDialog = () => {
           </Box>
         </Box>
       ))}
+      {/* Save as Favorite dialog */}
+      <Dialog open={saveDialog.value} onClose={saveDialog.onFalse}>
+        <DialogTitle>{t('Save as Favorite')}</DialogTitle>
+        <DialogContent sx={{ width: 360, pt: 1 }}>
+          <TextField
+            fullWidth
+            label={t('Favorite Name (EN)')}
+            value={favName}
+            onChange={(e) => setFavName(e.target.value)}
+            sx={{ mb: 2, mt: 1 }}
+          />
+          <TextField
+            fullWidth
+            label={t('Favorite Name (AR)')}
+            value={favNameAr}
+            onChange={(e) => setFavNameAr(e.target.value)}
+            inputProps={{ dir: 'rtl' }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={saveDialog.onFalse}>{t('Cancel')}</Button>
+          <Button variant="contained" color="warning" onClick={handleSaveFavorite}>
+            {t('Save')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={prescriptionDialog.value} onClose={handleCloseDialog}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
             {t('add radiology')}
           </DialogTitle>
           <DialogContent>
-            <Autocomplete
-              sx={{ minWidth: 300, my: 2 }}
-              options={favoriteRadiology || []}
-              getOptionLabel={(option) =>
-                t('language') === 'ar' ? option.favorite_name_ar : option.favorite_name
-              }
-              onChange={(event, newValue) => {
-                if (!newValue) return;
-
-                const favRadiology = newValue.radiology || [];
-
-                const formatted = favRadiology.map((item) => ({
-                  employee: user?.employee?._id,
-                  patient: Entrance?.patient?._id,
-                  unit_service:
-                    user?.employee?.employee_engagements?.[user.employee.selected_engagement]
-                      ?.unit_service?._id,
-                  unit_service_patient: Entrance?.unit_service_patient,
-                  entrance_mangament: Entrance?._id,
-                  radiology: item._id,
-                  Doctor_Comments: '',
-                }));
-
-                setradiology(formatted.map((_, index) => ({ id: index })));
-
-                setValue('radiology', formatted, {
-                  shouldValidate: true,
-                });
-              }}
-              renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
-            />
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+              <Autocomplete
+                sx={{ flex: 1, minWidth: 250, my: 2 }}
+                options={favoriteRadiology || []}
+                value={selectedFavorite}
+                getOptionLabel={(option) =>
+                  t('language') === 'ar' ? option.favorite_name_ar || '' : option.favorite_name || ''
+                }
+                onChange={(event, newValue) => {
+                  setSelectedFavorite(newValue);
+                  if (!newValue) return;
+                  const favRadiology = newValue.radiology || [];
+                  const formatted = favRadiology.map((item) => ({
+                    employee: user?.employee?._id,
+                    patient: Entrance?.patient?._id,
+                    unit_service:
+                      user?.employee?.employee_engagements?.[user.employee.selected_engagement]
+                        ?.unit_service?._id,
+                    unit_service_patient: Entrance?.unit_service_patient,
+                    entrance_mangament: Entrance?._id,
+                    radiology: item._id,
+                    Doctor_Comments: '',
+                  }));
+                  setradiology(formatted.map((_, index) => ({ id: index })));
+                  setValue('radiology', formatted, { shouldValidate: true });
+                }}
+                renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
+              />
+              {!selectedFavorite ? (
+                <Button
+                  size="small"
+                  color="warning"
+                  onClick={saveDialog.onTrue}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="mingcute:star-line" />
+                </Button>
+              ) : (
+                <Button
+                  size="small"
+                  color="info"
+                  onClick={() => router.push(paths.employee.medicalServices.radiology.root)}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="solar:list-bold-duotone" sx={{ mr: 0.5 }} />
+                  {t('Manage')}
+                </Button>
+              )}
+            </Stack>
+            <Divider sx={{ mb: 2 }} />
             {radiology?.map((prescription, index) => (
               <div key={prescription.id}>
                 <Autocomplete
