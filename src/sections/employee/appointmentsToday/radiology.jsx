@@ -215,6 +215,10 @@ const handleCloseDialog = () => {
   prescriptionDialog.onFalse();
 };
   const handleSaveFavorite = async () => {
+    if (!favName.trim() || !favNameAr.trim()) {
+      enqueueSnackbar(t('Please enter favorite name in both languages'), { variant: 'warning' });
+      return;
+    }
     const currentValues = methods.getValues('radiology') || [];
     const radiologyIds = currentValues.map((item) => item.radiology).filter(Boolean);
     if (!radiologyIds.length) {
@@ -223,8 +227,8 @@ const handleCloseDialog = () => {
     }
     try {
       await axiosInstance.post(endpoints.favoriteRadiology.all, {
-        favorite_name: favName,
-        favorite_name_ar: favNameAr,
+        favorite_name: favName.trim(),
+        favorite_name_ar: favNameAr.trim(),
         radiology: radiologyIds,
       });
       enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });

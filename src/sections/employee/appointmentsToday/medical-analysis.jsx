@@ -180,6 +180,10 @@ export default function MedicalAnalysis({ Entrance }) {
     }
   };
   const handleSaveFavorite = async () => {
+    if (!favName.trim() || !favNameAr.trim()) {
+      enqueueSnackbar(t('Please enter favorite name in both languages'), { variant: 'warning' });
+      return;
+    }
     const currentValues = methods.getValues('medical_analysis') || [];
     const medicalAnalysisIds = currentValues.map((item) => item.medical_analysis).filter(Boolean);
     if (!medicalAnalysisIds.length) {
@@ -188,9 +192,9 @@ export default function MedicalAnalysis({ Entrance }) {
     }
     try {
       await axiosInstance.post(endpoints.favoriteMedicalAnalysis.all, {
-        favorite_name: favName,
-        favorite_name_ar: favNameAr,
-        medical_analyses: medicalAnalysisIds,
+        favorite_name: favName.trim(),
+        favorite_name_ar: favNameAr.trim(),
+        medical_analysis: medicalAnalysisIds,
       });
       enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
       saveDialog.onFalse();
@@ -334,7 +338,7 @@ export default function MedicalAnalysis({ Entrance }) {
                 onChange={(event, newValue) => {
                   setSelectedFavorite(newValue);
                   if (!newValue) return;
-                  const favAnalyses = newValue.medical_analyses || [];
+                  const favAnalyses = newValue.medical_analysis || [];
                   const formatted = favAnalyses.map((analysisId) => ({
                     employee: user?.employee?._id,
                     patient: Entrance?.patient?._id,
