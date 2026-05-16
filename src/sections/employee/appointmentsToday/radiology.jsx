@@ -133,6 +133,7 @@ export default function Radiology({ Entrance }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     control,
     setValue,
@@ -397,7 +398,7 @@ const handleCloseDialog = () => {
                   options={imagingData || []}
                   value={
                     imagingData?.find(
-                      (item) => item._id === methods.getValues(`radiology.${index}.radiology`)
+                      (item) => item._id === watch(`radiology.${index}.radiology`)
                     ) || null
                   }
                   onChange={(event, newValue) =>

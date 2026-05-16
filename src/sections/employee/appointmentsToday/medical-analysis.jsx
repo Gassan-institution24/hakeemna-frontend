@@ -120,6 +120,7 @@ export default function MedicalAnalysis({ Entrance }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     control,
     setValue,
@@ -347,7 +348,7 @@ export default function MedicalAnalysis({ Entrance }) {
                         ?.unit_service?._id,
                     unit_service_patient: Entrance?.unit_service_patient,
                     entrance_mangament: Entrance?._id,
-                    medical_analysis: analysisId,
+                    medical_analysis: analysisId?._id || analysisId,
                     Doctor_Comments: '',
                   }));
                   setMedicalAnalyses(formatted.map((_, index) => ({ id: index })));
@@ -382,7 +383,7 @@ export default function MedicalAnalysis({ Entrance }) {
                 <Autocomplete
                   sx={{ minWidth: 300, flex: 1, my: 2 }}
                   options={(medicalAnalysisData || []).filter((option) => {
-                    const currentValues = methods.getValues('medical_analysis') || [];
+                    const currentValues = watch('medical_analysis') || [];
 
                     return !currentValues.some(
                       (selected, i) => i !== index && selected?.medical_analysis === option._id
@@ -390,8 +391,7 @@ export default function MedicalAnalysis({ Entrance }) {
                   })}
                   value={
                     medicalAnalysisData?.find(
-                      (item) =>
-                        item._id === methods.getValues(`medical_analysis.${index}.medical_analysis`)
+                      (item) => item._id === watch(`medical_analysis.${index}.medical_analysis`)
                     ) || null
                   }
                   onChange={(event, newValue) =>
