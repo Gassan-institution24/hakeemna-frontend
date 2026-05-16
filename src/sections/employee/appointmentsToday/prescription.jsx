@@ -8,6 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
   Box,
+  Stack,
   Button,
   Dialog,
   Divider,
@@ -50,7 +51,11 @@ export default function Prescription({ Entrance }) {
   const curLangAr = currentLang.value === 'ar';
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [prescriptions, setPrescriptions] = useState([{ id: 0 }]);
-  const { favoriteMedication } = useGetFavoriteMedication();
+  const { favoriteMedication, refetch: refetchFavorites } = useGetFavoriteMedication();
+  const saveDialog = useBoolean();
+  const [favName, setFavName] = useState('');
+  const [favNameAr, setFavNameAr] = useState('');
+  const [selectedFavorite, setSelectedFavorite] = useState(null);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -252,8 +257,49 @@ export default function Prescription({ Entrance }) {
       prescriptions: mappedPrescriptions,
     });
   };
+  const handleSaveFavorite = async () => {
+    if (!favName.trim() || !favNameAr.trim()) {
+      enqueueSnackbar(t('Please enter favorite name in both languages'), { variant: 'warning' });
+      return;
+    }
+    const currentPrescriptions = methods.getValues('prescriptions') || [];
+    const medicines = currentPrescriptions
+      .filter((p) => p.medicines)
+      .map((p) => {
+        const entry = {
+          medicine: p.medicines?._id || p.medicines,
+          Doctor_Comments: p.Doctor_Comments || '',
+          chronic: p.chronic || false,
+        };
+        const freq = Number(p.Frequency_per_day);
+        if (!Number.isNaN(freq) && freq > 0) entry.Frequency_per_day = freq;
+        const days = Number(p.Num_days);
+        if (!Number.isNaN(days) && days > 0) entry.Num_days = days;
+        return entry;
+      });
+    if (!medicines.length) {
+      enqueueSnackbar(t('Select at least one medicine first'), { variant: 'warning' });
+      return;
+    }
+    try {
+      await axiosInstance.post(endpoints.favoriteMedication.all, {
+        favorite_name: favName.trim(),
+        favorite_name_ar: favNameAr.trim(),
+        medicines,
+      });
+      enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
+      saveDialog.onFalse();
+      setFavName('');
+      setFavNameAr('');
+      refetchFavorites();
+    } catch {
+      enqueueSnackbar(t('Error saving favorite'), { variant: 'error' });
+    }
+  };
+
   const resetDialogState = () => {
     setPrescriptions([{ id: 0 }]);
+    setSelectedFavorite(null);
     reset({
       prescriptions: [
         {
@@ -323,6 +369,33 @@ export default function Prescription({ Entrance }) {
           </Box>
         </Box>
       ))}
+      {/* Save as Favorite dialog */}
+      <Dialog open={saveDialog.value} onClose={saveDialog.onFalse}>
+        <DialogTitle>{t('Save as Favorite')}</DialogTitle>
+        <DialogContent sx={{ width: 360, pt: 1 }}>
+          <TextField
+            fullWidth
+            label={t('Favorite Name (EN)')}
+            value={favName}
+            onChange={(e) => setFavName(e.target.value)}
+            sx={{ mb: 2, mt: 1 }}
+          />
+          <TextField
+            fullWidth
+            label={t('Favorite Name (AR)')}
+            value={favNameAr}
+            onChange={(e) => setFavNameAr(e.target.value)}
+            inputProps={{ dir: 'rtl' }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={saveDialog.onFalse}>{t('Cancel')}</Button>
+          <Button variant="contained" color="warning" onClick={handleSaveFavorite}>
+            {t('Save')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog
         open={prescriptionDialog.value}
         onClose={() => {
@@ -335,19 +408,42 @@ export default function Prescription({ Entrance }) {
             {t('Add prescription')}
           </DialogTitle>
           <DialogContent>
-            <Autocomplete
-              sx={{ minWidth: 300, my: 2 }}
-              options={favoriteMedication || []}
-              getOptionLabel={(option) =>
-                curLangAr ? option.favorite_name_ar : option.favorite_name
-              }
-              onChange={(event, selectedFavorite) => {
-                if (!selectedFavorite) return;
-
-                handleSelectFavorite(selectedFavorite);
-              }}
-              renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
-            />
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+              <Autocomplete
+                sx={{ flex: 1, minWidth: 250, my: 2 }}
+                options={favoriteMedication || []}
+                value={selectedFavorite}
+                getOptionLabel={(option) =>
+                  curLangAr ? option.favorite_name_ar || '' : option.favorite_name || ''
+                }
+                onChange={(event, fav) => {
+                  setSelectedFavorite(fav);
+                  if (fav) handleSelectFavorite(fav);
+                }}
+                renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
+              />
+              {!selectedFavorite ? (
+                <Button
+                  size="small"
+                  color="warning"
+                  onClick={saveDialog.onTrue}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="mingcute:star-line" />
+                </Button>
+              ) : (
+                <Button
+                  size="small"
+                  color="info"
+                  onClick={() => router.push(paths.employee.medicalServices.medication.root)}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="solar:list-bold-duotone" sx={{ mr: 0.5 }} />
+                  {t('Manage')}
+                </Button>
+              )}
+            </Stack>
+            <Divider sx={{ mb: 2 }} />
             {prescriptions?.map((prescription, index) => (
               <div key={prescription.id}>
                 <Autocomplete

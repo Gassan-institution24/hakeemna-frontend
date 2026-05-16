@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 import {
   Box,
+  Stack,
   Button,
   Dialog,
   Divider,
@@ -38,12 +39,16 @@ export default function MedicalAnalysis({ Entrance }) {
   const router = useRouter();
   const { medicalAnalysis, refetch } = useGeEntranceMedicalAnalysis(Entrance?._id);
   const prescriptionDialog = useBoolean();
-  const { favoriteMedicalAnalysis } = useGetFavoriteMedicalAnalysis();
+  const saveDialog = useBoolean();
+  const { favoriteMedicalAnalysis, refetch: refetchFavorites } = useGetFavoriteMedicalAnalysis();
 
   const { medicalAnalysisData } = useGetMedicalAnalysis();
   const { t } = useTranslate();
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const [medicalAnalyses, setMedicalAnalyses] = useState([{ id: 0 }]);
+  const [favName, setFavName] = useState('');
+  const [favNameAr, setFavNameAr] = useState('');
+  const [selectedFavorite, setSelectedFavorite] = useState(null);
 
   const handleHover = (hoveredId) => {
     setHoveredButtonId(hoveredId);
@@ -115,6 +120,7 @@ export default function MedicalAnalysis({ Entrance }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     control,
     setValue,
@@ -174,6 +180,33 @@ export default function MedicalAnalysis({ Entrance }) {
       });
     }
   };
+  const handleSaveFavorite = async () => {
+    if (!favName.trim() || !favNameAr.trim()) {
+      enqueueSnackbar(t('Please enter favorite name in both languages'), { variant: 'warning' });
+      return;
+    }
+    const currentValues = methods.getValues('medical_analysis') || [];
+    const medicalAnalysisIds = currentValues.map((item) => item.medical_analysis).filter(Boolean);
+    if (!medicalAnalysisIds.length) {
+      enqueueSnackbar(t('Select at least one medical analysis first'), { variant: 'warning' });
+      return;
+    }
+    try {
+      await axiosInstance.post(endpoints.favoriteMedicalAnalysis.all, {
+        favorite_name: favName.trim(),
+        favorite_name_ar: favNameAr.trim(),
+        medical_analysis: medicalAnalysisIds,
+      });
+      enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
+      saveDialog.onFalse();
+      setFavName('');
+      setFavNameAr('');
+      refetchFavorites();
+    } catch {
+      enqueueSnackbar(t('Error saving favorite'), { variant: 'error' });
+    }
+  };
+
   const handleCloseDialog = () => {
     reset({
       medical_analysis: [
@@ -191,8 +224,8 @@ export default function MedicalAnalysis({ Entrance }) {
       ],
     });
 
-    setMedicalAnalyses([{ id: 0 }]); // رجّع حقل واحد بس
-
+    setMedicalAnalyses([{ id: 0 }]);
+    setSelectedFavorite(null);
     prescriptionDialog.onFalse();
   };
   useEffect(() => {
@@ -262,46 +295,95 @@ export default function MedicalAnalysis({ Entrance }) {
           </Box>
         </Box>
       ))}
+      {/* Save as Favorite dialog */}
+      <Dialog open={saveDialog.value} onClose={saveDialog.onFalse}>
+        <DialogTitle>{t('Save as Favorite')}</DialogTitle>
+        <DialogContent sx={{ width: 360, pt: 1 }}>
+          <TextField
+            fullWidth
+            label={t('Favorite Name (EN)')}
+            value={favName}
+            onChange={(e) => setFavName(e.target.value)}
+            sx={{ mb: 2, mt: 1 }}
+          />
+          <TextField
+            fullWidth
+            label={t('Favorite Name (AR)')}
+            value={favNameAr}
+            onChange={(e) => setFavNameAr(e.target.value)}
+            inputProps={{ dir: 'rtl' }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={saveDialog.onFalse}>{t('Cancel')}</Button>
+          <Button variant="contained" color="warning" onClick={handleSaveFavorite}>
+            {t('Save')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={prescriptionDialog.value} onClose={handleCloseDialog}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'success.main', position: 'relative', top: '10px' }}>
             {t('add medical analysis')}
           </DialogTitle>
           <DialogContent>
-            <Autocomplete
-              sx={{ minWidth: 300, my: 2 }}
-              options={favoriteMedicalAnalysis || []}
-              getOptionLabel={(option) =>
-                t('language') === 'ar' ? option.favorite_name_ar : option.favorite_name
-              }
-              onChange={(event, newValue) => {
-                if (!newValue) return;
-
-                const favAnalyses = newValue.medical_analyses || [];
-                const formatted = favAnalyses.map((analysisId) => ({
-                  employee: user?.employee?._id,
-                  patient: Entrance?.patient?._id,
-                  unit_service:
-                    user?.employee?.employee_engagements?.[user.employee.selected_engagement]
-                      ?.unit_service?._id,
-                  unit_service_patient: Entrance?.unit_service_patient,
-                  entrance_mangament: Entrance?._id,
-                  medical_analysis: analysisId,
-                  Doctor_Comments: '',
-                }));
-                setMedicalAnalyses(formatted.map((_, index) => ({ id: index })));
-                setValue('medical_analysis', formatted, {
-                  shouldValidate: true,
-                });
-              }}
-              renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
-            />
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+              <Autocomplete
+                sx={{ flex: 1, minWidth: 250, my: 2 }}
+                options={favoriteMedicalAnalysis || []}
+                value={selectedFavorite}
+                getOptionLabel={(option) =>
+                  t('language') === 'ar' ? option.favorite_name_ar || '' : option.favorite_name || ''
+                }
+                onChange={(event, newValue) => {
+                  setSelectedFavorite(newValue);
+                  if (!newValue) return;
+                  const favAnalyses = newValue.medical_analysis || [];
+                  const formatted = favAnalyses.map((analysisId) => ({
+                    employee: user?.employee?._id,
+                    patient: Entrance?.patient?._id,
+                    unit_service:
+                      user?.employee?.employee_engagements?.[user.employee.selected_engagement]
+                        ?.unit_service?._id,
+                    unit_service_patient: Entrance?.unit_service_patient,
+                    entrance_mangament: Entrance?._id,
+                    medical_analysis: analysisId?._id || analysisId,
+                    Doctor_Comments: '',
+                  }));
+                  setMedicalAnalyses(formatted.map((_, index) => ({ id: index })));
+                  setValue('medical_analysis', formatted, { shouldValidate: true });
+                }}
+                renderInput={(params) => <TextField {...params} label={t('Select Favorite')} />}
+              />
+              {!selectedFavorite ? (
+                <Button
+                  size="small"
+                  color="warning"
+                  onClick={saveDialog.onTrue}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="mingcute:star-line" />
+                </Button>
+              ) : (
+                <Button
+                  size="small"
+                  color="info"
+                  onClick={() => router.push(paths.employee.medicalServices.medicalAnalysis.root)}
+                  sx={{ whiteSpace: 'nowrap', mt: 1 }}
+                >
+                  <Iconify icon="solar:list-bold-duotone" sx={{ mr: 0.5 }} />
+                  {t('Manage')}
+                </Button>
+              )}
+            </Stack>
+            <Divider sx={{ mb: 2 }} />
             {medicalAnalyses?.map((prescription, index) => (
               <div key={prescription.id}>
                 <Autocomplete
                   sx={{ minWidth: 300, flex: 1, my: 2 }}
                   options={(medicalAnalysisData || []).filter((option) => {
-                    const currentValues = methods.getValues('medical_analysis') || [];
+                    const currentValues = watch('medical_analysis') || [];
 
                     return !currentValues.some(
                       (selected, i) => i !== index && selected?.medical_analysis === option._id
@@ -309,8 +391,7 @@ export default function MedicalAnalysis({ Entrance }) {
                   })}
                   value={
                     medicalAnalysisData?.find(
-                      (item) =>
-                        item._id === methods.getValues(`medical_analysis.${index}.medical_analysis`)
+                      (item) => item._id === watch(`medical_analysis.${index}.medical_analysis`)
                     ) || null
                   }
                   onChange={(event, newValue) =>
