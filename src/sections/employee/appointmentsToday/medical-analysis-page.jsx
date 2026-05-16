@@ -149,7 +149,7 @@ export default function MedicalAnalysisPage() {
         {/* Back */}
         <Button variant="text" sx={{ mt: 2, alignSelf: 'flex-start' }} onClick={() => navigate(-1)}>
           <Iconify icon="icon-park:back" />
-          &nbsp; رجوع
+          &nbsp; {t('back')}
         </Button>
       </Stack>
     </Box>
