@@ -298,7 +298,7 @@ export default function PrescriptionPage() {
             onClick={() => navigate(-1)}
           >
             <Iconify icon="icon-park:back" />
-            &nbsp; رجوع
+            &nbsp; {t('back')}
           </Button>
         </Stack>
       </Box>
