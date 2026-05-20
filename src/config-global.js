@@ -7,8 +7,6 @@ export const HOST_API = process.env.REACT_APP_API_URL;
 export const SERVER_IP = process.env.REACT_APP_SERVER;
 export const ASSETS_API = process.env.REACT_APP_API_URL;
 
-// export const MAPBOX_API = process.env.REACT_APP_MAPBOX_API;
-
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = paths.dashboard.root;
 export const PATH_AFTER_SIGNUP = paths.auth.verify;

@@ -4,9 +4,6 @@
 /* lazy image */
 @import 'react-lazy-load-image-component/src/effects/blur.css';
 
-/* map */
-@import 'mapbox-gl/dist/mapbox-gl.css';
-
 /* editor */
 @import 'react-quill/dist/quill.snow.css';
 
