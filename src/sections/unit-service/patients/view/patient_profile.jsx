@@ -13,6 +13,8 @@ import PatientCommunication from 'src/sections/employee/patients/patient-profile
 import PatientPrescriptions from 'src/sections/employee/patients/patient-profile/patient-prescriptions';
 import PatientMedicalReports from 'src/sections/employee/patients/patient-profile/patient-medical-reports';
 
+import PatientDentalChart from 'src/sections/employee/patients/dental-chart/patient-dental-chart';
+
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
 import PatientAbout from '../patient-profile/patient-about';
@@ -85,6 +87,10 @@ export default function PatientProfile() {
     {
       value: 'edit',
       label: t('edit'),
+    },
+    {
+      value: 'dental_chart',
+      label: t('dental chart'),
     },
   ].filter(Boolean);
 
@@ -168,6 +174,7 @@ export default function PatientProfile() {
       {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
       {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
       {currentTab === 'edit' && <EditPatient patient={usPatientData} />}
+      {currentTab === 'dental_chart' && <PatientDentalChart patient={usPatientData} />}
     </Container>
   );
 }

@@ -446,6 +446,30 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/patient/${id}`),
     resend: (id) => (!id ? null : `/api/patient/resend_id/${id}`),
   },
+  dentalChart: {
+    one: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}`),
+    updateTooth: (patientId, toothNumber) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}`,
+    clearTooth: (patientId, toothNumber) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/clear`,
+    bulk: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/bulk`),
+    addProcedure: (patientId, toothNumber) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure`,
+    updateProcedure: (patientId, toothNumber, procedureId) =>
+      !patientId
+        ? null
+        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
+    deleteProcedure: (patientId, toothNumber, procedureId) =>
+      !patientId
+        ? null
+        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
+    snapshot: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshot`),
+    snapshots: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshots`),
+    restore: (patientId, snapshotId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/restore/${snapshotId}`,
+    chartType: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/chart-type`),
+    export: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/export`),
+  },
   history: {
     all: '/api/history',
     one: (id) => `/api/history/${id}`,
