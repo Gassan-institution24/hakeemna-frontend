@@ -33,7 +33,6 @@ import { useSnackbar } from '../../../../components/snackbar';
 import {
   checkVisitApproval,
   submitVisitApproval,
-  submitVisitAuthorization,
 } from '../../../../services/claimService';
 
 const VISIT_TYPES = [
@@ -50,7 +49,6 @@ const BENEFIT_TYPES = [
 
 const STATUS_COLOR = { approved: 'success', pending: 'warning', rejected: 'error' };
 
-// WATANIA companies require a second Authorization step on "Create Visit"
 const WATANIA_LICENSES = ['WataniaINS', 'Medservice', 'Omnicare', 'MedExa'];
 
 export default function CompanyPage() {
@@ -75,15 +73,11 @@ export default function CompanyPage() {
   const [benefitType, setBenefitType] = useState('outpatient');
 
   // Step 2 — eligibility result
-  const [eligibilityStatus, setEligibilityStatus] = useState(null); // null | 'approved' | 'pending' | 'rejected'
+  const [eligibilityStatus, setEligibilityStatus] = useState(null);
   const [formNumber, setFormNumber] = useState(null);
   const [requestId, setRequestId] = useState(null);
   const [idPayer, setIdPayer] = useState(null);
   const [loadingEligibility, setLoadingEligibility] = useState(false);
-
-  // Step 3 — visit authorization (WATANIA only, triggered on "Create Visit")
-  const [authRequestId, setAuthRequestId] = useState(null); // polling ID for Authorization step
-  const [loadingAuth, setLoadingAuth] = useState(false);    // true while submitting auth request
 
   const clinicianId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
@@ -91,7 +85,6 @@ export default function CompanyPage() {
 
   const isWatania = WATANIA_LICENSES.includes(insuranceLicense);
 
-  // Search patients via API when the user types ≥2 characters
   useEffect(() => {
     const q = search.trim();
     if (q.length < 2) { setFilteredPatients([]); return () => {}; }
@@ -112,7 +105,6 @@ export default function CompanyPage() {
     setFormNumber(null);
     setRequestId(null);
     setIdPayer(null);
-    setAuthRequestId(null);
     setMemberID('');
 
     const basePatientId = patient.patient || patient._id;
@@ -128,7 +120,6 @@ export default function CompanyPage() {
   const handleCheckEligibility = async () => {
     setLoadingEligibility(true);
     setEligibilityStatus(null);
-    setAuthRequestId(null);
     try {
       const res = await submitVisitApproval({
         insuranceLicense,
@@ -141,13 +132,11 @@ export default function CompanyPage() {
       const data = res?.data;
 
       if (data?.formNumber && !data?.pending) {
-        // DELTA / ZERO / ISLAMIC: form number returned immediately or after first poll
         setFormNumber(data.formNumber);
         if (data?.idPayer) setIdPayer(data.idPayer);
         setEligibilityStatus('approved');
         enqueueSnackbar(t('Patient is eligible'), { variant: 'success' });
       } else if (data?.requestId) {
-        // Async insurer response needed — start polling
         setRequestId(data.requestId);
         setEligibilityStatus('pending');
         enqueueSnackbar(t('Awaiting insurer approval'), { variant: 'info' });
@@ -206,52 +195,18 @@ export default function CompanyPage() {
           clearInterval(timer);
           setEligibilityStatus('rejected');
           enqueueSnackbar(data?.error || t('Not approved'), { variant: 'warning' });
-        } else if (attempts >= 12) {
+        } else if (attempts >= 24) {
           clearInterval(timer);
           setEligibilityStatus('rejected');
-          enqueueSnackbar(t('Timeout: no insurer response after 60 s'), { variant: 'error' });
+          enqueueSnackbar(t('Timeout: no insurer response after 120 s'), { variant: 'error' });
         }
       } catch { /* will retry next tick */ }
     }, 5000);
     return () => clearInterval(timer);
   }, [requestId, eligibilityStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Step 3: Create Visit ──────────────────────────────────────────────
-  // WATANIA: submit Authorization with EncounterID=IDPayer, then poll and navigate when approved.
-  // DELTA / ZERO / ISLAMIC: navigate immediately — form number already obtained.
-  const handleCreateVisit = async () => {
-    if (isWatania) {
-      setLoadingAuth(true);
-      try {
-        const res = await submitVisitAuthorization({
-          insuranceLicense,
-          clinicianId,
-          patientNID: selectedPatient.identification_num,
-          memberID,
-          idPayer,
-          visitType,
-        });
-        const data = res?.data;
-        if (data?.pending && data?.requestId) {
-          setAuthRequestId(data.requestId);
-          enqueueSnackbar(t('Visit authorization submitted — approve in ClaimBrowser'), { variant: 'info' });
-        } else if (data?.success && !data?.pending) {
-          // Shouldn't happen for WATANIA but handle gracefully
-          doNavigate(formNumber, idPayer);
-        } else {
-          enqueueSnackbar(data?.error || t('Authorization request failed'), { variant: 'error' });
-        }
-      } catch (err) {
-        enqueueSnackbar(err?.message || t('Authorization request failed'), { variant: 'error' });
-      } finally {
-        setLoadingAuth(false);
-      }
-    } else {
-      doNavigate(formNumber, idPayer);
-    }
-  };
-
-  const doNavigate = (finalFormNumber, finalIdPayer) => {
+  // ── Step 3: Open Visit — navigate immediately for both WATANIA and DELTA ──
+  const handleCreateVisit = () => {
     navigate(paths.unitservice.accounting.claim.patientVisitView(selectedPatient._id), {
       state: {
         visitContext: {
@@ -262,44 +217,14 @@ export default function CompanyPage() {
           visitType,
           benefitType,
         },
-        formNumber: finalFormNumber,
+        formNumber,
         requestId,
-        idPayer:    finalIdPayer,
+        idPayer,
+        isWatania,
       },
     });
-    enqueueSnackbar(t('Visit created successfully'), { variant: 'success' });
+    enqueueSnackbar(t('Visit opened successfully'), { variant: 'success' });
   };
-
-  // Auto-poll for WATANIA visit authorization approval, then navigate
-  useEffect(() => {
-    if (!authRequestId) return () => {};
-    let attempts = 0;
-    const timer = setInterval(async () => {
-      attempts += 1;
-      try {
-        const res = await checkVisitApproval(authRequestId);
-        const data = res?.data;
-        if (data?.formNumber && !data?.pending) {
-          clearInterval(timer);
-          setAuthRequestId(null);
-          const finalFormNumber = data.formNumber;
-          const finalIdPayer    = data.idPayer || idPayer;
-          setFormNumber(finalFormNumber);
-          if (data.idPayer) setIdPayer(data.idPayer);
-          doNavigate(finalFormNumber, finalIdPayer);
-        } else if (data?.pending === false && !data?.success) {
-          clearInterval(timer);
-          setAuthRequestId(null);
-          enqueueSnackbar(data?.error || t('Visit authorization rejected by insurer'), { variant: 'error' });
-        } else if (attempts >= 24) {
-          clearInterval(timer);
-          setAuthRequestId(null);
-          enqueueSnackbar(t('Timeout: no insurer response for visit authorization'), { variant: 'error' });
-        }
-      } catch { /* will retry next tick */ }
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [authRequestId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const statusLabel = {
     approved: t('Eligible'),
@@ -310,12 +235,6 @@ export default function CompanyPage() {
   let searchHelperText = '';
   if (loadingSearch) searchHelperText = t('Searching...');
   else if (search.trim().length > 0 && search.trim().length < 2) searchHelperText = t('Type at least 2 characters');
-
-  const createVisitBusy = loadingAuth || !!authRequestId;
-
-  let createVisitLabel = t('Create Visit');
-  if (authRequestId) createVisitLabel = t('Waiting for authorization...');
-  else if (isWatania) createVisitLabel = t('Create Visit & Authorize');
 
   return (
     <Box sx={{ py: 5 }}>
@@ -383,7 +302,7 @@ export default function CompanyPage() {
             )}
           </Grid>
 
-          {/* Step 2 & 3 — Eligibility + Create Visit */}
+          {/* Step 2 — Eligibility + Open Visit */}
           {selectedPatient && (
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 3, borderRadius: 3 }}>
@@ -505,31 +424,21 @@ export default function CompanyPage() {
                       variant="contained"
                       color="success"
                       onClick={handleCreateVisit}
-                      disabled={createVisitBusy}
-                      startIcon={createVisitBusy ? <CircularProgress size={16} color="inherit" /> : null}
                     >
-                      {createVisitLabel}
+                      {t('Open Visit')}
                     </Button>
                   )}
                 </Box>
 
-                {/* Eligibility IDPayer / Form number */}
                 {formNumber && (
                   <Box sx={{ mt: 2, p: 1.5, bgcolor: '#f0fdf4', borderRadius: 2 }}>
                     <Typography variant="caption" color="text.secondary">
-                      {t('Form No')}:
+                      {isWatania ? t('IDPayer / EncounterID') : t('Form No')}:
                     </Typography>
                     <Typography fontFamily="monospace" fontWeight="bold">
                       {formNumber}
                     </Typography>
                   </Box>
-                )}
-
-                {/* WATANIA authorization waiting hint */}
-                {authRequestId && (
-                  <Alert severity="info" sx={{ mt: 2 }}>
-                    {t('Visit authorization sent — please approve in ClaimBrowser. This page will navigate automatically when approved.')}
-                  </Alert>
                 )}
               </Paper>
             </Grid>

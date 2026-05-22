@@ -18,41 +18,57 @@ import {
 import { useLocales } from 'src/locales';
 import { lab, cancellation } from 'src/services/claimService';
 
+/* Codes are from the EHC/JMA staging coding list (LABORATORY TESTS sheet). */
 const LAB_ORDERS_LIST = [
   {
-    code: 'L001',
-    nameEn: 'Ferritin',
-    nameAr: 'الفيريتين',
+    code: 'JOR-27-06-078',
+    nameEn: 'Herpes Simplex Virus I&II DNA PCR',
+    nameAr: 'تفاعل البوليميراز لفيروس الهربس',
   },
   {
-    code: 'L002',
-    nameEn: 'CBC Indices',
-    nameAr: 'مؤشرات CBC',
+    code: 'JOR-27-01-118',
+    nameEn: 'Tobramycin Level',
+    nameAr: 'مستوى توبراميسين',
   },
   {
-    code: 'L003',
-    nameEn: 'CBC With Blood Film',
-    nameAr: 'CBC مع لطاخة دموية',
+    code: 'JOR-27-03-077',
+    nameEn: 'Anti-Malaria AB',
+    nameAr: 'أضداد الملاريا',
   },
   {
-    code: 'L004',
-    nameEn: 'CRP',
-    nameAr: 'البروتين المتفاعل C',
+    code: 'JOR-27-03-410',
+    nameEn: 'Insulin Receptor Antibodies',
+    nameAr: 'أضداد مستقبلات الأنسولين',
   },
   {
-    code: 'L005',
-    nameEn: 'KFT',
-    nameAr: 'وظائف الكلى',
+    code: 'JOR-27-16-037',
+    nameEn: 'Flow Cytometry CD2',
+    nameAr: 'قياس التدفق CD2',
   },
   {
-    code: 'L006',
-    nameEn: 'Vitamin B12',
-    nameAr: 'فيتامين B12',
+    code: 'JOR-27-01-112',
+    nameEn: 'Syphilis Antibodies',
+    nameAr: 'أضداد الزهري',
   },
   {
-    code: 'L007',
-    nameEn: 'ESR',
-    nameAr: 'سرعة ترسيب الدم',
+    code: 'JOR-27-06-077',
+    nameEn: 'EBV by PCR Quantitative',
+    nameAr: 'فيروس ابشتاين-بار PCR كمي',
+  },
+  {
+    code: 'JOR-27-02-009',
+    nameEn: 'Amino Acids, Blood',
+    nameAr: 'الأحماض الأمينية في الدم',
+  },
+  {
+    code: 'JOR-27-15-019',
+    nameEn: 'Factor X',
+    nameAr: 'عامل التخثر X',
+  },
+  {
+    code: 'JOR-27-01-092',
+    nameEn: 'Growth Hormone Stimulation (Glucagon)',
+    nameAr: 'تحفيز هرمون النمو بالغلوكاجون',
   },
 ];
 
@@ -64,7 +80,7 @@ export default function LaboratoryOrders({ onDataChange }) {
 
   useEffect(() => {
     if (onDataChange) {
-      onDataChange(orders.length > 0);
+      onDataChange(orders);
     }
   }, [orders, onDataChange]);
 

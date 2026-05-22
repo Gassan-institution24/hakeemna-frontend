@@ -21,26 +21,47 @@ import { radiology } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
+/* Codes are from the EHC/JMA staging coding list (RADIOLOGY PROCEDURES sheet). */
 const RADIOLOGY_LIST = [
   {
-    code: 'R001',
-    nameEn: 'Chest X-Ray – One View',
-    nameAr: 'أشعة صدر – صورة واحدة',
+    code: 'JOR-22-04-021',
+    nameEn: 'Ultrasound Doppler Upper Limb (One Side)',
+    nameAr: 'دوبلر الموجات فوق الصوتية للطرف العلوي (جانب واحد)',
   },
   {
-    code: 'R002',
-    nameEn: 'Portable Ultrasound',
-    nameAr: 'تصوير بالموجات فوق الصوتية المحمول',
+    code: 'JOR-22-02-143',
+    nameEn: 'CT Liver 3-Phase W & W/O Contrast',
+    nameAr: 'تصوير طبقي للكبد ثلاثي المراحل مع وبدون مادة ظليلة',
   },
   {
-    code: 'R003',
-    nameEn: 'CT Foot Without Contrast',
-    nameAr: 'تصوير طبقي للقدم بدون مادة ظليلة',
+    code: 'JOR-22-03-134',
+    nameEn: 'MRI Whole Spine W/Contrast',
+    nameAr: 'رنين مغناطيسي للعمود الفقري كاملاً مع مادة ظليلة',
   },
   {
-    code: 'R004',
-    nameEn: 'Portable Chest X-Ray',
-    nameAr: 'أشعة صدر محمولة',
+    code: 'JOR-22-02-007',
+    nameEn: 'CT Abdomen W/Contrast',
+    nameAr: 'تصوير طبقي للبطن مع مادة ظليلة',
+  },
+  {
+    code: 'JOR-22-02-081',
+    nameEn: 'CT Knee W/O Contrast',
+    nameAr: 'تصوير طبقي للركبة بدون مادة ظليلة',
+  },
+  {
+    code: 'JOR-22-02-144',
+    nameEn: 'CT Upper Extremity W & W/O Contrast',
+    nameAr: 'تصوير طبقي للطرف العلوي مع وبدون مادة ظليلة',
+  },
+  {
+    code: 'JOR-22-03-049',
+    nameEn: 'MRI Cervico-Dorsal Spine W/O Contrast',
+    nameAr: 'رنين مغناطيسي للعمود الفقري العنقي الظهري بدون مادة ظليلة',
+  },
+  {
+    code: 'JOR-22-03-039',
+    nameEn: 'MRI Brain + MRA Brain & Neck',
+    nameAr: 'رنين مغناطيسي للدماغ + تصوير أوعية الدماغ والرقبة',
   },
 ];
 
@@ -53,7 +74,7 @@ export default function RadiologyOrders({ onDataChange }) {
 
   useEffect(() => {
     if (onDataChange) {
-      onDataChange(orders.length > 0);
+      onDataChange(orders);
     }
   }, [orders, onDataChange]);
   const filtered = RADIOLOGY_LIST.filter((r) => {

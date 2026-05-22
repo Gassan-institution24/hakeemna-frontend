@@ -53,7 +53,7 @@ const curLangAr = currentLang.value === 'ar';
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     if (onDataChange) {
-      onDataChange(orders.length > 0);
+      onDataChange(orders);
     }
   }, [orders, onDataChange]);
 

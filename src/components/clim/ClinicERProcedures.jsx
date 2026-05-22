@@ -33,51 +33,69 @@ const CONSULTATION = {
   patientShare: 0.0,
 };
 
+/* Codes are from the EHC/JMA staging coding list (PROCEDURES sheet).
+   Type '3' (JMA) is used for these in the TPO authorization payload. */
 const PROCEDURES_LIST = [
   {
-    code: 'P001',
-    nameEn: 'IV Injection',
-    nameAr: 'حقن وريدي',
-    gross: 1.5,
-    insurance: 1.42,
-    patientShare: 0.08,
-  },
-  {
-    code: 'P002',
-    nameEn: 'ECG In Clinic',
-    nameAr: 'تخطيط قلب في العيادة',
+    code: 'JOR-04-001-003',
+    nameEn: 'Chemical Treatment (per Session)',
+    nameAr: 'علاج كيميائي (لكل جلسة)',
     gross: 5.0,
     insurance: 4.5,
     patientShare: 0.5,
   },
   {
-    code: 'P003',
-    nameEn: 'Chemical Peeling',
-    nameAr: 'تقشير كيميائي',
+    code: 'JOR-04-001-008',
+    nameEn: 'Electrotherapy (1st Session)',
+    nameAr: 'علاج كهربائي (الجلسة الأولى)',
+    gross: 5.0,
+    insurance: 4.5,
+    patientShare: 0.5,
+  },
+  {
+    code: 'JOR-23-04-007',
+    nameEn: 'Mesotherapy Procedure',
+    nameAr: 'علاج ميزوثيرابي',
     gross: 10.0,
     insurance: 8.0,
     patientShare: 2.0,
   },
   {
-    code: 'P004',
-    nameEn: 'Burn With Dressing - Large',
+    code: 'JOR-08-01-011',
+    nameEn: 'Burn with Dressing - Large',
     nameAr: 'حرق مع تضميد – كبير',
     gross: 7.0,
     insurance: 6.0,
     patientShare: 1.0,
   },
   {
-    code: 'P005',
-    nameEn: 'Suturing of Skin Wound > 1cm',
-    nameAr: 'خياطة جرح جلدي أكبر من 1 سم',
+    code: 'JOR-08-01-010',
+    nameEn: 'Burn with Dressing - Medium',
+    nameAr: 'حرق مع تضميد – متوسط',
+    gross: 5.0,
+    insurance: 4.5,
+    patientShare: 0.5,
+  },
+  {
+    code: 'JOR-24-22-006',
+    nameEn: 'Laceration: Major',
+    nameAr: 'تمزق: كبير',
     gross: 12.0,
     insurance: 9.0,
     patientShare: 3.0,
   },
   {
-    code: 'P006',
-    nameEn: 'Ingrowing Toenail Removal',
-    nameAr: 'إزالة ظفر نامٍ',
+    code: 'JOR-28-03-017',
+    nameEn: 'Cryo-surgery',
+    nameAr: 'جراحة تجميد',
+    gross: 6.0,
+    insurance: 5.0,
+    patientShare: 1.0,
+  },
+  {
+    code: 'JOR-08-01-051',
+    nameEn: 'Remove Perianal Skin Tag',
+    nameAr: 'إزالة زائدة جلدية حول الشرج',
     gross: 6.0,
     insurance: 5.0,
     patientShare: 1.0,
@@ -139,7 +157,7 @@ export default function ClinicERProcedures({ onDataChange }) {
 
   useEffect(() => {
     if (onDataChange) {
-      onDataChange(procedures.length > 0);
+      onDataChange(procedures);
     }
   }, [procedures, onDataChange]);
   const filtered = PROCEDURES_LIST.filter((p) => {

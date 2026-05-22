@@ -42,3 +42,10 @@ export const checkVisitApproval = (requestId) =>
 // Sends Authorization with EncounterID = IDPayer. Poll /visit-approval/check for result.
 export const submitVisitAuthorization = (data) =>
   axiosInstance.post('/api/claims/visit-authorization/submit', data);
+
+// ✅ FINAL AUTHORIZATION (WATANIA only — triggered on "Close and Submit Claim")
+// Sends ONE Authorization with ALL visit data. EncounterID must equal IDPayer from eligibility.
+export const submitFinalAuthorization = (data) =>
+  axiosInstance.post('/api/claims/final-authorization/submit', data);
+export const checkFinalAuthorization = (requestId) =>
+  axiosInstance.get('/api/claims/final-authorization/check', { params: { requestId } });

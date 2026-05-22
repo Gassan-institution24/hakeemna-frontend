@@ -28,15 +28,19 @@ import RadiologyOrders from '../../../../components/clim/RadiologyOrders';
 import LaboratoryOrders from '../../../../components/clim/LaboratoryOrders';
 import MedicationsOrders from '../../../../components/clim/MedicationsOrders';
 import PhysiotherapyOrders from '../../../../components/clim/PhysiotherapyOrders';
+import ClinicERProcedures from '../../../../components/clim/ClinicERProcedures';
 import {
   submitClaim,
   cancellation,
   checkFormNumber,
   submitFormNumber,
+  checkFinalAuthorization,
+  submitFinalAuthorization,
 } from '../../../../services/claimService';
 
 const sections = [
   'Add Diagnosis',
+  'In-Clinic Procedures',
   'Laboratory Orders',
   'Radiology Orders',
   'Medications Orders',
@@ -44,10 +48,11 @@ const sections = [
 ];
 const indexToKey = {
   0: 'diagnosis',
-  1: 'lab',
-  2: 'radiology',
-  3: 'medications',
-  4: 'physiotherapy',
+  1: 'procedures',
+  2: 'lab',
+  3: 'radiology',
+  4: 'medications',
+  5: 'physiotherapy',
 };
 
 export default function PatientPage() {
@@ -56,31 +61,41 @@ export default function PatientPage() {
   const { visitId } = useParams();
   const location = useLocation();
 
-  const [formNumber, setFormNumber]           = useState(null);
-  const [requestId, setRequestId]             = useState(null);
-  const [idPayer, setIdPayer]                 = useState(null);
-  const [visitCtx, setVisitCtx]               = useState(null);
-  const [loadingFormNumber, setLoadingFormNumber] = useState(false);
-  const [authApproved, setAuthApproved]       = useState(false);
+  const [formNumber, setFormNumber]               = useState(null);
+  const [requestId, setRequestId]                 = useState(null);
+  const [idPayer, setIdPayer]                     = useState(null);
+  const [visitCtx, setVisitCtx]                   = useState(null);
+  const [loadingFormNumber, setLoadingFormNumber]  = useState(false);
+  const [authApproved, setAuthApproved]            = useState(false);
+
+  // Section data — actual arrays for building TPO activities
+  const [diagnosisData,    setDiagnosisData]    = useState([]);
+  const [proceduresData,   setProceduresData]   = useState([]);
+  const [labData,          setLabData]          = useState([]);
+  const [radiologyData,    setRadiologyData]    = useState([]);
+  const [medicationData,   setMedicationData]   = useState([]);
+  const [physioData,       setPhysioData]       = useState([]);
+
+  // Final authorization state (WATANIA only — triggered on "Close and Submit Claim")
+  const [finalAuthReqId,  setFinalAuthReqId]   = useState(null);
+  const [submittingFinal, setSubmittingFinal]   = useState(false);
 
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
+    procedures: false,
     lab: false,
     radiology: false,
     medications: false,
     physiotherapy: false,
   });
 
-  /* ── initialise form-number on mount ─────────────────────────────
-     Priority 1: navigation state passed from companyPage (eligibility
-                 was already done there — reuse the result directly).
-     Priority 2: fetch visit context from the API, then request a new
-                 form number (fallback when navigating directly by URL).
-  ──────────────────────────────────────────────────────────────── */
+  // Detect WATANIA from navigation state passed by companyPage
+  const isWatania = !!location.state?.isWatania;
+
+  /* ── initialise form-number on mount ─────────────────────────────── */
   useEffect(() => {
     const navState = location.state;
 
-    // --- Priority 1: use what companyPage already fetched ---
     if (navState?.visitContext) {
       setVisitCtx(navState.visitContext);
       if (navState.idPayer) setIdPayer(navState.idPayer);
@@ -93,7 +108,6 @@ export default function PatientPage() {
       return;
     }
 
-    // --- Priority 2: fallback API path (direct URL navigation) ---
     if (!visitId) return;
 
     const initFormNumber = async () => {
@@ -114,6 +128,7 @@ export default function PatientPage() {
 
         if (data?.formNumber) {
           setFormNumber(data.formNumber);
+          if (data?.idPayer) setIdPayer(data.idPayer);
           setAuthApproved(true);
         } else if (data?.requestId) {
           setRequestId(data.requestId);
@@ -129,9 +144,9 @@ export default function PatientPage() {
     initFormNumber();
   }, [visitId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* ── auto-poll when a requestId is set (WATANIA / ZERO / ISLAMIC) ── */
+  /* ── auto-poll when a requestId is set (WATANIA eligibility / ZERO / ISLAMIC) ── */
   useEffect(() => {
-    if (!requestId) return;
+    if (!requestId) return () => {};
     let attempts = 0;
     const timer = setInterval(async () => {
       attempts += 1;
@@ -156,15 +171,42 @@ export default function PatientPage() {
         }
       } catch { /* will retry next tick */ }
     }, 5000);
-    clearInterval(timer)
+    return () => clearInterval(timer);
   }, [requestId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* ── recheck: poll for insurer approval ───────────────────────────── */
+  /* ── auto-poll for WATANIA final authorization (after "Close and Submit Claim") ── */
+  useEffect(() => {
+    if (!finalAuthReqId) return () => {};
+    let attempts = 0;
+    const timer = setInterval(async () => {
+      attempts += 1;
+      try {
+        const res  = await checkFinalAuthorization(finalAuthReqId);
+        const data = res?.data;
+        if (data?.formNumber && !data?.pending) {
+          clearInterval(timer);
+          setFinalAuthReqId(null);
+          enqueueSnackbar(t('Authorization approved — submitting claim'), { variant: 'success' });
+          await submitClaim();
+        } else if (data?.pending === false && !data?.success) {
+          clearInterval(timer);
+          setFinalAuthReqId(null);
+          enqueueSnackbar(data?.error || t('Authorization rejected by insurer'), { variant: 'error' });
+        } else if (attempts >= 24) {
+          clearInterval(timer);
+          setFinalAuthReqId(null);
+          enqueueSnackbar(t('Timeout: no insurer response for final authorization'), { variant: 'error' });
+        }
+      } catch { /* will retry next tick */ }
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [finalAuthReqId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── recheck: poll for insurer approval ─────────────────────────── */
   const handleRecheck = useCallback(async () => {
     setLoadingFormNumber(true);
     try {
       if (!requestId) {
-        // No pending request — re-submit using stored context
         if (!visitCtx) {
           enqueueSnackbar(t('Visit context not loaded'), { variant: 'warning' });
           return;
@@ -173,6 +215,7 @@ export default function PatientPage() {
         const data = res?.data;
         if (data?.formNumber) {
           setFormNumber(data.formNumber);
+          if (data?.idPayer) setIdPayer(data.idPayer);
           setAuthApproved(true);
           enqueueSnackbar(t('Form number obtained'), { variant: 'success' });
           return;
@@ -182,7 +225,6 @@ export default function PatientPage() {
           enqueueSnackbar(t('Request submitted, awaiting insurer approval'), { variant: 'info' });
         }
       } else {
-        // Poll existing request
         const res  = await checkFormNumber(requestId);
         const data = res?.data;
         if (data?.formNumber) {
@@ -209,13 +251,45 @@ export default function PatientPage() {
     }
   }, [requestId, visitCtx, enqueueSnackbar, t]);
 
-  /* ── claim submit ──────────────────────────────────────────────────── */
+  /* ── claim submit ─────────────────────────────────────────────────── */
+  // Always calls submitFinalAuthorization.
+  // Backend decides per strategy:
+  //   WATANIA → Authorization with EncounterID = IDPayer (from eligibility)
+  //   DELTA   → Authorization with self-generated EncounterID (formNumber)
+  //   ZERO / ISLAMIC → returns { noAuthRequired: true } → submitClaim directly
   const handleSubmit = async () => {
+    setSubmittingFinal(true);
     try {
-      await submitClaim();
-      enqueueSnackbar('Claim submitted successfully', { variant: 'success' });
-    } catch (error) {
-      enqueueSnackbar('Failed to submit claim', { variant: 'error' });
+      const res = await submitFinalAuthorization({
+        insuranceLicense: visitCtx?.insuranceLicense,
+        clinicianId:      visitCtx?.clinicianId,
+        patientNID:       visitCtx?.patientNID,
+        memberID:         visitCtx?.memberID,
+        // WATANIA: encounterId = IDPayer returned from eligibility
+        // DELTA:   encounterId = self-generated EncounterID (stored as formNumber)
+        encounterId:      idPayer || formNumber,
+        diagnosisCodes:   diagnosisData, // already has { code, description, type }
+        visitType:        visitCtx?.visitType || 'consultant',
+        procedureOrders:  proceduresData,
+        labOrders:        labData,
+        radiologyOrders:  radiologyData,
+        medicationOrders: medicationData,
+        physioOrders:     physioData,
+      });
+      const data = res?.data;
+      if (data?.pending && data?.requestId) {
+        setFinalAuthReqId(data.requestId);
+        enqueueSnackbar(t('Authorization submitted — awaiting insurer approval'), { variant: 'info' });
+      } else if (data?.noAuthRequired) {
+        await submitClaim();
+        enqueueSnackbar(t('Claim submitted successfully'), { variant: 'success' });
+      } else {
+        enqueueSnackbar(data?.error || t('Authorization failed'), { variant: 'error' });
+      }
+    } catch (err) {
+      enqueueSnackbar(err?.message || t('Failed to submit'), { variant: 'error' });
+    } finally {
+      setSubmittingFinal(false);
     }
   };
 
@@ -229,6 +303,8 @@ export default function PatientPage() {
     if (requestId && !formNumber)         return { label: t('Pending approval'), color: 'warning' };
     return { label: t('Not eligible'), color: 'error' };
   }, [loadingFormNumber, authApproved, formNumber, requestId, t]);
+
+  const claimBusy = submittingFinal || !!finalAuthReqId;
 
   return (
     <Box sx={{ p: 3, bgcolor: '#f4f6f8', minHeight: '100vh' }}>
@@ -258,7 +334,7 @@ export default function PatientPage() {
           <Grid item xs={12} md={3} textAlign="right">
             <Chip label={authStatus.label} color={authStatus.color} sx={{ mb: 0.5 }} />
             {formNumber && (
-              <Tooltip title={t('e-Form Number')}>
+              <Tooltip title={isWatania ? t('IDPayer / EncounterID') : t('e-Form Number')}>
                 <Typography
                   variant="caption"
                   display="block"
@@ -305,19 +381,52 @@ export default function PatientPage() {
 
           <AccordionDetails>
             {index === 0 && (
-              <AddDiagnosis onDataChange={(data) => updateSectionStatus('diagnosis', data.length > 0)} />
+              <AddDiagnosis
+                onDataChange={(data) => {
+                  updateSectionStatus('diagnosis', data.length > 0);
+                  setDiagnosisData(data);
+                }}
+              />
             )}
             {index === 1 && (
-              <LaboratoryOrders onDataChange={(hasData) => updateSectionStatus('lab', hasData)} />
+              <ClinicERProcedures
+                onDataChange={(data) => {
+                  updateSectionStatus('procedures', data.length > 0);
+                  setProceduresData(data);
+                }}
+              />
             )}
             {index === 2 && (
-              <RadiologyOrders onDataChange={(hasData) => updateSectionStatus('radiology', hasData)} />
+              <LaboratoryOrders
+                onDataChange={(data) => {
+                  updateSectionStatus('lab', data.length > 0);
+                  setLabData(data);
+                }}
+              />
             )}
             {index === 3 && (
-              <MedicationsOrders onDataChange={(hasData) => updateSectionStatus('medications', hasData)} />
+              <RadiologyOrders
+                onDataChange={(data) => {
+                  updateSectionStatus('radiology', data.length > 0);
+                  setRadiologyData(data);
+                }}
+              />
             )}
             {index === 4 && (
-              <PhysiotherapyOrders onDataChange={(hasData) => updateSectionStatus('physiotherapy', hasData)} />
+              <MedicationsOrders
+                onDataChange={(data) => {
+                  updateSectionStatus('medications', data.length > 0);
+                  setMedicationData(data);
+                }}
+              />
+            )}
+            {index === 5 && (
+              <PhysiotherapyOrders
+                onDataChange={(data) => {
+                  updateSectionStatus('physiotherapy', data.length > 0);
+                  setPhysioData(data);
+                }}
+              />
             )}
           </AccordionDetails>
         </Accordion>
@@ -330,8 +439,14 @@ export default function PatientPage() {
         <Button variant="contained" color="primary">
           Send Orders
         </Button>
-        <Button variant="contained" color="success" onClick={handleSubmit}>
-          {t('Close and Submit Claim')}
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleSubmit}
+          disabled={claimBusy}
+          startIcon={claimBusy ? <CircularProgress size={16} color="inherit" /> : null}
+        >
+          {finalAuthReqId ? t('Awaiting insurer approval...') : t('Close and Submit Claim')}
         </Button>
       </Box>
     </Box>

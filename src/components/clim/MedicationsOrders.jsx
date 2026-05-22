@@ -59,7 +59,7 @@ export default function MedicationsOrders({ onDataChange }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     if (onDataChange) {
-      onDataChange(orders.length > 0);
+      onDataChange(orders);
     }
   }, [orders, onDataChange]);
   const filtered = MEDICATIONS_LIST.filter((m) => {

@@ -1,81 +1,91 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import {
   Box,
+  Chip,
   Grid,
   List,
-  Chip,
   Paper,
   Divider,
   TextField,
   Typography,
   ListItemText,
   ListItemButton,
+  CircularProgress,
 } from '@mui/material';
 
+import axiosInstance from 'src/utils/axios';
 import { useLocales } from 'src/locales';
 
-const DIAGNOSIS_LIST = [
-  {
-    code: 'A18.0',
-    nameEn: 'Tuberculosis of other specified joint',
-    nameAr: 'السل في مفصل محدد آخر',
-  },
-  {
-    code: 'G44.2',
-    nameEn: 'Chronic tension type headache',
-    nameAr: 'صداع توتري مزمن',
-  },
-  {
-    code: 'R51',
-    nameEn: 'Headache',
-    nameAr: 'صداع',
-  },
-  {
-    code: 'K08.1',
-    nameEn: 'Loss of teeth due to trauma',
-    nameAr: 'فقدان الأسنان بسبب إصابة',
-  },
-];
-
 export default function AddDiagnosis({ onDataChange }) {
-  const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState([]);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  useEffect(() => {
-  if (onDataChange) {
-    onDataChange(selected);
-  }
-}, [selected, onDataChange]);
+  const [search, setSearch]   = useState('');
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState([]);
 
+  const debounceRef = useRef(null);
 
-  const filtered = DIAGNOSIS_LIST.filter((d) => {
-    const name = curLangAr ? d.nameAr : d.nameEn;
-    return name.toLowerCase().includes(search.toLowerCase());
-  });
+  const fetchDiagnoses = useCallback(async (query) => {
+    if (query.trim().length < 2) { setOptions([]); return; }
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get('/api/diagnosis/search', { params: { q: query } });
+      setOptions(res.data || []);
+    } catch {
+      setOptions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearch(val);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchDiagnoses(val), 300);
+  };
 
   const addDiagnosis = (item) => {
     if (selected.find((s) => s.code === item.code)) return;
-    setSelected((prev) => [...prev, item]);
+    const updated = [...selected, item];
+    setSelected(updated);
+    notify(updated);
+    setSearch('');
+    setOptions([]);
   };
 
   const removeDiagnosis = (code) => {
-    setSelected((prev) => prev.filter((d) => d.code !== code));
+    const updated = selected.filter((d) => d.code !== code);
+    setSelected(updated);
+    notify(updated);
+  };
+
+  const notify = (list) => {
+    if (!onDataChange) return;
+    // First item = Principal, rest = Secondary
+    onDataChange(
+      list.map((d, i) => ({
+        code:        d.code,
+        description: d.description || d.nameEn || '',
+        type:        i === 0 ? 'Principal' : 'Secondary',
+      }))
+    );
   };
 
   return (
     <Paper sx={{ p: 2, mb: 2, borderRadius: 2 }}>
       <Typography fontWeight="bold" mb={2}>
-          {curLangAr ? 'إضافة تشخيص' : 'Add Diagnosis'}
+        {curLangAr ? 'إضافة تشخيص' : 'Add Diagnosis'}
       </Typography>
 
       <Grid container spacing={2}>
-        {/* LEFT SIDE */}
+        {/* ── Selected diagnoses ── */}
         <Grid item xs={12} md={8}>
           <Box
             sx={{
@@ -98,42 +108,65 @@ export default function AddDiagnosis({ onDataChange }) {
                 }}
               >
                 <DragIndicatorIcon fontSize="large" />
-                <Typography mt={1}>{curLangAr ? 'اسحب أو اختر تشخيص' : 'Drag or Select Diagnosis'}</Typography>
+                <Typography mt={1}>
+                  {curLangAr ? 'اختر تشخيصًا من القائمة' : 'Select a diagnosis from the list'}
+                </Typography>
               </Box>
             ) : (
-              selected.map((item) => (
-                <Chip
-                  key={item.code}
-                  label={`${item.code} - ${curLangAr ? item.nameAr : item.nameEn}`}
-                  onDelete={() => removeDiagnosis(item.code)}
-                  sx={{ m: 0.5 }}
-                  color="primary"
-                  variant="outlined"
-                />
-              ))
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {selected.map((item, index) => (
+                  <Chip
+                    key={item.code}
+                    label={`${index === 0 ? '★ ' : ''}${item.code}${item.nameEn ? ` — ${item.nameEn}` : ''}`}
+                    onDelete={() => removeDiagnosis(item.code)}
+                    color={index === 0 ? 'primary' : 'default'}
+                    variant="outlined"
+                    sx={{ maxWidth: 320 }}
+                  />
+                ))}
+              </Box>
             )}
           </Box>
+          {selected.length > 0 && (
+            <Typography variant="caption" color="text.secondary" mt={0.5} display="block">
+              {curLangAr ? '★ = التشخيص الرئيسي (Principal)' : '★ = Principal diagnosis · others are Secondary'}
+            </Typography>
+          )}
         </Grid>
 
-        {/* RIGHT SIDE */}
+        {/* ── Search panel ── */}
         <Grid item xs={12} md={4}>
           <TextField
             fullWidth
             size="small"
-            placeholder={curLangAr ? 'ابحث عن تشخيص' : 'Search diagnosis'}
+            placeholder={curLangAr ? 'ابحث بالرمز أو الاسم' : 'Search by ICD code or name'}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
+            InputProps={{
+              endAdornment: loading ? <CircularProgress size={16} /> : null,
+            }}
           />
 
           <Divider sx={{ my: 1 }} />
 
-          <List dense sx={{ maxHeight: 180, overflow: 'auto' }}>
-            {filtered.map((item) => (
-              <ListItemButton key={item.code} onClick={() => addDiagnosis(item)}>
-                <AddIcon fontSize="small" sx={{ mr: 1 }} />
+          {options.length === 0 && search.trim().length >= 2 && !loading && (
+            <Typography variant="caption" color="text.secondary" px={1}>
+              {curLangAr ? 'لا توجد نتائج' : 'No results'}
+            </Typography>
+          )}
+
+          <List dense sx={{ maxHeight: 220, overflow: 'auto' }}>
+            {options.map((item) => (
+              <ListItemButton
+                key={item.code}
+                onClick={() => addDiagnosis(item)}
+                disabled={!!selected.find((s) => s.code === item.code)}
+              >
+                <AddIcon fontSize="small" sx={{ mr: 1, flexShrink: 0 }} />
                 <ListItemText
-                  primary={curLangAr ? item.nameAr : item.nameEn}
+                  primary={item.nameEn}
                   secondary={item.code}
+                  primaryTypographyProps={{ fontSize: 13 }}
                 />
               </ListItemButton>
             ))}
@@ -143,6 +176,7 @@ export default function AddDiagnosis({ onDataChange }) {
     </Paper>
   );
 }
+
 AddDiagnosis.propTypes = {
   onDataChange: PropTypes.func,
 };
