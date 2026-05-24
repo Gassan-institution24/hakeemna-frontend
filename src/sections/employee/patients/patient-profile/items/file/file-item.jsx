@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Card, Link, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Card, Link, Stack, Button, Typography, IconButton, Chip } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -76,6 +76,8 @@ export default function FileItem({ one, refetch }) {
     }
   });
 
+  const isDentalChartLog = one.source === 'dental_chart';
+
   return (
     <Card sx={{ py: 3, px: 5, mb: 2 }}>
       {editting ? (
@@ -112,11 +114,23 @@ export default function FileItem({ one, refetch }) {
         </FormProvider>
       ) : (
         <>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-            <IconButton onClick={() => setEditting(true)}>
-              <Iconify icon="lets-icons:edit-fill" />
-            </IconButton>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
+              {isDentalChartLog && (
+                <Chip
+                  label={one.name || t('dental chart log')}
+                  size="small"
+                  color="info"
+                  sx={{ fontWeight: 600, height: 24 }}
+                />
+              )}
+            </Stack>
+            {!isDentalChartLog && (
+              <IconButton onClick={() => setEditting(true)}>
+                <Iconify icon="lets-icons:edit-fill" />
+              </IconButton>
+            )}
           </Stack>
           <Stack gap={1} mt={1} ml={1}>
             <Typography
