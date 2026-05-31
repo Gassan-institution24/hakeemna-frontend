@@ -40,6 +40,12 @@ import { getSurfaceLabel } from '../constants/fdi';
 
 const SURFACES = ['occlusal', 'mesial', 'distal', 'buccal', 'lingual'];
 const PROC_STATUSES = ['planned', 'in_progress', 'completed', 'cancelled'];
+const PROC_STATUS_COLORS = {
+  planned: 'info',
+  in_progress: 'warning',
+  completed: 'success',
+  cancelled: 'error',
+};
 
 function ColorSwatch({ color, stroke, size = 14 }) {
   return (
@@ -97,6 +103,9 @@ export default function ToothModal({
   const [procError, setProcError] = useState('');
 
   // ── Sync from toothData ───────────────────────────────────────────────────
+  // Only re-initialise when the tooth changes (fdiNumber), not on every
+  // background re-fetch.  Keeping toothData out of the deps prevents the
+  // auto-save SWR revalidation from resetting the user's unsaved edits.
   useEffect(() => {
     if (toothData) {
       setWholeCondition(toothData.whole_condition || '');
@@ -120,7 +129,8 @@ export default function ToothModal({
     setInfoSuccess(false);
     setProcError('');
     setTab('info');
-  }, [toothData, fdiNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fdiNumber]);
 
   // ── Save info ─────────────────────────────────────────────────────────────
   const handleSaveInfo = async () => {
@@ -300,9 +310,24 @@ export default function ToothModal({
                     label={isAr ? 'نوع العلاج' : 'Treatment Status'}
                     onChange={(e) => setWholeStatus(e.target.value)}
                   >
-                    <MenuItem value="existing">{isAr ? 'حالي' : 'Existing'}</MenuItem>
-                    <MenuItem value="planned">{isAr ? 'مخطط' : 'Planned'}</MenuItem>
-                    <MenuItem value="watch">{isAr ? 'مراقبة' : 'Watch'}</MenuItem>
+                    <MenuItem value="existing">
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <Box sx={{ width: 12, height: 12, borderRadius: 0.5, border: '1.5px solid #BDBDBD', bgcolor: 'transparent', flexShrink: 0 }} />
+                        <span>{isAr ? 'حالي' : 'Existing'}</span>
+                      </Stack>
+                    </MenuItem>
+                    <MenuItem value="planned">
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <Box sx={{ width: 12, height: 12, borderRadius: 0.5, border: '2px dashed #1565C0', bgcolor: 'transparent', flexShrink: 0 }} />
+                        <Box component="span" sx={{ color: '#1565C0', fontWeight: 600 }}>{isAr ? 'مخطط' : 'Planned'}</Box>
+                      </Stack>
+                    </MenuItem>
+                    <MenuItem value="watch">
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <Box sx={{ width: 12, height: 12, borderRadius: 0.5, border: '2px dotted #F9A825', bgcolor: 'transparent', flexShrink: 0 }} />
+                        <Box component="span" sx={{ color: '#F9A825', fontWeight: 600 }}>{isAr ? 'مراقبة' : 'Watch'}</Box>
+                      </Stack>
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -482,7 +507,12 @@ export default function ToothModal({
                         primary={
                           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
                             <Typography variant="body2" fontWeight={600}>{proc.description}</Typography>
-                            <Chip label={proc.status} size="small" sx={{ height: 18, fontSize: '0.65rem' }} />
+                            <Chip
+                              label={proc.status?.replace('_', ' ')}
+                              size="small"
+                              color={PROC_STATUS_COLORS[proc.status] || 'info'}
+                              sx={{ height: 18, fontSize: '0.65rem' }}
+                            />
                             {proc.cost > 0 && (
                               <Chip label={`${proc.cost} JOD`} size="small" color="success" variant="outlined" sx={{ height: 18, fontSize: '0.65rem' }} />
                             )}
