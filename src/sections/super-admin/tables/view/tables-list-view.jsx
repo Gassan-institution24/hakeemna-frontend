@@ -99,6 +99,7 @@ export default function TablesListView() {
       { tableName: 'currencies', documents: [] }, //
       { tableName: 'analyses', documents: [] }, //
       { tableName: 'medical_categories', documents: [] }, //
+      { tableName: 'medicines_categories', documents: [] }, //
       { tableName: 'medicines_families', documents: [] }, //
       { tableName: 'insurance_types', documents: [] }, //
       { tableName: 'companies', documents: [] }, //

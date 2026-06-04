@@ -3,7 +3,16 @@ import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
 import { LoadingButton } from '@mui/lab';
-import { Stack, Checkbox, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Alert,
+  Stack,
+  Collapse,
+  Checkbox,
+  Divider,
+  Typography,
+} from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -17,8 +26,11 @@ import {
   useGetUSWorkGroups,
   useGetUSWorkShifts,
   useGetUSDepartments,
+  useGetMedicineCategoriesBySpeciality,
 } from 'src/api';
+import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
 
+import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
 export default function StartupCreating({ open, onClose }) {
@@ -34,12 +46,38 @@ export default function StartupCreating({ open, onClose }) {
   const USData =
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
+  const doctorSpeciality = user?.employee?.speciality;
+  const doctorSpecialityId = doctorSpeciality?._id || doctorSpeciality;
+
   const { departmentsData } = useGetUSDepartments(USData?._id);
   const { workGroupsData } = useGetUSWorkGroups(USData?._id);
   const { workShiftsData } = useGetUSWorkShifts(USData?._id);
   const { roomsData } = useGetUSRooms(USData?._id);
 
+  const { categoriesBySpeciality } = useGetMedicineCategoriesBySpeciality(doctorSpecialityId);
+  const { favoriteMedication } = useGetFavoriteMedication();
+
+  const existingFavNames = new Set((favoriteMedication || []).map((f) => f.favorite_name));
+
+  const newCategories = categoriesBySpeciality.filter(
+    (cat) => cat.medicines?.length > 0 && !existingFavNames.has(cat.name_english)
+  );
+  const alreadyImported = categoriesBySpeciality.filter(
+    (cat) => cat.medicines?.length > 0 && existingFavNames.has(cat.name_english)
+  );
+  const noCategoriesAtAll = categoriesBySpeciality.length === 0;
+  const allAlreadyImported = !noCategoriesAtAll && newCategories.length === 0;
+
   const [tables, setTables] = useState([]);
+  const medCatChecked = tables.includes('medicines categories');
+
+  const toggleMedCat = () => {
+    setTables((prev) =>
+      medCatChecked
+        ? prev.filter((one) => one !== 'medicines categories')
+        : [...prev, 'medicines categories']
+    );
+  };
 
   const onAcceptCreating = async () => {
     try {
@@ -74,6 +112,11 @@ export default function StartupCreating({ open, onClose }) {
           name_arabic: `فريق عمل ${user.employee?.name_arabic || ''}`,
         });
       }
+      if (tables.includes('medicines categories') && doctorSpecialityId) {
+        await axiosInstance.post(endpoints.medicinesCategories.importToFavorites, {
+          specialityId: doctorSpecialityId,
+        });
+      }
       if (tables.includes('rooms and activities')) {
         const { data: consultanstActivity } = await axiosInstance.post(endpoints.activities.all, {
           unit_service: USData?._id,
@@ -99,6 +142,7 @@ export default function StartupCreating({ open, onClose }) {
       onclose();
     }
   };
+
   return (
     <ConfirmDialog
       open={open}
@@ -136,7 +180,7 @@ export default function StartupCreating({ open, onClose }) {
           {USData &&
             (!USData?.employees_number || USData?.employees_number > 3) &&
             checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
-              <Stack direction="row">
+              <Stack direction="row" alignItems="center">
                 <Checkbox
                   disabled={departmentsData.length > 0}
                   checked={tables.includes('department')}
@@ -146,22 +190,16 @@ export default function StartupCreating({ open, onClose }) {
                       : setTables((prev) => [...prev, 'department'])
                   }
                 />
-                <Typography variant="subtitle2" alignSelf="center">
-                  {t('department')}
-                </Typography>
+                <Typography variant="subtitle2">{t('department')}</Typography>
                 {departmentsData.length > 0 && (
-                  <Typography
-                    sx={{ p: 2, color: 'error.main' }}
-                    alignSelf="center"
-                    variant="caption"
-                  >
+                  <Typography sx={{ pl: 1, color: 'error.main' }} variant="caption">
                     {t('already created')}
                   </Typography>
                 )}
               </Stack>
             )}
 
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center">
             <Checkbox
               disabled={workGroupsData.length > 0}
               checked={tables.includes('work group')}
@@ -171,17 +209,15 @@ export default function StartupCreating({ open, onClose }) {
                   : setTables((prev) => [...prev, 'work group'])
               }
             />
-            <Typography variant="subtitle2" alignSelf="center">
-              {t('work group')}
-            </Typography>
+            <Typography variant="subtitle2">{t('work group')}</Typography>
             {workGroupsData.length > 0 && (
-              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+              <Typography sx={{ pl: 1, color: 'error.main' }} variant="caption">
                 {t('already created')}
               </Typography>
             )}
           </Stack>
 
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center">
             <Checkbox
               disabled={workShiftsData.length > 0}
               checked={tables.includes('work shift')}
@@ -191,16 +227,15 @@ export default function StartupCreating({ open, onClose }) {
                   : setTables((prev) => [...prev, 'work shift'])
               }
             />
-            <Typography variant="subtitle2" alignSelf="center">
-              {t('work shift')}
-            </Typography>
+            <Typography variant="subtitle2">{t('work shift')}</Typography>
             {workShiftsData.length > 0 && (
-              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+              <Typography sx={{ pl: 1, color: 'error.main' }} variant="caption">
                 {t('already created')}
               </Typography>
             )}
           </Stack>
-          <Stack direction="row">
+
+          <Stack direction="row" alignItems="center">
             <Checkbox
               disabled={roomsData.length > 1}
               checked={tables.includes('rooms and activities')}
@@ -210,15 +245,130 @@ export default function StartupCreating({ open, onClose }) {
                   : setTables((prev) => [...prev, 'rooms and activities'])
               }
             />
-            <Typography variant="subtitle2" alignSelf="center">
-              {t('rooms and activities')}
-            </Typography>
+            <Typography variant="subtitle2">{t('rooms and activities')}</Typography>
             {roomsData.length > 1 && (
-              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+              <Typography sx={{ pl: 1, color: 'error.main' }} variant="caption">
                 {t('already created')}
               </Typography>
             )}
           </Stack>
+
+          {/* ── Medicines Categories ── */}
+          {doctorSpecialityId && (
+            <Box>
+              <Stack direction="row" alignItems="center" flexWrap="wrap" gap={0.5}>
+                <Checkbox
+                  disabled={noCategoriesAtAll || allAlreadyImported}
+                  checked={medCatChecked}
+                  onChange={toggleMedCat}
+                />
+                <Typography variant="subtitle2">{t('favorite medicines')}</Typography>
+
+                {/* {noCategoriesAtAll && (
+                  <Typography variant="caption" sx={{ color: 'text.disabled', pl: 0.5 }}>
+                    {t('no categories for your speciality yet')}
+                  </Typography>
+                )} */}
+
+                {allAlreadyImported && (
+                  <Typography variant="caption" sx={{ color: 'error.main', pl: 0.5 }}>
+                    {t('already added to favorites')}
+                  </Typography>
+                )}
+
+                {!noCategoriesAtAll && !allAlreadyImported && (
+                  <Stack direction="row" gap={0.5} alignItems="center" flexWrap="wrap">
+                    <Chip
+                      size="small"
+                      color="success"
+                      label={`${newCategories.length} ${t('new')}`}
+                      icon={<Iconify icon="mingcute:add-line" width={14} />}
+                    />
+                    {alreadyImported.length > 0 && (
+                      <Chip
+                        size="small"
+                        color="default"
+                        label={`${alreadyImported.length} ${t('already added')}`}
+                        icon={<Iconify icon="eva:checkmark-fill" width={14} />}
+                      />
+                    )}
+                  </Stack>
+                )}
+              </Stack>
+
+              {/* Preview panel — shows when checkbox is ticked */}
+              <Collapse in={medCatChecked && newCategories.length > 0}>
+                <Alert
+                  severity="info"
+                  icon={<Iconify icon="solar:star-bold-duotone" />}
+                  sx={{ mt: 1, mb: 1, borderRadius: 1.5 }}
+                >
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    {t('The following favorite lists will be created in your prescription favorites:')}
+                  </Typography>
+                </Alert>
+
+                <Stack
+                  spacing={1.5}
+                  sx={{
+                    maxHeight: 260,
+                    overflowY: 'auto',
+                    pr: 0.5,
+                    pb: 1,
+                  }}
+                >
+                  {newCategories.map((cat, idx) => (
+                    <Box
+                      key={cat._id || idx}
+                      sx={{
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: 1.5,
+                        p: { xs: 1, sm: 1.5 },
+                        bgcolor: 'background.neutral',
+                      }}
+                    >
+                      <Stack direction="row" alignItems="center" gap={1} sx={{ mb: 1 }}>
+                        <Iconify
+                          icon="solar:pills-bold-duotone"
+                          width={18}
+                          sx={{ color: 'primary.main', flexShrink: 0 }}
+                        />
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                          {curLangAr ? cat.name_arabic || cat.name_english : cat.name_english}
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={`${cat.medicines?.length} ${t('medicines')}`}
+                          sx={{ ml: 'auto', flexShrink: 0 }}
+                        />
+                      </Stack>
+
+                      <Divider sx={{ mb: 1 }} />
+
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: 0.5,
+                        }}
+                      >
+                        {cat.medicines?.map((med, mi) => (
+                          <Chip
+                            key={med._id || mi}
+                            size="small"
+                            variant="outlined"
+                            label={med.trade_name || med.scientific_name || '—'}
+                            sx={{ fontSize: '0.7rem' }}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  ))}
+                </Stack>
+              </Collapse>
+            </Box>
+          )}
         </Stack>
       }
       action={
@@ -234,6 +384,7 @@ export default function StartupCreating({ open, onClose }) {
     />
   );
 }
+
 StartupCreating.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,

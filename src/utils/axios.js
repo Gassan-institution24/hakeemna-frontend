@@ -102,6 +102,14 @@ export const endpoints = {
     many: '/api/medCategories/many',
     one: (id) => (!id ? null : `/api/medCategories/${id}`),
   },
+  medicinesCategories: {
+    all: '/api/medicinesCategories/',
+    many: '/api/medicinesCategories/many',
+    one: (id) => (!id ? null : `/api/medicinesCategories/${id}`),
+    bySpeciality: (specialityId) => (!specialityId ? null : `/api/medicinesCategories/by-speciality/${specialityId}`),
+    setupDefault: '/api/medicinesCategories/setup-default',
+    importToFavorites: '/api/medicinesCategories/import-to-favorites',
+  },
   oldmedicalreports: {
     all: '/api/oldmedicalreports/',
     patient: (id) => (!id ? null : `/api/oldmedicalreports/patient/${id}`),
