@@ -109,7 +109,9 @@ export default function AddDiagnosis({ onDataChange }) {
               >
                 <DragIndicatorIcon fontSize="large" />
                 <Typography mt={1}>
-                  {curLangAr ? 'اختر تشخيصًا من القائمة' : 'Select a diagnosis from the list'}
+                  {curLangAr
+                    ? 'ابحث أو اكتب تشخيصًا وأضفه'
+                    : 'Search or type a diagnosis and add it'}
                 </Typography>
               </Box>
             ) : (
@@ -150,9 +152,24 @@ export default function AddDiagnosis({ onDataChange }) {
           <Divider sx={{ my: 1 }} />
 
           {options.length === 0 && search.trim().length >= 2 && !loading && (
-            <Typography variant="caption" color="text.secondary" px={1}>
-              {curLangAr ? 'لا توجد نتائج' : 'No results'}
-            </Typography>
+            <>
+              <Typography variant="caption" color="text.secondary" px={1}>
+                {curLangAr ? 'لا توجد نتائج' : 'No results'}
+              </Typography>
+              <ListItemButton
+                onClick={() => addDiagnosis({ code: search.trim(), nameEn: search.trim() })}
+              >
+                <AddIcon fontSize="small" sx={{ mr: 1, flexShrink: 0 }} />
+                <ListItemText
+                  primary={
+                    curLangAr
+                      ? `إضافة "${search.trim()}" كتشخيص مخصص`
+                      : `Add "${search.trim()}" as custom`
+                  }
+                  primaryTypographyProps={{ fontSize: 13 }}
+                />
+              </ListItemButton>
+            </>
           )}
 
           <List dense sx={{ maxHeight: 220, overflow: 'auto' }}>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,20 +19,21 @@ import {
   Autocomplete,
   DialogActions,
   DialogContent,
+  createFilterOptions,
 } from '@mui/material';
 
 import { paths } from '../../../routes/paths';
-import { useRouter } from '../../../routes/hooks';
-
-import { useBoolean } from '../../../hooks/use-boolean';
-
 import axiosInstance from '../../../utils/axios';
+import { useRouter } from '../../../routes/hooks';
 import Iconify from '../../../components/iconify';
 import { useAuthContext } from '../../../auth/hooks';
+import { useBoolean } from '../../../hooks/use-boolean';
 import { useLocales, useTranslate } from '../../../locales';
 import { useGetFavoriteDiagnosis } from '../../../api/doctor_favorite';
 import { useGetdiagnosis, useGetEntranceDiagnosis } from '../../../api';
 import FormProvider, { RHFTextField } from '../../../components/hook-form';
+
+const filter = createFilterOptions();
 
 // ─── level → chip color ───────────────────────────────────────────────────────
 
@@ -62,6 +63,8 @@ export default function Diagnosis({ Entrance }) {
   const [favName, setFavName] = useState('');
   const [favNameAr, setFavNameAr] = useState('');
   const [selectedFavorite, setSelectedFavorite] = useState(null);
+  const [primaryInput, setPrimaryInput] = useState('');
+  const [secondaryInput, setSecondaryInput] = useState('');
 
   const schema = Yup.object().shape({
     primary_diagnosis: Yup.object().required('Primary diagnosis is required'),
@@ -82,10 +85,22 @@ export default function Diagnosis({ Entrance }) {
 
   // ── Fill form from a saved favorite list ─────────────────────────────────
   const handleSelectFavorite = (favorite) => {
-    if (!favorite?.diagnoses?.length) return;
-    const [first, second] = favorite.diagnoses;
-    setValue('primary_diagnosis', first || null, { shouldValidate: true });
-    setValue('secondary_diagnosis', second || null, { shouldValidate: true });
+    if (!favorite) return;
+    // Use explicit primary/secondary fields (new format), fall back to diagnoses array (legacy)
+    const primaryVal =
+      favorite.primary_diagnosis ||
+      (favorite.primary_diagnosis_name ? { name: favorite.primary_diagnosis_name } : null) ||
+      favorite.diagnoses?.[0] ||
+      null;
+    const secondaryVal =
+      favorite.secondary_diagnosis ||
+      (favorite.secondary_diagnosis_name ? { name: favorite.secondary_diagnosis_name } : null) ||
+      favorite.diagnoses?.[1] ||
+      null;
+    setValue('primary_diagnosis', primaryVal, { shouldValidate: true });
+    setValue('secondary_diagnosis', secondaryVal, { shouldValidate: true });
+    setPrimaryInput(primaryVal?.name || '');
+    setSecondaryInput(secondaryVal?.name || '');
   };
 
   const handleSaveFavorite = async () => {
@@ -101,6 +116,10 @@ export default function Diagnosis({ Entrance }) {
         favorite_name: favName,
         favorite_name_ar: favNameAr,
         diagnoses,
+        primary_diagnosis: primary._id || undefined,
+        primary_diagnosis_name: !primary._id ? primary?.name : undefined,
+        secondary_diagnosis: secondary?._id || undefined,
+        secondary_diagnosis_name: !secondary?._id ? secondary?.name : undefined,
       });
       enqueueSnackbar(t('Saved to favorites'), { variant: 'success' });
       saveDialog.onFalse();
@@ -115,8 +134,14 @@ export default function Diagnosis({ Entrance }) {
   const onSubmit = async (data) => {
     try {
       await axiosInstance.post('/api/patient-diagnosis', {
-        primary_diagnosis: data.primary_diagnosis?._id,
-        secondary_diagnosis: data.secondary_diagnosis?._id,
+        primary_diagnosis: data.primary_diagnosis?._id || undefined,
+        primary_diagnosis_name: !data.primary_diagnosis?._id
+          ? data.primary_diagnosis?.name
+          : undefined,
+        secondary_diagnosis: data.secondary_diagnosis?._id || undefined,
+        secondary_diagnosis_name: !data.secondary_diagnosis?._id
+          ? data.secondary_diagnosis?.name
+          : undefined,
         appointment: Entrance?.appointmentId,
         entrance: Entrance?._id,
         unit_service_patient: Entrance?.unit_service_patient,
@@ -130,6 +155,8 @@ export default function Diagnosis({ Entrance }) {
       dialog.onFalse();
       reset();
       setSelectedFavorite(null);
+      setPrimaryInput('');
+      setSecondaryInput('');
     } catch {
       enqueueSnackbar(t('Error saving diagnosis'), { variant: 'error' });
     }
@@ -178,12 +205,13 @@ export default function Diagnosis({ Entrance }) {
             >
               <Box sx={{ flex: 1 }}>
                 <Typography variant="subtitle1" fontWeight={600}>
-                  {item?.primary_diagnosis?.name || t('Diagnosis')}
+                  {item?.primary_diagnosis?.name || item?.primary_diagnosis_name || t('Diagnosis')}
                 </Typography>
 
-                {item?.secondary_diagnosis?.name && (
+                {(item?.secondary_diagnosis?.name || item?.secondary_diagnosis_name) && (
                   <Typography variant="body2" color="text.secondary">
-                    {t('Secondary')}: {item.secondary_diagnosis.name}
+                    {t('Secondary')}:{' '}
+                    {item.secondary_diagnosis?.name || item.secondary_diagnosis_name}
                   </Typography>
                 )}
 
@@ -249,7 +277,7 @@ export default function Diagnosis({ Entrance }) {
       {/* ── Add diagnosis dialog ────────────────────────────────────────── */}
       <Dialog
         open={dialog.value}
-        onClose={() => { dialog.onFalse(); setSelectedFavorite(null); }}
+        onClose={() => { dialog.onFalse(); setSelectedFavorite(null); setPrimaryInput(''); setSecondaryInput(''); }}
       >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>{t('Add Diagnosis')}</DialogTitle>
@@ -296,26 +324,82 @@ export default function Diagnosis({ Entrance }) {
             <Divider sx={{ mb: 2 }} />
 
             <Autocomplete
+              freeSolo
               options={diagnosisData || []}
               value={watch('primary_diagnosis') || null}
-              onChange={(_, newValue) =>
-                setValue('primary_diagnosis', newValue, { shouldValidate: true })
+              inputValue={primaryInput}
+              onInputChange={(_, newVal, reason) => {
+                setPrimaryInput(newVal);
+                if (reason === 'input') {
+                  setValue('primary_diagnosis', newVal.trim() ? { name: newVal.trim() } : null, { shouldValidate: false });
+                }
+              }}
+              onChange={(_, newValue) => {
+                let normalized;
+                if (typeof newValue === 'string') normalized = { name: newValue };
+                else if (newValue?.inputValue) normalized = { name: newValue.inputValue };
+                else normalized = newValue;
+                setValue('primary_diagnosis', normalized, { shouldValidate: true });
+                setPrimaryInput(newValue?.inputValue || newValue?.name || (typeof newValue === 'string' ? newValue : '') || '');
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const exists = options.some((o) => o.name?.toLowerCase() === inputValue.toLowerCase());
+                if (inputValue !== '' && !exists) {
+                  filtered.push({ inputValue, name: `${t('Add')}: "${inputValue}"` });
+                }
+                return filtered;
+              }}
+              getOptionLabel={(option) => {
+                if (typeof option === 'string') return option;
+                if (option.inputValue) return option.inputValue;
+                return option.name || '';
+              }}
+              isOptionEqualToValue={(option, value) =>
+                option._id && value._id ? option._id === value._id : option.name === value.name
               }
-              getOptionLabel={(option) => option.name || ''}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
               renderInput={(params) => (
                 <TextField {...params} label={t('Primary Diagnosis')} sx={{ my: 2 }} />
               )}
             />
 
             <Autocomplete
+              freeSolo
               options={diagnosisData || []}
               value={watch('secondary_diagnosis') || null}
-              onChange={(_, newValue) =>
-                setValue('secondary_diagnosis', newValue, { shouldValidate: true })
+              inputValue={secondaryInput}
+              onInputChange={(_, newVal, reason) => {
+                setSecondaryInput(newVal);
+                if (reason === 'input') {
+                  setValue('secondary_diagnosis', newVal.trim() ? { name: newVal.trim() } : null, { shouldValidate: false });
+                }
+              }}
+              onChange={(_, newValue) => {
+                let normalized;
+                if (typeof newValue === 'string') normalized = { name: newValue };
+                else if (newValue?.inputValue) normalized = { name: newValue.inputValue };
+                else normalized = newValue;
+                setValue('secondary_diagnosis', normalized, { shouldValidate: true });
+                setSecondaryInput(newValue?.inputValue || newValue?.name || (typeof newValue === 'string' ? newValue : '') || '');
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const exists = options.some((o) => o.name?.toLowerCase() === inputValue.toLowerCase());
+                if (inputValue !== '' && !exists) {
+                  filtered.push({ inputValue, name: `${t('Add')}: "${inputValue}"` });
+                }
+                return filtered;
+              }}
+              getOptionLabel={(option) => {
+                if (typeof option === 'string') return option;
+                if (option.inputValue) return option.inputValue;
+                return option.name || '';
+              }}
+              isOptionEqualToValue={(option, value) =>
+                option._id && value._id ? option._id === value._id : option.name === value.name
               }
-              getOptionLabel={(option) => option.name || ''}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
               renderInput={(params) => (
                 <TextField {...params} label={t('Secondary Diagnosis')} sx={{ mb: 2 }} />
               )}
