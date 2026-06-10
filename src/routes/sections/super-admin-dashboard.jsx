@@ -43,6 +43,10 @@ const SurgeryEditPage = lazy(() => import('src/pages/super-admin/tables/surgerie
 const MedCatTablePage = lazy(() => import('src/pages/super-admin/tables/medical-categories/table'));
 const MedCatCreatePage = lazy(() => import('src/pages/super-admin/tables/medical-categories/new'));
 const MedCatEditPage = lazy(() => import('src/pages/super-admin/tables/medical-categories/edit'));
+// MEDICINES CATEGORIES
+const MedCatTablePage2 = lazy(() => import('src/pages/super-admin/tables/medicines-categories/table'));
+const MedCatCreatePage2 = lazy(() => import('src/pages/super-admin/tables/medicines-categories/new'));
+const MedCatEditPage2 = lazy(() => import('src/pages/super-admin/tables/medicines-categories/edit'));
 // DISEASES
 const DiseasesTablePage = lazy(() => import('src/pages/super-admin/tables/diseases/table'));
 const DiseaseCreatePage = lazy(() => import('src/pages/super-admin/tables/diseases/new'));
@@ -1044,6 +1048,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <MedCatTablePage /> },
               { path: 'new', element: <MedCatCreatePage /> },
               { path: ':id/edit', element: <MedCatEditPage /> },
+            ],
+          },
+          {
+            path: 'medicines_categories',
+            children: [
+              { element: <MedCatTablePage2 />, index: true },
+              { path: 'list', element: <MedCatTablePage2 /> },
+              { path: 'new', element: <MedCatCreatePage2 /> },
+              { path: ':id/edit', element: <MedCatEditPage2 /> },
             ],
           },
           {

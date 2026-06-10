@@ -85,6 +85,7 @@ export * from './ticket_categories';
 export * from './added_value_tax_GD';
 export * from './free_subscriptions';
 export * from './medical_categories';
+export * from './medicines_categories';
 export * from './old_medical_reports';
 export * from './medicines_families';
 export * from './entrance_management';

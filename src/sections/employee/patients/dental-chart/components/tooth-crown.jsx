@@ -102,6 +102,17 @@ export default function ToothCrown({
   const wholeCondition = toothData?.whole_condition;
   const isMissing = wholeCondition === 'missing';
 
+  // Effective treatment status: whole_status takes precedence, then check
+  // any surface that has an actual condition set with a non-existing status.
+  const wholeStatus = toothData?.whole_status;
+  const surfaceStatusValues = Object.values(toothData?.surfaces || {})
+    .filter((s) => s?.condition)          // only surfaces that have a condition
+    .map((s) => s?.status);
+  const hasPlanned =
+    wholeStatus === 'planned' || surfaceStatusValues.includes('planned');
+  const hasWatch =
+    !hasPlanned && (wholeStatus === 'watch' || surfaceStatusValues.includes('watch'));
+
   const scale = size / 44;
 
   return (
@@ -169,6 +180,38 @@ export default function ToothCrown({
         strokeWidth="0.8"
         style={{ pointerEvents: 'none' }}
       />
+
+      {/* ── Treatment status ring ── */}
+      {!isSelected && hasPlanned && (
+        <rect
+          x="1"
+          y="1"
+          width="42"
+          height="42"
+          rx="3"
+          ry="3"
+          fill="none"
+          stroke="#1565C0"
+          strokeWidth="2.5"
+          strokeDasharray="5 3"
+          style={{ pointerEvents: 'none' }}
+        />
+      )}
+      {!isSelected && hasWatch && (
+        <rect
+          x="1"
+          y="1"
+          width="42"
+          height="42"
+          rx="3"
+          ry="3"
+          fill="none"
+          stroke="#F9A825"
+          strokeWidth="2.5"
+          strokeDasharray="3 2"
+          style={{ pointerEvents: 'none' }}
+        />
+      )}
 
       {/* ── Selection ring ── */}
       {isSelected && (

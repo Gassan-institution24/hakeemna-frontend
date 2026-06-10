@@ -505,6 +505,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/medical_categories/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/medical_categories/${id}/edit`,
       },
+      medicinesCategories: {
+        root: `${ROOTS.SUPERADMIN}/tables/medicines_categories`,
+        new: `${ROOTS.SUPERADMIN}/tables/medicines_categories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines_categories/${id}/edit`,
+      },
       medicines: {
         root: `${ROOTS.SUPERADMIN}/tables/medicines`,
         new: `${ROOTS.SUPERADMIN}/tables/medicines/new`,

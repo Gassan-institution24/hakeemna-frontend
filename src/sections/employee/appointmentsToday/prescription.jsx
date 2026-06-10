@@ -31,7 +31,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
-import { useGetMedicines, useGeEntrancePrescription } from 'src/api';
+import { useGetMedicines, useGeEntrancePrescription, useGetMedicineCategoriesBySpeciality } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -45,6 +45,13 @@ export default function Prescription({ Entrance }) {
   const { medicinesData } = useGetMedicines({
     select: 'trade_name concentration',
   });
+
+  const doctorSpecialityId =
+    user?.employee?.speciality?._id || user?.employee?.speciality;
+
+  const { categoriesBySpeciality } = useGetMedicineCategoriesBySpeciality(doctorSpecialityId);
+
+  const [selectedCategories, setSelectedCategories] = useState({});
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -300,6 +307,7 @@ export default function Prescription({ Entrance }) {
   const resetDialogState = () => {
     setPrescriptions([{ id: 0 }]);
     setSelectedFavorite(null);
+    setSelectedCategories({});
     reset({
       prescriptions: [
         {
@@ -446,15 +454,35 @@ export default function Prescription({ Entrance }) {
             <Divider sx={{ mb: 2 }} />
             {prescriptions?.map((prescription, index) => (
               <div key={prescription.id}>
+                {categoriesBySpeciality.length > 0 && (
+                  <Autocomplete
+                    sx={{ mb: 1.5 }}
+                    options={categoriesBySpeciality}
+                    value={selectedCategories[index] || null}
+                    onChange={(_, category) => {
+                      setSelectedCategories((prev) => ({ ...prev, [index]: category }));
+                      setValue(`prescriptions[${index}].medicines`, null);
+                    }}
+                    getOptionLabel={(option) => option?.name_english || ''}
+                    isOptionEqualToValue={(option, value) => option?._id === value?._id}
+                    renderInput={(params) => (
+                      <TextField {...params} label={t('Medicine Category')} />
+                    )}
+                  />
+                )}
                 <Autocomplete
-                  options={medicinesData || []}
+                  options={
+                    selectedCategories[index]?.medicines?.length
+                      ? selectedCategories[index].medicines
+                      : medicinesData || []
+                  }
                   value={watch(`prescriptions[${index}].medicines`) || null}
                   onChange={(event, newValue) =>
                     setValue(`prescriptions[${index}].medicines`, newValue)
                   }
                   isOptionEqualToValue={(option, value) => option?._id === value?._id}
                   getOptionLabel={(option) =>
-                    option?.trade_name ? `${option.trade_name} ${option.concentration}` : ''
+                    option?.trade_name ? `${option.trade_name} ${option.concentration || ''}`.trim() : ''
                   }
                   renderInput={(params) => <TextField {...params} label={t('medicine')} />}
                 />
@@ -554,7 +582,7 @@ export default function Prescription({ Entrance }) {
                   variant="outlined"
                   disabled={prescriptions.length === 1} // Disable if only one prescription
                 >
-                  {t('Remove Prescription')}
+                  {t('Remove from Prescription')}
                 </Button>
 
                 {index === prescriptions.length - 1 && (

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { getCondition } from '../constants/conditions';
 import useUndoRedo from './use-undo-redo';
@@ -29,8 +29,6 @@ export default function useOdontogram({ chartData, onSave }) {
   const [multiSelect, setMultiSelect] = useState(false); // bulk-apply mode
   const [selectedTeeth, setSelectedTeeth] = useState(new Set());
 
-  const saveTimer = useRef(null);
-
   // ── Sync from API data ────────────────────────────────────────────────────
   useEffect(() => {
     if (chartData) {
@@ -40,25 +38,7 @@ export default function useOdontogram({ chartData, onSave }) {
     }
   }, [chartData, resetHistory]);
 
-  // ── Auto-save (debounced 2s) ──────────────────────────────────────────────
-  useEffect(() => {
-    if (!isDirty || !onSave) {
-      return undefined;
-    }
-    clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(async () => {
-      setIsSaving(true);
-      try {
-        await onSave(teethMap, chartType);
-        setIsDirty(false);
-      } catch (e) {
-        console.error('Auto-save failed:', e);
-      } finally {
-        setIsSaving(false);
-      }
-    }, 2000);
-    return () => clearTimeout(saveTimer.current);
-  }, [isDirty, teethMap, chartType, onSave]);
+  // Auto-save intentionally removed — doctor triggers save manually via toolbar.
 
   // ── Apply a condition to a surface or whole tooth ─────────────────────────
   const applySurface = useCallback(

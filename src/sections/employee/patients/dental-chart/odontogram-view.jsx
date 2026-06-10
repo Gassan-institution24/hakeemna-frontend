@@ -99,6 +99,37 @@ function Legend({ lang }) {
             </Typography>
           </Stack>
         ))}
+        {/* Treatment status indicators */}
+        <Stack direction="row" alignItems="center" gap={0.5}>
+          <Box
+            sx={{
+              width: 12,
+              height: 12,
+              borderRadius: 0.5,
+              backgroundColor: 'transparent',
+              border: '2px dashed #1565C0',
+              flexShrink: 0,
+            }}
+          />
+          <Typography variant="caption" sx={{ fontSize: '0.65rem' }}>
+            {isAr ? 'مخطط' : 'Planned'}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" gap={0.5}>
+          <Box
+            sx={{
+              width: 12,
+              height: 12,
+              borderRadius: 0.5,
+              backgroundColor: 'transparent',
+              border: '2px dotted #F9A825',
+              flexShrink: 0,
+            }}
+          />
+          <Typography variant="caption" sx={{ fontSize: '0.65rem' }}>
+            {isAr ? 'مراقبة' : 'Watch'}
+          </Typography>
+        </Stack>
       </Stack>
     </Box>
   );
@@ -249,15 +280,15 @@ export default function OdontogramView({
       if (onSaveTooth) {
         try {
           await onSaveTooth(fdiNumber, payload, surfaceEdits);
-          showToast(isAr ? 'تم حفظ بيانات السن' : 'Tooth saved');
         } catch (e) {
           showToast(isAr ? 'فشل الحفظ' : 'Save failed', 'error');
+          throw e; // let the modal's handleSaveInfo catch and show the inline error
         }
       }
-
-      setSelectedFdi(null);
+      // Modal stays open so handleSaveInfo can show the success alert.
+      // The user closes it manually via the Close button.
     },
-    [updateToothData, onSaveTooth, showToast, isAr, setSelectedFdi]
+    [updateToothData, onSaveTooth, showToast, isAr]
   );
 
   const handleAddProcedure = useCallback(
