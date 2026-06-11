@@ -366,7 +366,7 @@ export default function CompanyPage() {
                         <MenuItem key={v} value={v}>{v}</MenuItem>
                       ))}
                       <MenuItem disabled><em>— ISLAMIC —</em></MenuItem>
-                      <MenuItem value="IslamicINS">IslamicINS</MenuItem>
+                      <MenuItem value="IslamicINS">Islamic Insurance (JOR-I-999999)</MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={6}>
