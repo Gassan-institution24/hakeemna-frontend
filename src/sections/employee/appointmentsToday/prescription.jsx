@@ -43,7 +43,8 @@ export default function Prescription({ Entrance }) {
   const prescriptionDialog = useBoolean();
 
   const { medicinesData } = useGetMedicines({
-    select: 'trade_name concentration',
+    select: 'trade_name concentration scientific_name',
+    rowsPerPage: 5000,
   });
 
   const doctorSpecialityId =
@@ -484,6 +485,15 @@ export default function Prescription({ Entrance }) {
                   getOptionLabel={(option) =>
                     option?.trade_name ? `${option.trade_name} ${option.concentration || ''}`.trim() : ''
                   }
+                  filterOptions={(options, { inputValue }) => {
+                    const q = inputValue.toLowerCase();
+                    if (!q) return options;
+                    return options.filter(
+                      (o) =>
+                        o?.trade_name?.toLowerCase().includes(q) ||
+                        o?.scientific_name?.toLowerCase().includes(q)
+                    );
+                  }}
                   renderInput={(params) => <TextField {...params} label={t('medicine')} />}
                 />
                 <RHFTextField

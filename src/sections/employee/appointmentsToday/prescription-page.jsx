@@ -38,7 +38,7 @@ export default function PrescriptionPage() {
   const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
   const { prescriptionData, refetch } = useGePrescription(id);
-  const { medicinesData } = useGetMedicines();
+  const { medicinesData } = useGetMedicines({ rowsPerPage: 5000 });
   const [DoctorComment, setDoctorComment] = useState('');
   const prescriptionDialog = useBoolean();
   const [chronic, setChronic] = useState(false);

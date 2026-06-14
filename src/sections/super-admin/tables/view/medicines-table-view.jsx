@@ -108,7 +108,7 @@ export default function MedicinesTableView() {
     sortBy: table.orderBy || 'trade_name',
     rowsPerPage: table.rowsPerPage || 10,
     order: table.order || 'asc',
-    name: nameDebounse,
+    search: nameDebounse,
   });
 
   const searchParams = useSearchParams();

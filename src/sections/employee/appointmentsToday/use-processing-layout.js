@@ -41,14 +41,14 @@ export const DEFAULT_SECTIONS = [
     descriptionKey: 'Optional adjustable forms for this patient',
     visible: true,
   },
-  {
-    key: SECTION_KEYS.SERVICES_PROVIDED,
-    icon: 'hugeicons:give-pill',
-    color: 'error',
-    labelKey: 'Services provided',
-    descriptionKey: 'Record services rendered during this visit',
-    visible: true,
-  },
+  // {
+  //   key: SECTION_KEYS.SERVICES_PROVIDED,
+  //   icon: 'hugeicons:give-pill',
+  //   color: 'error',
+  //   labelKey: 'Services provided',
+  //   descriptionKey: 'Record services rendered during this visit',
+  //   visible: true,
+  // },
 ];
 
 const STORAGE_KEY_PREFIX = 'processing_layout_v1_';

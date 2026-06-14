@@ -45,7 +45,7 @@ export default function MedicationNewEditForm({ currentFavorite }) {
       .min(1, t('at least one medicine must be added')),
   });
 
-  const { medicinesData } = useGetMedicines();
+  const { medicinesData } = useGetMedicines({ rowsPerPage: 5000 });
 
   const defaultValues = useMemo(
     () => ({
