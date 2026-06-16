@@ -1,25 +1,36 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-import { Box, Card, Grid, Stack, Dialog, Rating, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fCurrency } from 'src/utils/format-number';
-import { ConvertToHTML } from 'src/utils/convert-to-html';
-import { fDate, fDateAndTime } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetBlogs, useGetEmployeeAppointments } from 'src/api';
+import { useGetBlogs, useGetEmployeeFeedbackes, useGetEmployeeAppointments } from 'src/api';
 
 import Image from 'src/components/image';
 
 import BookDetails from '../book-details';
 import { JwtLoginView } from '../../auth';
-import FeedbackSection from '../feedback-section';
+import DoctorHero from '../doctor/doctor-hero';
+import DoctorAbout from '../doctor/doctor-about';
+import FaqSection from '../components/faq-section';
 import ClassicVerifyView from '../../auth/verify-email';
+import SectionHeading from '../components/section-heading';
+import ReviewsSection from '../components/reviews-section';
 import JwtRegisterView from '../../auth/jwt-register-view';
+import DoctorCredentials from '../doctor/doctor-credentials';
+import StickyBookingBar from '../components/sticky-booking-bar';
+import DoctorRelatedCarousel from '../doctor/doctor-related-carousel';
 
 export default function DoctorPage({ employeeData }) {
   const { t } = useTranslate();
@@ -40,361 +51,168 @@ export default function DoctorPage({ employeeData }) {
       startDate: selectedDate,
     }
   );
-  const { data } = useGetBlogs({ employee: employeeData?.employee?._id });
+  const { data: blogsData } = useGetBlogs({ employee: employeeData?.employee?._id });
+  const { feedbackData } = useGetEmployeeFeedbackes(employeeData?.employee?._id);
+
   const timeListChangeHandler = (newValue) => {
     setSelected(newValue);
     setSignupDialog(true);
-    // setTimeListItem(newValue);
   };
-  console.log(employeeData?.visibility_online_appointment);
-  // const formatTextWithLineBreaks = (text, limit = 20) => {
-  //   if (!text) return '';
 
-  //   const chunks = [];
+  const hasAvailableSlots = AppointDates.some((date) => {
+    const d = new Date(date);
+    const now = new Date();
+    return (
+      d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+    );
+  });
 
-  //   for (let i = 0; i < text.length; i += 100) {
-  //     chunks.push(text.slice(i, i + 100));
-  //   }
+  const openBooking = () => {
+    document.getElementById('doctor-booking-widget')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  //   let formattedText = chunks.join('<br />');
-
-  //   if (text.length > limit) {
-  //     formattedText = `${text.slice(0, limit)}...`;
-  //   }
-
-  //   return formattedText;
-  // };
+  const sendMessage = () => {
+    const phoneNumber = employeeData?.employee?.phone;
+    if (!phoneNumber) return;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = `whatsapp://send?phone=${phoneNumber}`;
+    } else {
+      window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}`);
+    }
+  };
 
   return (
     <>
-      <Stack gap={1} margin={5} padding={3} sx={{ backgroundColor: 'white', borderRadius: 1 }}>
-        <Stack
-          gap={3}
-          direction={{ lg: 'row' }}
-          justifyContent="space-between"
-          margin={{ md: 5 }}
-          padding={{ md: 3 }}
-        >
-          <Stack
-            direction={{ md: 'row' }}
-            alignItems="center"
-            justifyContent="center"
-            gap={{ md: 10, xs: 3 }}
-          >
-            <Image sx={{ width: 300, height: 300 }} src={employeeData.employee?.picture} />
-            <Stack mb={3}>
-              <Typography variant="h6" component="h1" mr={5}>
-                {curLangAr
-                  ? employeeData?.employee?.name_arabic
-                  : employeeData?.employee?.name_english}
-              </Typography>
-              <Typography variant="body2" component="h2">
-                {curLangAr
-                  ? employeeData?.employee?.speciality?.name_arabic
-                  : employeeData?.employee?.speciality?.name_english}
-              </Typography>
-              <Typography variant="body2" component="h2">
-                {curLangAr
-                  ? employeeData?.unit_service?.name_arabic
-                  : employeeData?.unit_service?.name_english}
-              </Typography>
-              <Stack direction="row" alignItems="flex-end" mt={3}>
-                <Rating
-                  size="small"
-                  readOnly
-                  value={employeeData.employee?.rate}
-                  precision={0.1}
-                  max={5}
-                />
-                <Typography variant="caption" textTransform="lowercase">
-                  ({employeeData.employee?.rated_times}) {t('people rate')}
-                </Typography>
-              </Stack>
-              {employeeData?.fees && (
-                <Stack direction="row" gap={1} mb={2}>
-                  <Typography variant="body2">{t('fees')}:</Typography>
-                  {employeeData?.fees_after_discount ? (
-                    <>
-                      <Typography
-                        sx={{
-                          textDecoration: 'line-through',
-                          textDecorationColor: 'red',
-                          textDecorationThickness: '2px',
-                        }}
-                        variant="body2"
-                      >
-                        {fCurrency(employeeData?.fees, employeeData.currency?.symbol)}
-                      </Typography>
-                      <Typography variant="body2">
-                        {fCurrency(
-                          employeeData?.fees_after_discount,
-                          employeeData.currency?.symbol
-                        )}
-                      </Typography>
-                      <Typography color="primary.main" variant="caption">
-                        {t('special offer for Hakeemna users')}
-                      </Typography>
-                    </>
-                  ) : (
-                    <Typography variant="body2">
-                      {fCurrency(employeeData?.fees, employeeData.currency?.symbol)}
-                    </Typography>
-                  )}
-                </Stack>
-              )}
-            </Stack>
-          </Stack>
-          {employeeData?.visibility_online_appointment && (
-            <Stack
-              direction={{ md: 'row' }}
-              alignItems="center"
-              justifyContent="center"
-              gap={{ md: 10 }}
-            >
-              {AppointDates.length > 0 && (
-                <BookDetails
-                  selected={selected}
-                  AppointDates={AppointDates}
-                  loading={loading}
-                  timeListChangeHandler={timeListChangeHandler}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  list={appointmentsData}
-                />
-              )}
-              {AppointDates.length < 1 && (
-                <Typography>{t('no online appointment for this doctor')}</Typography>
-              )}
-            </Stack>
-          )}
-        </Stack>
-        <Stack gap={3} marginX={{ md: 5 }} padding={{ md: 3 }}>
-          <Stack gap={1} flex={1}>
-            {(employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me) && (
-              <>
-                <Stack direction="row">
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
-                  >
-                    {t('Introductory text')}:
-                  </Typography>
-                </Stack>
-                <Typography variant="body2" sx={{ px: { md: 3 } }}>
-                  {curLangAr
-                    ? ConvertToHTML(
-                        employeeData?.employee?.arabic_about_me || employeeData?.employee?.about_me
-                      )
-                    : ConvertToHTML(
-                        employeeData?.employee?.about_me || employeeData?.employee?.arabic_about_me
-                      )}
-                </Typography>
-              </>
-            )}
-            {employeeData?.unit_service?.address && (
-              <>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
-                >
-                  {t('address')}:
-                </Typography>
-                <Typography variant="body2" sx={{ px: { md: 3 } }}>
-                  {employeeData?.unit_service?.address}
-                </Typography>
-              </>
-            )}
-            {employeeData?.employee?.phone && (
-              <>
-                <Stack direction="row">
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ borderBottom: '2px solid #00A76F', display: 'inline' }}
-                    component="h3"
-                  >
-                    {t('phone number')}:
-                  </Typography>
-                </Stack>
-                <Stack direction="row" justifyContent="left">
-                  <Typography variant="body2" dir="ltr" sx={{ px: { md: 3 } }}>
-                    {employeeData?.employee?.phone}
-                  </Typography>
-                </Stack>
-              </>
-            )}
-            {employeeData?.employee?.email && (
-              <>
-                <Stack direction="row">
-                  <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                    {t('email')}:
-                  </Typography>
-                </Stack>
-                <Typography variant="body2" sx={{ px: { md: 3 } }} component="h3">
-                  {employeeData?.employee?.email}
-                </Typography>
-              </>
-            )}
-            <Stack direction="row">
-              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                {t('Insurance')}:
-              </Typography>
-            </Stack>
-            <Stack>
-              {employeeData?.unit_service?.insurance?.map((one) => (
-                <Typography variant="body2" sx={{ px: { md: 3 } }} component="h3">
-                  {curLangAr ? one.name_arabic : one.name_english}
-                </Typography>
-              ))}
-            </Stack>
-            <Stack direction="row">
-              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                {t('languages')}:
-              </Typography>
-            </Stack>
-            <Typography variant="body2" sx={{ px: { md: 3 } }}>
-              {employeeData?.employee?.languages?.map((one) => one).join(', ')}
-            </Typography>
-            <Stack direction="row">
-              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                {t('certifications')}:
-              </Typography>
-            </Stack>
-            <Stack px={{ md: 3 }} gap={1}>
-              {employeeData?.employee?.certifications?.map((one) => {
-                if (one.name && one.year) {
-                  return (
-                    <Stack direction="row" gap={{ md: 1, xs: 1 }}>
-                      <Typography variant="body2" component="h3">
-                        {one.name}
-                      </Typography>
-                      ,
-                      <Typography variant="body2" component="h3">
-                        {one.institution}
-                      </Typography>
-                      ,<Typography variant="body2">{fDate(new Date(one.year), 'yyyy')}</Typography>
-                    </Stack>
-                  );
-                }
-                return '';
-              })}
-            </Stack>
-            <Stack direction="row">
-              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                {t('memberships')}:
-              </Typography>
-            </Stack>
-            <Stack px={{ md: 3 }} gap={1}>
-              {employeeData?.employee?.memberships?.map((one) => {
-                if (one.name && one.institution) {
-                  return (
-                    <Stack direction="row" gap={1}>
-                      <Typography variant="body2" component="h3">
-                        {one.name}
-                      </Typography>
-                      ,
-                      <Typography variant="body2" component="h3">
-                        {one.institution}
-                      </Typography>
-                    </Stack>
-                  );
-                }
-                return '';
-              })}
-            </Stack>
-            {employeeData?.employee?.other?.length > 0 && (
-              <>
-                <Stack direction="row">
-                  <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                    {t('other (researchs, books, and conferences)')}:
-                  </Typography>
-                </Stack>
-                <Stack px={{ md: 3 }} gap={1}>
-                  {employeeData?.employee?.other?.map((one) => {
-                    if (one.kind && one.name) {
-                      return (
-                        <Stack direction="row" gap={1}>
-                          <Typography variant="body2" component="h4">
-                            {one.name}
-                          </Typography>
-                          ,
-                          <Typography variant="body2" component="h4">
-                            {t(one.kind)}
-                          </Typography>
-                        </Stack>
-                      );
-                    }
-                    return '';
-                  })}
-                </Stack>
-              </>
-            )}
-          </Stack>
-          <Stack gap={1} flex={1}>
-            <FeedbackSection employee={employeeData} />
-          </Stack>
-          {data?.length > 0 && (
-            <Stack direction="row">
-              <Typography variant="subtitle2" sx={{ borderBottom: '2px solid #00A76F' }}>
-                {t('Blogs')}:
-              </Typography>
-            </Stack>
-          )}
-          <Grid
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-              lg: 'repeat(4, 1fr)',
-            }}
-          >
-            {data?.map((blog, index) => (
-              <Card
-                key={index}
-                sx={{
-                  position: 'relative',
-                  overflow: 'hidden',
-                  mb: 3,
-                  // width: '75%',
-                  height: '200px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                }}
-                onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
-              >
-                <Image
-                  src={blog?.file}
-                  alt={blog.title}
-                  sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-                <Box sx={{ p: 2, maxHeight: 150 }}>
-                  <Typography>{blog.title}</Typography>
+      <Container sx={{ my: { xs: 3, md: 5 } }}>
+        <Stack spacing={4}>
+          <DoctorHero
+            employeeData={employeeData}
+            hasAvailableSlots={hasAvailableSlots}
+            onBook={openBooking}
+            onMessage={sendMessage}
+          />
 
-                  <Typography variant="body2" sx={{ color: 'gray', mt: 1 }}>
-                    {fDateAndTime(blog.created_at)}
-                  </Typography>
-                </Box>
-              </Card>
-            ))}
-          </Grid>
-          <Stack direction="row" gap={1} flexWrap="wrap">
-            {employeeData.employee?.keywords?.map((one, index) => (
-              <Box
-                sx={{ padding: 1, backgroundColor: 'background.neutral', borderRadius: 2 }}
-                key={index}
-              >
-                <Typography variant="caption" component="h3">
-                  {one}
+          {employeeData?.visibility_online_appointment && (
+            <Stack id="doctor-booking-widget" spacing={1.5}>
+              <SectionHeading title={t('book appointment')} />
+              {AppointDates.length > 0 ? (
+                <Card sx={{ p: { xs: 2, md: 3 } }}>
+                  <BookDetails
+                    selected={selected}
+                    AppointDates={AppointDates}
+                    loading={loading}
+                    timeListChangeHandler={timeListChangeHandler}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    list={appointmentsData}
+                  />
+                </Card>
+              ) : (
+                <Typography variant="body2" sx={{ color: 'text.disabled' }}>
+                  {t('no online appointment for this doctor')}
                 </Typography>
-              </Box>
-            ))}
+              )}
+            </Stack>
+          )}
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <DoctorAbout employeeData={employeeData} />
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <DoctorCredentials employee={employeeData?.employee} />
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <Stack spacing={1.5}>
+            <SectionHeading title={t('reviews')} />
+            <ReviewsSection
+              feedbackData={feedbackData}
+              average={employeeData?.employee?.rate}
+              count={employeeData?.employee?.rated_times}
+            />
           </Stack>
+
+          <FaqSection
+            items={[
+              employeeData?.employee?.languages?.length > 0 && {
+                question: t('what languages does the doctor speak'),
+                answer: employeeData.employee.languages.join(', '),
+              },
+              employeeData?.unit_service?.insurance?.length > 0 && {
+                question: t('does this doctor accept insurance'),
+                answer: employeeData.unit_service.insurance
+                  .map((one) => (curLangAr ? one.name_arabic : one.name_english))
+                  .join(', '),
+              },
+            ]}
+          />
+
+          {blogsData?.length > 0 && (
+            <Stack spacing={1.5}>
+              <SectionHeading title={t('Blogs')} />
+              <Box
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(2, 1fr)',
+                  md: 'repeat(3, 1fr)',
+                  lg: 'repeat(4, 1fr)',
+                }}
+              >
+                {blogsData.map((blog, index) => (
+                  <Card
+                    key={index}
+                    sx={{
+                      position: 'relative',
+                      overflow: 'hidden',
+                      height: '200px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => router.push(paths.pages.BlogsView(blog?._id))}
+                  >
+                    <Image
+                      src={blog?.file}
+                      alt={blog.title}
+                      sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <Box sx={{ p: 2, maxHeight: 150 }}>
+                      <Typography>{blog.title}</Typography>
+                      <Typography variant="body2" sx={{ color: 'gray', mt: 1 }}>
+                        {fDateAndTime(blog.created_at)}
+                      </Typography>
+                    </Box>
+                  </Card>
+                ))}
+              </Box>
+            </Stack>
+          )}
+
+          {/* <DoctorRelatedCarousel
+            currentId={employeeData?._id}
+            specialityId={employeeData?.employee?.speciality?._id}
+          /> */}
         </Stack>
-      </Stack>
+      </Container>
+
+      {employeeData?.visibility_online_appointment && (
+        <StickyBookingBar
+          title={curLangAr ? employeeData?.employee?.name_arabic : employeeData?.employee?.name_english}
+          priceLabel={employeeData?.fees ? `${t('fees')}: ${employeeData.fees}` : undefined}
+          ctaLabel={t('book appointment')}
+          onBook={openBooking}
+        />
+      )}
+
       <Dialog fullWidth open={signupDialog} minWidth="lg" onClose={() => setSignupDialog(false)}>
         <Stack sx={{ p: { md: 4 } }}>
           {page === 1 && (

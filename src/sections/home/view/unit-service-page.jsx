@@ -1,306 +1,159 @@
-import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useRef, useMemo } from 'react';
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-// import Checkbox from '@mui/material/Checkbox';
-import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
+import Container from '@mui/material/Container';
 
-import { fTime } from 'src/utils/format-time';
-
-// import { TOUR_SERVICE_OPTIONS } from 'src/_mock';
-
-import { useParams } from 'src/routes/hooks';
-
-import { ConvertToHTML } from 'src/utils/convert-to-html';
-
-import { useGetUSActiveEmployeeEngs } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSFeedbackes, useGetUSActiveEmployeeEngs } from 'src/api';
 
-import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-import { varTranHover } from 'src/components/animate';
-import Lightbox, { useLightBox } from 'src/components/lightbox';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import UnitServiceEmployees from '../unit-service-employee';
+import MapEmbed from '../components/map-embed';
+import ClinicHero from '../clinic/clinic-hero';
+import ClinicAbout from '../clinic/clinic-about';
+import FaqSection from '../components/faq-section';
+import ClinicServices from '../clinic/clinic-services';
+import SectionHeading from '../components/section-heading';
+import ReviewsSection from '../components/reviews-section';
+import ClinicDepartments from '../clinic/clinic-departments';
+import ClinicDoctorsList from '../clinic/clinic-doctors-list';
+import StickyBookingBar from '../components/sticky-booking-bar';
+import { normalizeDay } from '../components/working-hours-widget';
+import ClinicRelatedCarousel from '../clinic/clinic-related-carousel';
 
 // ----------------------------------------------------------------------
 
 export default function UnitServicePage({ USData }) {
-  const {
-    name_english,
-    name_arabic,
-    company_logo,
-    introduction_letter,
-    arabic_introduction_letter,
-    work_start_time,
-    work_end_time,
-    phone,
-    rate,
-    rate_numbers,
-    country,
-    city,
-    sector_type,
-    US_type,
-    web_page,
-    work_days,
-    email,
-    insurance,
-    location_gps,
-  } = USData;
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { id } = useParams();
-  const { employeesData } = useGetUSActiveEmployeeEngs(id, {
+  const {
+    _id,
+    name_english,
+    name_arabic,
+    address,
+    location_gps,
+    phone,
+    sector_type,
+    city,
+    work_days,
+    insurance,
+    rate,
+    rate_numbers,
+  } = USData;
+
+  const { employeesData } = useGetUSActiveEmployeeEngs(_id, {
     populate: 'employee unit_service department nationality insurance country city',
   });
+  const { feedbackData } = useGetUSFeedbackes(_id);
 
-  const getDirections = () => {
-    window.location.href = location_gps;
+  const doctorsSectionRef = useRef(null);
+  const locationSectionRef = useRef(null);
+
+  const scrollToDoctors = () => doctorsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToLocation = () => locationSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const callNow = () => {
+    window.location.href = `tel:${phone}`;
   };
 
-  const slides = [{ src: company_logo }];
-  const {
-    selected: selectedImage,
-    open: openLightbox,
-    onOpen: handleOpenLightbox,
-    onClose: handleCloseLightbox,
-  } = useLightBox(slides);
-
-  const renderOverview = (
-    <Box
-      gap={3}
-      display="grid"
-      gridTemplateColumns={{
-        xs: 'repeat(1, 1fr)',
-        md: 'repeat(2, 1fr)',
-      }}
-    >
-      {[
-        {
-          label: t('type'),
-          value: curLangAr ? US_type?.name_arabic : US_type?.name_english,
-          icon: <Iconify icon="ri:hospital-fill" />,
-        },
-        {
-          label: t('sector type'),
-          value: t(sector_type),
-          icon: <Iconify icon="fluent:class-24-filled" />,
-        },
-        {
-          label: t('work days'),
-          value: work_days.length === 7 ? t('All days') : work_days.map((day) => t(day)).join(', '),
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: t('work hours'),
-          value:
-            work_start_time === work_end_time
-              ? t('24 hours')
-              : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(
-                  work_end_time,
-                  'p',
-                  curLangAr
-                )}`,
-          icon: <Iconify icon="solar:clock-circle-bold" />,
-        },
-        {
-          label: t('contact phone'),
-          value: phone,
-          icon: <Iconify icon="solar:phone-bold" />,
-        },
-        {
-          label: t('email'),
-          value: email,
-          icon: <Iconify icon="entypo:email" />,
-        },
-        {
-          label: t('website'),
-          value: web_page,
-          icon: <Iconify icon="fluent-mdl2:website" />,
-        },
-      ].map((item) => (
-        <Stack key={item.label} spacing={1.5} direction="row">
-          {item.icon}
-          <ListItemText
-            primary={item.label}
-            secondary={<span dir={item.label === 'رقم الهاتف' ? 'ltr' : 'auto'}>{item.value}</span>}
-            primaryTypographyProps={{
-              typography: 'body2',
-              color: 'text.secondary',
-              mb: 0.5,
-            }}
-            secondaryTypographyProps={{
-              typography: 'subtitle2',
-              color: 'text.primary',
-              component: 'span',
-              textTransform: 'none',
-            }}
-          />
-        </Stack>
-      ))}
-    </Box>
-  );
-
-  const renderHead = (
-    <Stack>
-      <Stack direction="row" sx={{ mb: 3 }}>
-        <Typography variant="h4" sx={{ flexGrow: 1 }} component="h1">
-          {curLangAr ? name_arabic : name_english}
-        </Typography>
-      </Stack>
-
-      <Stack spacing={3} direction="row" flexWrap="wrap" alignItems="center">
-        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
-          <Iconify icon="eva:star-fill" sx={{ color: 'warning.main' }} />
-          <Box component="span" sx={{ typography: 'subtitle2' }}>
-            {rate}
-          </Box>
-          <Link sx={{ color: 'text.secondary' }}>
-            ({rate_numbers} {t('reviews')})
-          </Link>
-        </Stack>
-
-        <Stack
-          onClick={getDirections}
-          direction="row"
-          alignItems="center"
-          spacing={0.5}
-          sx={{
-            typography: 'body2',
-            cursor: location_gps ? 'pointer' : '',
-            textDecoration: location_gps ? 'underline' : '',
-          }}
-          component="h3"
-        >
-          <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />
-          {curLangAr ? country?.name_arabic : country?.name_english},{' '}
-          {curLangAr ? city?.name_arabic : city?.name_english}
-        </Stack>
-      </Stack>
-      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
-      {renderOverview}
-    </Stack>
-  );
-
-  const renderGallery = (
-    <>
-      <Box
-        gap={5}
-        display="grid"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          md: 'repeat(2, 1fr)',
-        }}
-        justifyContent="center"
-        alignItems="center"
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        <m.div
-          key={slides[0].src}
-          whileHover="hover"
-          variants={{
-            hover: { opacity: 0.8 },
-          }}
-          transition={varTranHover()}
-        >
-          <Image
-            alt={slides[0].src}
-            src={slides[0].src}
-            ratio="1/1"
-            onClick={() => handleOpenLightbox(slides[0].src)}
-            sx={{ borderRadius: 2, cursor: 'pointer' }}
-          />
-        </m.div>
-        {renderHead}
-      </Box>
-
-      <Lightbox
-        index={selectedImage}
-        slides={slides}
-        open={openLightbox}
-        close={handleCloseLightbox}
-      />
-    </>
-  );
-
-  const renderContent = (
-    <Stack sx={{ mb: 5, mx: 2 }}>
-      {curLangAr ? ConvertToHTML(arabic_introduction_letter) : ConvertToHTML(introduction_letter)}
-      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
-
-      <Typography variant="h6">{t('insurance companies')}</Typography>
-
-      {insurance.length === 0 && (
-        <Typography
-          sx={{ px: 5, py: 1, color: 'text.disabled', textTransform: 'none' }}
-          variant="subtitle2"
-        >
-          {t('Does not work with any insurance company')}
-        </Typography>
-      )}
-
-      <Box
-        rowGap={2}
-        columnGap={2}
-        display="grid"
-        justifyContent="center"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
-        }}
-        sx={{ px: 5, py: 1 }}
-      >
-        {insurance?.map((insur) => (
-          <Stack
-            key={insur._id}
-            spacing={1}
-            direction="row"
-            alignItems="center"
-            sx={{
-              ...(insurance?.includes(insur._id) && {
-                color: 'text.disabled',
-              }),
-            }}
-          >
-            <Iconify
-              icon="eva:checkmark-circle-2-outline"
-              sx={{
-                color: 'primary.main',
-                ...(insurance?.includes(insur._id) && {
-                  color: 'text.disabled',
-                }),
-              }}
-            />
-            {curLangAr ? insur?.name_arabic : insur?.name_english}
-          </Stack>
-        ))}
-      </Box>
-      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
-      {/* <Typography sx={{ mt: 2 }} variant="h6">
-        {t('Employees')}
-      </Typography> */}
-      <UnitServiceEmployees employees={employeesData} />
-      {/* </Stack> */}
-    </Stack>
+  const faqItems = useMemo(
+    () => [
+      work_days?.length > 0 && {
+        question: t('what are the working hours'),
+        answer:
+          work_days.length === 7
+            ? t('All days')
+            : work_days.map((day) => t(normalizeDay(day))).join(', '),
+      },
+      insurance?.length > 0 && {
+        question: t('does this clinic accept insurance'),
+        answer: insurance.map((one) => (curLangAr ? one.name_arabic : one.name_english)).join(', '),
+      },
+    ],
+    [work_days, insurance, curLangAr, t]
   );
 
   return (
-    <Stack sx={{ m: { md: 10, xs: 2 } }}>
-      {renderGallery}
+    <Container sx={{ my: { xs: 3, md: 5 } }}>
+      <Stack spacing={4}>
+        <CustomBreadcrumbs
+          links={[
+            { name: t('home'), href: '/' },
+            { name: curLangAr ? name_arabic : name_english },
+          ]}
+        />
 
-      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+        <ClinicHero USData={USData} onGetDirections={scrollToLocation} />
 
-      {renderContent}
-    </Stack>
+        <Stack direction="row" spacing={2} flexWrap="wrap">
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<Iconify icon="solar:calendar-add-bold" />}
+            onClick={scrollToDoctors}
+          >
+            {t('book appointment')}
+          </Button>
+          {phone && (
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="large"
+              startIcon={<Iconify icon="solar:phone-bold" />}
+              onClick={callNow}
+            >
+              {t('call now')}
+            </Button>
+          )}
+        </Stack>
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <ClinicAbout USData={USData} />
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <ClinicDepartments unitServiceId={_id} />
+
+        <ClinicServices unitServiceId={_id} onViewDoctors={scrollToDoctors} />
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <div ref={doctorsSectionRef}>
+          <ClinicDoctorsList employees={employeesData} />
+        </div>
+
+        <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <Stack spacing={1.5}>
+          <SectionHeading title={t('reviews')} />
+          <ReviewsSection feedbackData={feedbackData} average={rate} count={rate_numbers} />
+        </Stack>
+
+        <FaqSection items={faqItems} />
+
+        <div ref={locationSectionRef}>
+          <Stack spacing={1.5}>
+            <SectionHeading title={t('location')} />
+            <MapEmbed address={address || `${name_english} ${city?.name_english || ''}`} locationGps={location_gps} />
+          </Stack>
+        </div>
+
+        {/* <ClinicRelatedCarousel currentId={_id} sectorType={sector_type} cityId={city?._id} /> */}
+      </Stack>
+
+      <StickyBookingBar
+        title={curLangAr ? name_arabic : name_english}
+        priceLabel={address}
+        ctaLabel={t('book appointment')}
+        onBook={scrollToDoctors}
+      />
+    </Container>
   );
 }
 
