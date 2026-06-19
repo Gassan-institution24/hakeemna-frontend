@@ -150,8 +150,8 @@ export default function DentalChart({ chartData, patientId, readonly }) {
               background: `linear-gradient(to right, transparent, ${theme.palette.divider}, transparent)`,
               borderRadius: 1,
             }}
-          />
-
+          /> 
+ 
           {/* Lower arch */}
           {renderArch(LOWER_TEETH, '')}
 
