@@ -145,8 +145,8 @@ export default function DentalChart({ chartData, patientId, readonly }) {
           {/* Center divider */}
           <Box
             sx={{
-              my: 1.5,
-              height: 2,
+              my: 0.5,
+              height: 1,
               background: `linear-gradient(to right, transparent, ${theme.palette.divider}, transparent)`,
               borderRadius: 1,
             }}

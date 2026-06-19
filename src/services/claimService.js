@@ -30,7 +30,7 @@ export const labCancelation = () =>
   axiosInstance.post('/api/claims/lab/cancelation');
 
 // ✅ CLAIM
-export const submitClaim = () => axiosInstance.post('/api/claims/claim');
+export const submitClaim = (data) => axiosInstance.post('/api/claims/claim', data);
 
 // ✅ VISIT APPROVAL (Prior Authorization / Eligibility)
 export const submitVisitApproval = (data) =>

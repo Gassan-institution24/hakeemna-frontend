@@ -134,9 +134,9 @@ export default function ConditionPalette({ activeCondition, activeStatus, onSele
       </Box>
 
       {/* Status selector */}
-      <StatusSelector value={activeStatus} onChange={onStatusChange} lang={lang} />
+      {/* <StatusSelector value={activeStatus} onChange={onStatusChange} lang={lang} /> */}
 
-      <Divider sx={{ mx: 1, my: 0.5 }} />
+      {/* <Divider sx={{ mx: 1, my: 0.5 }} /> */}
 
       {/* Conditions by group */}
       {CONDITION_GROUPS.map((group) => {

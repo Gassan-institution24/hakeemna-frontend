@@ -2,7 +2,19 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Box, TextField, Typography, Autocomplete, InputAdornment } from '@mui/material';
+import {
+  Box,
+  List,
+  Button,
+  Divider,
+  Popover,
+  TextField,
+  InputBase,
+  Typography,
+  ListItemText,
+  InputAdornment,
+  ListItemButton,
+} from '@mui/material';
 
 import { useLocales } from 'src/locales';
 
@@ -97,6 +109,8 @@ export default function RHFPhoneNumberCustom({ name, helperText, label }) {
       : JORDAN;
 
   const [selectedCountry, setSelectedCountry] = useState(initialCountry);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [search, setSearch] = useState('');
 
   if (!currentValue && JORDAN) {
     setValue(name, JORDAN.callingCode, {
@@ -106,95 +120,134 @@ export default function RHFPhoneNumberCustom({ name, helperText, label }) {
     });
   }
 
+  const filtered = COUNTRIES.filter(
+    (c) =>
+      c.label.toLowerCase().includes(search.toLowerCase()) ||
+      c.callingCode.includes(search)
+  );
+
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
-        <Box display="flex" gap={1}>
-          {/* Country Selector */}
-          <Autocomplete
-            sx={{ width: 280, flexShrink: 0 }}
-            options={COUNTRIES}
-            value={selectedCountry}
-            onChange={(e, newValue) => {
-              if (newValue) {
-                setSelectedCountry(newValue);
-                const digits = field.value?.replace(/^\+\d+/, '') || '';
-                field.onChange(newValue.callingCode + digits);
-              }
-            }}
-            autoHighlight
-            isOptionEqualToValue={(option, value) => option.code === value.code}
-            getOptionLabel={(option) => `${option.label} (${option.callingCode})`}
-            renderOption={(props, option) => (
-              <Box component="li" sx={{ display: 'flex', alignItems: 'center', gap: 1 }} {...props}>
-                <img
-                  loading="lazy"
-                  width={20}
-                  src={flagUrl(option.code)}
-                  alt={option.code}
-                  style={{ borderRadius: 2, objectFit: 'cover' }}
-                />
-                <Typography variant="body2">
-                  {option.label} ({option.callingCode})
-                </Typography>
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={curLangAr ? 'مفتاح الدولة' : 'Key country'}
-                placeholder={curLangAr ? 'ابحث عن دولة' : 'Search country'}
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: selectedCountry ? (
-                    <InputAdornment position="start" sx={{ ml: 0.5 }}>
+      render={({ field, fieldState: { error } }) => {
+        // Display only the local digits (strip the country code prefix)
+        const displayValue = field.value?.startsWith(selectedCountry.callingCode)
+          ? field.value.slice(selectedCountry.callingCode.length)
+          : field.value || '';
+
+        return (
+          <>
+            <TextField
+              fullWidth
+              label={label}
+              dir="ltr"
+              placeholder="7XXXXXXXX"
+              inputProps={{ inputMode: 'tel' }}
+              value={displayValue}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Button
+                      onClick={(e) => setAnchorEl(e.currentTarget)}
+                      disableRipple={false}
+                      sx={{
+                        minWidth: 'unset',
+                        px: 1,
+                        py: 0.5,
+                        mr: 1,
+                        gap: 0.5,
+                        borderRight: '1px solid',
+                        borderColor: 'divider',
+                        borderRadius: '8px 0 0 8px',
+                        color: 'text.primary',
+                        '&:hover': { bgcolor: 'action.hover' },
+                      }}
+                      color="inherit"
+                    >
                       <img
                         src={flagUrl(selectedCountry.code)}
                         alt={selectedCountry.code}
                         width={22}
                         style={{ borderRadius: 2, display: 'block' }}
                       />
-                    </InputAdornment>
-                  ) : (
-                    params.InputProps?.startAdornment
-                  ),
-                }}
-              />
-            )}
-          />
+                      <Typography variant="body2" fontWeight={600} sx={{ lineHeight: 1 }}>
+                        {selectedCountry.callingCode}
+                      </Typography>
+                    </Button>
+                  </InputAdornment>
+                ),
+              }}
+              error={!!error}
+              helperText={error ? error.message : helperText}
+              onChange={(e) => {
+                const local = e.target.value.replace(/\D/g, '');
+                field.onChange(selectedCountry.callingCode + local);
+              }}
+            />
 
-          {/* Phone Number Input */}
-          <TextField
-            {...field}
-            fullWidth
-            label={label}
-            dir="ltr"
-            placeholder="7XXXXXXXX"
-            inputProps={{ inputMode: 'tel' }}
-            InputProps={{
-              startAdornment: selectedCountry ? (
-                <InputAdornment position="start">
-                  <img
-                    src={flagUrl(selectedCountry.code)}
-                    alt={selectedCountry.code}
-                    width={22}
-                    style={{ borderRadius: 2, display: 'block' }}
-                  />
-                </InputAdornment>
-              ) : null,
-            }}
-            error={!!error}
-            helperText={error ? error.message : helperText}
-            onChange={(e) => {
-              let { value } = e.target;
-              value = value.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '');
-              field.onChange(value);
-            }}
-          />
-        </Box>
-      )}
+            <Popover
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              onClose={() => {
+                setAnchorEl(null);
+                setSearch('');
+              }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              PaperProps={{ sx: { width: 280, borderRadius: 2, boxShadow: 4 } }}
+            >
+              <Box sx={{ p: 1 }}>
+                <InputBase
+                  autoFocus
+                  fullWidth
+                  placeholder={curLangAr ? 'ابحث عن دولة...' : 'Search country...'}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  sx={{
+                    px: 1.5,
+                    py: 0.75,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 1.5,
+                    fontSize: '0.875rem',
+                  }}
+                />
+              </Box>
+              <Divider />
+              <List dense disablePadding sx={{ maxHeight: 260, overflowY: 'auto' }}>
+                {filtered.map((country) => (
+                  <ListItemButton
+                    key={country.code}
+                    selected={country.code === selectedCountry.code}
+                    onClick={() => {
+                      setSelectedCountry(country);
+                      const digits = field.value?.replace(/^\+\d+/, '') || '';
+                      field.onChange(country.callingCode + digits);
+                      setAnchorEl(null);
+                      setSearch('');
+                    }}
+                    sx={{ gap: 1.5, py: 0.75 }}
+                  >
+                    <img
+                      src={flagUrl(country.code)}
+                      alt={country.code}
+                      width={22}
+                      style={{ borderRadius: 2, flexShrink: 0 }}
+                    />
+                    <ListItemText
+                      primary={country.label}
+                      secondary={country.callingCode}
+                      primaryTypographyProps={{ variant: 'body2' }}
+                      secondaryTypographyProps={{ variant: 'caption' }}
+                    />
+                  </ListItemButton>
+                ))}
+              </List>
+            </Popover>
+          </>
+        );
+      }}
     />
   );
 }

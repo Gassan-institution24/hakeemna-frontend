@@ -152,24 +152,9 @@ export default function AddDiagnosis({ onDataChange }) {
           <Divider sx={{ my: 1 }} />
 
           {options.length === 0 && search.trim().length >= 2 && !loading && (
-            <>
-              <Typography variant="caption" color="text.secondary" px={1}>
-                {curLangAr ? 'لا توجد نتائج' : 'No results'}
-              </Typography>
-              <ListItemButton
-                onClick={() => addDiagnosis({ code: search.trim(), nameEn: search.trim() })}
-              >
-                <AddIcon fontSize="small" sx={{ mr: 1, flexShrink: 0 }} />
-                <ListItemText
-                  primary={
-                    curLangAr
-                      ? `إضافة "${search.trim()}" كتشخيص مخصص`
-                      : `Add "${search.trim()}" as custom`
-                  }
-                  primaryTypographyProps={{ fontSize: 13 }}
-                />
-              </ListItemButton>
-            </>
+            <Typography variant="caption" color="text.secondary" px={1}>
+              {curLangAr ? 'لا توجد نتائج في قائمة ICD' : 'No results in ICD dataset'}
+            </Typography>
           )}
 
           <List dense sx={{ maxHeight: 220, overflow: 'auto' }}>

@@ -76,9 +76,11 @@ export default function PatientPage() {
   const [medicationData,   setMedicationData]   = useState([]);
   const [physioData,       setPhysioData]       = useState([]);
 
-  // Final authorization state (WATANIA only — triggered on "Close and Submit Claim")
-  const [finalAuthReqId,  setFinalAuthReqId]   = useState(null);
-  const [submittingFinal, setSubmittingFinal]   = useState(false);
+  // Final authorization state (WATANIA only — triggered on "Send Visit Approval")
+  const [finalAuthReqId,       setFinalAuthReqId]       = useState(null);
+  const [submittingFinal,      setSubmittingFinal]       = useState(false);
+  const [visitApprovalApproved, setVisitApprovalApproved] = useState(false);
+  const [submittingClaim,       setSubmittingClaim]       = useState(false);
 
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
@@ -186,8 +188,8 @@ export default function PatientPage() {
         if (data?.formNumber && !data?.pending) {
           clearInterval(timer);
           setFinalAuthReqId(null);
-          enqueueSnackbar(t('Authorization approved — submitting claim'), { variant: 'success' });
-          await submitClaim();
+          setVisitApprovalApproved(true);
+          enqueueSnackbar(t('Visit Approval approved — click Submit Claim to continue'), { variant: 'success' });
         } else if (data?.pending === false && !data?.success) {
           clearInterval(timer);
           setFinalAuthReqId(null);
@@ -251,13 +253,10 @@ export default function PatientPage() {
     }
   }, [requestId, visitCtx, enqueueSnackbar, t]);
 
-  /* ── claim submit ─────────────────────────────────────────────────── */
-  // Always calls submitFinalAuthorization.
-  // Backend decides per strategy:
-  //   WATANIA → Authorization with EncounterID = IDPayer (from eligibility)
-  //   DELTA   → Authorization with self-generated EncounterID (formNumber)
-  //   ZERO / ISLAMIC → returns { noAuthRequired: true } → submitClaim directly
-  const handleSubmit = async () => {
+  /* ── Visit Approval — sends final Authorization with all visit data ── */
+  // WATANIA/DELTA → Authorization request; polls via finalAuthReqId effect.
+  // ZERO/ISLAMIC  → backend returns { noAuthRequired: true }; approval is immediate.
+  const handleVisitApproval = async () => {
     setSubmittingFinal(true);
     try {
       const res = await submitFinalAuthorization({
@@ -265,10 +264,8 @@ export default function PatientPage() {
         clinicianId:      visitCtx?.clinicianId,
         patientNID:       visitCtx?.patientNID,
         memberID:         visitCtx?.memberID,
-        // WATANIA: encounterId = IDPayer returned from eligibility
-        // DELTA:   encounterId = self-generated EncounterID (stored as formNumber)
         encounterId:      idPayer || formNumber,
-        diagnosisCodes:   diagnosisData, // already has { code, description, type }
+        diagnosisCodes:   diagnosisData,
         visitType:        visitCtx?.visitType || 'consultant',
         procedureOrders:  proceduresData,
         labOrders:        labData,
@@ -279,17 +276,51 @@ export default function PatientPage() {
       const data = res?.data;
       if (data?.pending && data?.requestId) {
         setFinalAuthReqId(data.requestId);
-        enqueueSnackbar(t('Authorization submitted — awaiting insurer approval'), { variant: 'info' });
+        enqueueSnackbar(t('Visit Approval submitted — awaiting insurer approval'), { variant: 'info' });
       } else if (data?.noAuthRequired) {
-        await submitClaim();
-        enqueueSnackbar(t('Claim submitted successfully'), { variant: 'success' });
+        setVisitApprovalApproved(true);
+        enqueueSnackbar(t('Visit Approval confirmed — click Submit Claim to continue'), { variant: 'success' });
       } else {
-        enqueueSnackbar(data?.error || t('Authorization failed'), { variant: 'error' });
+        enqueueSnackbar(data?.error || t('Visit Approval failed'), { variant: 'error' });
       }
     } catch (err) {
-      enqueueSnackbar(err?.message || t('Failed to submit'), { variant: 'error' });
+      enqueueSnackbar(err?.message || t('Failed to send Visit Approval'), { variant: 'error' });
     } finally {
       setSubmittingFinal(false);
+    }
+  };
+
+  /* ── Claim submit — called after Visit Approval is confirmed ────── */
+  const handleSubmitClaim = async () => {
+    setSubmittingClaim(true);
+    try {
+      const encounterId = idPayer || formNumber;
+      const res = await submitClaim({
+        insuranceLicense:    visitCtx?.insuranceLicense,
+        clinicianId:         visitCtx?.clinicianId,
+        patientNID:          visitCtx?.patientNID,
+        memberID:            visitCtx?.memberID,
+        encounterId,
+        priorAuthorizationID: encounterId,
+        visitType:           visitCtx?.visitType || 'consultant',
+        diagnosisCodes:      diagnosisData,
+        activities: [
+          ...proceduresData.map((a) => ({ ...a, type: '3' })),
+          ...labData.map((a)         => ({ ...a, type: '3' })),
+          ...radiologyData.map((a)   => ({ ...a, type: '4' })),
+          ...medicationData.map((a)  => ({ ...a, type: '6' })),
+          ...physioData.map((a)      => ({ ...a, type: '7' })),
+        ],
+      });
+      if (res?.data?.success) {
+        enqueueSnackbar(t('Claim submitted successfully'), { variant: 'success' });
+      } else {
+        enqueueSnackbar(res?.data?.error || t('Claim submission failed'), { variant: 'error' });
+      }
+    } catch (err) {
+      enqueueSnackbar(err?.message || t('Failed to submit claim'), { variant: 'error' });
+    } finally {
+      setSubmittingClaim(false);
     }
   };
 
@@ -304,7 +335,7 @@ export default function PatientPage() {
     return { label: t('Not eligible'), color: 'error' };
   }, [loadingFormNumber, authApproved, formNumber, requestId, t]);
 
-  const claimBusy = submittingFinal || !!finalAuthReqId;
+  const visitApprovalBusy = submittingFinal || !!finalAuthReqId;
 
   return (
     <Box sx={{ p: 3, bgcolor: '#f4f6f8', minHeight: '100vh' }}>
@@ -436,17 +467,35 @@ export default function PatientPage() {
         <Button variant="text" color="error" onClick={() => cancellation()}>
           {t('Cancel Visit')}
         </Button>
+
         <Button variant="contained" color="primary">
-          Send Orders
+          {t('Send Orders')}
         </Button>
+
+        {/* Step 1 after eligibility: Send Visit Approval with all visit data */}
+        <Button
+          variant="contained"
+          color="warning"
+          onClick={handleVisitApproval}
+          disabled={!authApproved || visitApprovalBusy || visitApprovalApproved}
+          startIcon={visitApprovalBusy ? <CircularProgress size={16} color="inherit" /> : null}
+        >
+          {finalAuthReqId
+            ? t('Awaiting insurer approval...')
+            : visitApprovalApproved
+              ? t('Visit Approval Sent')
+              : t('Send Visit Approval')}
+        </Button>
+
+        {/* Step 2: Submit Claim — enabled only after Visit Approval is confirmed */}
         <Button
           variant="contained"
           color="success"
-          onClick={handleSubmit}
-          disabled={claimBusy}
-          startIcon={claimBusy ? <CircularProgress size={16} color="inherit" /> : null}
+          onClick={handleSubmitClaim}
+          disabled={!visitApprovalApproved || submittingClaim}
+          startIcon={submittingClaim ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          {finalAuthReqId ? t('Awaiting insurer approval...') : t('Close and Submit Claim')}
+          {t('Submit Claim')}
         </Button>
       </Box>
     </Box>
