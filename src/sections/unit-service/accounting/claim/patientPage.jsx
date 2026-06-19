@@ -337,6 +337,15 @@ export default function PatientPage() {
 
   const visitApprovalBusy = submittingFinal || !!finalAuthReqId;
 
+  let visitApprovalLabel;
+  if (finalAuthReqId) {
+    visitApprovalLabel = t('Awaiting insurer approval...');
+  } else if (visitApprovalApproved) {
+    visitApprovalLabel = t('Visit Approval Sent');
+  } else {
+    visitApprovalLabel = t('Send Visit Approval');
+  }
+
   return (
     <Box sx={{ p: 3, bgcolor: '#f4f6f8', minHeight: '100vh' }}>
       {/* ── HEADER ─────────────────────────────────────────────────── */}
@@ -480,11 +489,7 @@ export default function PatientPage() {
           disabled={!authApproved || visitApprovalBusy || visitApprovalApproved}
           startIcon={visitApprovalBusy ? <CircularProgress size={16} color="inherit" /> : null}
         >
-          {finalAuthReqId
-            ? t('Awaiting insurer approval...')
-            : visitApprovalApproved
-              ? t('Visit Approval Sent')
-              : t('Send Visit Approval')}
+          {visitApprovalLabel}
         </Button>
 
         {/* Step 2: Submit Claim — enabled only after Visit Approval is confirmed */}
