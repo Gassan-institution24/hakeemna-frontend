@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import CardActionArea from '@mui/material/CardActionArea';
 import ListItemButton from '@mui/material/ListItemButton';
 
@@ -20,6 +20,7 @@ export const NavItem = forwardRef(
   ({ title, path, open, active, hasChild, externalLink, subItem, ...other }, ref) => {
     const { currentLang } = useLocales();
     const curLangAr = currentLang.value === 'ar';
+
     const renderContent = (
       <StyledNavItem
         disableRipple
@@ -28,18 +29,25 @@ export const NavItem = forwardRef(
         open={open}
         active={active}
         subItem={subItem}
-        sx={{ textTransform: 'uppercase', fontWeight: 600, fontSize: curLangAr ? 15 : 13 }}
+        sx={{ fontSize: curLangAr ? 15 : 13.5, letterSpacing: 0.15 }}
         {...other}
       >
         {title}
-
-        {hasChild && <Iconify width={16} icon="eva:arrow-ios-downward-fill" sx={{ ml: 1 }} />}
+        {hasChild && (
+          <Iconify
+            width={15}
+            icon="eva:arrow-ios-downward-fill"
+            sx={{
+              ml: 0.5,
+              transition: 'transform 0.2s ease',
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+            }}
+          />
+        )}
       </StyledNavItem>
     );
 
-    if (hasChild) {
-      return renderContent;
-    }
+    if (hasChild) return renderContent;
 
     if (externalLink) {
       return (
@@ -67,86 +75,109 @@ NavItem.propTypes = {
   externalLink: PropTypes.bool,
 };
 
+// Healthcare pulse ring — fires once on hover, single outward ripple
+const pulseRing = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(0.15); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(2.6);  opacity: 0;   }
+`;
+
 // ----------------------------------------------------------------------
 
 const StyledNavItem = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== 'active' && prop !== 'subItem',
-})(({ open, active, subItem, theme }) => {
-  const opened = open && !active;
+})(({ open, active, subItem, theme }) => ({
+  // ── Root nav item ──────────────────────────────────────────────
+  ...(!subItem && {
+    ...theme.typography.body2,
+    padding: '0 14px',
+    height: '100%',
+    position: 'relative',
+    fontWeight: active ? 700 : theme.typography.fontWeightMedium,
+    color: active ? theme.palette.primary.main : theme.palette.text.primary,
+    letterSpacing: 0.1,
+    borderRadius: 0,
+    overflow: 'visible',
+    transition: 'color 0.22s ease, font-weight 0.15s ease',
 
-  const dotStyles = {
-    width: 6,
-    height: 6,
-    left: -12,
-    opacity: 0.64,
-    content: '""',
-    borderRadius: '50%',
-    position: 'absolute',
-    backgroundColor: 'currentColor',
-    ...(active && {
+    // Pulse ring — teal circle that expands outward and fades (ECG / vital-sign pulse)
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: 28,
+      height: 28,
+      borderRadius: '50%',
+      border: `1.5px solid ${theme.palette.primary.main}`,
+      opacity: 0,
+      transform: 'translate(-50%, -50%) scale(0)',
+      pointerEvents: 'none',
+    },
+
+    '&:hover': {
+      backgroundColor: 'transparent',
+      color: theme.palette.primary.main,
+      '&::before': {
+        animation: `${pulseRing} 0.52s ease-out forwards`,
+      },
+    },
+
+    ...(open && !active && {
       color: theme.palette.primary.main,
     }),
-  };
 
-  return {
-    // Root item
-    ...(!subItem && {
-      ...theme.typography.body2,
-      padding: 0,
-      height: '100%',
-      fontWeight: theme.typography.fontWeightMedium,
-      transition: theme.transitions.create(['all'], {
-        duration: theme.transitions.duration.shorter,
-      }),
-      '&:hover': {
-        opacity: 0.64,
-        backgroundColor: 'transparent',
-        '&:before': {
-          ...dotStyles,
-        },
-      },
-      ...(active && {
-        color: theme.palette.primary.main,
-        fontWeight: theme.typography.fontWeightSemiBold,
-        '&:before': {
-          ...dotStyles,
-        },
-      }),
-      ...(opened && {
-        opacity: 0.64,
-        '&:before': {
-          ...dotStyles,
-        },
-      }),
+    '&:focus-visible': {
+      outline: `2px solid ${theme.palette.primary.main}`,
+      outlineOffset: 3,
+      borderRadius: 4,
+      backgroundColor: 'transparent',
+    },
+  }),
+
+  // ── Sub-menu item ──────────────────────────────────────────────
+  ...(subItem && {
+    ...theme.typography.body2,
+    padding: '6px 0',
+    fontSize: 13.5,
+    color: theme.palette.text.secondary,
+    fontWeight: theme.typography.fontWeightMedium,
+    position: 'relative',
+    transition: 'color 0.18s ease, padding-left 0.18s ease',
+
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      left: -14,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: 5,
+      height: 5,
+      borderRadius: '50%',
+      backgroundColor: theme.palette.primary.main,
+      opacity: active ? 1 : 0,
+      transition: 'opacity 0.2s',
+    },
+
+    '&:hover': {
+      backgroundColor: 'transparent',
+      color: theme.palette.text.primary,
+      paddingLeft: '4px',
+      '&::before': { opacity: 0.5 },
+    },
+
+    ...(active && {
+      color: theme.palette.text.primary,
+      fontWeight: 600,
     }),
 
-    // Sub item
-    ...(subItem && {
-      ...theme.typography.body2,
-      padding: 0,
-      fontSize: 13,
-      color: theme.palette.text.secondary,
-      fontWeight: theme.typography.fontWeightMedium,
-      transition: theme.transitions.create(['all'], {
-        duration: theme.transitions.duration.shorter,
-      }),
-      '&:hover': {
-        backgroundColor: 'transparent',
-        color: theme.palette.text.primary,
-        '&:before': {
-          ...dotStyles,
-        },
-      },
-      ...(active && {
-        color: theme.palette.text.primary,
-        fontWeight: theme.typography.fontWeightSemiBold,
-        '&:before': {
-          ...dotStyles,
-        },
-      }),
-    }),
-  };
-});
+    '&:focus-visible': {
+      outline: `2px solid ${theme.palette.primary.main}`,
+      outlineOffset: 2,
+      borderRadius: 4,
+      backgroundColor: 'transparent',
+    },
+  }),
+}));
 
 // ----------------------------------------------------------------------
 
