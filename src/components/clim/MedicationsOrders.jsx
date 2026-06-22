@@ -21,47 +21,108 @@ import { useLocales } from 'src/locales';
 import { ERX } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
-
+/*
+ * code        = LOCAL_DRUG_CODE (barcode) — used by the ERX /api/ERX/EditRequest endpoint
+ * hcpcsCode   = HCPCS staging code       — used by the Authorization /api/Authorization/PostRequest (VR0139)
+ * routeOfAdmin= ROA_CODE from DRUG sheet
+ */
 const MEDICATIONS_LIST = [
   {
-    code: 'M001',
-    nameEn: 'Panadol Advance 500mg Tablet (24)',
-    nameAr: 'بانادول أدفانس 500 ملغ أقراص (24)',
+    code: '6251148030235',
+    hcpcsCode: 'J1180',
+    nameEn: 'CIPROFLACIN 500MG TAB (10)',
+    nameAr: 'سيبروفلاسين 500 ملغ أقراص (10)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 10,
   },
   {
-    code: 'M002',
-    nameEn: 'Panadol Joint 665mg Tablet (18)',
-    nameAr: 'بانادول جوينت 665 ملغ أقراص (18)',
+    code: '5012727901770',
+    hcpcsCode: 'J1180',
+    nameEn: 'PREDNISOLONE 5MG TAB (28)',
+    nameAr: 'بريدنيزولون 5 ملغ أقراص (28)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 28,
   },
   {
-    code: 'M003',
-    nameEn: 'Azithromycin 250mg Capsules',
-    nameAr: 'أزيثروميسين 250 ملغ كبسولات',
+    code: '6251107425874',
+    hcpcsCode: 'J1180',
+    nameEn: 'FLUCOHEAL 150MG CAP (4)',
+    nameAr: 'فلوكوهيل 150 ملغ كبسولات (4)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 4,
   },
   {
-    code: 'M004',
-    nameEn: 'Flagyl 125mg/5ml Suspension (120ml)',
-    nameAr: 'فلاجيل معلق 125 ملغ/5 مل (120 مل)',
+    code: '6251106800191',
+    hcpcsCode: 'J1180',
+    nameEn: 'OROTIX 120MG TAB (7)',
+    nameAr: 'أوروتيكس 120 ملغ أقراص (7)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 7,
   },
   {
-    code: 'M005',
-    nameEn: 'Zinnat 500mg Tablet (10)',
-    nameAr: 'زينات 500 ملغ أقراص (10)',
+    code: '6251599000825',
+    hcpcsCode: 'J1180',
+    nameEn: 'IVY 10% SYRUP (100ML)',
+    nameAr: 'لبلاب 10% شراب (100 مل)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 1,
+  },
+  {
+    code: '6251158190004',
+    hcpcsCode: 'J1180',
+    nameEn: 'UNIFED EXPECTORANT SYRUP (120ML)',
+    nameAr: 'يونيفيد شراب طارد للبلغم (120 مل)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 1,
+  },
+  {
+    code: '3760008321213',
+    hcpcsCode: 'J1180',
+    nameEn: 'FAVERIN 100MG TAB (30)',
+    nameAr: 'فافرين 100 ملغ أقراص (30)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 30,
+  },
+  {
+    code: '6253348500037',
+    hcpcsCode: 'J1180',
+    nameEn: 'REPARIL 20MG TAB (40)',
+    nameAr: 'ريبارل 20 ملغ أقراص (40)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 40,
+  },
+  {
+    code: '2802880701163',
+    hcpcsCode: 'J1180',
+    nameEn: 'DONAGEN 5MG ORTHO-TAB (28)',
+    nameAr: 'دوناجن 5 ملغ أقراص (28)',
+    routeOfAdmin: 'ROA074',
+    granularUnit: 28,
+  },
+  {
+    code: '6251158060109',
+    hcpcsCode: 'J1180',
+    nameEn: 'CLODERM 0.05% OINT (25GM)',
+    nameAr: 'كلوديرم 0.05% مرهم (25 غم)',
+    routeOfAdmin: 'ROA092',
+    granularUnit: 1,
   },
 ];
 
 const SCHEDULE_OPTIONS = ['Q8H', 'Q12H', 'QD', 'BID'];
 
-export default function MedicationsOrders({ onDataChange }) {
+export default function MedicationsOrders({ onDataChange, visitCtx, encounterId }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     if (onDataChange) {
       onDataChange(orders);
     }
   }, [orders, onDataChange]);
+
   const filtered = MEDICATIONS_LIST.filter((m) => {
     const name = curLangAr ? m.nameAr : m.nameEn;
     return name.toLowerCase().includes(search.toLowerCase());
@@ -69,6 +130,12 @@ export default function MedicationsOrders({ onDataChange }) {
 
   const addOrder = async (item) => {
     if (orders.find((o) => o.code === item.code)) return;
+
+    if (!visitCtx || !encounterId) {
+      enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
+      return;
+    }
+
     try {
       setOrders((prev) => [
         ...prev,
@@ -82,7 +149,19 @@ export default function MedicationsOrders({ onDataChange }) {
         },
       ]);
 
-      await ERX();
+      await ERX({
+        ...visitCtx,
+        encounterId,
+        medications: [{
+          code:         item.code,          // barcode → TPO drug code list
+          nameEn:       item.nameEn,
+          routeOfAdmin: item.routeOfAdmin || 'ROA074',
+          quantity:     1,
+          duration:     1,
+          refills:      0,
+          instructions: `Supply 1, Duration 1 days, Refill 0`,
+        }],
+      });
       enqueueSnackbar('Medication order sent successfully', { variant: 'success' });
     } catch (e) {
       console.error('ERX send failed', e);
@@ -164,6 +243,7 @@ export default function MedicationsOrders({ onDataChange }) {
 
                 {/* ORDER */}
                 <Typography fontSize={13}>{curLangAr ? item.nameAr : item.nameEn}</Typography>
+
                 {/* DOSAGE */}
                 <Box>
                   <Typography fontSize={11}>{curLangAr ? 'الجرعة' : 'Dosage'}</Typography>
@@ -286,4 +366,6 @@ export default function MedicationsOrders({ onDataChange }) {
 
 MedicationsOrders.propTypes = {
   onDataChange: PropTypes.func,
+  visitCtx: PropTypes.object,
+  encounterId: PropTypes.string,
 };

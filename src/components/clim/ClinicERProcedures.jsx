@@ -101,54 +101,22 @@ const PROCEDURES_LIST = [
     patientShare: 1.0,
   },
 ];
+
 const UI_TEXT = {
-  service: {
-    en: 'Service',
-    ar: 'الخدمة',
-  },
-  consultation: {
-    en: 'Consultation',
-    ar: 'استشارة',
-  },
-  visit: {
-    en: 'Visit',
-    ar: 'زيارة',
-  },
-  procedures: {
-    en: 'Procedures',
-    ar: 'إجراءات',
-  },
-  dragProcedures: {
-    en: 'Drag or Select Procedures',
-    ar: 'اسحب أو اختر إجراء',
-  },
-  gross: {
-    en: 'Gross',
-    ar: 'الإجمالي',
-  },
-  insurance: {
-    en: 'Ins. Amount',
-    ar: 'قيمة التأمين',
-  },
-  patientShare: {
-    en: 'Patient Share',
-    ar: 'حصة المريض',
-  },
-  approved: {
-    en: 'Approved',
-    ar: 'موافق عليه',
-  },
-  edit: {
-    en: 'Edit',
-    ar: 'تعديل',
-  },
-  searchProcedure: {
-    en: 'Search procedure',
-    ar: 'بحث عن إجراء',
-  },
+  service: { en: 'Service', ar: 'الخدمة' },
+  consultation: { en: 'Consultation', ar: 'استشارة' },
+  visit: { en: 'Visit', ar: 'زيارة' },
+  procedures: { en: 'Procedures', ar: 'إجراءات' },
+  dragProcedures: { en: 'Drag or Select Procedures', ar: 'اسحب أو اختر إجراء' },
+  gross: { en: 'Gross', ar: 'الإجمالي' },
+  insurance: { en: 'Ins. Amount', ar: 'قيمة التأمين' },
+  patientShare: { en: 'Patient Share', ar: 'حصة المريض' },
+  approved: { en: 'Approved', ar: 'موافق عليه' },
+  edit: { en: 'Edit', ar: 'تعديل' },
+  searchProcedure: { en: 'Search procedure', ar: 'بحث عن إجراء' },
 };
 
-export default function ClinicERProcedures({ onDataChange }) {
+export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -160,6 +128,7 @@ export default function ClinicERProcedures({ onDataChange }) {
       onDataChange(procedures);
     }
   }, [procedures, onDataChange]);
+
   const filtered = PROCEDURES_LIST.filter((p) => {
     const name = curLangAr ? p.nameAr : p.nameEn;
     return name.toLowerCase().includes(search.toLowerCase());
@@ -170,12 +139,28 @@ export default function ClinicERProcedures({ onDataChange }) {
   const addProcedure = async (item) => {
     if (procedures.find((p) => p.code === item.code)) return;
 
+    if (!visitCtx || !encounterId) {
+      enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
+      return;
+    }
+
     try {
-      // update UI أولاً
+      // update UI first
       setProcedures((prev) => [...prev, item]);
 
-      // call backend
-      await ERX();
+      await ERX({
+        ...visitCtx,
+        encounterId,
+        medications: [{
+          code: item.code,
+          nameEn: item.nameEn,
+          quantity: 1,
+          duration: 1,
+          refills: 0,
+          routeOfAdmin: '',
+          instructions: '',
+        }],
+      });
 
       enqueueSnackbar('Procedure order sent successfully', { variant: 'success' });
     } catch (e) {
@@ -373,4 +358,6 @@ export default function ClinicERProcedures({ onDataChange }) {
 
 ClinicERProcedures.propTypes = {
   onDataChange: PropTypes.func,
+  visitCtx: PropTypes.object,
+  encounterId: PropTypes.string,
 };

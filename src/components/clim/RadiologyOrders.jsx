@@ -65,42 +65,50 @@ const RADIOLOGY_LIST = [
   },
 ];
 
-export default function RadiologyOrders({ onDataChange }) {
+export default function RadiologyOrders({ onDataChange, visitCtx, encounterId }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const [search, setSearch] = useState('');
-  const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     if (onDataChange) {
       onDataChange(orders);
     }
   }, [orders, onDataChange]);
+
   const filtered = RADIOLOGY_LIST.filter((r) => {
     const name = curLangAr ? r.nameAr : r.nameEn;
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
-const addOrder = async (item) => {
-  if (orders.find((o) => o.code === item.code)) return;
+  const addOrder = async (item) => {
+    if (orders.find((o) => o.code === item.code)) return;
 
-  try {
-    // update UI أولاً
-    setOrders((prev) => [...prev, item]);
+    if (!visitCtx || !encounterId) {
+      enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
+      return;
+    }
 
-    // call backend (static payload)
-    await radiology();
+    try {
+      // update UI first
+      setOrders((prev) => [...prev, item]);
 
-    enqueueSnackbar('Radiology order sent successfully', { variant: 'success' });
-  } catch (e) {
-    console.error('Radiology send failed', e);
-    enqueueSnackbar('Failed to send radiology order', { variant: 'error' });
-    // Remove from UI if failed
-    setOrders((prev) => prev.filter((o) => o.code !== item.code));
-  }
-};
+      await radiology({
+        ...visitCtx,
+        encounterId,
+        radiologyTests: [{ code: item.code, nameEn: item.nameEn, quantity: 1 }],
+      });
 
+      enqueueSnackbar('Radiology order sent successfully', { variant: 'success' });
+    } catch (e) {
+      console.error('Radiology send failed', e);
+      enqueueSnackbar('Failed to send radiology order', { variant: 'error' });
+      // Remove from UI if failed
+      setOrders((prev) => prev.filter((o) => o.code !== item.code));
+    }
+  };
 
   const removeOrder = (code) => {
     setOrders((prev) => prev.filter((o) => o.code !== code));
@@ -156,6 +164,7 @@ const addOrder = async (item) => {
           ) : (
             orders.map((item, index) => (
               <Box
+                key={item.code}
                 sx={{
                   mb: 1,
                   px: 1,
@@ -226,4 +235,6 @@ const addOrder = async (item) => {
 
 RadiologyOrders.propTypes = {
   onDataChange: PropTypes.func,
+  visitCtx: PropTypes.object,
+  encounterId: PropTypes.string,
 };

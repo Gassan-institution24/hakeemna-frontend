@@ -17,15 +17,15 @@ export const checkFormNumber = (requestId) =>
   axiosInstance.get('/api/claims/form-number/check', { params: { requestId } });
 
 // ✅ ORDERS
-export const radiology = () => axiosInstance.post('/api/claims/radiology');
+export const radiology = (data) => axiosInstance.post('/api/claims/radiology', data);
 export const radiologyCancelation = () =>
   axiosInstance.post('/api/claims/radiology/cancelation');
 
-export const ERX = () => axiosInstance.post('/api/claims/erx');
+export const ERX = (data) => axiosInstance.post('/api/claims/erx', data);
 export const ERXcancelation = () =>
   axiosInstance.post('/api/claims/erx/cancelation');
 
-export const lab = () => axiosInstance.post('/api/claims/lab');
+export const lab = (data) => axiosInstance.post('/api/claims/lab', data);
 export const labCancelation = () =>
   axiosInstance.post('/api/claims/lab/cancelation');
 

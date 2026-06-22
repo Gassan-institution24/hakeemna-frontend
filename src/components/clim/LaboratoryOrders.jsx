@@ -72,7 +72,7 @@ const LAB_ORDERS_LIST = [
   },
 ];
 
-export default function LaboratoryOrders({ onDataChange }) {
+export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
@@ -92,6 +92,11 @@ export default function LaboratoryOrders({ onDataChange }) {
   const addOrder = async (item) => {
     if (orders.find((o) => o.code === item.code)) return;
 
+    if (!visitCtx || !encounterId) {
+      enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
+      return;
+    }
+
     const confirmed = window.confirm(
       curLangAr ? 'هل أنت متأكد من إضافة هذا الطلب؟' : 'Are you sure you want to add this order?'
     );
@@ -108,7 +113,11 @@ export default function LaboratoryOrders({ onDataChange }) {
         },
       ]);
 
-      await lab();
+      await lab({
+        ...visitCtx,
+        encounterId,
+        labTests: [{ code: item.code, nameEn: item.nameEn, quantity: 1 }],
+      });
 
       enqueueSnackbar('Laboratory order sent successfully', { variant: 'success' });
     } catch (e) {
@@ -129,7 +138,7 @@ export default function LaboratoryOrders({ onDataChange }) {
     try {
       setOrders((prev) => prev.filter((o) => o.code !== code));
 
-      await cancellation(); // 🔥 call backend cancel
+      await cancellation();
 
       console.log('Cancelled successfully');
     } catch (e) {
@@ -230,17 +239,6 @@ export default function LaboratoryOrders({ onDataChange }) {
                     gap: 1,
                   }}
                 >
-                  {/* <Typography
-                    sx={{
-                      color: 'primary.main',
-                      cursor: 'pointer',
-                      fontSize: 14,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {curLangAr ? 'تعديل' : 'Edit'}
-                  </Typography> */}
-
                   <DeleteIcon
                     fontSize="small"
                     sx={{ color: 'error.main', cursor: 'pointer' }}
@@ -278,4 +276,6 @@ export default function LaboratoryOrders({ onDataChange }) {
 
 LaboratoryOrders.propTypes = {
   onDataChange: PropTypes.func,
+  visitCtx: PropTypes.object,
+  encounterId: PropTypes.string,
 };

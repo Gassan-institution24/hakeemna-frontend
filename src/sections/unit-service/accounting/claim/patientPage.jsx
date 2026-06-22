@@ -430,6 +430,8 @@ export default function PatientPage() {
             )}
             {index === 1 && (
               <ClinicERProcedures
+                visitCtx={visitCtx}
+                encounterId={formNumber}
                 onDataChange={(data) => {
                   updateSectionStatus('procedures', data.length > 0);
                   setProceduresData(data);
@@ -438,6 +440,8 @@ export default function PatientPage() {
             )}
             {index === 2 && (
               <LaboratoryOrders
+                visitCtx={visitCtx}
+                encounterId={formNumber}
                 onDataChange={(data) => {
                   updateSectionStatus('lab', data.length > 0);
                   setLabData(data);
@@ -446,6 +450,8 @@ export default function PatientPage() {
             )}
             {index === 3 && (
               <RadiologyOrders
+                visitCtx={visitCtx}
+                encounterId={formNumber}
                 onDataChange={(data) => {
                   updateSectionStatus('radiology', data.length > 0);
                   setRadiologyData(data);
@@ -454,6 +460,8 @@ export default function PatientPage() {
             )}
             {index === 4 && (
               <MedicationsOrders
+                visitCtx={visitCtx}
+                encounterId={formNumber}
                 onDataChange={(data) => {
                   updateSectionStatus('medications', data.length > 0);
                   setMedicationData(data);
@@ -462,6 +470,8 @@ export default function PatientPage() {
             )}
             {index === 5 && (
               <PhysiotherapyOrders
+                visitCtx={visitCtx}
+                encounterId={formNumber}
                 onDataChange={(data) => {
                   updateSectionStatus('physiotherapy', data.length > 0);
                   setPhysioData(data);

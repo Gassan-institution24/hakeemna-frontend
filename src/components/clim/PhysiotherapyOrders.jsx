@@ -17,40 +17,45 @@ import {
 } from '@mui/material';
 
 import { useLocales } from 'src/locales';
-import { ERX } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
+/*
+ * JOR codes from the PROCEDURES (JMA) staging sheet.
+ * Physio activities are submitted as type '3' (JMA) in the Authorization — NOT via ERX.
+ * Type '7' in Authorization = Dental/CDT (VR0141), so physio must use type '3'.
+ */
 const PHYSIOTHERAPY_LIST = [
   {
-    code: 'P001',
-    nameEn: 'Treadmill Exercise',
-    nameAr: 'تمارين جهاز المشي',
+    code: 'JOR-04-001-003',
+    nameEn: 'Chemical Treatment (per Session)',
+    nameAr: 'علاج كيميائي (لكل جلسة)',
   },
   {
-    code: 'P002',
-    nameEn: 'Hot or Cold Packs',
-    nameAr: 'كمادات ساخنة أو باردة',
+    code: 'JOR-04-001-008',
+    nameEn: 'Electrotherapy (1st Session)',
+    nameAr: 'علاج كهربائي (الجلسة الأولى)',
   },
   {
-    code: 'P003',
-    nameEn: 'Chest Physiotherapy (One Session)',
-    nameAr: 'علاج طبيعي للصدر (جلسة واحدة)',
+    code: 'JOR-08-01-011',
+    nameEn: 'Cryotherapy Session',
+    nameAr: 'جلسة علاج بالتبريد',
   },
   {
-    code: 'P004',
-    nameEn: 'Chemical Peeling',
-    nameAr: 'تقشير كيميائي',
+    code: 'JOR-08-01-010',
+    nameEn: 'Hot/Cold Pack Therapy',
+    nameAr: 'علاج بالكمادات الساخنة/الباردة',
   },
 ];
 
 
-export default function PhysiotherapyOrders({ onDataChange }) {
-    const { currentLang } = useLocales();
-const curLangAr = currentLang.value === 'ar';
+export default function PhysiotherapyOrders({ onDataChange, visitCtx, encounterId }) {
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     if (onDataChange) {
       onDataChange(orders);
@@ -61,25 +66,11 @@ const curLangAr = currentLang.value === 'ar';
     (curLangAr ? p.nameAr : p.nameEn).toLowerCase().includes(search.toLowerCase())
   );
 
-  const addOrder = async (item) => {
+  const addOrder = (item) => {
     if (orders.find((o) => o.code === item.code)) return;
-    try {
-      setOrders((prev) => [
-        ...prev,
-        {
-          ...item,
-          sessions: 0,
-        },
-      ]);
-
-      await ERX();
-      enqueueSnackbar('Physiotherapy order sent successfully', { variant: 'success' });
-    } catch (e) {
-      console.error('ERX send failed', e);
-      enqueueSnackbar('Failed to send physiotherapy order', { variant: 'error' });
-      // Remove from UI if failed
-      setOrders((prev) => prev.filter((o) => o.code !== item.code));
-    }
+    // Physio orders are included in the Authorization and Claim — no separate TPO endpoint.
+    setOrders((prev) => [...prev, { ...item, sessions: 1 }]);
+    enqueueSnackbar('Physiotherapy order added', { variant: 'success' });
   };
 
   const removeOrder = (code) => {
@@ -112,7 +103,7 @@ const curLangAr = currentLang.value === 'ar';
           >
             <Typography>{curLangAr ? 'الخدمة' : 'Service'}</Typography>
             <Typography>{curLangAr ? 'الطلب' : 'Order'}</Typography>
-            <Typography /> {/* فاضي */}
+            <Typography />
             <Box />
           </Box>
 
@@ -226,4 +217,6 @@ const curLangAr = currentLang.value === 'ar';
 
 PhysiotherapyOrders.propTypes = {
   onDataChange: PropTypes.func,
+  visitCtx: PropTypes.object,
+  encounterId: PropTypes.string,
 };
