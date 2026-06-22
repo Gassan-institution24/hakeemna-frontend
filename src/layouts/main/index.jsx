@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-
-import { useResponsive } from 'src/hooks/use-responsive';
 
 import Footer from './footer';
 import Header from './header';
@@ -11,38 +8,22 @@ import Header from './header';
 // ----------------------------------------------------------------------
 
 export default function MainLayout({ children }) {
-  const mdUp = useResponsive('up', 'md');
-
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    if (!mdUp) {
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
-
-      setLastScrollY(currentScrollY);
-    }
-  }, [lastScrollY, mdUp]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [lastScrollY, handleScroll]);
-
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-      {/* Toggle header visibility based on scroll direction */}
-      {showHeader && <Header />}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Header />
 
-      <Box component="main">{children}</Box>
+      {/* Offset below the fixed header so content isn't hidden beneath it */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          // top bar (40px, desktop only) + main bar (68px) = 108px desktop
+          // mobile only has main bar (64px)
+          pt: { xs: '65px', lg: '89px' },
+        }}
+      >
+        {children}
+      </Box>
 
       <Footer />
     </Box>

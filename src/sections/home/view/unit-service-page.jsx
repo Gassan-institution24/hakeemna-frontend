@@ -116,11 +116,11 @@ export default function UnitServicePage({ USData }) {
 
         <ClinicAbout USData={USData} />
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
-        <ClinicDepartments unitServiceId={_id} />
+        {/* <ClinicDepartments unitServiceId={_id} /> */}
 
-        <ClinicServices unitServiceId={_id} onViewDoctors={scrollToDoctors} />
+        {/* <ClinicServices unitServiceId={_id} onViewDoctors={scrollToDoctors} /> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

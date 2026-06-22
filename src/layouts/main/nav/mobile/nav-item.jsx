@@ -16,11 +16,28 @@ export const NavItem = forwardRef(
   ({ title, path, icon, open, button, active, hasChild, externalLink, ...other }, ref) => {
     const renderContent = (
       <StyledNavItem ref={ref} open={open} active={active} {...other}>
-        <Box component="span" sx={{ mr: 2, display: 'inline-flex' }}>
-          {icon}
-        </Box>
+        {icon && (
+          <Box
+            component="span"
+            sx={{
+              mr: 2,
+              display: 'inline-flex',
+              color: active ? 'primary.main' : 'text.disabled',
+              transition: 'color 0.2s',
+            }}
+          >
+            {icon}
+          </Box>
+        )}
 
-        <Box component="span" sx={{ flexGrow: 1 }}>
+        <Box
+          component="span"
+          sx={{
+            flexGrow: 1,
+            fontWeight: active ? 600 : 500,
+            transition: 'font-weight 0.1s',
+          }}
+        >
           {title}
           {button}
         </Box>
@@ -29,14 +46,13 @@ export const NavItem = forwardRef(
           <Iconify
             width={16}
             icon={open ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-forward-fill'}
+            sx={{ color: 'text.disabled', flexShrink: 0 }}
           />
         )}
       </StyledNavItem>
     );
 
-    if (hasChild) {
-      return renderContent;
-    }
+    if (hasChild) return renderContent;
 
     if (externalLink)
       return (
@@ -69,25 +85,54 @@ NavItem.propTypes = {
 
 const StyledNavItem = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== 'active',
-})(({ open, active, theme }) => {
-  const opened = open && !active;
+})(({ active, theme }) => ({
+  ...theme.typography.body2,
+  color: active ? theme.palette.primary.main : theme.palette.text.primary,
+  fontWeight: active ? theme.typography.fontWeightSemiBold : theme.typography.fontWeightMedium,
+  fontSize: 15,
+  height: 52,
+  paddingLeft: theme.spacing(2.5),
+  paddingRight: theme.spacing(2.5),
+  position: 'relative',
+  borderRadius: 0,
+  transition: 'background-color 0.18s ease, color 0.18s ease',
 
-  return {
-    ...theme.typography.body2,
-    color: theme.palette.text.secondary,
-    fontWeight: theme.typography.fontWeightMedium,
-    height: 48,
-    ...(active && {
+  // Left accent bar for active item
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    top: '20%',
+    height: '60%',
+    width: 3,
+    borderRadius: '0 3px 3px 0',
+    backgroundColor: theme.palette.primary.main,
+    opacity: active ? 1 : 0,
+    transform: active ? 'scaleY(1)' : 'scaleY(0)',
+    transition: 'opacity 0.2s ease, transform 0.2s ease',
+  },
+
+  ...(active && {
+    backgroundColor: alpha(theme.palette.primary.main, 0.07),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.primary.main, 0.12),
+    },
+  }),
+
+  ...(!active && {
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.primary.main, 0.05),
       color: theme.palette.primary.main,
-      fontWeight: theme.typography.fontWeightSemiBold,
-      backgroundColor: alpha(theme.palette.primary.main, 0.08),
-      '&:hover': {
-        backgroundColor: alpha(theme.palette.primary.main, 0.16),
+      '&::before': {
+        opacity: 0.4,
+        transform: 'scaleY(1)',
       },
-    }),
-    ...(opened &&
-      {
-        // backgroundColor: theme.palette.action.hover,
-      }),
-  };
-});
+    },
+  }),
+
+  '&:focus-visible': {
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: -2,
+    backgroundColor: alpha(theme.palette.primary.main, 0.06),
+  },
+}));

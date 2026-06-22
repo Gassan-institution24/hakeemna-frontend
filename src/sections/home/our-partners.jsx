@@ -54,31 +54,37 @@ export default function OurPartners() {
         <Swiper
           modules={[Autoplay, Pagination]}
           slidesPerView={1}
+          spaceBetween={20}
+          loop
+          speed={700}
           pagination={{ clickable: true, el: '.custom-pagination' }}
-          autoplay={{ delay: 3000 }}
+          autoplay={{ delay: 3200, disableOnInteraction: false, pauseOnMouseEnter: true }}
           breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
+            480:  { slidesPerView: 2, spaceBetween: 16 },
+            768:  { slidesPerView: 3, spaceBetween: 20 },
+            1200: { slidesPerView: 4, spaceBetween: 24 },
           }}
         >
           {unitservicesData.map(
             (partner, index) =>
               partner?.status === 'active' &&
               partner?.show_on_homepage && (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} style={{ height: 'auto' }}>
                   <Box
-                    sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}
+                    sx={{ display: 'flex', height: '100%', cursor: 'pointer' }}
                     onClick={() => router.push(paths.pages.serviceUnit(partner?._id))}
                   >
                     <Paper
                       elevation={3}
                       sx={{
-                        // width: 240, // Set width
+                        width: '100%',
+                        height: 210,
                         overflow: 'hidden',
                         borderRadius: 3,
                         textAlign: 'center',
                         backgroundColor: 'white',
                         position: 'relative',
+                        flexShrink: 0,
                       }}
                     >
                       {partner.company_logo &&
@@ -88,7 +94,7 @@ export default function OurPartners() {
                           alt={partner.name_english}
                           sx={{
                             width: '100%',
-                            height: 170,
+                            height: '100%',
                             objectFit: 'cover',
                           }}
                         />
@@ -98,7 +104,7 @@ export default function OurPartners() {
                           alt={partner.name_english}
                           sx={{
                             width: '100%',
-                            height: 170,
+                            height: '100%',
                             objectFit: 'cover',
                           }}
                         />
