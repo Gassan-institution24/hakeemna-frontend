@@ -99,7 +99,7 @@ export default function HomeHero() {
           px: 3,
           py: { xs: 30 },
           mb: '100px',
-          mt: '130px',
+          // mt: { xs: '0px', lg: '10px' },
           position: 'relative',
           backgroundImage: {
             xs: `linear-gradient(${gradientDirection}, rgba(60, 176, 153, 0.7), rgba(112, 216, 192, 0.24))`,

@@ -141,7 +141,7 @@ export default function Header() {
                 href="/"
                 sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
               >
-                <Logo sx={{ width: { xs: 90, lg: 85 }, height: 'auto', mt:2 }} />
+                <Logo sx={{ width: { xs: 70, lg: 85 }, height: 'auto', mt:{xs: 0, lg: 2.5} }} />
               </Link>
             </m.div>
 
@@ -156,7 +156,7 @@ export default function Header() {
                   transform: scrolled ? 'translateY(-3px)' : 'translateY(0)',
                   transition: 'opacity 0.22s ease, transform 0.22s ease',
                   pointerEvents: scrolled ? 'none' : 'auto',
-                  mt: 1,
+                  mt: 1.5,
                 }}
               >
                 <Link
@@ -166,8 +166,8 @@ export default function Header() {
                     alignItems: 'center',
                     gap: 0.4,
                     textDecoration: 'none',
-                    color: '#9CA3AF',
-                    fontSize: 11,
+                    color: '#ffffff',
+                    fontSize: 12,
                     fontWeight: 500,
                     letterSpacing: 0.1,
                     transition: 'color 0.18s',
@@ -189,8 +189,8 @@ export default function Header() {
                     alignItems: 'center',
                     gap: 0.4,
                     textDecoration: 'none',
-                    color: '#9CA3AF',
-                    fontSize: 11,
+                    color: '#ffffff',
+                    fontSize: 12,
                     fontWeight: 500,
                     letterSpacing: 0.1,
                     transition: 'color 0.18s',
