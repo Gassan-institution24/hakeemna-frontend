@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack';
-import { useParams, useLocation } from 'react-router-dom';
 import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -21,6 +21,8 @@ import {
 } from '@mui/material';
 
 import axiosInstance from 'src/utils/axios';
+
+import { paths } from '../../../../routes/paths';
 import { useTranslate } from '../../../../locales';
 import Iconify from '../../../../components/iconify';
 import AddDiagnosis from '../../../../components/clim/AddDiagnosis';
@@ -60,6 +62,7 @@ export default function PatientPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { visitId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [formNumber, setFormNumber]               = useState(null);
   const [requestId, setRequestId]                 = useState(null);
@@ -314,6 +317,7 @@ export default function PatientPage() {
       });
       if (res?.data?.success) {
         enqueueSnackbar(t('Claim submitted successfully'), { variant: 'success' });
+        navigate(paths.unitservice.myClaim.root);
       } else {
         enqueueSnackbar(res?.data?.error || t('Claim submission failed'), { variant: 'error' });
       }

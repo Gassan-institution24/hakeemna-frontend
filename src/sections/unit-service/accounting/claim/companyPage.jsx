@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -51,8 +52,9 @@ const STATUS_COLOR = { approved: 'success', pending: 'warning', rejected: 'error
 
 const WATANIA_LICENSES = ['WataniaINS', 'Medservice', 'Omnicare', 'MedExa'];
 
-export default function CompanyPage() {
-  const { id: companyId } = useParams();
+export default function CompanyPage({ companyId: propCompanyId }) {
+  const { companyId: paramCompanyId } = useParams();
+  const companyId = propCompanyId || paramCompanyId;
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -239,14 +241,6 @@ export default function CompanyPage() {
   return (
     <Box sx={{ py: 5 }}>
       <Container maxWidth={false} sx={{ px: 3 }}>
-        {/* Company header */}
-        <Paper sx={{ p: 3, mb: 4, borderRadius: 3 }}>
-          <Typography variant="h5" fontWeight="bold">
-            {company?.name_english || '...'}
-          </Typography>
-          <Typography color="text.secondary">{t('Insurance Company')}</Typography>
-        </Paper>
-
         <Grid container spacing={3}>
           {/* Step 1 — Patient Search */}
           <Grid item xs={12} md={selectedPatient ? 6 : 12}>
@@ -448,3 +442,7 @@ export default function CompanyPage() {
     </Box>
   );
 }
+
+CompanyPage.propTypes = {
+  companyId: PropTypes.string,
+};

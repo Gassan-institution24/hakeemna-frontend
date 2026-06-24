@@ -429,7 +429,7 @@ export const unitServiceDashboardRoutes = [
             children: [
               {
                 index: true,
-                element: <ClaimHomePage />,
+                element: <ClaimCompanyPage />,
               },
               {
                 path: 'visit/:visitId',
