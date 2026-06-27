@@ -21,7 +21,7 @@ export default function WorkGroupEditPage() {
       ?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Edit Work Group</title>
         <meta name="description" content="meta" />

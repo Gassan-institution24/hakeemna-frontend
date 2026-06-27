@@ -13,7 +13,7 @@ export default function DepartmentsHomePage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="departments" acl="read">
+    <ACLGuard permission="departments:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Departments </title>
         <meta name="description" content="meta" />

@@ -9,7 +9,7 @@ import EconomicMovementInfoView from 'src/sections/employee/accounting/economic-
 export default function EconomicMovementInfoPage() {
   const { user } = useAuthContext();
   return (
-    <ACLGuard category="employee" subcategory="accounting" acl="update">
+    <ACLGuard permission="accounting:update">
       <Helmet>
         <title> {user?.employee?.name_english} : Economic Movement Info</title>
         <meta name="description" content="meta" />

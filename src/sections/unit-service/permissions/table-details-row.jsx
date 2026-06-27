@@ -31,9 +31,11 @@ export default function UnitServiceEmployeesRow({
   onViewRow,
   onChangeVisPage,
   onChangeVisOnlineApp,
+  onAssignRole,
 }) {
   const {
     employee,
+    is_owner,
     visibility_online_appointment,
     visibility_US_page,
     adjust_schedual,
@@ -88,6 +90,11 @@ export default function UnitServiceEmployeesRow({
         align="center"
       >
         {curLangAr ? employee?.name_arabic : employee?.name_english}
+        {is_owner && (
+          <Label variant="soft" color="warning" sx={{ ml: 1, fontSize: '10px' }}>
+            {t('owner')}
+          </Label>
+        )}
       </TableCell>
       <TableCell align="center">
         {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
@@ -140,7 +147,7 @@ export default function UnitServiceEmployeesRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl('employees:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -153,7 +160,7 @@ export default function UnitServiceEmployeesRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl('employees:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -170,6 +177,18 @@ export default function UnitServiceEmployeesRow({
           <Iconify icon="solar:eye-bold" />
           {t('view')}
         </MenuItem>
+        {checkAcl('permissions:update') && !is_owner && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              onAssignRole?.();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="mdi:account-key" />
+            {t('assign role')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -237,6 +256,7 @@ UnitServiceEmployeesRow.propTypes = {
   onViewRow: PropTypes.func,
   onChangeVisPage: PropTypes.func,
   onChangeVisOnlineApp: PropTypes.func,
+  onAssignRole: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,

@@ -16,7 +16,7 @@ export default function DepartmentAccountingPage() {
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
   return (
-    <ACLGuard category="department" subcategory="accounting" acl="read">
+    <ACLGuard permission="accounting:read">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : Accounting</title>
         <meta name="description" content="meta" />

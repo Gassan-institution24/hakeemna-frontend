@@ -13,7 +13,7 @@ export default function DepartmentWorkGroupEmployeePermissionPage() {
   const { id } = params;
   const { data } = useGetDepartment(id);
   return (
-    <ACLGuard category="department" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : work group permissions </title>
         <meta name="description" content="meta" />

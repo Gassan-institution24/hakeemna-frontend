@@ -115,7 +115,7 @@ export default function UnitServiceEmployeesRow({
         sx={{ width: 140 }}
       >
         {/* {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl('employees:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -128,7 +128,7 @@ export default function UnitServiceEmployeesRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl('employees:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {

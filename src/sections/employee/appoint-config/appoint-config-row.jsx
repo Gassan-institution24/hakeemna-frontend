@@ -63,22 +63,14 @@ export default function AppointmentsTableRow({
 
         <TableCell
           sx={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            }) && {
+            checkAcl('appointment_configs:update') && {
               cursor: 'pointer',
               color: '#3F54EB',
               // textDecoration: 'underline',
             }
           }
           onClick={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            })
+            checkAcl('appointment_configs:update')
               ? onViewRow
               : null
           }
@@ -89,11 +81,7 @@ export default function AppointmentsTableRow({
 
         <TableCell
           onClick={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            })
+            checkAcl('appointment_configs:update')
               ? onViewRow
               : null
           }
@@ -110,11 +98,7 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell
           onClick={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            })
+            checkAcl('appointment_configs:update')
               ? onViewRow
               : null
           }
@@ -130,11 +114,7 @@ export default function AppointmentsTableRow({
 
         <TableCell
           onClick={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            })
+            checkAcl('appointment_configs:update')
               ? onViewRow
               : null
           }
@@ -144,11 +124,7 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell
           onClick={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            })
+            checkAcl('appointment_configs:update')
               ? onViewRow
               : null
           }
@@ -182,11 +158,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 140 }}
       >
         {/* {status === 'active' &&
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'appointment_configs',
-            acl: 'delete',
-          }) && (
+          checkAcl('appointment_configs:delete') && (
             <MenuItem lang="ar" 
               onClick={() => {
                 onCancelRow();
@@ -199,11 +171,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'inactive' &&
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'appointment_configs',
-            acl: 'update',
-          }) && (
+          checkAcl('appointment_configs:update') && (
             <MenuItem lang="ar" 
               onClick={() => {
                 onUnCancelRow();
@@ -215,11 +183,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )} */}
-        {checkAcl({
-          category: 'work_group',
-          subcategory: 'appointment_configs',
-          acl: 'update',
-        }) && (
+        {checkAcl('appointment_configs:update') && (
           <MenuItem lang="ar" onClick={onViewRow}>
             <Iconify icon="solar:eye-bold" />
             {t('view')}

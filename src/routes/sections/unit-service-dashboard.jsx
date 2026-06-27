@@ -217,6 +217,9 @@ const StakeholderProductsPage = lazy(
 const ProductCheckoutPage = lazy(() => import('src/pages/unit-service/products/checkout'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 
+// ROLES
+const RolesHomePage = lazy(() => import('src/pages/unit-service/roles/home'));
+
 // PERMISSIONS
 const USPermissions = lazy(
   () => import('src/pages/unit-service/permissions/unitservice-permission')
@@ -366,6 +369,10 @@ export const unitServiceDashboardRoutes = [
             ],
           },
         ],
+      },
+      {
+        path: 'roles',
+        children: [{ element: <RolesHomePage />, index: true }],
       },
       { path: 'processingpage/:id', element: <Processing /> },
       { path: 'viewgpage/:id', element: <Viewgpage /> },

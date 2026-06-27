@@ -13,7 +13,7 @@ export default function SubscriptionNewPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="unit_service_info" acl="create">
+    <ACLGuard permission="unit_service_info:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : New Subscription</title>
         <meta name="description" content="meta" />

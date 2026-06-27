@@ -17,7 +17,7 @@ export default function EmployeeAppointmentsPage() {
   const { data, loading } = useGetEmployeeEngagement(id);
   const name = data?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="appointments" acl="read">
+    <ACLGuard permission="appointments:read">
       <Helmet>
         <title>{name || 'Employee'} : Appointments</title>
         <meta name="description" content="meta" />

@@ -198,7 +198,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
-        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+        {checkAcl('appointments:update') &&
           status !== 'finished' && (
             <MenuItem
               lang="ar"
@@ -213,7 +213,7 @@ export default function AppointmentsTableRow({
           )}
         {['Processing', 'finished'].includes(status) &&
           !invoiced &&
-          checkAcl({ category: 'work_group', subcategory: 'accounting', acl: 'create' }) && (
+          checkAcl('accounting:create') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -229,7 +229,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'available' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl('appointments:update') && (
             <MenuItem
               lang="ar"
               sx={{ color: 'success.main' }}
@@ -243,7 +243,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'available' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl('appointments:delete') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -257,7 +257,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'processing' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl('appointments:delete') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -272,7 +272,7 @@ export default function AppointmentsTableRow({
           )}
 
         {status === 'canceled' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl('appointments:update') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -285,7 +285,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+        {checkAcl('appointments:update') &&
           !['finished', 'canceled', 'not booked'].includes(status) && (
             <MenuItem lang="ar" sx={{ color: 'warning.main' }} onClick={confirmDelayOne.onTrue}>
               <Iconify icon="mdi:timer-sync" />

@@ -365,11 +365,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         >
           {t('walktour for first steps')}
         </MenuItem>
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'create',
-        }) && (
+        {checkAcl('management_tables:create') && (
           <>
             <Divider />
             <MenuItem

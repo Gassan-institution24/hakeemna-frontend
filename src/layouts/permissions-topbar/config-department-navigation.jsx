@@ -27,14 +27,14 @@ export function useNavData() {
   const data = useMemo(() => {
     const employeeItems = [
       {
-        show: checkAcl({ category: 'department', subcategory: 'permissions', acl: 'update' }),
+        show: checkAcl('permissions:update'),
         title: t('unit of service level'),
         path: `${paths.unitservice.acl.employees}/${id}/us`,
         // icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
         show:
-          checkAcl({ category: 'department', subcategory: 'permissions', acl: 'update' }) &&
+          checkAcl('permissions:update') &&
           employee?.department,
         title: t('department level'),
         path: `${paths.unitservice.acl.employees}/${id}/departments/${employee?.department?._id}`,
@@ -42,7 +42,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'work_group', subcategory: 'permissions', acl: 'update' }) &&
+          checkAcl('permissions:update') &&
           workGroupsData.length,
         title: t('work groups level'),
         path: `${paths.unitservice.acl.employees}/${id}/workgroups`,

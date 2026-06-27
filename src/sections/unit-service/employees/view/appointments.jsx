@@ -426,7 +426,7 @@ export default function AppointmentsView({ employeeData }) {
       <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
-            checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl('appointments:create') && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}
@@ -509,7 +509,7 @@ export default function AppointmentsView({ employeeData }) {
                 )
               }
               action={
-                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+                checkAcl('appointments:update') && (
                   <>
                     <Tooltip title="delay all">
                       <IconButton color="info" onClick={confirmDelay.onTrue}>
@@ -535,7 +535,7 @@ export default function AppointmentsView({ employeeData }) {
                 )
               }
               color={
-                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
+                checkAcl('appointments:update') &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')

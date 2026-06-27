@@ -260,7 +260,7 @@ export default function TableCreateView() {
             { name: t('book') },
           ]}
           action={
-            checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl('appointments:create') && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}

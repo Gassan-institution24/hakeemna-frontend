@@ -17,7 +17,7 @@ export default function DepartmentActivitiesPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="read">
+    <ACLGuard permission="management_tables:read">
       <Helmet>
         <title>{name || 'Deartment'} : Activities</title>
         <meta name="description" content="meta" />

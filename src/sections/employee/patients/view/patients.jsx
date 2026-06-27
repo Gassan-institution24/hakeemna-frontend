@@ -115,7 +115,7 @@ export default function PatientTableView() {
     content: () => componentRef.current,
   });
   const clickHandler = (id) => {
-    if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
+    if (checkAcl('entrance:rooms')) {
       router.push(paths.employee.patients.info(id));
     } else {
       enqueueSnackbar(t('permission denide'), { variant: 'warning' });
@@ -167,11 +167,7 @@ export default function PatientTableView() {
           { name: t("institution's patients") }, /// edit
         ]}
         action={
-          checkAcl({
-            category: 'unit_service',
-            subcategory: 'unit_service_info',
-            acl: 'create',
-          }) && (
+          checkAcl('unit_service_info:create') && (
             <Button
               component={RouterLink}
               href={paths.employee.patients.new}

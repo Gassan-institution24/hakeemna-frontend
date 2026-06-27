@@ -11,7 +11,7 @@ export default function ClaimCompanyPage() {
     const { companyId } = useParams();
 
     return (
-        <ACLGuard category="unit_service" subcategory="accounting" acl="read">
+        <ACLGuard permission="accounting:read">
             <Helmet>
                 <title>Claim</title>
                 <meta name="description" content="claim" />

@@ -40,11 +40,11 @@ export default function TableCreateView() {
         }}
       />
       {loading && <LoadingScreen />}
-      {checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
+      {checkAcl('old_patient:create') && (
         <UploadOldPatient refetch={refetch} />
       )}
       {!loading &&
-        checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
+        checkAcl('old_patient:read') && (
           <UploadedOldPatients oldPatients={oldPatients} />
         )}
     </Container>

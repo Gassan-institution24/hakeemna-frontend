@@ -142,7 +142,7 @@ const codeResult =
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl('employees:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -155,7 +155,7 @@ const codeResult =
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl('employees:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {

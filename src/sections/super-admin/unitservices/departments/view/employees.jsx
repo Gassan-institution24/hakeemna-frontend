@@ -355,7 +355,7 @@ export default function EmployeesTableView({ departmentData }) {
           //   { name: t('department employees') },
           // ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
+            checkAcl('employees:create') && (
               <Button
                 component={RouterLink}
                 href={paths.superadmin.unitservices.departments.employees.new(
@@ -444,7 +444,7 @@ export default function EmployeesTableView({ departmentData }) {
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
+                checkAcl('employees:update') && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -465,7 +465,7 @@ export default function EmployeesTableView({ departmentData }) {
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) &&
+                checkAcl('employees:update') &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((info) => info.status === 'inactive')

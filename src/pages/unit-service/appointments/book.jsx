@@ -8,7 +8,7 @@ import AppointmentBookView from 'src/sections/unit-service/appointments/view/boo
 
 export default function BookAppointmentPage() {
   return (
-    <ACLGuard category="unit_service" subcategory="appointments" acl="read">
+    <ACLGuard permission="appointments:read">
       <Helmet>
         <title> Book Appointment </title>
         <meta name="description" content="meta" />

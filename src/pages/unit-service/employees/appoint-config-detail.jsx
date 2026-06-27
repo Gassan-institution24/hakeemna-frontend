@@ -18,7 +18,7 @@ export default function EmployeeAppointconfigPage() {
   const { data, loading, refetch } = useGetAppointmentConfig(coid);
 
   return (
-    <ACLGuard category="unit_service" subcategory="appointment_configs" acl="update">
+    <ACLGuard permission="appointment_configs:update">
       <Helmet>
         <title> {employeeData?.name_english || 'Employee'} : Appointment Config</title>
         <meta name="description" content="meta" />

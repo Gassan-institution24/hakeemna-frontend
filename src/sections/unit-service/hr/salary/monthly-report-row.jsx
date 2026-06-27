@@ -135,21 +135,13 @@ export default function MonthlyReportRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'update',
-        }) && (
+        {checkAcl('hr:update') && (
           <MenuItem lang="ar" onClick={show.onTrue}>
             <Iconify icon="fluent:edit-32-filled" />
             {t('Edit')}
           </MenuItem>
         )}
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'delete',
-        }) && (
+        {checkAcl('hr:delete') && (
           <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
             <Iconify icon="mdi:trash" />
             {t('Delete')}

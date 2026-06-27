@@ -28,24 +28,20 @@ export function useNavData() {
   const data = useMemo(() => {
     const employeeItems = [
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl('appointments:read'),
         title: t('appointments'),
         path: paths.unitservice.employees.appointments(id),
         icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'appointment_configs',
-          acl: 'read',
-        }),
+        show: checkAcl('appointment_configs:read'),
         title: t('appointment configuration'),
         path: paths.unitservice.employees.appointmentconfig.root(id),
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }) && false,
+          checkAcl('accounting:read') && false,
         title: t('accounting'),
         path: paths.unitservice.employees.accounting(id),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -58,26 +54,26 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }) &&
+          checkAcl('unit_service_info:read') &&
           false,
         title: t('attendance'),
         path: paths.unitservice.employees.attendence(id),
         icon: <Iconify icon="fluent-mdl2:time-entry" />,
       },
       // {
-      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),//
+      // show: checkAcl('accounting:read'),//
       // title: t('offers'),
       //   path: paths.unitservice.employees.offers(id),
       //   icon: <Iconify icon="eos-icons:activate-subscriptions" />,
       // },
       // {
-      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),//
+      // show: checkAcl('accounting:read'),//
       // title: t('activities'),
       //   path: paths.unitservice.employees.activities.root(id),
       //   icon: <Iconify icon="ic:baseline-security" />,
       // },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }),
+        show: checkAcl('permissions:read'),
         title: t('permissions'),
         path: paths.unitservice.employees.acl(id),
         icon: <Iconify icon="mdi:account-secure" />,

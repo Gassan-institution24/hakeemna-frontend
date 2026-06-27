@@ -13,7 +13,7 @@ export default function WorkGroupEmployeePermissionPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : work group permissions </title>
         <meta name="description" content="meta" />

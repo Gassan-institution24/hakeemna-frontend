@@ -12,7 +12,7 @@ export default function QualityControlPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
+    <ACLGuard permission="unit_service_info:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Quality Control</title>
         <meta name="description" content="meta" />

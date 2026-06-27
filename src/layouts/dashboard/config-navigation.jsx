@@ -319,7 +319,7 @@ export function useNavData() {
     const unitServiceManagementTables = [
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
+          checkAcl('departments:read') &&
           employees_number > 3 &&
           !isMedLab &&
           false,
@@ -328,51 +328,35 @@ export function useNavData() {
         'data-test': 'us-nav-item-departments',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
+        show: checkAcl('employees:read'),
         title: t('employees'),
         path: paths.unitservice.employees.root,
         navItemId: 'USEmployeesNav',
         'data-test': 'us-nav-item-employees',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }),
+        show: checkAcl('management_tables:read'),
         title: t('departments'),
         path: paths.unitservice.departments.root,
         navItemId: 'USWorkShiftNav',
         'data-test': 'us-nav-item-workshifts',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }),
+        show: checkAcl('management_tables:read'),
         title: t('work shifts'),
         path: paths.unitservice.tables.workshifts.root,
         navItemId: 'USWorkShiftNav',
         'data-test': 'us-nav-item-workshifts',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }),
+        show: checkAcl('management_tables:read'),
         title: t('work groups'),
         path: paths.unitservice.tables.workgroups.root,
         navItemId: 'USWorkGroupNav',
         'data-test': 'us-nav-item-workgroups',
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'read',
-        }),
+        show: checkAcl('management_tables:read'),
         title: t('services and pricing'),
         path: paths.unitservice.tables.services.root,
         navItemId: 'USServicesNav',
@@ -380,11 +364,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({
-            category: 'unit_service',
-            subcategory: 'management_tables',
-            acl: 'read',
-          }) && !isMedLab,
+          checkAcl('management_tables:read') && !isMedLab,
         title: t('rooms'),
         path: paths.unitservice.tables.rooms.root,
         navItemId: 'USRoomsNav',
@@ -392,11 +372,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({
-            category: 'unit_service',
-            subcategory: 'management_tables',
-            acl: 'read',
-          }) && !isMedLab,
+          checkAcl('management_tables:read') && !isMedLab,
         title: t('activities'),
         path: paths.unitservice.tables.activities.root,
         navItemId: 'USActivitiesNav',
@@ -404,7 +380,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && false,
+          checkAcl('old_patient:read') && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,
@@ -415,9 +391,9 @@ export function useNavData() {
     const unitServiceItems = [
       {
         show:
-          (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
-            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
-            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) &&
+          (checkAcl('entrance:appointment') ||
+            checkAcl('entrance:rooms') ||
+            checkAcl('entrance:finished')) &&
           isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
@@ -426,7 +402,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
+          checkAcl('departments:read') &&
           false &&
           employees_number > 3 &&
           !isMedLab,
@@ -436,7 +412,7 @@ export function useNavData() {
         navItemId: 'USDepartmentNav',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl('appointments:read'),
         title: t('appointments'),
         path: paths.unitservice.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
@@ -444,18 +420,14 @@ export function useNavData() {
         navItemId: 'USAppointmentsNav',
         children: [
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+            show: checkAcl('appointments:read'),
             title: t('appointments'),
             path: paths.unitservice.appointments.root,
             navItemId: 'USAppointmentsNav',
             'data-test': 'us-nav-item-appointments-appointments',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'appointments',
-              acl: 'update',
-            }),
+            show: checkAcl('appointments:update'),
             title: t('book appointments'),
             path: paths.unitservice.appointments.book,
             'data-test': 'us-nav-item-appointments-book',
@@ -464,7 +436,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'appointment_configs', acl: 'read' }) &&
+          checkAcl('appointment_configs:read') &&
           isMedLab,
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
@@ -474,7 +446,7 @@ export function useNavData() {
       },
 
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        show: checkAcl('accounting:read'),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -482,36 +454,32 @@ export function useNavData() {
         'data-test': 'us-nav-item-accounting',
         children: [
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkAcl('accounting:read'),
             title: t('invoicing'),
             path: paths.unitservice.accounting.invoicing,
             'data-test': 'us-nav-item-accounting-invoicing',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkAcl('accounting:read'),
             title: t('economic movements'),
             path: paths.unitservice.accounting.economicmovements.root,
             'data-test': 'us-nav-item-accounting-economic',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkAcl('accounting:read'),
             title: t('payment control'),
             path: paths.unitservice.accounting.paymentcontrol.root,
             'data-test': 'us-nav-item-accounting-payment',
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkAcl('accounting:read'),
             title: t('reciepts'),
             path: paths.unitservice.accounting.reciepts.root,
             'data-test': 'us-nav-item-accounting-reciepts',
           },
           {
             show:
-              checkAcl({
-                category: 'unit_service',
-                subcategory: 'accounting',
-                acl: 'read',
-              }) && claimRegistered,
+              checkAcl('accounting:read') && claimRegistered,
 
             title: t('claim'),
             path: paths.unitservice.accounting.claim.root,
@@ -537,14 +505,14 @@ export function useNavData() {
       },
 
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        show: checkAcl('old_patient:read'),
         title: t("institution's patients"),
         path: paths.unitservice.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
         'data-test': 'us-nav-item-patients',
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
+        show: checkAcl('management_tables:read'),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
         icon: <Iconify icon="icon-park-twotone:data" />,
@@ -554,13 +522,18 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) &&
+          checkAcl('permissions:read') &&
           !isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         icon: <Iconify icon="mdi:account-secure" />,
         'data-test': 'us-nav-item-permissions',
         children: [
+          {
+            title: t('roles'),
+            path: paths.unitservice.roles.root,
+            'data-test': 'us-nav-item-roles',
+          },
           {
             title: t('unit of service level'),
             path: paths.unitservice.acl.unitservice,
@@ -585,13 +558,14 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }) &&
+          checkAcl('permissions:read') &&
           isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
         'data-test': 'lab-nav-item-permissions',
         icon: <Iconify icon="mdi:account-secure" />,
         children: [
+          { title: t('roles'), path: paths.unitservice.roles.root },
           { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
           // { title: t('departments level'), path: paths.unitservice.acl.department },
           { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
@@ -599,11 +573,7 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'read',
-        }),
+        show: checkAcl('hr:read'),
         title: t('human resource'),
         path: paths.unitservice.hr.root,
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
@@ -614,7 +584,7 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+        show: checkAcl('unit_service_info:read'),
         title: t('products and suppliers'),
         path: paths.unitservice.products.root,
         icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
@@ -622,31 +592,19 @@ export function useNavData() {
         'data-test': 'us-nav-item-products',
         children: [
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'read',
-            }),
+            show: checkAcl('unit_service_info:read'),
             title: t('all products'),
             path: paths.unitservice.products.all,
             'data-test': 'us-nav-item-products-all',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'read',
-            }),
+            show: checkAcl('unit_service_info:read'),
             title: t('suppliers'),
             path: paths.unitservice.products.stakeholder.root,
             'data-test': 'us-nav-item-products-suppliers',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'read',
-            }),
+            show: checkAcl('unit_service_info:read'),
             title: t('orders'),
             path: paths.unitservice.orders.root,
             navItemId: 'USInsuranceNav',
@@ -655,11 +613,7 @@ export function useNavData() {
         ].filter((one) => one.show),
       },
       {
-        show: checkAcl({
-          category: 'unit_service',
-          subcategory: 'unit_service_info',
-          acl: 'update',
-        }),
+        show: checkAcl('unit_service_info:update'),
         title: t('unit of service info'),
         path: paths.unitservice.profile.parent,
         icon: <Iconify icon="fa-solid:clinic-medical" />,
@@ -667,22 +621,14 @@ export function useNavData() {
         'data-test': 'us-nav-item-info',
         children: [
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'update',
-            }),
+            show: checkAcl('unit_service_info:update'),
             title: t('profile'),
             path: paths.unitservice.profile.root,
             navItemId: 'USInfoNav',
             'data-test': 'us-nav-item-info-profile',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'read',
-            }),
+            show: checkAcl('unit_service_info:read'),
             title: t('Insurance'),
             path: paths.unitservice.insurance.root,
             navItemId: 'USInsuranceNav',
@@ -691,29 +637,21 @@ export function useNavData() {
           {
             show:
               false &&
-              checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
+              checkAcl('unit_service_info:read'),
             title: t('communication'),
             path: paths.unitservice.communication.root,
             navItemId: 'USCommunicationNav',
             'data-test': 'us-nav-item-info-communication',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'quality_control',
-              acl: 'read',
-            }),
+            show: checkAcl('quality_control:read'),
             title: t('quality control'),
             path: paths.unitservice.qualityControl.root,
             navItemId: 'USQualityControlNav',
             'data-test': 'us-nav-item-info-qc',
           },
           {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'read',
-            }),
+            show: checkAcl('unit_service_info:read'),
             title: t('subscriptions'),
             path: paths.unitservice.subscriptions.root,
             navItemId: 'USSubscriptionsNav',
@@ -739,11 +677,7 @@ export function useNavData() {
     const employeeItems = [
       // {
       //   show:
-      //     checkAcl({
-      //       category: 'work_group',
-      //       subcategory: 'entrance_management',
-      //       acl: 'read',
-      //     }) && !isMedLab,
+      //     checkAcl('entrance_management:read') && !isMedLab,
       //   title: t('entrance management'),
       //   path: paths.employee.entrancemanagement.root,
       //   icon: <Iconify icon="oi:timer" />,
@@ -751,9 +685,9 @@ export function useNavData() {
       // },
       {
         show:
-          (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) ||
-            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) ||
-            checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' })) &&
+          (checkAcl('entrance:appointment') ||
+            checkAcl('entrance:rooms') ||
+            checkAcl('entrance:finished')) &&
           !isMedLab,
         title: t('Appointments Today'),
         path: paths.employee.appointmentsToday,
@@ -761,7 +695,7 @@ export function useNavData() {
         'data-test': 'employee-nav-item-appointmenttoday',
       },
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl('appointments:read'),
         title: t('appointments'),
         path: paths.employee.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
@@ -769,7 +703,7 @@ export function useNavData() {
         'data-test': 'employee-nav-item-appointments',
         children: [
           {
-            show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+            show: checkAcl('appointments:read'),
             title: t('my appointments'),
             path: paths.employee.appointments.root,
             navItemId: 'EMAppointmentsNav',
@@ -777,7 +711,7 @@ export function useNavData() {
           },
           {
             show:
-              checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
+              checkAcl('appointments:update') &&
               !isMedLab,
             title: t('book appointments'),
             path: paths.employee.appointments.book,
@@ -786,11 +720,7 @@ export function useNavData() {
             'data-test': 'employee-nav-item-appointments-book',
           },
           {
-            show: checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'read',
-            }),
+            show: checkAcl('appointment_configs:read'),
             title: t('my appointment configuration'),
             path: paths.employee.appointmentconfiguration.root,
             // icon: <Iconify icon="fluent:content-settings-16-regular" />,
@@ -801,7 +731,7 @@ export function useNavData() {
       },
 
       {
-        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl('appointments:read'),
         title: t('my patients'),
         path: paths.employee.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
@@ -824,7 +754,7 @@ export function useNavData() {
         children: [
           {
             show:
-              checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }) &&
+              checkAcl('appointments:read') &&
               !isMedLab,
             title: t('checklist'),
             path: paths.employee.checklist.root,
@@ -1129,36 +1059,24 @@ export function useNavData() {
             icon: <Iconify icon="streamline:information-desk-customer-solid" />,
           },
           {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkAcl('accounting:read'),
             title: t('accounting'),
             path: paths.stakeholder.accounting.root,
             icon: <Iconify icon="fa6-solid:money-bill-transfer" />,
             navItemId: 'USAccountingNav',
             children: [
               {
-                show: checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'accounting',
-                  acl: 'read',
-                }),
+                show: checkAcl('accounting:read'),
                 title: t('economic movements'),
                 path: paths.stakeholder.accounting.economicmovements.root,
               },
               {
-                show: checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'accounting',
-                  acl: 'read',
-                }),
+                show: checkAcl('accounting:read'),
                 title: t('payment control'),
                 path: paths.stakeholder.accounting.paymentcontrol.root,
               },
               {
-                show: checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'accounting',
-                  acl: 'read',
-                }),
+                show: checkAcl('accounting:read'),
                 title: t('reciepts'),
                 path: paths.stakeholder.accounting.reciepts.root,
               },

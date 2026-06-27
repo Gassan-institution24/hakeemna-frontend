@@ -13,7 +13,7 @@ export default function WorkShiftNewPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
+    <ACLGuard permission="management_tables:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : New Work Shift</title>
         <meta name="description" content="meta" />

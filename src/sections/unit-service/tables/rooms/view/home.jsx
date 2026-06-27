@@ -339,11 +339,7 @@ export default function RoomsTableView() {
             { name: t('rooms') },
           ]}
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'create',
-            }) && (
+            checkAcl('management_tables:create') && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.rooms.new}
@@ -450,11 +446,7 @@ export default function RoomsTableView() {
                       },
                     ]}
                     actions={[
-                      checkAcl({
-                        category: 'unit_service',
-                        subcategory: 'management_tables',
-                        acl: 'update',
-                      }) && {
+                      checkAcl('management_tables:update') && {
                         label: row.status === 'active' ? t('inactivate') : t('activate'),
                         icon: row.status === 'active' ? 'ic:baseline-pause' : 'bi:play-fill',
                         color: row.status === 'active' ? 'error.main' : 'success.main',
@@ -496,11 +488,7 @@ export default function RoomsTableView() {
                   )
                 }
                 action={
-                  checkAcl({
-                    category: 'department',
-                    subcategory: 'management_tables',
-                    acl: 'update',
-                  }) && (
+                  checkAcl('management_tables:update') && (
                     <>
                       {dataFiltered
                         .filter((row) => table.selected.includes(row._id))
@@ -521,11 +509,7 @@ export default function RoomsTableView() {
                   )
                 }
                 color={
-                  checkAcl({
-                    category: 'department',
-                    subcategory: 'management_tables',
-                    acl: 'update',
-                  }) &&
+                  checkAcl('management_tables:update') &&
                   dataFiltered
                     .filter((row) => table.selected.includes(row._id))
                     .some((data) => data.status === 'inactive')

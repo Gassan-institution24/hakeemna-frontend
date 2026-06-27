@@ -17,7 +17,7 @@ export default function DepartmentRoomsPage() {
   const { data, loading } = useGetDepartment(id);
 
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="read">
+    <ACLGuard permission="management_tables:read">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : Rooms</title>
         <meta name="description" content="meta" />

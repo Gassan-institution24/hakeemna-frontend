@@ -17,7 +17,7 @@ export default function DepartmentRoomEditPage() {
   const departmentData = useGetDepartment(id).data;
   const { data, loading } = useGetRoom(acid);
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title>{departmentData.name_english || 'Deartment'} : Edit Room </title>
         <meta name="description" content="meta" />

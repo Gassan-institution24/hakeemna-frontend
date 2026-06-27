@@ -292,11 +292,7 @@ export default function AppointConfigView() {
             { name: t('appointment configuration') },
           ]}
           action={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointment_configs',
-              acl: 'create',
-            }) && (
+            checkAcl('appointment_configs:create') && (
               <Button
                 data-test="create-appointment-config-button"
                 component={RouterLink}
@@ -458,11 +454,7 @@ export default function AppointConfigView() {
                   )
                 }
                 action={
-                  checkAcl({
-                    category: 'work_group',
-                    subcategory: 'appointment_configs',
-                    acl: 'update',
-                  }) && (
+                  checkAcl('appointment_configs:update') && (
                     <>
                       {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -483,11 +475,7 @@ export default function AppointConfigView() {
                   )
                 }
                 color={
-                  checkAcl({
-                    category: 'work_group',
-                    subcategory: 'appointment_configs',
-                    acl: 'update',
-                  }) &&
+                  checkAcl('appointment_configs:update') &&
                   dataFiltered
                     .filter((row) => table.selected.includes(row._id))
                     .some((data) => data.status === 'canceled')

@@ -7,7 +7,7 @@ import PaymentControlView from 'src/sections/employee/accounting/payment-control
 
 export default function PaymentControlPage() {
   return (
-    <ACLGuard category="employee" subcategory="accounting" acl="read">
+    <ACLGuard permission="accounting:read">
       <Helmet>
         <title>Payment Control</title>
         <meta name="description" content="meta" />

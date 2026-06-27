@@ -983,4 +983,14 @@ export const endpoints = {
     entrance: (id) => (!id ? null : `/api/radiology-patient/entrance/${id}`),
     oneRadiology: (id) => (!id ? null : `/api/radiology-patient/oneRadiology/${id}`),
   },
+  roles: {
+    all: '/api/roles',
+    permissions: '/api/roles/permissions',
+    unitservice: (id) => (!id ? null : `/api/roles/unitservice/${id}`),
+    one: (id) => (!id ? null : `/api/roles/${id}`),
+    assign: '/api/roles/assign',
+    assignWorkGroupRole: '/api/roles/assign-workgroup',
+    migrate: (unitServiceId) => (!unitServiceId ? null : `/api/roles/migrate/${unitServiceId}`),
+    markOwners: '/api/roles/mark-owners',
+  },
 };

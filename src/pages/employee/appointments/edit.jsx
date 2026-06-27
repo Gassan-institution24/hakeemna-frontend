@@ -9,7 +9,7 @@ import AppointmentEditView from 'src/sections/employee/appointments/view/edit';
 export default function AppointmentsEditPage() {
   const { user } = useAuthContext();
   return (
-    <ACLGuard category="work_group" subcategory="appointments" acl="update">
+    <ACLGuard permission="appointments:update">
       <Helmet>
         <title> {user?.employee?.name_english || 'employee'} : Edit Appointments</title>
         <meta name="description" content="meta" />

@@ -10,7 +10,7 @@ import WorkGroupPermissionsView from 'src/sections/employee/work-groups/view/per
 export default function WorkGroupPermissionsPage() {
   const { user } = useAuthContext();
   return (
-    <ACLGuard category="work_group" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>{user?.employee?.name_english || 'employee'} : work group permissions</title>
         <meta name="description" content="meta" />

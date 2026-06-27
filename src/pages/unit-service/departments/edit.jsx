@@ -22,7 +22,7 @@ export default function DepartmentEditPage() {
       ?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="departments" acl="update">
+    <ACLGuard permission="departments:update">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Edit Department </title>
         <meta name="description" content="meta" />

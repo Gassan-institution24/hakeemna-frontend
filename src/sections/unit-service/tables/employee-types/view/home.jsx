@@ -323,11 +323,7 @@ export default function EmployeeTypesTable() {
             { name: t('employee types') },
           ]}
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'create',
-            }) && (
+            checkAcl('management_tables:create') && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.employeetypes.new}

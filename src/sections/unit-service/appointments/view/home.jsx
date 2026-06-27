@@ -489,7 +489,7 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('appointments') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) &&
+            checkAcl('appointments:create') &&
             !isMedLab && (
               <Button
                 component={RouterLink}
@@ -573,11 +573,7 @@ export default function AppointmentsView({ employeeData }) {
                 )
               }
               action={
-                checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'appointments',
-                  acl: 'update',
-                }) && (
+                checkAcl('appointments:update') && (
                   <>
                     <Tooltip title="delay all">
                       <IconButton color="info" onClick={confirmDelay.onTrue}>

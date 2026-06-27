@@ -655,6 +655,11 @@ export const paths = {
       workgroups: `${ROOTS.SUPERADMIN}/us/acl/workgroups`,
       employees: `${ROOTS.SUPERADMIN}/us/acl/employees`,
     },
+    roles: {
+      root: `${ROOTS.SUPERADMIN}/us/roles`,
+      new: `${ROOTS.SUPERADMIN}/us/roles/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/us/roles/${id}/edit`,
+    },
     oldPatient: `${ROOTS.SUPERADMIN}/us/oldpatient`,
     departments: {
       processingPage: `${ROOTS.SUPERADMIN}/us/processingpage`,

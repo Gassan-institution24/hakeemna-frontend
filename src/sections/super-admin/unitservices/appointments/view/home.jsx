@@ -480,11 +480,7 @@ export default function AppointmentsView() {
                 )
               }
               action={
-                checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'appointments',
-                  acl: 'update',
-                }) && (
+                checkAcl('appointments:update') && (
                   <>
                     <Tooltip title="delay all">
                       <IconButton color="info" onClick={confirmDelay.onTrue}>

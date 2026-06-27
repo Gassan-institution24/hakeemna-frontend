@@ -13,7 +13,7 @@ export default function HRPage() {
       ?.name_english;
   return (
     <>
-      {/* <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read"> */}
+      {/* <ACLGuard permission="unit_service_info:read"> */}
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Human resourse</title>
         <meta name="description" content="meta" />

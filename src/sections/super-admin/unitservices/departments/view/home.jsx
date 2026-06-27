@@ -334,7 +334,7 @@ export default function UnitServicesTableView() {
             { name: t('departments') }, /// edit
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+            checkAcl('departments:create') && (
               <Button
                 component={RouterLink}
                 href={paths.superadmin.unitservices.departments.new(id)} /// edit

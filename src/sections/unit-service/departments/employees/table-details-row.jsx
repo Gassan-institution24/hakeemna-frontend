@@ -133,7 +133,7 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl('employees:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -146,7 +146,7 @@ export default function CountriesTableRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl('employees:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {

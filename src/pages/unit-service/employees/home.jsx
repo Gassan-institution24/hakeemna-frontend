@@ -13,7 +13,7 @@ export default function EmployeeHomePage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="employees" acl="read">
+    <ACLGuard permission="employees:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Employees</title>
         <meta name="description" content="meta" />

@@ -21,7 +21,7 @@ export default function AppointmentEditPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="appointments" acl="update">
+    <ACLGuard permission="appointments:update">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Edit Appointment</title>
         <meta name="description" content="meta" />

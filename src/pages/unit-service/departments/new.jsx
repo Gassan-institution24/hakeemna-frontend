@@ -13,7 +13,7 @@ export default function DepartmentsNewPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="departments" acl="create">
+    <ACLGuard permission="departments:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} :New Department </title>
         <meta name="description" content="meta" />

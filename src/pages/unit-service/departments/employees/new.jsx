@@ -14,7 +14,7 @@ export default function DepartmentEmployeeNewPage() {
   const { id } = params;
   const { data } = useGetDepartment(id);
   return (
-    <ACLGuard category="department" subcategory="employees" acl="create">
+    <ACLGuard permission="employees:create">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : Add Employee </title>
         <meta name="description" content="meta" />

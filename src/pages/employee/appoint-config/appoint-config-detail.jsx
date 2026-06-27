@@ -19,7 +19,7 @@ export default function EmployeeAppointconfigPage() {
   const { user } = useAuthContext();
 
   return (
-    <ACLGuard category="work_group" subcategory="appointment_configs" acl="update">
+    <ACLGuard permission="appointment_configs:update">
       <Helmet>
         <title> {user?.employee?.name_english || 'employee'} : Appointment Config Detail </title>
         <meta name="description" content="meta" />

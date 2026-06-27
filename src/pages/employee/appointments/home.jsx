@@ -9,7 +9,7 @@ import AppointmentHomeView from 'src/sections/employee/appointments/view/home';
 export default function AppointmentsHomePage() {
   const { user } = useAuthContext();
   return (
-    <ACLGuard category="work_group" subcategory="appointments" acl="read">
+    <ACLGuard permission="appointments:read">
       <Helmet>
         <title> {user?.employee?.name_english || 'employee'} : Appointments</title>
         <meta name="description" content="meta" />

@@ -16,7 +16,7 @@ export default function DepartmentPermissionsPage() {
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
   return (
-    <ACLGuard category="department" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : permissions</title>
         <meta name="description" content="meta" />

@@ -13,7 +13,7 @@ export default function WorkGroupHomePage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
+    <ACLGuard permission="management_tables:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Work Groups</title>
         <meta name="description" content="meta" />

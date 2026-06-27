@@ -23,7 +23,7 @@ export default function WorkShiftEditPage() {
       ?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Edit Work Shift</title>
         <meta name="description" content="meta" />
