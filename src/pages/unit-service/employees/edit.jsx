@@ -23,7 +23,7 @@ export default function EmployeeEditPage() {
       ?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="employees" acl="update">
+    <ACLGuard permission="employees:update">
       <Helmet>
         <title> {serviceUnitName || 'unit of service'} : Edit Employee</title>
         <meta name="description" content="meta" />

@@ -180,7 +180,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 155 }}
       >
         {/* {status === 'available' &&
-          checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl('appointments:update') && (
             <MenuItem
               lang="ar"
               sx={{ color: 'success.main' }}
@@ -194,7 +194,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )} */}
         {status === 'available' &&
-          checkAcl({ category: 'department', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl('appointments:delete') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -208,7 +208,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl('appointments:update') && (
             <MenuItem
               lang="ar"
               onClick={() => {
@@ -221,7 +221,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) &&
+        {checkAcl('appointments:update') &&
           !['finished', 'canceled', 'not booked'].includes(status) && (
             <MenuItem lang="ar" onClick={confirmDelayOne.onTrue}>
               <Iconify icon="mdi:timer-sync" />

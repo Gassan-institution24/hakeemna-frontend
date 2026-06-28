@@ -30,13 +30,13 @@ export function useNavData() {
   const data = useMemo(() => {
     const employeeItems = [
       {
-        show: checkAcl({ category: 'department', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl('appointments:read'),
         title: t('appointments'),
         path: paths.unitservice.departments.appointments(id),
         icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }) && false,
+        show: checkAcl('accounting:read') && false,
         title: t('accounting'),
         path: paths.unitservice.departments.accounting(id),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -48,32 +48,32 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }),
+        show: checkAcl('management_tables:read'),
         title: t('activities'),
         path: paths.unitservice.departments.activities.root(id),
         icon: <Iconify icon="fluent:shifts-activity-24-filled" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'employees', acl: 'read' }), //
+        show: checkAcl('employees:read'), //
         title: t('employees'),
         path: paths.unitservice.departments.employees.root(id),
         icon: <Iconify icon="ic:round-group" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }), //
+        show: checkAcl('management_tables:read'), //
         title: t('rooms'),
         path: paths.unitservice.departments.rooms.root(id),
         icon: <Iconify icon="ic:sharp-meeting-room" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }),
+        show: checkAcl('management_tables:read'),
         title: t('work groups'),
         path: paths.unitservice.departments.workGroups.root(id),
         icon: <Iconify icon="fa6-solid:people-group" />,
       },
       {
         show:
-          checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }) && false,
+          checkAcl('permissions:read') && false,
         title: t('permissions'),
         path: paths.unitservice.departments.permissions.root(id),
         icon: <Iconify icon="mdi:account-secure" />,

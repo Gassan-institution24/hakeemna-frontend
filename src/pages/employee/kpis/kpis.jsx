@@ -7,7 +7,7 @@ import KpisView from 'src/sections/employee/kpis/kpis-view';
 
 export default function KpisPage() {
   return (
-    <ACLGuard category="work_group" subcategory="kpis" acl="read">
+    <ACLGuard permission="kpis:read">
       <Helmet>
         <title> Kpis </title>
         <meta name="description" content="meta" />

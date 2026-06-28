@@ -476,7 +476,7 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('appointments') },
           ]}
           action={
-            checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl('appointments:create') && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}
@@ -673,11 +673,7 @@ export default function AppointmentsView({ employeeData }) {
                     ]}
                     actions={[
                       row.status !== 'finished' &&
-                      checkAcl({
-                        category: 'work_group',
-                        subcategory: 'appointments',
-                        acl: 'update',
-                      }) && {
+                      checkAcl('appointments:update') && {
                         label: t('edit'),
                         icon: 'fluent:edit-32-filled',
                         onClick: () => {
@@ -687,11 +683,7 @@ export default function AppointmentsView({ employeeData }) {
 
                       ['finished'].includes(row.status) &&
                         !row.invoiced &&
-                        checkAcl({
-                          category: 'work_group',
-                          subcategory: 'accounting',
-                          acl: 'create',
-                        }) && {
+                        checkAcl('accounting:create') && {
                           label: t('make an invoice'),
                           icon: 'hugeicons:invoice',
                           color: 'info.main',
@@ -703,11 +695,7 @@ export default function AppointmentsView({ employeeData }) {
                         },
 
                       row.status === 'available' &&
-                        checkAcl({
-                          category: 'work_group',
-                          subcategory: 'appointments',
-                          acl: 'update',
-                        }) && {
+                        checkAcl('appointments:update') && {
                           label: t('book manually'),
                           icon: 'mdi:register',
                           onClick: () => {
@@ -716,11 +704,7 @@ export default function AppointmentsView({ employeeData }) {
                         },
 
                       row.status === 'available' &&
-                        checkAcl({
-                          category: 'work_group',
-                          subcategory: 'appointments',
-                          acl: 'delete',
-                        }) && {
+                        checkAcl('appointments:delete') && {
                           label: t('cancel'),
                           icon: 'mdi:bell-cancel',
                           color: 'error.main',
@@ -730,11 +714,7 @@ export default function AppointmentsView({ employeeData }) {
                         },
 
                       row.status === 'processing' &&
-                        checkAcl({
-                          category: 'work_group',
-                          subcategory: 'appointments',
-                          acl: 'delete',
-                        }) && {
+                        checkAcl('appointments:delete') && {
                           label: t('end'),
                           icon: 'mdi:done',
                           color: 'success.main',
@@ -744,11 +724,7 @@ export default function AppointmentsView({ employeeData }) {
                         },
 
                       row.status === 'canceled' &&
-                        checkAcl({
-                          category: 'work_group',
-                          subcategory: 'appointments',
-                          acl: 'update',
-                        }) && {
+                        checkAcl('appointments:update') && {
                           label: t('uncancel'),
                           icon: 'material-symbols-light:notifications-active-rounded',
                           color: 'success.main',
@@ -757,11 +733,7 @@ export default function AppointmentsView({ employeeData }) {
                           },
                         },
 
-                      checkAcl({
-                        category: 'work_group',
-                        subcategory: 'appointments',
-                        acl: 'update',
-                      }) &&
+                      checkAcl('appointments:update') &&
                         !['finished', 'canceled', 'not booked'].includes(row.status) && {
                           label: t('delay'),
                           icon: 'mdi:timer-sync',
@@ -794,11 +766,7 @@ export default function AppointmentsView({ employeeData }) {
                   )
                 }
                 action={
-                  checkAcl({
-                    category: 'work_group',
-                    subcategory: 'appointments',
-                    acl: 'update',
-                  }) && (
+                  checkAcl('appointments:update') && (
                     <>
                       <Tooltip title="delay all">
                         <IconButton color="info" onClick={confirmDelay.onTrue}>
@@ -824,11 +792,7 @@ export default function AppointmentsView({ employeeData }) {
                   )
                 }
                 color={
-                  checkAcl({
-                    category: 'work_group',
-                    subcategory: 'appointments',
-                    acl: 'update',
-                  }) &&
+                  checkAcl('appointments:update') &&
                   dataFiltered
                     .filter((row) => table.selected.includes(row._id))
                     .some((data) => data.status === 'canceled')

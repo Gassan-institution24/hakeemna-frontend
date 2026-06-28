@@ -7,7 +7,7 @@ import InvoicingView from 'src/sections/unit-service/accounting/invoicing/view/h
 
 export default function InvoicingPage() {
   return (
-    <ACLGuard category="unit_service" subcategory="accounting" acl="create">
+    <ACLGuard permission="accounting:create">
       <Helmet>
         <title>invoicing</title>
         <meta name="description" content="meta" />

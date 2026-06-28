@@ -196,7 +196,7 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
+          ? checkAcl('departments:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -209,7 +209,7 @@ export default function CountriesTableRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+          : checkAcl('departments:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -222,7 +222,7 @@ export default function CountriesTableRow({
                 {t('activate')}
               </MenuItem>
             )}
-        {checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+        {checkAcl('departments:update') && (
           <MenuItem
             lang="ar"
             onClick={() => {

@@ -10,7 +10,7 @@ import AppointconfigDetailView from 'src/sections/employee/appoint-config/view/a
 export default function NewEmployeeAppointconfigPage() {
   const { user } = useAuthContext();
   return (
-    <ACLGuard category="work_group" subcategory="appointment_configs" acl="create">
+    <ACLGuard permission="appointment_configs:create">
       <Helmet>
         <title> {user?.employee?.name_english || 'employee'} : New Appointment Config</title>
         <meta name="description" content="meta" />

@@ -342,11 +342,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           //   { name: t('department work groups') },
           // ]}
           action={
-            checkAcl({
-              category: 'department',
-              subcategory: 'management_tables',
-              acl: 'create',
-            }) && (
+            checkAcl('management_tables:create') && (
               <Button
                 component={RouterLink}
                 href={paths.superadmin.unitservices.departments.workGroups.new(
@@ -436,11 +432,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               action={
-                checkAcl({
-                  category: 'department',
-                  subcategory: 'management_tables',
-                  acl: 'update',
-                }) && (
+                checkAcl('management_tables:update') && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -461,11 +453,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               color={
-                checkAcl({
-                  category: 'department',
-                  subcategory: 'management_tables',
-                  acl: 'update',
-                }) &&
+                checkAcl('management_tables:update') &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

@@ -18,7 +18,7 @@ export default function DepartmentPermissionsPage() {
       ?.name_english;
   const { emid, depId } = useParams();
   return (
-    <ACLGuard category="unit_service" subcategory="permissions" acl="read">
+    <ACLGuard permission="permissions:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : departments permissions</title>
         <meta name="description" content="meta" />

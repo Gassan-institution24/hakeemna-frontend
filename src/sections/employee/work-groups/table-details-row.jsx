@@ -21,21 +21,13 @@ export default function TableDetailsRow({ row, selected, onView }) {
     <TableRow hover selected={selected}>
       <TableCell
         sx={
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'permissions',
-            acl: 'update',
-          }) && {
+          checkAcl('permissions:update') && {
             cursor: 'pointer',
             color: '#3F54EB',
           }
         }
         onClick={
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'permissions',
-            acl: 'update',
-          })
+          checkAcl('permissions:update')
             ? onView
             : null
         }
@@ -46,21 +38,13 @@ export default function TableDetailsRow({ row, selected, onView }) {
 
       <TableCell
         sx={
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'permissions',
-            acl: 'update',
-          }) && {
+          checkAcl('permissions:update') && {
             cursor: 'pointer',
             color: '#3F54EB',
           }
         }
         onClick={
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'permissions',
-            acl: 'update',
-          })
+          checkAcl('permissions:update')
             ? onView
             : null
         }
@@ -70,11 +54,7 @@ export default function TableDetailsRow({ row, selected, onView }) {
       </TableCell>
       <TableCell
         onClick={
-          checkAcl({
-            category: 'work_group',
-            subcategory: 'permissions',
-            acl: 'update',
-          })
+          checkAcl('permissions:update')
             ? onView
             : null
         }

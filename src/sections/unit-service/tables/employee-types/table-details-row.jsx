@@ -108,11 +108,7 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'delete',
-            }) && (
+          ? checkAcl('management_tables:delete') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -125,11 +121,7 @@ export default function TableDetailsRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'update',
-            }) && (
+          : checkAcl('management_tables:update') && (
               <MenuItem
                 lang="ar"
                 onClick={() => {
@@ -143,11 +135,7 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'management_tables',
-          acl: 'update',
-        }) && (
+        {checkAcl('management_tables:update') && (
           <MenuItem
             lang="ar"
             onClick={() => {

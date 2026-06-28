@@ -179,7 +179,7 @@ export default function StartupCreating({ open, onClose }) {
 
           {USData &&
             (!USData?.employees_number || USData?.employees_number > 3) &&
-            checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+            checkAcl('departments:create') && (
               <Stack direction="row" alignItems="center">
                 <Checkbox
                   disabled={departmentsData.length > 0}

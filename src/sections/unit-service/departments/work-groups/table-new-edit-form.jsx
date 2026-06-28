@@ -20,7 +20,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetDepartmentActiveEmployeeEngs } from 'src/api';
+import { useGetDepartmentActiveEmployeeEngs, useGetUSDepartments } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -38,7 +38,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { employeesData } = useGetDepartmentActiveEmployeeEngs(departmentData._id);
 
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id;
+  const { departmentsData } = useGetUSDepartments(unitServiceId);
+
   const [selectedEmployees, setSelectedEmployees] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -53,7 +58,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       unit_service:
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           ._id || departmentData.unit_service._id,
-      department: departmentData._id,
+      departments: currentTable?.departments?.map((d) => d._id || d) || [departmentData._id],
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       employees: currentTable?.employees.map((info, idx) => info.employee) || [],
@@ -192,6 +197,46 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                     label={curLangAr ? option.employee.name_arabic : option.employee.name_english}
                     size="small"
                     color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            />
+            <RHFAutocomplete
+              name="departments"
+              label={t('departments')}
+              multiple
+              disableCloseOnSelect
+              options={departmentsData}
+              getOptionLabel={(option) =>
+                curLangAr
+                  ? option.name_arabic || option
+                  : option.name_english || option
+              }
+              isOptionEqualToValue={(option, value) =>
+                (option._id || option) === (value._id || value)
+              }
+              renderOption={(props, option, idx) => (
+                <li lang="ar" {...props} key={option._id || idx} value={option._id}>
+                  {curLangAr ? option.name_arabic : option.name_english}
+                </li>
+              )}
+              onChange={(event, newValue) => {
+                setSelectedDepartments(newValue);
+                methods.setValue(
+                  'departments',
+                  newValue.map((d) => d._id || d),
+                  { shouldValidate: true }
+                );
+              }}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={index}
+                    label={curLangAr ? option.name_arabic : option.name_english}
+                    size="small"
+                    color="primary"
                     variant="soft"
                   />
                 ))

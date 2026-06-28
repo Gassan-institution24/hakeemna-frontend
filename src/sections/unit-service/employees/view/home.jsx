@@ -391,7 +391,7 @@ export default function EmployeesTableView() {
             { name: t('employees') }, /// edit
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+            checkAcl('employees:create') && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.employees.new} /// edit

@@ -21,7 +21,7 @@ export default function ActivityEditPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title> {serviceUnitName || 'unit of service'} : Edit Activity</title>
         <meta name="description" content="meta" />

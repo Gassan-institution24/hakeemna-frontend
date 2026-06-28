@@ -19,7 +19,7 @@ export default function EmployeeAppointconfigPage() {
   const name = employeeData?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="appointment_configs" acl="read">
+    <ACLGuard permission="appointment_configs:read">
       <Helmet>
         <title> {name || 'Employee'} : Appointment Config</title>
         <meta name="description" content="meta" />

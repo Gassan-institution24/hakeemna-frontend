@@ -8,7 +8,7 @@ import PatientPage from 'src/sections/unit-service/accounting/claim/patientPage'
 
 export default function PatientVisitView() {
   return (
-    <ACLGuard category="unit_service" subcategory="accounting" acl="read">
+    <ACLGuard permission="accounting:read">
       <Helmet>
         <title>Claim Company</title>
         <meta name="description" content="claim company" />

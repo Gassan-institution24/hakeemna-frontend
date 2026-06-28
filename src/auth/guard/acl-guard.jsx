@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { RouterLink } from 'src/routes/components';
 
 import { useTranslate } from 'src/locales';
-import { useGetwgroupEmployeeEngs } from 'src/api';
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
@@ -17,57 +16,54 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
+function getMergedPermissions(user) {
+  const eng = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
+  if (!eng) return null;
+  // is_owner engagements always get unconditional bypass (null = full access)
+  if (eng.is_owner) return null;
+  const allRoles = [
+    ...(eng.roles?.length ? eng.roles : []),
+    ...(eng.role ? [eng.role] : []),
+  ];
+  if (allRoles.length === 0) return null; // no RBAC roles assigned yet
+  return [...new Set(allRoles.flatMap((r) => r?.permissions || []))];
+}
+
+function isOwnerEngagement(user) {
+  const eng = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
+  return eng?.is_owner === true;
+}
+
 export function useAclGuard() {
   const { user } = useAuthContext();
-  const { data } = useGetwgroupEmployeeEngs(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-  );
 
   const checkAcl = useCallback(
-    ({ category, subcategory, acl }) => {
-      // if (
-      //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?.status !==
-      //   'active'
-      // ) {
-      //   return false;
-      // }
-      const currentACL =
-        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
-      if (category === 'work_group') {
-        return (
-          data?.some((eng) => eng?.acl?.[subcategory]?.includes(acl)) ||
-          currentACL?.department?.[subcategory]?.includes(acl) ||
-          currentACL?.unit_service?.[subcategory]?.includes(acl) ||
-          false
-        );
-      }
-      if (category === 'department') {
-        return (
-          currentACL?.department?.[subcategory]?.includes(acl) ||
-          currentACL?.unit_service?.[subcategory]?.includes(acl) ||
-          false
-        );
-      }
-      return currentACL?.[category]?.[subcategory]?.includes(acl);
+    (permission) => {
+      if (user?.role === 'superadmin') return true;
+      if (isOwnerEngagement(user)) return true; // unit service owner: always full access
+      const perms = getMergedPermissions(user);
+      // admin with no roles assigned = full access (backward compat — not yet marked as owner)
+      if (perms === null) return user?.role === 'admin';
+      return perms.includes(permission);
     },
-    [user, data]
+    [user]
   );
   return checkAcl;
 }
-export default function ACLGuard({ category, subcategory, acl, children, sx }) {
+
+export default function ACLGuard({ permission, children, sx }) {
   const { user } = useAuthContext();
   const { t } = useTranslate();
 
-  const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
-
-  const { data } = useGetwgroupEmployeeEngs(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-  );
+  const currentEngagement =
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement];
+  const owner = currentEngagement?.is_owner === true;
+  const mergedPerms = getMergedPermissions(user);
+  const permArray = mergedPerms || [];
 
   if (
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-      ?.status !== 'active' &&
-    subcategory !== 'unit_service_info'
+    currentEngagement?.unit_service?.status !== 'active' &&
+    !permission?.startsWith('unit_service_info:')
   ) {
     return (
       <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
@@ -91,7 +87,7 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
             }}
           />
         </m.div>
-        {currentACL?.unit_service?.unit_service_info?.includes('create') && (
+        {(owner || permArray.includes('unit_service_info:create')) && (
           <Button
             component={RouterLink}
             href="/dashboard/us/profile/subscriptions/new"
@@ -105,24 +101,13 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
     );
   }
 
-  if (category === 'work_group') {
-    if (
-      !data?.some((eng) => eng?.acl?.[subcategory]?.includes(acl)) ||
-      currentACL?.department?.[subcategory]?.includes(acl) ||
-      currentACL?.unit_service?.[subcategory]?.includes(acl)
-    ) {
-      return children;
-    }
-  }
-  if (category === 'department') {
-    if (
-      currentACL?.department?.[subcategory]?.includes(acl) ||
-      currentACL?.unit_service?.[subcategory]?.includes(acl)
-    ) {
-      return children;
-    }
-  }
-  if (currentACL?.[category]?.[subcategory]?.includes(acl)) {
+  const hasAccess =
+    user?.role === 'superadmin' ||
+    owner ||
+    (mergedPerms === null && user?.role === 'admin') ||
+    mergedPerms?.includes(permission);
+
+  if (hasAccess) {
     return children;
   }
 
@@ -154,8 +139,6 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
 
 ACLGuard.propTypes = {
   children: PropTypes.node,
-  acl: PropTypes.string,
-  category: PropTypes.string,
-  subcategory: PropTypes.string,
+  permission: PropTypes.string,
   sx: PropTypes.object,
 };

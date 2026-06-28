@@ -24,7 +24,7 @@ export default function WorkGroupPermissionsPage() {
       ?.name_english;
 
   return (
-    <ACLGuard category="unit_service" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>
           {serviceUnitName || 'unit of service'} : {name || ''} permissions

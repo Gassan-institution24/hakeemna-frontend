@@ -17,7 +17,7 @@ export default function DepartmentWorkGroupEditPage() {
   const departmentData = useGetDepartment(id).data;
   const { data, loading } = useGetWorkGroup(acid);
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title>{departmentData.name_english || 'Deartment'} : Edit Work Group</title>
         <meta name="description" content="meta" />

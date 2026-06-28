@@ -17,7 +17,7 @@ export default function DepartmentActivityEditPage() {
   const departmentData = useGetDepartment(id).data;
   const { data, loading } = useGetActivity(acid);
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="update">
+    <ACLGuard permission="management_tables:update">
       <Helmet>
         <title> {data.name_english || 'Deartment'} : Edit Activity </title>
         <meta name="description" content="meta" />

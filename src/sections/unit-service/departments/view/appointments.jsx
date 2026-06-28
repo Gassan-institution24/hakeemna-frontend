@@ -415,7 +415,7 @@ export default function AppointmentsView({ departmentData }) {
       <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
-            checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl('appointments:create') && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}
@@ -498,11 +498,7 @@ export default function AppointmentsView({ departmentData }) {
                 )
               }
               action={
-                checkAcl({
-                  category: 'department',
-                  subcategory: 'appointments',
-                  acl: 'update',
-                }) && (
+                checkAcl('appointments:update') && (
                   <>
                     <Tooltip title="delay all">
                       <IconButton color="info" onClick={confirmDelay.onTrue}>

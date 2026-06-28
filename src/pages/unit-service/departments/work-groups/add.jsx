@@ -16,7 +16,7 @@ export default function DepartmentWorkGroupNewPage() {
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
   return (
-    <ACLGuard category="department" subcategory="management_tables" acl="create">
+    <ACLGuard permission="management_tables:create">
       <Helmet>
         <title>{data.name_english || 'Deartment'} : New Work Group </title>
         <meta name="description" content="meta" />

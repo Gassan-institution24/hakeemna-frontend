@@ -9,7 +9,7 @@ import EmployeeProfileView from 'src/sections/employee/profile/view/home';
 export default function EmployeeProfilePage() {
   const { user } = useAuthContext();
   return (
-    // <ACLGuard category="employee" subcategory="info" acl="read">
+    // <ACLGuard permission="info:read">
     <>
       <Helmet>
         <title> {user?.employee?.name_english || 'employee'} : My Profile</title>

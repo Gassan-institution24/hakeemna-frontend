@@ -297,11 +297,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            }) && (
+            checkAcl('appointment_configs:update') && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.employees.appointmentconfig.new(id)}
@@ -378,11 +374,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               action={
-                checkAcl({
-                  category: 'employee',
-                  subcategory: 'appointment_configs',
-                  acl: 'update',
-                }) && (
+                checkAcl('appointment_configs:update') && (
                   <>
                     {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -403,11 +395,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               color={
-                checkAcl({
-                  category: 'employee',
-                  subcategory: 'appointment_configs',
-                  acl: 'update',
-                }) &&
+                checkAcl('appointment_configs:update') &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')

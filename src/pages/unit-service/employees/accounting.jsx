@@ -16,7 +16,7 @@ export default function EmployeeAccountingPage() {
   const { id } = params;
   const { data, loading } = useGetEmployeeEngagement(id);
   return (
-    <ACLGuard category="unit_service" subcategory="accounting" acl="read">
+    <ACLGuard permission="accounting:read">
       <Helmet>
         <title> {data?.name_english || 'Employee'} : Accounting</title>
         <meta name="description" content="meta" />

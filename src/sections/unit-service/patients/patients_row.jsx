@@ -33,7 +33,7 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
   const confirm = useBoolean();
   const popover = usePopover();
   const clickHandler = () => {
-    if (checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' })) {
+    if (checkAcl('entrance:rooms')) {
       router.push(paths.employee.patients.info(_id));
     } else {
       enqueueSnackbar(t('permission denide'), { variant: 'warning' });

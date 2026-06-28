@@ -252,11 +252,7 @@ export default function UnitServicesInsuranceView() {
             { name: t('Insurance') }, /// edit
           ]}
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'unit_service_info',
-              acl: 'create',
-            }) && (
+            checkAcl('unit_service_info:create') && (
               <Button
                 component={RouterLink}
                 onClick={popover.onOpen}

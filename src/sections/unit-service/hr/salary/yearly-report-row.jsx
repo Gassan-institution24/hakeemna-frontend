@@ -108,11 +108,7 @@ export default function YearlyReportRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {checkAcl({
-          category: 'unit_service',
-          subcategory: 'hr',
-          acl: 'delete',
-        }) && (
+        {checkAcl('hr:delete') && (
           <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
             <Iconify icon="mdi:trash" />
             {t('Delete')}

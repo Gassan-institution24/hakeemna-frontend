@@ -12,7 +12,7 @@ export default function HomePage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="communication" acl="read">
+    <ACLGuard permission="communication:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Communication</title>
         <meta name="description" content="meta" />

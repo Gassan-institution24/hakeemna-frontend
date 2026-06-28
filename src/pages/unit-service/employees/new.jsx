@@ -13,7 +13,7 @@ export default function EmployeeNewPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="employees" acl="create">
+    <ACLGuard permission="employees:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : New Employee </title>
         <meta name="description" content="meta" />

@@ -103,21 +103,21 @@ export default function AppointmentsToday() {
   );
 
   const TABS = [
-    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'appointment' }) && {
+    checkAcl('entrance:appointment') && {
       value: 'one',
       label: t('Appointments Today'),
       color: 'info',
       count: appointmentsData?.length,
       data: appointmentsData,
     },
-    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'rooms' }) && {
+    checkAcl('entrance:rooms') && {
       value: 'two',
       label: t('Rooms'),
       color: 'warning',
       count: roomsEntranceOnly?.length,
       data: entrance,
     },
-    checkAcl({ category: 'unit_service', subcategory: 'entrance', acl: 'finished' }) && {
+    checkAcl('entrance:finished') && {
       value: 'three',
       label: t('Finished'),
       color: 'success',
@@ -129,11 +129,7 @@ export default function AppointmentsToday() {
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const canAccessRooms = checkAcl({
-    category: 'unit_service',
-    subcategory: 'entrance',
-    acl: 'rooms',
-  });
+  const canAccessRooms = checkAcl('entrance:rooms');
 
   // ─── Business logic (unchanged) ────────────────────────────────────────────
 
@@ -298,9 +294,11 @@ export default function AppointmentsToday() {
   };
 
   useEffect(() => {
-    setCurrentTab(TABS[0].value);
+    if (TABS.length > 0) {
+      setCurrentTab(TABS[0].value);
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [TABS.length]);
 
   // ─── UI helpers ────────────────────────────────────────────────────────────
 
@@ -806,11 +804,7 @@ export default function AppointmentsToday() {
           heading={t('Appointments Today')}
           links={[{ name: curLangAr ? user.employee?.name_arabic : user.employee?.name_english }]}
           action={
-            checkAcl({
-              category: 'work_group',
-              subcategory: 'appointments',
-              acl: 'create',
-            }) && (
+            checkAcl('appointments:create') && (
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap">
                 <Button
                   component={RouterLink}

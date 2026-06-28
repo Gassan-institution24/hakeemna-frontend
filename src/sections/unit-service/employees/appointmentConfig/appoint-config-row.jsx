@@ -118,7 +118,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 140 }}
       >
         {/* {status === 'available' &&
-          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
+          checkAcl('appointment_configs:delete') && (
             <MenuItem lang="ar" 
               onClick={() => {
                 onCancelRow();
@@ -131,7 +131,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'update' }) && (
+          checkAcl('appointment_configs:update') && (
             <MenuItem lang="ar" 
               onClick={() => {
                 onUnCancelRow();

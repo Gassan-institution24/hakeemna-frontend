@@ -15,7 +15,7 @@ export default function EmployeeWGPermissionsPage() {
       ?.name_english;
   const { id, wgid } = useParams();
   return (
-    <ACLGuard category="unit_service" subcategory="permissions" acl="read">
+    <ACLGuard permission="permissions:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : work groups permissions</title>
         <meta name="description" content="meta" />

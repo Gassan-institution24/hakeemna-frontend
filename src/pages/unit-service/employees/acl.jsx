@@ -13,7 +13,7 @@ export default function EmployeeACLPage() {
   const { id } = params;
   const { data } = useGetEmployeeEngagement(id);
   return (
-    <ACLGuard category="unit_service" subcategory="permissions" acl="update">
+    <ACLGuard permission="permissions:update">
       <Helmet>
         <title>{data?.name_english || 'Employee'} : Access control list</title>
         <meta name="description" content="meta" />

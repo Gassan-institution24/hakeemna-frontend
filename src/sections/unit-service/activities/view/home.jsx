@@ -344,11 +344,7 @@ export default function ActivitesTableView() {
             { name: t('activities') },
           ]}
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'create',
-            }) && (
+            checkAcl('management_tables:create') && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.activities.new}
@@ -501,11 +497,7 @@ export default function ActivitesTableView() {
                 )
               }
               action={
-                checkAcl({
-                  category: 'unit_service',
-                  subcategory: 'management_tables',
-                  acl: 'update',
-                }) && (
+                checkAcl('management_tables:update') && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))

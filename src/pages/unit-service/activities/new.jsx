@@ -13,7 +13,7 @@ export default function ActivityNewPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
+    <ACLGuard permission="management_tables:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : New Activity</title>
         <meta name="description" content="meta" />

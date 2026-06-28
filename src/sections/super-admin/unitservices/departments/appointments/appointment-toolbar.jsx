@@ -163,7 +163,7 @@ export default function AppointmentsTableToolbar({
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
-            {checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
+            {checkAcl('appointments:create') && (
               <IconButton color="error" onClick={onAdd}>
                 <Iconify icon="zondicons:add-outline" />
               </IconButton>

@@ -7,7 +7,7 @@ import PaymentControlNewView from 'src/sections/employee/accounting/payment-cont
 
 export default function PaymentControlNewPage() {
   return (
-    <ACLGuard category="employee" subcategory="accounting" acl="create">
+    <ACLGuard permission="accounting:create">
       <Helmet>
         <title>New Payment Control</title>
         <meta name="description" content="meta" />

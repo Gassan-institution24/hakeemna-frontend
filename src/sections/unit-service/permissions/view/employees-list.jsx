@@ -2,6 +2,7 @@ import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
+import AssignRoleDialog from 'src/sections/unit-service/roles/assign-role-dialog';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -88,6 +89,7 @@ export default function EmployeesTableView() {
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
+  const [assignRoleTarget, setAssignRoleTarget] = useState(null);
 
   const router = useRouter();
 
@@ -381,7 +383,7 @@ export default function EmployeesTableView() {
             { name: t('employees') }, /// edit
           ]}
           // action={
-          //   checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+          //   checkAcl('employees:create') && (
           //     <Button
           //       component={RouterLink}
           //       href={paths.unitservice.employees.new} /// edit
@@ -532,6 +534,7 @@ export default function EmployeesTableView() {
                         onEditRow={() => handleEditRow(row._id)}
                         onChangeVisPage={() => handleChangeVisPage(row._id)}
                         onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
+                        onAssignRole={() => setAssignRoleTarget(row)}
                       />
                     ))}
                   <TableNoData notFound={notFound} />
@@ -596,6 +599,17 @@ export default function EmployeesTableView() {
             Activate
           </Button>
         }
+      />
+
+      <AssignRoleDialog
+        open={!!assignRoleTarget}
+        onClose={() => setAssignRoleTarget(null)}
+        engagement={assignRoleTarget}
+        unitServiceId={
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+            ?._id
+        }
+        onSaved={refetch}
       />
     </>
   );

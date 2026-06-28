@@ -13,7 +13,7 @@ export default function AppointmentsHomePage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard category="unit_service" subcategory="appointments" acl="read">
+    <ACLGuard permission="appointments:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Appointments</title>
         <meta name="description" content="meta" />

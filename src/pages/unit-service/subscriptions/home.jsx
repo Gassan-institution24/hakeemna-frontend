@@ -12,7 +12,7 @@ export default function SubscriptionsHomePage() {
   const serviceUnitName =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?.nam;
   return (
-    <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
+    <ACLGuard permission="unit_service_info:read">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Subscriptions</title>
         <meta name="description" content="meta" />

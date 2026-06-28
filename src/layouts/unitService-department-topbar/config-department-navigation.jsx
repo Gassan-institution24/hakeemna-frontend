@@ -30,13 +30,13 @@ export function useNavData() {
   const data = useMemo(() => {
     const employeeItems = [
       {
-        // show: checkAcl({ category: 'department', subcategory: 'appointments', acl: 'read' }),
+        // show: checkAcl('appointments:read'),
         title: t('appointments'),
         path: paths.superadmin.unitservices.departments.appointments(id, depid),
         icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
-        // show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }),
+        // show: checkAcl('accounting:read'),
         title: t('accounting'),
         path: paths.superadmin.unitservices.departments.accounting(id, depid),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -48,25 +48,25 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        // show: checkAcl({ category: 'department', subcategory: 'activities', acl: 'read' }),
+        // show: checkAcl('activities:read'),
         title: t('activities'),
         path: paths.superadmin.unitservices.departments.activities.root(id, depid),
         icon: <Iconify icon="fluent:shifts-activity-24-filled" />,
       },
       {
-        // show: checkAcl({ category: 'department', subcategory: 'employees', acl: 'read' }), //
+        // show: checkAcl('employees:read'), //
         title: t('employees'),
         path: paths.superadmin.unitservices.departments.employees.root(id, depid),
         icon: <Iconify icon="ic:round-group" />,
       },
       {
-        // show: checkAcl({ category: 'department', subcategory: 'rooms', acl: 'read' }), //
+        // show: checkAcl('rooms:read'), //
         title: t('rooms'),
         path: paths.superadmin.unitservices.departments.rooms.root(id, depid),
         icon: <Iconify icon="ic:sharp-meeting-room" />,
       },
       {
-        // show: checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'read' }),
+        // show: checkAcl('work_groups:read'),
         title: t('work groups'),
         path: paths.superadmin.unitservices.departments.workGroups.root(id, depid),
         icon: <Iconify icon="fa6-solid:people-group" />,

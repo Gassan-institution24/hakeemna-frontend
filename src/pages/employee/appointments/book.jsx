@@ -17,7 +17,7 @@ export default function BookAppointmentPage() {
   // const { data, loading } = useGetAppointment(id);
   // const name = data?.name_english;
   return (
-    <ACLGuard category="work_group" subcategory="appointments" acl="read">
+    <ACLGuard permission="appointments:read">
       <Helmet>
         <title> Book Appointment </title>
         <meta name="description" content="meta" />
