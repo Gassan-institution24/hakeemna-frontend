@@ -77,6 +77,7 @@ export default function UnitServicesTableView() {
     // { id: 'code', label: t('code') },
     { id: 'sequence_number', label: t('number') },
     { id: 'name_english', label: t('name') },
+    { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
@@ -445,6 +446,12 @@ export default function UnitServicesTableView() {
                       {
                         label: t('number'),
                         value: row.sequence_number,
+                      },
+                      {
+                        label: t('work group'),
+                        value: curLangAr
+                          ? row.work_group?.name_arabic
+                          : row.work_group?.name_english,
                       },
                       {
                         label: t('status'),

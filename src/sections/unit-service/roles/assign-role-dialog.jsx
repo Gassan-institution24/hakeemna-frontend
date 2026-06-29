@@ -6,7 +6,6 @@ import Chip from '@mui/material/Chip';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -19,7 +18,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetUnitServiceRoles } from 'src/api/roles';
-import { useGetwgroupEmployeeEngs } from 'src/api/work_groups';
 
 import { useSnackbar } from 'src/components/snackbar';
 
@@ -30,18 +28,6 @@ function getExistingRoleIds(engagement) {
   }
   if (engagement.role) {
     const id = engagement.role?._id || engagement.role;
-    return id ? [id] : [];
-  }
-  return [];
-}
-
-function getWgExistingRoleIds(wgEng) {
-  if (!wgEng) return [];
-  if (wgEng.roles?.length) {
-    return wgEng.roles.map((r) => r?._id || r).filter(Boolean);
-  }
-  if (wgEng.role) {
-    const id = wgEng.role?._id || wgEng.role;
     return id ? [id] : [];
   }
   return [];
@@ -105,38 +91,26 @@ RoleCheckboxList.propTypes = {
   curLangAr: PropTypes.bool,
 };
 
-export default function AssignRoleDialog({ open, onClose, engagement, unitServiceId, onSaved }) {
+export default function AssignRoleDialog({ open, onClose, engagement, unitServiceId, workGroupId, onSaved }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
   const { initialize } = useAuthContext();
-  const { roles, loading } = useGetUnitServiceRoles(unitServiceId);
+  const { roles: allRoles, loading } = useGetUnitServiceRoles(unitServiceId);
 
-  // Overall (engagement-level) role selection
+  const roles = workGroupId
+    ? allRoles.filter((r) => (r.work_group?._id || r.work_group) === workGroupId)
+    : allRoles;
+
   const [selectedIds, setSelectedIds] = useState([]);
-
-  // Work group engagement role selections: { [wgEngId]: string[] }
-  const [wgRoleSelections, setWgRoleSelections] = useState({});
-
   const [saving, setSaving] = useState(false);
-
-  // Load work group engagements for this employee engagement
-  const { data: wgEngagements, loading: wgLoading } = useGetwgroupEmployeeEngs(engagement?._id);
 
   useEffect(() => {
     if (open) {
       setSelectedIds(getExistingRoleIds(engagement));
-      // Initialize WG role selections from existing data
-      if (Array.isArray(wgEngagements)) {
-        const initial = {};
-        wgEngagements.forEach((wge) => {
-          initial[wge._id] = getWgExistingRoleIds(wge);
-        });
-        setWgRoleSelections(initial);
-      }
     }
-  }, [open, engagement, wgEngagements]);
+  }, [open, engagement]);
 
   const toggleRole = (id) => {
     setSelectedIds((prev) =>
@@ -144,42 +118,17 @@ export default function AssignRoleDialog({ open, onClose, engagement, unitServic
     );
   };
 
-  const toggleWgRole = (wgEngId, roleId) => {
-    setWgRoleSelections((prev) => {
-      const current = prev[wgEngId] || [];
-      const updated = current.includes(roleId)
-        ? current.filter((r) => r !== roleId)
-        : [...current, roleId];
-      return { ...prev, [wgEngId]: updated };
-    });
-  };
-
   const handleAssign = async () => {
-    const hasWgRoles = Object.values(wgRoleSelections).some((ids) => ids.length > 0);
-    if (selectedIds.length === 0 && !hasWgRoles) {
+    if (selectedIds.length === 0) {
       enqueueSnackbar(t('Please select at least one role'), { variant: 'error' });
       return;
     }
     setSaving(true);
     try {
-      // 1. Assign overall engagement roles (allowed to be empty — clears overall role)
       await axiosInstance.patch(endpoints.roles.assign, {
         engagement_id: engagement._id,
         role_ids: selectedIds,
       });
-
-      // 2. Assign work group engagement roles (for each WGE that exists)
-      if (Array.isArray(wgEngagements) && wgEngagements.length > 0) {
-        await Promise.all(
-          wgEngagements.map(async (wge) => {
-            const roleIds = wgRoleSelections[wge._id] || [];
-            await axiosInstance.patch(endpoints.roles.assignWorkGroupRole, {
-              workgroup_engagement_id: wge._id,
-              role_ids: roleIds,
-            });
-          })
-        );
-      }
 
       enqueueSnackbar(t('Role assigned successfully'));
       await initialize();
@@ -196,60 +145,6 @@ export default function AssignRoleDialog({ open, onClose, engagement, unitServic
     ? engagement?.employee?.name_arabic
     : engagement?.employee?.name_english;
 
-  function renderOverallSection() {
-    if (loading) {
-      return <Typography variant="body2">{t('Loading...')}</Typography>;
-    }
-    return (
-      <RoleCheckboxList
-        roles={roles}
-        selectedIds={selectedIds}
-        onToggle={toggleRole}
-        curLangAr={curLangAr}
-      />
-    );
-  }
-
-  function renderWorkGroupSection() {
-    if (wgLoading) {
-      return <Typography variant="body2">{t('Loading...')}</Typography>;
-    }
-    if (!Array.isArray(wgEngagements) || wgEngagements.length === 0) {
-      return (
-        <Typography variant="body2" color="text.secondary">
-          {t('No work group memberships.')}
-        </Typography>
-      );
-    }
-    return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {wgEngagements.map((wge) => {
-          const wgName = curLangAr
-            ? wge.work_group?.name_arabic
-            : wge.work_group?.name_english;
-          const currentSelections = wgRoleSelections[wge._id] || [];
-          return (
-            <Box key={wge._id}>
-              <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
-                {wgName || wge._id}
-              </Typography>
-              {loading ? (
-                <Typography variant="body2">{t('Loading...')}</Typography>
-              ) : (
-                <RoleCheckboxList
-                  roles={roles}
-                  selectedIds={currentSelections}
-                  onToggle={(roleId) => toggleWgRole(wge._id, roleId)}
-                  curLangAr={curLangAr}
-                />
-              )}
-            </Box>
-          );
-        })}
-      </Box>
-    );
-  }
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{t('Assign Roles')}</DialogTitle>
@@ -261,24 +156,16 @@ export default function AssignRoleDialog({ open, onClose, engagement, unitServic
           {t('Select one or more roles. Permissions from all selected roles will be merged.')}
         </Alert>
 
-        {/* Section 1: Overall Role */}
-        <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 700 }}>
-          {t('Overall Role')}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {t('Applies to the employee across the unit service (used when no work group is assigned).')}
-        </Typography>
-        {renderOverallSection()}
-
-        {/* Section 2: Work Group Roles */}
-        <Divider sx={{ my: 2 }} />
-        <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 700 }}>
-          {t('Work Group Roles')}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {t('Assign roles per work group membership. These permissions are merged with the overall role.')}
-        </Typography>
-        {renderWorkGroupSection()}
+        {loading ? (
+          <Typography variant="body2">{t('Loading...')}</Typography>
+        ) : (
+          <RoleCheckboxList
+            roles={roles}
+            selectedIds={selectedIds}
+            onToggle={toggleRole}
+            curLangAr={curLangAr}
+          />
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="inherit">
@@ -297,5 +184,6 @@ AssignRoleDialog.propTypes = {
   onClose: PropTypes.func,
   engagement: PropTypes.object,
   unitServiceId: PropTypes.string,
+  workGroupId: PropTypes.string,
   onSaved: PropTypes.func,
 };

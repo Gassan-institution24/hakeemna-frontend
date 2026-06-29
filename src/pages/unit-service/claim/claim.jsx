@@ -7,7 +7,7 @@ import ClaimsView from 'src/sections/unit-service/myClaim/claim-view';
 
 export default function ClaimPage() {
   return (
-    <ACLGuard permission="claim:read">
+    <ACLGuard permission="claims:read">
       <Helmet>
         <title> Claim </title>
         <meta name="description" content="meta" />

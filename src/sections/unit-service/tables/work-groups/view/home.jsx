@@ -307,13 +307,6 @@ export default function WorkGroupsTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.tables.workgroups.permissions.employee(id));
-    },
-    [router]
-  );
-
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
@@ -423,14 +416,7 @@ export default function WorkGroupsTableView() {
                 .map((row) => (
                   <MobileRow
                     title={
-                      <Box
-                        onClick={() => handleViewRow(row._id)}
-                        sx={{
-                          cursor: 'pointer',
-                          color: 'primary.main',
-                          fontWeight: 600,
-                        }}
-                      >
+                      <Box sx={{ fontWeight: 600 }}>
                         {curLangAr ? row?.name_arabic : row?.name_english}
                       </Box>
                     }
@@ -478,11 +464,6 @@ export default function WorkGroupsTableView() {
                         label: t('edit'),
                         icon: 'fluent:edit-32-filled',
                         onClick: () => handleEditRow(row._id),
-                      },
-                      {
-                        label: t('permissions'),
-                        icon: 'material-symbols-light:security',
-                        onClick: () => handleViewRow(row._id),
                       },
                       {
                         label: t('DDL'),
@@ -571,7 +552,6 @@ export default function WorkGroupsTableView() {
                           onActivate={() => handleActivate(row)}
                           onInactivate={() => handleInactivate(row)}
                           onEditRow={() => handleEditRow(row._id)}
-                          onView={() => handleViewRow(row._id)}
                         />
                       ))}
                     <TableNoData notFound={notFound} />

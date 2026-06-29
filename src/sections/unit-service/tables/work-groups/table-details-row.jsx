@@ -26,7 +26,6 @@ export default function TableDetailsRow({
   onSelectRow,
   onInactivate,
   onActivate,
-  onView,
   filters,
   setFilters,
 }) {
@@ -62,25 +61,11 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onView}
-        align="center"
-      >
+      <TableCell align="center">
         <Box>{sequence_number}</Box>
       </TableCell>
 
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onView}
-        align="center"
-      >
+      <TableCell align="center">
         {curLangAr ? name_arabic : name_english}
       </TableCell>
       <TableCell align="center">
@@ -173,10 +158,6 @@ export default function TableDetailsRow({
             {t('edit')}
           </MenuItem>
         )}
-        <MenuItem lang="ar" onClick={onView}>
-          <Iconify icon="material-symbols-light:security" />
-          {t('permissions')}
-        </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -241,7 +222,6 @@ TableDetailsRow.propTypes = {
   onSelectRow: PropTypes.func,
   setFilters: PropTypes.func,
   onEditRow: PropTypes.func,
-  onView: PropTypes.func,
   row: PropTypes.object,
   filters: PropTypes.object,
   selected: PropTypes.bool,

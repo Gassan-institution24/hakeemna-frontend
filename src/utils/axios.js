@@ -359,8 +359,6 @@ export const endpoints = {
     employee: {
       all: (id) => (!id ? null : `/api/wgroups/employee/${id}`),
       active: (id) => (!id ? null : `/api/wgroups/employee/${id}/active`),
-      acl: (id) => (!id ? null : `/api/wgroups/employee/${id}/acl`),
-      engagement: (id) => (!id ? null : `/api/wgroups/employee/engagement/${id}`),
     },
   },
   notifications: {
@@ -989,7 +987,6 @@ export const endpoints = {
     unitservice: (id) => (!id ? null : `/api/roles/unitservice/${id}`),
     one: (id) => (!id ? null : `/api/roles/${id}`),
     assign: '/api/roles/assign',
-    assignWorkGroupRole: '/api/roles/assign-workgroup',
     migrate: (unitServiceId) => (!unitServiceId ? null : `/api/roles/migrate/${unitServiceId}`),
     markOwners: '/api/roles/mark-owners',
   },

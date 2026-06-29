@@ -1,14 +1,14 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
-import { useGetUnitservice } from 'src/api';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
 import Label from 'src/components/label';
@@ -24,6 +24,11 @@ export function useNavData() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
+  const { hasFeature } = useSubscriptionGuard();
+  const checkAccess = useCallback(
+    (permission, feature) => checkAcl(permission) && hasFeature(feature),
+    [checkAcl, hasFeature]
+  );
   const { isMedLab } = useUSTypeGuard();
   const { messages, refetch } = useGetUnreadMsgs(user?._id);
 
@@ -40,10 +45,6 @@ export function useNavData() {
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
-  const unitServiceId =
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
-  const { data: unitServiceData } = useGetUnitservice(unitServiceId);
-  const claimRegistered = unitServiceData?.claim_registered;
 
   const data = useMemo(() => {
     const permissions = user?.permissions || [];
@@ -380,7 +381,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl('old_patient:read') && false,
+          checkAcl('institution_patients:read') && false,
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         // icon: <Iconify icon="entypo:upload" />,
@@ -412,7 +413,7 @@ export function useNavData() {
         navItemId: 'USDepartmentNav',
       },
       {
-        show: checkAcl('appointments:read'),
+        show: checkAccess('appointments:read', 'appointments'),
         title: t('appointments'),
         path: paths.unitservice.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
@@ -436,7 +437,7 @@ export function useNavData() {
       },
       {
         show:
-          checkAcl('appointment_configs:read') &&
+          checkAccess('appointment_configs:read', 'appointments') &&
           isMedLab,
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
@@ -446,7 +447,7 @@ export function useNavData() {
       },
 
       {
-        show: checkAcl('accounting:read'),
+        show: checkAccess('accounting:read', 'accounting'),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -477,18 +478,10 @@ export function useNavData() {
             path: paths.unitservice.accounting.reciepts.root,
             'data-test': 'us-nav-item-accounting-reciepts',
           },
-          {
-            show:
-              checkAcl('accounting:read') && claimRegistered,
-
-            title: t('claim'),
-            path: paths.unitservice.accounting.claim.root,
-            'data-test': 'us-nav-item-accounting-claim',
-          },
         ].filter((one) => one.show),
       },
       {
-        show: claimRegistered,
+        show: checkAccess('claims:read', 'claims'),
         title: t('claims'),
         path: paths.unitservice.myClaim.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -496,16 +489,22 @@ export function useNavData() {
         'data-test': 'us-nav-item-claim',
         children: [
           {
-            show: claimRegistered,
+            show: checkAcl('claims:read'),
             title: t('my claims'),
             path: paths.unitservice.myClaim.root,
             'data-test': 'us-nav-item-claim-claim',
+          },
+          {
+            show: checkAcl('claims:read'),
+            title: t('claim'),
+            path: paths.unitservice.accounting.claim.root,
+            'data-test': 'us-nav-item-accounting-claim',
           },
         ].filter((one) => one.show),
       },
 
       {
-        show: checkAcl('old_patient:read'),
+        show: checkAcl('institution_patients:read'),
         title: t("institution's patients"),
         path: paths.unitservice.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
@@ -535,21 +534,6 @@ export function useNavData() {
             'data-test': 'us-nav-item-roles',
           },
           {
-            title: t('unit of service level'),
-            path: paths.unitservice.acl.unitservice,
-            'data-test': 'us-nav-item-permissions-us',
-          },
-          {
-            title: t('departments level'),
-            path: paths.unitservice.acl.department,
-            'data-test': 'us-nav-item-permissions-department',
-          },
-          {
-            title: t('work groups level'),
-            path: paths.unitservice.acl.workgroups,
-            'data-test': 'us-nav-item-permissions-wg',
-          },
-          {
             title: t('employee permission'),
             path: paths.unitservice.acl.employees,
             'data-test': 'us-nav-item-permissions-ws',
@@ -566,14 +550,11 @@ export function useNavData() {
         icon: <Iconify icon="mdi:account-secure" />,
         children: [
           { title: t('roles'), path: paths.unitservice.roles.root },
-          { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
-          // { title: t('departments level'), path: paths.unitservice.acl.department },
-          { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
           { title: t('employee permission'), path: paths.unitservice.acl.employees },
         ],
       },
       {
-        show: checkAcl('hr:read'),
+        show: checkAccess('hr:read', 'hr'),
         title: t('human resource'),
         path: paths.unitservice.hr.root,
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
@@ -584,7 +565,7 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAcl('unit_service_info:read'),
+        show: checkAccess('unit_service_info:read', 'products'),
         title: t('products and suppliers'),
         path: paths.unitservice.products.root,
         icon: <Iconify icon="material-symbols:shopping-cart-outline-rounded" />,
@@ -644,7 +625,7 @@ export function useNavData() {
             'data-test': 'us-nav-item-info-communication',
           },
           {
-            show: checkAcl('quality_control:read'),
+            show: checkAccess('quality_control:read', 'quality_control'),
             title: t('quality control'),
             path: paths.unitservice.qualityControl.root,
             navItemId: 'USQualityControlNav',
@@ -695,7 +676,7 @@ export function useNavData() {
         'data-test': 'employee-nav-item-appointmenttoday',
       },
       {
-        show: checkAcl('appointments:read'),
+        show: checkAccess('appointments:read', 'appointments'),
         title: t('appointments'),
         path: paths.employee.appointments.parent,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
@@ -731,7 +712,7 @@ export function useNavData() {
       },
 
       {
-        show: checkAcl('appointments:read'),
+        show: checkAccess('appointments:read', 'appointments'),
         title: t('my patients'),
         path: paths.employee.patients.all,
         icon: <Iconify icon="streamline:health-care-2-solid" />,
@@ -754,7 +735,7 @@ export function useNavData() {
         children: [
           {
             show:
-              checkAcl('appointments:read') &&
+              checkAccess('appointments:read', 'appointments') &&
               !isMedLab,
             title: t('checklist'),
             path: paths.employee.checklist.root,
@@ -1113,6 +1094,6 @@ export function useNavData() {
       return stakeholderItems;
     }
     return [...userItems];
-  }, [t, user, router, checkAcl, employees_number, messages, isMedLab, claimRegistered]);
+  }, [t, user, router, checkAcl, checkAccess, employees_number, messages, isMedLab]);
   return data;
 }
