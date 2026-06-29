@@ -10,23 +10,19 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
-import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSActiveDepartments, useGetUSActiveEmployeeEngs } from 'src/api';
+import { useGetUSActiveEmployeeEngs } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -39,21 +35,14 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  const { handleAddNew } = useNewScreen();
-
   const { employeesData } = useGetUSActiveEmployeeEngs(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id,
     { select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] }
   );
 
-  const { departmentsData } = useGetUSActiveDepartments(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    department: Yup.string().nullable(),
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
     employees: Yup.array().min(1, 'Choose at least one option'),
@@ -64,10 +53,9 @@ export default function TableNewEditForm({ currentTable }) {
       unit_service:
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           ?._id,
-      department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees?.map((info, idx) => info.employee) || [],
+      employees: currentTable?.employees || [],
     }),
     [currentTable, user?.employee]
   );
@@ -104,7 +92,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-      Object.keys(errors).forEach((key, idx) =>
+      Object.keys(errors).forEach((key) =>
         enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
       );
     }
@@ -119,10 +107,10 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `updated a work group <strong>${data.name_english || ''}</strong>`,
+          msg: `updated a work group <strong>${data?.name_english || ''}</strong>`,
         });
         reset();
-        router.push(paths.unitservice.tables.workgroups.root);  
+        router.push(paths.unitservice.tables.workgroups.root);
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
         socket.emit('created', {
@@ -130,25 +118,17 @@ export default function TableNewEditForm({ currentTable }) {
           link: paths.unitservice.tables.workgroups.root,
           msg: `created a work group <strong>${data.name_english || ''}</strong>`,
         });
+        reset();
+        router.push(paths.unitservice.tables.workgroups.root);
       }
-      reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      // router.push(paths.unitservice.tables.workgroups.root);
     } catch (error) {
-      // // error emitted in backend
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        { variant: 'error' }
       );
-      // console.error(error);
     }
   });
-
-  const employees_number =
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
-      ?.employees_number || 10;
 
   useEffect(() => {
     reset(defaultValues);
@@ -156,7 +136,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      {/* <Grid container spacing={3}> */}
       <Grid xs={12} maxWidth="md">
         <Card sx={{ p: 3 }}>
           <Box
@@ -180,34 +159,6 @@ export default function TableNewEditForm({ currentTable }) {
               placeholder="فريق عمل الدكتور أحمد"
               label={`${t('name arabic')} *`}
             />
-            {employees_number > 3 && (
-              <RHFSelect name="department" label={t('department')}>
-                {departmentsData.map((department, idx) => (
-                  <MenuItem lang="ar" key={idx} value={department?._id}>
-                    {curLangAr ? department.name_arabic : department.name_english}
-                  </MenuItem>
-                ))}
-                <Divider />
-                <MenuItem
-                  lang="ar"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    gap: 1,
-                    fontWeight: 600,
-                    // color: 'error.main',
-                  }}
-                  onClick={() => handleAddNew(paths.unitservice.departments.new)}
-                >
-                  <Typography variant="body2" sx={{ color: 'info.main' }}>
-                    {t('Add new')}
-                  </Typography>
-                  <Iconify icon="material-symbols:new-window-sharp" />
-                </MenuItem>
-              </RHFSelect>
-            )}
-            {/* <Stack spacing={1.5}> */}
-            {/* <Typography variant="subtitle2">Working schedule</Typography> */}
             <RHFAutocomplete
               name="employees"
               label={`${t('employees')} *`}
@@ -226,7 +177,6 @@ export default function TableNewEditForm({ currentTable }) {
                 </li>
               )}
               onChange={(event, newValue) => {
-                // setSelectedEmployees(newValue);
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
@@ -234,7 +184,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
-                    label={curLangAr ? option?.employee.name_arabic : option?.employee.name_english}
+                    label={curLangAr ? option?.employee.name_arabic : option?.employee?.name_english}
                     size="small"
                     color="info"
                     variant="soft"
@@ -242,7 +192,6 @@ export default function TableNewEditForm({ currentTable }) {
                 ))
               }
             />
-            {/* </Stack> */}
           </Box>
 
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
@@ -252,12 +201,10 @@ export default function TableNewEditForm({ currentTable }) {
           </Stack>
         </Card>
       </Grid>
-      {/* </Grid> */}
     </FormProvider>
   );
 }
 
 TableNewEditForm.propTypes = {
   currentTable: PropTypes.object,
-  departmentData: PropTypes.object,
 };

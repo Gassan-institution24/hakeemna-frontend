@@ -32,6 +32,7 @@ export default function UnitServiceEmployeesRow({
   onChangeVisPage,
   onChangeVisOnlineApp,
   onAssignRole,
+  onDeletePermissions,
 }) {
   const {
     employee,
@@ -144,7 +145,7 @@ export default function UnitServiceEmployeesRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 200 }}
       >
         {status === 'active'
           ? checkAcl('employees:delete') && (
@@ -187,6 +188,19 @@ export default function UnitServiceEmployeesRow({
           >
             <Iconify icon="mdi:account-key" />
             {t('assign role')}
+          </MenuItem>
+        )}
+        {checkAcl('permissions:update') && !is_owner && (row.roles?.length > 0 || row.role) && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              onDeletePermissions?.();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+            {t('delete all permissions')}
           </MenuItem>
         )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
@@ -257,6 +271,7 @@ UnitServiceEmployeesRow.propTypes = {
   onChangeVisPage: PropTypes.func,
   onChangeVisOnlineApp: PropTypes.func,
   onAssignRole: PropTypes.func,
+  onDeletePermissions: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,

@@ -49,9 +49,6 @@ const CommunicationHomePage = lazy(() => import('src/pages/employee/communicatio
 // WORK GROUPS
 const WorkGroupsHomePage = lazy(() => import('src/pages/employee/wgroups/home'));
 const WorkGroupsPermissionPage = lazy(() => import('src/pages/employee/wgroups/permissions/home'));
-const WorkGroupsEmployeePermissionPage = lazy(
-  () => import('src/pages/employee/wgroups/permissions/employee')
-);
 // QUALITY CONTROL
 const QCHomePage = lazy(() => import('src/pages/employee/qualitycontrol/home'));
 
@@ -318,10 +315,6 @@ export const unitServiceEmployeeDashboardRoutes = [
                 ),
                 children: [
                   { element: <WorkGroupsPermissionPage />, index: true },
-                  {
-                    path: 'employee/:emid',
-                    element: <WorkGroupsEmployeePermissionPage />,
-                  },
                 ],
               },
             ],

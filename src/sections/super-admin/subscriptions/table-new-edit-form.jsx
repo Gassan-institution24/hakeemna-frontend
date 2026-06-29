@@ -29,6 +29,23 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 // ----------------------------------------------------------------------
 
+const FEATURE_OPTIONS = [
+  { value: 'appointments', label: 'Appointments' },
+  { value: 'accounting', label: 'Accounting' },
+  { value: 'doctor_reports', label: 'Doctor Reports' },
+  { value: 'final_reports', label: 'Final Reports' },
+  { value: 'old_files_management', label: 'Old Files Management' },
+  { value: 'tax_income_reporting', label: 'Tax Income Reporting' },
+  { value: 'claims', label: 'Claims' },
+  { value: 'hr', label: 'HR' },
+  { value: 'products', label: 'Products' },
+  { value: 'quality_control', label: 'Quality Control' },
+  { value: 'permissions', label: 'Permissions' },
+  { value: 'blogs', label: 'Blogs' },
+];
+
+// ----------------------------------------------------------------------
+
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
@@ -49,12 +66,7 @@ export default function TableNewEditForm({ currentTable }) {
     sector_type: Yup.string().nullable(),
     unit_service: Yup.string().nullable(),
     price_in_usd: Yup.number(),
-    package_appointment: Yup.boolean(),
-    package_accounting: Yup.boolean(),
-    package_docotor_report: Yup.boolean(),
-    package_final_reporting: Yup.boolean(),
-    package_old_files_Management: Yup.boolean(),
-    package_TAX_Income_reporting: Yup.boolean(),
+    features: Yup.array().of(Yup.string()),
   });
 
   const defaultValues = useMemo(
@@ -67,12 +79,8 @@ export default function TableNewEditForm({ currentTable }) {
       sector_type: currentTable?.sector_type || null,
       unit_service: currentTable?.unit_service?._id || null,
       price_in_usd: currentTable?.price_in_usd || 0,
-      package_appointment: currentTable?.package_appointment || false,
-      package_accounting: currentTable?.package_accounting || false,
-      package_docotor_report: currentTable?.package_docotor_report || false,
-      package_final_reporting: currentTable?.package_final_reporting || false,
-      package_old_files_Management: currentTable?.package_old_files_Management || false,
-      package_TAX_Income_reporting: currentTable?.package_TAX_Income_reporting || false,
+      period_in_months: currentTable?.period_in_months || 0,
+      features: currentTable?.features || [],
     }),
     [currentTable]
   );
@@ -206,7 +214,7 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField type="number" name="price_in_usd" label="Cost in USD" />
             </Box>
             <Typography marginTop={{ xs: 1, sm: 3 }} variant="subtitle2">
-              Packages
+              {t('features')}
             </Typography>
             <Box
               rowGap={1}
@@ -216,54 +224,27 @@ export default function TableNewEditForm({ currentTable }) {
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(3, 1fr)',
               }}
-              placeItems="center"
               paddingLeft={{ xs: 1, sm: 4 }}
               marginTop={{ sm: 1 }}
             >
-              <FormControlLabel
-                name="package_appointment"
-                control={<Checkbox defaultChecked={defaultValues.package_appointment} />}
-                onChange={(event) => methods.setValue('package_appointment', event.target.checked)}
-                label="Appointments"
-              />
-              <FormControlLabel
-                name="package_accounting"
-                control={<Checkbox defaultChecked={defaultValues.package_accounting} />}
-                onChange={(event) => methods.setValue('package_accounting', event.target.checked)}
-                label={t('accounting')}
-              />
-              <FormControlLabel
-                name="package_docotor_report"
-                control={<Checkbox defaultChecked={defaultValues.package_docotor_report} />}
-                onChange={(event) =>
-                  methods.setValue('package_docotor_report', event.target.checked)
-                }
-                label="Docotor Report"
-              />
-              <FormControlLabel
-                name="package_final_reporting"
-                control={<Checkbox defaultChecked={defaultValues.package_final_reporting} />}
-                onChange={(event) =>
-                  methods.setValue('package_final_reporting', event.target.checked)
-                }
-                label="Final Reporting"
-              />
-              <FormControlLabel
-                name="package_old_files_Management"
-                control={<Checkbox defaultChecked={defaultValues.package_old_files_Management} />}
-                onChange={(event) =>
-                  methods.setValue('package_old_files_Management', event.target.checked)
-                }
-                label="Old Files Management"
-              />
-              <FormControlLabel
-                name="package_TAX_Income_reporting"
-                control={<Checkbox defaultChecked={defaultValues.package_TAX_Income_reporting} />}
-                onChange={(event) =>
-                  methods.setValue('package_TAX_Income_reporting', event.target.checked)
-                }
-                label="Package TAX Income Reporting"
-              />
+              {FEATURE_OPTIONS.map((feature) => {
+                const selectedFeatures = methods.watch('features') || [];
+                const checked = selectedFeatures.includes(feature.value);
+                return (
+                  <FormControlLabel
+                    key={feature.value}
+                    control={<Checkbox checked={checked} />}
+                    onChange={(event) => {
+                      const current = methods.getValues('features') || [];
+                      const next = event.target.checked
+                        ? [...current, feature.value]
+                        : current.filter((f) => f !== feature.value);
+                      methods.setValue('features', next, { shouldValidate: true });
+                    }}
+                    label={feature.label}
+                  />
+                );
+              })}
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>

@@ -39,6 +39,7 @@ export default function CountriesTableRow({
     sequence_number,
     name_english,
     name_arabic,
+    work_group,
     status,
     created_at,
     user_creation,
@@ -83,6 +84,9 @@ export default function CountriesTableRow({
         align="center"
       >
         {curLangAr ? name_arabic : name_english}
+      </TableCell>
+      <TableCell align="center">
+        {work_group ? (curLangAr ? work_group.name_arabic : work_group.name_english) : '—'}
       </TableCell>
       <TableCell align="center">
         <Label

@@ -13,7 +13,7 @@ export default function OldPatientPage() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
       ?.name_english;
   return (
-    <ACLGuard permission="old_patient:create">
+    <ACLGuard permission="institution_patients:create">
       <Helmet>
         <title>{serviceUnitName || 'unit of service'} : Old patient</title>
         <meta name="description" content="meta" />

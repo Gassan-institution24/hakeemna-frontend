@@ -7,6 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -20,6 +21,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetUSEmployeeEngs } from 'src/api';
+import { useGetUSActiveWorkGroups } from 'src/api/work_groups';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -90,12 +92,17 @@ export default function EmployeesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
   const [assignRoleTarget, setAssignRoleTarget] = useState(null);
+  const [deletePermTarget, setDeletePermTarget] = useState(null);
+  const [deletingPerms, setDeletingPerms] = useState(false);
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } = useGetUSEmployeeEngs(
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id
-  );
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id;
+
+  const { employeesData, loading, refetch } = useGetUSEmployeeEngs(unitServiceId);
+
+  const { workGroupsData } = useGetUSActiveWorkGroups(unitServiceId);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -271,6 +278,27 @@ export default function EmployeesTableView() {
     curLangAr,
     enqueueSnackbar,
   ]);
+
+  const handleDeletePermissions = useCallback(async () => {
+    if (!deletePermTarget) return;
+    setDeletingPerms(true);
+    try {
+      await axiosInstance.patch(endpoints.roles.assign, {
+        engagement_id: deletePermTarget._id,
+        role_ids: [],
+      });
+      enqueueSnackbar(t('permissions deleted'));
+      refetch();
+    } catch (error) {
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        { variant: 'error' }
+      );
+    } finally {
+      setDeletingPerms(false);
+      setDeletePermTarget(null);
+    }
+  }, [deletePermTarget, enqueueSnackbar, t, refetch, curLangAr]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -535,6 +563,7 @@ export default function EmployeesTableView() {
                         onChangeVisPage={() => handleChangeVisPage(row._id)}
                         onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
                         onAssignRole={() => setAssignRoleTarget(row)}
+                        onDeletePermissions={() => setDeletePermTarget(row)}
                       />
                     ))}
                   <TableNoData notFound={notFound} />
@@ -605,11 +634,42 @@ export default function EmployeesTableView() {
         open={!!assignRoleTarget}
         onClose={() => setAssignRoleTarget(null)}
         engagement={assignRoleTarget}
-        unitServiceId={
-          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-            ?._id
+        unitServiceId={unitServiceId}
+        workGroupId={
+          workGroupsData.find((wg) =>
+            wg.employees?.some(
+              (emp) => (emp._id || emp) === assignRoleTarget?._id
+            )
+          )?._id
         }
         onSaved={refetch}
+      />
+
+      <ConfirmDialog
+        open={!!deletePermTarget}
+        onClose={() => setDeletePermTarget(null)}
+        title={t('delete all permissions')}
+        content={
+          <>
+            {t('Are you sure you want to delete all permissions for')}{' '}
+            <strong>
+              {curLangAr
+                ? deletePermTarget?.employee?.name_arabic
+                : deletePermTarget?.employee?.name_english}
+            </strong>
+            ?
+          </>
+        }
+        action={
+          <LoadingButton
+            variant="contained"
+            color="error"
+            loading={deletingPerms}
+            onClick={handleDeletePermissions}
+          >
+            {t('delete all permissions')}
+          </LoadingButton>
+        }
       />
     </>
   );

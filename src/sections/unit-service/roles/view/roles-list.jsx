@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -31,24 +30,18 @@ export default function RolesListView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
-  const { user, initialize } = useAuthContext();
+  const { user } = useAuthContext();
 
   const unitServiceId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
-
-  const currentEngagement =
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
-  const alreadyOwner = currentEngagement?.is_owner === true;
 
   const { roles, loading, refetch } = useGetUnitServiceRoles(unitServiceId);
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingRole, setEditingRole] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteBlockedBy, setDeleteBlockedBy] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [migrating, setMigrating] = useState(false);
-  const [migrationResult, setMigrationResult] = useState(null);
-  const [markingOwners, setMarkingOwners] = useState(false);
 
   const handleNew = () => {
     setEditingRole(null);
@@ -67,41 +60,18 @@ export default function RolesListView() {
       await axiosInstance.delete(endpoints.roles.one(deleteTarget._id));
       enqueueSnackbar(t('Role deleted'));
       refetch();
+      setDeleteTarget(null);
     } catch (err) {
-      enqueueSnackbar(err.message || t('Cannot delete role'), { variant: 'error' });
+      if (err.employees?.length) {
+        setDeleteBlockedBy(err.employees);
+      } else {
+        enqueueSnackbar(err.message || t('Cannot delete role'), { variant: 'error' });
+        setDeleteTarget(null);
+      }
     } finally {
       setDeleting(false);
-      setDeleteTarget(null);
     }
   }, [deleteTarget, enqueueSnackbar, t, refetch]);
-
-  const handleMarkOwners = async () => {
-    setMarkingOwners(true);
-    try {
-      const res = await axiosInstance.post(endpoints.roles.markOwners);
-      enqueueSnackbar(t('Owners marked: {{count}}', { count: res.data.marked }));
-      await initialize(); // refresh session so alreadyOwner flips to true and button disappears
-    } catch (err) {
-      enqueueSnackbar(err.message || t('Failed to mark owners'), { variant: 'error' });
-    } finally {
-      setMarkingOwners(false);
-    }
-  };
-
-  const handleMigrate = async () => {
-    setMigrating(true);
-    setMigrationResult(null);
-    try {
-      const res = await axiosInstance.post(endpoints.roles.migrate(unitServiceId));
-      setMigrationResult(res.data);
-      enqueueSnackbar(t('Migration complete'));
-      refetch();
-    } catch (err) {
-      enqueueSnackbar(err.message || t('Migration failed'), { variant: 'error' });
-    } finally {
-      setMigrating(false);
-    }
-  };
 
   if (loading) return <LoadingScreen />;
 
@@ -126,45 +96,6 @@ export default function RolesListView() {
           }
           sx={{ mb: { xs: 3, md: 5 }, mt: { xs: 3, md: 5 } }}
         />
-
-        <Alert
-          severity="info"
-          sx={{ mb: 3 }}
-          action={
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              {user?.role === 'admin' && !alreadyOwner && (
-                <LoadingButton
-                  size="small"
-                  loading={markingOwners}
-                  variant="outlined"
-                  color="warning"
-                  onClick={handleMarkOwners}
-                >
-                  {t('Mark Owners')}
-                </LoadingButton>
-              )}
-              <LoadingButton
-                size="small"
-                loading={migrating}
-                variant="outlined"
-                color="inherit"
-                onClick={handleMigrate}
-              >
-                {t('Migrate ACL → Roles')}
-              </LoadingButton>
-            </Box>
-          }
-        >
-          {t('Run "Mark Owners" once to lock the admin user with permanent full access. Then use "Migrate ACL → Roles" to convert existing employee permissions.')}
-        </Alert>
-
-        {migrationResult && (
-          <Alert severity="success" sx={{ mb: 3 }} onClose={() => setMigrationResult(null)}>
-            {t('Migration complete')}: {migrationResult.migrated} {t('migrated')},{' '}
-            {migrationResult.skipped} {t('skipped')}.
-            {migrationResult.errors?.length > 0 && ` ${migrationResult.errors.length} errors.`}
-          </Alert>
-        )}
 
         <Card>
           <TableContainer>
@@ -253,7 +184,7 @@ export default function RolesListView() {
       />
 
       <ConfirmDialog
-        open={!!deleteTarget}
+        open={!!deleteTarget && !deleteBlockedBy}
         onClose={() => setDeleteTarget(null)}
         title={t('Delete Role')}
         content={
@@ -274,6 +205,36 @@ export default function RolesListView() {
           >
             {t('Delete')}
           </LoadingButton>
+        }
+      />
+
+      <ConfirmDialog
+        open={!!deleteBlockedBy}
+        onClose={() => { setDeleteBlockedBy(null); setDeleteTarget(null); }}
+        title={t('Cannot Delete Role')}
+        content={
+          <Box>
+            <Typography variant="body2" sx={{ mb: 1.5 }}>
+              {t('This role is still assigned to the following employees. Remove it from their permissions first:')}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+              {deleteBlockedBy?.map((emp, i) => (
+                <Typography key={i} variant="subtitle2">
+                  {curLangAr ? emp.name_arabic : emp.name_english}
+                  {emp.email && (
+                    <Typography component="span" variant="caption" sx={{ ml: 1, color: 'text.secondary' }}>
+                      {emp.email}
+                    </Typography>
+                  )}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+        }
+        action={
+          <Button variant="contained" onClick={() => { setDeleteBlockedBy(null); setDeleteTarget(null); }}>
+            {t('OK')}
+          </Button>
         }
       />
     </>

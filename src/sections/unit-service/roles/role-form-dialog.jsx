@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Checkbox from '@mui/material/Checkbox';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -15,29 +16,56 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useGetPermissionsList } from 'src/api/roles';
+import { useGetUSActiveWorkGroups } from 'src/api/work_groups';
+import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
-// Group permission strings by resource prefix
+const PERMISSION_ALIASES = {
+  'old_patient:read': 'institution_patients:read',
+  'old_patient:create': 'institution_patients:create',
+  'old_patient:update': 'institution_patients:update',
+  'old_patient:delete': 'institution_patients:delete',
+};
+
+// Permission resources that require a subscription feature to be available.
+// Resources NOT listed here are always available regardless of subscription.
+const RESOURCE_FEATURE_MAP = {
+  appointments: 'appointments',
+  appointment_configs: 'appointments',
+  accounting: 'accounting',
+  claims: 'claims',
+  hr: 'hr',
+  quality_control: 'quality_control',
+  offers: 'products',
+};
+
+function normalizePermissions(perms) {
+  return (perms || []).map((p) => PERMISSION_ALIASES[p] || p);
+}
+
 function groupPermissions(permList) {
-  const groups = {};
-  // eslint-disable-next-line no-restricted-syntax
-  for (const perm of permList) {
+  return permList.reduce((groups, perm) => {
     const [resource] = perm.split(':');
     if (!groups[resource]) groups[resource] = [];
     groups[resource].push(perm);
-  }
-  return groups;
+    return groups;
+  }, {});
 }
 
 export default function RoleFormDialog({ open, onClose, role, unitServiceId, onSaved }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
   const { permissions: allPermissions, loading: permsLoading } = useGetPermissionsList();
+  const { workGroupsData } = useGetUSActiveWorkGroups(unitServiceId);
+  const { hasFeature } = useSubscriptionGuard();
 
   const [nameEn, setNameEn] = useState('');
   const [nameAr, setNameAr] = useState('');
+  const [workGroupId, setWorkGroupId] = useState('');
   const [selected, setSelected] = useState([]);
   const [saving, setSaving] = useState(false);
 
@@ -45,7 +73,8 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
     if (open) {
       setNameEn(role?.name_english || '');
       setNameAr(role?.name_arabic || '');
-      setSelected(role?.permissions || []);
+      setWorkGroupId(role?.work_group?._id || role?.work_group || '');
+      setSelected(normalizePermissions(role?.permissions));
     }
   }, [open, role]);
 
@@ -56,8 +85,8 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
   };
 
   const toggleGroup = (groupPerms) => {
-    const allSelected = groupPerms.every((p) => selected.includes(p));
-    if (allSelected) {
+    const allSel = groupPerms.every((p) => selected.includes(p));
+    if (allSel) {
       setSelected((prev) => prev.filter((p) => !groupPerms.includes(p)));
     } else {
       setSelected((prev) => [...new Set([...prev, ...groupPerms])]);
@@ -69,6 +98,10 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
       enqueueSnackbar(t('Name (English) is required'), { variant: 'error' });
       return;
     }
+    if (!workGroupId) {
+      enqueueSnackbar(t('Work group is required'), { variant: 'error' });
+      return;
+    }
     setSaving(true);
     try {
       if (role?._id) {
@@ -76,6 +109,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
           name_english: nameEn,
           name_arabic: nameAr,
           permissions: selected,
+          work_group: workGroupId,
         });
         enqueueSnackbar(t('Role updated'));
       } else {
@@ -84,6 +118,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
           name_arabic: nameAr,
           permissions: selected,
           unit_service: unitServiceId,
+          work_group: workGroupId,
         });
         enqueueSnackbar(t('Role created'));
       }
@@ -96,11 +131,22 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
     }
   };
 
-  const groups = groupPermissions(allPermissions);
+  // Only show permission groups whose feature is included in the subscription.
+  // Resources not mapped to a feature are always available. Permissions the role
+  // already has stay visible so existing roles are never affected.
+  const availablePermissions = allPermissions.filter((perm) => {
+    if (selected.includes(perm)) return true;
+    const [resource] = perm.split(':');
+    const feature = RESOURCE_FEATURE_MAP[resource];
+    return !feature || hasFeature(feature);
+  });
+
+  const groups = groupPermissions(availablePermissions);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{role?._id ? t('Edit Role') : t('New Role')}</DialogTitle>
+
       <DialogContent dividers>
         <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
           <TextField
@@ -117,10 +163,26 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
             fullWidth
             dir="rtl"
           />
+          <TextField
+            select
+            label={`${t('work group')} *`}
+            value={workGroupId}
+            onChange={(e) => setWorkGroupId(e.target.value)}
+            fullWidth
+          >
+            <MenuItem value="" disabled>
+              {t('select work group')}
+            </MenuItem>
+            {workGroupsData.map((wg) => (
+              <MenuItem key={wg._id} value={wg._id}>
+                {curLangAr ? wg.name_arabic : wg.name_english}
+              </MenuItem>
+            ))}
+          </TextField>
         </Box>
 
-        <Typography variant="subtitle2" sx={{ mb: 1.5, color: 'text.secondary' }}>
-          {t('Permissions')}
+        <Typography variant="caption" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
+          {selected.length} {t('permissions selected')}
         </Typography>
 
         {permsLoading ? (
@@ -139,12 +201,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
               return (
                 <Box
                   key={resource}
-                  sx={{
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: 1,
-                    p: 1.5,
-                  }}
+                  sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, p: 1.5 }}
                 >
                   <FormControlLabel
                     label={
@@ -186,6 +243,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
           </Box>
         )}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose} color="inherit">
           {t('Cancel')}

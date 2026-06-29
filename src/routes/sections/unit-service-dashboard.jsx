@@ -5,13 +5,7 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
-import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
 import EmployeeMinBarLayout from 'src/layouts/employees-minibar';
-import DepartmentsNavLayout from 'src/layouts/departments-topbar';
-import PermissionsNavLayout from 'src/layouts/permissions-topbar';
-import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
-import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
-import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -58,12 +52,6 @@ const DepartmentsWorkGroupsPage = lazy(
 );
 const DepartmentsNewWorkGroupsPage = lazy(
   () => import('src/pages/unit-service/departments/work-groups/add')
-);
-const DepartmentsWorkGroupsPermissionPage = lazy(
-  () => import('src/pages/unit-service/departments/work-groups/permissions/home')
-);
-const DepartmentsWorkGroupsEmployeePermissionPage = lazy(
-  () => import('src/pages/unit-service/departments/work-groups/permissions/employee')
 );
 const DepartmentsEditWorkGroupsPage = lazy(
   () => import('src/pages/unit-service/departments/work-groups/edit')
@@ -179,12 +167,6 @@ const WorkShiftsEditPage = lazy(() => import('src/pages/unit-service/tables/work
 const WorkGroupsHomePage = lazy(() => import('src/pages/unit-service/tables/work-groups/home'));
 const WorkGroupsNewPage = lazy(() => import('src/pages/unit-service/tables/work-groups/new'));
 const WorkGroupsEditPage = lazy(() => import('src/pages/unit-service/tables/work-groups/edit'));
-const WorkGroupsPermissionPage = lazy(
-  () => import('src/pages/unit-service/tables/work-groups/permissions/home')
-);
-const WorkGroupsEmployeePermissionPage = lazy(
-  () => import('src/pages/unit-service/tables/work-groups/permissions/employee')
-);
 // ROOMS
 const RoomsHomePage = lazy(() => import('src/pages/unit-service/tables/rooms/home'));
 const RoomsNewPage = lazy(() => import('src/pages/unit-service/tables/rooms/new'));
@@ -221,25 +203,7 @@ const ProductCheckoutPage = lazy(() => import('src/pages/unit-service/products/c
 const RolesHomePage = lazy(() => import('src/pages/unit-service/roles/home'));
 
 // PERMISSIONS
-const USPermissions = lazy(
-  () => import('src/pages/unit-service/permissions/unitservice-permission')
-);
-const DepartmentsPermissions = lazy(
-  () => import('src/pages/unit-service/permissions/departments-permission')
-);
-const WorkGroupsPermissions = lazy(
-  () => import('src/pages/unit-service/permissions/workgroup-permission')
-);
 const EmployeesList = lazy(() => import('src/pages/unit-service/permissions/employees-list'));
-const EmployeeUSPermission = lazy(
-  () => import('src/pages/unit-service/permissions/employee-us-permissions')
-);
-const EmployeeDepartmentPermission = lazy(
-  () => import('src/pages/unit-service/permissions/employee-department-permissions')
-);
-const EmployeeWGPermission = lazy(
-  () => import('src/pages/unit-service/permissions/employee-workgroup-permissions')
-);
 
 // HR
 const HRPage = lazy(() => import('src/pages/unit-service/hr/home'));
@@ -271,102 +235,7 @@ export const unitServiceDashboardRoutes = [
         children: [
           {
             path: 'employees',
-            children: [
-              { element: <EmployeesList />, index: true },
-              {
-                path: ':id',
-                element: (
-                  <PermissionsNavLayout>
-                    <Outlet />
-                  </PermissionsNavLayout>
-                ),
-                children: [
-                  { path: 'us', element: <EmployeeUSPermission /> },
-                  { path: 'departments/:depId', element: <EmployeeDepartmentPermission /> },
-                  {
-                    path: 'workgroups',
-                    element: (
-                      <EmployeePermissionWGLayout>
-                        <Outlet />
-                      </EmployeePermissionWGLayout>
-                    ),
-                    children: [
-                      { element: <EmployeeWGPermission />, index: true },
-                      { path: ':wgid', element: <EmployeeWGPermission /> },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'unitservice',
-            element: (
-              <EmployeeMinBarLayout>
-                <USPermissions />
-              </EmployeeMinBarLayout>
-            ),
-            children: [{ path: ':id', element: <USPermissions /> }],
-          },
-          {
-            path: 'departments',
-            element: (
-              <EmployeeMinBarLayout>
-                <DepartmentsNavLayout>
-                  <DepartmentsPermissions />
-                </DepartmentsNavLayout>
-              </EmployeeMinBarLayout>
-            ),
-            children: [
-              {
-                path: ':depId',
-                element: (
-                  <EmployeeMinBarLayout>
-                    <DepartmentsPermissions />
-                  </EmployeeMinBarLayout>
-                ),
-                children: [
-                  {
-                    path: ':emid',
-                    element: (
-                      <EmployeeMinBarLayout>
-                        <DepartmentsPermissions />
-                      </EmployeeMinBarLayout>
-                    ),
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'workgroups',
-            element: (
-              <EmployeeMinBarLayout>
-                <WorkGroupsNavLayout>
-                  <WorkGroupsPermissions />
-                </WorkGroupsNavLayout>
-              </EmployeeMinBarLayout>
-            ),
-            children: [
-              {
-                path: ':wgid',
-                element: (
-                  <EmployeeMinBarLayout>
-                    <WorkGroupsPermissions />
-                  </EmployeeMinBarLayout>
-                ),
-                children: [
-                  {
-                    path: ':emid',
-                    element: (
-                      <EmployeeMinBarLayout>
-                        <WorkGroupsPermissions />
-                      </EmployeeMinBarLayout>
-                    ),
-                  },
-                ],
-              },
-            ],
+            children: [{ element: <EmployeesList />, index: true }],
           },
         ],
       },
@@ -586,21 +455,6 @@ export const unitServiceDashboardRoutes = [
                     children: [
                       { element: <DepartmentsWorkGroupsPage />, index: true },
                       { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
-                      {
-                        path: ':wgid',
-                        element: (
-                          <DepartmentWorkGroupPermissionsBarLayout>
-                            <Outlet />
-                          </DepartmentWorkGroupPermissionsBarLayout>
-                        ),
-                        children: [
-                          { element: <DepartmentsWorkGroupsPermissionPage />, index: true },
-                          {
-                            path: 'employee/:emid',
-                            element: <DepartmentsWorkGroupsEmployeePermissionPage />,
-                          },
-                        ],
-                      },
                       { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
                     ],
                   },
@@ -669,18 +523,6 @@ export const unitServiceDashboardRoutes = [
               { element: <WorkGroupsHomePage />, index: true },
               { path: 'new', element: <WorkGroupsNewPage /> },
               { path: ':id/edit', element: <WorkGroupsEditPage /> },
-              {
-                path: ':wgid',
-                element: (
-                  <USWorkGroupPermissionsBarLayout>
-                    <Outlet />
-                  </USWorkGroupPermissionsBarLayout>
-                ),
-                children: [
-                  { element: <WorkGroupsPermissionPage />, index: true },
-                  { path: 'employee/:emid', element: <WorkGroupsEmployeePermissionPage /> },
-                ],
-              },
             ],
           },
           {

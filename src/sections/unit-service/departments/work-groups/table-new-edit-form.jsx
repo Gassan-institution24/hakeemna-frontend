@@ -20,7 +20,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetDepartmentActiveEmployeeEngs, useGetUSDepartments } from 'src/api';
+import { useGetDepartmentActiveEmployeeEngs } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -38,12 +38,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { employeesData } = useGetDepartmentActiveEmployeeEngs(departmentData._id);
 
-  const unitServiceId =
-    user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id;
-  const { departmentsData } = useGetUSDepartments(unitServiceId);
-
   const [selectedEmployees, setSelectedEmployees] = useState([]);
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -58,11 +53,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       unit_service:
         user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service
           ._id || departmentData.unit_service._id,
-      departments: currentTable?.departments?.map((d) => d._id || d) || [departmentData._id],
+      department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
+      employees: currentTable?.employees.map((info) => info.employee) || [],
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentTable, departmentData, user?.employee]
   );
 
@@ -71,19 +67,16 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
 
+  const handleArabicInputChange = (event) => {
+    const arabicRegex = /^[؀-ۿ0-9\s!@#$%^&*_\-().]*$/;
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
 
   const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
-
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
@@ -97,7 +90,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-      Object.keys(errors).forEach((key, idx) =>
+      Object.keys(errors).forEach((key) =>
         enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
       );
     }
@@ -126,16 +119,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             departmentData.name_english
           }</strong> department`,
         });
+        router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
-      // error emitted in backend
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
+        { variant: 'error' }
       );
       console.error(error);
     }
@@ -147,7 +138,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      {/* <Grid container spacing={3}> */}
       <Grid xs={12} maxWidth="md">
         <Card sx={{ p: 3 }}>
           <Box
@@ -169,8 +159,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               name="name_arabic"
               label={`${t('name arabic')} *`}
             />
-            {/* <Stack spacing={1.5}> */}
-            {/* <Typography variant="subtitle2">Working schedule</Typography> */}
             <RHFAutocomplete
               name="employees"
               label={`${t('employees')} *`}
@@ -202,47 +190,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 ))
               }
             />
-            <RHFAutocomplete
-              name="departments"
-              label={t('departments')}
-              multiple
-              disableCloseOnSelect
-              options={departmentsData}
-              getOptionLabel={(option) =>
-                curLangAr
-                  ? option.name_arabic || option
-                  : option.name_english || option
-              }
-              isOptionEqualToValue={(option, value) =>
-                (option._id || option) === (value._id || value)
-              }
-              renderOption={(props, option, idx) => (
-                <li lang="ar" {...props} key={option._id || idx} value={option._id}>
-                  {curLangAr ? option.name_arabic : option.name_english}
-                </li>
-              )}
-              onChange={(event, newValue) => {
-                setSelectedDepartments(newValue);
-                methods.setValue(
-                  'departments',
-                  newValue.map((d) => d._id || d),
-                  { shouldValidate: true }
-                );
-              }}
-              renderTags={(selected, getTagProps) =>
-                selected.map((option, index) => (
-                  <Chip
-                    {...getTagProps({ index })}
-                    key={index}
-                    label={curLangAr ? option.name_arabic : option.name_english}
-                    size="small"
-                    color="primary"
-                    variant="soft"
-                  />
-                ))
-              }
-            />
-            {/* </Stack> */}
           </Box>
 
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
@@ -252,7 +199,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           </Stack>
         </Card>
       </Grid>
-      {/* </Grid> */}
     </FormProvider>
   );
 }
