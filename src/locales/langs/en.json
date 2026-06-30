@@ -182,5 +182,8 @@
   "Upload clinical forms and documents": "Upload clinical forms and documents",
   "Optional adjustable forms for this patient": "Optional adjustable forms for this patient",
   "Record services rendered during this visit": "Record services rendered during this visit",
-  "Done": "Done"
+  "Done": "Done",
+  "book an appointment": "Book an Appointment",
+  "available times": "Available times",
+  "no results": "No results found"
 }

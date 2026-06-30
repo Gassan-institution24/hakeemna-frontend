@@ -17,52 +17,58 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
     <>
       <Stack
         sx={{
-          my: 3,
+          my: 2,
           maxHeight: 300,
           overflow: 'auto',
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
           alignItems: 'center',
-          // backgroundColor: 'red',
           justifyContent: 'flex-start',
           '&::-webkit-scrollbar': {
-            width: '8px',
+            width: '6px',
           },
           '&::-webkit-scrollbar-track': {
-            background: 'white',
+            background: 'transparent',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: 'white',
+            background: 'rgba(60, 176, 153, 0.3)',
             borderRadius: '4px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: 'white',
+            background: 'rgba(60, 176, 153, 0.5)',
           },
           gap: 1,
         }}
       >
-        {list.map((time) => (
-          <Button
-            variant="outlined"
-            sx={{
-              width: 100,
-              '&:hover': {
-                bgcolor: 'white',
-                color: 'primary.main',
-              },
-              fontWeight: value === time._id ? 600 : 500,
-              backgroundColor: value === time._id ? 'primary.main' : 'white', // Ensure white background by default
-              color: value === time._id ? 'white' : 'primary.main', // Ensure text color is always visible
-              borderRadius: 2,
-            }}
-            onClick={() => {
-              onChange(time._id);
-            }}
-          >
-            {fTime(myunitTime(time.start_time), 'p', curLangAr)}
-          </Button>
-        ))}
+        {list.map((time) => {
+          const isSelected = value === time._id;
+          return (
+            <Button
+              key={time._id}
+              variant={isSelected ? 'contained' : 'outlined'}
+              disableElevation
+              sx={{
+                minWidth: 92,
+                px: 1.5,
+                borderRadius: 5,
+                fontWeight: isSelected ? 700 : 500,
+                borderColor: 'primary.light',
+                bgcolor: isSelected ? 'primary.main' : 'common.white',
+                color: isSelected ? 'common.white' : 'primary.dark',
+                '&:hover': {
+                  bgcolor: isSelected ? 'primary.dark' : 'primary.lighter',
+                  borderColor: 'primary.main',
+                },
+              }}
+              onClick={() => {
+                onChange(time._id);
+              }}
+            >
+              {fTime(myunitTime(time.start_time), 'p', curLangAr)}
+            </Button>
+          );
+        })}
       </Stack>
       {/* </Scrollbar> */}
     </>

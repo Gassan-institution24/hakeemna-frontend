@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
+import Draggable from 'react-draggable';
+import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -58,6 +59,28 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const [runningTour, setRunningTour] = useState(false);
 
   const [ticketDialog, setTicketDialog] = useState(false);
+
+  // Draggable launcher (chat circle)
+  const launcherRef = useRef(null);
+  const draggedRef = useRef(false);
+  const launcherSize = 64;
+  const launcherDefault = useMemo(() => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    const small = window.innerWidth < 900;
+    return {
+      x: small ? 20 : window.innerWidth - launcherSize - 20,
+      y: small ? window.innerHeight - launcherSize - 56 : window.innerHeight - launcherSize - 20,
+    };
+  }, []);
+  const launcherBounds = useMemo(() => {
+    if (typeof window === 'undefined') return undefined;
+    return {
+      left: 8,
+      top: 8,
+      right: Math.max(8, window.innerWidth - launcherSize - 8),
+      bottom: Math.max(8, window.innerHeight - launcherSize - 8),
+    };
+  }, []);
 
   // useEffect(() => {
   //   setDialog(!loading && user.role === 'admin' && !user.last_online);
@@ -378,60 +401,77 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </>
         )}
       </CustomPopover>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: { md: 20, xs: 40 },
-          pb: { md: 0, xs: 2 },
-          right: { md: 20, xs: 'auto' },
-          left: { md: 'auto', xs: 20 },
-          zIndex: 99,
+      <Draggable
+        nodeRef={launcherRef}
+        defaultPosition={launcherDefault}
+        bounds={launcherBounds}
+        onStart={() => {
+          draggedRef.current = false;
+        }}
+        onDrag={() => {
+          draggedRef.current = true;
         }}
       >
-        <Badge
-          badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
-          color="error"
-          onClick={() => setTicketDialog(true)}
+        <Box
+          ref={launcherRef}
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 99,
+            touchAction: 'none',
+            cursor: 'grab',
+            '&:active': { cursor: 'grabbing' },
+          }}
         >
-          <IconButton
-            sx={{
-              bgcolor: '#22C55E',
-              '&:hover': {
-                bgcolor: '#22C55E',
-                border: 'solid 2px #FFAB00',
-              },
+          <Badge
+            badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
+            color="error"
+            onClick={() => {
+              if (draggedRef.current) return;
+              setTicketDialog(true);
             }}
           >
-            <Iconify
-              width={35}
+            <IconButton
               sx={{
-                m: 0.5,
-                color: 'white',
+                bgcolor: '#22C55E',
+                '&:hover': {
+                  bgcolor: '#22C55E',
+                  border: 'solid 2px #FFAB00',
+                },
               }}
-              icon="streamline:chat-bubble-oval-smiley-2"
-            />
-          </IconButton>
-        </Badge>
+            >
+              <Iconify
+                width={35}
+                sx={{
+                  m: 0.5,
+                  color: 'white',
+                }}
+                icon="streamline:chat-bubble-oval-smiley-2"
+              />
+            </IconButton>
+          </Badge>
 
-        {ticketDialog && (
-          <TicketPopover
-            messagesLength={messages}
-            refetchLenght={refetch}
-            open={ticketDialog}
-            onClose={() => setTicketDialog(false)}
+          {ticketDialog && (
+            <TicketPopover
+              messagesLength={messages}
+              refetchLenght={refetch}
+              open={launcherRef.current}
+              onClose={() => setTicketDialog(false)}
+            />
+          )}
+          <StartupCreating
+            open={dialog}
+            onClose={() => {
+              setDialog(false);
+              setRunningTour(true);
+              setTimeout(() => {
+                setRunningTour(false);
+              }, 200);
+            }}
           />
-        )}
-        <StartupCreating
-          open={dialog}
-          onClose={() => {
-            setDialog(false);
-            setRunningTour(true);
-            setTimeout(() => {
-              setRunningTour(false);
-            }, 200);
-          }}
-        />
-      </Box>
+        </Box>
+      </Draggable>
     </>
   );
 }

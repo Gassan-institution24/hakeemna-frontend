@@ -188,7 +188,7 @@ export default function DigitalTrust() {
         >
           <Container maxWidth="lg">
             <Stack spacing={5} textAlign="center" alignItems="center">
-              <Typography variant="h2" sx={{ fontWeight: 900, lineHeight: 1.2, maxWidth: 900 }}>
+              <Typography variant="h2" sx={{ fontWeight: 900, lineHeight: 1.2, maxWidth: 900, }}>
                 {t('digitalTrust.hero.title')}
               </Typography>
 

@@ -2,9 +2,13 @@ import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
 import { StaticDatePicker } from '@mui/x-date-pickers';
+import { Paper, Divider, Typography } from '@mui/material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import { useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 import TimeList from 'src/components/time-list/time-list';
 
 // ----------------------------------------------------------------------
@@ -20,32 +24,29 @@ export default function BookDetails({
 }) {
   // const [timeListItem, setTimeListItem] = useState();
   const mdUp = useResponsive('up', 'md');
-
-  // useEffect(() => {
-  //   if (!loading.value) {
-  //     if (!selected) {
-  //       setSelected(list?.[0]?._id);
-  //       setTimeListItem(list?.[0]?._id);
-  //     } else if (!list.some((one) => one._id === selected)) {
-  //       setSelected(list?.[0]?._id);
-  //       setTimeListItem(list?.[0]?._id);
-  //     } else {
-  //       list.forEach((one, index) => {
-  //         if (one._id === selected) {
-  //           setSelected(list?.[index]?._id);
-  //           setTimeListItem(list?.[index]?._id);
-  //         }
-  //       });
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [list, loading.value]);
+  const { t } = useTranslate();
 
   return (
-    <>
+    <Paper
+      elevation={0}
+      sx={{
+        p: { xs: 1.5, md: 2 },
+        borderRadius: 3,
+        bgcolor: '#F8FCFB',
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        width: '100%',
+      }}
+    >
       <StaticDatePicker
         localeText={false}
-        sx={{ mt: { md: 0, xs: 4, borderRadius: 10 }, mx: 1 }}
+        sx={{
+          bgcolor: 'transparent',
+          borderRadius: 2,
+          '& .MuiPickersDay-root.Mui-selected': {
+            bgcolor: 'primary.main',
+            '&:hover': { bgcolor: 'primary.dark' },
+          },
+        }}
         orientation={mdUp ? 'landscape' : ''}
         shouldDisableDate={(day) =>
           !AppointDates.some((date) => {
@@ -67,16 +68,25 @@ export default function BookDetails({
           )
         }
       />
+
+      <Divider sx={{ my: 1 }} />
+
       <Stack
         sx={{
           width: '100%',
           maxWidth: 560,
-          px: { md: 3 },
+          px: { md: 2 },
         }}
       >
+        <Stack direction="row" alignItems="center" gap={0.75}>
+          <Iconify icon="solar:clock-circle-bold" width={18} sx={{ color: 'primary.main' }} />
+          <Typography variant="subtitle2" sx={{ color: 'secondary.main' }}>
+            {t('available times')}
+          </Typography>
+        </Stack>
         <TimeList list={list} onChange={timeListChangeHandler} value={selected} />
       </Stack>
-    </>
+    </Paper>
   );
 }
 

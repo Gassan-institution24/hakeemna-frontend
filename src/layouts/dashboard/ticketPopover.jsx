@@ -105,7 +105,12 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId, messagesLength]);
   return (
-    <CustomPopover open={open} hiddenArrow arrow={curLangAr ? 'top-left' : ''} onClose={onClose}>
+    <CustomPopover
+      open={open}
+      hiddenArrow
+      arrow={curLangAr ? 'bottom-left' : 'bottom-right'}
+      onClose={onClose}
+    >
       {page === 0 && (
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <Stack sx={{ p: 1 }} spacing={2.5}>
@@ -248,7 +253,7 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   );
 }
 TicketPopover.propTypes = {
-  open: PropTypes.bool,
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   onClose: PropTypes.func,
   refetchLenght: PropTypes.func,
   messagesLength: PropTypes.array,

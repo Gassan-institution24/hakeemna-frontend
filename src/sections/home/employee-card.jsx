@@ -3,7 +3,17 @@ import { useSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Paper, Stack, Dialog, Rating, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Card,
+  Stack,
+  Dialog,
+  Avatar,
+  Divider,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -19,7 +29,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAppointments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
-import Image from 'src/components/image';
+import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import { JwtLoginView } from '../auth';
@@ -69,7 +79,6 @@ export default function EmployeeCard({ employee }) {
       setSignupDialog(true);
     }
   };
-  console.log('appointmentsData', employee);
   const handleBook = async () => {
     setSubmitting(true);
     try {
@@ -98,216 +107,255 @@ export default function EmployeeCard({ employee }) {
     }
   };
 
+  const doctorName = curLangAr
+    ? employee.employee?.name_arabic
+    : employee.employee?.name_english;
+
+  const goToDoctorPage = () =>
+    router.push(
+      paths.pages.doctor(
+        `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
+          / /g,
+          '-'
+        )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
+      )
+    );
+
   return (
     employee?.unit_service?.status === 'active' && (
       <>
-        <Stack
-          direction={{ lg: 'row' }}
-          justifyContent="space-between"
-          padding={5}
+        <Card
           sx={{
-            backgroundColor: '#3CB099',
-            borderRadius: 2,
-            boxShadow: 3,
-            maxWidth: '1400px',
-            mx: 'auto',
-            width: '100%',
+            p: { xs: 2.5, md: 4 },
+            borderRadius: 3,
+            boxShadow: '0 8px 24px rgba(145, 158, 171, 0.12)',
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            transition: (theme) =>
+              theme.transitions.create(['box-shadow', 'transform'], { duration: 200 }),
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 16px 40px rgba(60, 176, 153, 0.18)',
+            },
           }}
         >
           <Stack
-            direction={{ md: 'row' }}
-            alignItems={{ sm: 'center', md: 'start' }}
-            gap={{ md: 10 }}
+            direction={{ xs: 'column', lg: 'row' }}
+            justifyContent="space-between"
+            gap={{ xs: 3, lg: 5 }}
           >
-            <Box>
-              <Paper
-                elevation={3}
-                sx={{
-                  overflow: 'hidden',
-                  borderRadius: 3,
-                  textAlign: 'center',
-                  backgroundColor: 'white',
-                  position: 'relative',
-                  cursor: 'pointer',
-                  mb: 2,
-                  width: 250,
-                  minHeight: 200,
-                }}
-                onClick={() =>
-                  router.push(
-                    paths.pages.doctor(
-                      `${employee._id}_${employee?.employee?.[t('name_english')]?.replace(
-                        / /g,
-                        '-'
-                      )}_${employee?.employee?.speciality?.[t('name_english')]?.replace(/ /g, '-')}`
-                    )
-                  )
-                }
+            {/* ---- Doctor info ---- */}
+            <Stack direction={{ xs: 'column', sm: 'row' }} gap={3} sx={{ flex: 1 }}>
+              <Box
+                onClick={goToDoctorPage}
+                sx={{ cursor: 'pointer', textAlign: 'center', flexShrink: 0 }}
               >
-                <Image
+                <Avatar
                   src={
-                    employee?.unit_service?.company_logo
-                      ? employee?.unit_service?.company_logo
-                      : 'https://hakeemna.com/static/media/3.dc47881bd18a4a9c90b3b7987f34e213.svg'
+                    employee?.unit_service?.company_logo ||
+                    'https://hakeemna.com/static/media/3.dc47881bd18a4a9c90b3b7987f34e213.svg'
                   }
                   alt={employee.employee?.name_english}
+                  variant="rounded"
                   sx={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
+                    width: 130,
+                    height: 130,
+                    mx: 'auto',
+                    bgcolor: '#F2FBF8',
+                    borderRadius: 3,
+                    border: '3px solid',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 12px rgba(60, 176, 153, 0.25)',
+                    '& img': { objectFit: 'contain' },
                   }}
                 />
+              </Box>
 
-                {/* Green Overlay at the Bottom */}
-                <Box
+              <Stack gap={1} sx={{ minWidth: 0 }}>
+                <Typography
+                  variant="h6"
+                  onClick={goToDoctorPage}
                   sx={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '80px',
-                    backgroundColor: '#2EA98D',
-                    clipPath: 'ellipse(100% 60% at center bottom)', // Curved bottom shape
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    color: 'secondary.main',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    '&:hover': { color: 'primary.dark' },
                   }}
                 >
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 'bold', color: 'white', fontSize: 18, pt: 5 }}
-                  >
-                    {curLangAr ? employee.employee?.name_arabic : employee.employee?.name_english}
-                  </Typography>
-                </Box>
-              </Paper>
-              {employee?.employee?.phone && (
-                <Stack direction="row" gap={1}>
-                  <Typography sx={{ color: 'white' }} variant="body2">
-                    {t('phone number')}:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ direction: curLangAr ? 'rtl' : 'ltr', color: 'white' }}
-                  >
-                    {employee?.employee?.phone}
-                  </Typography>
-                </Stack>
-              )}
-              {employee?.employee?.email && (
-                <Stack direction="row" gap={1}>
-                  <Typography sx={{ color: 'white' }} variant="body2">
-                    {t('email')}:
-                  </Typography>
-                  <Typography sx={{ color: '#3C5CD2' }} variant="body2">
-                    {employee?.employee?.email}
-                  </Typography>
-                </Stack>
-              )}
-            </Box>
+                  {doctorName}
+                </Typography>
 
-            <Stack sx={{ gap: 1 }}>
-              <Stack>
-                <Stack direction="row" spacing={1} sx={{ justifyContent: 'start' }}>
-                  <Rating
+                <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
+                  <Chip
                     size="small"
-                    readOnly
-                    value={employee.employee?.rate}
-                    max={1}
+                    icon={<Iconify icon="solar:star-bold" sx={{ color: '#FFB400 !important' }} />}
+                    label={`${employee.employee?.rate || 0} (${
+                      employee.employee?.rated_times || 0
+                    })`}
                     sx={{
-                      '& .MuiRating-icon': {
-                        color: '#FFD700', // Replace with the color you want
-                      },
+                      bgcolor: '#F2FBF8',
+                      color: 'secondary.main',
+                      fontWeight: 600,
+                      '& .MuiChip-icon': { ml: 0.5 },
                     }}
                   />
-                  <Typography variant="body" sx={{ color: 'white' }}>
-                    {employee.employee?.rated_times}
+                  {(employee?.employee?.speciality?.name_english ||
+                    employee?.employee?.speciality?.name_arabic) && (
+                    <Chip
+                      size="small"
+                      label={
+                        curLangAr
+                          ? employee?.employee?.speciality?.name_arabic
+                          : employee?.employee?.speciality?.name_english
+                      }
+                      sx={{ bgcolor: 'primary.lighter', color: 'primary.dark', fontWeight: 600 }}
+                    />
+                  )}
+                </Stack>
+
+                <Stack direction="row" alignItems="center" gap={0.75}>
+                  <Iconify
+                    icon="solar:hospital-bold"
+                    width={18}
+                    sx={{ color: 'text.secondary', flexShrink: 0 }}
+                  />
+                  <Typography variant="body2" color="text.secondary">
+                    {curLangAr
+                      ? employee?.unit_service?.name_arabic
+                      : employee?.unit_service?.name_english}
                   </Typography>
                 </Stack>
-                <Typography variant="body1" mb={1} sx={{ fontWeight: 500, color: 'white' }}>
-                  {curLangAr
-                    ? employee?.employee?.speciality?.name_arabic
-                    : employee?.employee?.speciality?.name_english}
-                </Typography>
-                <Typography mb={1} variant="body1" color="white">
-                  {curLangAr
-                    ? employee?.unit_service?.name_arabic
-                    : employee?.unit_service?.name_english}
-                </Typography>
-              </Stack>
-              {employee?.fees && (
-                <Stack gap={1} mb={2}>
-                  <Stack gap={1} direction="row">
-                    <Typography color="white" variant="body2">
+
+                {employee?.employee?.phone && (
+                  <Stack direction="row" alignItems="center" gap={0.75}>
+                    <Iconify
+                      icon="solar:phone-bold"
+                      width={18}
+                      sx={{ color: 'text.secondary', flexShrink: 0 }}
+                    />
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ direction: curLangAr ? 'rtl' : 'ltr' }}
+                    >
+                      {employee?.employee?.phone}
+                    </Typography>
+                  </Stack>
+                )}
+
+                {employee?.employee?.email && (
+                  <Stack direction="row" alignItems="center" gap={0.75}>
+                    <Iconify
+                      icon="solar:letter-bold"
+                      width={18}
+                      sx={{ color: 'text.secondary', flexShrink: 0 }}
+                    />
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {employee?.employee?.email}
+                    </Typography>
+                  </Stack>
+                )}
+
+                {employee?.fees && (
+                  <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap" sx={{ mt: 0.5 }}>
+                    <Typography variant="body2" color="text.secondary">
                       {t('fees')}:
                     </Typography>
-
                     <Typography
-                      sx={{
-                        textDecoration: 'line-through',
-                        textDecorationColor: 'red',
-                        textDecorationThickness: '2px',
-                        color: 'white',
-                      }}
                       variant="body2"
+                      sx={{
+                        textDecoration: employee?.fees_after_discount ? 'line-through' : 'none',
+                        textDecorationColor: 'error.main',
+                        color: 'text.disabled',
+                      }}
                     >
                       {fCurrency(employee?.fees, employee.currency?.symbol)}
                     </Typography>
                     {employee?.fees_after_discount && (
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>
+                      <Typography variant="subtitle2" sx={{ color: 'primary.dark', fontWeight: 700 }}>
                         {fCurrency(employee?.fees_after_discount, employee.currency?.symbol)}
                       </Typography>
                     )}
+                    {employee?.fees_after_discount && (
+                      <Chip
+                        size="small"
+                        color="success"
+                        variant="soft"
+                        label={t('special offer for Hakeemna users')}
+                      />
+                    )}
                   </Stack>
-                  {employee?.fees_after_discount && (
-                    <Typography color="#1F2C5C" variant="caption" sx={{ display: 'block' }}>
-                      {t('special offer for Hakeemna users')}
-                    </Typography>
-                  )}
-                </Stack>
-              )}
+                )}
 
-              {employee?.unit_service?.insurance?.length > 0 && (
-                <Stack gap={1} color="white">
-                  <Typography variant="body2">{t('Insurance')}:</Typography>
-                  <Stack direction="row" gap={1}>
-                    {employee?.unit_service?.insurance?.length > 5
-                      ? employee?.unit_service?.insurance
-                          ?.filter((one, index) => index <= 5)
-                          .map((one) => (
-                            <Typography variant="body2">
-                              {curLangAr ? one.name_arabic : one.name_english}
-                            </Typography>
-                          ))
-                      : employee?.unit_service?.insurance?.map((one) => (
-                          <Typography variant="body2">
-                            {curLangAr ? one.name_arabic : one.name_english}
-                          </Typography>
+                {employee?.unit_service?.insurance?.length > 0 && (
+                  <Stack gap={0.75} sx={{ mt: 0.5 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      {t('Insurance')}:
+                    </Typography>
+                    <Stack direction="row" gap={0.75} flexWrap="wrap">
+                      {employee?.unit_service?.insurance
+                        ?.filter((one, index) => index <= 5)
+                        .map((one, idx) => (
+                          <Chip
+                            key={idx}
+                            size="small"
+                            variant="outlined"
+                            label={curLangAr ? one.name_arabic : one.name_english}
+                            sx={{ borderColor: 'primary.light', color: 'text.secondary' }}
+                          />
                         ))}
-                    {employee?.unit_service?.insurance?.length > 5 &&
-                      `+${employee.unit_service.insurance.length - 5}`}
+                      {employee?.unit_service?.insurance?.length > 5 && (
+                        <Chip
+                          size="small"
+                          label={`+${employee.unit_service.insurance.length - 5}`}
+                          sx={{ bgcolor: 'primary.lighter', color: 'primary.dark' }}
+                        />
+                      )}
+                    </Stack>
                   </Stack>
+                )}
+              </Stack>
+            </Stack>
+
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ display: { xs: 'none', lg: 'block' } }}
+            />
+
+            {/* ---- Booking calendar / times ---- */}
+            <Box sx={{ width: { xs: '100%', lg: 'auto' } }}>
+              {AppointDates.length > 0 && (
+                <BookDetails
+                  selected={selected}
+                  AppointDates={AppointDates}
+                  loading={loading}
+                  timeListChangeHandler={timeListChangeHandler}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  list={appointmentsData}
+                />
+              )}
+              {AppointDates.length < 1 && (
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  gap={1}
+                  sx={{
+                    height: '100%',
+                    minHeight: 120,
+                    px: 3,
+                    color: 'text.secondary',
+                  }}
+                >
+                  <Iconify icon="solar:calendar-mark-bold-duotone" width={40} />
+                  <Typography variant="body2" textAlign="center">
+                    {t('no online appointment for this doctor')}
+                  </Typography>
                 </Stack>
               )}
-            </Stack>
+            </Box>
           </Stack>
-          <Stack direction={{ md: 'row' }} gap={{ md: 10 }}>
-            {AppointDates.length > 0 && (
-              <BookDetails
-                selected={selected}
-                AppointDates={AppointDates}
-                loading={loading}
-                timeListChangeHandler={timeListChangeHandler}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                list={appointmentsData}
-              />
-            )}
-            {AppointDates.length < 1 && (
-              <Typography>{t('no online appointment for this doctor')}</Typography>
-            )}
-          </Stack>
-        </Stack>
+        </Card>
         <Dialog fullWidth open={signupDialog} minWidth="lg" onClose={() => setSignupDialog(false)}>
           <Stack sx={{ p: 4 }}>
             {page === 1 && (
