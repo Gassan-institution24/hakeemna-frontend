@@ -73,8 +73,6 @@ export default function RolesListView() {
     }
   }, [deleteTarget, enqueueSnackbar, t, refetch]);
 
-  if (loading) return <LoadingScreen />;
-
   return (
     <>
       <Container maxWidth="xl">
@@ -97,6 +95,9 @@ export default function RolesListView() {
           sx={{ mb: { xs: 3, md: 5 }, mt: { xs: 3, md: 5 } }}
         />
 
+        {loading && roles.length === 0 ? (
+          <LoadingScreen />
+        ) : (
         <Card>
           <TableContainer>
             <Scrollbar>
@@ -173,6 +174,7 @@ export default function RolesListView() {
             </Scrollbar>
           </TableContainer>
         </Card>
+        )}
       </Container>
 
       <RoleFormDialog
