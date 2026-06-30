@@ -5,6 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import Button from '@mui/material/Button';
 import { ListItemText } from '@mui/material';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
@@ -22,6 +23,7 @@ import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomPopover from 'src/components/custom-popover';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
@@ -36,6 +38,7 @@ import {
 import MobileRow from '../../mobile-row';
 import AppointmentsRow from '../ticket-row';
 import TicketsToolbar from '../tickets-toolbar';
+import WhatsappSendDialog from '../whatsapp-send-dialog';
 import HistoryFiltersResult from '../ticket-filters-result';
 
 // ----------------------------------------------------------------------
@@ -70,6 +73,7 @@ export default function AppointmentsView() {
   const isMobile = useMediaQuery('(max-width: 899px)');
   const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
   const [ddlRow, setDdlRow] = useState(null);
+  const [whatsappOpen, setWhatsappOpen] = useState(false);
 
   const ddlOpen = Boolean(ddlAnchorEl);
   const table = useTable({ defaultOrderBy: 'code' });
@@ -180,10 +184,22 @@ export default function AppointmentsView() {
       <CustomBreadcrumbs
         heading="tickets"
         links={[{ name: 'dashboard', href: paths.dashboard.root }, { name: 'tickets' }]}
+        action={
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<Iconify icon="ic:baseline-whatsapp" />}
+            onClick={() => setWhatsappOpen(true)}
+          >
+            Send Message
+          </Button>
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
+
+      <WhatsappSendDialog open={whatsappOpen} onClose={() => setWhatsappOpen(false)} />
       <Card>
         <Tabs
           value={filters.status}

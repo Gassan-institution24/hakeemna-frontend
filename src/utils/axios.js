@@ -981,6 +981,9 @@ export const endpoints = {
     entrance: (id) => (!id ? null : `/api/radiology-patient/entrance/${id}`),
     oneRadiology: (id) => (!id ? null : `/api/radiology-patient/oneRadiology/${id}`),
   },
+  whatsapp: {
+    send: '/api/whatsapp/send',
+  },
   roles: {
     all: '/api/roles',
     permissions: '/api/roles/permissions',
