@@ -3,10 +3,12 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
+const swrOptions = { revalidateOnFocus: false, keepPreviousData: true };
+
 export function useGetWorkGroups() {
   const URL = endpoints.work_groups.all;
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -28,7 +30,7 @@ export function useGetWorkGroups() {
 export function useGetDepartmentWorkGroups(id) {
   const URL = endpoints.work_groups.department.all(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -50,7 +52,7 @@ export function useGetDepartmentWorkGroups(id) {
 export function useGetDepartmentActiveWorkGroups(id) {
   const URL = endpoints.work_groups.department.active(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -72,7 +74,7 @@ export function useGetDepartmentActiveWorkGroups(id) {
 export function useGetUSWorkGroups(id) {
   const URL = endpoints.work_groups.unit_service.all(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -94,7 +96,7 @@ export function useGetUSWorkGroups(id) {
 export function useGetUSActiveWorkGroups(id) {
   const URL = endpoints.work_groups.unit_service.active(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -116,7 +118,7 @@ export function useGetUSActiveWorkGroups(id) {
 export function useGetEmployeeWorkGroups(id) {
   const URL = endpoints.work_groups.employee.all(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -138,7 +140,7 @@ export function useGetEmployeeWorkGroups(id) {
 export function useGetEmployeeActiveWorkGroups(id) {
   const URL = endpoints.work_groups.employee.active(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       workGroupsData: data || [],
@@ -160,7 +162,7 @@ export function useGetEmployeeActiveWorkGroups(id) {
 export function useGetWorkGroup(id) {
   const URL = endpoints.work_groups.one(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       data: data || {},

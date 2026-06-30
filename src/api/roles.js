@@ -3,9 +3,11 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
+const swrOptions = { revalidateOnFocus: false, keepPreviousData: true };
+
 export function useGetUnitServiceRoles(unitServiceId) {
   const URL = endpoints.roles.unitservice(unitServiceId);
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       roles: data?.roles || [],
@@ -21,7 +23,7 @@ export function useGetUnitServiceRoles(unitServiceId) {
 
 export function useGetPermissionsList() {
   const URL = endpoints.roles.permissions;
-  const { data, isLoading, error } = useSWR(URL, fetcher);
+  const { data, isLoading, error } = useSWR(URL, fetcher, swrOptions);
   const memoizedValue = useMemo(
     () => ({
       permissions: data?.permissions || [],
