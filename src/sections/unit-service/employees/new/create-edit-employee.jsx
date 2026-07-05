@@ -190,11 +190,7 @@ export default function TableNewEditForm({ currentTable }) {
         msg: `created an employee <strong>${data.name_english || ''}</strong>`,
       });
       reset();
-      router.push(
-        submit.data?.engagement?._id
-          ? paths.unitservice.employees.acl(submit.data?.engagement?._id)
-          : paths.unitservice.employees.root
-      );
+      router.push(paths.unitservice.employees.root);
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
       console.error(error);

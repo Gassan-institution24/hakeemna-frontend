@@ -66,14 +66,7 @@ export default function UnitServiceEmployeesRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
+      <TableCell align="center">
         {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
       </TableCell>
       <TableCell align="center">
@@ -82,14 +75,7 @@ export default function UnitServiceEmployeesRow({
           style={{ width: '10px' }}
         />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
+      <TableCell align="center">
         {curLangAr ? employee?.name_arabic : employee?.name_english}
         {is_owner && (
           <Label variant="soft" color="warning" sx={{ ml: 1, fontSize: '10px' }}>
@@ -174,10 +160,6 @@ export default function UnitServiceEmployeesRow({
                 {t('activate')}
               </MenuItem>
             )}
-        <MenuItem lang="ar" onClick={onViewRow}>
-          <Iconify icon="solar:eye-bold" />
-          {t('view')}
-        </MenuItem>
         {checkAcl('permissions:update') && !is_owner && (
           <MenuItem
             lang="ar"

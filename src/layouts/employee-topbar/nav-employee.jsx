@@ -26,13 +26,15 @@ function NavEmployee() {
       sx={{
         m: 'auto',
         width: `100%`,
-        boxShadow: (design) => design.customShadows.z8,
+        borderBottom: (design) => `solid 1px ${design.palette.divider}`,
+        boxShadow: (design) => design.customShadows.z1,
         // ...sx,
       }}
       // {...other}
     >
       <Toolbar
         sx={{
+          minHeight: 60,
           ...bgBlur({
             color: theme.palette.background.default,
           }),

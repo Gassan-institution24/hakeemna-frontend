@@ -56,12 +56,6 @@ const DepartmentsNewWorkGroupsPage = lazy(
 const DepartmentsEditWorkGroupsPage = lazy(
   () => import('src/pages/unit-service/departments/work-groups/edit')
 );
-// const DepartmentsPermissionsPage = lazy(() =>
-//   import('src/pages/unit-service/departments/permissions/home')
-// );
-// const DepartmentsEmployeePermissionsPage = lazy(() =>
-//   import('src/pages/unit-service/departments/permissions/employee')
-// );
 const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
 // EMPLOYEES
 const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));
@@ -83,7 +77,6 @@ const EmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/employee
 const EmployeesAttendencePage = lazy(() => import('src/pages/unit-service/employees/attendence'));
 const EmployeesOffersPage = lazy(() => import('src/pages/unit-service/employees/offers'));
 const EmployeesEditPage = lazy(() => import('src/pages/unit-service/employees/edit'));
-const EmployeesACLPage = lazy(() => import('src/pages/unit-service/employees/acl'));
 const EmployeesNewPage = lazy(() => import('src/pages/unit-service/employees/new'));
 // ACTIVITIES
 const ActivitiesHomePage = lazy(() => import('src/pages/unit-service/activities/home'));
@@ -495,7 +488,6 @@ export const unitServiceDashboardRoutes = [
                   { path: 'feedback', element: <EmployeesFeedbackPage /> },
                   { path: 'attendence', element: <EmployeesAttendencePage /> },
                   { path: 'offers', element: <EmployeesOffersPage /> },
-                  { path: 'acl', element: <EmployeesACLPage /> },
                   { path: 'edit', element: <EmployeesEditPage /> },
                 ],
               },

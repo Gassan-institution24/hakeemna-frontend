@@ -414,11 +414,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
       >
         <Box
           ref={launcherRef}
+          // Anchor via inline style (not sx) so stylis-plugin-rtl doesn't flip
+          // `left` -> `right` in Arabic, which would push the draggable launcher
+          // off-screen since react-draggable positions from a top-left anchor.
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 99 }}
           sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            zIndex: 99,
             touchAction: 'none',
             cursor: 'grab',
             '&:active': { cursor: 'grabbing' },

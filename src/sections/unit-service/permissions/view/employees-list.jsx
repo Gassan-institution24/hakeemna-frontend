@@ -318,13 +318,6 @@ export default function EmployeesTableView() {
     [router]
   );
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(`${paths.unitservice.acl.employees}/${id}/us`); /// edit
-    },
-    [router]
-  );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -557,7 +550,6 @@ export default function EmployeesTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row)}
-                        onViewRow={() => handleViewRow(row._id)}
                         onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                         onChangeVisPage={() => handleChangeVisPage(row._id)}

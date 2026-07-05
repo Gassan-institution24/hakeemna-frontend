@@ -171,14 +171,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         });
         reset();
         enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-        router.push(
-          submit.data?.engagement?._id
-            ? paths.unitservice.departments.employees.acl(
-                departmentData._id,
-                submit.data?.engagement?._id
-              )
-            : paths.unitservice.departments.employees.root(departmentData._id)
-        );
+        router.push(paths.unitservice.departments.employees.root(departmentData._id));
       }
     } catch (error) {
       // error emitted in backend

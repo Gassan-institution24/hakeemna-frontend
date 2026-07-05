@@ -20,7 +20,10 @@ export function useNavData() {
   const { user } = useAuthContext();
   const { employeesData, loading } = useGetUSActiveEmployeeEngs(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service._id,
-    { select: 'employee', populate: [{ path: 'employee', select: 'name_english name_arabic' }] }
+    {
+      select: 'employee',
+      populate: [{ path: 'employee', select: 'name_english name_arabic picture' }],
+    }
   );
 
   const employeeItems = useMemo(() => {
@@ -34,6 +37,7 @@ export function useNavData() {
       return {
         title: curLangAr ? info.employee.name_arabic : info.employee.name_english,
         path,
+        picture: info.employee.picture,
         icon: <Iconify icon="ion:person" />,
       };
     });

@@ -72,12 +72,6 @@ export function useNavData() {
       //   path: paths.unitservice.employees.activities.root(id),
       //   icon: <Iconify icon="ic:baseline-security" />,
       // },
-      {
-        show: checkAcl('permissions:read'),
-        title: t('permissions'),
-        path: paths.unitservice.employees.acl(id),
-        icon: <Iconify icon="mdi:account-secure" />,
-      },
     ];
     const employeeSecDashboard = [
       {

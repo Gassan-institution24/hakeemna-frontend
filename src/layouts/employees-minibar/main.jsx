@@ -21,7 +21,7 @@ export default function Main({ children, sx, ...other }) {
         display: 'flex',
         flexDirection: 'column',
         mt: have2nav ? 0 : `4rem`,
-        mr: `4rem`,
+        mr: `8.5rem`,
         mb: 0,
         pb: 0,
         ...(lgUp && {

@@ -143,6 +143,18 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
 
   const groups = groupPermissions(availablePermissions);
 
+  const allSelected =
+    availablePermissions.length > 0 && availablePermissions.every((p) => selected.includes(p));
+  const someSelected = availablePermissions.some((p) => selected.includes(p)) && !allSelected;
+
+  const toggleAll = () => {
+    if (allSelected) {
+      setSelected((prev) => prev.filter((p) => !availablePermissions.includes(p)));
+    } else {
+      setSelected((prev) => [...new Set([...prev, ...availablePermissions])]);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{role?._id ? t('Edit Role') : t('New Role')}</DialogTitle>
@@ -181,9 +193,31 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
           </TextField>
         </Box>
 
-        <Typography variant="caption" color="text.secondary" sx={{ mb: 1.5, display: 'block' }}>
-          {selected.length} {t('permissions selected')}
-        </Typography>
+        <Box
+          sx={{
+            mb: 1.5,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1,
+          }}
+        >
+          <FormControlLabel
+            label={<Typography variant="subtitle2">{t('Select all')}</Typography>}
+            control={
+              <Checkbox
+                checked={allSelected}
+                indeterminate={someSelected}
+                onChange={toggleAll}
+                disabled={permsLoading || availablePermissions.length === 0}
+                size="small"
+              />
+            }
+          />
+          <Typography variant="caption" color="text.secondary">
+            {selected.length} {t('permissions selected')}
+          </Typography>
+        </Box>
 
         {permsLoading ? (
           <Typography variant="body2">{t('Loading...')}</Typography>
@@ -206,7 +240,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
                   <FormControlLabel
                     label={
                       <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-                        {resource.replace(/_/g, ' ')}
+                        {t(resource.replace(/_/g, ' '))}
                       </Typography>
                     }
                     control={
@@ -224,7 +258,7 @@ export default function RoleFormDialog({ open, onClose, role, unitServiceId, onS
                       return (
                         <FormControlLabel
                           key={perm}
-                          label={<Typography variant="body2">{action}</Typography>}
+                          label={<Typography variant="body2">{t(action)}</Typography>}
                           control={
                             <Checkbox
                               checked={selected.includes(perm)}
