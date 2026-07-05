@@ -114,6 +114,7 @@ const PreviewBlogs = lazy(() => import('src/pages/employee/blogs/preview-blogs')
 
 // HR
 const MyAttendencePage = lazy(() => import('src/pages/employee/attendence/my_attendence'));
+const MySalaryPage = lazy(() => import('src/pages/employee/salary/home'));
 
 // KPIs
 const KpisPage = lazy(() => import('src/pages/employee/kpis/kpis'));
@@ -229,6 +230,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'profile/myattendence',
         children: [{ element: <MyAttendencePage />, index: true }],
+      },
+      {
+        path: 'profile/mysalary',
+        children: [{ element: <MySalaryPage />, index: true }],
       },
       {
         path: 'Kpis',

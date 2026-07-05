@@ -19,6 +19,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import CreateMonthlyReport from './create-monthly-report';
+import SalaryReceiptDialog from './salary-receipt-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ export default function MonthlyReportRow({
   hideEmployee,
   refetch,
   selectedReported,
+  employeeView,
 }) {
   const {
     code,
@@ -65,6 +67,7 @@ export default function MonthlyReportRow({
   const DDL = usePopover();
   const deleting = useBoolean();
   const show = useBoolean();
+  const receipt = useBoolean();
 
   const getRowColor = () => {
     if (selectedReported !== null) return 'black';
@@ -131,17 +134,29 @@ export default function MonthlyReportRow({
           <Iconify icon="solar:eye-bold" />
           {t('view')}
         </MenuItem> */}
-        <MenuItem lang="ar" onClick={DDL.onOpen}>
-          <Iconify icon="carbon:data-quality-definition" />
-          {t('DDL')}
+        <MenuItem
+          lang="ar"
+          onClick={() => {
+            popover.onClose();
+            receipt.onTrue();
+          }}
+        >
+          <Iconify icon="solar:document-text-bold" />
+          {t('Salary Receipt')}
         </MenuItem>
-        {checkAcl('hr:update') && (
+        {!employeeView && (
+          <MenuItem lang="ar" onClick={DDL.onOpen}>
+            <Iconify icon="carbon:data-quality-definition" />
+            {t('DDL')}
+          </MenuItem>
+        )}
+        {!employeeView && checkAcl('hr:update') && (
           <MenuItem lang="ar" onClick={show.onTrue}>
             <Iconify icon="fluent:edit-32-filled" />
             {t('Edit')}
           </MenuItem>
         )}
-        {checkAcl('hr:delete') && (
+        {!employeeView && checkAcl('hr:delete') && (
           <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onTrue}>
             <Iconify icon="mdi:trash" />
             {t('Delete')}
@@ -150,6 +165,13 @@ export default function MonthlyReportRow({
       </CustomPopover>
 
       <CreateMonthlyReport row={row} refetch={refetch} open={show.value} onClose={show.onFalse} />
+
+      <SalaryReceiptDialog
+        row={row}
+        refetch={refetch}
+        open={receipt.value}
+        onClose={receipt.onFalse}
+      />
 
       <CustomPopover
         open={DDL.open}
@@ -232,4 +254,5 @@ MonthlyReportRow.propTypes = {
   selected: PropTypes.bool,
   hideEmployee: PropTypes.bool,
   selectedReported: PropTypes.bool,
+  employeeView: PropTypes.bool,
 };

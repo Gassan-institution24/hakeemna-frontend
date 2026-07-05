@@ -969,6 +969,9 @@ export const paths = {
     myattendence: {
       root: `${ROOTS.SUPERADMIN}/profile/myattendence`,
     },
+    mysalary: {
+      root: `${ROOTS.SUPERADMIN}/profile/mysalary`,
+    },
     calender: `${ROOTS.SUPERADMIN}/calender`,
     blogs: `${ROOTS.SUPERADMIN}/browzeblogs`,
     kpis: `${ROOTS.SUPERADMIN}/kpis`,

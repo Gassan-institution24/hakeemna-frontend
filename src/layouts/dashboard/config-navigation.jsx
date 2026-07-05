@@ -804,6 +804,13 @@ export function useNavData() {
             navItemId: 'EMQualityControlNav',
             'data-test': 'employee-nav-item-profile-qc',
           },
+          {
+            show: true,
+            title: t('my salary'),
+            path: paths.employee.mysalary.root,
+            navItemId: 'EMSalaryNav',
+            'data-test': 'employee-nav-item-profile-salary',
+          },
         ].filter((one) => one.show),
       },
       {

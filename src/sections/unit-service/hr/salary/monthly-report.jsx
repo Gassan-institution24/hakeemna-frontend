@@ -45,7 +45,7 @@ const defaultFilters = {
 };
 // ----------------------------------------------------------------------
 
-export default function MonthlyReportsView({ employee }) {
+export default function MonthlyReportsView({ employee, employeeView }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'code', label: t('number') },
@@ -90,8 +90,19 @@ export default function MonthlyReportsView({ employee }) {
     populate: [
       {
         path: 'employee_engagement',
-        select: 'employee',
-        populate: { path: 'employee', select: 'name_english name_arabic' },
+        select: 'employee department',
+        populate: [
+          {
+            path: 'employee',
+            select: 'name_english name_arabic picture',
+            populate: { path: 'speciality', select: 'name_english name_arabic' },
+          },
+          { path: 'department', select: 'name_english name_arabic' },
+        ],
+      },
+      {
+        path: 'unit_service',
+        select: 'company_logo name_english name_arabic phone email address',
       },
     ],
     employee_engagement: employee,
@@ -152,6 +163,7 @@ export default function MonthlyReportsView({ employee }) {
 
   return (
     <Container maxWidth="xl">
+      {!employeeView && (
       <Stack direction={{ md: 'row' }} justifyContent="space-around" mb={2}>
         <Stack alignItems="center" direction="row" gap={1}>
           <Typography>{t('working hours')}:</Typography>
@@ -192,7 +204,8 @@ export default function MonthlyReportsView({ employee }) {
           <Typography>{total}</Typography>
         </Stack>
       </Stack>
-      {filters.reported === null && (
+      )}
+      {!employeeView && filters.reported === null && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           <b>{t('Note:')}</b> {t('Rows highlighted in')} <span style={{ color: 'red' }}>{t('red')}</span> {t('are not assigned to a specific yearly report, and rows highlighted in')} <span style={{ color: 'green' }}>{t('green')}</span> {t('are assigned to a specific yearly report.')}
         </Typography>
@@ -214,7 +227,7 @@ export default function MonthlyReportsView({ employee }) {
           //
           canReset={canReset}
           onResetFilters={handleResetFilters}
-          showReported
+          showReported={!employeeView}
         />
 
         {canReset && (
@@ -273,6 +286,7 @@ export default function MonthlyReportsView({ employee }) {
                       hideEmployee={!!employee}
                       refetch={refetch}
                       selectedReported={filters.reported}
+                      employeeView={employeeView}
                     />
                   ))}
                 <TableNoData notFound={notFound} />
@@ -346,4 +360,5 @@ function applyFilter({ inputData, comparator, filters }) {
 }
 MonthlyReportsView.propTypes = {
   employee: PropTypes.string,
+  employeeView: PropTypes.bool,
 };
