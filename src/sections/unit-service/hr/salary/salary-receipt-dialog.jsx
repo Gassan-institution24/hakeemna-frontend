@@ -214,10 +214,10 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                   {t('employee')}
                 </Typography>
                 <InfoLine label={t('name')} value={name} />
-                <InfoLine
+                {/* <InfoLine
                   label={t('specialty')}
                   value={curLangAr ? speciality?.name_arabic : speciality?.name_english}
-                />
+                /> */}
                 <InfoLine
                   label={t('department')}
                   value={curLangAr ? department?.name_arabic : department?.name_english}
@@ -269,6 +269,8 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
               <InfoLine label={t('unpaid days off')} value={data?.unpaid} />
               <InfoLine label={t('public days off')} value={data?.public} />
               <InfoLine label={t('other days off')} value={data?.other} />
+              <InfoLine label={t('overtime')} value={data?.over_time} />
+              <InfoLine label={t('extras')} value={data?.extras} />
             </Box>
 
             <Box
