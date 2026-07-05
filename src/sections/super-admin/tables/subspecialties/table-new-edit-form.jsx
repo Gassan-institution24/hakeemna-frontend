@@ -35,7 +35,7 @@ export default function TableNewEditForm({ currentTable }) {
     name_english: Yup.string().required('Name is required'),
     description: Yup.string(),
     description_arabic: Yup.string(),
-     Yup.string().nullable(),
+    specialty: Yup.string().nullable(),
   });
 
   const defaultValues = useMemo(
