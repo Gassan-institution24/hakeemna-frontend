@@ -148,6 +148,18 @@ export default function UnitServiceEmployeesRow({
           <Iconify icon="solar:eye-bold" />
           {t('view')}
         </MenuItem>
+        {checkAcl('employees:update') && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              onEditRow();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="fluent:edit-32-filled" />
+            {t('Edit')}
+          </MenuItem>
+        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

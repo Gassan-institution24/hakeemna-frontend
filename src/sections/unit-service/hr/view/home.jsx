@@ -296,12 +296,12 @@ export default function EmployeesTableView() {
     [table]
   );
 
-  // const handleEditRow = useCallback(
-  //     (id) => {
-  //         router.push(paths.unitservice.employees.edit(id)); /// edit
-  //     },
-  //     [router]
-  // );
+  const handleEditRow = useCallback(
+    (id) => {
+      router.push(paths.unitservice.employees.edit(id)); /// edit
+    },
+    [router]
+  );
 
   const handleViewRow = useCallback(
     (id) => {
@@ -637,7 +637,7 @@ export default function EmployeesTableView() {
                           onActivate={() => handleActivate(row)}
                           onViewRow={() => handleViewRow(row._id)}
                           onInactivate={() => handleInactivate(row)}
-                          // onEditRow={() => handleEditRow(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
                           onChangeVisPage={() => handleChangeVisPage(row._id)}
                           onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
                         />

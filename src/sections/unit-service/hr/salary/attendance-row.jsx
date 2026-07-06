@@ -90,12 +90,10 @@ export default function AttendanceRow({
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
-        {checkAcl('hr:update') && (
-          <MenuItem lang="ar" onClick={() => setOpen(true)}>
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('Edit')}
-          </MenuItem>
-        )}
+        <MenuItem lang="ar" onClick={() => setOpen(true)}>
+          <Iconify icon="fluent:edit-32-filled" />
+          {t('Edit')}
+        </MenuItem>
         {checkAcl('hr:delete') && (
           <MenuItem sx={{ color: 'error.main' }} lang="ar" onClick={deleting.onOpen}>
             <Iconify icon="mdi:trash" />

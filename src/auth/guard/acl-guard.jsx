@@ -40,10 +40,12 @@ export function useAclGuard() {
   const checkAcl = useCallback(
     (permission) => {
       if (user?.role === 'superadmin') return true;
+      // admin = unconditional full access regardless of any assigned roles / work groups.
+      // Only the subscription (unit_service licence) restricts an admin (see ACLGuard below).
+      if (user?.role === 'admin') return true;
       if (isOwnerEngagement(user)) return true; // unit service owner: always full access
       const perms = getMergedPermissions(user);
-      // admin with no roles assigned = full access (backward compat — not yet marked as owner)
-      if (perms === null) return user?.role === 'admin';
+      if (perms === null) return false; // no RBAC roles assigned yet
       return perms.includes(permission);
     },
     [user]
@@ -103,8 +105,8 @@ export default function ACLGuard({ permission, children, sx }) {
 
   const hasAccess =
     user?.role === 'superadmin' ||
+    user?.role === 'admin' ||
     owner ||
-    (mergedPerms === null && user?.role === 'admin') ||
     mergedPerms?.includes(permission);
 
   if (hasAccess) {
