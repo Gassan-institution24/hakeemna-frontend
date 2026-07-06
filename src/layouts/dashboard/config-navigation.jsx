@@ -520,8 +520,9 @@ export function useNavData() {
         'data-test': 'us-nav-item-tables',
       },
       {
+        // admin always sees permissions, regardless of roles/work groups/subscription.
         show:
-          checkAcl('permissions:read') &&
+          (user?.role === 'admin' || checkAcl('permissions:read')) &&
           !isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
@@ -541,8 +542,9 @@ export function useNavData() {
         ],
       },
       {
+        // admin always sees permissions, regardless of roles/work groups/subscription.
         show:
-          checkAcl('permissions:read') &&
+          (user?.role === 'admin' || checkAcl('permissions:read')) &&
           isMedLab,
         title: t('permissions'),
         path: paths.unitservice.acl.root,
