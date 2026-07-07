@@ -34,11 +34,14 @@ const BRAND = '#2a5d71';
 // (fHourMin returns a block <Typography>, which would drop the value to a new line.)
 function formatHoursMinutes(mins) {
   if (mins === undefined || mins === null) return null;
-  const h = Math.floor(mins / 60).toString().padStart(2, '0');
-  const m = Math.floor(mins % 60).toString().padStart(2, '0');
+  const h = Math.floor(mins / 60)
+    .toString()
+    .padStart(2, '0');
+  const m = Math.floor(mins % 60)
+    .toString()
+    .padStart(2, '0');
   return `${h} : ${m}`;
 }
-
 
 function InfoLine({ label, value, strong }) {
   if (value === undefined || value === null || value === '') return null;
@@ -51,6 +54,27 @@ function InfoLine({ label, value, strong }) {
 }
 
 InfoLine.propTypes = { label: PropTypes.string, value: PropTypes.node, strong: PropTypes.bool };
+
+function StatTile({ label, value }) {
+  return (
+    <Box
+      sx={{
+        p: 1.25,
+        borderRadius: 1.5,
+        border: '1px solid #dbe5ee',
+        backgroundColor: '#fff',
+        textAlign: 'center',
+      }}
+    >
+      <Typography sx={{ fontSize: 20, fontWeight: 800, color: '#1f2c5b', lineHeight: 1.2 }}>
+        {value}
+      </Typography>
+      <Typography sx={{ fontSize: 12, fontWeight: 700, color: BRAND }}>{label}</Typography>
+    </Box>
+  );
+}
+
+StatTile.propTypes = { label: PropTypes.string, value: PropTypes.node };
 
 // ----------------------------------------------------------------------
 
@@ -148,7 +172,7 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                   startIcon={<Iconify icon="solar:pen-new-square-bold" />}
                   onClick={() => setSignOpen(true)}
                 >
-                  {confirmed ? t('Re-sign') : t('Confirm receipt')}
+                  {t('Confirm receipt')}
                 </Button>
               )}
               <Button
@@ -203,7 +227,9 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                   <Typography sx={{ fontSize: 26, fontWeight: 900, color: BRAND }}>
                     {unitName || t('unit of service')}
                   </Typography>
-                  <Typography sx={{ fontSize: 14, color: BRAND }}>{unit?.address}</Typography>
+                  <Typography sx={{ fontSize: 14, color: BRAND }}>
+                    {unit?.country?.name_english}
+                  </Typography>
                 </Box>
               </Stack>
 
@@ -244,18 +270,28 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                   </span>
                 </Typography>
 
-                <InfoLine label={t('annual days off')} value={data?.annual} />
-
-                <InfoLine label={t('sick days off')} value={data?.sick} />
-
-                <InfoLine label={t('unpaid days off')} value={data?.unpaid} />
-                <InfoLine label={t('working hours')} value={formatHoursMinutes(data?.working_time)} />
+                <Box
+                  sx={{
+                    mt: 1.5,
+                    display: 'grid',
+                    gap: 1.5,
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                  }}
+                >
+                  <StatTile label={t('annual days off')} value={data?.annual ?? 0} />
+                  <StatTile label={t('sick days off')} value={data?.sick ?? 0} />
+                  <StatTile label={t('unpaid days off')} value={data?.unpaid ?? 0} />
+                  <StatTile
+                    label={t('working hours')}
+                    value={formatHoursMinutes(data?.working_time) ?? '—'}
+                  />
+                </Box>
               </Box>
             </Stack>
 
-            {/* SALARY DETAILS */}
+            {/* salary statement */}
             <Typography sx={{ fontSize: 18, fontWeight: 800, color: BRAND, mt: 4, mb: 1 }}>
-              {t('salary details')}
+              {t('salary statement')}
             </Typography>
             <Box
               sx={{
