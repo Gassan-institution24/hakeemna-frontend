@@ -1,5 +1,15 @@
 {
+
   "my salary": "راتبي",
+  "confirmed": "مؤكد",
+  "Employee": "الموظف",
+  "Earnings": "المستحقات",
+  "Deductions": "الاقتطاعات",
+  "overtime": "العمل الإضافي",
+  "extras": "إضافات",
+  "Social Security": "الضمان الاجتماعي",
+  "Net salary": "صافي الراتب",
+  "Signature of receipt": "توقيع الاستلام",
   "Could not save the signature. Please try again.": "تعذّر حفظ التوقيع. حاول مرة أخرى.",
   "Salary Receipt": "إيصال استلام الراتب",
   "Confirm receipt": "تأكيد الاستلام",

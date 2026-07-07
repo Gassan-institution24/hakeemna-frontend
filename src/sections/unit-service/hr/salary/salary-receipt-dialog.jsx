@@ -12,14 +12,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
 import { fixURL } from 'src/utils/format-url';
+import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
-import { fDate, fHourMin } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { confirmSalaryReceipt } from 'src/api/monthly_reports';
 
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import SignaturePad from 'src/components/signature/signature-pad';
@@ -28,6 +29,16 @@ import { generatePdfFromElement } from 'src/components/pdf/generate-pdf';
 // ----------------------------------------------------------------------
 
 const BRAND = '#2a5d71';
+
+// Inline "HH : MM" string so the value stays on the same line as its label.
+// (fHourMin returns a block <Typography>, which would drop the value to a new line.)
+function formatHoursMinutes(mins) {
+  if (mins === undefined || mins === null) return null;
+  const h = Math.floor(mins / 60).toString().padStart(2, '0');
+  const m = Math.floor(mins % 60).toString().padStart(2, '0');
+  return `${h} : ${m}`;
+}
+
 
 function InfoLine({ label, value, strong }) {
   if (value === undefined || value === null || value === '') return null;
@@ -67,7 +78,6 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
   const data = { ...row, ...(override || {}) };
   const employee = row?.employee_engagement?.employee;
   const department = row?.employee_engagement?.department;
-  const speciality = employee?.speciality;
 
   const authUnit =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service;
@@ -169,6 +179,8 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
               px: '50px',
               pb: '24px',
               backgroundColor: '#F7FAFF',
+              borderRadius: 2,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
               boxSizing: 'border-box',
               minHeight: '1120px',
               display: 'flex',
@@ -195,14 +207,17 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                 </Box>
               </Stack>
 
-              <Box sx={{ textAlign: 'right' }}>
+              <Stack spacing={0.75} alignItems="flex-end">
                 <Typography sx={{ fontSize: 20, fontWeight: 900, color: BRAND }}>
                   {t('Salary Receipt')}
                 </Typography>
                 <Typography sx={{ fontSize: 14, color: '#000' }}>
                   {t('number')}: {data?.code}
                 </Typography>
-              </Box>
+                <Label variant="soft" color={confirmed ? 'success' : 'warning'}>
+                  {confirmed ? t('confirmed') : t('pending')}
+                </Label>
+              </Stack>
             </Stack>
 
             <Box sx={{ borderBottom: `2px solid ${BRAND}`, mt: 2, mb: 3 }} />
@@ -211,13 +226,9 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
             <Stack direction="row" spacing={5}>
               <Box sx={{ flex: 1 }}>
                 <Typography sx={{ fontSize: 18, fontWeight: 800, color: BRAND, mb: 1 }}>
-                  {t('employee')}
+                  {t('Employee')} : {name}
                 </Typography>
-                <InfoLine label={t('name')} value={name} />
-                {/* <InfoLine
-                  label={t('specialty')}
-                  value={curLangAr ? speciality?.name_arabic : speciality?.name_english}
-                /> */}
+
                 <InfoLine
                   label={t('department')}
                   value={curLangAr ? department?.name_arabic : department?.name_english}
@@ -226,11 +237,19 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
 
               <Box sx={{ flex: 1 }}>
                 <Typography sx={{ fontSize: 18, fontWeight: 800, color: BRAND, mb: 1 }}>
-                  {t('period')}
+                  {t('period')} :{' '}
+                  <span style={{ color: '#000' }}>
+                    {t('from')} {fDate(data?.start_date, 'dd/MM/yyyy')} {t('to')}{' '}
+                    {fDate(data?.end_date, 'dd/MM/yyyy')}
+                  </span>
                 </Typography>
-                <InfoLine label={t('Start Date')} value={fDate(data?.start_date, 'dd/MM/yyyy')} />
-                <InfoLine label={t('End Date')} value={fDate(data?.end_date, 'dd/MM/yyyy')} />
-                <InfoLine label={t('working hours')} value={fHourMin(data?.working_time)} />
+
+                <InfoLine label={t('annual days off')} value={data?.annual} />
+
+                <InfoLine label={t('sick days off')} value={data?.sick} />
+
+                <InfoLine label={t('unpaid days off')} value={data?.unpaid} />
+                <InfoLine label={t('working hours')} value={formatHoursMinutes(data?.working_time)} />
               </Box>
             </Stack>
 
@@ -240,37 +259,81 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
             </Typography>
             <Box
               sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                columnGap: 6,
-                rowGap: 0,
-                p: 2,
-                borderRadius: 1,
+                display: 'flex',
+                gap: 3,
+                p: 2.5,
+                borderRadius: 1.5,
                 border: '1px solid #dbe5ee',
                 backgroundColor: '#fff',
               }}
             >
-              <InfoLine label={t('salary')} value={fCurrency(data?.salary)} />
-              <InfoLine
-                label={t('company contribution')}
-                value={fCurrency(data?.company_contribution_amount)}
-              />
-              <InfoLine
-                label={t('employee contribution')}
-                value={fCurrency(data?.employee_contribution_amount)}
-              />
-              <InfoLine label={t('tax')} value={data?.tax ? fCurrency(data?.tax) : null} />
-              <InfoLine
-                label={t('deduction')}
-                value={data?.deduction ? fCurrency(data?.deduction) : null}
-              />
-              <InfoLine label={t('annual days off')} value={data?.annual} />
-              <InfoLine label={t('sick days off')} value={data?.sick} />
-              <InfoLine label={t('unpaid days off')} value={data?.unpaid} />
-              <InfoLine label={t('public days off')} value={data?.public} />
-              <InfoLine label={t('other days off')} value={data?.other} />
-              <InfoLine label={t('overtime')} value={data?.over_time} />
-              <InfoLine label={t('extras')} value={data?.extras} />
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    fontWeight: 800,
+                    color: BRAND,
+                    mb: 1,
+                    letterSpacing: 0.5,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {t('Earnings')}
+                </Typography>
+                <InfoLine label={t('salary')} value={fCurrency(data?.salary)} />
+                <InfoLine
+                  label={t('overtime')}
+                  value={data?.over_time ? fCurrency(data?.over_time) : null}
+                />
+                <InfoLine
+                  label={t('extras')}
+                  value={data?.extras ? fCurrency(data?.extras) : null}
+                />
+                <Divider sx={{ my: 1, borderColor: '#dbe5ee' }} />
+                <InfoLine
+                  strong
+                  label={t('Total')}
+                  value={fCurrency(
+                    (data?.salary ?? 0) + (data?.extras ?? 0) + (data?.over_time ?? 0)
+                  )}
+                />
+              </Box>
+
+              <Divider orientation="vertical" flexItem sx={{ borderColor: '#dbe5ee' }} />
+
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    fontWeight: 800,
+                    color: BRAND,
+                    mb: 1,
+                    letterSpacing: 0.5,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {t('Deductions')}
+                </Typography>
+                <InfoLine
+                  label={t('Social Security')}
+                  value={fCurrency(data?.employee_contribution_amount)}
+                />
+                <InfoLine label={t('tax')} value={data?.tax ? fCurrency(data?.tax) : null} />
+                <InfoLine
+                  label={t('deduction')}
+                  value={data?.deduction ? fCurrency(data?.deduction) : null}
+                />
+                <Divider sx={{ my: 1, borderColor: '#dbe5ee' }} />
+                <InfoLine
+                  strong
+                  label={t('Total')}
+                  value={fCurrency(
+                    (data?.employee_contribution_amount ?? 0) +
+                      (data?.tax ?? 0) +
+                      (data?.deduction ?? 0)
+                  )}
+                />
+              </Box>
             </Box>
 
             <Box
@@ -285,8 +348,10 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                 color: '#fff',
               }}
             >
-              <Typography sx={{ fontSize: 18, fontWeight: 800 }}>{t('total')}</Typography>
-              <Typography sx={{ fontSize: 20, fontWeight: 900 }}>{fCurrency(data?.total)}</Typography>
+              <Typography sx={{ fontSize: 18, fontWeight: 800 }}>{t('Net salary')}</Typography>
+              <Typography sx={{ fontSize: 20, fontWeight: 900 }}>
+                {fCurrency(data?.total)}
+              </Typography>
             </Box>
 
             {/* spacer keeps the signature near the bottom of the page */}
@@ -298,8 +363,10 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
               <Box>
                 <Typography sx={{ fontSize: 15, color: BRAND, fontWeight: 700 }}>
                   {t('Salary received on')}:{' '}
-                  <span style={{ color: '#000' }}>
-                    {confirmed ? fDate(data?.salaryReceivedAt, 'dd/MM/yyyy p') : t('not confirmed yet')}
+                  <span style={{ color: '#000', fontWeight: 300, fontSize: 15 }}>
+                    {confirmed
+                      ? fDate(data?.salaryReceivedAt, 'dd/MM/yyyy p')
+                      : t('not confirmed yet')}
                   </span>
                 </Typography>
               </Box>
@@ -317,7 +384,7 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                 )}
                 <Box sx={{ borderTop: '1.5px solid #000', pt: 0.5 }}>
                   <Typography sx={{ fontSize: 15, fontWeight: 700, color: BRAND }}>
-                    {t('employee signature')}
+                    {t('Signature of receipt')}
                   </Typography>
                 </Box>
               </Box>
