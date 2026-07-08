@@ -17,6 +17,9 @@ export const isUpperArch = (fdi) => {
   return [1, 2, 5, 6].includes(q);
 };
 
+// Primary (deciduous) teeth live in quadrants 5–8 (FDI 51–85).
+export const isPrimary = (fdi) => [5, 6, 7, 8].includes(getQuadrant(fdi));
+
 // Right quadrants: Q1 (upper right), Q4 (lower right), Q5 (child upper right), Q8 (child lower right)
 export const isRightQuadrant = (fdi) => {
   const q = getQuadrant(fdi);
@@ -30,6 +33,8 @@ export const getToothType = (fdi) => {
   const pos = getToothPosition(fdi);
   if (pos <= 2) return 'incisor';
   if (pos === 3) return 'canine';
+  // Primary dentition has no premolars — positions 4 & 5 are primary molars.
+  if (isPrimary(fdi)) return 'molar';
   if (pos <= 5) return 'premolar';
   return 'molar';
 };

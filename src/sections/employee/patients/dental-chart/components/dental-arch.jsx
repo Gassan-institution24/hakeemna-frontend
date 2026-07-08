@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Box, Divider, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 import SingleTooth from './single-tooth';
 
@@ -15,15 +15,32 @@ export default function DentalArch({
   midlineAfterIndex,
   onSurfaceClick,
   onDoubleClick,
-  activeCondition,
   selectedTeeth,
   multiSelect,
+  dimmed,
+  leadingGhosts,
+  trailingGhosts,
   lang,
   crownSize,
 }) {
+  const align = isUpper ? 'flex-end' : 'flex-start';
+
+  const renderGhost = (fdi) => (
+    <SingleTooth
+      key={`ghost-${fdi}`}
+      fdiNumber={fdi}
+      toothData={null}
+      onSurfaceClick={onSurfaceClick}
+      onDoubleClick={onDoubleClick}
+      ghost
+      lang={lang}
+      crownSize={crownSize}
+    />
+  );
+
   return (
     <Box>
-      {isUpper && (
+      {isUpper && label && (
         <Typography
           variant="caption"
           fontWeight={600}
@@ -34,14 +51,11 @@ export default function DentalArch({
         </Typography>
       )}
 
-      <Stack
-        direction="row"
-        alignItems="flex-end"
-        justifyContent="center"
-        sx={{ gap: `${GAP}px`, px: 1 }}
-      >
+      <Stack direction="row" alignItems={align} justifyContent="center" sx={{ gap: `${GAP}px`, px: 1 }}>
+        {leadingGhosts.map(renderGhost)}
+
         {teeth.map((fdi, idx) => (
-          <Box key={fdi} sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <Box key={fdi} sx={{ display: 'flex', alignItems: align }}>
             <SingleTooth
               fdiNumber={fdi}
               toothData={teethMap[fdi] || null}
@@ -49,7 +63,7 @@ export default function DentalArch({
               onDoubleClick={onDoubleClick}
               isSelected={multiSelect && selectedTeeth.has(fdi)}
               isHighlighted={!multiSelect && selectedTeeth.has(fdi)}
-              activeCondition={activeCondition}
+              ghost={dimmed}
               lang={lang}
               crownSize={crownSize}
             />
@@ -59,7 +73,6 @@ export default function DentalArch({
               <Box
                 sx={{
                   width: 2,
-                  height: 'calc(100% - 4px)',
                   backgroundColor: MIDLINE_COLOR,
                   mx: 0.5,
                   borderRadius: 1,
@@ -69,9 +82,11 @@ export default function DentalArch({
             )}
           </Box>
         ))}
+
+        {trailingGhosts.map(renderGhost)}
       </Stack>
 
-      {!isUpper && (
+      {!isUpper && label && (
         <Typography
           variant="caption"
           fontWeight={600}
@@ -93,9 +108,11 @@ DentalArch.propTypes = {
   midlineAfterIndex: PropTypes.number,
   onSurfaceClick: PropTypes.func.isRequired,
   onDoubleClick: PropTypes.func.isRequired,
-  activeCondition: PropTypes.string,
   selectedTeeth: PropTypes.instanceOf(Set),
   multiSelect: PropTypes.bool,
+  dimmed: PropTypes.bool,
+  leadingGhosts: PropTypes.arrayOf(PropTypes.number),
+  trailingGhosts: PropTypes.arrayOf(PropTypes.number),
   lang: PropTypes.string,
   crownSize: PropTypes.number,
 };
@@ -104,9 +121,11 @@ DentalArch.defaultProps = {
   isUpper: true,
   label: '',
   midlineAfterIndex: 7,
-  activeCondition: null,
   selectedTeeth: new Set(),
   multiSelect: false,
+  dimmed: false,
+  leadingGhosts: [],
+  trailingGhosts: [],
   lang: 'en',
   crownSize: 44,
 };

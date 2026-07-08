@@ -8,6 +8,9 @@ import ChildCareIcon from '@mui/icons-material/ChildCare';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import PersonIcon from '@mui/icons-material/Person';
 import ClearIcon from '@mui/icons-material/Clear';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
   Box,
   Chip,
@@ -24,6 +27,8 @@ import {
 export default function ChartToolbar({
   chartType,
   onChartTypeChange,
+  jawFilter,
+  onJawFilterChange,
   canUndo,
   canRedo,
   onUndo,
@@ -37,6 +42,12 @@ export default function ChartToolbar({
   selectedCount,
   onApplyBulk,
   onClearSelection,
+  zoom,
+  onZoomIn,
+  onZoomOut,
+  onZoomReset,
+  canZoomIn,
+  canZoomOut,
   lang,
 }) {
   const isAr = lang === 'ar';
@@ -72,6 +83,26 @@ export default function ChartToolbar({
         <ToggleButton value="child" sx={{ fontSize: '0.72rem', px: 1.5, py: 0.5 }}>
           <ChildCareIcon fontSize="inherit" sx={{ mr: 0.5 }} />
           {isAr ? 'طفل' : 'Child'}
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      <Divider orientation="vertical" flexItem />
+
+      {/* Jaw view filter */}
+      <ToggleButtonGroup
+        exclusive
+        value={jawFilter}
+        onChange={(_, v) => v && onJawFilterChange(v)}
+        size="small"
+      >
+        <ToggleButton value="full" sx={{ fontSize: '0.72rem', px: 1.25, py: 0.5 }}>
+          {isAr ? 'الفم كامل' : 'Full Mouth'}
+        </ToggleButton>
+        <ToggleButton value="upper" sx={{ fontSize: '0.72rem', px: 1.25, py: 0.5 }}>
+          {isAr ? 'الفك العلوي' : 'Upper Jaw'}
+        </ToggleButton>
+        <ToggleButton value="lower" sx={{ fontSize: '0.72rem', px: 1.25, py: 0.5 }}>
+          {isAr ? 'الفك السفلي' : 'Lower Jaw'}
         </ToggleButton>
       </ToggleButtonGroup>
 
@@ -133,6 +164,36 @@ export default function ChartToolbar({
         </>
       )}
 
+      <Divider orientation="vertical" flexItem />
+
+      {/* Zoom controls */}
+      <Stack direction="row" alignItems="center" gap={0.25}>
+        <Tooltip title={isAr ? 'تصغير' : 'Zoom out'}>
+          <span>
+            <IconButton size="small" onClick={onZoomOut} disabled={!canZoomOut}>
+              <ZoomOutIcon fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Box sx={{ minWidth: 38, textAlign: 'center', fontSize: '0.72rem', color: 'text.secondary' }}>
+          {Math.round(zoom * 100)}%
+        </Box>
+        <Tooltip title={isAr ? 'تكبير' : 'Zoom in'}>
+          <span>
+            <IconButton size="small" onClick={onZoomIn} disabled={!canZoomIn}>
+              <ZoomInIcon fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Tooltip title={isAr ? 'إعادة الضبط' : 'Reset zoom'}>
+          <span>
+            <IconButton size="small" onClick={onZoomReset} disabled={zoom === 1}>
+              <RestartAltIcon fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </Stack>
+
       <Box sx={{ flex: 1 }} />
 
       {/* Status indicator */}
@@ -178,6 +239,8 @@ export default function ChartToolbar({
 ChartToolbar.propTypes = {
   chartType: PropTypes.string,
   onChartTypeChange: PropTypes.func.isRequired,
+  jawFilter: PropTypes.string,
+  onJawFilterChange: PropTypes.func.isRequired,
   canUndo: PropTypes.bool,
   canRedo: PropTypes.bool,
   onUndo: PropTypes.func.isRequired,
@@ -191,16 +254,26 @@ ChartToolbar.propTypes = {
   selectedCount: PropTypes.number,
   onApplyBulk: PropTypes.func.isRequired,
   onClearSelection: PropTypes.func.isRequired,
+  zoom: PropTypes.number,
+  onZoomIn: PropTypes.func.isRequired,
+  onZoomOut: PropTypes.func.isRequired,
+  onZoomReset: PropTypes.func.isRequired,
+  canZoomIn: PropTypes.bool,
+  canZoomOut: PropTypes.bool,
   lang: PropTypes.string,
 };
 
 ChartToolbar.defaultProps = {
   chartType: 'adult',
+  jawFilter: 'full',
   canUndo: false,
   canRedo: false,
   isDirty: false,
   isSaving: false,
   multiSelect: false,
   selectedCount: 0,
+  zoom: 1,
+  canZoomIn: true,
+  canZoomOut: true,
   lang: 'en',
 };

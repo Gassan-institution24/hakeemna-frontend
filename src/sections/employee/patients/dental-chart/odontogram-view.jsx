@@ -21,6 +21,7 @@ import {
   ADULT_LOWER,
   CHILD_UPPER,
   CHILD_LOWER,
+  getToothType,
 } from './constants/fdi';
 import useOdontogram from './hooks/use-odontogram';
 import ChartToolbar from './components/chart-toolbar';
@@ -28,24 +29,49 @@ import ConditionPalette from './components/condition-palette';
 import DentalArch from './components/dental-arch';
 import ToothModal from './components/tooth-modal';
 
+// ── Zoom configuration ───────────────────────────────────────────────────────
+const BASE_CROWN = 54; // px crown size at 100%
+const ZOOM_MIN = 0.7;
+const ZOOM_MAX = 1.8;
+const ZOOM_STEP = 0.15;
+const TOOTH_GAP = 2; // matches DentalArch GAP
+
+// Type-colored FDI numbers (incisor blue · canine red · premolar/molar green)
+const NUMBER_COLORS = { incisor: '#1E88E5', canine: '#E53935', premolar: '#2E9E5B', molar: '#2E9E5B' };
+const numberColor = (fdi) => NUMBER_COLORS[getToothType(fdi)] || 'text.disabled';
+
+// Flanking permanent-molar ghosts shown around the primary arch (like paper charts)
+const CHILD_GHOSTS = {
+  upper: { leading: [18, 17, 16], trailing: [26, 27, 28] },
+  lower: { leading: [48, 47, 46], trailing: [36, 37, 38] },
+};
+
 // ── FDI number row between the arches ────────────────────────────────────────
-function FdiRow({ teeth, midlineAfterIndex }) {
+function FdiRow({ teeth, midlineAfterIndex, cellWidth, leadingCount, trailingCount }) {
+  const spacer = (n, side) =>
+    Array.from({ length: n }).map((_, i) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <Box key={`${side}-${i}`} sx={{ width: cellWidth, flexShrink: 0 }} />
+    ));
   return (
     <Stack
       direction="row"
       justifyContent="center"
       alignItems="center"
-      sx={{ gap: '2px', px: 1, py: 0.3 }}
+      sx={{ gap: `${TOOTH_GAP}px`, px: 1, py: 0.3 }}
     >
+      {spacer(leadingCount, 'l')}
       {teeth.map((fdi, idx) => (
         <Box key={fdi} sx={{ display: 'flex', alignItems: 'center' }}>
           <Box
             sx={{
-              width: 44,
+              width: cellWidth,
               textAlign: 'center',
-              fontSize: '0.6rem',
-              color: 'text.disabled',
+              fontSize: '0.62rem',
+              fontWeight: 700,
+              color: numberColor(fdi),
               lineHeight: 1,
+              fontVariantNumeric: 'tabular-nums',
             }}
           >
             {fdi}
@@ -55,6 +81,7 @@ function FdiRow({ teeth, midlineAfterIndex }) {
           )}
         </Box>
       ))}
+      {spacer(trailingCount, 't')}
     </Stack>
   );
 }
@@ -62,6 +89,15 @@ function FdiRow({ teeth, midlineAfterIndex }) {
 FdiRow.propTypes = {
   teeth: PropTypes.arrayOf(PropTypes.number).isRequired,
   midlineAfterIndex: PropTypes.number,
+  cellWidth: PropTypes.number,
+  leadingCount: PropTypes.number,
+  trailingCount: PropTypes.number,
+};
+
+FdiRow.defaultProps = {
+  cellWidth: 44,
+  leadingCount: 0,
+  trailingCount: 0,
 };
 
 // ── Color legend ──────────────────────────────────────────────────────────────
@@ -198,6 +234,18 @@ export default function OdontogramView({
   const [snapshotOpen, setSnapshotOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
+  // ── Zoom ────────────────────────────────────────────────────────────────────
+  const [zoom, setZoom] = useState(1);
+  const crownSize = Math.round(BASE_CROWN * zoom);
+  const zoomIn = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2))), []);
+  const zoomOut = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2))), []);
+  const zoomReset = useCallback(() => setZoom(1), []);
+
+  // ── Jaw view filter: full | upper | lower ────────────────────────────────────
+  const [jawFilter, setJawFilter] = useState('full');
+  const dimUpper = jawFilter === 'lower';
+  const dimLower = jawFilter === 'upper';
+
   const showToast = useCallback((message, severity = 'success') => {
     setToast({ open: true, message, severity });
   }, []);
@@ -232,6 +280,9 @@ export default function OdontogramView({
 
   const upperTeeth = chartType === 'child' ? CHILD_UPPER : ADULT_UPPER;
   const lowerTeeth = chartType === 'child' ? CHILD_LOWER : ADULT_LOWER;
+  const midIndex = chartType === 'child' ? 4 : 7;
+  const upperGhosts = chartType === 'child' ? CHILD_GHOSTS.upper : { leading: [], trailing: [] };
+  const lowerGhosts = chartType === 'child' ? CHILD_GHOSTS.lower : { leading: [], trailing: [] };
 
   const handleChartTypeChange = useCallback(
     async (newType) => {
@@ -335,6 +386,8 @@ export default function OdontogramView({
       <ChartToolbar
         chartType={chartType}
         onChartTypeChange={handleChartTypeChange}
+        jawFilter={jawFilter}
+        onJawFilterChange={setJawFilter}
         canUndo={canUndo}
         canRedo={canRedo}
         onUndo={undo}
@@ -351,6 +404,12 @@ export default function OdontogramView({
         selectedCount={selectedTeeth.size}
         onApplyBulk={applyBulk}
         onClearSelection={clearSelection}
+        zoom={zoom}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        onZoomReset={zoomReset}
+        canZoomIn={zoom < ZOOM_MAX}
+        canZoomOut={zoom > ZOOM_MIN}
         lang={lang}
       />
 
@@ -369,12 +428,12 @@ export default function OdontogramView({
         <Box
           sx={{
             flex: 1,
-            overflowY: 'auto',
+            overflow: 'auto',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            py: 3,
+            justifyContent: 'flex-start',
+            py: 1.5,
             px: 1,
             gap: 0,
             backgroundColor: 'background.default',
@@ -394,43 +453,61 @@ export default function OdontogramView({
             teeth={upperTeeth}
             teethMap={teethMap}
             isUpper
-            midlineAfterIndex={chartType === 'child' ? 4 : 7}
+            midlineAfterIndex={midIndex}
             onSurfaceClick={handleToothClick}
             onDoubleClick={setSelectedFdi}
-            activeCondition={activeCondition}
             selectedTeeth={selectedTeeth}
             multiSelect={multiSelect}
+            dimmed={dimUpper}
+            leadingGhosts={upperGhosts.leading}
+            trailingGhosts={upperGhosts.trailing}
             lang={lang}
+            crownSize={crownSize}
           />
 
           {/* FDI numbers — upper */}
-          <FdiRow teeth={upperTeeth} midlineAfterIndex={chartType === 'child' ? 4 : 7} />
+          <FdiRow
+            teeth={upperTeeth}
+            midlineAfterIndex={midIndex}
+            cellWidth={crownSize}
+            leadingCount={upperGhosts.leading.length}
+            trailingCount={upperGhosts.trailing.length}
+          />
 
           {/* Midline divider */}
           <Box
             sx={{
-              width: '80%',
-              height: 1,
+              width: '78%',
+              height: '1px',
               backgroundColor: 'divider',
-              my: 0.5,
+              my: 1,
             }}
           />
 
           {/* FDI numbers — lower */}
-          <FdiRow teeth={lowerTeeth} midlineAfterIndex={chartType === 'child' ? 4 : 7} />
+          <FdiRow
+            teeth={lowerTeeth}
+            midlineAfterIndex={midIndex}
+            cellWidth={crownSize}
+            leadingCount={lowerGhosts.leading.length}
+            trailingCount={lowerGhosts.trailing.length}
+          />
 
           {/* Lower arch */}
           <DentalArch
             teeth={lowerTeeth}
             teethMap={teethMap}
             isUpper={false}
-            midlineAfterIndex={chartType === 'child' ? 4 : 7}
+            midlineAfterIndex={midIndex}
             onSurfaceClick={handleToothClick}
             onDoubleClick={setSelectedFdi}
-            activeCondition={activeCondition}
             selectedTeeth={selectedTeeth}
             multiSelect={multiSelect}
+            dimmed={dimLower}
+            leadingGhosts={lowerGhosts.leading}
+            trailingGhosts={lowerGhosts.trailing}
             lang={lang}
+            crownSize={crownSize}
           />
 
           {/* Lower arch label */}

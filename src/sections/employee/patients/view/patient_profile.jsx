@@ -44,7 +44,6 @@ import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
 import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 import PatientMedicalAnalyses from '../patient-profile/patient_medical_analyses';
-import PatientDentalChart from '../dental-chart/patient-dental-chart';
 
 // ----------------------------------------------------------------------
 
@@ -118,7 +117,6 @@ export default function PatientProfile() {
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analysis', label: t('medical analysis') },
     { value: 'radiology', label: t('radiology') },
-    { value: 'dental_chart', label: t('dental chart') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -208,8 +206,6 @@ export default function PatientProfile() {
         return <PatientMedicalAnalyses patient={usPatientData} />;
       case 'radiology':
         return <PatientRadiology patient={usPatientData} />;
-      case 'dental_chart':
-        return <PatientDentalChart patient={usPatientData} />;
       default:
         return null;
     }

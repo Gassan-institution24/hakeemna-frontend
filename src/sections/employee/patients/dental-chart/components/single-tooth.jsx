@@ -1,77 +1,112 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
-import { Box, Tooltip, Typography } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 
-import { getRootConfig, isUpperArch, getSurfaceLabel } from '../constants/fdi';
-import ToothCrown from './tooth-crown';
-import ToothRoot from './tooth-root';
+import { isUpperArch, getSurfaceLabel } from '../constants/fdi';
+import ToothIllustration from './tooth-illustration';
+import SurfaceWheel from './surface-wheel';
 
-const TOOTH_WIDTH = 44;
+// Grey placeholder wheel for out-of-scope / dimmed teeth.
+function GhostWheel({ size }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 44 44" style={{ display: 'block', opacity: 0.5 }} aria-hidden="true">
+      <circle cx="22" cy="22" r="20" fill="#EDEFF2" stroke="#C2C7CE" strokeWidth="1" />
+      <circle cx="22" cy="22" r="8" fill="none" stroke="#C2C7CE" strokeWidth="1" />
+      <line x1="7.5" y1="7.5" x2="16.3" y2="16.3" stroke="#C2C7CE" strokeWidth="1" />
+      <line x1="36.5" y1="7.5" x2="27.7" y2="16.3" stroke="#C2C7CE" strokeWidth="1" />
+      <line x1="7.5" y1="36.5" x2="16.3" y2="27.7" stroke="#C2C7CE" strokeWidth="1" />
+      <line x1="36.5" y1="36.5" x2="27.7" y2="27.7" stroke="#C2C7CE" strokeWidth="1" />
+    </svg>
+  );
+}
+GhostWheel.propTypes = { size: PropTypes.number.isRequired };
 
-export default function SingleTooth({
+function SingleTooth({
   fdiNumber,
   toothData,
   onSurfaceClick,
   onDoubleClick,
   isSelected,
   isHighlighted,
-  activeCondition,
+  ghost,
   lang,
   crownSize,
 }) {
   const upper = isUpperArch(fdiNumber);
-  const { count: rootCount, height: rootHeight } = getRootConfig(fdiNumber);
+  const wheelSize = Math.round(crownSize * 0.82);
   const wholeCondition = toothData?.whole_condition;
 
-  // Build tooltip: current conditions summary
   const buildTooltip = () => {
     const parts = [];
     if (wholeCondition) parts.push(wholeCondition.replace(/_/g, ' '));
     const surfaces = toothData?.surfaces || {};
     Object.entries(surfaces).forEach(([surface, data]) => {
       if (data?.condition && data.condition !== 'healthy') {
-        const surfLabel = getSurfaceLabel(surface, fdiNumber, lang);
-        parts.push(`${surfLabel}: ${data.condition.replace(/_/g, ' ')}`);
+        parts.push(`${getSurfaceLabel(surface, fdiNumber, lang)}: ${data.condition.replace(/_/g, ' ')}`);
       }
     });
     return parts.length ? parts.join(' | ') : `Tooth ${fdiNumber}`;
   };
 
+  let selectionOutline = 'none';
+  if (isSelected) selectionOutline = '2px solid #1976D2';
+  else if (isHighlighted) selectionOutline = '2px dashed #1976D2';
+
+  const illustration = (
+    <ToothIllustration
+      fdiNumber={fdiNumber}
+      toothData={toothData}
+      size={crownSize}
+      ghost={ghost}
+      onSurfaceClick={onSurfaceClick}
+    />
+  );
+  const wheel = ghost ? (
+    <GhostWheel size={wheelSize} />
+  ) : (
+    <SurfaceWheel fdiNumber={fdiNumber} toothData={toothData} onSurfaceClick={onSurfaceClick} size={wheelSize} lang={lang} />
+  );
+
+  const content = (
+    <Box
+      role="group"
+      aria-label={`Tooth ${fdiNumber}`}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '3px',
+        width: crownSize,
+        cursor: ghost ? 'default' : 'pointer',
+        userSelect: 'none',
+        borderRadius: 1,
+        outline: selectionOutline,
+        outlineOffset: 2,
+      }}
+      onDoubleClick={ghost ? undefined : () => onDoubleClick(fdiNumber)}
+    >
+      {/* Upper: tooth on top (root up), wheel toward midline below.
+          Lower: wheel toward midline on top, tooth below (root down). */}
+      {upper ? (
+        <>
+          {illustration}
+          {wheel}
+        </>
+      ) : (
+        <>
+          {wheel}
+          {illustration}
+        </>
+      )}
+    </Box>
+  );
+
+  if (ghost) return content;
+
   return (
     <Tooltip title={buildTooltip()} placement="top" arrow enterDelay={600}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: TOOTH_WIDTH,
-          cursor: 'pointer',
-          '&:hover': { filter: 'brightness(0.95)' },
-          userSelect: 'none',
-        }}
-        onDoubleClick={() => onDoubleClick(fdiNumber)}
-      >
-        {/* Upper arch: root at TOP, crown at BOTTOM */}
-        {upper && (
-          <ToothRoot rootCount={rootCount} height={rootHeight} flipUp />
-        )}
-
-        {/* Crown with 5 surfaces */}
-        <ToothCrown
-          fdiNumber={fdiNumber}
-          toothData={toothData}
-          onSurfaceClick={onSurfaceClick}
-          isSelected={isSelected}
-          isHighlighted={isHighlighted}
-          activeCondition={activeCondition}
-          size={crownSize || TOOTH_WIDTH}
-        />
-
-        {/* Lower arch: root at BOTTOM */}
-        {!upper && (
-          <ToothRoot rootCount={rootCount} height={rootHeight} flipUp={false} />
-        )}
-      </Box>
+      {content}
     </Tooltip>
   );
 }
@@ -83,7 +118,7 @@ SingleTooth.propTypes = {
   onDoubleClick: PropTypes.func.isRequired,
   isSelected: PropTypes.bool,
   isHighlighted: PropTypes.bool,
-  activeCondition: PropTypes.string,
+  ghost: PropTypes.bool,
   lang: PropTypes.string,
   crownSize: PropTypes.number,
 };
@@ -92,7 +127,9 @@ SingleTooth.defaultProps = {
   toothData: null,
   isSelected: false,
   isHighlighted: false,
-  activeCondition: null,
+  ghost: false,
   lang: 'en',
   crownSize: 44,
 };
+
+export default memo(SingleTooth);

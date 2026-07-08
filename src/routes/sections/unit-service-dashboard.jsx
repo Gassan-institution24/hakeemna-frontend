@@ -203,6 +203,10 @@ const HRPage = lazy(() => import('src/pages/unit-service/hr/home'));
 const HRSalaryPage = lazy(() => import('src/pages/unit-service/hr/salary'));
 const HREmployeeSalaryPage = lazy(() => import('src/pages/unit-service/hr/employee-salary'));
 const HREmployeePage = lazy(() => import('src/pages/unit-service/hr/employee'));
+
+// DENTAL CHART
+const DentalHomePage = lazy(() => import('src/pages/unit-service/dental/home'));
+const DentalPatientPage = lazy(() => import('src/pages/unit-service/dental/patient'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 // const PatientNewPage = lazy(() => import('src/pages/unit-service/patients/new-patient'));
 
@@ -256,6 +260,13 @@ export const unitServiceDashboardRoutes = [
           { path: 'salary', element: <HRSalaryPage /> },
           { path: 'salary/:id', element: <HREmployeeSalaryPage /> },
           { path: ':id', element: <HREmployeePage /> },
+        ],
+      },
+      {
+        path: 'dental',
+        children: [
+          { element: <DentalHomePage />, index: true },
+          { path: ':id', element: <DentalPatientPage /> },
         ],
       },
       {

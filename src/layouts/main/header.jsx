@@ -6,13 +6,16 @@ import {
   Box,
   Fade,
   Link,
-  Menu,
+  Paper,
   Stack,
   Button,
   AppBar,
+  Popper,
   MenuItem,
+  MenuList,
   Toolbar,
   Typography,
+  ClickAwayListener,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -69,8 +72,7 @@ export default function Header() {
   const curLangAr = currentLang.value === 'ar';
 
   const [scrolled, setScrolled] = useState(false);
-  const [signupAnchor, setSignupAnchor] = useState(null);
-  const signupOpen = Boolean(signupAnchor);
+  const [signupOpen, setSignupOpen] = useState(false);
   const signupRef = useRef(null);
   const closeTimer = useRef(null);
 
@@ -83,18 +85,29 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  // Clear any pending close timer on unmount.
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  // Open immediately on hover/focus; close after a short grace period so the
+  // pointer can travel across the gap from the button into the menu.
   const handleSignupEnter = useCallback(() => {
     clearTimeout(closeTimer.current);
-    setSignupAnchor(signupRef.current);
+    setSignupOpen(true);
   }, []);
 
   const handleSignupLeave = useCallback(() => {
-    closeTimer.current = setTimeout(() => setSignupAnchor(null), 120);
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setSignupOpen(false), 160);
   }, []);
 
   const handleSignupClose = useCallback(() => {
     clearTimeout(closeTimer.current);
-    setSignupAnchor(null);
+    setSignupOpen(false);
+  }, []);
+
+  const handleSignupToggle = useCallback(() => {
+    clearTimeout(closeTimer.current);
+    setSignupOpen((prev) => !prev);
   }, []);
 
   const handleLangToggle = useCallback(() => {
@@ -324,7 +337,7 @@ export default function Header() {
                     aria-controls={signupOpen ? 'signup-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={signupOpen}
-                    onClick={handleSignupEnter}
+                    onClick={handleSignupToggle}
                     endIcon={
                       <ExpandMore
                         sx={{
@@ -357,71 +370,76 @@ export default function Header() {
                   </Button>
                 </m.div>
 
-                <Menu
+                <Popper
                   id="signup-menu"
-                  anchorEl={signupAnchor}
                   open={signupOpen}
-                  onClose={handleSignupClose}
-                  TransitionComponent={Fade}
-                  MenuListProps={{
-                    onMouseEnter: handleSignupEnter,
-                    onMouseLeave: handleSignupLeave,
-                    disablePadding: true,
-                  }}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      mt: 1,
-                      minWidth: 224,
-                      borderRadius: '14px',
-                      border: '1px solid rgba(0,0,0,0.07)',
-                      boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
-                      overflow: 'hidden',
-                      py: 0.75,
-                    },
-                  }}
-                  transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+                  anchorEl={signupRef.current}
+                  placement="bottom"
+                  transition
+                  onMouseEnter={handleSignupEnter}
+                  onMouseLeave={handleSignupLeave}
+                  modifiers={[{ name: 'offset', options: { offset: [0, 8] } }]}
+                  sx={{ zIndex: 1300 }}
                 >
-                  {[
-                    {
-                      label: t('join as user'),
-                      href: paths.auth.register,
-                      icon: 'ph:user-circle',
-                    },
-                    {
-                      label: t('join as unit of service'),
-                      href: paths.auth.registersu,
-                      icon: 'la:hospital-solid',
-                    },
-                    {
-                      label: t('join as supplier'),
-                      href: paths.auth.stakeholderRegister,
-                      icon: 'mdi:truck-delivery-outline',
-                    },
-                  ].map(({ label, href, icon }) => (
-                    <MenuItem
-                      key={href}
-                      onClick={handleSignupClose}
-                      component={RouterLink}
-                      href={href}
-                      sx={{
-                        px: 2,
-                        py: 1.25,
-                        gap: 1.5,
-                        fontSize: 14,
-                        fontWeight: 500,
-                        color: '#374151',
-                        textDecoration: 'none',
-                        transition: 'background 0.15s',
-                        '&:hover': { bgcolor: 'rgba(60,176,153,0.07)', color: '#3CB099' },
-                      }}
-                    >
-                      <Iconify icon={icon} width={18} sx={{ color: '#3CB099', flexShrink: 0 }} />
-                      {label}
-                    </MenuItem>
-                  ))}
-                </Menu>
+                  {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={180}>
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          minWidth: 224,
+                          borderRadius: '14px',
+                          border: '1px solid rgba(0,0,0,0.07)',
+                          boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
+                          overflow: 'hidden',
+                          py: 0.75,
+                        }}
+                      >
+                        <ClickAwayListener onClickAway={handleSignupClose}>
+                          <MenuList autoFocusItem={false} disablePadding>
+                            {[
+                              {
+                                label: t('join as user'),
+                                href: paths.auth.register,
+                                icon: 'ph:user-circle',
+                              },
+                              {
+                                label: t('join as unit of service'),
+                                href: paths.auth.registersu,
+                                icon: 'la:hospital-solid',
+                              },
+                              {
+                                label: t('join as supplier'),
+                                href: paths.auth.stakeholderRegister,
+                                icon: 'mdi:truck-delivery-outline',
+                              },
+                            ].map(({ label, href, icon }) => (
+                              <MenuItem
+                                key={href}
+                                onClick={handleSignupClose}
+                                component={RouterLink}
+                                href={href}
+                                sx={{
+                                  px: 2,
+                                  py: 1.25,
+                                  gap: 1.5,
+                                  fontSize: 14,
+                                  fontWeight: 500,
+                                  color: '#374151',
+                                  textDecoration: 'none',
+                                  transition: 'background 0.15s',
+                                  '&:hover': { bgcolor: 'rgba(60,176,153,0.07)', color: '#3CB099' },
+                                }}
+                              >
+                                <Iconify icon={icon} width={18} sx={{ color: '#3CB099', flexShrink: 0 }} />
+                                {label}
+                              </MenuItem>
+                            ))}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Fade>
+                  )}
+                </Popper>
               </Box>
 
               {/* Login — ghost */}

@@ -42,6 +42,7 @@ const FEATURE_OPTIONS = [
   { value: 'quality_control', label: 'Quality Control' },
   { value: 'permissions', label: 'Permissions' },
   { value: 'blogs', label: 'Blogs' },
+  { value: 'dental_chart', label: 'Dental Chart' },
 ];
 
 // ----------------------------------------------------------------------

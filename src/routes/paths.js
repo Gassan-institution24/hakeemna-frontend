@@ -648,6 +648,10 @@ export const paths = {
       employeeSalary: (id) => `${ROOTS.SUPERADMIN}/us/hr/salary/${id}`,
       employee: (id) => `${ROOTS.SUPERADMIN}/us/hr/${id}`,
     },
+    dental: {
+      root: `${ROOTS.SUPERADMIN}/us/dental`,
+      patient: (id) => `${ROOTS.SUPERADMIN}/us/dental/${id}`,
+    },
     acl: {
       root: `${ROOTS.SUPERADMIN}/us/acl`,
       unitservice: `${ROOTS.SUPERADMIN}/us/acl/unitservice`,
