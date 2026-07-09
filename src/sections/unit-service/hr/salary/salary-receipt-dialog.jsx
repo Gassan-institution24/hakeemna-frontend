@@ -28,7 +28,7 @@ import { generatePdfFromElement } from 'src/components/pdf/generate-pdf';
 
 // ----------------------------------------------------------------------
 
-const BRAND = '#2a5d71';
+const BRAND = '#357F9C';
 
 // Inline "HH : MM" string so the value stays on the same line as its label.
 // (fHourMin returns a block <Typography>, which would drop the value to a new line.)
@@ -172,7 +172,7 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
                   startIcon={<Iconify icon="solar:pen-new-square-bold" />}
                   onClick={() => setSignOpen(true)}
                 >
-                  {t('Confirm receipt')}
+                  {confirmed ? t('confirmed') : t('Confirm receipt')}
                 </Button>
               )}
               <Button
