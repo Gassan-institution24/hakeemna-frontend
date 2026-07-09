@@ -4,22 +4,26 @@ import {
   Box,
   Chip,
   Stack,
-  Divider,
-  Tooltip,
+  Button,
+  TextField,
   Typography,
-  ToggleButton,
-  ToggleButtonGroup,
+  Autocomplete,
 } from '@mui/material';
 
-import { CONDITIONS, CONDITION_GROUPS } from '../constants/conditions';
+import {
+  DIAGNOSES,
+  PROCEDURES,
+  getCondition,
+  CONDITION_GROUPS,
+} from '../constants/conditions';
 
 // ── Small color swatch ────────────────────────────────────────────────────────
-function Swatch({ color, stroke }) {
+function Swatch({ color, stroke, size = 14 }) {
   return (
     <Box
       sx={{
-        width: 14,
-        height: 14,
+        width: size,
+        height: size,
         borderRadius: 0.5,
         backgroundColor: color,
         border: `1.5px solid ${stroke}`,
@@ -28,91 +32,72 @@ function Swatch({ color, stroke }) {
     />
   );
 }
-Swatch.propTypes = { color: PropTypes.string, stroke: PropTypes.string };
+Swatch.propTypes = { color: PropTypes.string, stroke: PropTypes.string, size: PropTypes.number };
 
-// ── Single condition button ───────────────────────────────────────────────────
-function ConditionButton({ condition, isActive, onClick, lang }) {
-  const label = lang === 'ar' ? condition.labelAr : condition.label;
-
-  return (
-    <Tooltip title={label} placement="right" arrow>
-      <Box
-        onClick={() => onClick(isActive ? null : condition.id)}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          px: 1.2,
-          py: 0.65,
-          borderRadius: 1.5,
-          cursor: 'pointer',
-          backgroundColor: isActive ? `${condition.color}88` : 'transparent',
-          border: isActive ? `2px solid ${condition.stroke}` : '2px solid transparent',
-          transition: 'all 0.15s ease',
-          '&:hover': {
-            backgroundColor: `${condition.color}55`,
-          },
-        }}
-      >
-        <Swatch color={condition.color} stroke={condition.stroke} />
-        <Typography
-          variant="caption"
-          fontWeight={isActive ? 700 : 400}
-          noWrap
-          sx={{ fontSize: '0.72rem', lineHeight: 1.3 }}
-        >
-          {label}
-        </Typography>
-      </Box>
-    </Tooltip>
-  );
-}
-
-ConditionButton.propTypes = {
-  condition: PropTypes.object.isRequired,
-  isActive: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  lang: PropTypes.string,
+const labelOf = (opt, lang) => (lang === 'ar' ? opt.labelAr : opt.label);
+const groupLabel = (id, lang) => {
+  const g = CONDITION_GROUPS.find((x) => x.id === id);
+  if (!g) return id;
+  return lang === 'ar' ? g.labelAr : g.label;
 };
 
-// ── Status selector (existing / planned) ─────────────────────────────────────
-function StatusSelector({ value, onChange, lang }) {
-  const isAr = lang === 'ar';
+// A searchable condition picker shared by both dropdowns.
+function ConditionSelect({ label, options, grouped, value, onChange, lang }) {
   return (
-    <Box sx={{ px: 1, py: 0.5 }}>
-      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
-        {isAr ? 'نوع العلاج' : 'Treatment Status'}
-      </Typography>
-      <ToggleButtonGroup
-        exclusive
-        value={value}
-        onChange={(_, v) => v && onChange(v)}
-        size="small"
-        fullWidth
-        sx={{ '& .MuiToggleButton-root': { fontSize: '0.68rem', py: 0.5 } }}
-      >
-        <ToggleButton value="existing">{isAr ? 'حالي' : 'Existing'}</ToggleButton>
-        <ToggleButton value="planned">{isAr ? 'مخطط' : 'Planned'}</ToggleButton>
-        <ToggleButton value="watch">{isAr ? 'مراقبة' : 'Watch'}</ToggleButton>
-      </ToggleButtonGroup>
-    </Box>
+    <Autocomplete
+      size="small"
+      options={options}
+      value={value}
+      onChange={(_, v) => onChange(v ? v.id : null)}
+      getOptionLabel={(o) => labelOf(o, lang)}
+      isOptionEqualToValue={(o, v) => o.id === v.id}
+      groupBy={grouped ? (o) => groupLabel(o.group, lang) : undefined}
+      renderOption={(props, option) => (
+        <Box component="li" {...props} key={option.id} sx={{ gap: 1 }}>
+          <Swatch color={option.color} stroke={option.stroke} size={13} />
+          <span style={{ fontSize: '0.8rem' }}>{labelOf(option, lang)}</span>
+        </Box>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          placeholder={lang === 'ar' ? 'بحث…' : 'Search…'}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: value ? (
+              <Box sx={{ pl: 0.5, display: 'flex' }}>
+                <Swatch color={value.color} stroke={value.stroke} size={13} />
+              </Box>
+            ) : null,
+          }}
+        />
+      )}
+    />
   );
 }
 
-StatusSelector.propTypes = {
-  value: PropTypes.string,
+ConditionSelect.propTypes = {
+  label: PropTypes.string,
+  options: PropTypes.array,
+  grouped: PropTypes.bool,
+  value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   lang: PropTypes.string,
 };
 
 // ── Main palette ──────────────────────────────────────────────────────────────
-export default function ConditionPalette({ activeCondition, activeStatus, onSelect, onStatusChange, lang }) {
+export default function ConditionPalette({ activeCondition, onSelect, lang }) {
   const isAr = lang === 'ar';
+  const active = activeCondition ? getCondition(activeCondition) : null;
+  const dxValue = DIAGNOSES.find((d) => d.id === activeCondition) || null;
+  const procValue = PROCEDURES.find((p) => p.id === activeCondition) || null;
+  const isEraser = activeCondition === 'healthy';
 
   return (
     <Box
       sx={{
-        width: 175,
+        width: 230,
         flexShrink: 0,
         borderRight: '1px solid',
         borderColor: 'divider',
@@ -121,70 +106,71 @@ export default function ConditionPalette({ activeCondition, activeStatus, onSele
         backgroundColor: 'background.paper',
         display: 'flex',
         flexDirection: 'column',
-        pb: 2,
+        gap: 1.5,
+        p: 1.5,
       }}
     >
-      <Box sx={{ px: 1.5, py: 1.2, borderBottom: '1px solid', borderColor: 'divider' }}>
+      <Box>
         <Typography variant="subtitle2" fontWeight={700} fontSize="0.8rem">
-          {isAr ? 'الحالات السريرية' : 'Conditions'}
+          {isAr ? 'التشخيص والإجراءات' : 'Diagnosis & Procedures'}
         </Typography>
         <Typography variant="caption" color="text.secondary" fontSize="0.68rem">
-          {isAr ? 'اضغط لتطبيق على السن' : 'Click to apply to tooth'}
+          {isAr ? 'اختر ثم اضغط على السن' : 'Pick one, then click a tooth'}
         </Typography>
       </Box>
 
-      {/* Status selector */}
-      {/* <StatusSelector value={activeStatus} onChange={onStatusChange} lang={lang} /> */}
+      <ConditionSelect
+        label={isAr ? 'التشخيص' : 'Diagnosis'}
+        options={DIAGNOSES}
+        value={dxValue}
+        onChange={onSelect}
+        lang={lang}
+      />
 
-      {/* <Divider sx={{ mx: 1, my: 0.5 }} /> */}
+      <ConditionSelect
+        label={isAr ? 'الإجراء / التعويض' : 'Procedure / Restoration'}
+        options={PROCEDURES}
+        grouped
+        value={procValue}
+        onChange={onSelect}
+        lang={lang}
+      />
 
-      {/* Conditions by group */}
-      {CONDITION_GROUPS.map((group) => {
-        const groupConditions = CONDITIONS.filter((c) => c.group === group.id);
-        return (
-          <Box key={group.id}>
-            <Typography
-              variant="caption"
-              fontWeight={700}
-              color="text.secondary"
-              sx={{
-                display: 'block',
-                px: 1.5,
-                pt: 1,
-                pb: 0.3,
-                fontSize: '0.65rem',
-                textTransform: 'uppercase',
-                letterSpacing: 0.8,
-              }}
-            >
-              {isAr ? group.labelAr : group.label}
-            </Typography>
-            {groupConditions.map((cond) => (
-              <ConditionButton
-                key={cond.id}
-                condition={cond}
-                isActive={activeCondition === cond.id}
-                onClick={onSelect}
-                lang={lang}
-              />
-            ))}
-          </Box>
-        );
-      })}
+      <Button
+        size="small"
+        variant={isEraser ? 'contained' : 'outlined'}
+        color="inherit"
+        onClick={() => onSelect(isEraser ? null : 'healthy')}
+      >
+        {isAr ? 'مسح / محو' : 'Clear / Erase'}
+      </Button>
+
+      {/* Active paint indicator */}
+      {active && (
+        <Stack direction="row" alignItems="center" gap={1} sx={{ mt: 0.5 }}>
+          <Typography variant="caption" color="text.secondary">
+            {isAr ? 'نشط:' : 'Active:'}
+          </Typography>
+          <Chip
+            size="small"
+            icon={<Box sx={{ ml: 0.75 }}><Swatch color={active.color} stroke={active.stroke} size={12} /></Box>}
+            label={labelOf(active, lang)}
+            onDelete={() => onSelect(null)}
+            sx={{ fontSize: '0.7rem' }}
+          />
+        </Stack>
+      )}
     </Box>
   );
 }
 
 ConditionPalette.propTypes = {
   activeCondition: PropTypes.string,
-  activeStatus: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  onStatusChange: PropTypes.func.isRequired,
   lang: PropTypes.string,
 };
 
 ConditionPalette.defaultProps = {
   activeCondition: null,
-  activeStatus: 'existing',
   lang: 'en',
 };

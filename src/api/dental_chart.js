@@ -89,6 +89,18 @@ export async function restoreSnapshot(patientId, snapshotId) {
   return res.data;
 }
 
+export async function createBridge(patientId, payload) {
+  const res = await axiosInstance.post(endpoints.dentalChart.bridge(patientId), payload);
+  await invalidate(patientId);
+  return res.data;
+}
+
+export async function deleteBridge(patientId, bridgeId) {
+  const res = await axiosInstance.delete(endpoints.dentalChart.deleteBridge(patientId, bridgeId));
+  await invalidate(patientId);
+  return res.data;
+}
+
 export async function switchChartType(patientId, chartType) {
   const res = await axiosInstance.patch(endpoints.dentalChart.chartType(patientId), {
     chart_type: chartType,

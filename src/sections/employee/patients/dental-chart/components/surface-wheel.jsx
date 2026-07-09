@@ -49,11 +49,13 @@ const ZONES = {
 const ZONE_KEYS = ['buccal', 'mesial', 'lingual', 'distal', 'occlusal'];
 
 function zoneFill(toothData, key) {
-  const whole = toothData?.whole_condition;
-  // A whole-tooth restoration greys the wheel out (charting happens on the tooth).
-  if (whole) return NEUTRAL;
-  const cond = toothData?.surfaces?.[key]?.condition;
-  return cond ? getConditionColor(cond) : NEUTRAL;
+  // A whole-tooth restoration or diagnosis greys the wheel out (charting
+  // happens on the tooth itself in that case).
+  if (toothData?.whole_condition || toothData?.whole_diagnosis) return NEUTRAL;
+  const surf = toothData?.surfaces?.[key];
+  // Restoration colour takes precedence; otherwise show the diagnosis colour.
+  const id = surf?.condition || surf?.diagnosis;
+  return id ? getConditionColor(id) : NEUTRAL;
 }
 
 /**
@@ -65,11 +67,11 @@ function SurfaceWheel({ fdiNumber, toothData, onSurfaceClick, size, lang }) {
 
   // Treatment status ring.
   const wholeStatus = toothData?.whole_status;
-  const statuses = Object.values(toothData?.surfaces || {})
-    .filter((s) => s?.condition)
-    .map((s) => s?.status);
+  const surfaceVals = Object.values(toothData?.surfaces || {}).filter((s) => s?.condition || s?.diagnosis);
+  const statuses = surfaceVals.map((s) => s?.status);
+  const hasWatchDx = surfaceVals.some((s) => s?.diagnosis === 'watch');
   const hasPlanned = wholeStatus === 'planned' || statuses.includes('planned');
-  const hasWatch = !hasPlanned && (wholeStatus === 'watch' || statuses.includes('watch'));
+  const hasWatch = !hasPlanned && (wholeStatus === 'watch' || statuses.includes('watch') || hasWatchDx);
 
   return (
     <svg

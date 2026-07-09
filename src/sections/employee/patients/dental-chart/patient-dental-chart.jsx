@@ -16,6 +16,8 @@ import {
   deleteProcedure,
   saveSnapshot,
   switchChartType,
+  createBridge,
+  deleteBridge,
 } from '../../../../api/dental_chart';
 import OdontogramView from './odontogram-view';
 
@@ -33,6 +35,7 @@ export default function PatientDentalChart({ patient }) {
   const formatToothPayloadDescription = useCallback((payload) => {
     const segments = [];
 
+    if (payload.whole_diagnosis) segments.push(`diagnosis ${payload.whole_diagnosis}`);
     if (payload.whole_condition) segments.push(`condition ${payload.whole_condition}`);
     if (payload.whole_status) segments.push(`status ${payload.whole_status}`);
     if (payload.treatment_plan) segments.push(`treatment plan "${payload.treatment_plan}"`);
@@ -104,6 +107,7 @@ export default function PatientDentalChart({ patient }) {
       if (!patientId) return;
       const updates = Object.values(teethMap).map((tooth) => ({
         fdi_number: tooth.fdi_number,
+        whole_diagnosis: tooth.whole_diagnosis || null,
         whole_condition: tooth.whole_condition || null,
         whole_status: tooth.whole_status || null,
         surfaces: tooth.surfaces || {},
@@ -174,6 +178,24 @@ export default function PatientDentalChart({ patient }) {
     [patientId, createPatientFileRecord]
   );
 
+  const handleCreateBridge = useCallback(
+    async (teeth) => {
+      if (!patientId) return;
+      await createBridge(patientId, { teeth });
+      await createPatientFileRecord(`Created fixed bridge across teeth ${teeth.join('–')}.`);
+    },
+    [patientId, createPatientFileRecord]
+  );
+
+  const handleDeleteBridge = useCallback(
+    async (bridgeId) => {
+      if (!patientId) return;
+      await deleteBridge(patientId, bridgeId);
+      await createPatientFileRecord(`Removed fixed bridge ${bridgeId}.`);
+    },
+    [patientId, createPatientFileRecord]
+  );
+
   if (!patientId) {
     return <Alert severity="warning">Patient ID not found</Alert>;
   }
@@ -201,6 +223,8 @@ export default function PatientDentalChart({ patient }) {
       onDeleteProcedure={handleDeleteProcedure}
       onSnapshot={handleSnapshot}
       onChartTypeChange={handleChartTypeChange}
+      onCreateBridge={handleCreateBridge}
+      onDeleteBridge={handleDeleteBridge}
     />
   );
 }

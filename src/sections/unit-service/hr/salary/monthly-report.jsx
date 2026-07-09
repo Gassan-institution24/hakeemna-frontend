@@ -60,6 +60,9 @@ export default function MonthlyReportsView({ employee, employeeView }) {
     { id: 'other', label: t('other days off') },
     { id: 'salary', label: t('salary') },
     { id: 'total', label: t('total') },
+    ...(!employeeView
+      ? [{ id: 'availableForViewAndSignature', label: t('Available for view and signature') }]
+      : []),
     { id: '', width: 88 },
   ].filter(Boolean);
 
@@ -109,11 +112,17 @@ export default function MonthlyReportsView({ employee, employeeView }) {
     startDate: filters?.startDate,
     endDate: filters?.endDate,
     reported: filters?.reported,
+    // Employees only receive the reports HR has released for viewing.
+    availableForViewAndSignature: employeeView || undefined,
   });
 
+  // Client-side safety net: never render an unreleased report in the employee view.
+  const visibleReports = employeeView
+    ? (reportsData || []).filter((r) => r.availableForViewAndSignature)
+    : reportsData;
 
   const dataFiltered = applyFilter({
-    inputData: reportsData,
+    inputData: visibleReports,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });

@@ -6,6 +6,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import CameraIcon from '@mui/icons-material/PhotoCamera';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
+import LinkIcon from '@mui/icons-material/Link';
 import PersonIcon from '@mui/icons-material/Person';
 import ClearIcon from '@mui/icons-material/Clear';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
@@ -42,6 +43,7 @@ export default function ChartToolbar({
   selectedCount,
   onApplyBulk,
   onClearSelection,
+  onCreateBridge,
   zoom,
   onZoomIn,
   onZoomOut,
@@ -156,6 +158,20 @@ export default function ChartToolbar({
           >
             {isAr ? 'تطبيق' : 'Apply'}
           </Button>
+          {selectedCount >= 2 && onCreateBridge && (
+            <Tooltip title={isAr ? 'ربط الأسنان بجسر ثابت' : 'Connect teeth into a fixed bridge'}>
+              <Button
+                size="small"
+                variant="outlined"
+                color="warning"
+                startIcon={<LinkIcon fontSize="small" />}
+                onClick={onCreateBridge}
+                sx={{ fontSize: '0.72rem', py: 0.5 }}
+              >
+                {isAr ? 'إنشاء جسر' : 'Create Bridge'}
+              </Button>
+            </Tooltip>
+          )}
           <Tooltip title={isAr ? 'إلغاء التحديد' : 'Clear selection'}>
             <IconButton size="small" onClick={onClearSelection}>
               <ClearIcon fontSize="small" />
@@ -254,6 +270,7 @@ ChartToolbar.propTypes = {
   selectedCount: PropTypes.number,
   onApplyBulk: PropTypes.func.isRequired,
   onClearSelection: PropTypes.func.isRequired,
+  onCreateBridge: PropTypes.func,
   zoom: PropTypes.number,
   onZoomIn: PropTypes.func.isRequired,
   onZoomOut: PropTypes.func.isRequired,

@@ -475,6 +475,9 @@ export const endpoints = {
       !patientId ? null : `/api/dental-chart/${patientId}/restore/${snapshotId}`,
     chartType: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/chart-type`),
     export: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/export`),
+    bridge: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/bridge`),
+    deleteBridge: (patientId, bridgeId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/bridge/${bridgeId}`,
   },
   history: {
     all: '/api/history',

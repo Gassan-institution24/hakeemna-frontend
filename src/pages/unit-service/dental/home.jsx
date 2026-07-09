@@ -19,7 +19,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useGetUSPatients } from 'src/api';
 import { useDebounce } from 'src/hooks/use-debounce';
-import { useLocales, useTranslate } from 'src/locales';
+import {  useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -36,8 +36,6 @@ import {
 
 export default function DentalHomePage() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const router = useRouter();
   const { user } = useAuthContext();
 
@@ -133,10 +131,10 @@ export default function DentalHomePage() {
                       sx={{ cursor: 'pointer' }}
                       onClick={() => openChart(row._id)}
                     >
-                      <TableCell>{row.name_english || row.patient?.name_english}</TableCell>
-                      <TableCell>{row.name_arabic || row.patient?.name_arabic}</TableCell>
-                      <TableCell>{row.file_code}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">{row.name_english || row.patient?.name_english}</TableCell>
+                      <TableCell align="center">{row.name_arabic || row.patient?.name_arabic}</TableCell>
+                      <TableCell align="center">{row.file_code}</TableCell>
+                      <TableCell align="center">
                         <Iconify
                           icon="mdi:tooth-outline"
                           sx={{ color: 'primary.main' }}

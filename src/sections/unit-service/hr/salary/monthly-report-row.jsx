@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 
+import { useSnackbar } from 'notistack';
+
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
@@ -13,6 +16,7 @@ import { fDate, fHourMin } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { setReportAvailability } from 'src/api/monthly_reports';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -55,10 +59,12 @@ export default function MonthlyReportRow({
     salary,
     total,
     reported,
+    availableForViewAndSignature,
   } = row;
 
   const { t } = useTranslate();
   const  checkAcl  = useAclGuard();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -68,6 +74,22 @@ export default function MonthlyReportRow({
   const deleting = useBoolean();
   const show = useBoolean();
   const receipt = useBoolean();
+  const savingAvailability = useBoolean();
+
+  const canUpdate = checkAcl('hr:update');
+
+  const handleToggleAvailability = async (event) => {
+    const next = event.target.checked;
+    savingAvailability.onTrue();
+    try {
+      await setReportAvailability(row._id, next);
+      await refetch?.();
+    } catch (error) {
+      enqueueSnackbar(error?.message || t('Something went wrong'), { variant: 'error' });
+    } finally {
+      savingAvailability.onFalse();
+    }
+  };
 
   const getRowColor = () => {
     if (selectedReported !== null) return 'black';
@@ -111,6 +133,17 @@ export default function MonthlyReportRow({
       <TableCell align="center">{other}</TableCell>
       <TableCell align="center">{salary}</TableCell>
       <TableCell align="center">{total}</TableCell>
+
+      {!employeeView && (
+        <TableCell align="center">
+          <Checkbox
+            checked={!!availableForViewAndSignature}
+            disabled={!canUpdate || savingAvailability.value}
+            onChange={handleToggleAvailability}
+            inputProps={{ 'aria-label': t('Available for view and signature') }}
+          />
+        </TableCell>
+      )}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

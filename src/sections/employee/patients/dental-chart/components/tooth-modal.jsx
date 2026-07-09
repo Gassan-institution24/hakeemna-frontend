@@ -35,8 +35,18 @@ import {
 
 import { fDate } from 'src/utils/format-time';
 
-import { CONDITIONS, getConditionColor, getConditionStroke } from '../constants/conditions';
+import {
+  CONDITIONS,
+  getConditionColor,
+  getConditionStroke,
+  getConditionsByKind,
+} from '../constants/conditions';
 import { getSurfaceLabel } from '../constants/fdi';
+
+const TOOTH_DIAGNOSES = getConditionsByKind('diagnosis', { toothLevel: true });
+const TOOTH_PROCEDURES = getConditionsByKind('procedure', { toothLevel: true });
+const SURFACE_DIAGNOSES = getConditionsByKind('diagnosis', { toothLevel: false });
+const SURFACE_PROCEDURES = getConditionsByKind('procedure', { toothLevel: false });
 
 const SURFACES = ['occlusal', 'mesial', 'distal', 'buccal', 'lingual'];
 const PROC_STATUSES = ['planned', 'in_progress', 'completed', 'cancelled'];
@@ -69,16 +79,19 @@ export default function ToothModal({
   toothData,
   patientId,
   lang,
+  bridge,
   onClose,
   onSaveTooth,
   onAddProcedure,
   onDeleteProcedure,
   onUpdateProcedure,
+  onRemoveBridge,
 }) {
   const isAr = lang === 'ar';
   const [tab, setTab] = useState('info');
 
   // ── Info tab state ────────────────────────────────────────────────────────
+  const [wholeDiagnosis, setWholeDiagnosis] = useState('');
   const [wholeCondition, setWholeCondition] = useState('');
   const [wholeStatus, setWholeStatus] = useState('existing');
   const [notes, setNotes] = useState('');
@@ -108,6 +121,7 @@ export default function ToothModal({
   // auto-save SWR revalidation from resetting the user's unsaved edits.
   useEffect(() => {
     if (toothData) {
+      setWholeDiagnosis(toothData.whole_diagnosis || '');
       setWholeCondition(toothData.whole_condition || '');
       setWholeStatus(toothData.whole_status || 'existing');
       setNotes(toothData.notes || '');
@@ -119,6 +133,7 @@ export default function ToothModal({
       const edits = {};
       SURFACES.forEach((s) => {
         edits[s] = {
+          diagnosis: toothData.surfaces?.[s]?.diagnosis || '',
           condition: toothData.surfaces?.[s]?.condition || '',
           status: toothData.surfaces?.[s]?.status || 'existing',
         };
@@ -139,6 +154,7 @@ export default function ToothModal({
     setInfoSuccess(false);
     try {
       const payload = {
+        whole_diagnosis: wholeDiagnosis || null,
         whole_condition: wholeCondition || null,
         whole_status: wholeStatus,
         notes,
@@ -208,6 +224,13 @@ export default function ToothModal({
 
   if (!fdiNumber) return null;
 
+  // Bridge member role label (avoids a nested ternary inside the JSX).
+  let bridgeRoleText = '';
+  if (bridge) {
+    if (bridge.pontics?.includes(fdiNumber)) bridgeRoleText = isAr ? ' · حامل' : ' · pontic';
+    else bridgeRoleText = isAr ? ' · دعامة' : ' · abutment';
+  }
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
@@ -274,21 +297,72 @@ export default function ToothModal({
           {/* ── Info & Surfaces tab ─── */}
           <TabPanel value="info" sx={{ p: 0 }}>
             <Grid container spacing={2}>
-              {/* Whole-tooth condition */}
+              {/* Bridge banner */}
+              {bridge && (
+                <Grid item xs={12}>
+                  <Alert
+                    severity="info"
+                    icon={false}
+                    action={
+                      onRemoveBridge && (
+                        <Button color="error" size="small" onClick={() => onRemoveBridge(bridge._id)}>
+                          {isAr ? 'إزالة الجسر' : 'Remove bridge'}
+                        </Button>
+                      )
+                    }
+                    sx={{ py: 0.25 }}
+                  >
+                    <Typography variant="caption" fontWeight={600}>
+                      {isAr ? 'جزء من جسر ثابت' : 'Part of a fixed bridge'}
+                    </Typography>{' '}
+                    <Typography variant="caption" color="text.secondary">
+                      ({bridge.teeth?.join('–')}{bridgeRoleText})
+                    </Typography>
+                  </Alert>
+                </Grid>
+              )}
+
+              {/* Whole-tooth diagnosis */}
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth size="small">
                   <InputLabel sx={{ fontSize: '0.8rem' }}>
-                    {isAr ? 'حالة السن الكاملة' : 'Whole-tooth Condition'}
+                    {isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
+                  </InputLabel>
+                  <Select
+                    value={wholeDiagnosis}
+                    label={isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
+                    onChange={(e) => setWholeDiagnosis(e.target.value)}
+                  >
+                    <MenuItem value="">
+                      <em>{isAr ? 'لا شيء' : 'None'}</em>
+                    </MenuItem>
+                    {TOOTH_DIAGNOSES.map((c) => (
+                      <MenuItem key={c.id} value={c.id}>
+                        <Stack direction="row" alignItems="center" gap={1}>
+                          <ColorSwatch color={c.color} stroke={c.stroke} />
+                          <span>{isAr ? c.labelAr : c.label}</span>
+                        </Stack>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Whole-tooth procedure / restoration */}
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth size="small">
+                  <InputLabel sx={{ fontSize: '0.8rem' }}>
+                    {isAr ? 'إجراء / تعويض السن' : 'Tooth Procedure / Restoration'}
                   </InputLabel>
                   <Select
                     value={wholeCondition}
-                    label={isAr ? 'حالة السن الكاملة' : 'Whole-tooth Condition'}
+                    label={isAr ? 'إجراء / تعويض السن' : 'Tooth Procedure / Restoration'}
                     onChange={(e) => setWholeCondition(e.target.value)}
                   >
                     <MenuItem value="">
                       <em>{isAr ? 'لا شيء' : 'None'}</em>
                     </MenuItem>
-                    {CONDITIONS.filter((c) => c.toothLevel).map((c) => (
+                    {TOOTH_PROCEDURES.map((c) => (
                       <MenuItem key={c.id} value={c.id}>
                         <Stack direction="row" alignItems="center" gap={1}>
                           <ColorSwatch color={c.color} stroke={c.stroke} />
@@ -361,34 +435,59 @@ export default function ToothModal({
                     const surfLabel = getSurfaceLabel(surf, fdiNumber, lang);
                     const edit = surfaceEdits[surf] || {};
                     return (
-                      <Grid item xs={6} sm={4} key={surf}>
+                      <Grid item xs={12} sm={6} md={4} key={surf}>
                         <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 1 }}>
                           <Typography variant="caption" fontWeight={600} color="text.secondary" display="block" mb={0.5}>
                             {surfLabel}
                           </Typography>
-                          <FormControl fullWidth size="small">
-                            <Select
-                              value={edit.condition || ''}
-                              displayEmpty
-                              onChange={(e) =>
-                                setSurfaceEdits((prev) => ({
-                                  ...prev,
-                                  [surf]: { ...prev[surf], condition: e.target.value },
-                                }))
-                              }
-                              sx={{ fontSize: '0.75rem' }}
-                            >
-                              <MenuItem value=""><em>{isAr ? 'سليم' : 'Healthy'}</em></MenuItem>
-                              {CONDITIONS.filter((c) => !c.toothLevel).map((c) => (
-                                <MenuItem key={c.id} value={c.id}>
-                                  <Stack direction="row" alignItems="center" gap={0.75}>
-                                    <ColorSwatch color={c.color} stroke={c.stroke} size={11} />
-                                    <span style={{ fontSize: '0.75rem' }}>{isAr ? c.labelAr : c.label}</span>
-                                  </Stack>
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
+                          <Stack spacing={0.75}>
+                            <FormControl fullWidth size="small">
+                              <Select
+                                value={edit.diagnosis || ''}
+                                displayEmpty
+                                onChange={(e) =>
+                                  setSurfaceEdits((prev) => ({
+                                    ...prev,
+                                    [surf]: { ...prev[surf], diagnosis: e.target.value },
+                                  }))
+                                }
+                                sx={{ fontSize: '0.72rem' }}
+                              >
+                                <MenuItem value=""><em>{isAr ? 'تشخيص: لا شيء' : 'Dx: none'}</em></MenuItem>
+                                {SURFACE_DIAGNOSES.map((c) => (
+                                  <MenuItem key={c.id} value={c.id}>
+                                    <Stack direction="row" alignItems="center" gap={0.75}>
+                                      <ColorSwatch color={c.color} stroke={c.stroke} size={11} />
+                                      <span style={{ fontSize: '0.72rem' }}>{isAr ? c.labelAr : c.label}</span>
+                                    </Stack>
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                            <FormControl fullWidth size="small">
+                              <Select
+                                value={edit.condition || ''}
+                                displayEmpty
+                                onChange={(e) =>
+                                  setSurfaceEdits((prev) => ({
+                                    ...prev,
+                                    [surf]: { ...prev[surf], condition: e.target.value },
+                                  }))
+                                }
+                                sx={{ fontSize: '0.72rem' }}
+                              >
+                                <MenuItem value=""><em>{isAr ? 'ترميم: لا شيء' : 'Rx: none'}</em></MenuItem>
+                                {SURFACE_PROCEDURES.map((c) => (
+                                  <MenuItem key={c.id} value={c.id}>
+                                    <Stack direction="row" alignItems="center" gap={0.75}>
+                                      <ColorSwatch color={c.color} stroke={c.stroke} size={11} />
+                                      <span style={{ fontSize: '0.72rem' }}>{isAr ? c.labelAr : c.label}</span>
+                                    </Stack>
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Stack>
                         </Box>
                       </Grid>
                     );
@@ -597,11 +696,13 @@ ToothModal.propTypes = {
   toothData: PropTypes.object,
   patientId: PropTypes.string,
   lang: PropTypes.string,
+  bridge: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   onSaveTooth: PropTypes.func.isRequired,
   onAddProcedure: PropTypes.func.isRequired,
   onDeleteProcedure: PropTypes.func.isRequired,
   onUpdateProcedure: PropTypes.func,
+  onRemoveBridge: PropTypes.func,
 };
 
 ToothModal.defaultProps = {
@@ -609,5 +710,7 @@ ToothModal.defaultProps = {
   toothData: null,
   patientId: null,
   lang: 'en',
+  bridge: null,
   onUpdateProcedure: () => {},
+  onRemoveBridge: null,
 };

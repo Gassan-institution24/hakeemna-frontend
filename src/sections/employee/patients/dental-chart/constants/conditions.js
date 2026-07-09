@@ -1,6 +1,12 @@
-// Dental condition definitions — color, labels, scope, overlays
+// Dental condition definitions — color, labels, scope, overlays.
+//
+// `kind` splits the catalogue into two clinical axes that can coexist on the
+// same tooth/surface:
+//   • 'diagnosis'  — a clinical finding (caries, fracture, missing, …)
+//   • 'procedure'  — a restoration / treatment (filling, crown, implant, …)
+// `toothLevel: true`  → applies to the whole tooth; false → a single surface.
 export const CONDITIONS = [
-  // ── Restorative ───────────────────────────────────────────────────────────
+  // ── Special: eraser ─────────────────────────────────────────────────────────
   {
     id: 'healthy',
     label: 'Healthy',
@@ -8,8 +14,12 @@ export const CONDITIONS = [
     color: '#FFFFFF',
     stroke: '#BDBDBD',
     toothLevel: false,
-    group: 'restorative',
+    kind: 'diagnosis',
+    group: 'diagnosis',
+    eraser: true,
   },
+
+  // ── Diagnoses (clinical findings) ───────────────────────────────────────────
   {
     id: 'caries',
     label: 'Caries',
@@ -17,8 +27,73 @@ export const CONDITIONS = [
     color: '#EF5350',
     stroke: '#C62828',
     toothLevel: false,
-    group: 'restorative',
+    kind: 'diagnosis',
+    group: 'diagnosis',
   },
+  {
+    id: 'fracture',
+    label: 'Fracture',
+    labelAr: 'كسر',
+    color: '#FFCDD2',
+    stroke: '#B71C1C',
+    toothLevel: false,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+    overlay: 'fracture',
+  },
+  {
+    id: 'periodontal',
+    label: 'Periodontal',
+    labelAr: 'أمراض لثة',
+    color: '#FFF3E0',
+    stroke: '#E65100',
+    toothLevel: false,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+  },
+  {
+    id: 'watch',
+    label: 'Watch',
+    labelAr: 'مراقبة',
+    color: '#FFFDE7',
+    stroke: '#F9A825',
+    toothLevel: false,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+  },
+  {
+    id: 'missing',
+    label: 'Missing',
+    labelAr: 'مفقود',
+    color: '#F5F5F5',
+    stroke: '#9E9E9E',
+    toothLevel: true,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+    overlay: 'X',
+  },
+  {
+    id: 'unerupted',
+    label: 'Unerupted',
+    labelAr: 'لم يبزغ',
+    color: '#E8EAF6',
+    stroke: '#3949AB',
+    toothLevel: true,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+  },
+  {
+    id: 'impacted',
+    label: 'Impacted',
+    labelAr: 'مطمور',
+    color: '#FCE4EC',
+    stroke: '#C62828',
+    toothLevel: true,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+  },
+
+  // ── Procedures — Restorative ────────────────────────────────────────────────
   {
     id: 'filling_composite',
     label: 'Composite',
@@ -26,6 +101,7 @@ export const CONDITIONS = [
     color: '#42A5F5',
     stroke: '#1565C0',
     toothLevel: false,
+    kind: 'procedure',
     group: 'restorative',
   },
   {
@@ -35,6 +111,7 @@ export const CONDITIONS = [
     color: '#78909C',
     stroke: '#37474F',
     toothLevel: false,
+    kind: 'procedure',
     group: 'restorative',
   },
   {
@@ -44,6 +121,7 @@ export const CONDITIONS = [
     color: '#A5D6A7',
     stroke: '#2E7D32',
     toothLevel: false,
+    kind: 'procedure',
     group: 'restorative',
   },
   {
@@ -53,19 +131,11 @@ export const CONDITIONS = [
     color: '#B2DFDB',
     stroke: '#00695C',
     toothLevel: false,
+    kind: 'procedure',
     group: 'restorative',
   },
-  {
-    id: 'fracture',
-    label: 'Fracture',
-    labelAr: 'كسر',
-    color: '#FFCDD2',
-    stroke: '#B71C1C',
-    toothLevel: false,
-    group: 'restorative',
-    overlay: 'fracture',
-  },
-  // ── Prosthetic ────────────────────────────────────────────────────────────
+
+  // ── Procedures — Prosthetic ─────────────────────────────────────────────────
   {
     id: 'crown_ceramic',
     label: 'Ceramic Crown',
@@ -73,6 +143,7 @@ export const CONDITIONS = [
     color: '#FFF9C4',
     stroke: '#F9A825',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
   },
   {
@@ -82,6 +153,7 @@ export const CONDITIONS = [
     color: '#CFD8DC',
     stroke: '#455A64',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
   },
   {
@@ -91,6 +163,7 @@ export const CONDITIONS = [
     color: '#FFD54F',
     stroke: '#F57F17',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
   },
   {
@@ -100,6 +173,7 @@ export const CONDITIONS = [
     color: '#E1F5FE',
     stroke: '#0288D1',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
   },
   {
@@ -109,6 +183,7 @@ export const CONDITIONS = [
     color: '#F3E5F5',
     stroke: '#7B1FA2',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
   },
   {
@@ -118,6 +193,7 @@ export const CONDITIONS = [
     color: '#FFF3E0',
     stroke: '#F57C00',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
     overlay: 'bridge',
   },
@@ -128,6 +204,7 @@ export const CONDITIONS = [
     color: '#FFF3E0',
     stroke: '#F57C00',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
     overlay: 'bridge',
   },
@@ -138,10 +215,12 @@ export const CONDITIONS = [
     color: '#E8F5E9',
     stroke: '#2E7D32',
     toothLevel: true,
+    kind: 'procedure',
     group: 'prosthetic',
     overlay: 'implant',
   },
-  // ── Endodontic ────────────────────────────────────────────────────────────
+
+  // ── Procedures — Endodontic ─────────────────────────────────────────────────
   {
     id: 'root_canal',
     label: 'Root Canal',
@@ -149,38 +228,12 @@ export const CONDITIONS = [
     color: '#FFE0B2',
     stroke: '#E65100',
     toothLevel: true,
+    kind: 'procedure',
     group: 'endodontic',
     overlay: 'root_canal',
   },
-  // ── Other ─────────────────────────────────────────────────────────────────
-  {
-    id: 'missing',
-    label: 'Missing',
-    labelAr: 'مفقود',
-    color: '#F5F5F5',
-    stroke: '#9E9E9E',
-    toothLevel: true,
-    group: 'other',
-    overlay: 'X',
-  },
-  {
-    id: 'unerupted',
-    label: 'Unerupted',
-    labelAr: 'لم يبزغ',
-    color: '#E8EAF6',
-    stroke: '#3949AB',
-    toothLevel: true,
-    group: 'other',
-  },
-  {
-    id: 'impacted',
-    label: 'Impacted',
-    labelAr: 'مطمور',
-    color: '#FCE4EC',
-    stroke: '#C62828',
-    toothLevel: true,
-    group: 'other',
-  },
+
+  // ── Procedures — Surgical / Ortho ───────────────────────────────────────────
   {
     id: 'extraction_planned',
     label: 'Extraction',
@@ -188,17 +241,9 @@ export const CONDITIONS = [
     color: '#FFEBEE',
     stroke: '#C62828',
     toothLevel: true,
-    group: 'other',
+    kind: 'procedure',
+    group: 'surgical',
     overlay: 'X_planned',
-  },
-  {
-    id: 'periodontal',
-    label: 'Periodontal',
-    labelAr: 'أمراض لثة',
-    color: '#FFF3E0',
-    stroke: '#E65100',
-    toothLevel: false,
-    group: 'other',
   },
   {
     id: 'orthodontic',
@@ -207,29 +252,37 @@ export const CONDITIONS = [
     color: '#E8F5E9',
     stroke: '#1B5E20',
     toothLevel: true,
-    group: 'other',
-  },
-  {
-    id: 'watch',
-    label: 'Watch',
-    labelAr: 'مراقبة',
-    color: '#FFFDE7',
-    stroke: '#F9A825',
-    toothLevel: false,
-    group: 'other',
+    kind: 'procedure',
+    group: 'surgical',
   },
 ];
 
+// Groups shown within the Procedures column (diagnoses are a single flat list).
 export const CONDITION_GROUPS = [
   { id: 'restorative', label: 'Restorative', labelAr: 'ترميمي' },
   { id: 'prosthetic', label: 'Prosthetic', labelAr: 'تعويضي' },
   { id: 'endodontic', label: 'Endodontic', labelAr: 'قناة جذر' },
-  { id: 'other', label: 'Other', labelAr: 'أخرى' },
+  { id: 'surgical', label: 'Surgical / Ortho', labelAr: 'جراحي / تقويم' },
 ];
 
+// ── Lookups ────────────────────────────────────────────────────────────────────
 export const getCondition = (id) => CONDITIONS.find((c) => c.id === id) || null;
 
 export const getConditionColor = (id) => getCondition(id)?.color || '#FFFFFF';
 export const getConditionStroke = (id) => getCondition(id)?.stroke || '#BDBDBD';
 export const getConditionLabel = (id, lang = 'en') =>
   lang === 'ar' ? (getCondition(id)?.labelAr || id) : (getCondition(id)?.label || id);
+
+export const getConditionKind = (id) => getCondition(id)?.kind || null;
+
+// Convenience filters used by the palette / modal.
+export const DIAGNOSES = CONDITIONS.filter((c) => c.kind === 'diagnosis' && !c.eraser);
+export const PROCEDURES = CONDITIONS.filter((c) => c.kind === 'procedure');
+
+export const getConditionsByKind = (kind, { toothLevel } = {}) =>
+  CONDITIONS.filter(
+    (c) =>
+      c.kind === kind &&
+      !c.eraser &&
+      (toothLevel === undefined || c.toothLevel === toothLevel)
+  );

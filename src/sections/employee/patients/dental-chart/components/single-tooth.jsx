@@ -32,18 +32,24 @@ function SingleTooth({
   ghost,
   lang,
   crownSize,
+  bridgeRole,
+  bridgeExtendLeft,
+  bridgeExtendRight,
 }) {
   const upper = isUpperArch(fdiNumber);
   const wheelSize = Math.round(crownSize * 0.82);
   const wholeCondition = toothData?.whole_condition;
+  const wholeDiagnosis = toothData?.whole_diagnosis;
 
   const buildTooltip = () => {
     const parts = [];
+    if (wholeDiagnosis) parts.push(wholeDiagnosis.replace(/_/g, ' '));
     if (wholeCondition) parts.push(wholeCondition.replace(/_/g, ' '));
     const surfaces = toothData?.surfaces || {};
     Object.entries(surfaces).forEach(([surface, data]) => {
-      if (data?.condition && data.condition !== 'healthy') {
-        parts.push(`${getSurfaceLabel(surface, fdiNumber, lang)}: ${data.condition.replace(/_/g, ' ')}`);
+      const id = data?.condition || data?.diagnosis;
+      if (id && id !== 'healthy') {
+        parts.push(`${getSurfaceLabel(surface, fdiNumber, lang)}: ${id.replace(/_/g, ' ')}`);
       }
     });
     return parts.length ? parts.join(' | ') : `Tooth ${fdiNumber}`;
@@ -60,6 +66,9 @@ function SingleTooth({
       size={crownSize}
       ghost={ghost}
       onSurfaceClick={onSurfaceClick}
+      bridgeRole={bridgeRole}
+      bridgeExtendLeft={bridgeExtendLeft}
+      bridgeExtendRight={bridgeExtendRight}
     />
   );
   const wheel = ghost ? (
@@ -121,6 +130,9 @@ SingleTooth.propTypes = {
   ghost: PropTypes.bool,
   lang: PropTypes.string,
   crownSize: PropTypes.number,
+  bridgeRole: PropTypes.oneOf(['abutment', 'pontic']),
+  bridgeExtendLeft: PropTypes.bool,
+  bridgeExtendRight: PropTypes.bool,
 };
 
 SingleTooth.defaultProps = {
@@ -130,6 +142,9 @@ SingleTooth.defaultProps = {
   ghost: false,
   lang: 'en',
   crownSize: 44,
+  bridgeRole: null,
+  bridgeExtendLeft: false,
+  bridgeExtendRight: false,
 };
 
 export default memo(SingleTooth);

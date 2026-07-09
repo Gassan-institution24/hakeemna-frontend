@@ -18,6 +18,16 @@ export async function confirmSalaryReceipt(id, signatureBlob) {
   return res.data;
 }
 
+/**
+ * HR toggle: release (or hide) a monthly report for the employee to view/sign.
+ */
+export async function setReportAvailability(id, value) {
+  const res = await axiosInstance.patch(endpoints.monthlyReport.one(id), {
+    availableForViewAndSignature: value,
+  });
+  return res.data;
+}
+
 export function useGetMonthlyReports(params) {
   const URL = [endpoints.monthlyReport.all, { params }];
 

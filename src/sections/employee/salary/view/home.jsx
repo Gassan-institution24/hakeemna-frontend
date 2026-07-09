@@ -29,6 +29,7 @@ export default function MySalaryView() {
       </Container>
 
       {/* Reuses the monthly-report list, filtered to the signed-in employee's own reports.
+          In employee view, only reports HR marked "available for view and signature" are shown.
           Each row's "Salary Receipt" action lets the employee sign to approve receipt. */}
       <MonthlyReportsView employee={engagementId} employeeView />
     </>

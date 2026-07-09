@@ -28,12 +28,14 @@ export default function useOdontogram({ chartData, onSave }) {
   const [isSaving, setIsSaving] = useState(false);
   const [multiSelect, setMultiSelect] = useState(false); // bulk-apply mode
   const [selectedTeeth, setSelectedTeeth] = useState(new Set());
+  const [bridges, setBridges] = useState([]); // fixed prostheses (read from API)
 
   // ── Sync from API data ────────────────────────────────────────────────────
   useEffect(() => {
     if (chartData) {
       resetHistory(buildTeethMap(chartData.teeth));
       setChartTypeLocal(chartData.chart_type || 'adult');
+      setBridges(Array.isArray(chartData.bridges) ? chartData.bridges : []);
       setIsDirty(false);
     }
   }, [chartData, resetHistory]);
@@ -41,6 +43,8 @@ export default function useOdontogram({ chartData, onSave }) {
   // Auto-save intentionally removed — doctor triggers save manually via toolbar.
 
   // ── Apply a condition to a surface or whole tooth ─────────────────────────
+  // Diagnoses write to *_diagnosis, procedures write to *_condition, so a
+  // finding and its treatment can coexist on the same tooth / surface.
   const applySurface = useCallback(
     (fdiNumber, surfaceName) => {
       if (!activeCondition) {
@@ -50,24 +54,36 @@ export default function useOdontogram({ chartData, onSave }) {
       }
 
       const condDef = getCondition(activeCondition);
-      const isErasing = activeCondition === 'healthy';
+      const isErasing = !!condDef?.eraser;
+      const isDiagnosis = condDef?.kind === 'diagnosis';
+      const wholeField = isDiagnosis ? 'whole_diagnosis' : 'whole_condition';
+      const surfaceField = isDiagnosis ? 'diagnosis' : 'condition';
 
       setTeethMap((prev) => {
         const existing = prev[fdiNumber] || { fdi_number: fdiNumber, surfaces: {} };
         const tooth = { ...existing, surfaces: { ...(existing.surfaces || {}) } };
 
-        if (condDef?.toothLevel || surfaceName === 'whole') {
-          tooth.whole_condition = isErasing ? null : activeCondition;
-          tooth.whole_status = activeStatus;
-          if (isErasing) {
-            // Clear all surfaces too
+        if (isErasing) {
+          // Eraser clears both axes on the clicked scope.
+          if (surfaceName === 'whole') {
+            tooth.whole_condition = null;
+            tooth.whole_diagnosis = null;
             tooth.surfaces = {};
+          } else {
+            tooth.surfaces[surfaceName] = {
+              ...(tooth.surfaces[surfaceName] || {}),
+              condition: null,
+              diagnosis: null,
+            };
           }
+        } else if (condDef?.toothLevel || surfaceName === 'whole') {
+          tooth[wholeField] = activeCondition;
+          if (!isDiagnosis) tooth.whole_status = activeStatus;
         } else {
           const currentSurface = tooth.surfaces[surfaceName] || {};
           tooth.surfaces[surfaceName] = {
             ...currentSurface,
-            condition: isErasing ? null : activeCondition,
+            [surfaceField]: activeCondition,
             status: activeStatus,
           };
         }
@@ -84,18 +100,24 @@ export default function useOdontogram({ chartData, onSave }) {
   const applyBulk = useCallback(() => {
     if (!activeCondition || selectedTeeth.size === 0) return;
     const condDef = getCondition(activeCondition);
-    const isErasing = activeCondition === 'healthy';
+    const isErasing = !!condDef?.eraser;
+    const isDiagnosis = condDef?.kind === 'diagnosis';
+    const wholeField = isDiagnosis ? 'whole_diagnosis' : 'whole_condition';
 
     setTeethMap((prev) => {
       const next = { ...prev };
       selectedTeeth.forEach((fdi) => {
         const existing = next[fdi] || { fdi_number: fdi, surfaces: {} };
-        next[fdi] = {
-          ...existing,
-          whole_condition: isErasing ? null : activeCondition,
-          whole_status: activeStatus,
-          surfaces: isErasing ? {} : existing.surfaces || {},
-        };
+        if (isErasing) {
+          next[fdi] = { ...existing, whole_condition: null, whole_diagnosis: null, surfaces: {} };
+        } else {
+          next[fdi] = {
+            ...existing,
+            [wholeField]: activeCondition,
+            whole_status: isDiagnosis ? existing.whole_status : activeStatus,
+            surfaces: existing.surfaces || {},
+          };
+        }
       });
       return next;
     });
@@ -166,6 +188,7 @@ export default function useOdontogram({ chartData, onSave }) {
     setMultiSelect,
     selectedTeeth,
     clearSelection,
+    bridges,
     handleToothClick,
     getToothData,
     updateToothData,
