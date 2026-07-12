@@ -106,10 +106,13 @@ export default function DentalArch({
     />
   );
 
+  // Position via inline `style` (not `sx`) so stylis-plugin-rtl does NOT flip
+  // `left` → `right` under the Arabic (RTL) theme. The offsets from measure()
+  // are already physical/LTR, so the overlays must stay left-anchored.
   const renderDot = (cx, top, color, edge, key) => (
-    <Box
+    <div
       key={key}
-      sx={{
+      style={{
         position: 'absolute',
         left: cx - 5,
         top: top - 5,
@@ -185,11 +188,11 @@ export default function DentalArch({
           {trailingGhosts.map(renderGhost)}
         </Stack>
 
-        {/* Committed bridge connecting lines */}
+        {/* Committed bridge connecting lines (inline style → RTL-safe left) */}
         {beams.map((beam) => (
           <Fragment key={beam.id}>
-            <Box
-              sx={{
+            <div
+              style={{
                 position: 'absolute',
                 left: beam.left,
                 top: beam.top,
@@ -210,11 +213,11 @@ export default function DentalArch({
           </Fragment>
         ))}
 
-        {/* Live multi-selection preview line */}
+        {/* Live multi-selection preview line (inline style → RTL-safe left) */}
         {preview && (
           <>
-            <Box
-              sx={{
+            <div
+              style={{
                 position: 'absolute',
                 left: preview.left,
                 top: preview.top,

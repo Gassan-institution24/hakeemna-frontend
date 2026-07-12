@@ -257,7 +257,7 @@ export default function OdontogramView({
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
   // ── Zoom ────────────────────────────────────────────────────────────────────
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.75); // default view at 75%
   const crownSize = Math.round(BASE_CROWN * zoom);
   const zoomIn = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2))), []);
   const zoomOut = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2))), []);
@@ -485,8 +485,10 @@ export default function OdontogramView({
           lang={lang}
         />
 
-        {/* Arch area */}
+        {/* Arch area — always LTR so the odontogram layout (teeth + FDI numbers)
+            stays anatomically correct and identical in both Arabic and English. */}
         <Box
+          dir="ltr"
           sx={{
             flex: 1,
             overflow: 'auto',
