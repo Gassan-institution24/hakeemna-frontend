@@ -34,8 +34,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetFavoriteRadiology } from 'src/api/doctor_favorite';
 
 import Iconify from 'src/components/iconify';
-import { RHFTextField } from 'src/components/hook-form';
-import FormProvider from 'src/components/hook-form/form-provider';
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 export default function RadiologyUpload({ patient, refetch }) {
   const { t } = useTranslate();
@@ -77,8 +76,15 @@ export default function RadiologyUpload({ patient, refetch }) {
 
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { radiology: [defaultRadiology] },
+    defaultValues: { radiology: [defaultRadiology], file: [] },
   });
+
+  const handleDropFiles = (acceptedFiles) => {
+    const mapped = acceptedFiles.map((file) =>
+      Object.assign(file, { preview: URL.createObjectURL(file) })
+    );
+    methods.setValue('file', mapped, { shouldValidate: true });
+  };
 
   const {
     control,
@@ -116,9 +122,15 @@ export default function RadiologyUpload({ patient, refetch }) {
         })),
       };
 
-      await axiosInstance.post(endpoints.radiologyPatient.all, payload);
+      const { data: created } = await axiosInstance.post(endpoints.radiologyPatient.all, payload);
 
-      methods.reset({ radiology: [defaultRadiology] });
+      if (data.file?.length && created?._id) {
+        const formData = new FormData();
+        data.file.forEach((file) => formData.append('file', file));
+        await axiosInstance.patch(endpoints.radiologyPatient.filesUpload(created._id), formData);
+      }
+
+      methods.reset({ radiology: [defaultRadiology], file: [] });
 
       refetch();
       enqueueSnackbar(t('radiology added successfully'));
@@ -220,6 +232,12 @@ export default function RadiologyUpload({ patient, refetch }) {
               <Iconify width={20} icon="ri:add-line" />
               {t('add')}
             </Button>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('uploaded files')}
+              </Typography>
+              <RHFUpload name="file" multiple onDrop={handleDropFiles} />
+            </Box>
             <Stack alignItems="end">
               <Button variant="contained" onClick={handleSubmit} sx={{ mt: 2 }}>
                 {t('save')}

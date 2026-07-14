@@ -983,6 +983,7 @@ export const endpoints = {
     patient: (patientId) => `/api/radiology-patient/patient/${patientId}`,
     entrance: (id) => (!id ? null : `/api/radiology-patient/entrance/${id}`),
     oneRadiology: (id) => (!id ? null : `/api/radiology-patient/oneRadiology/${id}`),
+    filesUpload: (id) => `/api/radiology-patient/files/upload/${id}`,
   },
   whatsapp: {
     send: '/api/whatsapp/send',

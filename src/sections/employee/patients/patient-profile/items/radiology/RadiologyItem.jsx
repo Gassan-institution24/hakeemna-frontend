@@ -29,7 +29,7 @@ import { useTranslate } from 'src/locales';
 import { useGetImagings } from 'src/api/imaging';
 
 import Iconify from 'src/components/iconify';
-import FormProvider from 'src/components/hook-form/form-provider';
+import FormProvider, { RHFUpload } from 'src/components/hook-form';
 
 export default function RadiologyItem({ one, patient, refetch }) {
   const { t } = useTranslate();
@@ -39,6 +39,38 @@ export default function RadiologyItem({ one, patient, refetch }) {
   const [showFiles, setShowFiles] = useState(false);
   const [previewFile, setPreviewFile] = useState(null);
   const [editing, setEditing] = useState(false);
+  const [openUpload, setOpenUpload] = useState(false);
+
+  const uploadMethods = useForm({ defaultValues: { file: [] } });
+  const uploadFiles = uploadMethods.watch('file');
+
+  const handleDropFiles = (acceptedFiles) => {
+    const mapped = acceptedFiles.map((file) =>
+      Object.assign(file, { preview: URL.createObjectURL(file) })
+    );
+    uploadMethods.setValue('file', mapped, { shouldValidate: true });
+  };
+
+  const handleUpload = uploadMethods.handleSubmit(async (data) => {
+    try {
+      if (!data.file?.length) {
+        enqueueSnackbar(t('Please select at least one file'), { variant: 'warning' });
+        return;
+      }
+
+      const formData = new FormData();
+      data.file.forEach((file) => formData.append('file', file));
+
+      await axiosInstance.patch(endpoints.radiologyPatient.filesUpload(one?._id), formData);
+
+      enqueueSnackbar(t('radiology uploaded successfully'));
+      uploadMethods.reset({ file: [] });
+      setOpenUpload(false);
+      refetch();
+    } catch (e) {
+      enqueueSnackbar(e?.arabic_message || e?.message || t('Upload failed'), { variant: 'error' });
+    }
+  });
 
   const schema = Yup.object().shape({
     radiology: Yup.array().of(
@@ -205,6 +237,10 @@ export default function RadiologyItem({ one, patient, refetch }) {
                 <Iconify icon="mdi:delete-outline" />
               </IconButton>
 
+              <IconButton color="success" onClick={() => setOpenUpload(true)}>
+                <Iconify icon="mdi:cloud-upload-outline" />
+              </IconButton>
+
               {isDelivered && (
                 <IconButton color="primary" onClick={() => setShowFiles(true)}>
                   <Iconify icon="mdi:file-eye-outline" />
@@ -244,6 +280,28 @@ export default function RadiologyItem({ one, patient, refetch }) {
           </Box>
         </>
       )}
+      <Dialog
+        open={openUpload}
+        onClose={() => setOpenUpload(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>{t('uploaded files')}</DialogTitle>
+
+        <FormProvider methods={uploadMethods} onSubmit={handleUpload}>
+          <DialogContent>
+            <RHFUpload name="file" multiple onDrop={handleDropFiles} />
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={() => setOpenUpload(false)}>{t('cancel')}</Button>
+            <Button type="submit" variant="contained" disabled={!uploadFiles?.length}>
+              {t('save')}
+            </Button>
+          </DialogActions>
+        </FormProvider>
+      </Dialog>
+
       <Dialog open={showFiles} onClose={() => setShowFiles(false)} fullWidth maxWidth="sm">
         <DialogTitle>{t('uploaded files')}</DialogTitle>
 
