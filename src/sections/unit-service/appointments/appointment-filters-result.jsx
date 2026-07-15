@@ -28,7 +28,7 @@ export default function InvoiceTableFiltersResult({
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveStatus = () => {
-    onFilters('status', 'all');
+    onFilters('status', 'booked');
   };
   const handleRemoveGroup = () => {
     onFilters('group', '');
@@ -37,7 +37,7 @@ export default function InvoiceTableFiltersResult({
     onFilters('shift', '');
   };
   const handleRemovetype = () => {
-    onFilters('types', '');
+    onFilters('appointype', '');
   };
 
   const handleRemoveDate = () => {

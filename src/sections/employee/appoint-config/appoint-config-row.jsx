@@ -183,6 +183,19 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )} */}
+          {status === 'active' &&
+          checkAcl('appointment_configs:delete') && (
+            <MenuItem lang="ar" 
+              onClick={() => {
+                onCancelRow();
+                popover.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="material-symbols:delete" />
+              {t('inactivate')}
+            </MenuItem>
+          )}
         {checkAcl('appointment_configs:update') && (
           <MenuItem lang="ar" onClick={onViewRow}>
             <Iconify icon="solar:eye-bold" />

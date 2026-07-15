@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
@@ -16,12 +15,14 @@ import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
+import { Stack, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -47,6 +48,13 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import AppointmentCard from 'src/sections/_appointments/appointment-card';
+import {
+  tabCount,
+  LIFECYCLE_TABS,
+  MEDLAB_LIFECYCLE_TABS,
+} from 'src/sections/_appointments/appointment-status';
 
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
@@ -95,6 +103,8 @@ export default function AppointmentsView({ employeeData }) {
 
   const table = useTable({ defaultOrderBy: 'start_time' });
 
+  const mdUp = useResponsive('up', 'md');
+
   const { user } = useAuthContext();
 
   const checkAcl = useAclGuard();
@@ -137,91 +147,15 @@ export default function AppointmentsView({ employeeData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const TABS = isMedLab
-    ? [
-        // { value: 'all', label: t('all'), color: 'default', count: all },
-        {
-          value: 'booked',
-          label: t('booked'),
-          color: 'warning',
-          count: lengths?.booked,
-        },
-        {
-          value: 'finished',
-          label: t('finished'),
-          color: 'success',
-          count: lengths?.finished,
-        },
-        {
-          value: 'available',
-          label: t('available'),
-          color: 'secondary',
-          count: lengths?.available,
-        },
-        {
-          value: 'canceled',
-          label: t('canceled'),
-          color: 'error',
-          count: lengths?.canceled,
-        },
-      ]
-    : [
-        // { value: 'all', label: t('all'), color: 'default', count: all },
-        {
-          value: 'processing',
-          label: t('current'),
-          color: 'info',
-          count: lengths?.processing,
-        },
-        {
-          value: 'arrived',
-          label: t('arrived'),
-          color: 'success',
-          count: lengths?.arrived,
-        },
-        {
-          value: 'late',
-          label: t('late'),
-          color: 'warning',
-          count: lengths?.late,
-        },
-        {
-          value: 'booked',
-          label: t('booked'),
-          color: 'info',
-          count: lengths?.booked,
-        },
-        {
-          value: 'finished',
-          label: t('finished'),
-          color: 'success',
-          count: lengths?.finished,
-        },
-        {
-          value: 'not arrived',
-          label: t('not arrived'),
-          color: 'error',
-          count: lengths?.notArrived,
-        },
-        {
-          value: 'canceled',
-          label: t('canceled'),
-          color: 'warning',
-          count: lengths?.canceled,
-        },
-        {
-          value: 'available',
-          label: t('available'),
-          color: 'secondary',
-          count: lengths?.available,
-        },
-        {
-          value: 'not booked',
-          label: t('not booked'),
-          color: 'secondary',
-          count: lengths?.notBooked,
-        },
-      ];
+  // 6 lifecycle tabs (med-lab units get the reduced subset). Late / Not-arrived /
+  // Not-booked are derived chips on the rows, not tabs. Counts come from the
+  // backend grouped `g_*` keys (with a legacy-sum fallback in `tabCount`).
+  const TABS = (isMedLab ? MEDLAB_LIFECYCLE_TABS : LIFECYCLE_TABS).map((tab) => ({
+    value: tab.value,
+    label: t(tab.labelKey),
+    color: tab.color,
+    count: tabCount(lengths, tab.value),
+  }));
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -561,6 +495,7 @@ export default function AppointmentsView({ employeeData }) {
             />
           )}
 
+          {mdUp ? (
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
               // dense={table.dense}
@@ -642,6 +577,54 @@ export default function AppointmentsView({ employeeData }) {
               </Table>
             </Scrollbar>
           </TableContainer>
+          ) : (
+            <Box sx={{ p: 2 }}>
+              {table.selected.length > 0 && checkAcl('appointments:update') && (
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                  <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+                    {table.selected.length} {t('selected')}
+                  </Typography>
+                  <Tooltip title={t('delay')}>
+                    <IconButton color="info" onClick={confirmDelay.onTrue}>
+                      <Iconify icon="mdi:timer-sync" />
+                    </IconButton>
+                  </Tooltip>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled') ? (
+                    <Tooltip title={t('uncancel')}>
+                      <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                        <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title={t('cancel')}>
+                      <IconButton color="error" onClick={confirm.onTrue}>
+                        <Iconify icon="mdi:bell-cancel" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </Stack>
+              )}
+              <Stack spacing={2}>
+                {dataFiltered?.map((row) => (
+                  <AppointmentCard
+                    key={row._id}
+                    row={row}
+                    selected={table.selected.includes(row._id)}
+                    onSelectRow={() => table.onSelectRow(row._id)}
+                    onDelayRow={handleDelayRow}
+                    onCancelRow={() => handleCancelRow(row)}
+                    onUnCancelRow={() => handleUnCancelRow(row)}
+                    onBookAppoint={() => handleBookRow(row)}
+                  />
+                ))}
+              </Stack>
+              {notFound && (
+                <Box sx={{ textAlign: 'center', py: 6, color: 'text.secondary' }}>{t('no data')}</Box>
+              )}
+            </Box>
+          )}
 
           <TablePaginationCustom
             count={lengths?.length}
