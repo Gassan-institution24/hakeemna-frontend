@@ -43,6 +43,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { tabCount, LIFECYCLE_TABS } from 'src/sections/_appointments/appointment-status';
+
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
@@ -52,7 +54,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'pending',
+  status: 'booked',
   types: [],
   startDate: null,
   endDate: null,
@@ -105,13 +107,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     appointmentsData,
     appointmentsLength,
     refetch,
-    // all,
-    available,
-    notBooked,
-    processing,
-    canceled,
-    finished,
-    pending,
+    lengths,
     // loading,
   } = useGetDepartmentAppointments({
     id: departmentData?._id,
@@ -144,45 +140,13 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
   // const getAppointLength = (status) =>
   //   appointmentsData.filter((item) => item.status === status).length;
 
-  const TABS = [
-    // { value: 'all', label: t('all'), color: 'default', count: appointmentsLength },
-    {
-      value: 'pending',
-      label: t('pending'),
-      color: 'warning',
-      count: pending,
-    },
-    {
-      value: 'processing',
-      label: t('upcoming'),
-      color: 'info',
-      count: processing,
-    },
-    {
-      value: 'finished',
-      label: t('finished'),
-      color: 'success',
-      count: finished,
-    },
-    {
-      value: 'canceled',
-      label: t('canceled'),
-      color: 'error',
-      count: canceled,
-    },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
-    },
-    {
-      value: 'not booked',
-      label: t('not booked'),
-      color: 'secondary',
-      count: notBooked,
-    },
-  ];
+  // 6 lifecycle tabs (see src/sections/_appointments/appointment-status).
+  const TABS = LIFECYCLE_TABS.map((tab) => ({
+    value: tab.value,
+    label: t(tab.labelKey),
+    color: tab.color,
+    count: tabCount(lengths, tab.value),
+  }));
 
   const handleFilters = useCallback(
     (name, value) => {

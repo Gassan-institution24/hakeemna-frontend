@@ -234,5 +234,10 @@
   "book an appointment": "Book an Appointment",
   "available times": "Available times",
   "no results": "No results found",
-  "Available for view and signature": "Available for view and signature"
+  "Available for view and signature": "Available for view and signature",
+  "in progress": "In Progress",
+  "expired": "Expired",
+  "no data": "No Data",
+  "coming": "Coming",
+  "not coming": "Not Coming"
 }

@@ -24,10 +24,11 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import AppointmentStatusCell from 'src/sections/_appointments/appointment-status-cell';
 
 // ----------------------------------------------------------------------
 
@@ -164,23 +165,7 @@ export default function AppointmentsTableRow({
         )}
 
         <TableCell align="center">
-          <Label
-            variant="soft"
-            color={
-              (status === 'processing' && 'info') ||
-              (status === 'arrived' && 'success') ||
-              (status === 'late' && 'warning') ||
-              (status === 'booked' && 'info') ||
-              (status === 'finished' && 'success') ||
-              (status === 'not arrived' && 'error') ||
-              (status === 'canceled' && 'warning') ||
-              (status === 'available' && 'secondary') ||
-              (status === 'not booked' && 'secondary') ||
-              'default'
-            }
-          >
-            {t(status)}
-          </Label>
+          <AppointmentStatusCell row={row} />
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
