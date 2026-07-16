@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import ACLGuard from 'src/auth/guard/acl-guard';
 import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
@@ -204,7 +205,7 @@ const HRSalaryPage = lazy(() => import('src/pages/unit-service/hr/salary'));
 const HREmployeeSalaryPage = lazy(() => import('src/pages/unit-service/hr/employee-salary'));
 const HREmployeePage = lazy(() => import('src/pages/unit-service/hr/employee'));
 
-// DENTAL CHART
+// dental chart
 const DentalHomePage = lazy(() => import('src/pages/unit-service/dental/home'));
 const DentalPatientPage = lazy(() => import('src/pages/unit-service/dental/patient'));
 // const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
@@ -229,6 +230,11 @@ export const unitServiceDashboardRoutes = [
     children: [
       {
         path: 'acl',
+        element: (
+          <ACLGuard permission="permissions:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           {
             path: 'employees',
@@ -238,6 +244,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'roles',
+        element: (
+          <ACLGuard permission="permissions:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [{ element: <RolesHomePage />, index: true }],
       },
       { path: 'processingpage/:id', element: <Processing /> },
@@ -245,6 +256,11 @@ export const unitServiceDashboardRoutes = [
       { path: 'test', element: <Test /> },
       {
         path: 'appointments',
+        element: (
+          <ACLGuard permission="appointments:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <AppointmentsHomePage />, index: true },
           { path: 'list', element: <AppointmentsHomePage /> },
@@ -254,6 +270,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'hr',
+        element: (
+          <ACLGuard permission="hr:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <HRPage />, index: true },
           { path: 'list', element: <HRPage /> },
@@ -264,6 +285,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'dental',
+        element: (
+          <ACLGuard permission="dental_chart:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <DentalHomePage />, index: true },
           { path: ':id', element: <DentalPatientPage /> },
@@ -271,6 +297,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'patients',
+        element: (
+          <ACLGuard permission="institution_patients:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <PatientsPage />, index: true },
           { path: 'new', element: <PatientNewPage /> },
@@ -282,6 +313,11 @@ export const unitServiceDashboardRoutes = [
         children: [
           {
             path: 'economicmovements',
+            element: (
+              <ACLGuard permission="accounting:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <EconomicHomePage />, index: true },
               { path: ':id/info', element: <EconomicInfoPage /> },
@@ -291,10 +327,20 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'paymentcontrol',
+            element: (
+              <ACLGuard permission="accounting:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [{ element: <PaymentControlHomePage />, index: true }],
           },
           {
             path: 'reciepts',
+            element: (
+              <ACLGuard permission="accounting:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <ReceiptsHomePage />, index: true },
               { path: ':id/info', element: <ReceiptsInfoPage /> },
@@ -302,10 +348,19 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'invoicing',
-            element: <InvoicingHomePage />,
+            element: (
+              <ACLGuard permission="accounting:read">
+                <InvoicingHomePage />
+              </ACLGuard>
+            ),
           },
           {
             path: 'claim',
+            element: (
+              <ACLGuard permission="claims:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               {
                 index: true,
@@ -325,6 +380,11 @@ export const unitServiceDashboardRoutes = [
       },
        {
         path: 'myclaim',
+        element: (
+          <ACLGuard permission="claims:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           {
             children: [
@@ -336,6 +396,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'offers',
+        element: (
+          <ACLGuard permission="offers:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <ProductsHomePage />, index: true },
           { path: 'offer/:id', element: <OfferInfoPage /> },
@@ -343,6 +408,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'profile',
+        element: (
+          <ACLGuard permission="unit_service_info:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <ProfileHomePage />, index: true },
           { path: 'settings', element: <ProfileHomePage /> },
@@ -357,6 +427,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'qc',
+            element: (
+              <ACLGuard permission="quality_control:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [{ element: <QCHomePage />, index: true }],
           },
           {
@@ -371,6 +446,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'oldpatient',
+        element: (
+          <ACLGuard permission="institution_patients:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <OldPatientPage />, index: true },
           { path: 'new', element: <RoomsNewPage /> },
@@ -379,6 +459,11 @@ export const unitServiceDashboardRoutes = [
       },
       {
         path: 'products',
+        element: (
+          <ACLGuard permission="unit_service_info:read">
+            <Outlet />
+          </ACLGuard>
+        ),
         children: [
           { element: <AllProductsPage />, index: true },
           { path: 'all', element: <AllProductsPage /> },
@@ -417,6 +502,11 @@ export const unitServiceDashboardRoutes = [
           // },
           {
             path: 'departments',
+            element: (
+              <ACLGuard permission="departments:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <DepartmentsHomePage />, index: true },
               { path: 'new', element: <DepartmentsNewPage /> },
@@ -474,6 +564,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'employees',
+            element: (
+              <ACLGuard permission="employees:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <EmployeesHomePage />, index: true },
               { path: 'new', element: <EmployeesNewPage /> },
@@ -506,6 +601,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'activities',
+            element: (
+              <ACLGuard permission="management_tables:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <ActivitiesHomePage />, index: true },
               { path: 'new', element: <ActivitiesNewPage /> },
@@ -514,6 +614,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'work_shifts',
+            element: (
+              <ACLGuard permission="management_tables:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <WorkShiftsHomePage />, index: true },
               { path: 'new', element: <WorkShiftsNewPage /> },
@@ -522,6 +627,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'work_groups',
+            element: (
+              <ACLGuard permission="management_tables:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <WorkGroupsHomePage />, index: true },
               { path: 'new', element: <WorkGroupsNewPage /> },
@@ -530,6 +640,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'rooms',
+            element: (
+              <ACLGuard permission="management_tables:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <RoomsHomePage />, index: true },
               { path: 'new', element: <RoomsNewPage /> },
@@ -538,6 +653,11 @@ export const unitServiceDashboardRoutes = [
           },
           {
             path: 'services',
+            element: (
+              <ACLGuard permission="management_tables:read">
+                <Outlet />
+              </ACLGuard>
+            ),
             children: [
               { element: <ServicesHomePage />, index: true },
               { path: 'new', element: <ServicesNewPage /> },

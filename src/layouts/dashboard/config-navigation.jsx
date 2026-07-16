@@ -530,7 +530,7 @@ export function useNavData() {
         'data-test': 'us-nav-item-permissions',
         children: [
           {
-            title: t('roles'),
+            title: t('Roles'),
             path: paths.unitservice.roles.root,
             'data-test': 'us-nav-item-roles',
           },
@@ -562,8 +562,8 @@ export function useNavData() {
         icon: <Iconify icon="fluent-mdl2:recruitment-management" />,
         'data-test': 'us-nav-item-hr',
         children: [
-          { show: true, title: t('attendence'), path: paths.unitservice.hr.list },
-          { show: true, title: t('calculate salary'), path: paths.unitservice.hr.salary },
+          { show: checkAccess('hr:read', 'hr'), title: t('attendence'), path: paths.unitservice.hr.list },
+          { show: checkAccess('hr:read', 'hr'), title: t('calculate salary'), path: paths.unitservice.hr.salary },
         ],
       },
       {

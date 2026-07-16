@@ -104,8 +104,8 @@ export default function RolesListView() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t('Name')}</TableCell>
-                    <TableCell>{t('Permissions')}</TableCell>
+                    <TableCell>{t('name')}</TableCell>
+                    <TableCell>{t('permissions')}</TableCell>
                     <TableCell align="right">{t('Actions')}</TableCell>
                   </TableRow>
                 </TableHead>

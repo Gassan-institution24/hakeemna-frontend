@@ -85,14 +85,14 @@ export default function PatientDentalChart({ patient }) {
           unit_service: unitServiceId,
           employee: user.employee._id,
           description,
-          name: 'Dental chart log',
+          name: 'dental chart log',
           source: 'dental_chart',
           type: 'report',
         });
 
-        enqueueSnackbar('Dental chart activity saved to patient file', { variant: 'success' });
+        enqueueSnackbar('dental chart activity saved to patient file', { variant: 'success' });
       } catch (error) {
-        console.error('Dental chart record error:', error);
+        console.error('dental chart record error:', error);
         enqueueSnackbar('Failed to save dental chart record to patient file', { variant: 'error' });
       }
     },
