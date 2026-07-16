@@ -17,7 +17,6 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { confirmSalaryReceipt } from 'src/api/monthly_reports';
 
 import Label from 'src/components/label';
@@ -84,15 +83,15 @@ export default function SalaryReceiptDialog({ open, onClose, row, refetch }) {
   const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const checkAcl = useAclGuard();
 
-  // An employee can always sign/approve their OWN salary receipt; HR staff with
-  // hr:update can also confirm on their behalf (e.g. at payout).
+  // Signing is personal: only the employee the report was issued to can confirm
+  // receipt. HR, the unit service owner and admins can view and print it, but
+  // never sign on someone else's behalf. The backend enforces this too.
   const myEngagementId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id;
   const reportEngagementId = row?.employee_engagement?._id || row?.employee_engagement;
   const isOwnReport = !!myEngagementId && String(reportEngagementId) === String(myEngagementId);
-  const canConfirm = isOwnReport || checkAcl('hr:update');
+  const canConfirm = isOwnReport;
 
   const receiptRef = useRef(null);
   const [signOpen, setSignOpen] = useState(false);
