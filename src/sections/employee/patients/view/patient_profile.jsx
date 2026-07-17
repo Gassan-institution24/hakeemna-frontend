@@ -2,22 +2,7 @@ import io from 'socket.io-client';
 import { useParams } from 'react-router';
 import React, { useRef, useState, useEffect } from 'react';
 
-import { useTheme } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  Box,
-  List,
-  Stack,
-  Button,
-  Drawer,
-  ListItem,
-  Container,
-  Typography,
-  IconButton,
-  ListItemText,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Card, Chip, Stack, Button, Container, Typography, IconButton } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -25,10 +10,12 @@ import { fDate } from 'src/utils/format-time';
 
 import { useGetOneUSPatient } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
+import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import Iconify from 'src/components/iconify';
-import PageSelector from 'src/components/page-selector';
+import ProfileTabs from 'src/components/profile-tabs';
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
@@ -39,6 +26,7 @@ import PatientCheckList from '../patient-profile/patient-checklist';
 import PatientRadiology from '../patient-profile/patient-radiology';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
+import PatientDentalChart from '../dental-chart/patient-dental-chart';
 import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
@@ -71,6 +59,9 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const checkAcl = useAclGuard();
+  const { hasFeature } = useSubscriptionGuard();
+
   // eslint-disable-next-line no-unused-vars
   const [callData, setCallData] = useState(null);
 
@@ -98,10 +89,6 @@ export default function PatientProfile() {
   }, [patientData?.patient?._id]);
 
   const [currentTab, setCurrentTab] = useState('communication');
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const TABS = [
     { value: 'communication', label: t('communication') },
@@ -112,11 +99,11 @@ export default function PatientProfile() {
     { value: 'prescriptions', label: t('prescriptions') },
     { value: 'appointments', label: t('appointments') },
     { value: 'instructions', label: t('instructions') },
-    { value: 'requests', label: t('requests') },
-    { value: 'transfer', label: t('transfer') },
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analysis', label: t('medical analysis') },
     { value: 'radiology', label: t('radiology') },
+    checkAcl('dental_chart:read') &&
+      hasFeature('dental_chart') && { value: 'dental', label: t('dental chart') },
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -206,98 +193,41 @@ export default function PatientProfile() {
         return <PatientMedicalAnalyses patient={usPatientData} />;
       case 'radiology':
         return <PatientRadiology patient={usPatientData} />;
+      case 'dental':
+        return <PatientDentalChart patient={usPatientData} />;
       default:
         return null;
     }
   };
 
+  const patientName = curLangAr
+    ? patientData?.name_arabic || patientData?.name_english
+    : patientData?.name_english || patientData?.name_arabic;
+
   return (
-    <Container
-      sx={{ backgroundColor: '#fff', minHeight: '100vh', paddingTop: isMobile ? '20px' : '0' }}
-      maxWidth={false}
-    >
-      <Stack paddingTop={5} minHeight="100vh" direction={{ md: 'row' }}>
-        {isMobile ? (
-          <>
-            <IconButton
-              sx={{
-                position: 'fixed',
-                top: 16,
-                left: 16,
-                zIndex: 1300,
-                backgroundColor: 'background.paper',
-                boxShadow: 1,
-                '&:hover': {
-                  backgroundColor: 'background.paper',
-                },
-              }}
-              onClick={() => setDrawerOpen(!drawerOpen)}
-            >
-              {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+    <Container maxWidth="xl" sx={{ pt: 2 }}>
+      <Card sx={{ p: 3, mb: 2 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          flexWrap="wrap"
+          gap={2}
+        >
+          <Stack direction="row" alignItems="center" gap={1}>
+            <IconButton onClick={() => router.back()}>
+              <Iconify icon={curLangAr ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-back-fill'} />
             </IconButton>
 
-            <Drawer
-              anchor="left"
-              open={drawerOpen}
-              onClose={() => setDrawerOpen(false)}
-              sx={{
-                '& .MuiDrawer-paper': {
-                  paddingTop: '64px',
-                },
-              }}
-            >
-              <Box sx={{ width: 250, p: 2 }} role="presentation">
-                <List>
-                  {TABS.map((tab) => (
-                    <ListItem
-                      button
-                      key={tab.value}
-                      selected={tab.value === currentTab}
-                      onClick={() => {
-                        setCurrentTab(tab.value);
-                        setDrawerOpen(false);
-                      }}
-                    >
-                      <ListItemText primary={tab.label} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            </Drawer>
-          </>
-        ) : (
-          <Stack gap={2} sx={{ minWidth: 200, pr: 2 }}>
-            <PageSelector
-              vertical
-              pages={TABS.map((tab) => ({
-                ...tab,
-                onClick: () => setCurrentTab(tab.value),
-                active: tab.value === currentTab,
-              }))}
-            />
-          </Stack>
-        )}
-
-        <Stack gap={2} flex={1}>
-          <Stack
-            direction="row"
-            padding={3}
-            paddingX={{ xs: 2, md: 10 }}
-            paddingTop={0}
-            justifyContent="space-between"
-            flexWrap="wrap"
-            gap={2}
-          >
-            <Stack direction="row" alignItems="center" gap={2}>
-              <IconButton onClick={() => router.back()}>
-                <Iconify icon="eva:arrow-ios-back-fill" />
-              </IconButton>
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Typography variant="h6">
-                  {curLangAr
-                    ? patientData?.name_arabic || patientData?.name_english
-                    : patientData?.name_english || patientData?.name_arabic}
+            <Stack gap={0.5}>
+              <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
+                <Typography variant="subtitle1" color="text.secondary" fontWeight={500}>
+                  {t('patients')}
                 </Typography>
+                <Typography variant="subtitle1" color="text.disabled">
+                  /
+                </Typography>
+                <Typography variant="h6">{patientName}</Typography>
 
                 {patientData?.patient?._id ? (
                   <Iconify
@@ -306,44 +236,46 @@ export default function PatientProfile() {
                     sx={{ color: 'primary.main' }}
                   />
                 ) : (
-                  <Typography variant="body2" color="warning.main" fontWeight={600} sx={{ ml: 1 }}>
+                  <Typography variant="body2" color="warning.main" fontWeight={600}>
                     {curLangAr ? 'غير موثق' : 'Not Verified'}
                   </Typography>
                 )}
               </Stack>
-            </Stack>
 
-            <Stack direction="row" gap={2} flexWrap="wrap">
-              <Typography variant="h6">{t(patientData?.gender)}</Typography>
-              <Typography variant="h6">{calculateAge(patientData?.birth_date)}</Typography>
-              <Typography variant="h6">{fDate(patientData?.birth_date)}</Typography>
-            </Stack>
-
-            <Stack direction="row" gap={2}>
-              <Button
-                sx={{ minWidth: 120 }}
-                variant="contained"
-                onClick={() => setCurrentTab('edit')}
-              >
-                {t('edit')}
-              </Button>
-              {patientData?.patient?._id && (
-                <Button
-                  sx={{ minWidth: 120 }}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleCall}
-                  disabled={!isPatientOnline}
-                >
-                  {t('Call')}
-                </Button>
-              )}
+              <Stack direction="row" gap={1} flexWrap="wrap" sx={{ mt: 0.5 }}>
+                {patientData?.gender && <Chip size="small" label={t(patientData.gender)} />}
+                {patientData?.birth_date && (
+                  <>
+                    <Chip size="small" label={calculateAge(patientData.birth_date)} />
+                    <Chip size="small" label={fDate(patientData.birth_date)} />
+                  </>
+                )}
+              </Stack>
             </Stack>
           </Stack>
 
-          <Box sx={{ px: { xs: 2, md: 10 }, pb: 4 }}>{renderTabContent()}</Box>
+          <Stack direction="row" gap={2}>
+            <Button sx={{ minWidth: 120 }} variant="contained" onClick={() => setCurrentTab('edit')}>
+              {t('edit')}
+            </Button>
+            {patientData?.patient?._id && (
+              <Button
+                sx={{ minWidth: 120 }}
+                variant="contained"
+                color="primary"
+                onClick={handleCall}
+                disabled={!isPatientOnline}
+              >
+                {t('Call')}
+              </Button>
+            )}
+          </Stack>
         </Stack>
-      </Stack>
+
+        <ProfileTabs tabs={TABS} value={currentTab} onChange={setCurrentTab} sx={{ mt: 2 }} />
+      </Card>
+
+      <Box sx={{ pb: 4 }}>{renderTabContent()}</Box>
     </Container>
   );
 }

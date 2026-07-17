@@ -7,6 +7,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { useSettingsContext } from 'src/components/settings';
 
 import { NAV, HEADER } from '../config-layout';
+import { useNavHidden } from './nav-hidden-context';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +17,8 @@ export default function Main({ children, sx, ...other }) {
   const settings = useSettingsContext();
 
   const lgUp = useResponsive('up', 'lg');
+
+  const navHidden = useNavHidden();
 
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
@@ -58,6 +61,7 @@ export default function Main({ children, sx, ...other }) {
           ...(isNavMini && {
             width: `calc(100% - ${NAV.W_MINI}px)`,
           }),
+          ...(navHidden && { width: '100%' }),
         }),
         ...sx,
       }}

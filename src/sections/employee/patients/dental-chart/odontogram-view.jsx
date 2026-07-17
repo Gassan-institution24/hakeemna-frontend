@@ -15,7 +15,18 @@ import {
   DialogContent,
 } from '@mui/material';
 
+import XrayPanel from './components/xray-panel';
+import DentalArch from './components/dental-arch';
+import NotesPanel from './components/notes-panel';
+import ToothModal from './components/tooth-modal';
+import { toNotation } from './constants/numbering';
+import useOdontogram from './hooks/use-odontogram';
 import { CONDITIONS } from './constants/conditions';
+import ChartHeader from './components/chart-header';
+import ChartToolbar from './components/chart-toolbar';
+import DiagnosisPanel from './components/diagnosis-panel';
+import ProceduresPanel from './components/procedures-panel';
+import ConditionPalette from './components/condition-palette';
 import {
   ADULT_UPPER,
   ADULT_LOWER,
@@ -23,11 +34,6 @@ import {
   CHILD_LOWER,
   getToothType,
 } from './constants/fdi';
-import useOdontogram from './hooks/use-odontogram';
-import ChartToolbar from './components/chart-toolbar';
-import ConditionPalette from './components/condition-palette';
-import DentalArch from './components/dental-arch';
-import ToothModal from './components/tooth-modal';
 
 // ── Zoom configuration ───────────────────────────────────────────────────────
 const BASE_CROWN = 66; // px crown size at 100% (enlarged for readability)
@@ -66,8 +72,8 @@ const CHILD_GHOSTS = {
   lower: { leading: [48, 47, 46], trailing: [36, 37, 38] },
 };
 
-// ── FDI number row between the arches ────────────────────────────────────────
-function FdiRow({ teeth, midlineAfterIndex, cellWidth, leadingCount, trailingCount }) {
+// ── Tooth number row between the arches ──────────────────────────────────────
+function FdiRow({ teeth, midlineAfterIndex, cellWidth, leadingCount, trailingCount, numbering }) {
   const spacer = (n, side) =>
     Array.from({ length: n }).map((_, i) => (
       // eslint-disable-next-line react/no-array-index-key
@@ -94,7 +100,7 @@ function FdiRow({ teeth, midlineAfterIndex, cellWidth, leadingCount, trailingCou
               fontVariantNumeric: 'tabular-nums',
             }}
           >
-            {fdi}
+            {toNotation(fdi, numbering)}
           </Box>
           {idx === midlineAfterIndex && (
             <Box sx={{ width: 11, flexShrink: 0 }} />
@@ -112,12 +118,14 @@ FdiRow.propTypes = {
   cellWidth: PropTypes.number,
   leadingCount: PropTypes.number,
   trailingCount: PropTypes.number,
+  numbering: PropTypes.string,
 };
 
 FdiRow.defaultProps = {
   cellWidth: 44,
   leadingCount: 0,
   trailingCount: 0,
+  numbering: 'fdi',
 };
 
 // ── Color legend ──────────────────────────────────────────────────────────────
@@ -256,6 +264,10 @@ export default function OdontogramView({
   const [snapshotOpen, setSnapshotOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
 
+  // Display-only notation; the chart always stores FDI.
+  const [numbering, setNumbering] = useState('fdi');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   // ── Zoom ────────────────────────────────────────────────────────────────────
   const [zoom, setZoom] = useState(0.75); // default view at 75%
   const crownSize = Math.round(BASE_CROWN * zoom);
@@ -291,6 +303,7 @@ export default function OdontogramView({
     getToothData,
     updateToothData,
     applyBulk,
+    clearDiagnosis,
     undo,
     redo,
     canUndo,
@@ -430,13 +443,13 @@ export default function OdontogramView({
     [onDeleteProcedure, showToast, isAr]
   );
 
-  return (
+  const chartCard = (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        minHeight: 600,
+        minHeight: 520,
         border: '1px solid',
         borderColor: 'divider',
         borderRadius: 2,
@@ -444,6 +457,17 @@ export default function OdontogramView({
         backgroundColor: 'background.paper',
       }}
     >
+      {/* Title, dentition toggles, numbering and fullscreen */}
+      <ChartHeader
+        chartType={chartType}
+        onChartTypeChange={handleChartTypeChange}
+        numbering={numbering}
+        onNumberingChange={setNumbering}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={() => setIsFullscreen((v) => !v)}
+        lang={lang}
+      />
+
       {/* Toolbar */}
       <ChartToolbar
         chartType={chartType}
@@ -530,13 +554,14 @@ export default function OdontogramView({
             bridges={bridges}
           />
 
-          {/* FDI numbers — upper */}
+          {/* Tooth numbers — upper */}
           <FdiRow
             teeth={upperTeeth}
             midlineAfterIndex={midIndex}
             cellWidth={crownSize}
             leadingCount={upperGhosts.leading.length}
             trailingCount={upperGhosts.trailing.length}
+            numbering={numbering}
           />
 
           {/* Midline divider */}
@@ -549,13 +574,14 @@ export default function OdontogramView({
             }}
           />
 
-          {/* FDI numbers — lower */}
+          {/* Tooth numbers — lower */}
           <FdiRow
             teeth={lowerTeeth}
             midlineAfterIndex={midIndex}
             cellWidth={crownSize}
             leadingCount={lowerGhosts.leading.length}
             trailingCount={lowerGhosts.trailing.length}
+            numbering={numbering}
           />
 
           {/* Lower arch */}
@@ -590,6 +616,55 @@ export default function OdontogramView({
 
       {/* Legend */}
       <Legend lang={lang} />
+    </Box>
+  );
+
+  return (
+    <Stack gap={2}>
+      {/* Chart + diagnosis */}
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 2,
+          gridTemplateColumns: { xs: '1fr', lg: '1fr 320px' },
+          alignItems: 'stretch',
+          ...(isFullscreen && {
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1400,
+            p: 2,
+            gridTemplateRows: '1fr',
+            backgroundColor: 'background.default',
+            overflow: 'auto',
+          }),
+        }}
+      >
+        {chartCard}
+
+        <DiagnosisPanel
+          teethMap={teethMap}
+          activeCondition={activeCondition}
+          onSelect={setActiveCondition}
+          onClear={clearDiagnosis}
+          lang={lang}
+        />
+      </Box>
+
+      {/* X-ray · procedures · notes */}
+      {!isFullscreen && (
+        <Box
+          sx={{
+            display: 'grid',
+            gap: 2,
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            alignItems: 'stretch',
+          }}
+        >
+          <XrayPanel lang={lang} />
+          <ProceduresPanel teethMap={teethMap} numbering={numbering} lang={lang} />
+          <NotesPanel lang={lang} />
+        </Box>
+      )}
 
       {/* Tooth detail modal */}
       {selectedFdi && (
@@ -631,7 +706,7 @@ export default function OdontogramView({
           {toast.message}
         </Alert>
       </Snackbar>
-    </Box>
+    </Stack>
   );
 }
 

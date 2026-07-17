@@ -27,6 +27,7 @@ import { useWebRTC } from 'src/components/video-call/use-web-rtc';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
+import { useNavHidden } from './nav-hidden-context';
 import EmployeeAttendence from './employee-attendance';
 import AccountPopover from '../common/account-popover';
 import LanguagePopover from '../common/language-popover';
@@ -61,6 +62,8 @@ export default function Header({ onOpenNav }) {
 
   const lgUp = useResponsive('up', 'lg');
 
+  const navHidden = useNavHidden();
+
   const offset = useOffSetTop(HEADER.H_DESKTOP);
 
   const offsetTop = offset && !isNavHorizontal;
@@ -79,7 +82,7 @@ export default function Header({ onOpenNav }) {
   const renderContent = (
     <>
       {lgUp && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
-      {!lgUp && (
+      {(!lgUp || navHidden) && (
         <IconButton data-test="open-nav-button" onClick={onOpenNav}>
           <SvgColor src="/assets/icons/navbar/ic_menu_item.svg" />
         </IconButton>
@@ -138,6 +141,7 @@ export default function Header({ onOpenNav }) {
             borderBottom: `dashed 1px ${theme.palette.divider}`,
           }),
           ...(isNavMini && { width: `calc(100% - ${NAV.W_MINI + 1}px)` }),
+          ...(navHidden && { width: 1 }),
         }),
       }}
     >

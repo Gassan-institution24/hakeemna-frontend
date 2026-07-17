@@ -173,16 +173,6 @@ const RadiologyCreatePage = lazy(
 
 export const unitServiceEmployeeDashboardRoutes = [
   {
-    path: 'dashboard/mypatients/:id',
-    element: (
-      <AuthGuard>
-        <RoleBasedGuard hasContent roles={['admin', 'employee']}>
-          <PatientInfoPage />
-        </RoleBasedGuard>
-      </AuthGuard>
-    ),
-  },
-  {
     path: 'dashboard',
     element: (
       <AuthGuard>
@@ -261,7 +251,7 @@ export const unitServiceEmployeeDashboardRoutes = [
         children: [
           { element: <PatientsPage />, index: true },
           { path: 'new', element: <PatientNewPage /> },
-          // { path: ':id', element: <PatientInfoPage /> },
+          { path: ':id', element: <PatientInfoPage /> },
         ],
       },
       {

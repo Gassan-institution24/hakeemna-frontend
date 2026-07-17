@@ -31,7 +31,7 @@ import StartupCreating from './startup-creating';
 import NavToggleButton from '../common/nav-toggle-button';
 // ----------------------------------------------------------------------
 
-export default function NavVertical({ openNav, onCloseNav }) {
+export default function NavVertical({ openNav, onCloseNav, temporary = false }) {
   const { user, loading } = useAuthContext();
 
   const pathname = usePathname();
@@ -331,18 +331,22 @@ export default function NavVertical({ openNav, onCloseNav }) {
     <>
       <Box
         sx={{
-          height: { lg: '100vh' },
-          top: { lg: 0 },
-          position: { lg: 'sticky' },
-          flexShrink: { lg: 0 },
-          overflow: 'visible',
-          width: { lg: NAV.W_VERTICAL },
-          boxShadow: (theme) => theme.customShadows.z8,
+          ...(temporary
+            ? { width: 0, flexShrink: 0 }
+            : {
+                height: { lg: '100vh' },
+                top: { lg: 0 },
+                position: { lg: 'sticky' },
+                flexShrink: { lg: 0 },
+                overflow: 'visible',
+                width: { lg: NAV.W_VERTICAL },
+                boxShadow: (theme) => theme.customShadows.z8,
+              }),
         }}
       >
-        <NavToggleButton />
+        {!temporary && <NavToggleButton />}
 
-        {lgUp ? (
+        {lgUp && !temporary ? (
           <Scrollbar
             sx={{
               height: 1,
@@ -479,4 +483,5 @@ export default function NavVertical({ openNav, onCloseNav }) {
 NavVertical.propTypes = {
   openNav: PropTypes.bool,
   onCloseNav: PropTypes.func,
+  temporary: PropTypes.bool,
 };

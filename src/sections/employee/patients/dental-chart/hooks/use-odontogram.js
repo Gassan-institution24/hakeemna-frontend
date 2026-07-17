@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-import { getCondition } from '../constants/conditions';
 import useUndoRedo from './use-undo-redo';
+import { getCondition } from '../constants/conditions';
 
 // Build a teeth lookup map from the API array
 function buildTeethMap(teethArray) {
@@ -127,6 +127,30 @@ export default function useOdontogram({ chartData, onSave }) {
     setIsDirty(true);
   }, [activeCondition, activeStatus, selectedTeeth, setTeethMap]);
 
+  // ── Remove one diagnosis everywhere it appears on the chart ───────────────
+  const clearDiagnosis = useCallback(
+    (diagnosisId) => {
+      setTeethMap((prev) => {
+        const next = {};
+        Object.entries(prev).forEach(([fdi, tooth]) => {
+          const surfaces = {};
+          Object.entries(tooth.surfaces || {}).forEach(([name, surface]) => {
+            surfaces[name] =
+              surface?.diagnosis === diagnosisId ? { ...surface, diagnosis: null } : surface;
+          });
+          next[fdi] = {
+            ...tooth,
+            whole_diagnosis: tooth.whole_diagnosis === diagnosisId ? null : tooth.whole_diagnosis,
+            surfaces,
+          };
+        });
+        return next;
+      });
+      setIsDirty(true);
+    },
+    [setTeethMap]
+  );
+
   // ── Toggle tooth in multi-select ──────────────────────────────────────────
   const toggleSelectTooth = useCallback((fdi) => {
     setSelectedTeeth((prev) => {
@@ -193,6 +217,7 @@ export default function useOdontogram({ chartData, onSave }) {
     getToothData,
     updateToothData,
     applyBulk,
+    clearDiagnosis,
     undo,
     redo,
     canUndo,

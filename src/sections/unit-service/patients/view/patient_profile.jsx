@@ -1,14 +1,19 @@
+import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import React, { useState, useCallback } from 'react';
 
-import { Tab, Box, Tabs, Card, Stack, Avatar, Container, Typography } from '@mui/material';
+import { Box, Card, Stack, Avatar, Container, Typography } from '@mui/material';
 
 import { useGetOneUSPatient } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
+
+import ProfileTabs from 'src/components/profile-tabs';
 
 import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
 import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
+import PatientDentalChart from 'src/sections/employee/patients/dental-chart/patient-dental-chart';
 import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
 import PatientPrescriptions from 'src/sections/employee/patients/patient-profile/patient-prescriptions';
 import PatientMedicalReports from 'src/sections/employee/patients/patient-profile/patient-medical-reports';
@@ -45,10 +50,10 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [currentTab, setCurrentTab] = useState('upload');
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  const checkAcl = useAclGuard();
+  const { hasFeature } = useSubscriptionGuard();
+
+  const [currentTab, setCurrentTab] = useState('communication');
   const TABS = [
     // {
     //   value: 'about',
@@ -82,6 +87,12 @@ export default function PatientProfile() {
       value: 'upload',
       label: t('upload files'),
     },
+    !isMedLab &&
+      checkAcl('dental_chart:read') &&
+      hasFeature('dental_chart') && {
+        value: 'dental',
+        label: t('dental chart'),
+      },
     {
       value: 'edit',
       label: t('edit'),
@@ -123,6 +134,18 @@ export default function PatientProfile() {
             sx={{ width: { md: 100 }, height: { md: 100 } }}
           />
           <Stack gap={1}>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <Typography variant="body2" color="text.secondary">
+                {t('patients')}
+              </Typography>
+              <Typography variant="body2" color="text.disabled">
+                /
+              </Typography>
+              <Typography variant="body2" color="text.primary" fontWeight={600}>
+                {curLangAr ? patientData?.name_arabic : patientData?.name_english}
+              </Typography>
+            </Stack>
+
             <Typography variant="h6">
               {curLangAr ? patientData?.name_arabic : patientData?.name_english}
             </Typography>
@@ -148,17 +171,12 @@ export default function PatientProfile() {
           </Stack>
         </Stack>
       </Card>
-      <Tabs
+      <ProfileTabs
+        tabs={TABS}
         value={currentTab}
-        onChange={handleChangeTab}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        {TABS.map((tab, idx) => (
-          <Tab key={idx} label={tab.label} value={tab.value} />
-        ))}
-      </Tabs>
+        onChange={setCurrentTab}
+        sx={{ mb: { xs: 3, md: 5 } }}
+      />
       {currentTab === 'about' && <PatientAbout patient={usPatientData} />}
       {currentTab === 'communication' && <PatientCommunication patient={usPatientData} />}
       {currentTab === 'file' && <PatientFile patient={usPatientData} />}
@@ -167,6 +185,7 @@ export default function PatientProfile() {
       {currentTab === 'medical_reports' && <PatientMedicalReports patient={usPatientData} />}
       {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
       {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
+      {currentTab === 'dental' && <PatientDentalChart patient={usPatientData} />}
       {currentTab === 'edit' && <EditPatient patient={usPatientData} />}
     </Container>
   );
