@@ -72,6 +72,18 @@ export async function deleteProcedure(patientId, toothNumber, procedureId) {
   return res.data;
 }
 
+export async function addNote(patientId, payload) {
+  const res = await axiosInstance.post(endpoints.dentalChart.note(patientId), payload);
+  await invalidate(patientId);
+  return res.data;
+}
+
+export async function deleteNote(patientId, noteId) {
+  const res = await axiosInstance.delete(endpoints.dentalChart.deleteNote(patientId, noteId));
+  await invalidate(patientId);
+  return res.data;
+}
+
 export async function saveSnapshot(patientId, label) {
   const res = await axiosInstance.post(endpoints.dentalChart.snapshot(patientId), { label });
   await invalidate(patientId);

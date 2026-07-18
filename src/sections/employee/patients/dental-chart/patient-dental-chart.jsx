@@ -1,25 +1,28 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
-
-import { Box, Alert, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useLocales } from 'src/locales';
+import { Box, Alert, CircularProgress } from '@mui/material';
+
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useLocales } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+
+import OdontogramView from './odontogram-view';
 import {
-  useGetDentalChart,
-  bulkUpdateTeeth,
+  addNote,
+  deleteNote,
   updateTooth,
   addProcedure,
-  deleteProcedure,
   saveSnapshot,
-  switchChartType,
   createBridge,
   deleteBridge,
+  bulkUpdateTeeth,
+  deleteProcedure,
+  switchChartType,
+  useGetDentalChart,
 } from '../../../../api/dental_chart';
-import OdontogramView from './odontogram-view';
 
 // ----------------------------------------------------------------------
 
@@ -160,6 +163,24 @@ export default function PatientDentalChart({ patient }) {
     [patientId, createPatientFileRecord]
   );
 
+  const handleAddNote = useCallback(
+    async (payload) => {
+      if (!patientId) return;
+      await addNote(patientId, payload);
+      const scope = payload.tooth_fdi ? `tooth ${payload.tooth_fdi}` : 'chart';
+      await createPatientFileRecord(`Added dental note (${scope}): ${payload.text}`);
+    },
+    [patientId, createPatientFileRecord]
+  );
+
+  const handleDeleteNote = useCallback(
+    async (noteId) => {
+      if (!patientId) return;
+      await deleteNote(patientId, noteId);
+    },
+    [patientId]
+  );
+
   const handleSnapshot = useCallback(
     async (label) => {
       if (!patientId) return;
@@ -225,6 +246,8 @@ export default function PatientDentalChart({ patient }) {
       onChartTypeChange={handleChartTypeChange}
       onCreateBridge={handleCreateBridge}
       onDeleteBridge={handleDeleteBridge}
+      onAddNote={handleAddNote}
+      onDeleteNote={handleDeleteNote}
     />
   );
 }

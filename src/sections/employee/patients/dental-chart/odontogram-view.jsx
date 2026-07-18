@@ -26,7 +26,6 @@ import ChartHeader from './components/chart-header';
 import ChartToolbar from './components/chart-toolbar';
 import DiagnosisPanel from './components/diagnosis-panel';
 import ProceduresPanel from './components/procedures-panel';
-import ConditionPalette from './components/condition-palette';
 import {
   ADULT_UPPER,
   ADULT_LOWER,
@@ -260,6 +259,8 @@ export default function OdontogramView({
   onChartTypeChange,
   onCreateBridge,
   onDeleteBridge,
+  onAddNote,
+  onDeleteNote,
 }) {
   const [snapshotOpen, setSnapshotOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
@@ -314,6 +315,7 @@ export default function OdontogramView({
 
   const upperTeeth = chartType === 'child' ? CHILD_UPPER : ADULT_UPPER;
   const lowerTeeth = chartType === 'child' ? CHILD_LOWER : ADULT_LOWER;
+  const allTeeth = [...upperTeeth, ...lowerTeeth];
   const midIndex = chartType === 'child' ? 4 : 7;
   const upperGhosts = chartType === 'child' ? CHILD_GHOSTS.upper : { leading: [], trailing: [] };
   const lowerGhosts = chartType === 'child' ? CHILD_GHOSTS.lower : { leading: [], trailing: [] };
@@ -491,6 +493,8 @@ export default function OdontogramView({
         onApplyBulk={applyBulk}
         onClearSelection={clearSelection}
         onCreateBridge={handleCreateBridge}
+        bridges={bridges}
+        onRemoveBridge={handleRemoveBridge}
         zoom={zoom}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
@@ -500,15 +504,8 @@ export default function OdontogramView({
         lang={lang}
       />
 
-      {/* Body: palette + arch area */}
+      {/* Body: arch area (diagnosis selection lives in the Diagnosis panel) */}
       <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        {/* Condition palette */}
-        <ConditionPalette
-          activeCondition={activeCondition}
-          onSelect={setActiveCondition}
-          lang={lang}
-        />
-
         {/* Arch area — always LTR so the odontogram layout (teeth + FDI numbers)
             stays anatomically correct and identical in both Arabic and English. */}
         <Box
@@ -661,8 +658,21 @@ export default function OdontogramView({
           }}
         >
           <XrayPanel lang={lang} />
-          <ProceduresPanel teethMap={teethMap} numbering={numbering} lang={lang} />
-          <NotesPanel lang={lang} />
+          <ProceduresPanel
+            teethMap={teethMap}
+            teeth={allTeeth}
+            onAddProcedure={handleAddProcedure}
+            numbering={numbering}
+            lang={lang}
+          />
+          <NotesPanel
+            notes={chartData?.note_entries}
+            teeth={allTeeth}
+            onAddNote={onAddNote}
+            onDeleteNote={onDeleteNote}
+            numbering={numbering}
+            lang={lang}
+          />
         </Box>
       )}
 
@@ -722,6 +732,8 @@ OdontogramView.propTypes = {
   onChartTypeChange: PropTypes.func,
   onCreateBridge: PropTypes.func,
   onDeleteBridge: PropTypes.func,
+  onAddNote: PropTypes.func,
+  onDeleteNote: PropTypes.func,
 };
 
 OdontogramView.defaultProps = {

@@ -11,21 +11,21 @@ export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
   const selected = tabs.some((tab) => tab.value === value) ? value : false;
 
   return (
+    // The tabs wrap onto a second row rather than scrolling. MUI's scrollable
+    // variant has broken scroll buttons in RTL (Arabic), so wrapping keeps every
+    // tab reachable without depending on those arrows. The active underline is
+    // drawn per-tab instead of via the shared indicator, which doesn't track a
+    // wrapped layout correctly.
     <Tabs
       value={selected}
       onChange={(event, newValue) => onChange(newValue)}
-      variant="scrollable"
-      scrollButtons="auto"
-      allowScrollButtonsMobile
+      variant="standard"
+      TabIndicatorProps={{ sx: { display: 'none' } }}
       sx={{
+        minHeight: 48,
         borderBottom: 1,
         borderColor: 'divider',
-        minHeight: 48,
-        '& .MuiTabs-indicator': {
-          height: 3,
-          borderRadius: '3px 3px 0 0',
-          backgroundColor: 'primary.main',
-        },
+        '& .MuiTabs-flexContainer': { flexWrap: 'wrap' },
         ...sx,
       }}
       {...other}
@@ -39,13 +39,15 @@ export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
           iconPosition={tab.icon ? 'start' : undefined}
           sx={{
             px: 2,
+            mb: '-1px',
             minWidth: 'auto',
             minHeight: 48,
             fontWeight: 500,
             textTransform: 'none',
             color: 'text.secondary',
+            borderBottom: '2px solid transparent',
             '&:hover': { color: 'primary.dark' },
-            '&.Mui-selected': { color: 'primary.main', fontWeight: 600 },
+            '&.Mui-selected': { color: 'primary.main', fontWeight: 600, borderColor: 'primary.main' },
           }}
         />
       ))}

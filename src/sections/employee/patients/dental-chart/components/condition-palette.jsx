@@ -142,7 +142,7 @@ export default function ConditionPalette({ activeCondition, onSelect, lang }) {
         color="inherit"
         onClick={() => onSelect(isEraser ? null : 'healthy')}
       >
-        {isAr ? 'مسح / محو' : 'Clear / Erase'}
+        {isAr ? 'مسح' : 'Clear'}
       </Button>
 
       {/* Active paint indicator */}

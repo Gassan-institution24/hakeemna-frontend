@@ -407,7 +407,7 @@ export default function ToothModal({
               </Grid>
 
               {/* Mobility */}
-              <Grid item xs={12} sm={4}>
+              {/* <Grid item xs={12} sm={4}>
                 <FormControl fullWidth size="small">
                   <InputLabel sx={{ fontSize: '0.8rem' }}>
                     {isAr ? 'درجة الحركة' : 'Mobility Grade'}
@@ -423,10 +423,10 @@ export default function ToothModal({
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid> */}
 
               {/* Surfaces */}
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Typography variant="subtitle2" fontWeight={600} mb={1}>
                   {isAr ? 'حالة الأسطح' : 'Surface Conditions'}
                 </Typography>
@@ -493,7 +493,7 @@ export default function ToothModal({
                     );
                   })}
                 </Grid>
-              </Grid>
+              </Grid> */}
 
               {infoError && (
                 <Grid item xs={12}><Alert severity="error">{infoError}</Alert></Grid>

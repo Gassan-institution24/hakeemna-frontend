@@ -469,6 +469,9 @@ export const endpoints = {
       !patientId
         ? null
         : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
+    note: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/note`),
+    deleteNote: (patientId, noteId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/note/${noteId}`,
     snapshot: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshot`),
     snapshots: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshots`),
     restore: (patientId, snapshotId) =>

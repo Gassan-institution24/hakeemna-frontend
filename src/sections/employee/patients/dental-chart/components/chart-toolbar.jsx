@@ -1,29 +1,35 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import SaveIcon from '@mui/icons-material/Save';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import LinkIcon from '@mui/icons-material/Link';
+import ClearIcon from '@mui/icons-material/Clear';
+import PersonIcon from '@mui/icons-material/Person';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import CameraIcon from '@mui/icons-material/PhotoCamera';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
-import LinkIcon from '@mui/icons-material/Link';
-import PersonIcon from '@mui/icons-material/Person';
-import ClearIcon from '@mui/icons-material/Clear';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
   Box,
   Chip,
+  Menu,
   Stack,
   Button,
   Tooltip,
   Divider,
-  CircularProgress,
-  ToggleButton,
-  ToggleButtonGroup,
+  MenuItem,
+  Typography,
   IconButton,
+  ToggleButton,
+  CircularProgress,
+  ToggleButtonGroup,
 } from '@mui/material';
+
+import Iconify from 'src/components/iconify';
 
 export default function ChartToolbar({
   chartType,
@@ -44,6 +50,8 @@ export default function ChartToolbar({
   onApplyBulk,
   onClearSelection,
   onCreateBridge,
+  bridges,
+  onRemoveBridge,
   zoom,
   onZoomIn,
   onZoomOut,
@@ -53,6 +61,9 @@ export default function ChartToolbar({
   lang,
 }) {
   const isAr = lang === 'ar';
+
+  const [bridgeAnchor, setBridgeAnchor] = useState(null);
+  const bridgeList = Array.isArray(bridges) ? bridges : [];
 
   return (
     <Stack
@@ -180,6 +191,54 @@ export default function ChartToolbar({
         </>
       )}
 
+      {/* Bridges — view and remove existing fixed bridges */}
+      {onRemoveBridge && bridgeList.length > 0 && (
+        <>
+          <Tooltip title={isAr ? 'الجسور الثابتة' : 'Fixed bridges'}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="warning"
+              startIcon={<LinkIcon fontSize="small" />}
+              onClick={(e) => setBridgeAnchor(e.currentTarget)}
+              sx={{ fontSize: '0.72rem', py: 0.5 }}
+            >
+              {isAr ? 'الجسور' : 'Bridges'} ({bridgeList.length})
+            </Button>
+          </Tooltip>
+
+          <Menu
+            anchorEl={bridgeAnchor}
+            open={Boolean(bridgeAnchor)}
+            onClose={() => setBridgeAnchor(null)}
+          >
+            {bridgeList.map((bridge) => (
+              <MenuItem
+                key={bridge._id}
+                disableRipple
+                sx={{ gap: 2, justifyContent: 'space-between' }}
+              >
+                <Typography variant="body2">
+                  {(bridge.teeth || []).join('–')}
+                </Typography>
+                <Tooltip title={isAr ? 'إزالة الجسر' : 'Remove bridge'}>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => {
+                      onRemoveBridge(bridge._id);
+                      setBridgeAnchor(null);
+                    }}
+                  >
+                    <Iconify icon="solar:trash-bin-trash-bold" width={16} />
+                  </IconButton>
+                </Tooltip>
+              </MenuItem>
+            ))}
+          </Menu>
+        </>
+      )}
+
       <Divider orientation="vertical" flexItem />
 
       {/* Zoom controls */}
@@ -271,6 +330,8 @@ ChartToolbar.propTypes = {
   onApplyBulk: PropTypes.func.isRequired,
   onClearSelection: PropTypes.func.isRequired,
   onCreateBridge: PropTypes.func,
+  bridges: PropTypes.array,
+  onRemoveBridge: PropTypes.func,
   zoom: PropTypes.number,
   onZoomIn: PropTypes.func.isRequired,
   onZoomOut: PropTypes.func.isRequired,
