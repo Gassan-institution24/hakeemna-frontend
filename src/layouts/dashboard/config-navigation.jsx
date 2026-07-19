@@ -567,13 +567,6 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAccess('dental_chart:read', 'dental_chart'),
-        title: t('dental chart'),
-        path: paths.unitservice.dental.root,
-        icon: <Iconify icon="mdi:tooth-outline" />,
-        'data-test': 'us-nav-item-dental',
-      },
-      {
         show: checkAccess('unit_service_info:read', 'products'),
         title: t('products and suppliers'),
         path: paths.unitservice.products.root,

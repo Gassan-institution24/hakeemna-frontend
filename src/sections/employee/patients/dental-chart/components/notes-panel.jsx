@@ -24,7 +24,7 @@ import {
   DialogContent,
 } from '@mui/material';
 
-import { fDateTime } from 'src/utils/format-time';
+import { fDate, fDateTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 
@@ -130,9 +130,76 @@ AddNoteDialog.propTypes = {
 
 // ----------------------------------------------------------------------
 
+function ViewNoteDialog({ open, onClose, note, numbering, lang }) {
+  const isAr = lang === 'ar';
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle sx={{ fontSize: '1rem' }}>{isAr ? 'الملاحظة' : 'Note'}</DialogTitle>
+      <DialogContent dividers>
+        {note && (
+          <Stack gap={2} sx={{ mt: 1 }}>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                {isAr ? 'التاريخ' : 'Date'}
+              </Typography>
+              <Typography variant="body2">
+                {note.created_at ? fDateTime(note.created_at) : '—'}
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                {isAr ? 'الطبيب' : 'Doctor'}
+              </Typography>
+              <Typography variant="body2">{authorName(note.created_by, isAr)}</Typography>
+            </Box>
+
+            {note.tooth_fdi ? (
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  {isAr ? 'السن' : 'Tooth'}
+                </Typography>
+                <Typography variant="body2" color="primary.main">
+                  {toNotation(note.tooth_fdi, numbering)}
+                </Typography>
+              </Box>
+            ) : null}
+
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                {isAr ? 'الملاحظة' : 'Note'}
+              </Typography>
+              <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+                {note.text}
+              </Typography>
+            </Box>
+          </Stack>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} size="small">
+          {isAr ? 'إغلاق' : 'Close'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+ViewNoteDialog.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  note: PropTypes.object,
+  numbering: PropTypes.string,
+  lang: PropTypes.string,
+};
+
+// ----------------------------------------------------------------------
+
 export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numbering, lang }) {
   const isAr = lang === 'ar';
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewNote, setViewNote] = useState(null);
 
   const rows = [...(notes || [])].sort(
     (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
@@ -168,7 +235,6 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
               <TableRow>
                 <TableCell>{isAr ? 'التاريخ' : 'Date'}</TableCell>
                 <TableCell>{isAr ? 'الطبيب' : 'Doctor'}</TableCell>
-                <TableCell>{isAr ? 'الملاحظة' : 'Note'}</TableCell>
                 <TableCell align="right" />
               </TableRow>
             </TableHead>
@@ -176,25 +242,27 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
               {rows.map((note) => (
                 <TableRow key={note._id}>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {note.created_at ? fDateTime(note.created_at) : '—'}
+                    {note.created_at ? fDate(note.created_at, 'dd MMM yyyy') : '—'}
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>{authorName(note.created_by, isAr)}</TableCell>
-                  <TableCell>
-                    {note.tooth_fdi ? (
-                      <Typography variant="caption" color="primary.main" sx={{ mr: 0.5 }}>
-                        [{toNotation(note.tooth_fdi, numbering)}]
-                      </Typography>
-                    ) : null}
-                    {note.text}
-                  </TableCell>
                   <TableCell align="right">
-                    {onDeleteNote && (
-                      <Tooltip title={isAr ? 'حذف' : 'Delete'}>
-                        <IconButton size="small" onClick={() => onDeleteNote(note._id)}>
-                          <Iconify icon="solar:trash-bin-trash-bold" width={16} />
-                        </IconButton>
-                      </Tooltip>
-                    )}
+                    <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        startIcon={<Iconify icon="solar:eye-bold" width={16} />}
+                        onClick={() => setViewNote(note)}
+                      >
+                        {isAr ? 'عرض المزيد' : 'View more'}
+                      </Button>
+                      {onDeleteNote && (
+                        <Tooltip title={isAr ? 'حذف' : 'Delete'}>
+                          <IconButton size="small" onClick={() => onDeleteNote(note._id)}>
+                            <Iconify icon="solar:trash-bin-trash-bold" width={16} />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Stack>
                   </TableCell>
                 </TableRow>
               ))}
@@ -213,6 +281,14 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
           lang={lang}
         />
       )}
+
+      <ViewNoteDialog
+        open={Boolean(viewNote)}
+        onClose={() => setViewNote(null)}
+        note={viewNote}
+        numbering={numbering}
+        lang={lang}
+      />
     </PanelCard>
   );
 }
