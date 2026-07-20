@@ -34,6 +34,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useFDateTimeUnit } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { getLocalizedName } from 'src/utils/get-localized-name';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -97,6 +98,10 @@ export default function AppointmentsToday() {
   const { roomsData } = useGetUSRooms(unitServiceId);
   const { finishedAppointmentsData, refetch3 } = useGetfinishedAppointments(unitServiceId);
 
+  const sortedTodayAppointments = [...(appointmentsData || [])].sort(
+    (a, b) => new Date(b.start_time) - new Date(a.start_time)
+  );
+
   const receptionActivity = roomsData.find((activity) => activity?.name_english === 'Reception');
   const roomsEntranceOnly = entrance?.filter(
     (e) => e?.Next_activity && e?.Next_activity !== receptionActivity?.activities?._id
@@ -107,8 +112,8 @@ export default function AppointmentsToday() {
       value: 'one',
       label: t('Appointments Today'),
       color: 'info',
-      count: appointmentsData?.length,
-      data: appointmentsData,
+      count: sortedTodayAppointments?.length,
+      data: sortedTodayAppointments,
     },
     checkAcl('entrance:rooms') && {
       value: 'two',
@@ -134,15 +139,10 @@ export default function AppointmentsToday() {
   // ─── Business logic (unchanged) ────────────────────────────────────────────
 
   const getPatientName = (info) => {
-    if (info?.patient?.name_english) {
-      return curLangAr ? info.patient.name_arabic : info.patient.name_english;
-    }
-    if (info?.unit_service_patient?.name_english) {
-      return curLangAr
-        ? info.unit_service_patient.name_arabic
-        : info.unit_service_patient.name_english;
-    }
-    return t('Patient');
+    const person = info?.patient?.name_english || info?.patient?.name_arabic
+      ? info.patient
+      : info?.unit_service_patient;
+    return getLocalizedName(person, curLangAr, t('Patient'));
   };
 
   const startAppointment = async (info) => {

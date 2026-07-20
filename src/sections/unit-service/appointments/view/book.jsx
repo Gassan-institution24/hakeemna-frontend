@@ -117,8 +117,8 @@ export default function TableCreateView() {
     sequence_number: Yup.string(),
     name_english: Yup.string(),
     name_arabic: Yup.string(),
-    // email: Yup.string(),
-    // identification_num: Yup.string(),
+    email: Yup.string(),
+    identification_num: Yup.string(),
     // birth_date: Yup.mixed().nullable(),
     // marital_status: Yup.string().nullable(),
     nationality: Yup.string().required(t('required field')),
@@ -136,8 +136,8 @@ export default function TableCreateView() {
       sequence_number: '',
       name_english: '',
       name_arabic: '',
-      // email: '',
-      // identification_num: '',
+      email: '',
+      identification_num: '',
       // birth_date: null,
       // marital_status: null,
       nationality: null,
@@ -181,14 +181,18 @@ export default function TableCreateView() {
   // const { tableData } = useGetCountryCities(values.country, { select: 'name_english name_arabic' });
 
   const debouncedQuery = useDebounce({
-    sequence_number: values.sequence_number,
-    name_english: values.name_english,
-    name_arabic: values.name_arabic,
-    // email: values.email.toLowerCase(),
-    // identification_num: values.identification_num,
+    sequence_number: values.sequence_number?.trim(),
+    name_english: values.name_english?.trim(),
+    name_arabic: values.name_arabic?.trim(),
+    email: values.email?.trim().toLowerCase(),
+    identification_num: values.identification_num?.trim(),
     mobile_num1: values.mobile_num1,
     mobile_num2: values.mobile_num2,
   });
+
+  const hasSearchQuery = Object.entries(debouncedQuery).some(
+    ([key, value]) => key !== 'select' && value
+  );
 
   const { existPatients } = useFindPatient({
     ...debouncedQuery,
@@ -618,7 +622,7 @@ export default function TableCreateView() {
                     </Stack>
                   </>
                 )}
-                {existPatients.length > 0 && values.patientExist === 'new' && (
+                {hasSearchQuery && existPatients.length > 0 && values.patientExist === 'new' && (
                   <PatientsFound
                     SelectedAppointment={appointmentsData.find(
                       (appoint) => appoint._id === selected
@@ -628,7 +632,9 @@ export default function TableCreateView() {
                     oldPatients={existPatients}
                   />
                 )}
-                {foundPatients.length > 0 && values.patientExist === 'my_patients' && (
+                {hasSearchQuery &&
+                  foundPatients.length > 0 &&
+                  values.patientExist === 'my_patients' && (
                   <PatientsFound
                     SelectedAppointment={appointmentsData.find(
                       (appoint) => appoint._id === selected

@@ -19,7 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { fTimestamp } from 'src/utils/format-time';
+import { fTime, fTimestamp } from 'src/utils/format-time';
 
 import { updateEvent } from 'src/api/calendar';
 import { useAuthContext } from 'src/auth/hooks';
@@ -192,7 +192,25 @@ export default function CalendarView() {
                 meridiem: 'short',
               }}
               eventBorderColor="white"
-              // eventContent={(info)=><div style={{width:'100%',padding:'2px',backgroundColor:info.event.backgroundColor}}><b>{fTime(info.event.start)}</b><i style={{marginLeft:4}}>{info.event.title}</i></div>}
+              eventContent={(info) => (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 4,
+                    alignItems: 'center',
+                    width: '100%',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    padding: '0 2px',
+                  }}
+                >
+                  {!info.event.allDay && info.event.start && <b>{fTime(info.event.start)}</b>}
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {info.event.title}
+                  </span>
+                </div>
+              )}
               events={dataFiltered}
               headerToolbar={false}
               select={onSelectRange}

@@ -19,6 +19,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
+import { getLocalizedName } from 'src/utils/get-localized-name';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
@@ -85,14 +86,7 @@ export default function AppointmentsTableRow({
 
   const [minToDelay, setMinToDelay] = useState(0);
 
-  let patientName;
-  if (patient) {
-    patientName = curLangAr ? patient?.name_arabic : patient?.name_english;
-  } else if (unit_service_patient) {
-    patientName = curLangAr
-      ? unit_service_patient?.name_arabic
-      : unit_service_patient?.name_english;
-  }
+  const patientName = getLocalizedName(patient || unit_service_patient, curLangAr);
 
   return (
     <>

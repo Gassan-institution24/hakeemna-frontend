@@ -9,6 +9,7 @@ import { Card, TextField, IconButton, Typography } from '@mui/material';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate, fDateTime } from 'src/utils/format-time';
+import { getLocalizedName } from 'src/utils/get-localized-name';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -89,7 +90,7 @@ export default function PatientFoundRow({
             </Typography>
             <Card sx={{ p: 2, m: 2 }}>
               <Typography>
-                {t('patient')} : {curLangAr ? name_arabic : name_english}
+                {t('patient')} : {getLocalizedName(row, curLangAr)}
               </Typography>
               <Typography>
                 {t('appoitment')} : {fDateTime(SelectedAppointment.start_time)}

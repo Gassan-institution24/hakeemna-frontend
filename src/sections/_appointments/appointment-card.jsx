@@ -15,6 +15,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { getLocalizedName } from 'src/utils/get-localized-name';
+
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -58,7 +60,7 @@ export default function AppointmentCard({
 
   const tz = unit_service?.country?.time_zone || 'Asia/Amman';
   const person = patient || unit_service_patient;
-  const patientName = curLangAr ? person?.name_arabic : person?.name_english;
+  const patientName = getLocalizedName(person, curLangAr);
 
   const time =
     isValid(new Date(start_time)) &&
