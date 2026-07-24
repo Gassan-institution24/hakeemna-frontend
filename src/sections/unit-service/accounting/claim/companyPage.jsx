@@ -181,9 +181,7 @@ export default function CompanyPage({ companyId: propCompanyId }) {
   // Auto-poll while eligibility is pending (WATANIA / ZERO / ISLAMIC)
   useEffect(() => {
     if (!requestId || eligibilityStatus !== 'pending') return () => {};
-    let attempts = 0;
     const timer = setInterval(async () => {
-      attempts += 1;
       try {
         const res = await checkVisitApproval(requestId);
         const data = res?.data;
@@ -197,11 +195,8 @@ export default function CompanyPage({ companyId: propCompanyId }) {
           clearInterval(timer);
           setEligibilityStatus('rejected');
           enqueueSnackbar(data?.error || t('Not approved'), { variant: 'warning' });
-        } else if (attempts >= 24) {
-          clearInterval(timer);
-          setEligibilityStatus('rejected');
-          enqueueSnackbar(t('Timeout: no insurer response after 120 s'), { variant: 'error' });
         }
+        // keep polling indefinitely until insurer approves or rejects
       } catch { /* will retry next tick */ }
     }, 5000);
     return () => clearInterval(timer);

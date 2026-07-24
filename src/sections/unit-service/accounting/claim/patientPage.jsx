@@ -152,9 +152,7 @@ export default function PatientPage() {
   /* ── auto-poll when a requestId is set (WATANIA eligibility / ZERO / ISLAMIC) ── */
   useEffect(() => {
     if (!requestId) return () => {};
-    let attempts = 0;
     const timer = setInterval(async () => {
-      attempts += 1;
       try {
         const res  = await checkFormNumber(requestId);
         const data = res?.data;
@@ -169,11 +167,8 @@ export default function PatientPage() {
           clearInterval(timer);
           enqueueSnackbar(data?.error || t('Authorization not approved'), { variant: 'warning' });
           setRequestId(null);
-        } else if (attempts >= 12) {
-          clearInterval(timer);
-          enqueueSnackbar(t('Timeout: no insurer response after 60 s'), { variant: 'error' });
-          setRequestId(null);
         }
+        // keep polling indefinitely until insurer approves or rejects
       } catch { /* will retry next tick */ }
     }, 5000);
     return () => clearInterval(timer);
@@ -182,9 +177,7 @@ export default function PatientPage() {
   /* ── auto-poll for WATANIA final authorization (after "Close and Submit Claim") ── */
   useEffect(() => {
     if (!finalAuthReqId) return () => {};
-    let attempts = 0;
     const timer = setInterval(async () => {
-      attempts += 1;
       try {
         const res  = await checkFinalAuthorization(finalAuthReqId);
         const data = res?.data;
@@ -197,11 +190,8 @@ export default function PatientPage() {
           clearInterval(timer);
           setFinalAuthReqId(null);
           enqueueSnackbar(data?.error || t('Authorization rejected by insurer'), { variant: 'error' });
-        } else if (attempts >= 24) {
-          clearInterval(timer);
-          setFinalAuthReqId(null);
-          enqueueSnackbar(t('Timeout: no insurer response for final authorization'), { variant: 'error' });
         }
+        // keep polling indefinitely until insurer approves or rejects
       } catch { /* will retry next tick */ }
     }, 5000);
     return () => clearInterval(timer);
