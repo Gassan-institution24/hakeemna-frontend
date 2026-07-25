@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 
 import { useLocales } from 'src/locales';
-import { ERX } from 'src/services/claimService';
+import { ERX, ERXcancelation } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 /*
@@ -149,7 +149,7 @@ export default function MedicationsOrders({ onDataChange, visitCtx, encounterId 
         },
       ]);
 
-      await ERX({
+      const res = await ERX({
         ...visitCtx,
         encounterId,
         medications: [{
@@ -162,17 +162,58 @@ export default function MedicationsOrders({ onDataChange, visitCtx, encounterId 
           instructions: `Supply 1, Duration 1 days, Refill 0`,
         }],
       });
-      enqueueSnackbar('Medication order sent successfully', { variant: 'success' });
+      const ref = res?.data?.referenceNumber;
+      const orderId = res?.data?.orderId;
+      const activityIds = res?.data?.activityIds;
+      // Keep the TPO orderId + activity IDs + reference on the stored order so it can be cancelled later.
+      setOrders((prev) => prev.map((o) => (o.code === item.code
+        ? { ...o, orderId, activityIds, referenceNumber: ref, routeOfAdmin: item.routeOfAdmin || 'ROA074' }
+        : o)));
+      enqueueSnackbar(
+        ref ? `Medication order sent — Ref: ${ref}` : 'Medication order sent successfully',
+        { variant: 'success' }
+      );
     } catch (e) {
       console.error('ERX send failed', e);
-      enqueueSnackbar('Failed to send medication order', { variant: 'error' });
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to send medication order', { variant: 'error' });
       // Remove from UI if failed
       setOrders((prev) => prev.filter((o) => o.code !== item.code));
     }
   };
 
-  const removeOrder = (code) => {
-    setOrders((prev) => prev.filter((o) => o.code !== code));
+  const removeOrder = async (code) => {
+    const target = orders.find((o) => o.code === code);
+    try {
+      // Cancel at the insurer only if the order was actually submitted (has a TPO orderId).
+      let alreadyCancelled = false;
+      if (target?.orderId) {
+        const res = await ERXcancelation({
+          ...visitCtx,
+          encounterId,
+          orderId:     target.orderId,
+          activityIds: target.activityIds,
+          medications: [{
+            code:         target.code,
+            nameEn:       target.nameEn,
+            routeOfAdmin: target.routeOfAdmin || 'ROA074',
+            quantity:     target.packQty || 1,
+            duration:     target.duration || 1,
+            refills:      target.refills || 0,
+          }],
+        });
+        alreadyCancelled = !!res?.data?.alreadyCancelled;
+      }
+      setOrders((prev) => prev.filter((o) => o.code !== code));
+      if (target?.orderId) {
+        enqueueSnackbar(
+          alreadyCancelled ? 'Medication order was already cancelled' : 'Medication order cancelled',
+          { variant: 'success' }
+        );
+      }
+    } catch (e) {
+      console.error('ERX cancel failed', e);
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to cancel medication order', { variant: 'error' });
+    }
   };
 
   const updateOrder = (code, field, value) => {

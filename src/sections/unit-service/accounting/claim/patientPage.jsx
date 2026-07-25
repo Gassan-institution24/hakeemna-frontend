@@ -81,9 +81,16 @@ export default function PatientPage() {
 
   // Final authorization state (WATANIA only — triggered on "Send Visit Approval")
   const [finalAuthReqId,       setFinalAuthReqId]       = useState(null);
+  // The visit's Authorization.ID — kept for "Cancel Visit" even after the form number
+  // arrives (requestId gets cleared once approved, so we preserve it separately here).
+  const [visitAuthId,          setVisitAuthId]          = useState(null);
   const [submittingFinal,      setSubmittingFinal]       = useState(false);
   const [visitApprovalApproved, setVisitApprovalApproved] = useState(false);
   const [submittingClaim,       setSubmittingClaim]       = useState(false);
+  const [cancellingVisit,       setCancellingVisit]       = useState(false);
+  // Once the claim is submitted or the visit is cancelled the visit is finished —
+  // lock the action buttons so the user can't keep working after leaving.
+  const [finalized,             setFinalized]             = useState(false);
 
   const [sectionStatus, setSectionStatus] = useState({
     diagnosis: false,
@@ -109,6 +116,7 @@ export default function PatientPage() {
         setAuthApproved(true);
       } else if (navState.requestId) {
         setRequestId(navState.requestId);
+        setVisitAuthId(navState.requestId);
       }
       return;
     }
@@ -137,6 +145,7 @@ export default function PatientPage() {
           setAuthApproved(true);
         } else if (data?.requestId) {
           setRequestId(data.requestId);
+          setVisitAuthId(data.requestId);
         }
       } catch (err) {
         console.error('Form number init failed:', err);
@@ -217,6 +226,7 @@ export default function PatientPage() {
         }
         if (data?.requestId) {
           setRequestId(data.requestId);
+          setVisitAuthId(data.requestId);
           enqueueSnackbar(t('Request submitted, awaiting insurer approval'), { variant: 'info' });
         }
       } else {
@@ -269,6 +279,7 @@ export default function PatientPage() {
       const data = res?.data;
       if (data?.pending && data?.requestId) {
         setFinalAuthReqId(data.requestId);
+        setVisitAuthId(data.requestId);
         enqueueSnackbar(t('Visit Approval submitted — awaiting insurer approval'), { variant: 'info' });
       } else if (data?.noAuthRequired) {
         setVisitApprovalApproved(true);
@@ -297,24 +308,62 @@ export default function PatientPage() {
         priorAuthorizationID: encounterId,
         visitType:           visitCtx?.visitType || 'consultant',
         diagnosisCodes:      diagnosisData,
+        // TPO valid Types: 3=JMA, 4=HCPCS, 5=Drug, 6=Dental, 8=Service, 9=DRG, 10=Scientific.
+        // All JOR-coded clinical activities (procedures, lab, radiology, physio) → 3 (JMA);
+        // type 4/7 reject JOR codes. Medications → 5 (Drug).
         activities: [
           ...proceduresData.map((a) => ({ ...a, type: '3' })),
           ...labData.map((a)         => ({ ...a, type: '3' })),
-          ...radiologyData.map((a)   => ({ ...a, type: '4' })),
-          ...medicationData.map((a)  => ({ ...a, type: '6' })),
-          ...physioData.map((a)      => ({ ...a, type: '7' })),
+          ...radiologyData.map((a)   => ({ ...a, type: '3' })),
+          ...medicationData.map((a)  => ({ ...a, type: '5' })),
+          ...physioData.map((a)      => ({ ...a, type: '3' })),
         ],
       });
       if (res?.data?.success) {
+        setFinalized(true);
         enqueueSnackbar(t('Claim submitted successfully'), { variant: 'success' });
-        navigate(paths.unitservice.myClaim.root);
+        // Claim is done — leave the page (replace so Back can't return to keep working).
+        navigate(paths.unitservice.myClaim.root, { replace: true });
       } else {
         enqueueSnackbar(res?.data?.error || t('Claim submission failed'), { variant: 'error' });
       }
     } catch (err) {
-      enqueueSnackbar(err?.message || t('Failed to submit claim'), { variant: 'error' });
+      enqueueSnackbar(err?.response?.data?.error || err?.message || t('Failed to submit claim'), { variant: 'error' });
     } finally {
       setSubmittingClaim(false);
+    }
+  };
+
+  /* ── Cancel Visit — cancels the visit's Authorization at the insurer ── */
+  const handleCancelVisit = async () => {
+    // The Authorization.ID that was submitted for this visit. visitAuthId is preserved
+    // across the form-number flow; fall back to the transient ids if it isn't set yet.
+    const authorizationId = visitAuthId || finalAuthReqId || requestId;
+    if (!authorizationId) {
+      enqueueSnackbar(t('No submitted authorization to cancel for this visit'), { variant: 'warning' });
+      return;
+    }
+    const confirmed = window.confirm(t('Are you sure you want to cancel this visit?'));
+    if (!confirmed) return;
+    setCancellingVisit(true);
+    try {
+      const res = await cancellation({
+        insuranceLicense: visitCtx?.insuranceLicense,
+        clinicianId:      visitCtx?.clinicianId,
+        patientNID:       visitCtx?.patientNID,
+        memberID:         visitCtx?.memberID,
+        authorizationId,
+      });
+      setFinalized(true);
+      enqueueSnackbar(
+        res?.data?.alreadyCancelled ? t('Visit was already cancelled') : t('Visit cancelled'),
+        { variant: 'success' }
+      );
+      // Visit is done — leave the page (replace so Back can't return to keep working).
+      navigate(paths.unitservice.myClaim.root, { replace: true });
+    } catch (err) {
+      enqueueSnackbar(err?.response?.data?.error || err?.message || t('Failed to cancel visit'), { variant: 'error' });
+      setCancellingVisit(false);
     }
   };
 
@@ -477,12 +526,14 @@ export default function PatientPage() {
       ))}
 
       <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2, flexWrap: 'wrap' }}>
-        <Button variant="text" color="error" onClick={() => cancellation()}>
+        <Button
+          variant="text"
+          color="error"
+          onClick={handleCancelVisit}
+          disabled={cancellingVisit || finalized}
+          startIcon={cancellingVisit ? <CircularProgress size={16} color="inherit" /> : null}
+        >
           {t('Cancel Visit')}
-        </Button>
-
-        <Button variant="contained" color="primary">
-          {t('Send Orders')}
         </Button>
 
         {/* Step 1 after eligibility: Send Visit Approval with all visit data */}
@@ -490,7 +541,7 @@ export default function PatientPage() {
           variant="contained"
           color="warning"
           onClick={handleVisitApproval}
-          disabled={!authApproved || visitApprovalBusy || visitApprovalApproved}
+          disabled={!authApproved || visitApprovalBusy || visitApprovalApproved || finalized}
           startIcon={visitApprovalBusy ? <CircularProgress size={16} color="inherit" /> : null}
         >
           {visitApprovalLabel}
@@ -501,7 +552,7 @@ export default function PatientPage() {
           variant="contained"
           color="success"
           onClick={handleSubmitClaim}
-          disabled={!visitApprovalApproved || submittingClaim}
+          disabled={!visitApprovalApproved || submittingClaim || finalized}
           startIcon={submittingClaim ? <CircularProgress size={16} color="inherit" /> : null}
         >
           {t('Submit Claim')}

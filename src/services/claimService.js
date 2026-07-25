@@ -7,7 +7,7 @@ export const viewAuthorizations = (id) =>
   axiosInstance.get('/api/claims/authorization/view', { params: { id, direction: 0 } });
 export const setDownloaded = (id) =>
   axiosInstance.post('/api/claims/authorization/setDownloaded', null, { params: { id } });
-export const cancellation = () => axiosInstance.post('/api/claims/authorization/cancel');
+export const cancellation = (data) => axiosInstance.post('/api/claims/authorization/cancel', data);
 
 // ✅ E-FORM NUMBER
 // Step 1: submit prior-auth request → returns { requestId, strategy } or { formNumber } for self-generated insurers
@@ -18,22 +18,22 @@ export const checkFormNumber = (requestId) =>
 
 // ✅ ORDERS
 export const radiology = (data) => axiosInstance.post('/api/claims/radiology', data);
-export const radiologyCancelation = () =>
-  axiosInstance.post('/api/claims/radiology/cancelation');
+export const radiologyCancelation = (data) =>
+  axiosInstance.post('/api/claims/radiology/cancelation', data);
 
 export const ERX = (data) => axiosInstance.post('/api/claims/erx', data);
-export const ERXcancelation = () =>
-  axiosInstance.post('/api/claims/erx/cancelation');
+export const ERXcancelation = (data) =>
+  axiosInstance.post('/api/claims/erx/cancelation', data);
 
 export const lab = (data) => axiosInstance.post('/api/claims/lab', data);
-export const labCancelation = () =>
-  axiosInstance.post('/api/claims/lab/cancelation');
+export const labCancelation = (data) =>
+  axiosInstance.post('/api/claims/lab/cancelation', data);
 
 // ✅ CLAIM
 export const submitClaim        = (data) => axiosInstance.post('/api/claims/claim', data);
 export const getNewClaims       = ()     => axiosInstance.get('/api/claims/claim/new');
 export const setClaimDownloaded = (id)   => axiosInstance.post('/api/claims/claim/setDownloaded', null, { params: { id } });
-export const viewClaim          = (id)   => axiosInstance.get('/api/claims/claim/view', { params: { id, direction: 1 } });
+export const viewClaim          = (id)   => axiosInstance.get('/api/claims/claim/view', { params: { id, direction: 0 } });
 
 // ✅ VISIT APPROVAL (Prior Authorization / Eligibility)
 export const submitVisitApproval = (data) =>

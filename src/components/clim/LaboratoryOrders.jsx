@@ -16,7 +16,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
-import { lab, cancellation } from 'src/services/claimService';
+import { lab, labCancelation } from 'src/services/claimService';
 
 /* Codes are from the EHC/JMA staging coding list (LABORATORY TESTS sheet). */
 const LAB_ORDERS_LIST = [
@@ -113,22 +113,32 @@ export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }
         },
       ]);
 
-      await lab({
+      const res = await lab({
         ...visitCtx,
         encounterId,
         labTests: [{ code: item.code, nameEn: item.nameEn, quantity: 1 }],
       });
 
-      enqueueSnackbar('Laboratory order sent successfully', { variant: 'success' });
+      const ref = res?.data?.referenceNumber;
+      const orderId = res?.data?.orderId;
+      const activityIds = res?.data?.activityIds;
+      // Keep the TPO orderId + activity IDs + reference on the stored order so it can be cancelled later.
+      setOrders((prev) => prev.map((o) => (o.code === item.code ? { ...o, orderId, activityIds, referenceNumber: ref } : o)));
+      enqueueSnackbar(
+        ref ? `Laboratory order sent — Ref: ${ref}` : 'Laboratory order sent successfully',
+        { variant: 'success' }
+      );
     } catch (e) {
       console.error('Lab send failed', e);
-      enqueueSnackbar('Failed to send laboratory order', { variant: 'error' });
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to send laboratory order', { variant: 'error' });
       // Remove from UI if failed
       setOrders((prev) => prev.filter((o) => o.code !== item.code));
     }
   };
 
   const removeOrder = async (code) => {
+    const target = orders.find((o) => o.code === code);
+
     const confirmed = window.confirm(
       curLangAr ? 'هل أنت متأكد من حذف هذا الطلب؟' : 'Are you sure you want to delete this order?'
     );
@@ -136,13 +146,26 @@ export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }
     if (!confirmed) return;
 
     try {
+      // Cancel at the insurer only if the order was actually submitted (has a TPO orderId).
+      let alreadyCancelled = false;
+      if (target?.orderId) {
+        const res = await labCancelation({
+          ...visitCtx,
+          encounterId,
+          orderId:     target.orderId,
+          activityIds: target.activityIds,
+          labTests:    [{ code: target.code, nameEn: target.nameEn, quantity: target.quantity || 1 }],
+        });
+        alreadyCancelled = !!res?.data?.alreadyCancelled;
+      }
       setOrders((prev) => prev.filter((o) => o.code !== code));
-
-      await cancellation();
-
-      console.log('Cancelled successfully');
+      enqueueSnackbar(
+        alreadyCancelled ? 'Laboratory order was already cancelled' : 'Laboratory order cancelled',
+        { variant: 'success' }
+      );
     } catch (e) {
       console.error('Cancel failed', e);
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to cancel laboratory order', { variant: 'error' });
     }
   };
 
