@@ -93,7 +93,7 @@ export default function ClaimsView() {
       const res = await viewClaim(id);
       setDetail({ id, ...res?.data });
     } catch (e) {
-      enqueueSnackbar('Failed to load claim details', { variant: 'error' });
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to load claim details', { variant: 'error' });
       setOpen(false);
     } finally {
       setDetailLoading(false);

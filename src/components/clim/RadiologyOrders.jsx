@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 import { useLocales } from 'src/locales';
-import { radiology } from 'src/services/claimService';
+import { radiology, radiologyCancelation } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
@@ -95,23 +95,55 @@ export default function RadiologyOrders({ onDataChange, visitCtx, encounterId })
       // update UI first
       setOrders((prev) => [...prev, item]);
 
-      await radiology({
+      const res = await radiology({
         ...visitCtx,
         encounterId,
         radiologyTests: [{ code: item.code, nameEn: item.nameEn, quantity: 1 }],
       });
 
-      enqueueSnackbar('Radiology order sent successfully', { variant: 'success' });
+      const ref = res?.data?.referenceNumber;
+      const orderId = res?.data?.orderId;
+      const activityIds = res?.data?.activityIds;
+      // Keep the TPO orderId + activity IDs + reference on the stored order so it can be cancelled later.
+      setOrders((prev) => prev.map((o) => (o.code === item.code ? { ...o, orderId, activityIds, referenceNumber: ref } : o)));
+      enqueueSnackbar(
+        ref ? `Radiology order sent — Ref: ${ref}` : 'Radiology order sent successfully',
+        { variant: 'success' }
+      );
     } catch (e) {
       console.error('Radiology send failed', e);
-      enqueueSnackbar('Failed to send radiology order', { variant: 'error' });
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to send radiology order', { variant: 'error' });
       // Remove from UI if failed
       setOrders((prev) => prev.filter((o) => o.code !== item.code));
     }
   };
 
-  const removeOrder = (code) => {
-    setOrders((prev) => prev.filter((o) => o.code !== code));
+  const removeOrder = async (code) => {
+    const target = orders.find((o) => o.code === code);
+    try {
+      // Cancel at the insurer only if the order was actually submitted (has a TPO orderId).
+      let alreadyCancelled = false;
+      if (target?.orderId) {
+        const res = await radiologyCancelation({
+          ...visitCtx,
+          encounterId,
+          orderId:        target.orderId,
+          activityIds:    target.activityIds,
+          radiologyTests: [{ code: target.code, nameEn: target.nameEn, quantity: target.quantity || 1 }],
+        });
+        alreadyCancelled = !!res?.data?.alreadyCancelled;
+      }
+      setOrders((prev) => prev.filter((o) => o.code !== code));
+      if (target?.orderId) {
+        enqueueSnackbar(
+          alreadyCancelled ? 'Radiology order was already cancelled' : 'Radiology order cancelled',
+          { variant: 'success' }
+        );
+      }
+    } catch (e) {
+      console.error('Radiology cancel failed', e);
+      enqueueSnackbar(e?.response?.data?.error || 'Failed to cancel radiology order', { variant: 'error' });
+    }
   };
 
   return (
