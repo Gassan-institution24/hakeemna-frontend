@@ -12,6 +12,7 @@ import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 import ProfileTabs from 'src/components/profile-tabs';
 
 import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
+import PatientFinancial from 'src/sections/employee/patients/patient-profile/patient-financial';
 import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
 import PatientDentalChart from 'src/sections/employee/patients/dental-chart/patient-dental-chart';
 import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
@@ -82,6 +83,10 @@ export default function PatientProfile() {
     {
       value: 'appointments',
       label: t('appointments'),
+    },
+    {
+      value: 'financial',
+      label: t('financial information'),
     },
     {
       value: 'upload',
@@ -184,6 +189,7 @@ export default function PatientProfile() {
       {currentTab === 'sick_leave' && <PatientSickLeaves patient={usPatientData} />}
       {currentTab === 'medical_reports' && <PatientMedicalReports patient={usPatientData} />}
       {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
+      {currentTab === 'financial' && <PatientFinancial patient={usPatientData} />}
       {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
       {currentTab === 'dental' && <PatientDentalChart patient={usPatientData} />}
       {currentTab === 'edit' && <EditPatient patient={usPatientData} />}

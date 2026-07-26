@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 520" width="420" height="520" role="img" aria-label="For patients - a family beneficiary group">
+<defs>
+  <radialGradient id="paStage" cx="0.55" cy="0.18" r="0.95">
+    <stop offset="0" stop-color="#ffffff"></stop>
+    <stop offset="0.5" stop-color="#d0f7fc"></stop>
+    <stop offset="1" stop-color="#8fd3c3"></stop>
+  </radialGradient>
+  <radialGradient id="paHalo" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.85"></stop>
+    <stop offset="0.65" stop-color="#ffffff" stop-opacity="0"></stop>
+  </radialGradient>
+  <path id="paArch" d="M0 210A210 210 0 0 1 420 210L420 474A46 46 0 0 1 374 520L46 520A46 46 0 0 1 0 474Z"></path>
+  <clipPath id="paClip"><use href="#paArch"></use></clipPath>
+
+</defs>
+
+<use href="#paArch" fill="url(#paStage)"></use>
+<g clip-path="url(#paClip)">
+  <ellipse class="halo" cx="210" cy="190" rx="150" ry="150" fill="url(#paHalo)"></ellipse>
+  <g stroke="#155e63" stroke-opacity="0.1" stroke-width="1">
+    <path d="M-10 150h440M-10 210h440M-10 270h440M-10 330h440M-10 390h440M-10 450h440"></path>
+  </g>
+  <ellipse cx="210" cy="508" rx="150" ry="20" fill="#0b2e33" opacity="0.1"></ellipse>
+
+
+  <g class="drift" opacity="0.85">
+    <circle cx="72" cy="196" r="17" fill="#ffffff"></circle>
+    <path d="M72 204c-9-6-12-11-12-15a5.4 5.4 0 0 1 9.6-3.4l2.4 3 2.4-3A5.4 5.4 0 0 1 84 189c0 4-3 9-12 15z" fill="#f2704a"></path>
+  </g>
+  <g class="drift d2" opacity="0.8">
+    <rect x="330" y="164" width="34" height="34" rx="10" fill="#ffffff"></rect>
+    <path d="M340 181h5l2-6 4 12 3-8 2 2h4" fill="none" stroke="#155e63" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+  </g>
+
+
+  <g class="g1">
+    <path d="M132 262h44v30h-44z" fill="#f0c9a8"></path>
+    <ellipse cx="154" cy="238" rx="30" ry="34" fill="#f0c9a8"></ellipse>
+    <path d="M124 236c0-25 13-40 30-40s30 15 30 40c0 12-4 6-8-6-4-11-11-16-22-16-13 0-19 6-22 16-4 12-8 18-8-6z" fill="#0b2e33"></path>
+    <path d="M124 250c-8 26-6 52 2 74l-14-4c-8-24-6-52 12-70z" fill="#0b2e33" opacity="0.9"></path>
+    <path d="M154 278c-27 0-50 17-56 42-6 26-9 68-9 200h130c0-132-3-174-9-200-6-25-29-42-56-42z" fill="#155e63"></path>
+    <path d="M154 278l-14 8 14 22 14-22z" fill="#e5fdff" opacity="0.8"></path>
+    <path d="M106 306c-12 24-16 50-13 74" fill="none" stroke="#0f4d52" stroke-width="16" stroke-linecap="round"></path>
+    <path d="M202 306c11 20 15 38 13 56" fill="none" stroke="#0f4d52" stroke-width="16" stroke-linecap="round"></path>
+    <circle cx="95" cy="388" r="10" fill="#f0c9a8"></circle>
+  </g>
+
+
+  <g class="g2">
+    <path d="M256 268h42v28h-42z" fill="#f0c9a8"></path>
+    <ellipse cx="277" cy="246" rx="29" ry="33" fill="#f0c9a8"></ellipse>
+    <path d="M248 244c0-24 13-38 29-38s29 14 29 38c-5-11-13-17-29-17s-24 6-29 17z" fill="#0b2e33"></path>
+    <path d="M277 284c-26 0-48 16-54 40-6 25-8 64-8 196h124c0-132-2-171-8-196-6-24-28-40-54-40z" fill="#16255e"></path>
+    <path d="M277 284l-13 8 13 21 13-21z" fill="#d0f7fc" opacity="0.85"></path>
+    <path d="M231 312c-11 22-14 46-11 68" fill="none" stroke="#101c4a" stroke-width="16" stroke-linecap="round"></path>
+    <path d="M323 312c10 20 13 40 10 58" fill="none" stroke="#101c4a" stroke-width="16" stroke-linecap="round"></path>
+    <circle cx="333" cy="380" r="10" fill="#f0c9a8"></circle>
+  </g>
+
+
+  <g class="g3">
+    <path d="M203 350h30v22h-30z" fill="#f0c9a8"></path>
+    <ellipse cx="218" cy="334" rx="23" ry="25" fill="#f0c9a8"></ellipse>
+    <path d="M195 332c0-19 10-30 23-30s23 11 23 30c-4-9-11-14-23-14s-19 5-23 14z" fill="#0b2e33"></path>
+    <path d="M218 364c-19 0-35 12-39 30-4 18-6 44-6 126h90c0-82-2-108-6-126-4-18-20-30-39-30z" fill="#78c8b8"></path>
+    <path d="M218 364l-10 6 10 16 10-16z" fill="#ffffff" opacity="0.8"></path>
+    <path d="M185 384c-8 16-10 34-8 50" fill="none" stroke="#5eb7a5" stroke-width="13" stroke-linecap="round"></path>
+    <path d="M251 384c8 16 10 30 8 44" fill="none" stroke="#5eb7a5" stroke-width="13" stroke-linecap="round"></path>
+    <circle cx="177" cy="440" r="8.5" fill="#f0c9a8"></circle>
+    <circle cx="259" cy="434" r="8.5" fill="#f0c9a8"></circle>
+  </g>
+</g>
+<use href="#paArch" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"></use>
+</svg>

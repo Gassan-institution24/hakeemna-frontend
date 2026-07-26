@@ -22,6 +22,7 @@ import EditPatient from '../patient-profile/patient-edit';
 import PatientHistory from '../patient-profile/patient-hy';
 import PatientAbout from '../patient-profile/patient-about';
 import PatientUpload from '../patient-profile/patient-upload';
+import PatientFinancial from '../patient-profile/patient-financial';
 import PatientCheckList from '../patient-profile/patient-checklist';
 import PatientRadiology from '../patient-profile/patient-radiology';
 import AppointmentsHistory from '../patient-profile/appoint-history';
@@ -102,6 +103,7 @@ export default function PatientProfile() {
     { value: 'checklist', label: t('checklist') },
     { value: 'medical_analysis', label: t('medical analysis') },
     { value: 'radiology', label: t('radiology') },
+    { value: 'financial', label: t('financial information') },
     checkAcl('dental_chart:read') &&
       hasFeature('dental_chart') && { value: 'dental', label: t('dental chart') },
   ].filter(Boolean);
@@ -193,6 +195,8 @@ export default function PatientProfile() {
         return <PatientMedicalAnalyses patient={usPatientData} />;
       case 'radiology':
         return <PatientRadiology patient={usPatientData} />;
+      case 'financial':
+        return <PatientFinancial patient={usPatientData} />;
       case 'dental':
         return <PatientDentalChart patient={usPatientData} />;
       default:

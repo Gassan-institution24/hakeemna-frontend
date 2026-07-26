@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 520" width="420" height="520" role="img" aria-label="Electronic innovation - people connected through the Hakeemna platform">
+<defs>
+  <radialGradient id="inStage" cx="0.55" cy="0.18" r="0.95">
+    <stop offset="0" stop-color="#ffffff"></stop>
+    <stop offset="0.5" stop-color="#d0f7fc"></stop>
+    <stop offset="1" stop-color="#8fd3c3"></stop>
+  </radialGradient>
+  <radialGradient id="inHalo" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"></stop>
+    <stop offset="0.7" stop-color="#ffffff" stop-opacity="0"></stop>
+  </radialGradient>
+  <path id="inArch" d="M0 210A210 210 0 0 1 420 210L420 474A46 46 0 0 1 374 520L46 520A46 46 0 0 1 0 474Z"></path>
+  <clipPath id="inClip"><use href="#inArch"></use></clipPath>
+
+</defs>
+
+<use href="#inArch" fill="url(#inStage)"></use>
+<g clip-path="url(#inClip)">
+  <g stroke="#155e63" stroke-opacity="0.09" stroke-width="1">
+    <path d="M-10 150h440M-10 210h440M-10 270h440M-10 330h440M-10 390h440M-10 450h440M60 0v520M130 0v520M200 0v520M270 0v520M340 0v520"></path>
+  </g>
+  <ellipse class="halo" cx="210" cy="300" rx="170" ry="170" fill="url(#inHalo)"></ellipse>
+
+  <g stroke="#155e63" stroke-opacity="0.45" stroke-width="1.6" fill="none">
+    <line class="link" x1="96" y1="196" x2="210" y2="300"></line>
+    <line class="link" x1="322" y1="180" x2="210" y2="300"></line>
+    <line class="link" x1="66" y1="356" x2="210" y2="300"></line>
+    <line class="link" x1="350" y1="340" x2="210" y2="300"></line>
+    <line class="link" x1="210" y1="452" x2="210" y2="300"></line>
+  </g>
+
+  <circle class="ring" cx="210" cy="300" r="76" fill="none" stroke="#ffffff" stroke-width="2"></circle>
+  <circle class="ring r2" cx="210" cy="300" r="76" fill="none" stroke="#ffffff" stroke-width="2"></circle>
+
+  <g>
+    <rect x="164" y="254" width="92" height="92" rx="28" fill="#16255e"></rect>
+    <rect x="164" y="254" width="92" height="92" rx="28" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5"></rect>
+    <path d="M210 276v44M188 298h44" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.16"></path>
+    <path class="trace" d="M180 302h12l6-16 8 30 6-22 5 8h23" fill="none" stroke="#f2704a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path>
+    <text x="210" y="336" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="#d0f7fc" opacity="0.9">360</text>
+  </g>
+
+  <g class="node" style="animation-delay:0s">
+    <circle cx="96" cy="196" r="43" fill="#ffffff" opacity="0.75"></circle>
+    <clipPath id="av0"><circle cx="96" cy="196" r="38"></circle></clipPath>
+    <g clip-path="url(#av0)">
+      <circle cx="96" cy="196" r="38" fill="#e5fdff"></circle>
+      <g transform="translate(96 196) scale(0.7916666666666666)">
+        <path d="M-46 52c4-26 22-40 46-40s42 14 46 40l2 12h-96z" fill="#155e63"></path>
+        <path d="M0 12l-11 6 11 20 11-20z" fill="#ffffff" opacity="0.5"></path>
+        <rect x="-9" y="-6" width="18" height="22" fill="#f0c9a8"></rect>
+        <ellipse cx="0" cy="-22" rx="23" ry="26" fill="#f0c9a8"></ellipse>
+        <path d="M-25 -18c-3-30 8-46 25-46s28 16 25 46c-2 16-5 22-7 8 2-16-2-26-18-26s-20 10-18 26c-2 14-5 8-7-8z" fill="#2b2118"></path><path d="M-25 -22c-7 22-8 44-6 60h-9c-4-24-2-46 15-60zM25 -22c7 22 8 44 6 60h9c4-24 2-46-15-60z" fill="#2b2118"></path>
+      </g>
+    </g>
+    <circle cx="96" cy="196" r="38" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2.5"></circle>
+  </g>
+  <g class="node" style="animation-delay:-1.4s">
+    <circle cx="322" cy="180" r="39" fill="#ffffff" opacity="0.75"></circle>
+    <clipPath id="av1"><circle cx="322" cy="180" r="34"></circle></clipPath>
+    <g clip-path="url(#av1)">
+      <circle cx="322" cy="180" r="34" fill="#d0f7fc"></circle>
+      <g transform="translate(322 180) scale(0.7083333333333334)">
+        <path d="M-46 52c4-26 22-40 46-40s42 14 46 40l2 12h-96z" fill="#16255e"></path>
+        <path d="M0 12l-11 6 11 20 11-20z" fill="#ffffff" opacity="0.5"></path>
+        <rect x="-9" y="-6" width="18" height="22" fill="#d9a678"></rect>
+        <ellipse cx="0" cy="-22" rx="23" ry="26" fill="#d9a678"></ellipse>
+        <path d="M-24 -24c0-26 11-40 24-40s24 14 24 40c-4-12-11-19-24-19s-20 7-24 19z" fill="#0b2e33"></path>
+      </g>
+    </g>
+    <circle cx="322" cy="180" r="34" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2.5"></circle>
+  </g>
+  <g class="node" style="animation-delay:-2.6s">
+    <circle cx="66" cy="356" r="38" fill="#ffffff" opacity="0.75"></circle>
+    <clipPath id="av2"><circle cx="66" cy="356" r="33"></circle></clipPath>
+    <g clip-path="url(#av2)">
+      <circle cx="66" cy="356" r="33" fill="#d0f7fc"></circle>
+      <g transform="translate(66 356) scale(0.6875)">
+        <path d="M-46 52c4-26 22-40 46-40s42 14 46 40l2 12h-96z" fill="#2f8f80"></path>
+        <path d="M0 12l-11 6 11 20 11-20z" fill="#ffffff" opacity="0.5"></path>
+        <rect x="-9" y="-6" width="18" height="22" fill="#f5d5b4"></rect>
+        <ellipse cx="0" cy="-22" rx="23" ry="26" fill="#f5d5b4"></ellipse>
+        <path d="M-24 -24c0-26 11-40 24-40s24 14 24 40c-4-12-11-19-24-19s-20 7-24 19z" fill="#4a3524"></path>
+      </g>
+    </g>
+    <circle cx="66" cy="356" r="33" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2.5"></circle>
+  </g>
+  <g class="node" style="animation-delay:-3.6s">
+    <circle cx="350" cy="340" r="42" fill="#ffffff" opacity="0.75"></circle>
+    <clipPath id="av3"><circle cx="350" cy="340" r="37"></circle></clipPath>
+    <g clip-path="url(#av3)">
+      <circle cx="350" cy="340" r="37" fill="#e5fdff"></circle>
+      <g transform="translate(350 340) scale(0.7708333333333334)">
+        <path d="M-46 52c4-26 22-40 46-40s42 14 46 40l2 12h-96z" fill="#78c8b8"></path>
+        <path d="M0 12l-11 6 11 20 11-20z" fill="#ffffff" opacity="0.5"></path>
+        <rect x="-9" y="-6" width="18" height="22" fill="#e8b98f"></rect>
+        <ellipse cx="0" cy="-22" rx="23" ry="26" fill="#e8b98f"></ellipse>
+        <path d="M-25 -18c-3-30 8-46 25-46s28 16 25 46c-2 16-5 22-7 8 2-16-2-26-18-26s-20 10-18 26c-2 14-5 8-7-8z" fill="#3a2a1d"></path><path d="M-25 -22c-7 22-8 44-6 60h-9c-4-24-2-46 15-60zM25 -22c7 22 8 44 6 60h9c4-24 2-46-15-60z" fill="#3a2a1d"></path>
+      </g>
+    </g>
+    <circle cx="350" cy="340" r="37" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2.5"></circle>
+  </g>
+  <g class="node" style="animation-delay:-4.8s">
+    <circle cx="210" cy="452" r="53" fill="#ffffff" opacity="0.75"></circle>
+    <clipPath id="av4"><circle cx="210" cy="452" r="48"></circle></clipPath>
+    <g clip-path="url(#av4)">
+      <circle cx="210" cy="452" r="48" fill="#ffffff"></circle>
+      <g transform="translate(210 452) scale(1)">
+        <path d="M-46 52c4-26 22-40 46-40s42 14 46 40l2 12h-96z" fill="#155e63"></path>
+        <path d="M0 12l-11 6 11 20 11-20z" fill="#ffffff" opacity="0.5"></path>
+        <rect x="-9" y="-6" width="18" height="22" fill="#f0c9a8"></rect>
+        <ellipse cx="0" cy="-22" rx="23" ry="26" fill="#f0c9a8"></ellipse>
+        <path d="M-25 -18c-3-30 8-46 25-46s28 16 25 46c-2 16-5 22-7 8 2-16-2-26-18-26s-20 10-18 26c-2 14-5 8-7-8z" fill="#0b2e33"></path><path d="M-25 -22c-7 22-8 44-6 60h-9c-4-24-2-46 15-60zM25 -22c7 22 8 44 6 60h9c4-24 2-46-15-60z" fill="#0b2e33"></path>
+      </g>
+    </g>
+    <circle cx="210" cy="452" r="48" fill="none" stroke="#ffffff" stroke-opacity="0.9" stroke-width="2.5"></circle>
+  </g>
+</g>
+<use href="#inArch" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"></use>
+</svg>
