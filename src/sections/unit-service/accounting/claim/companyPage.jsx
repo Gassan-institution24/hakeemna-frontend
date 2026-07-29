@@ -31,9 +31,12 @@ import { useTranslate } from '../../../../locales';
 import { useGetInsuranceCo } from '../../../../api';
 import { useAuthContext } from '../../../../auth/hooks';
 import { useSnackbar } from '../../../../components/snackbar';
+import { usesBatchedOrders } from '../../../../components/clim/insurerFlow';
 import {
   checkVisitApproval,
   submitVisitApproval,
+  checkFinalAuthorization,
+  submitFinalAuthorization,
 } from '../../../../services/claimService';
 
 const VISIT_TYPES = [
@@ -80,6 +83,10 @@ export default function CompanyPage({ companyId: propCompanyId }) {
   const [requestId, setRequestId] = useState(null);
   const [idPayer, setIdPayer] = useState(null);
   const [loadingEligibility, setLoadingEligibility] = useState(false);
+  const [sendingApproval, setSendingApproval] = useState(false);
+  // Set when the insurer answers the visit approval asynchronously (WATANIA/DELTA); polled
+  // below until they accept, because the visit only opens once the approval is confirmed.
+  const [approvalReqId, setApprovalReqId] = useState(null);
 
   const clinicianId =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
@@ -202,8 +209,9 @@ export default function CompanyPage({ companyId: propCompanyId }) {
     return () => clearInterval(timer);
   }, [requestId, eligibilityStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Step 3: Open Visit — navigate immediately for both WATANIA and DELTA ──
-  const handleCreateVisit = () => {
+  const batchedFlow = usesBatchedOrders(insuranceLicense);
+
+  const openVisit = (visitApprovalApproved) => {
     navigate(paths.unitservice.accounting.claim.patientVisitView(selectedPatient._id), {
       state: {
         visitContext: {
@@ -218,10 +226,75 @@ export default function CompanyPage({ companyId: propCompanyId }) {
         requestId,
         idPayer,
         isWatania,
+        visitApprovalApproved,
       },
     });
+  };
+
+  // ── Step 3: Open Visit — WATANIA/DELTA send their Authorization later, from inside the
+  //    visit, with the complete visit data, so they go straight in. ──
+  const handleCreateVisit = () => {
+    openVisit(false);
     enqueueSnackbar(t('Visit opened successfully'), { variant: 'success' });
   };
+
+  // ── Step 3: Send Visit Approval — the visit only opens once the insurer confirms it. ──
+  const handleSendVisitApproval = async () => {
+    setSendingApproval(true);
+    try {
+      const res = await submitFinalAuthorization({
+        insuranceLicense,
+        clinicianId,
+        patientNID: selectedPatient.identification_num,
+        memberID,
+        encounterId: idPayer || formNumber,
+        visitType,
+      });
+      const data = res?.data;
+
+      // MedNet / Solidarity / Islamic were already authorised by the eligibility call, so the
+      // backend confirms immediately. WATANIA and DELTA post a real Authorization and answer
+      // asynchronously — hold here and poll rather than opening an unapproved visit.
+      if (data?.noAuthRequired) {
+        enqueueSnackbar(t('Visit approval confirmed'), { variant: 'success' });
+        openVisit(true);
+      } else if (data?.pending && data?.requestId) {
+        setApprovalReqId(data.requestId);
+        enqueueSnackbar(t('Visit approval sent — awaiting insurer approval'), { variant: 'info' });
+      } else {
+        enqueueSnackbar(data?.error || t('Visit approval was not accepted'), { variant: 'error' });
+        setSendingApproval(false);
+      }
+    } catch (err) {
+      enqueueSnackbar(
+        err?.response?.data?.error || err?.message || t('Failed to send visit approval'),
+        { variant: 'error' }
+      );
+      setSendingApproval(false);
+    }
+  };
+
+  // Poll the asynchronous visit approval; enter the visit the moment the insurer accepts.
+  useEffect(() => {
+    if (!approvalReqId) return () => {};
+    const timer = setInterval(async () => {
+      try {
+        const res = await checkFinalAuthorization(approvalReqId);
+        const data = res?.data;
+        if (data?.pending) return; // keep waiting
+        clearInterval(timer);
+        setApprovalReqId(null);
+        setSendingApproval(false);
+        if (data?.success) {
+          enqueueSnackbar(t('Visit approval confirmed'), { variant: 'success' });
+          openVisit(true);
+        } else {
+          enqueueSnackbar(data?.error || t('Visit approval was not accepted'), { variant: 'error' });
+        }
+      } catch { /* transient — retry on the next tick */ }
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [approvalReqId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const statusLabel = {
     approved: t('Eligible'),
@@ -408,15 +481,28 @@ export default function CompanyPage({ companyId: propCompanyId }) {
                     </Button>
                   )}
 
-                  {eligibilityStatus === 'approved' && (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={handleCreateVisit}
-                    >
-                      {t('Open Visit')}
-                    </Button>
-                  )}
+                  {eligibilityStatus === 'approved' &&
+                    (batchedFlow ? (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleSendVisitApproval}
+                        disabled={sendingApproval}
+                        startIcon={
+                          sendingApproval ? <CircularProgress size={16} color="inherit" /> : null
+                        }
+                      >
+                        {(() => {
+                          if (approvalReqId) return t('Awaiting insurer approval...');
+                          if (sendingApproval) return t('Sending visit approval...');
+                          return t('Send Visit Approval');
+                        })()}
+                      </Button>
+                    ) : (
+                      <Button variant="contained" color="success" onClick={handleCreateVisit}>
+                        {t('Open Visit')}
+                      </Button>
+                    ))}
                 </Box>
 
                 {formNumber && (

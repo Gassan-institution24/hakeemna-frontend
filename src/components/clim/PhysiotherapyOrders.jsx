@@ -21,9 +21,13 @@ import { useLocales } from 'src/locales';
 /* ================= STATIC DATA ================= */
 
 /*
- * JOR codes from the PROCEDURES (JMA) staging sheet.
- * Physio activities are submitted as type '3' (JMA) in the Authorization — NOT via ERX.
- * Type '7' in Authorization = Dental/CDT (VR0141), so physio must use type '3'.
+ * JOR codes from the PROCEDURES (JMA) staging sheet — physio activities are type '3' (JMA);
+ * type '7' is Dental/CDT and rejects JOR codes (VR0141).
+ *
+ * JOR-08-01-011 and JOR-08-01-010 used to be listed here as "Cryotherapy Session" and
+ * "Hot/Cold Pack Therapy". Both are "Burn with Dressing" (Large / Medium) in the official
+ * sheet, so picking them here billed a burn dressing under a physiotherapy name. They now
+ * live only in the In-Clinic Procedures section, under their real names.
  */
 const PHYSIOTHERAPY_LIST = [
   {
@@ -36,20 +40,11 @@ const PHYSIOTHERAPY_LIST = [
     nameEn: 'Electrotherapy (1st Session)',
     nameAr: 'علاج كهربائي (الجلسة الأولى)',
   },
-  {
-    code: 'JOR-08-01-011',
-    nameEn: 'Cryotherapy Session',
-    nameAr: 'جلسة علاج بالتبريد',
-  },
-  {
-    code: 'JOR-08-01-010',
-    nameEn: 'Hot/Cold Pack Therapy',
-    nameAr: 'علاج بالكمادات الساخنة/الباردة',
-  },
 ];
 
 
-export default function PhysiotherapyOrders({ onDataChange, visitCtx, encounterId }) {
+
+export default function PhysiotherapyOrders({ onDataChange, sentBatch, onCancelBatch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -66,14 +61,24 @@ export default function PhysiotherapyOrders({ onDataChange, visitCtx, encounterI
     (curLangAr ? p.nameAr : p.nameEn).toLowerCase().includes(search.toLowerCase())
   );
 
+  // Physiotherapy never submits on its own. On the batched flow it is sent by "Send Order"
+  // together with the laboratory tests, in one Lab EditRequest (both are Activity Type '3',
+  // JMA). On the WATANIA/DELTA flow it is declared inside their final Authorization.
+  // `sessions` is display-only; `quantity` is what was actually declared to the insurer.
   const addOrder = (item) => {
     if (orders.find((o) => o.code === item.code)) return;
-    // Physio orders are included in the Authorization and Claim — no separate TPO endpoint.
-    setOrders((prev) => [...prev, { ...item, sessions: 1 }]);
+    setOrders((prev) => [...prev, { ...item, sessions: 1, quantity: 1 }]);
     enqueueSnackbar('Physiotherapy order added', { variant: 'success' });
   };
 
-  const removeOrder = (code) => {
+  const removeOrder = async (code) => {
+    // Before "Send Order" nothing has left the building, so removal is free. Afterwards the
+    // whole Lab batch has to be cancelled at the insurer — TPO cancels a whole Order, it
+    // cannot drop a single activity from one.
+    if (sentBatch && onCancelBatch) {
+      const cancelled = await onCancelBatch();
+      if (!cancelled) return;
+    }
     setOrders((prev) => prev.filter((o) => o.code !== code));
   };
 
@@ -156,6 +161,9 @@ export default function PhysiotherapyOrders({ onDataChange, visitCtx, encounterI
                     type="number"
                     value={item.sessions}
                     onChange={(e) => updateSessions(item.code, e.target.value)}
+                    // Once the batch is sent it is declared at quantity 1 — editing this
+                    // afterwards would show a number the insurer never received.
+                    disabled={!!sentBatch}
                     fullWidth
                   />
                 </Box>
@@ -217,6 +225,6 @@ export default function PhysiotherapyOrders({ onDataChange, visitCtx, encounterI
 
 PhysiotherapyOrders.propTypes = {
   onDataChange: PropTypes.func,
-  visitCtx: PropTypes.object,
-  encounterId: PropTypes.string,
+  sentBatch: PropTypes.object,
+  onCancelBatch: PropTypes.func,
 };

@@ -18,7 +18,6 @@ import {
   ListItemButton,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
-import { ERX } from 'src/services/claimService';
 
 /* ================= STATIC DATA ================= */
 
@@ -33,74 +32,105 @@ const CONSULTATION = {
   patientShare: 0.0,
 };
 
-/* Codes are from the EHC/JMA staging coding list (PROCEDURES sheet).
-   Type '3' (JMA) is used for these in the TPO authorization payload. */
-const PROCEDURES_LIST = [
-  {
-    code: 'JOR-04-001-003',
-    nameEn: 'Chemical Treatment (per Session)',
-    nameAr: 'علاج كيميائي (لكل جلسة)',
-    gross: 5.0,
-    insurance: 4.5,
-    patientShare: 0.5,
-  },
-  {
-    code: 'JOR-04-001-008',
-    nameEn: 'Electrotherapy (1st Session)',
-    nameAr: 'علاج كهربائي (الجلسة الأولى)',
-    gross: 5.0,
-    insurance: 4.5,
-    patientShare: 0.5,
-  },
-  {
-    code: 'JOR-23-04-007',
-    nameEn: 'Mesotherapy Procedure',
-    nameAr: 'علاج ميزوثيرابي',
-    gross: 10.0,
-    insurance: 8.0,
-    patientShare: 2.0,
-  },
-  {
-    code: 'JOR-08-01-011',
-    nameEn: 'Burn with Dressing - Large',
-    nameAr: 'حرق مع تضميد – كبير',
-    gross: 7.0,
-    insurance: 6.0,
-    patientShare: 1.0,
-  },
-  {
-    code: 'JOR-08-01-010',
-    nameEn: 'Burn with Dressing - Medium',
-    nameAr: 'حرق مع تضميد – متوسط',
-    gross: 5.0,
-    insurance: 4.5,
-    patientShare: 0.5,
-  },
-  {
-    code: 'JOR-24-22-006',
-    nameEn: 'Laceration: Major',
-    nameAr: 'تمزق: كبير',
-    gross: 12.0,
-    insurance: 9.0,
-    patientShare: 3.0,
-  },
-  {
-    code: 'JOR-28-03-017',
-    nameEn: 'Cryo-surgery',
-    nameAr: 'جراحة تجميد',
-    gross: 6.0,
-    insurance: 5.0,
-    patientShare: 1.0,
-  },
-  {
-    code: 'JOR-08-01-051',
-    nameEn: 'Remove Perianal Skin Tag',
-    nameAr: 'إزالة زائدة جلدية حول الشرج',
-    gross: 6.0,
-    insurance: 5.0,
-    patientShare: 1.0,
-  },
+/* Codes and English names are taken verbatim from the EHC/JMA staging coding list
+   (PROCEDURES sheet). Procedures are billed on the Claim as Activity Type '3' (JMA).
+
+   Two groups of sheet rows are deliberately left out:
+     · JOR 34-100- 549 / 585 / 544 / 501 — the source sheet stores these with embedded
+       spaces. The canonical form is a guess (siblings look like JOR-34-100-550) and TPO
+       validates against its own table, so they are omitted until EHC confirms the exact
+       string. All four are vaccines rather than in-clinic procedures.
+     · JOR-04-001-003 / JOR-04-001-008 — owned by the Physiotherapy section, which submits
+       them as their own TPO order. Listing them here too would let one code be declared
+       twice on the same encounter. */
+const PROCEDURE_CODES = [
+  ['JOR-16-01-036', 'Elbow Disl. OPR'],
+  ['JOR-07-16-014', 'High recto-vaginal fistula'],
+  ['JOR-02-06-017', 'Pulmonary Valvotomy & VSD Closure'],
+  ['JOR-14-04-004', 'GI BLEEDING'],
+  ['JOR-24-02-002', 'Reductive Mammaplasty (Unilateral)'],
+  ['JOR-07-16-015', 'Entero-vesical fistula'],
+  ['JOR-08-01-051', 'Remove perianal skin tag'],
+  ['JOR-15-02-046', 'Pterygium'],
+  ['JOR-24-11-018', 'Fasciotomy Acute'],
+  ['JOR-16-01-033', 'Repair Malunion or Non Union HUM. B. Graft'],
+  ['JOR-14-11-001', 'SALIVARY GLANDS SCAN'],
+  ['JOR-14-17-009', 'Curative Treatment by External Beams Tumors of Gamma Knife Stereotactic RT.'],
+  ['JOR-01-01-023', 'PERIPHERAL ARTERY BALLOON'],
+  ['JOR-16-01-221', 'Metatarsal FR. OFR + MR.'],
+  ['JOR-24-05-002', 'Fracture Orbital Fracture Orif'],
+  ['JOR-29-08-003', 'Axillo-Femoral bypass Unilateral'],
+  ['JOR-34-100-550', 'ISG'],
+  ['JOR-19-01-001', 'Newborn Routine Examination'],
+  ['JOR-28-03-017', 'Cryo-surgery'],
+  ['JOR-14-01-004', 'BONE MARROW SCAN'],
+  ['JOR-08-01-011', 'Burn with Dressing-Large'],
+  ['JOR-02-03-013', 'Modified Blalock -Taussig shunt (GORE-TEX)'],
+  ['JOR-24-11-019', 'Deeping Web Space'],
+  ['JOR-33-01-011', 'Craniotomy for spontaneous intracerebral hematoma'],
+  ['JOR-29-02-004', 'False aneurysm excision'],
+  ['JOR-02-04-004', 'ACB with closure of acquired postinfarction VSD ADD'],
+  ['JOR-24-22-006', 'Laceration: Major'],
+  ['JOR-28-03-018', 'Cystic Lesion Enucleation'],
+  ['JOR-08-01-010', 'Burn with Dressing-Medium'],
+  ['JOR-23-04-007', 'Mesotherapy Procedure'],
+  ['JOR-18-03-074', 'Barium Enema Reduction'],
+  ['JOR-29-12-075', 'Ilio – canal thrombectomy + thrombolysis'],
+  ['JOR-24-25-001', 'Scar revision in Face, Scalp & Neck, Up to 2.5 cm'],
+  ['JOR-28-06-013', 'Diagonsis of Acute periodontal conditions'],
+  ['JOR-09-01-062', 'Manual Removal of Placenat not by DEL. SUR'],
+  ['JOR-26-01-040', 'Ureteric Reimplantation Boari Flap'],
+  ['JOR-28-02-027', 'porcelain fused to metal crown(non precious)'],
+  ['JOR-15-04-018', 'Upper Cicatricle Entropion Repair without Graft'],
+  ['JOR-25-09-002', 'Repair of Sternal Deformity (Ravitch Operation), (Complex)'],
+  ['JOR-25-02-013', 'Mediastenal tracheostomy'],
+  ['JOR-19-01-002', 'Blood Exchange Including Cath'],
+  ['JOR-15-08-004', 'Phakic IOL (ICL)'],
+  ['JOR-25-01-022', 'V AT Thymectomy (for MG)'],
+  ['JOR-15-05-009', 'Subtota l Exenteration'],
+  ['JOR-28-03-011', 'Condlylar Fracture Open Red'],
+  ['JOR-14-04-007', 'GASTRIC EMPTYING - SOLID PHASE'],
+  ['JOR-05-01-083', 'Sinusotomy Sphenoidal'],
+  ['JOR-15-02-047', 'Ptertgium Recurrent or if Reaching Pupil'],
+  ['JOR-24-05-008', 'Fracture Maxilla ORIF'],
+  ['JOR-14-13-019', 'Curative Treatment by External Beams Tumors of Curative'],
+  ['JOR-34-100-556', 'Received All Childhood Vaccinations'],
+  ['JOR-15-02-040', 'Tarsorrhaphy LA or GA Double'],
+  ['JOR-16-01-220', 'Metatarsal FR. CR.+ GA'],
+  ['JOR-24-05-009', 'Fracture Zygoma Open Reduction (Tripode)'],
+  ['JOR-22-04-022', 'ULTRASOUND DOPPLER UPPER LIMBS TWO SIDES'],
+  ['JOR-30-01-005', 'Electrical Cardioversion (DC Shock)'],
+  ['JOR-19-01-006', 'Intravenous or arterial umbilical catheterization'],
+  ['JOR-02-06-016', 'Pulmonary Valvotomy & VSD Closure & RV Outflow Patc'],
+  ['JOR-14-01-003', 'BONE SCAN - SPECT'],
+  ['JOR-26-01-041', 'Repair of Retrocavalureter'],
+  ['JOR-16-01-264', 'Acromioplasty – open'],
+  ['JOR-16-01-259', 'Shoulder Arthroscopy/ Diagnostic'],
 ];
+
+/* The coding sheet carries no Arabic text and no prices. These are the entries that were
+   already priced before the list was expanded — values kept verbatim. Anything not listed
+   here falls back to the English name and 0.00, and is billed at zero until priced. */
+const PROCEDURE_OVERRIDES = {
+  'JOR-23-04-007': { nameAr: 'علاج ميزوثيرابي', gross: 10.0, insurance: 8.0, patientShare: 2.0 },
+  'JOR-08-01-011': { nameAr: 'حرق مع تضميد – كبير', gross: 7.0, insurance: 6.0, patientShare: 1.0 },
+  'JOR-08-01-010': { nameAr: 'حرق مع تضميد – متوسط', gross: 5.0, insurance: 4.5, patientShare: 0.5 },
+  'JOR-24-22-006': { nameAr: 'تمزق: كبير', gross: 12.0, insurance: 9.0, patientShare: 3.0 },
+  'JOR-28-03-017': { nameAr: 'جراحة تجميد', gross: 6.0, insurance: 5.0, patientShare: 1.0 },
+  'JOR-08-01-051': { nameAr: 'إزالة زائدة جلدية حول الشرج', gross: 6.0, insurance: 5.0, patientShare: 1.0 },
+};
+
+const PROCEDURES_LIST = PROCEDURE_CODES.map(([code, nameEn]) => {
+  const override = PROCEDURE_OVERRIDES[code] || {};
+  return {
+    code,
+    nameEn,
+    nameAr: override.nameAr ?? nameEn, // sheet has no Arabic column — fall back to English
+    gross: override.gross ?? 0,
+    insurance: override.insurance ?? 0,
+    patientShare: override.patientShare ?? 0,
+  };
+});
 
 const UI_TEXT = {
   service: { en: 'Service', ar: 'الخدمة' },
@@ -130,45 +160,20 @@ export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId
   }, [procedures, onDataChange]);
 
   const filtered = PROCEDURES_LIST.filter((p) => {
-    const name = curLangAr ? p.nameAr : p.nameEn;
+    const name = (curLangAr ? p.nameAr : p.nameEn) || '';
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
   const hasProcedures = procedures.length > 0;
 
-  const addProcedure = async (item) => {
+  // Procedures are performed in-clinic, so there is no order to send to another provider —
+  // they are declared on the Claim as Activity Type '3' (JMA). The previous implementation
+  // posted them to the ERX endpoint, which hard-codes Type '5' (Drug); TPO rejects a JOR
+  // code declared as a drug, so the row was always rolled back and nothing could be added.
+  const addProcedure = (item) => {
     if (procedures.find((p) => p.code === item.code)) return;
-
-    if (!visitCtx || !encounterId) {
-      enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
-      return;
-    }
-
-    try {
-      // update UI first
-      setProcedures((prev) => [...prev, item]);
-
-      await ERX({
-        ...visitCtx,
-        encounterId,
-        medications: [{
-          code: item.code,
-          nameEn: item.nameEn,
-          quantity: 1,
-          duration: 1,
-          refills: 0,
-          routeOfAdmin: '',
-          instructions: '',
-        }],
-      });
-
-      enqueueSnackbar('Procedure order sent successfully', { variant: 'success' });
-    } catch (e) {
-      console.error('ERX send failed', e);
-      enqueueSnackbar('Failed to send procedure order', { variant: 'error' });
-      // Remove from UI if failed
-      setProcedures((prev) => prev.filter((p) => p.code !== item.code));
-    }
+    setProcedures((prev) => [...prev, item]);
+    enqueueSnackbar('Procedure added', { variant: 'success' });
   };
 
   const removeProcedure = (code) => {
