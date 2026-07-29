@@ -65,7 +65,14 @@ const RADIOLOGY_LIST = [
   },
 ];
 
-export default function RadiologyOrders({ onDataChange, visitCtx, encounterId }) {
+export default function RadiologyOrders({
+  onDataChange,
+  visitCtx,
+  encounterId,
+  deferSend,
+  sentBatch,
+  onCancelBatch,
+}) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -85,6 +92,13 @@ export default function RadiologyOrders({ onDataChange, visitCtx, encounterId })
 
   const addOrder = async (item) => {
     if (orders.find((o) => o.code === item.code)) return;
+
+    // Batched flow: collect only. "Send Order" submits every study in one Rad request.
+    if (deferSend) {
+      setOrders((prev) => [...prev, item]);
+      enqueueSnackbar('Radiology order added', { variant: 'success' });
+      return;
+    }
 
     if (!visitCtx || !encounterId) {
       enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
@@ -120,6 +134,18 @@ export default function RadiologyOrders({ onDataChange, visitCtx, encounterId })
 
   const removeOrder = async (code) => {
     const target = orders.find((o) => o.code === code);
+
+    // Batched flow: free before "Send Order". Afterwards the whole Rad batch has to be
+    // cancelled at the insurer — TPO cancels a whole Order, not one activity within it.
+    if (deferSend) {
+      if (sentBatch && onCancelBatch) {
+        const cancelled = await onCancelBatch();
+        if (!cancelled) return;
+      }
+      setOrders((prev) => prev.filter((o) => o.code !== code));
+      return;
+    }
+
     try {
       // Cancel at the insurer only if the order was actually submitted (has a TPO orderId).
       let alreadyCancelled = false;
@@ -269,4 +295,7 @@ RadiologyOrders.propTypes = {
   onDataChange: PropTypes.func,
   visitCtx: PropTypes.object,
   encounterId: PropTypes.string,
+  deferSend: PropTypes.bool,
+  sentBatch: PropTypes.object,
+  onCancelBatch: PropTypes.func,
 };

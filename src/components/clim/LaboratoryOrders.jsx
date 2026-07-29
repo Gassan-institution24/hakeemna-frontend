@@ -72,7 +72,14 @@ const LAB_ORDERS_LIST = [
   },
 ];
 
-export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }) {
+export default function LaboratoryOrders({
+  onDataChange,
+  visitCtx,
+  encounterId,
+  deferSend,
+  sentBatch,
+  onCancelBatch,
+}) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [search, setSearch] = useState('');
@@ -89,8 +96,21 @@ export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }
     return name.toLowerCase().includes(search.toLowerCase());
   });
 
+  const newRow = (item) => ({
+    ...item,
+    frequency: 0,
+    howOften: curLangAr ? 'الآن' : 'NOW',
+  });
+
   const addOrder = async (item) => {
     if (orders.find((o) => o.code === item.code)) return;
+
+    // Batched flow: collect only. "Send Order" submits every lab test in one Lab request.
+    if (deferSend) {
+      setOrders((prev) => [...prev, newRow(item)]);
+      enqueueSnackbar('Laboratory order added', { variant: 'success' });
+      return;
+    }
 
     if (!visitCtx || !encounterId) {
       enqueueSnackbar('Please complete eligibility check first', { variant: 'warning' });
@@ -104,14 +124,7 @@ export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }
     if (!confirmed) return;
 
     try {
-      setOrders((prev) => [
-        ...prev,
-        {
-          ...item,
-          frequency: 0,
-          howOften: curLangAr ? 'الآن' : 'NOW',
-        },
-      ]);
+      setOrders((prev) => [...prev, newRow(item)]);
 
       const res = await lab({
         ...visitCtx,
@@ -138,6 +151,17 @@ export default function LaboratoryOrders({ onDataChange, visitCtx, encounterId }
 
   const removeOrder = async (code) => {
     const target = orders.find((o) => o.code === code);
+
+    // Batched flow: free before "Send Order". Afterwards the whole Lab batch has to be
+    // cancelled at the insurer — TPO cancels a whole Order, not one activity within it.
+    if (deferSend) {
+      if (sentBatch && onCancelBatch) {
+        const cancelled = await onCancelBatch();
+        if (!cancelled) return;
+      }
+      setOrders((prev) => prev.filter((o) => o.code !== code));
+      return;
+    }
 
     const confirmed = window.confirm(
       curLangAr ? 'هل أنت متأكد من حذف هذا الطلب؟' : 'Are you sure you want to delete this order?'
@@ -301,4 +325,7 @@ LaboratoryOrders.propTypes = {
   onDataChange: PropTypes.func,
   visitCtx: PropTypes.object,
   encounterId: PropTypes.string,
+  deferSend: PropTypes.bool,
+  sentBatch: PropTypes.object,
+  onCancelBatch: PropTypes.func,
 };

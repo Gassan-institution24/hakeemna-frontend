@@ -27,15 +27,22 @@ import { useTranslate } from '../../../../locales';
 import Iconify from '../../../../components/iconify';
 import AddDiagnosis from '../../../../components/clim/AddDiagnosis';
 import RadiologyOrders from '../../../../components/clim/RadiologyOrders';
+import { usesBatchedOrders } from '../../../../components/clim/insurerFlow';
 import LaboratoryOrders from '../../../../components/clim/LaboratoryOrders';
 import MedicationsOrders from '../../../../components/clim/MedicationsOrders';
-import PhysiotherapyOrders from '../../../../components/clim/PhysiotherapyOrders';
 import ClinicERProcedures from '../../../../components/clim/ClinicERProcedures';
+import PhysiotherapyOrders from '../../../../components/clim/PhysiotherapyOrders';
 import {
+  lab,
+  ERX,
+  radiology,
   submitClaim,
   cancellation,
+  labCancelation,
+  ERXcancelation,
   checkFormNumber,
   submitFormNumber,
+  radiologyCancelation,
   checkFinalAuthorization,
   submitFinalAuthorization,
 } from '../../../../services/claimService';
@@ -88,6 +95,12 @@ export default function PatientPage() {
   const [visitApprovalApproved, setVisitApprovalApproved] = useState(false);
   const [submittingClaim,       setSubmittingClaim]       = useState(false);
   const [cancellingVisit,       setCancellingVisit]       = useState(false);
+
+  // Batched-order flow (every payer except WATANIA/DELTA): orders are collected while the
+  // doctor works and submitted together by "Send Order", grouped by TPO transaction type.
+  // Each entry holds what was actually sent, so the order can be cancelled verbatim later.
+  const [sendingOrders, setSendingOrders] = useState(false);
+  const [sentOrders, setSentOrders] = useState({ lab: null, radiology: null, erx: null });
   // Once the claim is submitted or the visit is cancelled the visit is finished —
   // lock the action buttons so the user can't keep working after leaving.
   const [finalized,             setFinalized]             = useState(false);
@@ -110,6 +123,9 @@ export default function PatientPage() {
 
     if (navState?.visitContext) {
       setVisitCtx(navState.visitContext);
+      // On the batched flow the visit approval was already confirmed on the patient screen —
+      // that confirmation is what let us in here, so it does not need sending again.
+      if (navState.visitApprovalApproved) setVisitApprovalApproved(true);
       if (navState.idPayer) setIdPayer(navState.idPayer);
       if (navState.formNumber) {
         setFormNumber(navState.formNumber);
@@ -294,11 +310,188 @@ export default function PatientPage() {
     }
   };
 
+  /* ── Send Order — one request per TPO transaction type ──────────────
+     TPO has no combined order transaction, so the most batching it allows is three:
+     Lab (laboratory tests + physiotherapy, both Activity Type '3' JMA), Rad, and ERX.
+     Sections that are empty are skipped; sections already sent are not re-sent. */
+  const orderBatches = useMemo(
+    () => [
+      {
+        key: 'lab',
+        label: t('Laboratory'),
+        // Physiotherapy has no transaction type of its own and is JMA like the lab tests,
+        // so it rides the same Lab request.
+        items: [...labData, ...physioData].map((o) => ({
+          code: o.code,
+          nameEn: o.nameEn,
+          quantity: o.quantity ?? 1,
+        })),
+        send: (items) => lab({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, labTests: items }),
+        cancel: (batch) =>
+          labCancelation({
+            ...visitCtx,
+            encounterId: formNumber,
+            orderId: batch.orderId,
+            activityIds: batch.activityIds,
+            labTests: batch.items,
+          }),
+      },
+      {
+        key: 'radiology',
+        label: t('Radiology'),
+        items: radiologyData.map((o) => ({
+          code: o.code,
+          nameEn: o.nameEn,
+          quantity: o.quantity ?? 1,
+        })),
+        send: (items) =>
+          radiology({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, radiologyTests: items }),
+        cancel: (batch) =>
+          radiologyCancelation({
+            ...visitCtx,
+            encounterId: formNumber,
+            orderId: batch.orderId,
+            activityIds: batch.activityIds,
+            radiologyTests: batch.items,
+          }),
+      },
+      {
+        key: 'erx',
+        label: t('Medications'),
+        items: medicationData.map((o) => ({
+          code: o.code, // barcode → TPO drug code list
+          nameEn: o.nameEn,
+          routeOfAdmin: o.routeOfAdmin || 'ROA074',
+          quantity: o.packQty ?? 1,
+          duration: o.duration ?? 1,
+          refills: o.refills ?? 0,
+        })),
+        send: (items) =>
+          ERX({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, medications: items }),
+        cancel: (batch) =>
+          ERXcancelation({
+            ...visitCtx,
+            encounterId: formNumber,
+            orderId: batch.orderId,
+            activityIds: batch.activityIds,
+            medications: batch.items,
+          }),
+      },
+    ],
+    [visitCtx, formNumber, diagnosisData, labData, physioData, radiologyData, medicationData, t]
+  );
+
+  const pendingBatches = orderBatches.filter((b) => b.items.length > 0 && !sentOrders[b.key]);
+
+  const handleSendOrders = async () => {
+    if (pendingBatches.length === 0) {
+      enqueueSnackbar(t('No new orders to send'), { variant: 'info' });
+      return;
+    }
+    setSendingOrders(true);
+
+    const sent = [];
+    const failed = [];
+    const submitted = {};
+
+    // Strictly sequential. TPO races against itself when several order transactions land on
+    // the same new encounter at once and returns 500 "Sequence contains more than one
+    // element" — measured at 2 failures in 18 requests when sent in parallel, 0 in 18 when
+    // sent one after another. A promise chain keeps that ordering without a loop.
+    await pendingBatches.reduce(
+      (chain, batch) =>
+        chain.then(async () => {
+          try {
+            const res = await batch.send(batch.items);
+            submitted[batch.key] = {
+              orderId: res?.data?.orderId,
+              activityIds: res?.data?.activityIds,
+              referenceNumber: res?.data?.referenceNumber,
+              items: batch.items,
+            };
+            sent.push(`${batch.label} — ${t('Ref')}: ${res?.data?.referenceNumber ?? '—'}`);
+          } catch (e) {
+            // Carry on with the remaining sections; a partial send is recoverable because
+            // "Send Order" only ever submits sections that have not gone out yet.
+            failed.push(`${batch.label}: ${e?.response?.data?.error || e?.message || t('failed')}`);
+          }
+        }),
+      Promise.resolve()
+    );
+
+    setSentOrders((prev) => ({ ...prev, ...submitted }));
+    setSendingOrders(false);
+    if (sent.length) enqueueSnackbar(`${t('Orders sent')} — ${sent.join(' · ')}`, { variant: 'success' });
+    if (failed.length) enqueueSnackbar(failed.join(' · '), { variant: 'error' });
+  };
+
+  // Removing a row after the batch went out means cancelling that whole order at the
+  // insurer — TPO cancels an Order, it cannot drop one activity from within one. The
+  // section then returns to "not sent" so the remaining rows can be sent again.
+  const handleCancelBatch = useCallback(
+    async (key) => {
+      const batch = sentOrders[key];
+      if (!batch) return true;
+
+      const config = orderBatches.find((b) => b.key === key);
+      const confirmed = window.confirm(
+        t('This will cancel the whole {{label}} order at the insurer. Continue?', {
+          label: config.label,
+        })
+      );
+      if (!confirmed) return false;
+
+      try {
+        await config.cancel(batch);
+        setSentOrders((prev) => ({ ...prev, [key]: null }));
+        enqueueSnackbar(t('{{label}} order cancelled — send again when ready', { label: config.label }), {
+          variant: 'success',
+        });
+        return true;
+      } catch (e) {
+        enqueueSnackbar(e?.response?.data?.error || t('Failed to cancel order'), { variant: 'error' });
+        return false;
+      }
+    },
+    [sentOrders, orderBatches, enqueueSnackbar, t]
+  );
+
+  const cancelLabBatch       = useCallback(() => handleCancelBatch('lab'),       [handleCancelBatch]);
+  const cancelRadiologyBatch = useCallback(() => handleCancelBatch('radiology'), [handleCancelBatch]);
+  const cancelErxBatch       = useCallback(() => handleCancelBatch('erx'),       [handleCancelBatch]);
+
   /* ── Claim submit — called after Visit Approval is confirmed ────── */
   const handleSubmitClaim = async () => {
     setSubmittingClaim(true);
     try {
       const encounterId = idPayer || formNumber;
+
+      // The claim carries the consultation (prepended server-side as Activity ID '1') plus
+      // in-clinic procedures only. Lab, radiology, medications and physiotherapy are each
+      // sent as their own TPO order the moment they are added, so repeating them here would
+      // declare them to the insurer a second time.
+      //
+      // Procedure rows carry `insurance` (the payer's share), never `net`, and the claim
+      // builder reads `net` — without this mapping every procedure is submitted at Net 0.
+      // TPO accepts that (it derives both totals from the activities), so it fails silently:
+      // the provider bills the insurer nothing for the procedure.
+      const procedureActivities = proceduresData.map((p) => ({
+        code:     p.code,
+        nameEn:   p.nameEn,
+        type:     '3', // JMA — types 4 and 7 reject JOR codes (VR0139 / VR0141)
+        quantity: p.quantity ?? 1,
+        gross:    Number(p.gross) || 0,
+        net:      Number(p.net ?? p.insurance) || 0,
+      }));
+
+      // Claim.Gross/Net are summed server-side from the activities, but PatientShare is not
+      // derived — send the procedure total explicitly or the insurer is told the patient
+      // owes nothing.
+      const procedurePatientShare = proceduresData.reduce(
+        (sum, p) => sum + (Number(p.patientShare) || 0),
+        0
+      );
+
       const res = await submitClaim({
         insuranceLicense:    visitCtx?.insuranceLicense,
         clinicianId:         visitCtx?.clinicianId,
@@ -308,16 +501,8 @@ export default function PatientPage() {
         priorAuthorizationID: encounterId,
         visitType:           visitCtx?.visitType || 'consultant',
         diagnosisCodes:      diagnosisData,
-        // TPO valid Types: 3=JMA, 4=HCPCS, 5=Drug, 6=Dental, 8=Service, 9=DRG, 10=Scientific.
-        // All JOR-coded clinical activities (procedures, lab, radiology, physio) → 3 (JMA);
-        // type 4/7 reject JOR codes. Medications → 5 (Drug).
-        activities: [
-          ...proceduresData.map((a) => ({ ...a, type: '3' })),
-          ...labData.map((a)         => ({ ...a, type: '3' })),
-          ...radiologyData.map((a)   => ({ ...a, type: '3' })),
-          ...medicationData.map((a)  => ({ ...a, type: '5' })),
-          ...physioData.map((a)      => ({ ...a, type: '3' })),
-        ],
+        activities:          procedureActivities,
+        patientShare:        procedurePatientShare,
       });
       if (res?.data?.success) {
         setFinalized(true);
@@ -367,8 +552,12 @@ export default function PatientPage() {
     }
   };
 
+  // Return the same object when nothing changed so React bails out. Each section gets a
+  // fresh inline onDataChange every render and reports back from an effect keyed on it,
+  // so always allocating a new object here keeps the page re-rendering until React's
+  // update-depth limit trips.
   const updateSectionStatus = (key, hasData) => {
-    setSectionStatus((prev) => ({ ...prev, [key]: hasData }));
+    setSectionStatus((prev) => (prev[key] === hasData ? prev : { ...prev, [key]: hasData }));
   };
 
   const authStatus = useMemo(() => {
@@ -387,6 +576,20 @@ export default function PatientPage() {
     visitApprovalLabel = t('Visit Approval Sent');
   } else {
     visitApprovalLabel = t('Send Visit Approval');
+  }
+
+  // WATANIA/DELTA declare their orders inside the final Authorization sent from this screen,
+  // so they keep sending each order as it is added. Everyone else collects and batches.
+  const batchedFlow = usesBatchedOrders(visitCtx?.insuranceLicense);
+  const anySentOrders = Object.values(sentOrders).some(Boolean);
+
+  let sendOrderLabel;
+  if (sendingOrders) {
+    sendOrderLabel = t('Sending orders...');
+  } else if (pendingBatches.length > 0) {
+    sendOrderLabel = anySentOrders ? t('Send Remaining Orders') : t('Send Order');
+  } else {
+    sendOrderLabel = anySentOrders ? t('Orders Sent') : t('Send Order');
   }
 
   return (
@@ -485,6 +688,9 @@ export default function PatientPage() {
               <LaboratoryOrders
                 visitCtx={visitCtx}
                 encounterId={formNumber}
+                deferSend={batchedFlow}
+                sentBatch={sentOrders.lab}
+                onCancelBatch={cancelLabBatch}
                 onDataChange={(data) => {
                   updateSectionStatus('lab', data.length > 0);
                   setLabData(data);
@@ -495,6 +701,9 @@ export default function PatientPage() {
               <RadiologyOrders
                 visitCtx={visitCtx}
                 encounterId={formNumber}
+                deferSend={batchedFlow}
+                sentBatch={sentOrders.radiology}
+                onCancelBatch={cancelRadiologyBatch}
                 onDataChange={(data) => {
                   updateSectionStatus('radiology', data.length > 0);
                   setRadiologyData(data);
@@ -505,6 +714,9 @@ export default function PatientPage() {
               <MedicationsOrders
                 visitCtx={visitCtx}
                 encounterId={formNumber}
+                deferSend={batchedFlow}
+                sentBatch={sentOrders.erx}
+                onCancelBatch={cancelErxBatch}
                 onDataChange={(data) => {
                   updateSectionStatus('medications', data.length > 0);
                   setMedicationData(data);
@@ -513,8 +725,8 @@ export default function PatientPage() {
             )}
             {index === 5 && (
               <PhysiotherapyOrders
-                visitCtx={visitCtx}
-                encounterId={formNumber}
+                sentBatch={sentOrders.lab}
+                onCancelBatch={cancelLabBatch}
                 onDataChange={(data) => {
                   updateSectionStatus('physiotherapy', data.length > 0);
                   setPhysioData(data);
@@ -536,16 +748,30 @@ export default function PatientPage() {
           {t('Cancel Visit')}
         </Button>
 
-        {/* Step 1 after eligibility: Send Visit Approval with all visit data */}
-        <Button
-          variant="contained"
-          color="warning"
-          onClick={handleVisitApproval}
-          disabled={!authApproved || visitApprovalBusy || visitApprovalApproved || finalized}
-          startIcon={visitApprovalBusy ? <CircularProgress size={16} color="inherit" /> : null}
-        >
-          {visitApprovalLabel}
-        </Button>
+        {/* Batched flow: the visit approval was confirmed before this screen opened, so the
+            action here is sending the collected orders. WATANIA/DELTA still send their final
+            Authorization from here instead. */}
+        {batchedFlow ? (
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={handleSendOrders}
+            disabled={!authApproved || sendingOrders || pendingBatches.length === 0 || finalized}
+            startIcon={sendingOrders ? <CircularProgress size={16} color="inherit" /> : null}
+          >
+            {sendOrderLabel}
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="warning"
+            onClick={handleVisitApproval}
+            disabled={!authApproved || visitApprovalBusy || visitApprovalApproved || finalized}
+            startIcon={visitApprovalBusy ? <CircularProgress size={16} color="inherit" /> : null}
+          >
+            {visitApprovalLabel}
+          </Button>
+        )}
 
         {/* Step 2: Submit Claim — enabled only after Visit Approval is confirmed */}
         <Button
