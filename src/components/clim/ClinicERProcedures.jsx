@@ -11,11 +11,13 @@ import {
   List,
   Chip,
   Paper,
+  Button,
   Divider,
   TextField,
   Typography,
   ListItemText,
   ListItemButton,
+  CircularProgress,
 } from '@mui/material';
 import { useLocales } from 'src/locales';
 
@@ -142,16 +144,24 @@ const UI_TEXT = {
   insurance: { en: 'Ins. Amount', ar: 'قيمة التأمين' },
   patientShare: { en: 'Patient Share', ar: 'حصة المريض' },
   approved: { en: 'Approved', ar: 'موافق عليه' },
+  sent: { en: 'Sent', ar: 'تم الإرسال' },
   edit: { en: 'Edit', ar: 'تعديل' },
   searchProcedure: { en: 'Search procedure', ar: 'بحث عن إجراء' },
 };
 
-export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId }) {
+export default function ClinicERProcedures({
+  onDataChange,
+  visitCtx,
+  encounterId,
+  onSendOrder,
+  sentCodes = [],
+}) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const [search, setSearch] = useState('');
   const [procedures, setProcedures] = useState([]);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (onDataChange) {
@@ -179,6 +189,41 @@ export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId
   const removeProcedure = (code) => {
     setProcedures((prev) => prev.filter((p) => p.code !== code));
   };
+
+  // Procedures already declared to the insurer; the next "Send Order" carries only the rest,
+  // so the step can be repeated each time more are added.
+  const isSent = (code) => sentCodes.includes(code);
+  const unsent = procedures.filter((p) => !isSent(p.code));
+
+  const handleSendOrder = async () => {
+    if (!encounterId) {
+      enqueueSnackbar(
+        curLangAr ? 'يجب الحصول على رقم النموذج أولاً' : 'Send the visit approval first',
+        { variant: 'warning' }
+      );
+      return;
+    }
+    setSending(true);
+    try {
+      await onSendOrder(unsent);
+      enqueueSnackbar(
+        curLangAr ? 'تم إرسال الإجراءات' : 'In-clinic procedures sent',
+        { variant: 'success' }
+      );
+    } catch (e) {
+      enqueueSnackbar(
+        e?.response?.data?.error || e?.message || 'Failed to send in-clinic procedures',
+        { variant: 'error' }
+      );
+    } finally {
+      setSending(false);
+    }
+  };
+
+  let sendLabel;
+  if (sending) sendLabel = curLangAr ? 'جارٍ الإرسال...' : 'Sending...';
+  else if (unsent.length === 0 && sentCodes.length > 0) sendLabel = curLangAr ? 'تم الإرسال' : 'Order Sent';
+  else sendLabel = curLangAr ? 'إرسال الطلب' : 'Send Order';
 
   return (
     <Paper sx={{ p: 2, borderRadius: 2 }}>
@@ -312,6 +357,14 @@ export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId
 
                   {/* ACTIONS */}
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {onSendOrder && isSent(item.code) && (
+                      <Chip
+                        label={curLangAr ? UI_TEXT.sent.ar : UI_TEXT.sent.en}
+                        color="success"
+                        size="small"
+                      />
+                    )}
+
                     <Typography
                       sx={{
                         color: 'primary.main',
@@ -323,16 +376,36 @@ export default function ClinicERProcedures({ onDataChange, visitCtx, encounterId
                       {curLangAr ? UI_TEXT.edit.ar : UI_TEXT.edit.en}
                     </Typography>
 
-                    <DeleteIcon
-                      sx={{ color: 'error.main', cursor: 'pointer' }}
-                      fontSize="small"
-                      onClick={() => removeProcedure(item.code)}
-                    />
+                    {/* A procedure already declared to the insurer cannot be dropped locally —
+                        removing it here would leave the claim and the approval disagreeing. */}
+                    {!(onSendOrder && isSent(item.code)) && (
+                      <DeleteIcon
+                        sx={{ color: 'error.main', cursor: 'pointer' }}
+                        fontSize="small"
+                        onClick={() => removeProcedure(item.code)}
+                      />
+                    )}
                   </Box>
                 </Box>
               ))
             )}
           </Box>
+
+          {/* Islamic / MedNet / Solidarity: procedures are approved by their own
+              Authorization, sent from here as often as new ones are added. */}
+          {onSendOrder && (
+            <Box sx={{ mt: 1.5, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={handleSendOrder}
+                disabled={sending || unsent.length === 0}
+                startIcon={sending ? <CircularProgress size={16} color="inherit" /> : null}
+              >
+                {sendLabel}
+              </Button>
+            </Box>
+          )}
         </Grid>
 
         {/* ================= RIGHT ================= */}
@@ -365,4 +438,7 @@ ClinicERProcedures.propTypes = {
   onDataChange: PropTypes.func,
   visitCtx: PropTypes.object,
   encounterId: PropTypes.string,
+  // Provided only by the insurers that approve procedures with their own Authorization.
+  onSendOrder: PropTypes.func,
+  sentCodes: PropTypes.array,
 };

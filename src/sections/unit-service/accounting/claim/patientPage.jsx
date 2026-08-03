@@ -27,11 +27,11 @@ import { useTranslate } from '../../../../locales';
 import Iconify from '../../../../components/iconify';
 import AddDiagnosis from '../../../../components/clim/AddDiagnosis';
 import RadiologyOrders from '../../../../components/clim/RadiologyOrders';
-import { usesBatchedOrders } from '../../../../components/clim/insurerFlow';
 import LaboratoryOrders from '../../../../components/clim/LaboratoryOrders';
 import MedicationsOrders from '../../../../components/clim/MedicationsOrders';
 import ClinicERProcedures from '../../../../components/clim/ClinicERProcedures';
 import PhysiotherapyOrders from '../../../../components/clim/PhysiotherapyOrders';
+import { usesBatchedOrders, usesProcedureAuthorization } from '../../../../components/clim/insurerFlow';
 import {
   lab,
   ERX,
@@ -45,6 +45,7 @@ import {
   radiologyCancelation,
   checkFinalAuthorization,
   submitFinalAuthorization,
+  submitProcedureAuthorization,
 } from '../../../../services/claimService';
 
 const sections = [
@@ -101,6 +102,11 @@ export default function PatientPage() {
   // Each entry holds what was actually sent, so the order can be cancelled verbatim later.
   const [sendingOrders, setSendingOrders] = useState(false);
   const [sentOrders, setSentOrders] = useState({ lab: null, radiology: null, erx: null });
+
+  // In-clinic procedures (Islamic / MedNet / Solidarity): each "Send Order" posts one
+  // Authorization for the procedures added since the last one, so the step repeats as the
+  // doctor keeps working. Codes already declared are remembered and never resent.
+  const [sentProcedureCodes, setSentProcedureCodes] = useState([]);
   // Once the claim is submitted or the visit is cancelled the visit is finished —
   // lock the action buttons so the user can't keep working after leaving.
   const [finalized,             setFinalized]             = useState(false);
@@ -129,6 +135,10 @@ export default function PatientPage() {
       if (navState.idPayer) setIdPayer(navState.idPayer);
       if (navState.formNumber) {
         setFormNumber(navState.formNumber);
+        setAuthApproved(true);
+      } else if (navState.eligibilityApproved) {
+        // Islamic / MedNet / Solidarity: eligibility confirmed coverage but issues no e-Form
+        // number — that arrives with the visit approval sent from this screen.
         setAuthApproved(true);
       } else if (navState.requestId) {
         setRequestId(navState.requestId);
@@ -159,6 +169,8 @@ export default function PatientPage() {
           setFormNumber(data.formNumber);
           if (data?.idPayer) setIdPayer(data.idPayer);
           setAuthApproved(true);
+        } else if (data?.eligible) {
+          setAuthApproved(true);
         } else if (data?.requestId) {
           setRequestId(data.requestId);
           setVisitAuthId(data.requestId);
@@ -188,6 +200,13 @@ export default function PatientPage() {
           setAuthApproved(true);
           setRequestId(null);
           enqueueSnackbar(t('Approved! Form number received'), { variant: 'success' });
+        } else if (data?.eligible) {
+          // Coverage only (Islamic / MedNet / Solidarity) — the e-Form number comes with
+          // the visit approval, so stop polling here and let the doctor record the visit.
+          clearInterval(timer);
+          setAuthApproved(true);
+          setRequestId(null);
+          enqueueSnackbar(t('Patient is eligible'), { variant: 'success' });
         } else if (!data?.pending) {
           clearInterval(timer);
           enqueueSnackbar(data?.error || t('Authorization not approved'), { variant: 'warning' });
@@ -209,6 +228,11 @@ export default function PatientPage() {
         if (data?.formNumber && !data?.pending) {
           clearInterval(timer);
           setFinalAuthReqId(null);
+          // Islamic / MedNet / Solidarity issue the e-Form number on this response — it is
+          // the EncounterID every order and the claim must carry from here on.
+          setFormNumber(data.formNumber);
+          if (data?.idPayer) setIdPayer(data.idPayer);
+          setAuthApproved(true);
           setVisitApprovalApproved(true);
           enqueueSnackbar(t('Visit Approval approved — click Submit Claim to continue'), { variant: 'success' });
         } else if (data?.pending === false && !data?.success) {
@@ -240,6 +264,11 @@ export default function PatientPage() {
           enqueueSnackbar(t('Form number obtained'), { variant: 'success' });
           return;
         }
+        if (data?.eligible) {
+          setAuthApproved(true);
+          enqueueSnackbar(t('Patient is eligible'), { variant: 'success' });
+          return;
+        }
         if (data?.requestId) {
           setRequestId(data.requestId);
           setVisitAuthId(data.requestId);
@@ -254,6 +283,12 @@ export default function PatientPage() {
           setAuthApproved(true);
           setRequestId(null);
           enqueueSnackbar(t('Approved! Form number received'), { variant: 'success' });
+          return;
+        }
+        if (data?.eligible) {
+          setAuthApproved(true);
+          setRequestId(null);
+          enqueueSnackbar(t('Patient is eligible'), { variant: 'success' });
           return;
         }
         if (data?.pending) {
@@ -272,6 +307,50 @@ export default function PatientPage() {
     }
   }, [requestId, visitCtx, enqueueSnackbar, t]);
 
+  // The insurer records every diagnosis it is sent, so one code listed twice shows up twice
+  // on its side. This is the only list any transaction is built from — exactly the codes the
+  // doctor added, each once, first one Principal.
+  const diagnosisPayload = useMemo(() => {
+    const seen = new Set();
+    return diagnosisData.filter((d) => {
+      const key = String(d?.code || '').trim().toUpperCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [diagnosisData]);
+
+  /* ── In-clinic procedures approval (Islamic / MedNet / Solidarity) ────
+     Procedures have no TPO order transaction of their own, so they are approved with an
+     Authorization posted against the e-Form encounter. Repeatable: only the procedures that
+     have not been declared yet are sent. ── */
+  const handleSendProcedures = useCallback(
+    async (items) => {
+      const res = await submitProcedureAuthorization({
+        insuranceLicense: visitCtx?.insuranceLicense,
+        clinicianId:      visitCtx?.clinicianId,
+        patientNID:       visitCtx?.patientNID,
+        memberID:         visitCtx?.memberID,
+        encounterId:      formNumber,
+        diagnosisCodes:   diagnosisPayload,
+        procedures:       items.map((p) => ({
+          code:     p.code,
+          nameEn:   p.nameEn,
+          quantity: p.quantity ?? 1,
+          gross:    Number(p.gross) || 0,
+          net:      Number(p.net ?? p.insurance) || 0,
+        })),
+      });
+
+      if (!res?.data?.success) {
+        throw new Error(res?.data?.error || t('Failed to send in-clinic procedures'));
+      }
+      setSentProcedureCodes((prev) => [...prev, ...items.map((p) => p.code)]);
+      return res.data;
+    },
+    [visitCtx, formNumber, diagnosisPayload, t]
+  );
+
   /* ── Visit Approval — sends final Authorization with all visit data ── */
   // WATANIA/DELTA → Authorization request; polls via finalAuthReqId effect.
   // ZERO/ISLAMIC  → backend returns { noAuthRequired: true }; approval is immediate.
@@ -283,9 +362,14 @@ export default function PatientPage() {
         clinicianId:      visitCtx?.clinicianId,
         patientNID:       visitCtx?.patientNID,
         memberID:         visitCtx?.memberID,
-        encounterId:      idPayer || formNumber,
-        diagnosisCodes:   diagnosisData,
+        // WATANIA/DELTA authorise against the EncounterID eligibility already gave them —
+        // for WATANIA that number IS the IDPayer. Islamic/MedNet/Solidarity have no
+        // encounter yet: this request is what asks the insurer to open one and answer with
+        // the e-Form number, so the backend fills the EncounterID itself (0 or generated).
+        encounterId:      formNumber,
+        diagnosisCodes:   diagnosisPayload,
         visitType:        visitCtx?.visitType || 'consultant',
+        benefitType:      visitCtx?.benefitType || 'outpatient',
         procedureOrders:  proceduresData,
         labOrders:        labData,
         radiologyOrders:  radiologyData,
@@ -326,7 +410,7 @@ export default function PatientPage() {
           nameEn: o.nameEn,
           quantity: o.quantity ?? 1,
         })),
-        send: (items) => lab({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, labTests: items }),
+        send: (items) => lab({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisPayload, labTests: items }),
         cancel: (batch) =>
           labCancelation({
             ...visitCtx,
@@ -345,7 +429,7 @@ export default function PatientPage() {
           quantity: o.quantity ?? 1,
         })),
         send: (items) =>
-          radiology({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, radiologyTests: items }),
+          radiology({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisPayload, radiologyTests: items }),
         cancel: (batch) =>
           radiologyCancelation({
             ...visitCtx,
@@ -367,7 +451,7 @@ export default function PatientPage() {
           refills: o.refills ?? 0,
         })),
         send: (items) =>
-          ERX({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisData, medications: items }),
+          ERX({ ...visitCtx, encounterId: formNumber, diagnosisCodes: diagnosisPayload, medications: items }),
         cancel: (batch) =>
           ERXcancelation({
             ...visitCtx,
@@ -378,7 +462,7 @@ export default function PatientPage() {
           }),
       },
     ],
-    [visitCtx, formNumber, diagnosisData, labData, physioData, radiologyData, medicationData, t]
+    [visitCtx, formNumber, diagnosisPayload, labData, physioData, radiologyData, medicationData, t]
   );
 
   const pendingBatches = orderBatches.filter((b) => b.items.length > 0 && !sentOrders[b.key]);
@@ -464,7 +548,12 @@ export default function PatientPage() {
   const handleSubmitClaim = async () => {
     setSubmittingClaim(true);
     try {
-      const encounterId = idPayer || formNumber;
+      // The claim carries the e-Form number as EncounterID, exactly as the orders did.
+      // PriorAuthorizationID is the IDPayer from the visit approval response (MedNet /
+      // Solidarity / Islamic); WATANIA returns the same value for both, and DELTA has no
+      // IDPayer at all, so both fall back to the form number.
+      const encounterId          = formNumber;
+      const priorAuthorizationID = idPayer || formNumber;
 
       // The claim carries the consultation (prepended server-side as Activity ID '1') plus
       // in-clinic procedures only. Lab, radiology, medications and physiotherapy are each
@@ -498,9 +587,9 @@ export default function PatientPage() {
         patientNID:          visitCtx?.patientNID,
         memberID:            visitCtx?.memberID,
         encounterId,
-        priorAuthorizationID: encounterId,
+        priorAuthorizationID,
         visitType:           visitCtx?.visitType || 'consultant',
-        diagnosisCodes:      diagnosisData,
+        diagnosisCodes:      diagnosisPayload,
         activities:          procedureActivities,
         patientShare:        procedurePatientShare,
       });
@@ -561,9 +650,13 @@ export default function PatientPage() {
   };
 
   const authStatus = useMemo(() => {
-    if (loadingFormNumber && !formNumber) return { label: t('Checking eligibility...'), color: 'warning' };
-    if (authApproved && formNumber)       return { label: t('Eligible'), color: 'success' };
-    if (requestId && !formNumber)         return { label: t('Pending approval'), color: 'warning' };
+    if (loadingFormNumber && !formNumber && !authApproved) {
+      return { label: t('Checking eligibility...'), color: 'warning' };
+    }
+    // Islamic / MedNet / Solidarity are eligible before any form number exists — theirs is
+    // issued by the visit approval, so eligibility alone is enough to show "Eligible".
+    if (authApproved)             return { label: t('Eligible'), color: 'success' };
+    if (requestId && !formNumber) return { label: t('Pending approval'), color: 'warning' };
     return { label: t('Not eligible'), color: 'error' };
   }, [loadingFormNumber, authApproved, formNumber, requestId, t]);
 
@@ -582,6 +675,10 @@ export default function PatientPage() {
   // so they keep sending each order as it is added. Everyone else collects and batches.
   const batchedFlow = usesBatchedOrders(visitCtx?.insuranceLicense);
   const anySentOrders = Object.values(sentOrders).some(Boolean);
+
+  // Islamic / MedNet / Solidarity approve their in-clinic procedures with an Authorization of
+  // their own, sent from the procedures section. Everyone else declares them on the claim.
+  const procedureAuthFlow = usesProcedureAuthorization(visitCtx?.insuranceLicense);
 
   let sendOrderLabel;
   if (sendingOrders) {
@@ -678,6 +775,8 @@ export default function PatientPage() {
               <ClinicERProcedures
                 visitCtx={visitCtx}
                 encounterId={formNumber}
+                onSendOrder={procedureAuthFlow ? handleSendProcedures : undefined}
+                sentCodes={sentProcedureCodes}
                 onDataChange={(data) => {
                   updateSectionStatus('procedures', data.length > 0);
                   setProceduresData(data);
@@ -756,7 +855,9 @@ export default function PatientPage() {
             variant="contained"
             color="warning"
             onClick={handleSendOrders}
-            disabled={!authApproved || sendingOrders || pendingBatches.length === 0 || finalized}
+            // Every order carries the e-Form number as its EncounterID, so orders can only
+            // go out once the insurer has issued it.
+            disabled={!formNumber || sendingOrders || pendingBatches.length === 0 || finalized}
             startIcon={sendingOrders ? <CircularProgress size={16} color="inherit" /> : null}
           >
             {sendOrderLabel}

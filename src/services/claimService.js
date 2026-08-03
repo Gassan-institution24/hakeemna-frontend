@@ -52,3 +52,8 @@ export const submitFinalAuthorization = (data) =>
   axiosInstance.post('/api/claims/final-authorization/submit', data);
 export const checkFinalAuthorization = (requestId) =>
   axiosInstance.get('/api/claims/final-authorization/check', { params: { requestId } });
+
+// ✅ IN-CLINIC PROCEDURES APPROVAL (Islamic · MedNet · Solidarity — step 3)
+// Authorization against the e-Form encounter. Repeatable: send only what has not gone yet.
+export const submitProcedureAuthorization = (data) =>
+  axiosInstance.post('/api/claims/procedure-authorization/submit', data);

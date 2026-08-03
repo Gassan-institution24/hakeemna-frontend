@@ -140,8 +140,10 @@ export default function CompanyPage({ companyId: propCompanyId }) {
       });
       const data = res?.data;
 
-      if (data?.formNumber && !data?.pending) {
-        setFormNumber(data.formNumber);
+      if (data?.success && data?.pending === false) {
+        // Islamic / MedNet / Solidarity confirm coverage only — their e-Form number is
+        // issued by the visit approval sent from inside the visit, so formNumber is absent.
+        if (data?.formNumber) setFormNumber(data.formNumber);
         if (data?.idPayer) setIdPayer(data.idPayer);
         setEligibilityStatus('approved');
         enqueueSnackbar(t('Patient is eligible'), { variant: 'success' });
@@ -167,13 +169,13 @@ export default function CompanyPage({ companyId: propCompanyId }) {
     try {
       const res = await checkVisitApproval(requestId);
       const data = res?.data;
-      if (data?.formNumber && !data?.pending) {
-        setFormNumber(data.formNumber);
+      if (data?.pending) {
+        enqueueSnackbar(t('Still awaiting insurer response'), { variant: 'info' });
+      } else if (data?.success) {
+        if (data?.formNumber) setFormNumber(data.formNumber);
         if (data?.idPayer) setIdPayer(data.idPayer);
         setEligibilityStatus('approved');
         enqueueSnackbar(t('Approved! Patient is eligible'), { variant: 'success' });
-      } else if (data?.pending) {
-        enqueueSnackbar(t('Still awaiting insurer response'), { variant: 'info' });
       } else {
         setEligibilityStatus('rejected');
         enqueueSnackbar(data?.error || t('Not approved'), { variant: 'warning' });
@@ -192,9 +194,11 @@ export default function CompanyPage({ companyId: propCompanyId }) {
       try {
         const res = await checkVisitApproval(requestId);
         const data = res?.data;
-        if (data?.formNumber && !data?.pending) {
+        if (data?.pending === false && data?.success) {
           clearInterval(timer);
-          setFormNumber(data.formNumber);
+          // formNumber is absent for Islamic / MedNet / Solidarity: coverage is all this
+          // response carries, the e-Form number comes with the visit approval.
+          if (data?.formNumber) setFormNumber(data.formNumber);
           if (data?.idPayer) setIdPayer(data.idPayer);
           setEligibilityStatus('approved');
           enqueueSnackbar(t('Approved! Patient is eligible'), { variant: 'success' });
@@ -211,7 +215,10 @@ export default function CompanyPage({ companyId: propCompanyId }) {
 
   const batchedFlow = usesBatchedOrders(insuranceLicense);
 
-  const openVisit = (visitApprovalApproved) => {
+  // `approval` overrides the state values when the visit approval response has just landed:
+  // setState has not committed yet at that point, so the e-Form number and the approval
+  // number are passed straight through to the visit.
+  const openVisit = (visitApprovalApproved, approval = {}) => {
     navigate(paths.unitservice.accounting.claim.patientVisitView(selectedPatient._id), {
       state: {
         visitContext: {
@@ -222,11 +229,14 @@ export default function CompanyPage({ companyId: propCompanyId }) {
           visitType,
           benefitType,
         },
-        formNumber,
+        formNumber: approval.formNumber ?? formNumber,
         requestId,
-        idPayer,
+        idPayer:    approval.idPayer ?? idPayer,
         isWatania,
         visitApprovalApproved,
+        // Coverage is confirmed even when no e-Form number came with it (Islamic / MedNet /
+        // Solidarity), so the visit opens ready to work instead of re-polling eligibility.
+        eligibilityApproved: eligibilityStatus === 'approved',
       },
     });
   };
@@ -247,14 +257,19 @@ export default function CompanyPage({ companyId: propCompanyId }) {
         clinicianId,
         patientNID: selectedPatient.identification_num,
         memberID,
-        encounterId: idPayer || formNumber,
+        // WATANIA/DELTA authorise against the encounter eligibility already gave them.
+        // Islamic / MedNet / Solidarity have none yet — this request is what asks the insurer
+        // to open the visit and answer with the e-Form number, and benefitType picks the
+        // mapped diagnosis MedNet/Solidarity require (Outpatient · Maternity · Dental).
+        encounterId: formNumber,
         visitType,
+        benefitType,
       });
       const data = res?.data;
 
-      // MedNet / Solidarity / Islamic were already authorised by the eligibility call, so the
-      // backend confirms immediately. WATANIA and DELTA post a real Authorization and answer
-      // asynchronously — hold here and poll rather than opening an unapproved visit.
+      // Every payer that reaches here posts a real Authorization and answers asynchronously
+      // — for Islamic / MedNet / Solidarity this is the request that returns the e-Form
+      // number — so hold here and poll rather than opening an unapproved visit.
       if (data?.noAuthRequired) {
         enqueueSnackbar(t('Visit approval confirmed'), { variant: 'success' });
         openVisit(true);
@@ -286,8 +301,12 @@ export default function CompanyPage({ companyId: propCompanyId }) {
         setApprovalReqId(null);
         setSendingApproval(false);
         if (data?.success) {
+          // Islamic / MedNet / Solidarity issue the e-Form number on this response; it is the
+          // EncounterID every order and the claim must carry, so it travels into the visit.
+          if (data?.formNumber) setFormNumber(data.formNumber);
+          if (data?.idPayer) setIdPayer(data.idPayer);
           enqueueSnackbar(t('Visit approval confirmed'), { variant: 'success' });
-          openVisit(true);
+          openVisit(true, { formNumber: data?.formNumber, idPayer: data?.idPayer });
         } else {
           enqueueSnackbar(data?.error || t('Visit approval was not accepted'), { variant: 'error' });
         }
