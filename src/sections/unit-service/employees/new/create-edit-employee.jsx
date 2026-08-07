@@ -20,6 +20,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
+import { isDemoUser } from 'src/utils/demo';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
@@ -333,24 +334,36 @@ export default function TableNewEditForm({ currentTable }) {
                   </Typography>
                 }
               />
-              <RHFCheckbox
-                sx={{ px: 2 }}
-                name="visibility_US_page"
-                onChange={() => setValue('visibility_US_page', !watch('visibility_US_page'))}
-                label={<Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>}
-              />
-              <RHFCheckbox
-                sx={{ px: 2 }}
-                name="visibility_online_appointment"
-                onChange={() =>
-                  setValue('visibility_online_appointment', !watch('visibility_online_appointment'))
-                }
-                label={
-                  <Typography sx={{ fontSize: 12 }}>
-                    {t('visible in online appointments')}
-                  </Typography>
-                }
-              />
+              {/* Hidden for demo clinics — their staff never appear in the public clinic page
+                  or the online-appointment search, so these switches would be dead controls.
+                  The server pins both flags off regardless of what the client sends. */}
+              {!isDemoUser(user) && (
+                <>
+                  <RHFCheckbox
+                    sx={{ px: 2 }}
+                    name="visibility_US_page"
+                    onChange={() => setValue('visibility_US_page', !watch('visibility_US_page'))}
+                    label={
+                      <Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>
+                    }
+                  />
+                  <RHFCheckbox
+                    sx={{ px: 2 }}
+                    name="visibility_online_appointment"
+                    onChange={() =>
+                      setValue(
+                        'visibility_online_appointment',
+                        !watch('visibility_online_appointment')
+                      )
+                    }
+                    label={
+                      <Typography sx={{ fontSize: 12 }}>
+                        {t('visible in online appointments')}
+                      </Typography>
+                    }
+                  />
+                </>
+              )}
             </Box>
             <Box
               rowGap={3}

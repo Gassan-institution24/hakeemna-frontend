@@ -9,6 +9,9 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { isDemoUser } from 'src/utils/demo';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -25,8 +28,18 @@ export default function TableCreateView({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { user } = useAuthContext();
+
+  // Demo clinics always go straight to "create a new one".
+  //
+  // The "yes" branch searches the real users collection and attaches that account to this
+  // clinic — which is exactly what a demo must not do: it would pull a real person into a
+  // throwaway trial, and demo staff have no users row to find in the first place
+  // (see backend utils/demoEmployee.js). So the prompt is skipped, not just defaulted.
+  const isDemo = isDemoUser(user);
+
   const [selectedPage, setSelectedPage] = useState(1);
-  const select = useBoolean(true);
+  const select = useBoolean(!isDemo);
 
   return (
     <>

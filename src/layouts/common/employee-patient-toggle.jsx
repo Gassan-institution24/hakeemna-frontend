@@ -12,6 +12,7 @@ import { paths } from 'src/routes/paths';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import { isDemoUser } from 'src/utils/demo';
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -113,7 +114,10 @@ export default function EmployeePatientToggel() {
 
   return (
     <>
-      {!user?.strict_employee && (
+      {/* isDemoUser: a demo account is scoped to its trial clinic and cannot become a patient
+          (the server refuses PATCH /api/auth/togglerole for demos), so the button is hidden
+          rather than left to fail. */}
+      {!user?.strict_employee && !isDemoUser(user) && (
         <LoadingButton
           component={m.button}
           loading={loading}

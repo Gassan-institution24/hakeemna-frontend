@@ -7,13 +7,21 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
+import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import LoadingButton from '@mui/lab/LoadingButton';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import TableContainer from '@mui/material/TableContainer';
 
@@ -23,12 +31,16 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { getDemoState, DEMO_ACCOUNT_TYPES, filterByAccountType } from 'src/utils/demo';
+
 import socket from 'src/socket';
-import { useGetUsers } from 'src/api';
+import { useTranslate } from 'src/locales';
+import { useGetUsers, extendDemoAccount } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -67,6 +79,9 @@ const TABLE_HEAD = [
   { id: 'role', label: 'role' },
   { id: 'online', label: 'online' },
   { id: 'last_online', label: 'last view' },
+  // Demo/trial columns. Order here must match the cell order in table-details-row.jsx.
+  { id: 'isDemo', label: 'account type' },
+  { id: 'demoExpiresAt', label: 'demo expiry' },
   { id: 'status', label: 'status' },
   { id: '', width: 88 },
 ];
@@ -75,6 +90,8 @@ const defaultFilters = {
   name: '',
   role: 'all',
   status: 'active',
+  // 'all' keeps the pre-existing result set unchanged by default.
+  accountType: DEMO_ACCOUNT_TYPES.ALL,
 };
 
 // ----------------------------------------------------------------------
@@ -95,6 +112,15 @@ export default function UsersTableView() {
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
+
+  // Demo trial extension dialog state.
+  const extendDemo = useBoolean();
+  const [demoRowToExtend, setDemoRowToExtend] = useState(null);
+  const [extendDays, setExtendDays] = useState('3');
+  const [extending, setExtending] = useState(false);
+
+  const { t } = useTranslate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { usersData, loading, refetch } = useGetUsers();
 
@@ -117,7 +143,11 @@ export default function UsersTableView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const canReset = !!filters?.name || filters.role !== 'all' || filters.status !== 'active';
+  const canReset =
+    !!filters?.name ||
+    filters.role !== 'all' ||
+    filters.status !== 'active' ||
+    filters.accountType !== DEMO_ACCOUNT_TYPES.ALL;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -213,6 +243,40 @@ export default function UsersTableView() {
     [router]
   );
 
+  // ── Demo trial extension ────────────────────────────────────────────────
+  // Opens a small dialog rather than extending straight from the menu, so the super admin can
+  // choose the number of days. The backend re-activates the user, the demo clinic and the
+  // licence window in one call (see extendDemoUser in utils/demoAccount.js).
+  const handleOpenExtendDemo = useCallback(
+    (row) => {
+      setDemoRowToExtend(row);
+      setExtendDays('3');
+      extendDemo.onTrue();
+    },
+    [extendDemo]
+  );
+
+  const handleExtendDemo = useCallback(async () => {
+    if (!demoRowToExtend) return;
+
+    setExtending(true);
+    try {
+      await extendDemoAccount(demoRowToExtend._id, Number(extendDays) || 3);
+      enqueueSnackbar(t('Demo account extended'));
+      extendDemo.onFalse();
+      setDemoRowToExtend(null);
+      refetch();
+    } catch (error) {
+      // The axios interceptor rejects with the raw server payload, not an AxiosError.
+      enqueueSnackbar(
+        (typeof error === 'string' ? error : error?.message) || t('Something went wrong'),
+        { variant: 'error' }
+      );
+    } finally {
+      setExtending(false);
+    }
+  }, [demoRowToExtend, extendDays, extendDemo, refetch, enqueueSnackbar, t]);
+
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -256,14 +320,28 @@ export default function UsersTableView() {
             { name: 'users' }, /// edit
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.users.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button> /// edit
+            <Stack direction="row" spacing={1}>
+              {/* Demo provisioning is a separate flow: it creates a clinic, an owner engagement
+                  and a 3-day licence window, not just a user row. */}
+              <Button
+                component={RouterLink}
+                href={paths.superadmin.users.demoNew}
+                variant="outlined"
+                color="warning"
+                startIcon={<Iconify icon="mdi:clock-fast" />}
+              >
+                {t('New demo account')}
+              </Button>
+
+              <Button
+                component={RouterLink}
+                href={paths.superadmin.users.new} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New user
+              </Button>
+            </Stack>
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -367,6 +445,29 @@ export default function UsersTableView() {
                         value: row.last_online ? new Date(row.last_online).toLocaleString() : '-',
                       },
                       {
+                        label: t('account type'),
+                        value: (
+                          <Label variant="soft" color={getDemoState(row).isDemo ? 'warning' : 'default'}>
+                            {t(getDemoState(row).isDemo ? 'demo account' : 'normal account')}
+                          </Label>
+                        ),
+                      },
+                      {
+                        label: t('demo expiry'),
+                        value: getDemoState(row).isDemo ? (
+                          <Label
+                            variant="soft"
+                            color={getDemoState(row).expired ? 'error' : 'success'}
+                          >
+                            {`${fDateTime(getDemoState(row).expiresAt)} · ${t(
+                              getDemoState(row).expired ? 'Expired' : 'Active'
+                            )}`}
+                          </Label>
+                        ) : (
+                          '-'
+                        ),
+                      },
+                      {
                         label: 'Status',
                         value: (
                           <Label
@@ -383,6 +484,15 @@ export default function UsersTableView() {
                       },
                     ]}
                     actions={[
+                      ...(getDemoState(row).isDemo
+                        ? [
+                            {
+                              label: t('Extend demo'),
+                              icon: 'mdi:calendar-plus',
+                              onClick: () => handleOpenExtendDemo(row),
+                            },
+                          ]
+                        : []),
                       {
                         label: 'DDL',
                         icon: 'carbon:data-quality-definition',
@@ -467,6 +577,7 @@ export default function UsersTableView() {
                           onActivate={() => handleActivate(row._id)}
                           onInactivate={() => handleInactivate(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
+                          onExtendDemo={() => handleOpenExtendDemo(row)}
                         />
                       ))}
                     <TableNoData notFound={notFound} />
@@ -533,6 +644,43 @@ export default function UsersTableView() {
           </Button>
         }
       />
+      {/* Extend a demo trial. Days is capped server-side (1-365) so a demo cannot quietly
+          become an unlimited free licence. */}
+      <Dialog open={extendDemo.value} onClose={extendDemo.onFalse} fullWidth maxWidth="xs">
+        <DialogTitle>{t('Extend demo')}</DialogTitle>
+
+        <DialogContent>
+          <Stack spacing={2} sx={{ pt: 1 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {demoRowToExtend?.email}
+            </Typography>
+
+            <TextField
+              fullWidth
+              type="number"
+              label={t('days')}
+              value={extendDays}
+              onChange={(event) => setExtendDays(event.target.value)}
+              inputProps={{ min: 1, max: 365 }}
+            />
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="outlined" color="inherit" onClick={extendDemo.onFalse}>
+            {t('cancel')}
+          </Button>
+          <LoadingButton
+            variant="contained"
+            color="warning"
+            loading={extending}
+            onClick={handleExtendDemo}
+          >
+            {t('Extend demo')}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+
       <CustomPopover
         open={ddlOpen}
         onClose={() => setDdlAnchorEl(null)}
@@ -576,7 +724,7 @@ export default function UsersTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name, role } = filters;
+  const { status, name, role, accountType } = filters;
 
   const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
@@ -605,6 +753,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (status !== 'all') {
     inputData = inputData.filter((order) => order.status === status);
   }
+
+  // Demo vs normal. Delegated to src/utils/demo.js so the rule lives in one place.
+  inputData = filterByAccountType(inputData, accountType);
 
   return inputData;
 }

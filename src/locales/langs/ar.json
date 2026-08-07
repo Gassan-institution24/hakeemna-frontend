@@ -8,7 +8,6 @@
   "Code": "الرمز",
   "income": "دخل",
   "expences": "مصروفات",
-
   "For Patients": "للمرضى",
   "For Providers": "لمقدمي الخدمات",
   "Digital Presence": "الحضور الرقمي",
@@ -17,7 +16,6 @@
   "Records": "السجلات",
   "Go to slide": "الانتقال إلى الشريحة",
   "CARE": "الرعاية",
-
   "my salary": "راتبي",
   "confirmed": "مؤكد",
   "Employee": "الموظف",
@@ -71,7 +69,7 @@
   "login": "تسجيل الدخول",
   "home": "الصفحة الرئيسية",
   "R&D": "الأبحاث",
-  "No message": "لا يوجد رسائل", 
+  "No message": "لا يوجد رسائل",
   "services": "الخدمات",
   "on the ground": "ميداني",
   "services and pricing": "الخدمات والأسعار",
@@ -925,7 +923,6 @@
   "choose 12 am for both start and end time if you are working 24 hours": "اختر الساعة 12 صباحا لوقت بدء وانتهاء الدوام ان كانت ساعات العمل 24 ساعة",
   "visit profile": "الملف التعريفي",
   "show page": "معاينة الصفحة",
-  
   "No valid date to create": "لا يوجد يوم متاح لإضافته",
   "creating startup data": "إنشاء معلومات وجداول لأول مرة",
   "Select types of data you want me to create": "اختر الجداول المراد أنشاءها",
@@ -1985,7 +1982,6 @@
   "Optional adjustable forms for this patient": "نماذج قابلة للتعديل اختيارية لهذا المريض",
   "Record services rendered during this visit": "تسجيل الخدمات المقدمة خلال هذه الزيارة",
   "Done": "تم",
-
   "Read less": "عرض أقل",
   "open now": "مفتوح الآن",
   "closed now": "مغلق الآن",
@@ -2022,5 +2018,25 @@
   "expired": "منتهية الصلاحية",
   "no data": "لا توجد بيانات",
   "coming": "قادم",
-  "not coming": "لن يحضر"
+  "not coming": "لن يحضر",
+  "account type": "نوع الحساب",
+  "demo expiry": "انتهاء الفترة التجريبية",
+  "New demo account": "حساب تجريبي جديد",
+  "Extend demo": "تمديد الفترة التجريبية",
+  "Demo account expired": "انتهت صلاحية الحساب التجريبي",
+  "Demo account created": "تم إنشاء الحساب التجريبي",
+  "Demo account extended": "تم تمديد الحساب التجريبي",
+  "Demo accounts have full access with no feature limits and expire automatically.": "الحسابات التجريبية تمتلك صلاحيات كاملة دون أي قيود على المزايا وتنتهي صلاحيتها تلقائياً.",
+  "The account expires automatically after this many days.": "ينتهي الحساب تلقائياً بعد هذا العدد من الأيام.",
+  "Expired": "منتهي",
+  "Active": "نشط",
+  "roles": "الأدوار",
+  "username": "اسم المستخدم",
+  "identification number": "الرقم الوطني",
+  "Passwords do not match": "كلمتا المرور غير متطابقتين",
+  "demo account": "تجريبي",
+  "normal account": "عادي",
+  "demo trial": "الفترة التجريبية",
+  "Not available for demo accounts": "غير متاح للحسابات التجريبية",
+  "This feature is not included in the demo account.": "هذه الميزة غير مضمّنة في الحساب التجريبي."
 }

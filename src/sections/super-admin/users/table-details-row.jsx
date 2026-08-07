@@ -9,6 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import { Dialog, ListItemText } from '@mui/material';
 
 import { fDateTime } from 'src/utils/format-time';
+import { getDemoState, getDemoStatus, getDemoTypeLabel, getDemoTypeColor } from 'src/utils/demo';
+
+import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -25,6 +28,7 @@ export default function CountriesTableRow({
   onSelectRow,
   onInactivate,
   onActivate,
+  onExtendDemo,
 }) {
   const {
     code,
@@ -45,7 +49,12 @@ export default function CountriesTableRow({
 
   const DDL = usePopover();
   const popover = usePopover();
+  const { t } = useTranslate();
   const { setIdToCall, idToCall, callUser } = useWebRTC();
+
+  // Single source of truth for demo presentation — see src/utils/demo.js.
+  const demo = getDemoState(row);
+  const demoStatus = getDemoStatus(row);
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -75,6 +84,33 @@ export default function CountriesTableRow({
           primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           secondaryTypographyProps={{ mt: 0.5, component: 'span', typography: 'caption' }}
         />
+      </TableCell>
+
+      {/* Demo vs normal account. Reads the isDemo flag added to the User schema. */}
+      <TableCell align="center">
+        <Label variant="soft" color={getDemoTypeColor(row)}>
+          {t(getDemoTypeLabel(row))}
+        </Label>
+      </TableCell>
+
+      {/* Trial expiry + whether the trial is still running. Blank for normal accounts. */}
+      <TableCell align="center">
+        {demo.isDemo ? (
+          <ListItemText
+            primary={demo.expiresAt ? fDateTime(demo.expiresAt) : '-'}
+            secondary={
+              demoStatus && (
+                <Label variant="soft" color={demoStatus.color}>
+                  {t(demoStatus.label)}
+                </Label>
+              )
+            }
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{ mt: 0.5, component: 'span', typography: 'caption' }}
+          />
+        ) : (
+          '-'
+        )}
       </TableCell>
 
       <TableCell align="center">
@@ -163,6 +199,21 @@ export default function CountriesTableRow({
           <Iconify icon="material-symbols:call-sharp" />
           Call
         </MenuItem> */}
+        {/* Only demo accounts can be extended; a normal account has no trial window. */}
+        {demo.isDemo && onExtendDemo && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              onExtendDemo();
+              popover.onClose();
+            }}
+            sx={{ color: 'warning.main' }}
+          >
+            <Iconify icon="mdi:calendar-plus" />
+            {t('Extend demo')}
+          </MenuItem>
+        )}
+
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -206,6 +257,7 @@ CountriesTableRow.propTypes = {
   onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,
   onEditRow: PropTypes.func,
+  onExtendDemo: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

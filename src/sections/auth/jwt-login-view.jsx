@@ -39,6 +39,20 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState('');
 
+  // The axios interceptor / socket handler set this flag before bouncing an expired demo
+  // account back to login. Consume it once so the user is told why they were signed out
+  // instead of landing here with no explanation.
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('demoExpired')) {
+        sessionStorage.removeItem('demoExpired');
+        setErrorMsg(t('Demo account expired'));
+      }
+    } catch (error) {
+      /* storage unavailable — nothing to show */
+    }
+  }, [t]);
+
   const searchParams = useSearchParams();
 
   const returnTo = searchParams.get('returnTo');
