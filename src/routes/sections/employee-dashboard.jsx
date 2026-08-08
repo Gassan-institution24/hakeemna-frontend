@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
-import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
+import { AuthGuard, DemoDenyGuard, RoleBasedGuard } from 'src/auth/guard';
 import WorkGroupPermissionsBarLayout from 'src/layouts/workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -206,10 +206,28 @@ export const unitServiceEmployeeDashboardRoutes = [
           { path: ':id/edit', element: <AdjustEditPage /> },
         ],
       },
-      { path: 'browzeblogs', element: <BrowseBlogs /> },
-      { path: 'browzeblogs/:id', element: <PreviewBlogs /> },
+      // Blogs are not part of the demo. DemoDenyGuard covers browsing, reading, writing and
+      // editing in one place, so a demo cannot reach them by URL either — and it explains why
+      // rather than 404ing. Normal accounts pass straight through.
+      {
+        path: 'browzeblogs',
+        element: (
+          <DemoDenyGuard>
+            <Outlet />
+          </DemoDenyGuard>
+        ),
+        children: [
+          { element: <BrowseBlogs />, index: true },
+          { path: ':id', element: <PreviewBlogs /> },
+        ],
+      },
       {
         path: 'documents/blogs',
+        element: (
+          <DemoDenyGuard>
+            <Outlet />
+          </DemoDenyGuard>
+        ),
         children: [
           { element: <BlogsPage />, index: true },
           { path: 'list', element: <BlogsPage /> },

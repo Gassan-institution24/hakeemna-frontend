@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { paths } from 'src/routes/paths';
+
 import { HOST_API } from 'src/config-global';
 // import { idText } from 'typescript';
 
@@ -8,9 +10,44 @@ import { HOST_API } from 'src/config-global';
 
 const axiosInstance = axios.create({ baseURL: HOST_API });
 
+// The backend returns this exact message from every demo-expiry enforcement point
+// (protect, the global /api guard, login and the socket handshake).
+export const DEMO_EXPIRED_MESSAGE = 'Demo account expired';
+
+/**
+ * Tear the session down without importing src/auth/context/jwt/utils.js — that module imports
+ * this one, so calling setSession() from here would create a circular import. This mirrors the
+ * `setSession(null)` branch exactly.
+ */
+const clearSessionOnDemoExpiry = () => {
+  try {
+    localStorage.removeItem('accessToken');
+    delete axios.defaults.headers.common.Authorization;
+    // Read once by the login screen to explain why the user landed back there.
+    sessionStorage.setItem('demoExpired', '1');
+  } catch (error) {
+    /* storage unavailable (private mode) — the redirect below still happens */
+  }
+};
+
 axiosInstance.interceptors.response.use(
   (res) => res,
-  (error) => Promise.reject((error.response && error.response.data) || 'check internet connection')
+  (error) => {
+    // A demo account whose trial ended keeps a structurally valid JWT, so nothing else in the
+    // app would notice. Drop the session and bounce to login instead of letting the user click
+    // around a dashboard where every request 403s.
+    // Deliberately narrow: any other error falls through to the original behaviour untouched.
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.message === DEMO_EXPIRED_MESSAGE &&
+      window.location.pathname !== paths.auth.login
+    ) {
+      clearSessionOnDemoExpiry();
+      window.location.href = paths.auth.login;
+    }
+
+    return Promise.reject((error.response && error.response.data) || 'check internet connection');
+  }
 );
 
 export default axiosInstance;
@@ -930,6 +967,11 @@ export const endpoints = {
     superAdmin: (id) => (!id ? null : `/api/auth/superadmins/${id}`),
     superAdminPermissions: (id) => (!id ? null : `/api/auth/superadmins/${id}/permissions`),
     createSuperAdminLevel2: '/api/auth/superadmins/level-2',
+  },
+  // Demo / trial accounts — superadmin only (routes/superAdmin/demo_accounts.routes.js)
+  demoAccounts: {
+    all: '/api/demo-accounts',
+    extend: (id) => (!id ? null : `/api/demo-accounts/${id}/extend`),
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',

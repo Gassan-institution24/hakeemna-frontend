@@ -19,6 +19,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { isDemoUser } from 'src/utils/demo';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
@@ -278,20 +279,28 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                   </Typography>
                 }
               />
-              <RHFCheckbox
-                sx={{ px: 2 }}
-                name="visibility_US_page"
-                label={<Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>}
-              />
-              <RHFCheckbox
-                sx={{ px: 2 }}
-                name="visibility_online_appointment"
-                label={
-                  <Typography sx={{ fontSize: 12 }}>
-                    {t('visible in online appointments')}
-                  </Typography>
-                }
-              />
+              {/* Hidden for demo clinics — their staff never appear publicly, so these
+                  switches would be dead controls. The server pins both flags off anyway. */}
+              {!isDemoUser(user) && (
+                <>
+                  <RHFCheckbox
+                    sx={{ px: 2 }}
+                    name="visibility_US_page"
+                    label={
+                      <Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>
+                    }
+                  />
+                  <RHFCheckbox
+                    sx={{ px: 2 }}
+                    name="visibility_online_appointment"
+                    label={
+                      <Typography sx={{ fontSize: 12 }}>
+                        {t('visible in online appointments')}
+                      </Typography>
+                    }
+                  />
+                </>
+              )}
             </Box>
             <Box
               rowGap={3}

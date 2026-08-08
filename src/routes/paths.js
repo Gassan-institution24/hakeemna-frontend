@@ -357,6 +357,8 @@ export const paths = {
     users: {
       root: `${ROOTS.SUPERADMIN}/users`,
       new: `${ROOTS.SUPERADMIN}/users/new`,
+      // Demo / trial account provisioning (creates a clinic + admin, not just a user row).
+      demoNew: `${ROOTS.SUPERADMIN}/users/demo/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/users/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
     },

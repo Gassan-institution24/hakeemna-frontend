@@ -30,6 +30,7 @@ export default function UnitServiceEmployeesRow({
   onViewRow,
   onChangeVisPage,
   onChangeVisOnlineApp,
+  hideVisibility,
 }) {
   const {
     employee,
@@ -107,12 +108,18 @@ const codeResult =
       <TableCell sx={{ textTransform: 'lowercase' }} align="center">
         {employee?.email}
       </TableCell>
-      <TableCell align="center">
-        <Checkbox checked={visibility_online_appointment} onClick={onChangeVisOnlineApp} />
-      </TableCell>
-      <TableCell align="center">
-        <Checkbox checked={visibility_US_page} onClick={onChangeVisPage} />
-      </TableCell>
+      {/* Omitted for demo clinics — their staff are never listed publicly, so these toggles
+          would be dead controls. Must stay in step with TABLE_HEAD in view/home.jsx. */}
+      {!hideVisibility && (
+        <>
+          <TableCell align="center">
+            <Checkbox checked={visibility_online_appointment} onClick={onChangeVisOnlineApp} />
+          </TableCell>
+          <TableCell align="center">
+            <Checkbox checked={visibility_US_page} onClick={onChangeVisPage} />
+          </TableCell>
+        </>
+      )}
       {/* <TableCell  align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
@@ -239,6 +246,7 @@ UnitServiceEmployeesRow.propTypes = {
   onViewRow: PropTypes.func,
   onChangeVisPage: PropTypes.func,
   onChangeVisOnlineApp: PropTypes.func,
+  hideVisibility: PropTypes.bool,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,

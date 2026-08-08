@@ -464,6 +464,7 @@ const AdjustableServicePage = lazy(
 const UsersPage = lazy(() => import('src/pages/super-admin/users/index'));
 const EditUserPage = lazy(() => import('src/pages/super-admin/users/edit'));
 const AddUserPage = lazy(() => import('src/pages/super-admin/users/new'));
+const AddDemoAccountPage = lazy(() => import('src/pages/super-admin/users/demo-new'));
 
 // EMPLOYEES
 const EmployeesPage = lazy(() => import('src/pages/super-admin/employees/index'));
@@ -800,6 +801,8 @@ export const dashboardRoutes = [
         children: [
           { element: <UsersPage />, index: true },
           { path: 'new', element: <AddUserPage /> },
+          // Must be declared before ':id/edit' so 'demo' is not matched as a user id.
+          { path: 'demo/new', element: <AddDemoAccountPage /> },
           // { path: ':id/user', element: <UnitserviceInsurancePage /> },
           { path: ':id/edit', element: <EditUserPage /> },
         ],

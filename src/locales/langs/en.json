@@ -13,7 +13,6 @@
   "Total": "Total",
   "income": "Income",
   "expences": "Expenses",
-
   "For Patients": "For Patients",
   "For Providers": "For Providers",
   "Digital Presence": "Digital Presence",
@@ -22,7 +21,6 @@
   "Records": "Records",
   "Go to slide": "Go to slide",
   "CARE": "CARE",
-
   "my salary": "My Salary",
   "confirmed": "Confirmed",
   "pending": "Pending",
@@ -263,5 +261,26 @@
   "expired": "Expired",
   "no data": "No Data",
   "coming": "Coming",
-  "not coming": "Not Coming"
+  "not coming": "Not Coming",
+  "account type": "Account Type",
+  "demo expiry": "Demo Expiry",
+  "New demo account": "New Demo Account",
+  "Extend demo": "Extend Demo",
+  "Demo account expired": "Demo account expired",
+  "Demo account created": "Demo account created",
+  "Demo account extended": "Demo account extended",
+  "Demo accounts have full access with no feature limits and expire automatically.": "Demo accounts have full access with no feature limits and expire automatically.",
+  "The account expires automatically after this many days.": "The account expires automatically after this many days.",
+  "Expired": "Expired",
+  "Active": "Active",
+  "roles": "Roles",
+  "username": "Username",
+  "identification number": "Identification Number",
+  "Passwords do not match": "Passwords do not match",
+  "non profit organization": "Non Profit Organization",
+  "demo account": "Demo",
+  "normal account": "Normal",
+  "demo trial": "Demo Trial",
+  "Not available for demo accounts": "Not available for demo accounts",
+  "This feature is not included in the demo account.": "This feature is not included in the demo account."
 }

@@ -22,6 +22,7 @@ export function useGetTables() {
 }
 
 export * from './user';
+export * from './demo-accounts';
 export * from './blogs';
 export * from './user_contact';
 export * from './diets';

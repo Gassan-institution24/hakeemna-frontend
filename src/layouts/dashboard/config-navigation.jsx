@@ -3,13 +3,15 @@ import { useMemo, useEffect, useCallback } from 'react';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { isDemoUser } from 'src/utils/demo';
+
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -751,7 +753,9 @@ export function useNavData() {
             'data-test': 'employee-nav-item-documents-adjustable',
           },
           {
-            show: true,
+            // Blogs are not part of the demo — the routes are blocked by DemoDenyGuard, so
+            // leaving the link visible would just lead to a denial page.
+            show: !isDemoUser(user),
             title: t('my blogs'),
             path: paths.employee.documents.blogs.root,
             'data-test': 'employee-nav-item-documents-blogs',
@@ -824,7 +828,8 @@ export function useNavData() {
         'data-test': 'employee-nav-item-calender',
       },
       {
-        show: true,
+        // Not part of the demo — a demo account can neither read nor publish blogs.
+        show: !isDemoUser(user),
         title: t('browse blogs'),
         path: paths.employee.blogs,
         icon: <Iconify icon="ic:outline-library-books" />,

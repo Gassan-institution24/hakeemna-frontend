@@ -16,6 +16,7 @@ import { Chip, Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
+import { isDemoUser } from 'src/utils/demo';
 import { fData } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -291,7 +292,10 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
               <Divider />
-              <Stack alignItems="flex-start" gap={1}>
+              {/* Hidden for demo accounts: a demo clinic is never listed publicly, so this
+                  switch would do nothing. The server pins show_on_homepage off and excludes
+                  demo clinics from every public query — see backend utils/demoAccount.js. */}
+              <Stack alignItems="flex-start" gap={1} sx={{ display: isDemoUser(user) ? 'none' : undefined }}>
                 <Typography variant="subtitle1">{t('visibility information')}</Typography>
                 <RHFCheckbox
                   name="show_on_homepage"

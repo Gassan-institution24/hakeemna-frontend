@@ -8,6 +8,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Select, InputLabel, FormControl, OutlinedInput } from '@mui/material';
 
+import { DEMO_ACCOUNT_TYPES } from 'src/utils/demo';
+
 import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -37,6 +39,12 @@ export default function OrderTableToolbar({
   const handleFilterRole = useCallback(
     (event) => {
       onFilters('role', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterAccountType = useCallback(
+    (event) => {
+      onFilters('accountType', event.target.value);
     },
     [onFilters]
   );
@@ -87,6 +95,38 @@ export default function OrderTableToolbar({
             </MenuItem>
           </Select>
         </FormControl>
+
+        {/* Demo vs normal accounts. Defaults to "all" so the existing result set is unchanged. */}
+        <FormControl
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
+          }}
+        >
+          <InputLabel>{t('account type')}</InputLabel>
+
+          <Select
+            value={filters.accountType ?? DEMO_ACCOUNT_TYPES.ALL}
+            onChange={handleFilterAccountType}
+            input={<OutlinedInput label={t('account type')} />}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            <MenuItem lang="ar" value={DEMO_ACCOUNT_TYPES.ALL}>
+              {t('all')}
+            </MenuItem>
+            <MenuItem lang="ar" value={DEMO_ACCOUNT_TYPES.DEMO}>
+              {t('demo account')}
+            </MenuItem>
+            <MenuItem lang="ar" value={DEMO_ACCOUNT_TYPES.NORMAL}>
+              {t('normal account')}
+            </MenuItem>
+          </Select>
+        </FormControl>
+
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth

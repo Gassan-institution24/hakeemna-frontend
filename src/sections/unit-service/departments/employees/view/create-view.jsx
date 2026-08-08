@@ -9,6 +9,9 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { isDemoUser } from 'src/utils/demo';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -25,9 +28,17 @@ export default function TableCreateView({ departmentData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { user } = useAuthContext();
 
-  const [selectedPage, setSelectedPage] = useState();
-  const select = useBoolean(true);
+  // Demo clinics always go straight to "create a new one" — see the sibling view in
+  // sections/unit-service/employees/view/new.jsx for why the "search existing account"
+  // branch must not be reachable from a demo.
+  const isDemo = isDemoUser(user);
+
+  // Unlike the sibling view this starts undefined (neither page shown until the prompt is
+  // answered), so a demo has to be pointed at the create form explicitly.
+  const [selectedPage, setSelectedPage] = useState(isDemo ? 1 : undefined);
+  const select = useBoolean(!isDemo);
   return (
     <>
       <Container maxWidth="xl">

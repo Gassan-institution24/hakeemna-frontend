@@ -23,6 +23,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { isDemoUser } from 'src/utils/demo';
+
 import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -70,14 +72,26 @@ export default function EmployeesTableView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { user } = useAuthContext();
+
+  // A demo clinic's staff are never listed publicly, so these two toggles do nothing for a
+  // demo — the server pins both flags off and excludes demo clinics from every public query.
+  // Dropping the columns keeps the table honest rather than showing dead switches.
+  const hideVisibilityColumns = isDemoUser(user);
+
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },
     { id: 'online', label: t('online') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },
     { id: 'email', label: t('email') },
-    { id: 'visibility_online_appointment', label: t('visibility online appointment') },
-    { id: 'visibility_US_page', label: t('visibility page') },
+    ...(hideVisibilityColumns
+      ? []
+      : [
+          { id: 'visibility_online_appointment', label: t('visibility online appointment') },
+          { id: 'visibility_US_page', label: t('visibility page') },
+        ]),
     { id: 'adjust_schedual', label: t('adjust schedual') },
     { id: '', width: 88 },
   ];
@@ -95,8 +109,6 @@ export default function EmployeesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
-
-  const { user } = useAuthContext();
 
   // // const settings = useSettingsContext();
 
@@ -511,24 +523,29 @@ export default function EmployeesTableView() {
                         label: t('email'),
                         value: row.employee?.email,
                       },
-                      {
-                        label: t('visibility online appointment'),
-                        value: (
-                          <Checkbox
-                            checked={row.visibility_online_appointment}
-                            onClick={() => handleChangeVisOnlineApp(row._id)}
-                          />
-                        ),
-                      },
-                      {
-                        label: t('visibility page'),
-                        value: (
-                          <Checkbox
-                            checked={row.visibility_US_page}
-                            onClick={() => handleChangeVisPage(row._id)}
-                          />
-                        ),
-                      },
+                      // Omitted for demo clinics — see hideVisibilityColumns above.
+                      ...(hideVisibilityColumns
+                        ? []
+                        : [
+                            {
+                              label: t('visibility online appointment'),
+                              value: (
+                                <Checkbox
+                                  checked={row.visibility_online_appointment}
+                                  onClick={() => handleChangeVisOnlineApp(row._id)}
+                                />
+                              ),
+                            },
+                            {
+                              label: t('visibility page'),
+                              value: (
+                                <Checkbox
+                                  checked={row.visibility_US_page}
+                                  onClick={() => handleChangeVisPage(row._id)}
+                                />
+                              ),
+                            },
+                          ]),
                       {
                         label: t('adjust schedual'),
                         value: (
@@ -645,6 +662,7 @@ export default function EmployeesTableView() {
                           onEditRow={() => handleEditRow(row._id)}
                           onChangeVisPage={() => handleChangeVisPage(row._id)}
                           onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
+                          hideVisibility={hideVisibilityColumns}
                         />
                       ))}
                     <TableNoData notFound={notFound} />
