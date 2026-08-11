@@ -26,6 +26,7 @@ import ChartHeader from './components/chart-header';
 import ChartToolbar from './components/chart-toolbar';
 import DiagnosisPanel from './components/diagnosis-panel';
 import ProceduresPanel from './components/procedures-panel';
+import ChiefComplaintPanel from './components/chief-complaint-panel';
 import {
   ADULT_UPPER,
   ADULT_LOWER,
@@ -255,6 +256,11 @@ export default function OdontogramView({
   onSaveTooth,
   onAddProcedure,
   onDeleteProcedure,
+  onSetProcedurePayment,
+  onAddChiefComplaint,
+  onDeleteChiefComplaint,
+  onUploadXray,
+  onDeleteXray,
   onSnapshot,
   onChartTypeChange,
   onCreateBridge,
@@ -445,6 +451,70 @@ export default function OdontogramView({
     [onDeleteProcedure, showToast, isAr]
   );
 
+  const handleSetProcedurePayment = useCallback(
+    async (fdiNumber, procId, paymentStatus) => {
+      if (!onSetProcedurePayment) return;
+      try {
+        await onSetProcedurePayment(fdiNumber, procId, paymentStatus);
+        const paidMsg = isAr ? 'تم تعليم الإجراء كمدفوع' : 'Procedure marked as paid';
+        const unpaidMsg = isAr ? 'تم إلغاء الدفع' : 'Payment cleared';
+        showToast(paymentStatus === 'paid' ? paidMsg : unpaidMsg);
+      } catch (e) {
+        showToast(isAr ? 'فشل تحديث حالة الدفع' : 'Failed to update payment', 'error');
+      }
+    },
+    [onSetProcedurePayment, showToast, isAr]
+  );
+
+  const handleAddChiefComplaint = useCallback(
+    async (payload) => {
+      if (!onAddChiefComplaint) return;
+      try {
+        await onAddChiefComplaint(payload);
+        showToast(isAr ? 'تمت إضافة الشكوى' : 'Chief complaint added');
+      } catch (e) {
+        showToast(isAr ? 'فشل إضافة الشكوى' : 'Failed to add chief complaint', 'error');
+      }
+    },
+    [onAddChiefComplaint, showToast, isAr]
+  );
+
+  const handleDeleteChiefComplaint = useCallback(
+    async (complaintId) => {
+      if (!onDeleteChiefComplaint) return;
+      try {
+        await onDeleteChiefComplaint(complaintId);
+        showToast(isAr ? 'تم حذف الشكوى' : 'Chief complaint deleted');
+      } catch (e) {
+        showToast(isAr ? 'فشل حذف الشكوى' : 'Failed to delete chief complaint', 'error');
+      }
+    },
+    [onDeleteChiefComplaint, showToast, isAr]
+  );
+
+  // The panel surfaces its own inline error, so let the rejection propagate.
+  const handleUploadXray = useCallback(
+    async (phase, files) => {
+      if (!onUploadXray) return;
+      await onUploadXray(phase, files);
+      showToast(isAr ? 'تم رفع الصورة' : 'X-ray uploaded');
+    },
+    [onUploadXray, showToast, isAr]
+  );
+
+  const handleDeleteXray = useCallback(
+    async (xrayId) => {
+      if (!onDeleteXray) return;
+      try {
+        await onDeleteXray(xrayId);
+        showToast(isAr ? 'تم حذف الصورة' : 'X-ray deleted');
+      } catch (e) {
+        showToast(isAr ? 'فشل حذف الصورة' : 'Failed to delete x-ray', 'error');
+      }
+    },
+    [onDeleteXray, showToast, isAr]
+  );
+
   const chartCard = (
     <Box
       sx={{
@@ -618,6 +688,18 @@ export default function OdontogramView({
 
   return (
     <Stack gap={2}>
+      {/* Chief complaint — what brought the patient in, so it reads first */}
+      {!isFullscreen && (
+        <ChiefComplaintPanel
+          complaints={chartData?.chief_complaints}
+          teeth={allTeeth}
+          onAddComplaint={handleAddChiefComplaint}
+          onDeleteComplaint={handleDeleteChiefComplaint}
+          numbering={numbering}
+          lang={lang}
+        />
+      )}
+
       {/* Chart + diagnosis */}
       <Box
         sx={{
@@ -647,21 +729,33 @@ export default function OdontogramView({
         />
       </Box>
 
-      {/* X-ray · procedures · notes */}
+      {/* X-ray — before / after side by side, so it takes the full width */}
+      {!isFullscreen && (
+        <XrayPanel
+          xrays={chartData?.xrays}
+          onUploadXray={handleUploadXray}
+          onDeleteXray={handleDeleteXray}
+          numbering={numbering}
+          lang={lang}
+        />
+      )}
+
+      {/* Procedures · notes */}
       {!isFullscreen && (
         <Box
           sx={{
             display: 'grid',
             gap: 2,
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
             alignItems: 'stretch',
           }}
         >
-          <XrayPanel lang={lang} />
           <ProceduresPanel
             teethMap={teethMap}
             teeth={allTeeth}
             onAddProcedure={handleAddProcedure}
+            onDeleteProcedure={handleDeleteProcedure}
+            onSetPayment={handleSetProcedurePayment}
             numbering={numbering}
             lang={lang}
           />
@@ -685,8 +779,6 @@ export default function OdontogramView({
           bridge={activeBridge}
           onClose={() => setSelectedFdi(null)}
           onSaveTooth={handleModalSave}
-          onAddProcedure={handleAddProcedure}
-          onDeleteProcedure={handleDeleteProcedure}
           onRemoveBridge={handleRemoveBridge}
           lang={lang}
         />
@@ -728,6 +820,11 @@ OdontogramView.propTypes = {
   onSaveTooth: PropTypes.func,
   onAddProcedure: PropTypes.func,
   onDeleteProcedure: PropTypes.func,
+  onSetProcedurePayment: PropTypes.func,
+  onAddChiefComplaint: PropTypes.func,
+  onDeleteChiefComplaint: PropTypes.func,
+  onUploadXray: PropTypes.func,
+  onDeleteXray: PropTypes.func,
   onSnapshot: PropTypes.func,
   onChartTypeChange: PropTypes.func,
   onCreateBridge: PropTypes.func,

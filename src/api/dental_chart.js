@@ -72,6 +72,15 @@ export async function deleteProcedure(patientId, toothNumber, procedureId) {
   return res.data;
 }
 
+export async function setProcedurePayment(patientId, toothNumber, procedureId, paymentStatus) {
+  const res = await axiosInstance.patch(
+    endpoints.dentalChart.procedurePayment(patientId, toothNumber, procedureId),
+    { payment_status: paymentStatus }
+  );
+  await invalidate(patientId);
+  return res.data;
+}
+
 export async function addNote(patientId, payload) {
   const res = await axiosInstance.post(endpoints.dentalChart.note(patientId), payload);
   await invalidate(patientId);
@@ -80,6 +89,43 @@ export async function addNote(patientId, payload) {
 
 export async function deleteNote(patientId, noteId) {
   const res = await axiosInstance.delete(endpoints.dentalChart.deleteNote(patientId, noteId));
+  await invalidate(patientId);
+  return res.data;
+}
+
+export async function addChiefComplaint(patientId, payload) {
+  const res = await axiosInstance.post(endpoints.dentalChart.chiefComplaint(patientId), payload);
+  await invalidate(patientId);
+  return res.data;
+}
+
+export async function deleteChiefComplaint(patientId, complaintId) {
+  const res = await axiosInstance.delete(
+    endpoints.dentalChart.deleteChiefComplaint(patientId, complaintId)
+  );
+  await invalidate(patientId);
+  return res.data;
+}
+
+// `files` is a FileList / File[]; everything travels as multipart so DICOM and
+// plain images share one upload path.
+export async function uploadXrays(patientId, { phase, files, toothFdi, notes, takenAt }) {
+  const formData = new FormData();
+  Array.from(files).forEach((file) => formData.append('file', file));
+  formData.append('phase', phase);
+  if (toothFdi) formData.append('tooth_fdi', toothFdi);
+  if (notes) formData.append('notes', notes);
+  if (takenAt) formData.append('taken_at', takenAt);
+
+  const res = await axiosInstance.post(endpoints.dentalChart.xray(patientId), formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  await invalidate(patientId);
+  return res.data;
+}
+
+export async function deleteXray(patientId, xrayId) {
+  const res = await axiosInstance.delete(endpoints.dentalChart.deleteXray(patientId, xrayId));
   await invalidate(patientId);
   return res.data;
 }

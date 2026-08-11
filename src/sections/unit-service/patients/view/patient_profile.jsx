@@ -4,17 +4,14 @@ import { useParams } from 'react-router';
 import { Box, Card, Stack, Avatar, Container, Typography } from '@mui/material';
 
 import { useGetOneUSPatient } from 'src/api';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
-import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import ProfileTabs from 'src/components/profile-tabs';
 
 import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
 import PatientFinancial from 'src/sections/employee/patients/patient-profile/patient-financial';
 import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
-import PatientDentalChart from 'src/sections/employee/patients/dental-chart/patient-dental-chart';
 import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
 import PatientPrescriptions from 'src/sections/employee/patients/patient-profile/patient-prescriptions';
 import PatientMedicalReports from 'src/sections/employee/patients/patient-profile/patient-medical-reports';
@@ -51,8 +48,6 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const checkAcl = useAclGuard();
-  const { hasFeature } = useSubscriptionGuard();
 
   const [currentTab, setCurrentTab] = useState('communication');
   const TABS = [
@@ -92,12 +87,7 @@ export default function PatientProfile() {
       value: 'upload',
       label: t('upload files'),
     },
-    !isMedLab &&
-      checkAcl('dental_chart:read') &&
-      hasFeature('dental_chart') && {
-        value: 'dental',
-        label: t('dental chart'),
-      },
+    // The dental chart now lives in its own sidebar section (paths.unitservice.dental).
     {
       value: 'edit',
       label: t('edit'),
@@ -191,7 +181,6 @@ export default function PatientProfile() {
       {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
       {currentTab === 'financial' && <PatientFinancial patient={usPatientData} />}
       {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
-      {currentTab === 'dental' && <PatientDentalChart patient={usPatientData} />}
       {currentTab === 'edit' && <EditPatient patient={usPatientData} />}
     </Container>
   );

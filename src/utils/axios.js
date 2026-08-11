@@ -506,9 +506,20 @@ export const endpoints = {
       !patientId
         ? null
         : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
+    procedurePayment: (patientId, toothNumber, procedureId) =>
+      !patientId
+        ? null
+        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}/payment`,
     note: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/note`),
     deleteNote: (patientId, noteId) =>
       !patientId ? null : `/api/dental-chart/${patientId}/note/${noteId}`,
+    chiefComplaint: (patientId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/chief-complaint`,
+    deleteChiefComplaint: (patientId, complaintId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/chief-complaint/${complaintId}`,
+    xray: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/xray`),
+    deleteXray: (patientId, xrayId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/xray/${xrayId}`,
     snapshot: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshot`),
     snapshots: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshots`),
     restore: (patientId, snapshotId) =>

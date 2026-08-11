@@ -558,6 +558,13 @@ export function useNavData() {
         ],
       },
       {
+        show: checkAccess('dental_chart:read', 'dental_chart'),
+        title: t('dental chart'),
+        path: paths.unitservice.dental.root,
+        icon: <Iconify icon="mdi:tooth-outline" />,
+        'data-test': 'us-nav-item-dental',
+      },
+      {
         show: checkAccess('hr:read', 'hr'),
         title: t('human resource'),
         path: paths.unitservice.hr.root,

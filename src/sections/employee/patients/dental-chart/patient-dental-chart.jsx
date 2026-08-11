@@ -13,7 +13,9 @@ import OdontogramView from './odontogram-view';
 import {
   addNote,
   deleteNote,
+  deleteXray,
   updateTooth,
+  uploadXrays,
   addProcedure,
   saveSnapshot,
   createBridge,
@@ -22,6 +24,9 @@ import {
   deleteProcedure,
   switchChartType,
   useGetDentalChart,
+  addChiefComplaint,
+  setProcedurePayment,
+  deleteChiefComplaint,
 } from '../../../../api/dental_chart';
 
 // ----------------------------------------------------------------------
@@ -163,6 +168,54 @@ export default function PatientDentalChart({ patient }) {
     [patientId, createPatientFileRecord]
   );
 
+  const handleSetProcedurePayment = useCallback(
+    async (fdiNumber, procId, paymentStatus) => {
+      if (!patientId) return;
+      await setProcedurePayment(patientId, fdiNumber, procId, paymentStatus);
+      await createPatientFileRecord(
+        `Marked dental procedure ${procId} on tooth ${fdiNumber} as ${paymentStatus}.`
+      );
+    },
+    [patientId, createPatientFileRecord]
+  );
+
+  const handleAddChiefComplaint = useCallback(
+    async (payload) => {
+      if (!patientId) return;
+      await addChiefComplaint(patientId, payload);
+      const details = [payload.codes?.join(', '), payload.other_text].filter(Boolean).join(' | ');
+      await createPatientFileRecord(`Recorded dental chief complaint: ${details}.`);
+    },
+    [patientId, createPatientFileRecord]
+  );
+
+  const handleDeleteChiefComplaint = useCallback(
+    async (complaintId) => {
+      if (!patientId) return;
+      await deleteChiefComplaint(patientId, complaintId);
+    },
+    [patientId]
+  );
+
+  const handleUploadXray = useCallback(
+    async (phase, files) => {
+      if (!patientId) return;
+      await uploadXrays(patientId, { phase, files });
+      await createPatientFileRecord(
+        `Uploaded ${files.length} dental x-ray file(s) — ${phase} treatment.`
+      );
+    },
+    [patientId, createPatientFileRecord]
+  );
+
+  const handleDeleteXray = useCallback(
+    async (xrayId) => {
+      if (!patientId) return;
+      await deleteXray(patientId, xrayId);
+    },
+    [patientId]
+  );
+
   const handleAddNote = useCallback(
     async (payload) => {
       if (!patientId) return;
@@ -242,6 +295,11 @@ export default function PatientDentalChart({ patient }) {
       onSaveTooth={handleSaveTooth}
       onAddProcedure={handleAddProcedure}
       onDeleteProcedure={handleDeleteProcedure}
+      onSetProcedurePayment={handleSetProcedurePayment}
+      onAddChiefComplaint={handleAddChiefComplaint}
+      onDeleteChiefComplaint={handleDeleteChiefComplaint}
+      onUploadXray={handleUploadXray}
+      onDeleteXray={handleDeleteXray}
       onSnapshot={handleSnapshot}
       onChartTypeChange={handleChartTypeChange}
       onCreateBridge={handleCreateBridge}

@@ -10,9 +10,7 @@ import { fDate } from 'src/utils/format-time';
 
 import { useGetOneUSPatient } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
-import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import Iconify from 'src/components/iconify';
 import ProfileTabs from 'src/components/profile-tabs';
@@ -27,7 +25,6 @@ import PatientCheckList from '../patient-profile/patient-checklist';
 import PatientRadiology from '../patient-profile/patient-radiology';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
-import PatientDentalChart from '../dental-chart/patient-dental-chart';
 import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
@@ -60,8 +57,6 @@ export default function PatientProfile() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const checkAcl = useAclGuard();
-  const { hasFeature } = useSubscriptionGuard();
 
   // eslint-disable-next-line no-unused-vars
   const [callData, setCallData] = useState(null);
@@ -104,8 +99,7 @@ export default function PatientProfile() {
     { value: 'medical_analysis', label: t('medical analysis') },
     { value: 'radiology', label: t('radiology') },
     { value: 'financial', label: t('financial information') },
-    checkAcl('dental_chart:read') &&
-      hasFeature('dental_chart') && { value: 'dental', label: t('dental chart') },
+    // The dental chart now lives in its own sidebar section (paths.unitservice.dental).
   ].filter(Boolean);
 
   function calculateAge(birthDate) {
@@ -197,8 +191,6 @@ export default function PatientProfile() {
         return <PatientRadiology patient={usPatientData} />;
       case 'financial':
         return <PatientFinancial patient={usPatientData} />;
-      case 'dental':
-        return <PatientDentalChart patient={usPatientData} />;
       default:
         return null;
     }

@@ -9,6 +9,7 @@ import {
   Button,
   Dialog,
   Select,
+  Tooltip,
   MenuItem,
   TableRow,
   TableBody,
@@ -16,6 +17,7 @@ import {
   TableHead,
   TextField,
   InputLabel,
+  IconButton,
   Typography,
   FormControl,
   DialogTitle,
@@ -30,22 +32,17 @@ import Iconify from 'src/components/iconify';
 import PanelCard from './panel-card';
 import { getSurfaceLabel } from '../constants/fdi';
 import { toNotation } from '../constants/numbering';
-import { getConditionKind, getConditionLabel } from '../constants/conditions';
 
 // ----------------------------------------------------------------------
 
 const STATUS_COLOR = {
-  existing: 'success',
   planned: 'info',
-  watch: 'warning',
   in_progress: 'warning',
   completed: 'success',
   cancelled: 'default',
 };
 
 const STATUSES = ['planned', 'in_progress', 'completed', 'cancelled'];
-
-const SURFACE_KEYS = ['occlusal', 'incisal', 'mesial', 'distal', 'buccal', 'lingual'];
 
 const performerName = (performedBy, isAr) => {
   if (!performedBy || typeof performedBy === 'string') return '—';
@@ -57,54 +54,45 @@ const performerName = (performedBy, isAr) => {
   return name || performedBy.email || '—';
 };
 
-// Build one flat, most-recent-first list from three sources of "work done on a
-// tooth": whole-tooth restorations, per-surface restorations, and the formal
-// procedure records added through the tooth dialog.
+const todayValue = () => new Date().toISOString().slice(0, 10);
+
+const PAYMENT_LABELS = {
+  paid: { en: 'Paid', ar: 'مدفوع' },
+  unpaid: { en: 'Unpaid', ar: 'غير مدفوع' },
+};
+
+const PAYMENT_ACTIONS = {
+  // Shown on a paid row — the button reverses the payment.
+  paid: { en: 'Undo', ar: 'تراجع' },
+  unpaid: { en: 'Mark paid', ar: 'تعليم كمدفوع' },
+};
+
+const pick = (dict, key, isAr) => (isAr ? dict[key].ar : dict[key].en);
+
+// One flat, most-recent-first list of the actual procedure records. Painting a
+// tooth appends such a record on the server, so this is a real history: every
+// row keeps the date it was performed on instead of borrowing the tooth's
+// last-modified timestamp (which the autosave rewrites on every save).
 function collectProcedureRows(teethMap, lang) {
   const rows = [];
 
   Object.values(teethMap || {}).forEach((tooth) => {
     const fdi = tooth.fdi_number;
-    // Painted conditions have no date of their own; the tooth's own timestamp
-    // records when it was last worked on.
-    const toothDate = tooth.updated_at || tooth.created_at || null;
-
-    if (tooth.whole_condition && getConditionKind(tooth.whole_condition) === 'procedure') {
-      rows.push({
-        key: `w-${fdi}`,
-        fdi,
-        label: getConditionLabel(tooth.whole_condition, lang),
-        surface: null,
-        status: tooth.whole_status || 'existing',
-        doctor: tooth.updated_by,
-        date: toothDate,
-      });
-    }
-
-    SURFACE_KEYS.forEach((s) => {
-      const surf = tooth.surfaces?.[s];
-      if (surf && surf.condition && getConditionKind(surf.condition) === 'procedure') {
-        rows.push({
-          key: `s-${fdi}-${s}`,
-          fdi,
-          label: getConditionLabel(surf.condition, lang),
-          surface: getSurfaceLabel(s, fdi, lang),
-          status: surf.status || 'existing',
-          doctor: surf.updated_by || tooth.updated_by,
-          date: surf.updated_at || toothDate,
-        });
-      }
-    });
 
     (tooth.procedures || []).forEach((proc) => {
       rows.push({
         key: proc._id || `p-${fdi}-${proc.description}`,
+        id: proc._id,
         fdi,
         label: (lang === 'ar' && proc.description_arabic) || proc.description || '—',
         surface: proc.surface ? getSurfaceLabel(proc.surface, fdi, lang) : null,
         status: proc.status,
         doctor: proc.performed_by,
         date: proc.date_performed,
+        cost: proc.cost,
+        currency: proc.currency || 'JOD',
+        paymentStatus: proc.payment_status || 'unpaid',
+        paidAt: proc.paid_at,
       });
     });
   });
@@ -123,6 +111,7 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
   const [descriptionAr, setDescriptionAr] = useState('');
   const [status, setStatus] = useState('planned');
   const [cost, setCost] = useState('');
+  const [date, setDate] = useState(todayValue());
   const [saving, setSaving] = useState(false);
 
   const reset = () => {
@@ -131,6 +120,7 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
     setDescriptionAr('');
     setStatus('planned');
     setCost('');
+    setDate(todayValue());
   };
 
   const handleClose = () => {
@@ -148,6 +138,8 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
         description_arabic: descriptionAr.trim() || undefined,
         status,
         cost: cost ? Number(cost) : 0,
+        // Sent explicitly so the record is not silently stamped with server-now.
+        date_performed: date || undefined,
       });
       reset();
       onClose();
@@ -209,6 +201,16 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
             value={cost}
             onChange={(e) => setCost(e.target.value)}
           />
+
+          <TextField
+            fullWidth
+            size="small"
+            type="date"
+            label={isAr ? 'التاريخ' : 'Date'}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -239,11 +241,47 @@ AddProcedureDialog.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function ProceduresPanel({ teethMap, teeth, onAddProcedure, numbering, lang }) {
+export default function ProceduresPanel({
+  teethMap,
+  teeth,
+  onAddProcedure,
+  onDeleteProcedure,
+  onSetPayment,
+  numbering,
+  lang,
+}) {
   const isAr = lang === 'ar';
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [payingId, setPayingId] = useState(null);
 
   const rows = useMemo(() => collectProcedureRows(teethMap, lang), [teethMap, lang]);
+
+  const handleTogglePayment = async (row) => {
+    if (!onSetPayment || !row.id) return;
+    const next = row.paymentStatus === 'paid' ? 'unpaid' : 'paid';
+    // Un-paying reverses a financial record, so make it deliberate.
+    if (next === 'unpaid') {
+      const confirmed = window.confirm(
+        isAr ? 'إلغاء تعليم الإجراء كمدفوع؟' : 'Mark this procedure as unpaid again?'
+      );
+      if (!confirmed) return;
+    }
+    setPayingId(row.id);
+    try {
+      await onSetPayment(row.fdi, row.id, next);
+    } finally {
+      setPayingId(null);
+    }
+  };
+
+  const handleDelete = async (row) => {
+    if (!onDeleteProcedure || !row.id) return;
+    const confirmed = window.confirm(
+      isAr ? 'حذف هذا الإجراء نهائياً؟' : 'Delete this procedure record?'
+    );
+    if (!confirmed) return;
+    await onDeleteProcedure(row.fdi, row.id);
+  };
 
   return (
     <PanelCard
@@ -278,6 +316,9 @@ export default function ProceduresPanel({ teethMap, teeth, onAddProcedure, numbe
                 <TableCell>{isAr ? 'الحالة' : 'Status'}</TableCell>
                 <TableCell>{isAr ? 'الطبيب' : 'Doctor'}</TableCell>
                 <TableCell>{isAr ? 'التاريخ' : 'Date'}</TableCell>
+                <TableCell>{isAr ? 'التكلفة' : 'Cost'}</TableCell>
+                <TableCell>{isAr ? 'الدفع' : 'Payment'}</TableCell>
+                {onDeleteProcedure && <TableCell />}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -302,6 +343,42 @@ export default function ProceduresPanel({ teethMap, teeth, onAddProcedure, numbe
                   </TableCell>
                   <TableCell>{performerName(row.doctor, isAr)}</TableCell>
                   <TableCell>{row.date ? fDate(row.date) : '—'}</TableCell>
+                  <TableCell>{row.cost > 0 ? `${row.cost} ${row.currency}` : '—'}</TableCell>
+                  <TableCell>
+                    <Stack direction="row" alignItems="center" gap={0.75}>
+                      <Tooltip title={row.paidAt ? fDate(row.paidAt) : ''}>
+                        <Chip
+                          size="small"
+                          variant="soft"
+                          color={row.paymentStatus === 'paid' ? 'success' : 'default'}
+                          label={pick(PAYMENT_LABELS, row.paymentStatus, isAr)}
+                        />
+                      </Tooltip>
+
+                      {onSetPayment && row.id && (
+                        <Button
+                          size="small"
+                          variant="text"
+                          disabled={payingId === row.id}
+                          onClick={() => handleTogglePayment(row)}
+                          sx={{ minWidth: 0, px: 0.75, fontSize: '0.7rem' }}
+                        >
+                          {pick(PAYMENT_ACTIONS, row.paymentStatus, isAr)}
+                        </Button>
+                      )}
+                    </Stack>
+                  </TableCell>
+                  {onDeleteProcedure && (
+                    <TableCell align="right">
+                      {row.id && (
+                        <Tooltip title={isAr ? 'حذف' : 'Delete'}>
+                          <IconButton size="small" color="error" onClick={() => handleDelete(row)}>
+                            <Iconify icon="solar:trash-bin-trash-bold" width={16} />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -327,6 +404,8 @@ ProceduresPanel.propTypes = {
   teethMap: PropTypes.object,
   teeth: PropTypes.arrayOf(PropTypes.number),
   onAddProcedure: PropTypes.func,
+  onDeleteProcedure: PropTypes.func,
+  onSetPayment: PropTypes.func,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };
