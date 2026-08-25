@@ -65,13 +65,17 @@ function zoneFill(toothData, key) {
 function SurfaceWheel({ fdiNumber, toothData, onSurfaceClick, size, lang }) {
   const transform = getCrownTransform(fdiNumber);
 
-  // Treatment status ring.
+  // Treatment status ring. 'watch' is no longer a treatment status — only the
+  // "Watch" *diagnosis* still draws the dotted amber ring.
   const wholeStatus = toothData?.whole_status;
   const surfaceVals = Object.values(toothData?.surfaces || {}).filter((s) => s?.condition || s?.diagnosis);
   const statuses = surfaceVals.map((s) => s?.status);
-  const hasWatchDx = surfaceVals.some((s) => s?.diagnosis === 'watch');
+  const hasWatchDx =
+    surfaceVals.some((s) => s?.diagnosis === 'watch') || toothData?.whole_diagnosis === 'watch';
   const hasPlanned = wholeStatus === 'planned' || statuses.includes('planned');
-  const hasWatch = !hasPlanned && (wholeStatus === 'watch' || statuses.includes('watch') || hasWatchDx);
+  const hasCompleted =
+    !hasPlanned && (wholeStatus === 'completed' || statuses.includes('completed'));
+  const hasWatch = !hasPlanned && !hasCompleted && hasWatchDx;
 
   return (
     <svg
@@ -100,6 +104,9 @@ function SurfaceWheel({ fdiNumber, toothData, onSurfaceClick, size, lang }) {
 
       {hasPlanned && (
         <circle cx="22" cy="22" r="21" fill="none" stroke="#1565C0" strokeWidth="1.6" strokeDasharray="4 2.5" style={{ pointerEvents: 'none' }} />
+      )}
+      {hasCompleted && (
+        <circle cx="22" cy="22" r="21" fill="none" stroke="#2E7D32" strokeWidth="1.6" style={{ pointerEvents: 'none' }} />
       )}
       {hasWatch && (
         <circle cx="22" cy="22" r="21" fill="none" stroke="#F9A825" strokeWidth="1.6" strokeDasharray="2.5 2" style={{ pointerEvents: 'none' }} />

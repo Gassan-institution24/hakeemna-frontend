@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-extraneous-dependencies, import/extensions */
 // cornerstone-core, cornerstone-wado-image-loader and dicom-parser are declared in
 // package.json; eslint-plugin-import fails to resolve them under the CRA build's
 // eslint pass, so the rule is turned off for this file's imports only.
@@ -6,8 +6,14 @@ import PropTypes from 'prop-types';
 import dicomParser from 'dicom-parser';
 import cornerstone from 'cornerstone-core';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
-/* eslint-enable import/no-extraneous-dependencies */
+// The package's default entry decodes *every* transfer syntax by dispatching to a
+// web worker (imageLoader/decodeImageFrame.js has no main-thread branch), and its
+// dynamic-import build expects .worker.js and .wasm files to be served next to the
+// bundle — which CRA never copies out of node_modules. This build inlines the
+// worker and all codecs, so compressed DICOM (JPEG Lossless, JPEG-LS, JPEG 2000)
+// decodes with nothing extra to host.
+import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader/dist/cornerstoneWADOImageLoaderNoWebWorkers.bundle.min.js';
+/* eslint-enable import/no-extraneous-dependencies, import/extensions */
 
 import { Box, Stack, Slider, Tooltip, Typography, IconButton, CircularProgress } from '@mui/material';
 
@@ -15,15 +21,12 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// Wire cornerstone's externals once per page load. The app is built with CRA, so
-// bundling the loader's web-worker entry would need an ejected webpack config —
-// single-frame dental radiographs decode fast enough on the main thread.
+// Wire cornerstone's externals once per page load.
 let initialised = false;
 function initCornerstone() {
   if (initialised) return;
   cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
   cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
-  cornerstoneWADOImageLoader.configure({ useWebWorkers: false });
   initialised = true;
 }
 

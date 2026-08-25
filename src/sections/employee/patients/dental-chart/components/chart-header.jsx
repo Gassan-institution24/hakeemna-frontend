@@ -53,8 +53,9 @@ export default function ChartHeader({
 }) {
   const isAr = lang === 'ar';
 
-  // The chart model only stores adult|child, so dentition and age group are two
-  // views of the same value: permanent teeth = adult, primary teeth = child.
+  // The chart model only stores adult|child; here that value is labelled by
+  // dentition (permanent = adult, primary = child). The age-group wording lives
+  // on the toolbar's Adult/Child switch — this header used to duplicate it.
   const handleChartType = (_e, value) => {
     if (value) onChartTypeChange(value);
   };
@@ -94,17 +95,6 @@ export default function ChartHeader({
         >
           <ToggleButton value="adult">{isAr ? 'دائمة' : 'Permanent'}</ToggleButton>
           <ToggleButton value="child">{isAr ? 'لبنية' : 'Primary'}</ToggleButton>
-        </ToggleButtonGroup>
-
-        <ToggleButtonGroup
-          exclusive
-          size="small"
-          value={chartType}
-          onChange={handleChartType}
-          sx={toggleGroupSx}
-        >
-          <ToggleButton value="adult">{isAr ? 'بالغ' : 'Adult'}</ToggleButton>
-          <ToggleButton value="child">{isAr ? 'طفل' : 'Child'}</ToggleButton>
         </ToggleButtonGroup>
 
         <Box sx={{ flex: 1 }} />

@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import {
   Box,
   Stack,
-  Alert,
   Button,
   Dialog,
-  Snackbar,
   TextField,
   Typography,
   DialogTitle,
@@ -185,13 +184,13 @@ function Legend({ lang }) {
               width: 12,
               height: 12,
               borderRadius: 0.5,
-              backgroundColor: 'transparent',
-              border: '2px dotted #F9A825',
+              backgroundColor: '#2E7D32',
+              border: '2px solid #2E7D32',
               flexShrink: 0,
             }}
           />
           <Typography variant="caption" sx={{ fontSize: '0.65rem' }}>
-            {isAr ? 'مراقبة' : 'Watch'}
+            {isAr ? 'مكتمل' : 'Completed'}
           </Typography>
         </Stack>
       </Stack>
@@ -269,7 +268,7 @@ export default function OdontogramView({
   onDeleteNote,
 }) {
   const [snapshotOpen, setSnapshotOpen] = useState(false);
-  const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
+  const { enqueueSnackbar } = useSnackbar();
 
   // Display-only notation; the chart always stores FDI.
   const [numbering, setNumbering] = useState('fdi');
@@ -287,9 +286,12 @@ export default function OdontogramView({
   const dimUpper = jawFilter === 'lower';
   const dimLower = jawFilter === 'upper';
 
-  const showToast = useCallback((message, severity = 'success') => {
-    setToast({ open: true, message, severity });
-  }, []);
+  const showToast = useCallback(
+    (message, severity = 'success') => {
+      enqueueSnackbar(message, { variant: severity });
+    },
+    [enqueueSnackbar]
+  );
 
   const {
     teethMap,
@@ -792,22 +794,6 @@ export default function OdontogramView({
         lang={lang}
       />
 
-      {/* Toast notifications */}
-      <Snackbar
-        open={toast.open}
-        autoHideDuration={3000}
-        onClose={() => setToast((prev) => ({ ...prev, open: false }))}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={() => setToast((prev) => ({ ...prev, open: false }))}
-          severity={toast.severity}
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          {toast.message}
-        </Alert>
-      </Snackbar>
     </Stack>
   );
 }

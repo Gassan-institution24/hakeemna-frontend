@@ -35,6 +35,8 @@ import { toNotation } from '../constants/numbering';
 
 // ----------------------------------------------------------------------
 
+// Payment is a separate axis — it shows in the Payment column, never here.
+// Marking a procedure paid moves its status to 'completed'.
 const STATUS_COLOR = {
   planned: 'info',
   in_progress: 'warning',

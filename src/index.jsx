@@ -8,7 +8,12 @@ import App from './app';
 
 window.global = window;
 window.process = process;
-window.Buffer = [];
+// NOTE: do not assign window.Buffer here. app.jsx installs the real Buffer
+// constructor from the `buffer` package, and this module's body runs *after*
+// its imports — so assigning here overwrites it. A non-constructor value makes
+// every `x instanceof Buffer` check throw ("right-hand side is not callable"),
+// which breaks libraries that feature-detect Buffer (e.g. dicom-parser when
+// decoding compressed DICOM).
 
 // ----------------------------------------------------------------------
 

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useRef, useMemo, useState } from 'react';
 
 import {
   Box,
   Chip,
   Stack,
-  Alert,
   Button,
   Tooltip,
   Typography,
@@ -123,17 +123,16 @@ function PhaseColumn({ phase, xrays, onUpload, onOpen, onDelete, numbering, lang
   const isAr = lang === 'ar';
   const inputRef = useRef(null);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleFiles = async (event) => {
     const { files } = event.target;
     if (!files || files.length === 0) return;
     setBusy(true);
-    setError('');
     try {
       await onUpload(phase.id, files);
     } catch (err) {
-      setError(err?.message || (isAr ? 'فشل الرفع' : 'Upload failed'));
+      enqueueSnackbar(err?.message || (isAr ? 'فشل الرفع' : 'Upload failed'), { variant: 'error' });
     } finally {
       setBusy(false);
       // Reset so re-picking the same file still fires onChange.
@@ -185,12 +184,6 @@ function PhaseColumn({ phase, xrays, onUpload, onOpen, onDelete, numbering, lang
           onChange={handleFiles}
         />
       </Stack>
-
-      {error && (
-        <Alert severity="error" sx={{ py: 0 }}>
-          {error}
-        </Alert>
-      )}
 
       {xrays.length === 0 ? (
         <Stack alignItems="center" justifyContent="center" sx={{ py: 3, gap: 0.5 }}>

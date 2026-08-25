@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useState, useEffect } from 'react';
 
 import SaveIcon from '@mui/icons-material/Save';
@@ -75,8 +76,7 @@ export default function ToothModal({
   const [wholeStatus, setWholeStatus] = useState('existing');
   const [surfaceEdits, setSurfaceEdits] = useState({});
   const [infoSaving, setInfoSaving] = useState(false);
-  const [infoError, setInfoError] = useState('');
-  const [infoSuccess, setInfoSuccess] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   // ── Sync from toothData ───────────────────────────────────────────────────
   // Only re-initialise when the tooth changes (fdiNumber), not on every
@@ -98,16 +98,12 @@ export default function ToothModal({
       });
       setSurfaceEdits(edits);
     }
-    setInfoError('');
-    setInfoSuccess(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fdiNumber]);
 
   // ── Save info ─────────────────────────────────────────────────────────────
   const handleSaveInfo = async () => {
     setInfoSaving(true);
-    setInfoError('');
-    setInfoSuccess(false);
     try {
       const payload = {
         whole_diagnosis: wholeDiagnosis || null,
@@ -116,9 +112,9 @@ export default function ToothModal({
       };
       // Apply surface changes
       await onSaveTooth(fdiNumber, payload, surfaceEdits);
-      setInfoSuccess(true);
+      enqueueSnackbar(isAr ? 'تم الحفظ بنجاح' : 'Saved successfully', { variant: 'success' });
     } catch (err) {
-      setInfoError(err?.message || 'Error saving');
+      enqueueSnackbar(err?.message || (isAr ? 'فشل الحفظ' : 'Error saving'), { variant: 'error' });
     } finally {
       setInfoSaving(false);
     }
@@ -306,20 +302,20 @@ export default function ToothModal({
                     </Box>
                   </Stack>
                 </MenuItem>
-                <MenuItem value="watch">
+                <MenuItem value="completed">
                   <Stack direction="row" alignItems="center" gap={1}>
                     <Box
                       sx={{
                         width: 12,
                         height: 12,
                         borderRadius: 0.5,
-                        border: '2px dotted #F9A825',
-                        bgcolor: 'transparent',
+                        border: '2px solid #2E7D32',
+                        bgcolor: '#2E7D32',
                         flexShrink: 0,
                       }}
                     />
-                    <Box component="span" sx={{ color: '#F9A825', fontWeight: 600 }}>
-                      {isAr ? 'مراقبة' : 'Watch'}
+                    <Box component="span" sx={{ color: '#2E7D32', fontWeight: 600 }}>
+                      {isAr ? 'مكتمل' : 'Completed'}
                     </Box>
                   </Stack>
                 </MenuItem>
@@ -327,16 +323,6 @@ export default function ToothModal({
             </FormControl>
           </Grid>
 
-          {infoError && (
-            <Grid item xs={12}>
-              <Alert severity="error">{infoError}</Alert>
-            </Grid>
-          )}
-          {infoSuccess && (
-            <Grid item xs={12}>
-              <Alert severity="success">{isAr ? 'تم الحفظ بنجاح' : 'Saved successfully'}</Alert>
-            </Grid>
-          )}
         </Grid>
       </DialogContent>
 

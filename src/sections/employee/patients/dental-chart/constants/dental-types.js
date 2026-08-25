@@ -30,10 +30,10 @@
 
 /**
  * Clinical lifecycle of a condition/treatment.
- *  - existing: already present in the mouth
- *  - planned:  proposed / to be done (rendered with a dashed ring)
- *  - watch:    monitor over time (rendered with a dotted ring)
- * @typedef {'existing'|'planned'|'watch'} TreatmentStatus
+ *  - existing:  already present in the mouth
+ *  - planned:   proposed / to be done (rendered with a dashed ring)
+ *  - completed: treatment carried out (rendered with a solid green ring)
+ * @typedef {'existing'|'planned'|'completed'} TreatmentStatus
  */
 
 /**
