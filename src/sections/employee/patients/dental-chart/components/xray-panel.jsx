@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
+import resolveFileUrl from 'src/utils/resolve-file-url';
 
 import Iconify from 'src/components/iconify';
 
@@ -67,7 +68,7 @@ function XrayThumb({ xray, onOpen, onDelete, numbering, lang }) {
         ) : (
           <Box
             component="img"
-            src={xray.url}
+            src={resolveFileUrl(xray.url)}
             alt={xray.filename || 'x-ray'}
             loading="lazy"
             sx={{ width: '100%', height: '100%', objectFit: 'cover' }}

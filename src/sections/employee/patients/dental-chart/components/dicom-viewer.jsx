@@ -17,6 +17,8 @@ import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader/dist/corne
 
 import { Box, Stack, Slider, Tooltip, Typography, IconButton, CircularProgress } from '@mui/material';
 
+import resolveFileUrl from 'src/utils/resolve-file-url';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -34,6 +36,29 @@ function initCornerstone() {
 const TAG_PATIENT_NAME = 'x00100010';
 const TAG_STUDY_DATE = 'x00080020';
 const TAG_MODALITY = 'x00080060';
+
+// cornerstone rejects with { error, request } where `request` is the XHR. A
+// status of 0 means the browser never completed the request at all — almost
+// always mixed content or a CORS rejection — so say which, rather than the bare
+// "Failed to load DICOM file" that gives nobody anything to act on.
+function describeLoadError(err, fileUrl) {
+  const status = err?.request?.status;
+
+  if (status === 0) {
+    const pageIsHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
+    if (pageIsHttps && fileUrl.startsWith('http://')) {
+      return `Blocked as mixed content: the page is https but the file is served over http (${fileUrl}).`;
+    }
+    return `The file could not be fetched — the server may be unreachable or blocking cross-origin requests (${fileUrl}).`;
+  }
+
+  if (status === 404) return `File not found on the server (${fileUrl}).`;
+  if (status === 403) return `Access to the file was denied (${fileUrl}).`;
+  if (status >= 500) return `The server errored while serving the file (HTTP ${status}).`;
+  if (status) return `Could not fetch the file (HTTP ${status}).`;
+
+  return err?.error?.message || err?.message || 'Failed to load DICOM file';
+}
 
 function readTags(image) {
   const dataSet = image?.data;
@@ -71,8 +96,10 @@ export default function DicomViewer({ url, lang }) {
     setLoading(true);
     setError('');
 
+    const fileUrl = resolveFileUrl(url);
+
     cornerstone
-      .loadImage(`wadouri:${url}`)
+      .loadImage(`wadouri:${fileUrl}`)
       .then((image) => {
         if (cancelled) return;
         const viewport = cornerstone.getDefaultViewportForImage(element, image);
@@ -85,8 +112,8 @@ export default function DicomViewer({ url, lang }) {
       })
       .catch((err) => {
         if (cancelled) return;
-        console.error('DICOM load error:', err);
-        setError(err?.message || 'Failed to load DICOM file');
+        console.error('DICOM load error:', err, 'url:', fileUrl);
+        setError(describeLoadError(err, fileUrl));
         setLoading(false);
       });
 

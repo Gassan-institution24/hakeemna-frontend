@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
+import resolveFileUrl from 'src/utils/resolve-file-url';
 
 import Iconify from 'src/components/iconify';
 
@@ -28,6 +29,7 @@ export default function XrayViewerDialog({ open, xray, onClose, numbering, lang 
 
   if (!xray) return null;
 
+  const fileUrl = resolveFileUrl(xray.url);
   const phaseLabels = { before: isAr ? 'قبل' : 'Before', after: isAr ? 'بعد' : 'After' };
   const phaseLabel = phaseLabels[xray.phase] || xray.phase;
 
@@ -55,7 +57,7 @@ export default function XrayViewerDialog({ open, xray, onClose, numbering, lang 
 
           <Stack direction="row" gap={0.5}>
             <Tooltip title={isAr ? 'فتح في نافذة جديدة' : 'Open in new tab'}>
-              <IconButton size="small" component="a" href={xray.url} target="_blank" rel="noopener">
+              <IconButton size="small" component="a" href={fileUrl} target="_blank" rel="noopener">
                 <Iconify icon="solar:download-minimalistic-bold" width={18} />
               </IconButton>
             </Tooltip>
@@ -70,7 +72,7 @@ export default function XrayViewerDialog({ open, xray, onClose, numbering, lang 
 
       <DialogContent sx={{ p: 2 }}>
         {xray.is_dicom ? (
-          <DicomViewer url={xray.url} lang={lang} />
+          <DicomViewer url={fileUrl} lang={lang} />
         ) : (
           <Box
             sx={{
@@ -83,7 +85,7 @@ export default function XrayViewerDialog({ open, xray, onClose, numbering, lang 
           >
             <Box
               component="img"
-              src={xray.url}
+              src={fileUrl}
               alt={xray.filename || 'x-ray'}
               sx={{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain' }}
             />
