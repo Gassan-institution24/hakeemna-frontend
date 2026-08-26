@@ -113,6 +113,9 @@ export default function ToothModal({
       // Apply surface changes
       await onSaveTooth(fdiNumber, payload, surfaceEdits);
       enqueueSnackbar(isAr ? 'تم الحفظ بنجاح' : 'Saved successfully', { variant: 'success' });
+      // Close only once the save actually succeeded — a failure keeps the dialog
+      // open so the edits are not lost.
+      onClose();
     } catch (err) {
       enqueueSnackbar(err?.message || (isAr ? 'فشل الحفظ' : 'Error saving'), { variant: 'error' });
     } finally {

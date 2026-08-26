@@ -14,7 +14,7 @@
  * @see ./dental-types.js for data shapes, ./fdi.js for tooth-type helpers
  */
 
-import { getToothType, getRootConfig, isPrimary, isUpperArch } from './fdi';
+import { isPrimary, isUpperArch, getToothType, getRootConfig } from './fdi';
 
 const W = 40;
 const CX = W / 2;

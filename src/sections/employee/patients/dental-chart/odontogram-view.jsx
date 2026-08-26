@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useState, useCallback } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 import {
   Box,
   Stack,
   Button,
   Dialog,
+  useTheme,
   TextField,
   Typography,
   DialogTitle,
@@ -23,8 +24,11 @@ import useOdontogram from './hooks/use-odontogram';
 import { CONDITIONS } from './constants/conditions';
 import ChartHeader from './components/chart-header';
 import ChartToolbar from './components/chart-toolbar';
+import ViewOptions from './components/view-options';
 import DiagnosisPanel from './components/diagnosis-panel';
 import ProceduresPanel from './components/procedures-panel';
+import { getOdontogramPalette } from './constants/odontogram-theme';
+import { getHiddenTeeth } from './constants/tooth-states';
 import ChiefComplaintPanel from './components/chief-complaint-panel';
 import {
   ADULT_UPPER,
@@ -36,7 +40,7 @@ import {
 
 // ── Zoom configuration ───────────────────────────────────────────────────────
 const BASE_CROWN = 66; // px crown size at 100% (enlarged for readability)
-const ZOOM_MIN = 0.7;
+const ZOOM_MIN = 0.6;
 const ZOOM_MAX = 1.8;
 const ZOOM_STEP = 0.15;
 const TOOTH_GAP = 2; // matches DentalArch GAP
@@ -269,13 +273,15 @@ export default function OdontogramView({
 }) {
   const [snapshotOpen, setSnapshotOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const muiTheme = useTheme();
+  const odonPalette = getOdontogramPalette(muiTheme.palette.mode);
 
   // Display-only notation; the chart always stores FDI.
   const [numbering, setNumbering] = useState('fdi');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // ── Zoom ────────────────────────────────────────────────────────────────────
-  const [zoom, setZoom] = useState(0.75); // default view at 75%
+  const [zoom, setZoom] = useState(0.6); // default view at 60%
   const crownSize = Math.round(BASE_CROWN * zoom);
   const zoomIn = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2))), []);
   const zoomOut = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2))), []);
@@ -283,6 +289,15 @@ export default function OdontogramView({
 
   // ── Jaw view filter: full | upper | lower ────────────────────────────────────
   const [jawFilter, setJawFilter] = useState('full');
+
+  // Chart-level display toggles. Display-only — never saved, never sent to the
+  // API. Defaults preserve how the chart rendered before they existed.
+  const [viewOptions, setViewOptions] = useState({
+    occlusal: false,
+    showWisdom: true,
+    showBone: false,
+    showPulp: true,
+  });
   const dimUpper = jawFilter === 'lower';
   const dimLower = jawFilter === 'upper';
 
@@ -320,6 +335,10 @@ export default function OdontogramView({
   } = useOdontogram({ chartData, onSave });
 
   const isAr = lang === 'ar';
+
+    // Wisdom teeth are hidden in place rather than removed from the arch, so the
+  // layout never re-centres and bridge spans stay aligned.
+  const hiddenTeeth = useMemo(() => getHiddenTeeth(viewOptions), [viewOptions]);
 
   const upperTeeth = chartType === 'child' ? CHILD_UPPER : ADULT_UPPER;
   const lowerTeeth = chartType === 'child' ? CHILD_LOWER : ADULT_LOWER;
@@ -421,8 +440,8 @@ export default function OdontogramView({
           throw e; // let the modal's handleSaveInfo catch and show the inline error
         }
       }
-      // Modal stays open so handleSaveInfo can show the success alert.
-      // The user closes it manually via the Close button.
+      // ToothModal closes itself once the save resolves; a rejection propagates
+      // back to it so the dialog stays open and the edits survive.
     },
     [updateToothData, onSaveTooth, showToast, isAr]
   );
@@ -525,10 +544,11 @@ export default function OdontogramView({
         height: '100%',
         minHeight: 520,
         border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 2,
+        // Odontogram-Modul card treatment: hairline border, softer radius.
+        borderColor: odonPalette.line,
+        borderRadius: '14px',
         overflow: 'hidden',
-        backgroundColor: 'background.paper',
+        backgroundColor: odonPalette.card,
       }}
     >
       {/* Title, dentition toggles, numbering and fullscreen */}
@@ -554,8 +574,6 @@ export default function OdontogramView({
         onRedo={redo}
         isDirty={isDirty}
         isSaving={isSaving}
-        onSaveNow={handleSaveNow}
-        onSnapshot={handleSnapshot}
         multiSelect={multiSelect}
         onToggleMultiSelect={() => {
           setMultiSelect((v) => !v);
@@ -576,6 +594,15 @@ export default function OdontogramView({
         lang={lang}
       />
 
+      {/* Display options — change how teeth are drawn, never the data */}
+      <Box sx={{ borderBottom: '1px solid', borderColor: odonPalette.line }}>
+        <ViewOptions
+          viewOptions={viewOptions}
+          onViewChange={setViewOptions}
+          lang={lang}
+        />
+      </Box>
+
       {/* Body: arch area (diagnosis selection lives in the Diagnosis panel) */}
       <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Arch area — always LTR so the odontogram layout (teeth + FDI numbers)
@@ -592,13 +619,14 @@ export default function OdontogramView({
             py: 1.5,
             px: 1,
             gap: 0,
-            backgroundColor: 'background.default',
+            // Odontogram-Modul chart ground.
+            backgroundColor: odonPalette.bg,
           }}
         >
           {/* Upper arch label */}
           <Typography
             variant="caption"
-            color="text.disabled"
+            sx={{ color: odonPalette.muted }}
             sx={{ mb: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
           >
             {isAr ? 'الفك العلوي' : 'Upper Jaw (Maxilla)'}
@@ -608,6 +636,8 @@ export default function OdontogramView({
           <DentalArch
             teeth={upperTeeth}
             teethMap={teethMap}
+            hiddenTeeth={hiddenTeeth}
+            viewOptions={viewOptions}
             isUpper
             midlineAfterIndex={midIndex}
             onSurfaceClick={handleToothClick}
@@ -657,6 +687,8 @@ export default function OdontogramView({
           <DentalArch
             teeth={lowerTeeth}
             teethMap={teethMap}
+            hiddenTeeth={hiddenTeeth}
+            viewOptions={viewOptions}
             isUpper={false}
             midlineAfterIndex={midIndex}
             onSurfaceClick={handleToothClick}
@@ -675,7 +707,7 @@ export default function OdontogramView({
           {/* Lower arch label */}
           <Typography
             variant="caption"
-            color="text.disabled"
+            sx={{ color: odonPalette.muted }}
             sx={{ mt: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
           >
             {isAr ? 'الفك السفلي' : 'Lower Jaw (Mandible)'}
@@ -785,14 +817,6 @@ export default function OdontogramView({
           lang={lang}
         />
       )}
-
-      {/* Snapshot dialog */}
-      <SnapshotDialog
-        open={snapshotOpen}
-        onClose={() => setSnapshotOpen(false)}
-        onSave={handleSnapshotSave}
-        lang={lang}
-      />
 
     </Stack>
   );

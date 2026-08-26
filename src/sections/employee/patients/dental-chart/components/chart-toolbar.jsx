@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import SaveIcon from '@mui/icons-material/Save';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import LinkIcon from '@mui/icons-material/Link';
@@ -9,7 +8,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import PersonIcon from '@mui/icons-material/Person';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -42,8 +40,6 @@ export default function ChartToolbar({
   onRedo,
   isDirty,
   isSaving,
-  onSaveNow,
-  onSnapshot,
   multiSelect,
   onToggleMultiSelect,
   selectedCount,
@@ -218,9 +214,7 @@ export default function ChartToolbar({
                 disableRipple
                 sx={{ gap: 2, justifyContent: 'space-between' }}
               >
-                <Typography variant="body2">
-                  {(bridge.teeth || []).join('–')}
-                </Typography>
+                <Typography variant="body2">{(bridge.teeth || []).join('–')}</Typography>
                 <Tooltip title={isAr ? 'إزالة الجسر' : 'Remove bridge'}>
                   <IconButton
                     size="small"
@@ -250,7 +244,9 @@ export default function ChartToolbar({
             </IconButton>
           </span>
         </Tooltip>
-        <Box sx={{ minWidth: 38, textAlign: 'center', fontSize: '0.72rem', color: 'text.secondary' }}>
+        <Box
+          sx={{ minWidth: 38, textAlign: 'center', fontSize: '0.72rem', color: 'text.secondary' }}
+        >
           {Math.round(zoom * 100)}%
         </Box>
         <Tooltip title={isAr ? 'تكبير' : 'Zoom in'}>
@@ -289,24 +285,6 @@ export default function ChartToolbar({
         />
       )}
 
-      {/* Snapshot */}
-      <Tooltip title={isAr ? 'حفظ لقطة' : 'Save snapshot'}>
-        <IconButton size="small" onClick={onSnapshot}>
-          <CameraIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-
-      {/* Save now */}
-      <Button
-        size="small"
-        variant="contained"
-        startIcon={isSaving ? <CircularProgress size={14} color="inherit" /> : <SaveIcon fontSize="small" />}
-        onClick={onSaveNow}
-        disabled={!isDirty || isSaving}
-        sx={{ fontSize: '0.72rem', py: 0.5 }}
-      >
-        {isAr ? 'حفظ' : 'Save'}
-      </Button>
     </Stack>
   );
 }
@@ -322,8 +300,6 @@ ChartToolbar.propTypes = {
   onRedo: PropTypes.func.isRequired,
   isDirty: PropTypes.bool,
   isSaving: PropTypes.bool,
-  onSaveNow: PropTypes.func.isRequired,
-  onSnapshot: PropTypes.func.isRequired,
   multiSelect: PropTypes.bool,
   onToggleMultiSelect: PropTypes.func.isRequired,
   selectedCount: PropTypes.number,

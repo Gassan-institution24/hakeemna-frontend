@@ -1,98 +1,97 @@
 import PropTypes from 'prop-types';
-import { memo, useCallback } from 'react';
+import { memo, useRef, useMemo, useEffect, useCallback } from 'react';
 
 import { getToothShape } from '../constants/tooth-shapes';
-import { getConditionColor, getConditionStroke } from '../constants/conditions';
+import getActiveLayers, { VIEW_LAYERS, MANAGED_LAYERS } from '../constants/tooth-layers';
+import { getToothScale, getToothAspect, getToothArtwork } from '../constants/tooth-templates';
 
-// Procedures that replace / hollow the natural crown rather than tint it.
-const PROC_NON_CROWN = new Set(['extraction_planned', 'implant', 'root_canal', 'orthodontic']);
-// Whole-tooth procedures drawn with a bold prosthetic outline.
-const BOLD_OUTLINE = new Set([
-  'crown_ceramic', 'crown_metal', 'crown_pfm', 'crown_zirconia',
-  'bridge_abutment', 'bridge_pontic',
-]);
-// Diagnoses that fade / dim the tooth silhouette.
+// Diagnoses that fade the tooth silhouette.
 const FADED_DX = new Set(['missing', 'unerupted', 'impacted']);
 
 const CONNECTOR_COLOR = '#C9962B'; // prosthetic outline for bridge members
 
-// ── Whole-tooth glyph overlays (drawn in tooth-local coords) ──────────────────
-function Overlay({ condition, height }) {
-  const midRoot = height * 0.68;
-  switch (condition) {
-    case 'root_canal':
-      return <line x1="20" y1="34" x2="20" y2={height - 6} stroke="#E65100" strokeWidth="2" strokeLinecap="round" />;
-    case 'implant':
-      return (
-        <g stroke="#2E7D32" strokeWidth="1.6" strokeLinecap="round">
-          <line x1="14" y1={midRoot - 10} x2="26" y2={midRoot - 10} />
-          <line x1="15" y1={midRoot - 4} x2="25" y2={midRoot - 4} />
-          <line x1="16" y1={midRoot + 2} x2="24" y2={midRoot + 2} />
-          <line x1="17" y1={midRoot + 8} x2="23" y2={midRoot + 8} />
-        </g>
-      );
-    case 'veneer':
-      return <rect x="10" y="8" width="20" height="22" rx="5" fill="none" stroke="#7B1FA2" strokeWidth="1.8" />;
-    case 'missing':
-    case 'extraction_planned': {
-      const col = condition === 'missing' ? '#9E9E9E' : '#C62828';
-      return (
-        <g stroke={col} strokeWidth="2.6" strokeLinecap="round">
-          <line x1="9" y1="10" x2="31" y2="34" />
-          <line x1="31" y1="10" x2="9" y2="34" />
-        </g>
-      );
-    }
-    default:
-      return null;
-  }
-}
-
-Overlay.propTypes = { condition: PropTypes.string, height: PropTypes.number };
-
 /**
- * Realistic facial-view tooth. Procedures colour / outline / cross out the crown,
- * diagnoses dim or mark it, and surface restorations tint the crown (the wheel
- * carries the per-surface detail). `ghost` renders a flat grey silhouette.
+ * Anatomical facial-view tooth, drawn with React-Odontogram-Modul artwork
+ * (see ../assets/teeth/NOTICE.md).
  *
- * Bridge members draw a gold connective bar; pontics float (no roots).
+ * The artwork is a layered clinical illustration: every switchable layer is
+ * authored off, and `getActiveLayers()` turns on only what this patient's chart
+ * data specifies. Painting, selection and the tooth dialog are unchanged — this
+ * component still just reports clicks through `onSurfaceClick`.
+ *
+ * `ghost` renders the flat grey silhouette from `tooth-shapes.js`, which stays
+ * cheap for the out-of-scope teeth flanking a primary arch.
  */
-function ToothIllustration({ fdiNumber, toothData, size, ghost, onSurfaceClick, bridgeRole, bridgeExtendLeft, bridgeExtendRight }) {
+function ToothIllustration({
+  fdiNumber,
+  toothData,
+  size,
+  ghost,
+  viewOptions,
+  onSurfaceClick,
+  bridgeRole,
+  bridgeExtendLeft,
+  bridgeExtendRight,
+}) {
+  const hostRef = useRef(null);
   const shape = getToothShape(fdiNumber);
-  const { crown, roots, viewBox, height, naturalHeight, upper, yCervix } = shape;
-  const displayH = (size / 40) * height;
+  const { crown, roots, viewBox, height, upper } = shape;
+
+  const occlusal = Boolean(viewOptions?.occlusal);
+  // Bone defaults off (the chart has always drawn teeth without it); pulp defaults
+  // on, matching how the artwork has rendered since the switch to it.
+  const showBone = Boolean(viewOptions?.showBone);
+  const showPulp = viewOptions?.showPulp !== false;
+
+  const markup = ghost ? null : getToothArtwork(fdiNumber, occlusal);
+  const scale = getToothScale(fdiNumber);
+  const displaySize = Math.round(size * scale);
 
   const dx = toothData?.whole_diagnosis;
   const proc = toothData?.whole_condition;
   const isPontic = bridgeRole === 'pontic';
-  const isGone = dx === 'missing';
-  const isFaded = FADED_DX.has(dx);
-  const bold = (proc && BOLD_OUTLINE.has(proc)) || !!bridgeRole;
 
-  // Crown fill: a restoration / prosthetic procedure colours the crown.
-  const crownFilled = proc && !PROC_NON_CROWN.has(proc);
+  // Which artwork layers this tooth's data switches on.
+  const activeLayers = useMemo(() => getActiveLayers(toothData), [toothData]);
 
-  // First surface restoration → subtle crown tint (detail lives in the wheel).
-  const surfaceTintDef = (() => {
-    if (crownFilled) return null;
-    const s = toothData?.surfaces || {};
-    const found = Object.values(s).find((v) => v?.condition);
-    return found ? found.condition : null;
-  })();
-  // Surface caries → soft red hint on the crown.
-  const hasCaries = Object.values(toothData?.surfaces || {}).some((v) => v?.diagnosis === 'caries');
+  // The artwork is injected as markup, so layer state is applied to the live DOM
+  // rather than through React. Queries are scoped to this instance's root, so the
+  // template ids repeated across teeth cannot interfere with each other.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || ghost) return;
+    const svg = host.querySelector('svg');
+    if (!svg) return;
 
-  const enamelId = `il-enamel-${fdiNumber}`;
-  const dentinId = `il-dentin-${fdiNumber}`;
-  const shineId = `il-shine-${fdiNumber}`;
-  const crownFill = crownFilled ? getConditionColor(proc) : `url(#${enamelId})`;
-  let crownStroke = '#B7A98C';
-  if (bold) crownStroke = bridgeRole ? CONNECTOR_COLOR : '#37474F';
-  const crownStrokeW = bold ? 1.8 : 0.9;
+    // The asset carries no intrinsic size, so it is stretched to the tile here.
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.display = 'block';
 
-  let groupOpacity = 1;
-  if (isGone) groupOpacity = 0.32;
-  else if (isFaded) groupOpacity = 0.5;
+    // Every managed layer is written on each pass — not just the active ones —
+    // so clearing a condition removes its artwork rather than leaving it behind.
+    svg.querySelectorAll('[data-active]').forEach((node) => {
+      const { id } = node;
+      if (!id || !MANAGED_LAYERS.has(id)) return;
+      node.setAttribute('data-active', activeLayers.has(id) ? '1' : '0');
+    });
+
+    // View toggles are applied *after* the data pass so they win. They are display
+    // preferences, never clinical findings.
+    const setLayers = (ids, on) =>
+      ids.forEach((id) => {
+        const node = svg.querySelector(`[id="${id}"]`);
+        if (node) node.setAttribute('data-active', on ? '1' : '0');
+      });
+
+    // Bone and gum are not data-driven in Hakeemna, so the toggle owns them.
+    setLayers(VIEW_LAYERS.bone, showBone);
+
+    // Pulp *is* data-driven — the record decides healthy vs inflamed. The toggle
+    // may therefore only hide it; switching it "on" would light up both variants
+    // at once and contradict the tooth's own data.
+    if (!showPulp) setLayers(VIEW_LAYERS.pulp, false);
+  }, [activeLayers, markup, ghost, showBone, showPulp]);
 
   const activate = useCallback(
     (e) => {
@@ -101,6 +100,7 @@ function ToothIllustration({ fdiNumber, toothData, size, ghost, onSurfaceClick, 
     },
     [fdiNumber, onSurfaceClick]
   );
+
   const onKey = useCallback(
     (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -111,101 +111,66 @@ function ToothIllustration({ fdiNumber, toothData, size, ghost, onSurfaceClick, 
     [activate]
   );
 
-  // The continuous bridge beam is drawn as a DOM overlay in <DentalArch> (so it
-  // spans teeth without SVG-clipping seams). Here we only float pontics and use
-  // the prosthetic outline; bridgeExtend* are accepted for API compatibility.
-
-  // Ghost silhouette — flat grey, no interaction.
+  // Ghost silhouette — flat grey, no interaction. Unchanged from before.
   if (ghost) {
+    const displayH = (size / 40) * height;
     return (
-      <svg width={size} height={displayH} viewBox={viewBox} style={{ display: 'block', opacity: 0.5 }} aria-hidden="true">
-        <g transform={upper ? `scale(1,-1) translate(0,-${height})` : undefined} fill="#D6D9DE" stroke="#C2C7CE" strokeWidth="0.8">
-          {roots.map((d) => <path key={d} d={d} />)}
+      <svg
+        width={size}
+        height={displayH}
+        viewBox={viewBox}
+        style={{ display: 'block', opacity: 0.5 }}
+        aria-hidden="true"
+      >
+        <g
+          transform={upper ? `scale(1,-1) translate(0,-${height})` : undefined}
+          fill="#D6D9DE"
+          stroke="#C2C7CE"
+          strokeWidth="0.8"
+        >
+          {roots.map((d) => (
+            <path key={d} d={d} />
+          ))}
           <path d={crown} />
         </g>
       </svg>
     );
   }
 
+  let groupOpacity = 1;
+  if (dx === 'missing') groupOpacity = 0.32;
+  else if (FADED_DX.has(dx)) groupOpacity = 0.5;
+
+  const label = `Tooth ${fdiNumber}${dx ? ` — ${dx.replace(/_/g, ' ')}` : ''}${
+    proc ? ` — ${proc.replace(/_/g, ' ')}` : ''
+  }`;
+
   return (
-    <svg
-      width={size}
-      height={displayH}
-      viewBox={viewBox}
-      style={{ display: 'block', overflow: 'visible' }}
+    <div
+      ref={hostRef}
       role="button"
       tabIndex={0}
-      aria-label={`Tooth ${fdiNumber}${dx ? ` — ${dx.replace(/_/g, ' ')}` : ''}${proc ? ` — ${proc.replace(/_/g, ' ')}` : ''}`}
+      aria-label={label}
       onClick={activate}
       onKeyDown={onKey}
-    >
-      <defs>
-        <linearGradient id={enamelId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="45%" stopColor="#FBF6EC" />
-          <stop offset="82%" stopColor="#ECE0C8" />
-          <stop offset="100%" stopColor="#DDCBA8" />
-        </linearGradient>
-        <linearGradient id={dentinId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#F1E6CF" />
-          <stop offset="55%" stopColor="#E4D0AC" />
-          <stop offset="100%" stopColor="#CBB183" />
-        </linearGradient>
-        {/* Soft specular highlight on the crown */}
-        <radialGradient id={shineId} cx="0.38" cy="0.28" r="0.75">
-          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.75" />
-          <stop offset="45%" stopColor="#FFFFFF" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      <g
-        transform={upper ? `scale(1,-1) translate(0,-${height})` : undefined}
-        opacity={groupOpacity}
-        style={{ cursor: 'pointer' }}
-      >
-        {/* Roots (suppressed for pontics — they float on the bridge) */}
-        {!isPontic && roots.map((d) => (
-          <g key={d}>
-            <path d={d} fill={`url(#${dentinId})`} stroke="#C4A882" strokeWidth="0.8" />
-            {/* subtle central shading for depth */}
-            <path d={d} fill="none" stroke="#B99C6E" strokeWidth="0.35" opacity="0.4" />
-          </g>
-        ))}
-
-        {/* Cervical shadow just under the crown for a rounded look */}
-        {!crownFilled && (
-          <path d={crown} fill="none" stroke="#C9B78F" strokeWidth="2.4" opacity="0.25" />
-        )}
-
-        {/* Crown */}
-        <path d={crown} fill={crownFill} stroke={crownStroke} strokeWidth={crownStrokeW} />
-
-        {/* Enamel shine (only on natural / lightly tinted crowns) */}
-        {!crownFilled && <path d={crown} fill={`url(#${shineId})`} pointerEvents="none" />}
-
-        {/* Surface-restoration tint */}
-        {surfaceTintDef && (
-          <path
-            d={crown}
-            fill={getConditionColor(surfaceTintDef)}
-            opacity="0.5"
-            stroke={getConditionStroke(surfaceTintDef)}
-            strokeWidth="0.6"
-          />
-        )}
-
-        {/* Caries hint */}
-        {hasCaries && !crownFilled && (
-          <circle cx="20" cy={yCervix - 8} r="3.2" fill="#C62828" opacity="0.5" />
-        )}
-
-        {/* Whole-tooth procedure glyphs (root canal, implant, extraction, veneer) */}
-        {proc && <Overlay condition={proc} height={naturalHeight} />}
-        {/* Whole-tooth diagnosis glyphs (missing X) */}
-        {dx === 'missing' && <Overlay condition="missing" height={naturalHeight} />}
-      </g>
-    </svg>
+      style={{
+        display: 'block',
+        width: displaySize,
+        height: Math.round(displaySize * getToothAspect(fdiNumber, occlusal)),
+        cursor: 'pointer',
+        opacity: groupOpacity,
+        // Upper teeth point root-up; pontics float without roots, matching the
+        // previous renderer.
+        transform: upper ? 'scaleY(-1)' : undefined,
+        lineHeight: 0,
+        // Bridge members keep the prosthetic outline cue.
+        outline: bridgeRole ? `1.5px solid ${CONNECTOR_COLOR}` : 'none',
+        outlineOffset: -1,
+        clipPath: isPontic ? 'inset(0 0 38% 0)' : undefined,
+      }}
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: markup || '' }}
+    />
   );
 }
 
@@ -214,6 +179,8 @@ ToothIllustration.propTypes = {
   toothData: PropTypes.object,
   size: PropTypes.number,
   ghost: PropTypes.bool,
+  // Chart-level display toggles: { occlusal, showBone, showPulp }.
+  viewOptions: PropTypes.object,
   onSurfaceClick: PropTypes.func,
   bridgeRole: PropTypes.oneOf(['abutment', 'pontic']),
   bridgeExtendLeft: PropTypes.bool,
@@ -224,6 +191,7 @@ ToothIllustration.defaultProps = {
   toothData: null,
   size: 40,
   ghost: false,
+  viewOptions: null,
   onSurfaceClick: () => {},
   bridgeRole: null,
   bridgeExtendLeft: false,

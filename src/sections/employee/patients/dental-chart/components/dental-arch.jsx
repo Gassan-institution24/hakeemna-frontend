@@ -22,6 +22,8 @@ export default function DentalArch({
   selectedTeeth,
   multiSelect,
   dimmed,
+  hiddenTeeth,
+  viewOptions,
   leadingGhosts,
   trailingGhosts,
   lang,
@@ -141,7 +143,12 @@ export default function DentalArch({
       )}
 
       <Box ref={wrapRef} sx={{ position: 'relative' }}>
-        <Stack direction="row" alignItems={align} justifyContent="center" sx={{ gap: `${GAP}px`, px: 1 }}>
+        <Stack
+          direction="row"
+          alignItems={align}
+          justifyContent="center"
+          sx={{ gap: `${GAP}px`, px: 1 }}
+        >
           {leadingGhosts.map(renderGhost)}
 
           {teeth.map((fdi, idx) => {
@@ -162,6 +169,8 @@ export default function DentalArch({
                   isSelected={multiSelect && selectedTeeth.has(fdi)}
                   isHighlighted={!multiSelect && selectedTeeth.has(fdi)}
                   ghost={dimmed}
+                  hidden={Boolean(hiddenTeeth) && hiddenTeeth.has(fdi)}
+                  viewOptions={viewOptions}
                   lang={lang}
                   crownSize={crownSize}
                   bridgeRole={bridge?.role}
@@ -261,6 +270,9 @@ DentalArch.propTypes = {
   selectedTeeth: PropTypes.instanceOf(Set),
   multiSelect: PropTypes.bool,
   dimmed: PropTypes.bool,
+  // fdi numbers hidden by a view toggle (e.g. wisdom teeth).
+  hiddenTeeth: PropTypes.instanceOf(Set),
+  viewOptions: PropTypes.object,
   leadingGhosts: PropTypes.arrayOf(PropTypes.number),
   trailingGhosts: PropTypes.arrayOf(PropTypes.number),
   lang: PropTypes.string,
@@ -276,6 +288,8 @@ DentalArch.defaultProps = {
   selectedTeeth: new Set(),
   multiSelect: false,
   dimmed: false,
+  hiddenTeeth: null,
+  viewOptions: null,
   leadingGhosts: [],
   trailingGhosts: [],
   lang: 'en',

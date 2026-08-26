@@ -92,6 +92,18 @@ export const CONDITIONS = [
     kind: 'diagnosis',
     group: 'diagnosis',
   },
+  {
+    // Crown gone, root fragment left in the socket. Drawn by the artwork's
+    // `tooth-radix` variant, which replaces the natural crown.
+    id: 'retained_root',
+    label: 'Retained Root',
+    labelAr: 'جذر متبقٍ',
+    color: '#D7CCC8',
+    stroke: '#6D4C41',
+    toothLevel: true,
+    kind: 'diagnosis',
+    group: 'diagnosis',
+  },
 
   // ── Procedures — Restorative ────────────────────────────────────────────────
   {
@@ -182,6 +194,18 @@ export const CONDITIONS = [
     labelAr: 'قشرة',
     color: '#F3E5F5',
     stroke: '#7B1FA2',
+    toothLevel: true,
+    kind: 'procedure',
+    group: 'prosthetic',
+  },
+  {
+    // Tooth reduced and waiting for its crown. Drawn by the artwork's
+    // `tooth-crownprep` variant, which replaces the natural crown.
+    id: 'crown_prep',
+    label: 'Crown Prep',
+    labelAr: 'تحضير للتاج',
+    color: '#ECEFF1',
+    stroke: '#78909C',
     toothLevel: true,
     kind: 'procedure',
     group: 'prosthetic',
