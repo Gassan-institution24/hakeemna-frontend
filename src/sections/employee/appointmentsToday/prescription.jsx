@@ -25,6 +25,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -42,9 +43,13 @@ export default function Prescription({ Entrance }) {
   const { prescriptionData, refetch } = useGeEntrancePrescription(Entrance?._id);
   const prescriptionDialog = useBoolean();
 
+  const [medSearch, setMedSearch] = useState('');
+  const debouncedQuery = useDebounce(medSearch);
+
   const { medicinesData } = useGetMedicines({
     select: 'trade_name concentration scientific_name',
-    rowsPerPage: 5000,
+    search: debouncedQuery,
+    rowsPerPage: 100,
   });
 
   const doctorSpecialityId =
@@ -305,6 +310,19 @@ export default function Prescription({ Entrance }) {
     }
   };
 
+  // keeps the already selected medicine in the list, since the server only
+  // returns the medicines matching the current search
+  const getMedicineOptions = (index) => {
+    const options = selectedCategories[index]?.medicines?.length
+      ? selectedCategories[index].medicines
+      : medicinesData || [];
+    const selected = watch(`prescriptions[${index}].medicines`);
+    if (selected?._id && !options.some((o) => o?._id === selected._id)) {
+      return [selected, ...options];
+    }
+    return options;
+  };
+
   const resetDialogState = () => {
     setPrescriptions([{ id: 0 }]);
     setSelectedFavorite(null);
@@ -472,20 +490,23 @@ export default function Prescription({ Entrance }) {
                   />
                 )}
                 <Autocomplete
-                  options={
-                    selectedCategories[index]?.medicines?.length
-                      ? selectedCategories[index].medicines
-                      : medicinesData || []
-                  }
+                  options={getMedicineOptions(index)}
                   value={watch(`prescriptions[${index}].medicines`) || null}
                   onChange={(event, newValue) =>
                     setValue(`prescriptions[${index}].medicines`, newValue)
                   }
+                  onInputChange={(event, newInputValue, reason) => {
+                    if (reason === 'input') setMedSearch(newInputValue);
+                  }}
+                  onBlur={() => setMedSearch('')}
                   isOptionEqualToValue={(option, value) => option?._id === value?._id}
                   getOptionLabel={(option) =>
                     option?.trade_name ? `${option.trade_name} ${option.concentration || ''}`.trim() : ''
                   }
                   filterOptions={(options, { inputValue }) => {
+                    // the full medicine list is searched server-side, so only the
+                    // category-narrowed list still needs filtering here
+                    if (!selectedCategories[index]?.medicines?.length) return options;
                     const q = inputValue.toLowerCase();
                     if (!q) return options;
                     return options.filter(
