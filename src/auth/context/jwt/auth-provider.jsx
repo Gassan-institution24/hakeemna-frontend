@@ -106,6 +106,12 @@ export function AuthProvider({ children }) {
         password,
       };
 
+      // Drop whatever session is still in memory before authenticating. Logging in is always a
+      // fresh identity, and a leftover Authorization header (e.g. from an expired demo session in
+      // this tab) would otherwise ride along on the request and be judged instead of these
+      // credentials.
+      setSession(null);
+
       const response = await axios.post(endpoints.auth.login, data);
 
       const { accessToken, user, message } = response.data;

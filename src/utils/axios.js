@@ -22,6 +22,9 @@ export const DEMO_EXPIRED_MESSAGE = 'Demo account expired';
 const clearSessionOnDemoExpiry = () => {
   try {
     localStorage.removeItem('accessToken');
+    // setSession() sets the header on this instance, so it must be cleared here too — clearing
+    // only the global axios defaults would leave the dead token attached to every later request.
+    delete axiosInstance.defaults.headers.common.Authorization;
     delete axios.defaults.headers.common.Authorization;
     // Read once by the login screen to explain why the user landed back there.
     sessionStorage.setItem('demoExpired', '1');
