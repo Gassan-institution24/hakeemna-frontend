@@ -41,7 +41,9 @@ Cypress.Commands.add('getDataTest', (dataTestSelector) => {
 });
 Cypress.Commands.add('login', () => {
   cy.visit('/login')
+  // Two steps: the address is submitted on its own, then the password field appears.
   cy.getDataTest('email-input').find('input').type('alaa@employee.com')
+  cy.getDataTest('login-button').click()
   cy.getDataTest('password-input').find('input').type(12345678)
   cy.url().should('not.include', '/dashboard')
   cy.getDataTest('login-button').click()

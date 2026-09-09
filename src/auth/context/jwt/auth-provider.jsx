@@ -135,6 +135,43 @@ export function AuthProvider({ children }) {
     [initialize]
   );
 
+  // FIRST-LOGIN PASSWORD
+  // An account created by a clinic has no password until its owner picks one, so `login` answers
+  // that case with `password_pending` instead of a session. This sets the password and signs the
+  // employee in with it in one step, which is why it establishes the session exactly like login
+  // rather than bouncing them back to the login form to type it again.
+  const setInitialPassword = useCallback(
+    async (email, password, confirmPassword) => {
+      setSession(null);
+
+      const response = await axios.post(endpoints.auth.setpassword, {
+        email: email.toLowerCase(),
+        password,
+        confirmPassword,
+      });
+
+      const { accessToken, user, message } = response.data;
+
+      if (!accessToken || !user) throw new Error(message);
+
+      setSession(accessToken);
+
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
+        },
+      });
+      initialize();
+
+      return response.data;
+    },
+    [initialize]
+  );
+
   // REGISTER
   const register = useCallback(async (data) => {
     const { data: userData } = await axios.post(endpoints.auth.register, data);
@@ -194,13 +231,24 @@ export function AuthProvider({ children }) {
       unauthenticated: status === 'unauthenticated',
       //
       login,
+      setInitialPassword,
       register,
       initialize,
       forgotPassword,
       newPassword,
       logout,
     }),
-    [login, logout, register, initialize, forgotPassword, newPassword, state.user, status]
+    [
+      login,
+      setInitialPassword,
+      logout,
+      register,
+      initialize,
+      forgotPassword,
+      newPassword,
+      state.user,
+      status,
+    ]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

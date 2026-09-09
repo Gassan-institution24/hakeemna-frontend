@@ -24,6 +24,8 @@ import Language from 'src/layouts/common/language-popover';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
+import CreatePasswordDialog from './create-password-dialog';
+
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, setPatientId }) {
@@ -38,6 +40,16 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
 
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState('');
+
+  // The address is asked for on its own first: what comes next depends on the account. Staff
+  // created by a clinic have no password yet and are sent to the create-password dialog;
+  // everyone else gets the password field. 'email' is step one, 'password' step two.
+  const [step, setStep] = useState('email');
+
+  // Staff accounts are created by their clinic without a password. The server answers the first
+  // login attempt on such an account with `password_pending` instead of a session; that opens
+  // this dialog, where the employee chooses the password they will use from then on.
+  const [pendingPasswordEmail, setPendingPasswordEmail] = useState('');
 
   // The axios interceptor / socket handler set this flag before bouncing an expired demo
   // account back to login. Consume it once so the user is told why they were signed out
@@ -64,7 +76,9 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
       .trim()
       .required(t('required field'))
       .email(t('Email must be a valid email address')),
-    password: Yup.string().required(t('required field')),
+    // Not required by the schema: on step one there is no password field yet. Step two checks
+    // it directly, so the rule cannot fall out of step with what is on screen.
+    password: Yup.string(),
   });
 
   const defaultValues = {
@@ -79,11 +93,46 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   });
 
   const {
+    watch,
+    setError,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  // Editing the address invalidates the answer we got for the previous one, so go back a step.
+  const emailValue = watch('email');
+
+  useEffect(() => {
+    setStep('email');
+  }, [emailValue]);
+
   const onSubmit = handleSubmit(async (data) => {
+    setErrorMsg('');
+
+    // Step one: the address alone decides what to show next.
+    if (step === 'email') {
+      try {
+        const { data: state } = await axiosInstance.post(endpoints.auth.loginstate, {
+          email: data.email.toLowerCase().trim(),
+        });
+
+        if (state?.state === 'password_pending') {
+          setPendingPasswordEmail(data.email);
+        } else {
+          setStep('password');
+        }
+      } catch (error) {
+        setErrorMsg(typeof error === 'string' ? error : error.message);
+      }
+      return;
+    }
+
+    // Step two: an ordinary sign-in.
+    if (!data.password) {
+      setError('password', { type: 'manual', message: t('required field') });
+      return;
+    }
+
     try {
       const userData = await login?.(data.email, data.password);
       if (onSignin) {
@@ -100,6 +149,14 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         router.push(returnTo || PATH_AFTER_LOGIN);
       }
     } catch (error) {
+      // A first login on an account that has no password yet. Not an error to show — the
+      // employee is asked to create one instead.
+      if (error?.password_pending) {
+        setErrorMsg('');
+        setPendingPasswordEmail(error.email || data.email);
+        return;
+      }
+
       // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
       if (error === 'Your account is inactive!') {
@@ -178,33 +235,37 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
 
       <RHFTextField name="email" data-test="email-input" label={t('email address')} />
 
-      <RHFTextField
-        name="password"
-        label={t('password')}
-        data-test="password-input"
-        type={password.value ? 'text' : 'password'}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={password.onToggle} edge="end">
-                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      {step === 'password' && (
+        <>
+          <RHFTextField
+            name="password"
+            label={t('password')}
+            data-test="password-input"
+            type={password.value ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={password.onToggle} edge="end">
+                    <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
-      {!onSignin && (
-        <Link
-          variant="body2"
-          component={RouterLink}
-          href={paths.auth.forgotPassword}
-          color="inherit"
-          underline="always"
-          sx={{ alignSelf: 'flex-end', mt: 5 }}
-        >
-          {t('Forgot password?')}
-        </Link>
+          {!onSignin && (
+            <Link
+              variant="body2"
+              component={RouterLink}
+              href={paths.auth.forgotPassword}
+              color="inherit"
+              underline="always"
+              sx={{ alignSelf: 'flex-end', mt: 5 }}
+            >
+              {t('Forgot password?')}
+            </Link>
+          )}
+        </>
       )}
 
       <LoadingButton
@@ -216,7 +277,7 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
         variant="contained"
         loading={isSubmitting}
       >
-        {t('Login')}
+        {step === 'email' ? t('continue') : t('Login')}
       </LoadingButton>
       {!onSignin && (
         <Link
@@ -233,12 +294,25 @@ export default function JwtLoginView({ onSignin, selected, refetch, onSignUp, se
   );
 
   return (
-    <FormProvider data-test="login-form" methods={methods} onSubmit={onSubmit}>
-      <Stack data-test="login-form" justifyContent="center" width={1} height="70vh">
-        {renderHead}
-        {renderForm}
-      </Stack>
-    </FormProvider>
+    <>
+      <FormProvider data-test="login-form" methods={methods} onSubmit={onSubmit}>
+        <Stack data-test="login-form" justifyContent="center" width={1} height="70vh">
+          {renderHead}
+          {renderForm}
+        </Stack>
+      </FormProvider>
+
+      <CreatePasswordDialog
+        open={!!pendingPasswordEmail}
+        email={pendingPasswordEmail}
+        onClose={() => setPendingPasswordEmail('')}
+        onDone={() => {
+          setPendingPasswordEmail('');
+          // Setting the password signs the employee in, so go where a successful login goes.
+          router.push(returnTo || PATH_AFTER_LOGIN);
+        }}
+      />
+    </>
   );
 }
 JwtLoginView.propTypes = {

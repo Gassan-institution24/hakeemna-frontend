@@ -1,5 +1,13 @@
 const { default: axios } = require("axios")
 
+// Logging in takes two steps: the address is submitted on its own first, and only then does the
+// form show the password field. Accounts a clinic created have no password yet and are sent to a
+// "create your password" dialog instead — see src/sections/auth/jwt-login-view.jsx.
+const submitEmail = (email) => {
+  cy.getDataTest('email-input').find('input').clear().type(email)
+  cy.getDataTest('login-button').click()
+}
+
 describe('log in', () => {
   let startTime
   before(() => {
@@ -9,39 +17,31 @@ describe('log in', () => {
     cy.visit('/login')
   })
   it('test login with wrong password', () => {
-    cy.getDataTest('email-input').find('input').as('email-input')
-    cy.getDataTest('password-input').find('input').as('password-input')
-    cy.getDataTest('login-button').as('login-button')
     cy.contains(/تسجيل الدخول/i)
-    cy.get('@email-input').type('alaa@employee.com')
+    submitEmail('alaa@employee.com')
+    cy.getDataTest('password-input').find('input').as('password-input')
     cy.get('@password-input').type(123456789)
     cy.contains(/خطأ في البريد الالكتروني أو كلمة المرور/i).should('not.exist')
-    cy.get('@login-button').click()
+    cy.getDataTest('login-button').click()
     cy.contains(/خطأ في البريد الالكتروني أو كلمة المرور/i).should('exist')
     cy.url().should('not.include', '/dashboard')
-    cy.get('@email-input').clear()
-    cy.get('@password-input').clear()
     cy.wait(2000)
   })
 
   it('test login with wrong email', () => {
-    cy.getDataTest('email-input').find('input').as('email-input')
-    cy.getDataTest('password-input').find('input').as('password-input')
-    cy.getDataTest('login-button').as('login-button')
     cy.contains(/تسجيل الدخول/i)
-    cy.get('@email-input').type('alaa@employee')
+    submitEmail('alaa@employee')
+    cy.getDataTest('password-input').find('input').as('password-input')
     cy.get('@password-input').type(12345678)
     cy.contains(/خطأ في البريد الالكتروني أو كلمة المرور/i).should('not.exist')
-    cy.get('@login-button').click()
+    cy.getDataTest('login-button').click()
     cy.contains(/خطأ في البريد الالكتروني أو كلمة المرور/i).should('exist')
     cy.url().should('not.include', '/dashboard')
-    cy.get('@email-input').clear()
-    cy.get('@password-input').clear()
     cy.wait(2000)
   })
 
   it('test login with correct credential', () => {
-    cy.getDataTest('email-input').find('input').type('alaa@employee.com')
+    submitEmail('alaa@employee.com')
     cy.getDataTest('password-input').find('input').type(12345678)
     cy.url().should('not.include', '/dashboard')
     cy.getDataTest('login-button').click()

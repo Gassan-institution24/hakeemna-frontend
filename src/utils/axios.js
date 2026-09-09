@@ -269,6 +269,9 @@ export const endpoints = {
   employees: {
     all: '/api/employees/',
     keywords: '/api/employees/keywords',
+    // Preview the generated employeename@unitservicename.com address and whether it is free.
+    emailCheck: (name_english) =>
+      `/api/employees/email-check?name_english=${encodeURIComponent(name_english || '')}`,
     one: (id) => (!id ? null : `/api/employees/${id}`),
     find: ({
       email,
@@ -967,10 +970,14 @@ export const endpoints = {
     deletMe: '/api/auth/deletMe',
     me: '/api/auth/me',
     login: '/api/auth/login',
+    // Which second step the login screen should show for an address.
+    loginstate: '/api/auth/loginstate',
     changeId: '/api/auth/changeid',
     resendActivation: `/api/auth/resendactivate`,
     activate: `/api/auth/activate`,
     register: '/api/auth/signup',
+    // First-login password creation for an account created without one.
+    setpassword: '/api/auth/setpassword',
     forgotpassword: '/api/auth/forgotpassword',
     resetpassword: '/api/auth/resetpassword',
     updatepassword: '/api/auth/updateCurrentPassowrd',

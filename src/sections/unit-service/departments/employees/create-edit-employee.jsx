@@ -9,25 +9,21 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MenuItem, Typography } from '@mui/material';
-import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { isDemoUser } from 'src/utils/demo';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { buildEmployeeEmail, getSelectedUnitService } from 'src/utils/employee-email';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
@@ -68,11 +64,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     speciality: Yup.string(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.string(),
-    strict_employee: Yup.bool(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
-    password: Yup.string().required(t('required field')),
-    confirmPassword: Yup.string().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -93,16 +86,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
       birth_date: currentTable?.birth_date || '',
-      strict_employee: currentTable?.strict_employee || false,
+      // An employee belongs to the unit service that created them and to nothing else, so a
+      // new one is always strict. Editing keeps whatever the existing employee already has.
+      strict_employee: currentTable ? currentTable?.strict_employee || false : true,
       visibility_US_page: currentTable?.visibility_US_page || false,
       visibility_online_appointment: currentTable?.visibility_online_appointment || false,
-      password: currentTable?.password || '',
-      confirmPassword: currentTable?.confirmPassword || '',
     }),
     [currentTable, departmentData, user?.employee]
   );
-
-  const password = useBoolean();
 
   const methods = useForm({
     mode: 'all',
@@ -128,6 +119,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   };
 
   const {
+    watch,
+    setValue,
     reset,
     handleSubmit,
     formState: { isSubmitting, errors },
@@ -141,7 +134,64 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     }
   }, [errors, enqueueSnackbar]);
 
+  // ── Generated address ──────────────────────────────────────────────────────
+  // Same rule as the clinic-wide employee form: a new employee's address is derived from their
+  // English name and the clinic's name (see src/utils/employee-email.js), never typed. The
+  // server rebuilds and re-checks it; this is a preview so a clash surfaces before submitting.
+  // Editing an existing employee leaves the stored address alone.
+  const isCreating = !currentTable;
+  const nameEnglish = watch('name_english');
+  const unitServiceName =
+    getSelectedUnitService(user)?.name_english || departmentData?.unit_service?.name_english;
+  const generatedEmail = isCreating ? buildEmployeeEmail(nameEnglish, unitServiceName) : '';
+
+  // available: true / false once answered, null while unknown (empty name, or the check failed).
+  const [emailStatus, setEmailStatus] = useState({ checking: false, available: null });
+
+  useEffect(() => {
+    if (!isCreating) return;
+    setValue('email', generatedEmail, { shouldValidate: Boolean(generatedEmail) });
+  }, [isCreating, generatedEmail, setValue]);
+
+  useEffect(() => {
+    if (!isCreating || !generatedEmail) {
+      setEmailStatus({ checking: false, available: null });
+      return undefined;
+    }
+
+    setEmailStatus({ checking: true, available: null });
+
+    // Debounced — the name field fires on every keystroke.
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await axiosInstance.get(endpoints.employees.emailCheck(nameEnglish));
+        setEmailStatus({ checking: false, available: Boolean(data?.available) });
+      } catch (error) {
+        // Advisory only: signup re-checks and is what actually rejects a taken address.
+        setEmailStatus({ checking: false, available: null });
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [isCreating, generatedEmail, nameEnglish]);
+
+  const emailHelperText = (() => {
+    if (!isCreating) return undefined;
+    if (generatedEmail && emailStatus.checking) return t('checking availability...');
+    if (generatedEmail && emailStatus.available === false)
+      return t('this email already exists, please change the employee name');
+    return undefined;
+  })();
+
   const onSubmit = handleSubmit(async (data) => {
+    // Stop here rather than sending a request the server is certain to refuse.
+    if (isCreating && emailStatus.available === false) {
+      enqueueSnackbar(t('this email already exists, please change the employee name'), {
+        variant: 'error',
+      });
+      return;
+    }
+
     try {
       if (currentTable) {
         await axiosInstance.patch(endpoints.hospitals.one(currentTable._id), {
@@ -267,18 +317,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                   {t('female')}
                 </MenuItem>
               </RHFSelect>
-              <RHFCheckbox
-                sx={{ px: 2 }}
-                name="strict_employee"
-                onChange={() =>
-                  methods.setValue('strict_employee', !methods.watch('strict_employee'))
-                }
-                label={
-                  <Typography sx={{ fontSize: 12 }}>
-                    {t('strict account - only for my unit of service')}
-                  </Typography>
-                }
-              />
               {/* Hidden for demo clinics — their staff never appear publicly, so these
                   switches would be dead controls. The server pins both flags off anyway. */}
               {!isDemoUser(user) && (
@@ -312,38 +350,15 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField name="email" label={`${t('email')} *`} />
+              {/* Read-only on create: the address is derived from the name above. */}
               <RHFTextField
-                name="password"
-                label={`${t('password')} *`}
-                type={password.value ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={password.onToggle} edge="end">
-                        <Iconify
-                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <RHFTextField
-                name="confirmPassword"
-                label={`${t('confirm password')} *`}
-                type={password.value ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={password.onToggle} edge="end">
-                        <Iconify
-                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+                name="email"
+                label={`${t('email')} *`}
+                helperText={emailHelperText}
+                InputProps={{ readOnly: isCreating }}
+                // Spread conditionally: RHFTextField applies `other` after its own `error`, so
+                // passing `error={false}` would clear a real validation error on the field.
+                {...(isCreating && emailStatus.available === false ? { error: true } : {})}
               />
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

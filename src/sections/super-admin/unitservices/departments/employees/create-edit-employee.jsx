@@ -10,14 +10,10 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -26,7 +22,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
@@ -64,8 +59,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     speciality: Yup.string().required('speciality is required'),
     gender: Yup.string().required('gender is required'),
     birth_date: Yup.string(),
-    password: Yup.string().required('password is required'),
-    confirmPassword: Yup.string().required('confirmPassword is required'),
   });
 
   const defaultValues = useMemo(
@@ -84,13 +77,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
       birth_date: currentTable?.birth_date || '',
-      password: currentTable?.password || '',
-      confirmPassword: currentTable?.confirmPassword || '',
     }),
     [currentTable, departmentData, id]
   );
-
-  const password = useBoolean();
 
   const methods = useForm({
     mode: 'all',
@@ -261,39 +250,10 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
+              {/* The server generates the address and the employee chooses their own password
+                  at their first login (see hakeemna-backend/utils/employeeEmail.js and
+                  auth.controller.js `setInitialPassword`), so neither is set from here. */}
               <RHFTextField name="email" label={`${t('email')} *`} />
-              <RHFTextField
-                name="password"
-                label={`${t('password')} *`}
-                type={password.value ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={password.onToggle} edge="end">
-                        <Iconify
-                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <RHFTextField
-                name="confirmPassword"
-                label={`${t('confirm password')} *`}
-                type={password.value ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={password.onToggle} edge="end">
-                        <Iconify
-                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
