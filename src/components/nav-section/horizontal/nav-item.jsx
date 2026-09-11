@@ -25,6 +25,7 @@ const NavItem = forwardRef(
       disabled,
       caption,
       roles,
+      logout,
       //
       open,
       depth,
@@ -113,6 +114,7 @@ const NavItem = forwardRef(
         href={path}
         color="inherit"
         underline="none"
+        onClick={logout}
         sx={{
           ...(disabled && {
             cursor: 'default',
@@ -138,6 +140,7 @@ NavItem.propTypes = {
   hasChild: PropTypes.bool,
   caption: PropTypes.string,
   externalLink: PropTypes.bool,
+  logout: PropTypes.func,
   currentRole: PropTypes.string,
   roles: PropTypes.arrayOf(PropTypes.string),
 };

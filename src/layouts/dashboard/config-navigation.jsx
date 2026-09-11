@@ -15,6 +15,7 @@ import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { notifyDemoLocked } from 'src/components/demo-lock';
 
 // import { useSnackbar } from 'src/components/snackbar';
 // import { usePopover } from 'src/components/custom-popover';
@@ -50,6 +51,18 @@ export function useNavData() {
 
   const data = useMemo(() => {
     const permissions = user?.permissions || [];
+
+    // Spread into a nav entry to leave it on screen but closed to a demo account: the click is
+    // swallowed and the "not available for demo" popup explains why, and a padlock marks it so
+    // it does not merely look broken. Empty for every normal account, so those entries are
+    // untouched. Deliberately not `disabled` — that sets pointer-events:none, which would
+    // swallow the click before the explanation could be shown.
+    const demoLock = isDemoUser(user)
+      ? {
+          onClick: notifyDemoLocked,
+          info: <Iconify icon="solar:lock-keyhole-bold" width={16} />,
+        }
+      : {};
 
     const SUPER_ADMIN_ITEMS_MAP = {
       confirming: {
@@ -461,6 +474,9 @@ export function useNavData() {
             title: t('invoicing'),
             path: paths.unitservice.accounting.invoicing,
             'data-test': 'us-nav-item-accounting-invoicing',
+            // Left visible for a demo but not openable: invoicing reaches the national billing
+            // system, which a trial must not write to. Clicking explains why instead.
+            ...demoLock,
           },
           {
             show: checkAcl('accounting:read'),
@@ -495,12 +511,15 @@ export function useNavData() {
             title: t('my claims'),
             path: paths.unitservice.myClaim.root,
             'data-test': 'us-nav-item-claim-claim',
+            // Claims go out to the insurer's gateway — same reasoning as invoicing above.
+            ...demoLock,
           },
           {
             show: checkAcl('claims:read'),
             title: t('claim'),
             path: paths.unitservice.accounting.claim.root,
             'data-test': 'us-nav-item-accounting-claim',
+            ...demoLock,
           },
         ].filter((one) => one.show),
       },

@@ -22,8 +22,6 @@ import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import EmployeePatientToggle from './employee-patient-toggle';
-
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -143,11 +141,6 @@ export default function AccountPopover() {
             </MenuItem>
           ))}
         </Stack>
-        <Divider sx={{ borderStyle: 'dashed' }} />
-        {(user?.role === 'admin' ||
-          user?.role === 'employee' ||
-          (user?.employee && user?.patient)) && <EmployeePatientToggle />}
-
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <MenuItem

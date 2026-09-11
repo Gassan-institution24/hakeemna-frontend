@@ -21,6 +21,7 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
+import DemoLockedDialog from 'src/components/demo-lock';
 import { useSettingsContext } from 'src/components/settings';
 import WebRTCComponent from 'src/components/video-call/webRTC';
 import { useWebRTC } from 'src/components/video-call/use-web-rtc';
@@ -31,7 +32,6 @@ import { useNavHidden } from './nav-hidden-context';
 import EmployeeAttendence from './employee-attendance';
 import AccountPopover from '../common/account-popover';
 import LanguagePopover from '../common/language-popover';
-import ServiceUnitPopover from '../common/service-unit-popover';
 import NotificationsPopover from '../common/notifications-popover';
 import NotificationsPopoverPatient from '../common/notifications-popover/indexPatient';
 
@@ -99,7 +99,6 @@ export default function Header({ onOpenNav }) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 2 }}
       >
-        <ServiceUnitPopover />
         {parentToken ? (
           <Button onClick={switchBack}>
             <Iconify icon="icon-park:back" /> Switch
@@ -117,6 +116,9 @@ export default function Header({ onOpenNav }) {
 
         <AccountPopover />
       </Stack>
+
+      {/* Opened from the navigation when a demo account clicks a locked entry. */}
+      <DemoLockedDialog />
     </>
   );
 

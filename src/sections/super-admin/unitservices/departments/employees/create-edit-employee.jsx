@@ -50,7 +50,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     // unit_service: Yup.string().required('unit of service is required'),
     // department: Yup.string(),
     employee_type: Yup.string().required('Employee Type is required'),
-    email: Yup.string().required('email is required'),
     name_english: Yup.string().required('name is required'),
     name_arabic: Yup.string(),
     nationality: Yup.string().required('Nationality is required'),
@@ -68,7 +67,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       unit_service: id || departmentData.unit_service._id,
       department: departmentData._id,
       employee_type: currentTable?.employee_type || '',
-      email: currentTable?.email || '',
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       nationality: currentTable?.nationality || '',
@@ -250,10 +248,13 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              {/* The server generates the address and the employee chooses their own password
-                  at their first login (see hakeemna-backend/utils/employeeEmail.js and
-                  auth.controller.js `setInitialPassword`), so neither is set from here. */}
-              <RHFTextField name="email" label={`${t('email')} *`} />
+              {/* No address field and no password field: the server generates
+                  employeename@unitservicename.com on save (hakeemna-backend/utils/employeeEmail.js)
+                  and the employee chooses their own password at their first login
+                  (auth.controller.js `setInitialPassword`). An input here could only mislead —
+                  whatever was typed was discarded. The live preview the clinic-side forms show
+                  is not available here: that check resolves the clinic from the caller's own
+                  session, and a super admin is not in the clinic they are editing. */}
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>

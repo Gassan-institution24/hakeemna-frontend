@@ -1025,6 +1025,8 @@
   "password must be at least 8 characters.": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
   "email, password and confirm password are required.": "البريد الالكتروني وكلمة المرور وتأكيدها مطلوبة.",
   "editing an employee is not available on this screen": "تعديل بيانات الموظف غير متاح من هذه الشاشة",
+  "not available for demo": "غير متاح في الحساب التجريبي",
+  "this feature is not available in the demo account": "هذه الميزة غير متاحة في الحساب التجريبي",
   "checking availability...": "جارٍ التحقق من التوفر...",
   "this email already exists, please change the employee name": "البريد الالكتروني موجود مسبقاً، يرجى تغيير اسم الموظف",
   "Join us and Get the right offer for your unit of service": "انضم الان للحصول على افضل الاشتراكات المناسبة لعيادتك",

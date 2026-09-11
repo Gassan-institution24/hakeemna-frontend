@@ -355,7 +355,10 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 name="email"
                 label={`${t('email')} *`}
                 helperText={emailHelperText}
-                InputProps={{ readOnly: isCreating }}
+                // Disabled, not merely read-only: the address is generated from the employee
+                // name and the clinic name and the server rebuilds it on save, so typing here
+                // could never have any effect.
+                disabled={isCreating}
                 // Spread conditionally: RHFTextField applies `other` after its own `error`, so
                 // passing `error={false}` would clear a real validation error on the field.
                 {...(isCreating && emailStatus.available === false ? { error: true } : {})}

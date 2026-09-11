@@ -982,7 +982,6 @@ export const endpoints = {
     resetpassword: '/api/auth/resetpassword',
     updatepassword: '/api/auth/updateCurrentPassowrd',
     checkPassword: '/api/auth/checkpassword',
-    toggleRole: '/api/auth/togglerole',
     newUser: '/api/auth/newuser',
     superAdminsLevel2: '/api/auth/superadmins/level-2',
     superAdmin: (id) => (!id ? null : `/api/auth/superadmins/${id}`),

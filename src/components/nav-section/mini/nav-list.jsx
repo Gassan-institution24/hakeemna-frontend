@@ -49,6 +49,7 @@ export default function NavList({ data, depth, slotProps }) {
         path={data.path}
         icon={data.icon}
         info={data.info}
+        logout={data.onClick}
         roles={data.roles}
         caption={data.caption}
         disabled={data.disabled}
