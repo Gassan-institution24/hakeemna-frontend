@@ -25,7 +25,6 @@ import {
   switchChartType,
   useGetDentalChart,
   addChiefComplaint,
-  setProcedurePayment,
   deleteChiefComplaint,
 } from '../../../../api/dental_chart';
 
@@ -38,7 +37,8 @@ export default function PatientDentalChart({ patient }) {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 
-  const unitServiceId = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id;
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id;
 
   const formatToothPayloadDescription = useCallback((payload) => {
     const segments = [];
@@ -67,20 +67,20 @@ export default function PatientDentalChart({ patient }) {
     return segments.length > 0 ? segments.join('; ') : 'details changed';
   }, []);
 
-  const formatBulkSaveDescription = useCallback((updates) => {
-    const count = updates.length;
-    const preview = updates
-      .slice(0, 3)
-      .map(
-        (tooth) =>
-          `tooth ${tooth.fdi_number}: ${formatToothPayloadDescription(tooth)}`
-      )
-      .join(' | ');
+  const formatBulkSaveDescription = useCallback(
+    (updates) => {
+      const count = updates.length;
+      const preview = updates
+        .slice(0, 3)
+        .map((tooth) => `tooth ${tooth.fdi_number}: ${formatToothPayloadDescription(tooth)}`)
+        .join(' | ');
 
-    return count > 3
-      ? `Saved dental chart for ${count} teeth: ${preview} + ${count - 3} more.`
-      : `Saved dental chart for ${count} teeth: ${preview}`;
-  }, [formatToothPayloadDescription]);
+      return count > 3
+        ? `Saved dental chart for ${count} teeth: ${preview} + ${count - 3} more.`
+        : `Saved dental chart for ${count} teeth: ${preview}`;
+    },
+    [formatToothPayloadDescription]
+  );
 
   const createPatientFileRecord = useCallback(
     async (description) => {
@@ -150,11 +150,10 @@ export default function PatientDentalChart({ patient }) {
       await addProcedure(patientId, fdiNumber, payload);
       const description = payload.description || payload.description_arabic || 'Added procedure';
       const statusPart = payload.status ? `status ${payload.status}` : '';
-      const costPart = payload.cost !== undefined && payload.cost !== null ? `cost ${payload.cost}` : '';
+      const costPart =
+        payload.cost !== undefined && payload.cost !== null ? `cost ${payload.cost}` : '';
       const details = [description, statusPart, costPart].filter(Boolean).join(' | ');
-      await createPatientFileRecord(
-        `Added dental procedure to tooth ${fdiNumber}: ${details}.`
-      );
+      await createPatientFileRecord(`Added dental procedure to tooth ${fdiNumber}: ${details}.`);
     },
     [patientId, createPatientFileRecord]
   );
@@ -164,17 +163,6 @@ export default function PatientDentalChart({ patient }) {
       if (!patientId) return;
       await deleteProcedure(patientId, fdiNumber, procId);
       await createPatientFileRecord(`Deleted dental procedure ${procId} from tooth ${fdiNumber}.`);
-    },
-    [patientId, createPatientFileRecord]
-  );
-
-  const handleSetProcedurePayment = useCallback(
-    async (fdiNumber, procId, paymentStatus) => {
-      if (!patientId) return;
-      await setProcedurePayment(patientId, fdiNumber, procId, paymentStatus);
-      await createPatientFileRecord(
-        `Marked dental procedure ${procId} on tooth ${fdiNumber} as ${paymentStatus}.`
-      );
     },
     [patientId, createPatientFileRecord]
   );
@@ -295,7 +283,7 @@ export default function PatientDentalChart({ patient }) {
       onSaveTooth={handleSaveTooth}
       onAddProcedure={handleAddProcedure}
       onDeleteProcedure={handleDeleteProcedure}
-      onSetProcedurePayment={handleSetProcedurePayment}
+      unitServiceId={unitServiceId}
       onAddChiefComplaint={handleAddChiefComplaint}
       onDeleteChiefComplaint={handleDeleteChiefComplaint}
       onUploadXray={handleUploadXray}

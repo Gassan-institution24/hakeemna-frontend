@@ -21,13 +21,16 @@ import {
   Typography,
   FormControl,
   DialogTitle,
+  Autocomplete,
   DialogActions,
   DialogContent,
+  InputAdornment,
 } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
+import { useGetUSActiveServiceTypes } from 'src/api/service_types';
 
 import PanelCard from './panel-card';
 import { getSurfaceLabel } from '../constants/fdi';
@@ -35,8 +38,6 @@ import { toNotation } from '../constants/numbering';
 
 // ----------------------------------------------------------------------
 
-// Payment is a separate axis — it shows in the Payment column, never here.
-// Marking a procedure paid moves its status to 'completed'.
 const STATUS_COLOR = {
   planned: 'info',
   in_progress: 'warning',
@@ -46,36 +47,51 @@ const STATUS_COLOR = {
 
 const STATUSES = ['planned', 'in_progress', 'completed', 'cancelled'];
 
+/**
+ * Doctor shown as first + family name.
+ *
+ * Names here are frequently four parts (given · father · grandfather · family),
+ * which is far too wide for a table cell; the middle parts are the ones that
+ * carry no identifying value between colleagues.
+ */
 const performerName = (performedBy, isAr) => {
   if (!performedBy || typeof performedBy === 'string') return '—';
   // The name lives on the linked employee; the user only carries the email.
   const src = performedBy.employee || performedBy;
-  const name = isAr
+  const full = isAr
     ? src.name_arabic || src.name_english
     : src.name_english || src.name_arabic;
-  return name || performedBy.email || '—';
+
+  if (!full) return performedBy.email || '—';
+
+  const parts = String(full).trim().split(/\s+/).filter(Boolean);
+  if (parts.length <= 2) return parts.join(' ');
+  return `${parts[0]} ${parts[parts.length - 1]}`;
 };
 
 const todayValue = () => new Date().toISOString().slice(0, 10);
 
-const PAYMENT_LABELS = {
-  paid: { en: 'Paid', ar: 'مدفوع' },
-  unpaid: { en: 'Unpaid', ar: 'غير مدفوع' },
+// `Price_per_unit` is stored as a String on service_types, and may be blank or
+// non-numeric — never let that reach the cost field as NaN.
+const servicePrice = (service) => {
+  const raw = Number(service?.Price_per_unit);
+  return Number.isFinite(raw) ? raw : 0;
 };
 
-const PAYMENT_ACTIONS = {
-  // Shown on a paid row — the button reverses the payment.
-  paid: { en: 'Undo', ar: 'تراجع' },
-  unpaid: { en: 'Mark paid', ar: 'تعليم كمدفوع' },
+const serviceLabel = (service, isAr) => {
+  if (!service) return '';
+  if (typeof service === 'string') return service;
+  const name = isAr
+    ? service.name_arabic || service.name_english
+    : service.name_english || service.name_arabic;
+  return name || '';
 };
-
-const pick = (dict, key, isAr) => (isAr ? dict[key].ar : dict[key].en);
 
 // One flat, most-recent-first list of the actual procedure records. Painting a
 // tooth appends such a record on the server, so this is a real history: every
 // row keeps the date it was performed on instead of borrowing the tooth's
-// last-modified timestamp (which the autosave rewrites on every save).
-function collectProcedureRows(teethMap, lang) {
+// last-modified timestamp (which the save rewrites on every save).
+function collectTreatmentRows(teethMap, lang) {
   const rows = [];
 
   Object.values(teethMap || {}).forEach((tooth) => {
@@ -93,22 +109,19 @@ function collectProcedureRows(teethMap, lang) {
         date: proc.date_performed,
         cost: proc.cost,
         currency: proc.currency || 'JOD',
-        paymentStatus: proc.payment_status || 'unpaid',
-        paidAt: proc.paid_at,
       });
     });
   });
 
-  return rows.sort(
-    (a, b) => new Date(b.date || 0) - new Date(a.date || 0) || a.fdi - b.fdi
-  );
+  return rows.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0) || a.fdi - b.fdi);
 }
 
 // ----------------------------------------------------------------------
 
-function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang }) {
+function AddTreatmentDialog({ open, onClose, onSubmit, teeth, unitServiceId, numbering, lang }) {
   const isAr = lang === 'ar';
   const [fdi, setFdi] = useState('');
+  const [service, setService] = useState(null);
   const [description, setDescription] = useState('');
   const [descriptionAr, setDescriptionAr] = useState('');
   const [status, setStatus] = useState('planned');
@@ -116,8 +129,16 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
   const [date, setDate] = useState(todayValue());
   const [saving, setSaving] = useState(false);
 
+  // The clinic's own catalogue — same source the accounting module prices from.
+  const { serviceTypesData, loading: servicesLoading } = useGetUSActiveServiceTypes(unitServiceId);
+  const services = useMemo(
+    () => (Array.isArray(serviceTypesData) ? serviceTypesData : []),
+    [serviceTypesData]
+  );
+
   const reset = () => {
     setFdi('');
+    setService(null);
     setDescription('');
     setDescriptionAr('');
     setStatus('planned');
@@ -131,6 +152,22 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
     onClose();
   };
 
+  // Picking a service seeds the name and the price; both stay editable after.
+  const handleServiceChange = (_e, value) => {
+    setService(value);
+    if (!value) return;
+
+    if (typeof value === 'string') {
+      // freeSolo: a one-off treatment with no catalogue entry.
+      setDescription(value);
+      return;
+    }
+
+    setDescription(value.name_english || value.name_arabic || '');
+    setDescriptionAr(value.name_arabic || '');
+    setCost(String(servicePrice(value)));
+  };
+
   const handleSubmit = async () => {
     if (!fdi || !description.trim()) return;
     setSaving(true);
@@ -140,6 +177,9 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
         description_arabic: descriptionAr.trim() || undefined,
         status,
         cost: cost ? Number(cost) : 0,
+        // Only set when the line came from the catalogue, so hand-typed
+        // treatments and painted rows simply have no service behind them.
+        service_type: service && typeof service !== 'string' ? service._id : undefined,
         // Sent explicitly so the record is not silently stamped with server-now.
         date_performed: date || undefined,
       });
@@ -153,13 +193,17 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ fontSize: '1rem' }}>
-        {isAr ? 'إضافة إجراء' : 'Add Procedure'}
+        {isAr ? 'إضافة علاج' : 'Add treatment'}
       </DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ mt: 1 }}>
           <FormControl size="small" fullWidth>
             <InputLabel>{isAr ? 'السن' : 'Tooth'}</InputLabel>
-            <Select value={fdi} label={isAr ? 'السن' : 'Tooth'} onChange={(e) => setFdi(e.target.value)}>
+            <Select
+              value={fdi}
+              label={isAr ? 'السن' : 'Tooth'}
+              onChange={(e) => setFdi(e.target.value)}
+            >
               {teeth.map((t) => (
                 <MenuItem key={t} value={t}>
                   {toNotation(t, numbering)}
@@ -168,13 +212,44 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
             </Select>
           </FormControl>
 
-          <TextField
-            fullWidth
+          <Autocomplete
+            freeSolo
             size="small"
-            label={isAr ? 'الوصف' : 'Description'}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            options={services}
+            value={service}
+            loading={servicesLoading}
+            onChange={handleServiceChange}
+            getOptionLabel={(option) => serviceLabel(option, isAr)}
+            isOptionEqualToValue={(option, value) => option?._id === value?._id}
+            renderOption={(props, option) => (
+              <li {...props} key={option._id}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ width: '100%', gap: 2 }}
+                >
+                  <Typography variant="body2">{serviceLabel(option, isAr)}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {servicePrice(option) > 0 ? servicePrice(option) : '—'}
+                  </Typography>
+                </Stack>
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={isAr ? 'العلاج / الخدمة' : 'Treatment / service'}
+                placeholder={isAr ? 'اختر من الخدمات...' : 'Pick from services…'}
+                helperText={
+                  isAr
+                    ? 'اختر خدمة ليتم تعبئة السعر تلقائياً، أو اكتب علاجاً مخصصاً'
+                    : 'Pick a service to auto-fill its price, or type a one-off treatment'
+                }
+              />
+            )}
           />
+
           <TextField
             fullWidth
             size="small"
@@ -186,7 +261,11 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
 
           <FormControl size="small" fullWidth>
             <InputLabel>{isAr ? 'الحالة' : 'Status'}</InputLabel>
-            <Select value={status} label={isAr ? 'الحالة' : 'Status'} onChange={(e) => setStatus(e.target.value)}>
+            <Select
+              value={status}
+              label={isAr ? 'الحالة' : 'Status'}
+              onChange={(e) => setStatus(e.target.value)}
+            >
               {STATUSES.map((s) => (
                 <MenuItem key={s} value={s}>
                   {s.replace('_', ' ')}
@@ -199,9 +278,12 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
             fullWidth
             size="small"
             type="number"
-            label={isAr ? 'التكلفة (دينار)' : 'Cost (JOD)'}
+            label={isAr ? 'التكلفة' : 'Cost'}
             value={cost}
             onChange={(e) => setCost(e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">JOD</InputAdornment>,
+            }}
           />
 
           <TextField
@@ -232,54 +314,36 @@ function AddProcedureDialog({ open, onClose, onSubmit, teeth, numbering, lang })
   );
 }
 
-AddProcedureDialog.propTypes = {
+AddTreatmentDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   teeth: PropTypes.arrayOf(PropTypes.number),
+  unitServiceId: PropTypes.string,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };
 
 // ----------------------------------------------------------------------
 
-export default function ProceduresPanel({
+export default function TreatmentPlanPanel({
   teethMap,
   teeth,
   onAddProcedure,
   onDeleteProcedure,
-  onSetPayment,
+  unitServiceId,
   numbering,
   lang,
 }) {
   const isAr = lang === 'ar';
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [payingId, setPayingId] = useState(null);
 
-  const rows = useMemo(() => collectProcedureRows(teethMap, lang), [teethMap, lang]);
-
-  const handleTogglePayment = async (row) => {
-    if (!onSetPayment || !row.id) return;
-    const next = row.paymentStatus === 'paid' ? 'unpaid' : 'paid';
-    // Un-paying reverses a financial record, so make it deliberate.
-    if (next === 'unpaid') {
-      const confirmed = window.confirm(
-        isAr ? 'إلغاء تعليم الإجراء كمدفوع؟' : 'Mark this procedure as unpaid again?'
-      );
-      if (!confirmed) return;
-    }
-    setPayingId(row.id);
-    try {
-      await onSetPayment(row.fdi, row.id, next);
-    } finally {
-      setPayingId(null);
-    }
-  };
+  const rows = useMemo(() => collectTreatmentRows(teethMap, lang), [teethMap, lang]);
 
   const handleDelete = async (row) => {
     if (!onDeleteProcedure || !row.id) return;
     const confirmed = window.confirm(
-      isAr ? 'حذف هذا الإجراء نهائياً؟' : 'Delete this procedure record?'
+      isAr ? 'حذف هذا العلاج نهائياً؟' : 'Delete this treatment line?'
     );
     if (!confirmed) return;
     await onDeleteProcedure(row.fdi, row.id);
@@ -288,7 +352,7 @@ export default function ProceduresPanel({
   return (
     <PanelCard
       icon="solar:clipboard-text-bold"
-      title={`${isAr ? 'الإجراءات' : 'Procedures'} (${rows.length})`}
+      title={`${isAr ? 'خطة العلاج' : 'Treatment plan'} (${rows.length})`}
       action={
         <Button
           size="small"
@@ -297,7 +361,7 @@ export default function ProceduresPanel({
           onClick={() => setDialogOpen(true)}
           disabled={!onAddProcedure}
         >
-          {isAr ? 'إضافة' : 'Add Procedure'}
+          {isAr ? 'إضافة' : 'Add treatment'}
         </Button>
       }
     >
@@ -305,7 +369,7 @@ export default function ProceduresPanel({
         <Stack alignItems="center" justifyContent="center" sx={{ py: 4, gap: 1 }}>
           <Iconify icon="solar:clipboard-text-linear" width={28} sx={{ color: 'text.disabled' }} />
           <Typography variant="caption" color="text.secondary">
-            {isAr ? 'لا توجد إجراءات بعد.' : 'No procedures added yet.'}
+            {isAr ? 'لا توجد علاجات بعد.' : 'No treatments planned yet.'}
           </Typography>
         </Stack>
       ) : (
@@ -314,12 +378,11 @@ export default function ProceduresPanel({
             <TableHead>
               <TableRow>
                 <TableCell>{isAr ? 'السن' : 'Tooth'}</TableCell>
-                <TableCell>{isAr ? 'الإجراء' : 'Procedure'}</TableCell>
+                <TableCell>{isAr ? 'العلاج' : 'Treatment'}</TableCell>
                 <TableCell>{isAr ? 'الحالة' : 'Status'}</TableCell>
                 <TableCell>{isAr ? 'الطبيب' : 'Doctor'}</TableCell>
                 <TableCell>{isAr ? 'التاريخ' : 'Date'}</TableCell>
                 <TableCell>{isAr ? 'التكلفة' : 'Cost'}</TableCell>
-                <TableCell>{isAr ? 'الدفع' : 'Payment'}</TableCell>
                 {onDeleteProcedure && <TableCell />}
               </TableRow>
             </TableHead>
@@ -330,7 +393,12 @@ export default function ProceduresPanel({
                   <TableCell>
                     {row.label}
                     {row.surface && (
-                      <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ ml: 0.5 }}
+                      >
                         ({row.surface})
                       </Typography>
                     )}
@@ -343,32 +411,14 @@ export default function ProceduresPanel({
                       color={STATUS_COLOR[row.status] || 'default'}
                     />
                   </TableCell>
-                  <TableCell>{performerName(row.doctor, isAr)}</TableCell>
-                  <TableCell>{row.date ? fDate(row.date) : '—'}</TableCell>
-                  <TableCell>{row.cost > 0 ? `${row.cost} ${row.currency}` : '—'}</TableCell>
-                  <TableCell>
-                    <Stack direction="row" alignItems="center" gap={0.75}>
-                      <Tooltip title={row.paidAt ? fDate(row.paidAt) : ''}>
-                        <Chip
-                          size="small"
-                          variant="soft"
-                          color={row.paymentStatus === 'paid' ? 'success' : 'default'}
-                          label={pick(PAYMENT_LABELS, row.paymentStatus, isAr)}
-                        />
-                      </Tooltip>
-
-                      {onSetPayment && row.id && (
-                        <Button
-                          size="small"
-                          variant="text"
-                          disabled={payingId === row.id}
-                          onClick={() => handleTogglePayment(row)}
-                          sx={{ minWidth: 0, px: 0.75, fontSize: '0.7rem' }}
-                        >
-                          {pick(PAYMENT_ACTIONS, row.paymentStatus, isAr)}
-                        </Button>
-                      )}
-                    </Stack>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {performerName(row.doctor, isAr)}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {row.date ? fDate(row.date) : '—'}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {row.cost > 0 ? `${row.cost} ${row.currency}` : '—'}
                   </TableCell>
                   {onDeleteProcedure && (
                     <TableCell align="right">
@@ -389,11 +439,12 @@ export default function ProceduresPanel({
       )}
 
       {onAddProcedure && (
-        <AddProcedureDialog
+        <AddTreatmentDialog
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
           onSubmit={onAddProcedure}
           teeth={teeth}
+          unitServiceId={unitServiceId}
           numbering={numbering}
           lang={lang}
         />
@@ -402,12 +453,13 @@ export default function ProceduresPanel({
   );
 }
 
-ProceduresPanel.propTypes = {
+TreatmentPlanPanel.propTypes = {
   teethMap: PropTypes.object,
   teeth: PropTypes.arrayOf(PropTypes.number),
   onAddProcedure: PropTypes.func,
   onDeleteProcedure: PropTypes.func,
-  onSetPayment: PropTypes.func,
+  // The clinic whose service catalogue prices the treatment lines.
+  unitServiceId: PropTypes.string,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };

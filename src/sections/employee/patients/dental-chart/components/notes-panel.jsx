@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 
 import {
   Box,
+  Chip,
   Table,
   Stack,
   Button,
   Dialog,
   Select,
+  Divider,
   Tooltip,
   MenuItem,
   TableRow,
@@ -196,10 +198,83 @@ ViewNoteDialog.propTypes = {
 
 // ----------------------------------------------------------------------
 
+// The table deliberately hides the note body to stay compact; this dialog is the
+// way to read every note end to end without opening them one by one.
+function AllNotesDialog({ open, onClose, notes, numbering, lang }) {
+  const isAr = lang === 'ar';
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle sx={{ fontSize: '1rem' }}>
+        {isAr ? `كل الملاحظات (${notes.length})` : `All Notes (${notes.length})`}
+      </DialogTitle>
+      <DialogContent dividers>
+        {notes.length === 0 ? (
+          <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
+            {isAr ? 'لا توجد ملاحظات بعد.' : 'No notes added yet.'}
+          </Typography>
+        ) : (
+          <Stack divider={<Divider flexItem />} gap={2} sx={{ py: 1 }}>
+            {notes.map((note) => (
+              <Box key={note._id}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  flexWrap="wrap"
+                  gap={1}
+                  sx={{ mb: 0.75 }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    {note.created_at ? fDateTime(note.created_at) : '—'}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    ·
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {authorName(note.created_by, isAr)}
+                  </Typography>
+                  {note.tooth_fdi ? (
+                    <Chip
+                      size="small"
+                      variant="outlined"
+                      color="primary"
+                      label={toNotation(note.tooth_fdi, numbering)}
+                      sx={{ height: 20, fontSize: '0.7rem' }}
+                    />
+                  ) : null}
+                </Stack>
+                <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+                  {note.text}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} size="small">
+          {isAr ? 'إغلاق' : 'Close'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+AllNotesDialog.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  notes: PropTypes.array,
+  numbering: PropTypes.string,
+  lang: PropTypes.string,
+};
+
+// ----------------------------------------------------------------------
+
 export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numbering, lang }) {
   const isAr = lang === 'ar';
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewNote, setViewNote] = useState(null);
+  const [allOpen, setAllOpen] = useState(false);
 
   const rows = [...(notes || [])].sort(
     (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
@@ -210,15 +285,26 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
       icon="solar:notes-bold"
       title={`${isAr ? 'الملاحظات' : 'Notes'} (${rows.length})`}
       action={
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" width={16} />}
-          onClick={() => setDialogOpen(true)}
-          disabled={!onAddNote}
-        >
-          {isAr ? 'إضافة' : 'Add Note'}
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<Iconify icon="solar:list-bold" width={16} />}
+            onClick={() => setAllOpen(true)}
+            disabled={rows.length === 0}
+          >
+            {isAr ? 'عرض الكل' : 'Show all'}
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" width={16} />}
+            onClick={() => setDialogOpen(true)}
+            disabled={!onAddNote}
+          >
+            {isAr ? 'إضافة' : 'Add Note'}
+          </Button>
+        </Stack>
       }
     >
       {rows.length === 0 ? (
@@ -286,6 +372,14 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
         open={Boolean(viewNote)}
         onClose={() => setViewNote(null)}
         note={viewNote}
+        numbering={numbering}
+        lang={lang}
+      />
+
+      <AllNotesDialog
+        open={allOpen}
+        onClose={() => setAllOpen(false)}
+        notes={rows}
         numbering={numbering}
         lang={lang}
       />

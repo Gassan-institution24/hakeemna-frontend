@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
-import resolveFileUrl from 'src/utils/resolve-file-url';
 
 import Iconify from 'src/components/iconify';
 
@@ -35,60 +34,60 @@ const ACCEPTED = 'image/*,.dcm,.dicom,application/dicom';
 
 // ----------------------------------------------------------------------
 
-function XrayThumb({ xray, onOpen, onDelete, numbering, lang }) {
+/**
+ * One x-ray as a single compact row.
+ *
+ * Deliberately renders no <img>: the panel used to show every radiograph inline,
+ * which both dominated the page and pulled every file over the network on mount.
+ * Pixels load only once a row is clicked and the viewer opens.
+ */
+function XrayRow({ xray, onOpen, onDelete, numbering, lang }) {
   const isAr = lang === 'ar';
 
   return (
-    <Box
+    <Stack
+      direction="row"
+      alignItems="center"
+      gap={1}
       sx={{
-        position: 'relative',
-        borderRadius: 1.5,
-        overflow: 'hidden',
-        border: '1px solid',
-        borderColor: 'divider',
+        px: 1,
+        py: 0.6,
+        borderRadius: 1,
+        cursor: 'pointer',
+        '&:hover': { backgroundColor: 'action.hover' },
         '&:hover .xray-actions': { opacity: 1 },
       }}
+      onClick={() => onOpen(xray)}
     >
-      <Box
-        onClick={() => onOpen(xray)}
-        sx={{
-          cursor: 'pointer',
-          height: 108,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'common.black',
-        }}
-      >
-        {xray.is_dicom ? (
-          <Stack alignItems="center" gap={0.5}>
-            <Iconify icon="healthicons:x-ray-outline" width={26} sx={{ color: 'common.white' }} />
-            <Chip label="DICOM" size="small" color="info" sx={{ height: 18, fontSize: '0.6rem' }} />
-          </Stack>
-        ) : (
-          <Box
-            component="img"
-            src={resolveFileUrl(xray.url)}
-            alt={xray.filename || 'x-ray'}
-            loading="lazy"
-            sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        )}
-      </Box>
+      <Iconify
+        icon={xray.is_dicom ? 'healthicons:x-ray-outline' : 'solar:gallery-bold'}
+        width={18}
+        sx={{ color: 'text.secondary', flexShrink: 0 }}
+      />
+
+      <Typography variant="caption" noWrap sx={{ flex: 1, minWidth: 0 }}>
+        {xray.filename || (isAr ? 'صورة' : 'image')}
+      </Typography>
+
+      {xray.is_dicom && (
+        <Chip label="DICOM" size="small" color="info" sx={{ height: 17, fontSize: '0.58rem' }} />
+      )}
+
+      <Typography variant="caption" color="text.secondary" noWrap sx={{ flexShrink: 0 }}>
+        {fDate(xray.taken_at)}
+        {xray.tooth_fdi ? ` · ${toNotation(xray.tooth_fdi, numbering)}` : ''}
+      </Typography>
 
       {onDelete && (
-        <Box
-          className="xray-actions"
-          sx={{ position: 'absolute', top: 4, right: 4, opacity: 0, transition: 'opacity .2s' }}
-        >
+        <Box className="xray-actions" sx={{ opacity: 0, transition: 'opacity .2s', flexShrink: 0 }}>
           <Tooltip title={isAr ? 'حذف' : 'Delete'}>
             <IconButton
               size="small"
-              onClick={() => onDelete(xray._id)}
-              sx={{
-                backgroundColor: 'rgba(0,0,0,0.6)',
-                color: 'common.white',
-                '&:hover': { backgroundColor: 'error.main' },
+              color="error"
+              onClick={(e) => {
+                // The row itself opens the viewer; deleting must not do both.
+                e.stopPropagation();
+                onDelete(xray._id);
               }}
             >
               <Iconify icon="solar:trash-bin-trash-bold" width={14} />
@@ -96,21 +95,11 @@ function XrayThumb({ xray, onOpen, onDelete, numbering, lang }) {
           </Tooltip>
         </Box>
       )}
-
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        noWrap
-        sx={{ display: 'block', px: 0.75, py: 0.5 }}
-      >
-        {fDate(xray.taken_at)}
-        {xray.tooth_fdi ? ` · ${toNotation(xray.tooth_fdi, numbering)}` : ''}
-      </Typography>
-    </Box>
+    </Stack>
   );
 }
 
-XrayThumb.propTypes = {
+XrayRow.propTypes = {
   xray: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
@@ -194,15 +183,9 @@ function PhaseColumn({ phase, xrays, onUpload, onOpen, onDelete, numbering, lang
           </Typography>
         </Stack>
       ) : (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 1,
-            gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' },
-          }}
-        >
+        <Stack gap={0.25}>
           {xrays.map((x) => (
-            <XrayThumb
+            <XrayRow
               key={x._id}
               xray={x}
               onOpen={onOpen}
@@ -211,7 +194,7 @@ function PhaseColumn({ phase, xrays, onUpload, onOpen, onDelete, numbering, lang
               lang={lang}
             />
           ))}
-        </Box>
+        </Stack>
       )}
     </Stack>
   );

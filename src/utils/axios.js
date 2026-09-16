@@ -495,6 +495,13 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/patient/${id}`),
     resend: (id) => (!id ? null : `/api/patient/resend_id/${id}`),
   },
+  dentalDiagnoses: {
+    // Clinic-defined diagnoses, added from the tooth dialog's "Add new" button.
+    byUnitService: (unitServiceId) =>
+      !unitServiceId ? null : `/api/dental-diagnoses/unit-service/${unitServiceId}`,
+    create: '/api/dental-diagnoses',
+    remove: (id) => `/api/dental-diagnoses/${id}`,
+  },
   dentalChart: {
     one: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}`),
     updateTooth: (patientId, toothNumber) =>

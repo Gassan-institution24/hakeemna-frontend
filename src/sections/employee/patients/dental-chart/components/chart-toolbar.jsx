@@ -6,11 +6,8 @@ import RedoIcon from '@mui/icons-material/Redo';
 import LinkIcon from '@mui/icons-material/Link';
 import ClearIcon from '@mui/icons-material/Clear';
 import PersonIcon from '@mui/icons-material/Person';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import ChildCareIcon from '@mui/icons-material/ChildCare';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
   Box,
   Chip,
@@ -43,17 +40,10 @@ export default function ChartToolbar({
   multiSelect,
   onToggleMultiSelect,
   selectedCount,
-  onApplyBulk,
   onClearSelection,
   onCreateBridge,
   bridges,
   onRemoveBridge,
-  zoom,
-  onZoomIn,
-  onZoomOut,
-  onZoomReset,
-  canZoomIn,
-  canZoomOut,
   lang,
 }) {
   const isAr = lang === 'ar';
@@ -157,14 +147,6 @@ export default function ChartToolbar({
             color="primary"
             variant="outlined"
           />
-          <Button
-            size="small"
-            variant="contained"
-            onClick={onApplyBulk}
-            sx={{ fontSize: '0.72rem', py: 0.5 }}
-          >
-            {isAr ? 'تطبيق' : 'Apply'}
-          </Button>
           {selectedCount >= 2 && onCreateBridge && (
             <Tooltip title={isAr ? 'ربط الأسنان بجسر ثابت' : 'Connect teeth into a fixed bridge'}>
               <Button
@@ -235,35 +217,6 @@ export default function ChartToolbar({
 
       <Divider orientation="vertical" flexItem />
 
-      {/* Zoom controls */}
-      <Stack direction="row" alignItems="center" gap={0.25}>
-        <Tooltip title={isAr ? 'تصغير' : 'Zoom out'}>
-          <span>
-            <IconButton size="small" onClick={onZoomOut} disabled={!canZoomOut}>
-              <ZoomOutIcon fontSize="small" />
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Box
-          sx={{ minWidth: 38, textAlign: 'center', fontSize: '0.72rem', color: 'text.secondary' }}
-        >
-          {Math.round(zoom * 100)}%
-        </Box>
-        <Tooltip title={isAr ? 'تكبير' : 'Zoom in'}>
-          <span>
-            <IconButton size="small" onClick={onZoomIn} disabled={!canZoomIn}>
-              <ZoomInIcon fontSize="small" />
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Tooltip title={isAr ? 'إعادة الضبط' : 'Reset zoom'}>
-          <span>
-            <IconButton size="small" onClick={onZoomReset} disabled={zoom === 1}>
-              <RestartAltIcon fontSize="small" />
-            </IconButton>
-          </span>
-        </Tooltip>
-      </Stack>
 
       <Box sx={{ flex: 1 }} />
 
@@ -303,17 +256,10 @@ ChartToolbar.propTypes = {
   multiSelect: PropTypes.bool,
   onToggleMultiSelect: PropTypes.func.isRequired,
   selectedCount: PropTypes.number,
-  onApplyBulk: PropTypes.func.isRequired,
   onClearSelection: PropTypes.func.isRequired,
   onCreateBridge: PropTypes.func,
   bridges: PropTypes.array,
   onRemoveBridge: PropTypes.func,
-  zoom: PropTypes.number,
-  onZoomIn: PropTypes.func.isRequired,
-  onZoomOut: PropTypes.func.isRequired,
-  onZoomReset: PropTypes.func.isRequired,
-  canZoomIn: PropTypes.bool,
-  canZoomOut: PropTypes.bool,
   lang: PropTypes.string,
 };
 
@@ -326,8 +272,5 @@ ChartToolbar.defaultProps = {
   isSaving: false,
   multiSelect: false,
   selectedCount: 0,
-  zoom: 1,
-  canZoomIn: true,
-  canZoomOut: true,
   lang: 'en',
 };

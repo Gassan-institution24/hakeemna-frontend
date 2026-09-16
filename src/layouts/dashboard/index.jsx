@@ -19,7 +19,13 @@ import { NavHiddenContext } from './nav-hidden-context';
 // ----------------------------------------------------------------------
 
 // Routes that hide the nav entirely and reach it through the header menu button.
-const HIDDEN_NAV_ROUTES = [/\/(mypatients|patients)\/(?!new$)[^/]+$/];
+// The dental chart is here because the odontogram wants every pixel of width —
+// it sizes its teeth to the container, so the reclaimed rail goes into the chart.
+// Its own Back button returns to the dental list, where the nav reappears.
+const HIDDEN_NAV_ROUTES = [
+  /\/(mypatients|patients)\/(?!new$)[^/]+$/,
+  /\/us\/dental\/[^/]+$/,
+];
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useMemo, useState, useCallback } from 'react';
+import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
 import {
   Box,
@@ -15,18 +15,19 @@ import {
   DialogContent,
 } from '@mui/material';
 
+import { useGetDentalDiagnoses } from 'src/api/dental_diagnoses';
+
 import XrayPanel from './components/xray-panel';
 import DentalArch from './components/dental-arch';
 import NotesPanel from './components/notes-panel';
 import ToothModal from './components/tooth-modal';
 import { toNotation } from './constants/numbering';
 import useOdontogram from './hooks/use-odontogram';
-import { CONDITIONS } from './constants/conditions';
+import { CONDITIONS, setCustomConditions } from './constants/conditions';
 import ChartHeader from './components/chart-header';
 import ChartToolbar from './components/chart-toolbar';
 import ViewOptions from './components/view-options';
-import DiagnosisPanel from './components/diagnosis-panel';
-import ProceduresPanel from './components/procedures-panel';
+import TreatmentPlanPanel from './components/treatment-plan-panel';
 import { getOdontogramPalette } from './constants/odontogram-theme';
 import { getHiddenTeeth } from './constants/tooth-states';
 import ChiefComplaintPanel from './components/chief-complaint-panel';
@@ -38,12 +39,23 @@ import {
   getToothType,
 } from './constants/fdi';
 
-// ── Zoom configuration ───────────────────────────────────────────────────────
-const BASE_CROWN = 66; // px crown size at 100% (enlarged for readability)
-const ZOOM_MIN = 0.6;
-const ZOOM_MAX = 1.8;
-const ZOOM_STEP = 0.15;
+// ── Auto-fit configuration ───────────────────────────────────────────────────
+// The arch sizes itself to the space it is given rather than to a manual zoom:
+// 16 teeth across, so each crown takes a sixteenth of the usable width. Manual
+// zoom controls existed only because the chart could not do this for itself.
+//
+// Width alone is not enough — on a wide but short window a width-fitted arch
+// runs off the bottom — so the crown is bounded by the viewport height as well
+// and the smaller of the two bounds wins. That is what keeps one chart legible
+// on a laptop and a 27" monitor alike.
+const CROWN_MIN = 34; // never so small the surfaces stop being clickable
+const CROWN_MAX = 60; // never so large the arch outgrows a wide monitor
+const ARCH_PADDING = 48; // container padding + the midline gap
 const TOOTH_GAP = 2; // matches DentalArch GAP
+const TOOTH_ASPECT = 90 / 40; // illustration height ÷ crown width, per DentalArch
+const ARCH_ROWS = 2; // upper + lower
+const ARCH_CHROME = 140; // jaw labels, FDI number rows, midline, padding
+const VIEWPORT_SHARE = 0.72; // leave room for the toolbar and the panels below
 
 // Build fdi → { role, extendLeft, extendRight } for the teeth in one arch,
 // so each tooth knows whether to draw / extend the bridge beam to its neighbour.
@@ -259,7 +271,7 @@ export default function OdontogramView({
   onSaveTooth,
   onAddProcedure,
   onDeleteProcedure,
-  onSetProcedurePayment,
+  unitServiceId,
   onAddChiefComplaint,
   onDeleteChiefComplaint,
   onUploadXray,
@@ -280,12 +292,62 @@ export default function OdontogramView({
   const [numbering, setNumbering] = useState('fdi');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // ── Zoom ────────────────────────────────────────────────────────────────────
-  const [zoom, setZoom] = useState(0.6); // default view at 60%
-  const crownSize = Math.round(BASE_CROWN * zoom);
-  const zoomIn = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2))), []);
-  const zoomOut = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2))), []);
-  const zoomReset = useCallback(() => setZoom(1), []);
+  // ── Auto-fit sizing ─────────────────────────────────────────────────────────
+  // Crown size follows the container width, so hiding the sidebar or widening the
+  // window makes the chart genuinely bigger instead of leaving empty space.
+  // ── Clinic-defined diagnoses ────────────────────────────────────────────────
+  // Registered into the condition catalogue during render, not in an effect: the
+  // teeth read colours straight from that catalogue as they render, so an effect
+  // would paint one frame of grey before the real colours landed.
+  const { diagnoses: customDiagnoses } = useGetDentalDiagnoses(unitServiceId);
+
+  useMemo(() => setCustomConditions(customDiagnoses), [customDiagnoses]);
+
+  const archRef = useRef(null);
+  const [archWidth, setArchWidth] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(
+    typeof window === 'undefined' ? 0 : window.innerHeight
+  );
+
+  useEffect(() => {
+    const el = archRef.current;
+    if (!el) return undefined;
+
+    const measure = () => setArchWidth(el.clientWidth);
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // The arch box is flex-sized, so its own height follows the card rather than
+  // the screen; the viewport is what actually has to contain the chart.
+  useEffect(() => {
+    const onResize = () => setViewportHeight(window.innerHeight);
+    onResize();
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const crownSize = useMemo(() => {
+    // The widest arch is 16 teeth; sizing to that keeps adult and child charts
+    // on the same scale instead of the primary arch ballooning.
+    const usableWidth = Math.max(0, archWidth - ARCH_PADDING) - TOOTH_GAP * 15;
+    if (usableWidth <= 0) return CROWN_MIN;
+    const widthBound = usableWidth / 16;
+
+    // Both arches plus their labels have to clear the fold, so the height bound
+    // is what stops a wide-but-short window from pushing the lower jaw off-screen.
+    const usableHeight = viewportHeight * VIEWPORT_SHARE - ARCH_CHROME;
+    const heightBound = usableHeight / (ARCH_ROWS * TOOTH_ASPECT);
+
+    // Floor, not round: rounding up can push the arch a couple of pixels past
+    // the width it was just measured to fit into.
+    const fitted = Math.min(widthBound, heightBound, CROWN_MAX);
+    return Math.max(CROWN_MIN, Math.floor(fitted));
+  }, [archWidth, viewportHeight]);
 
   // ── Jaw view filter: full | upper | lower ────────────────────────────────────
   const [jawFilter, setJawFilter] = useState('full');
@@ -310,8 +372,6 @@ export default function OdontogramView({
 
   const {
     teethMap,
-    activeCondition,
-    setActiveCondition,
     selectedFdi,
     setSelectedFdi,
     chartType,
@@ -326,8 +386,6 @@ export default function OdontogramView({
     handleToothClick,
     getToothData,
     updateToothData,
-    applyBulk,
-    clearDiagnosis,
     undo,
     redo,
     canUndo,
@@ -472,21 +530,6 @@ export default function OdontogramView({
     [onDeleteProcedure, showToast, isAr]
   );
 
-  const handleSetProcedurePayment = useCallback(
-    async (fdiNumber, procId, paymentStatus) => {
-      if (!onSetProcedurePayment) return;
-      try {
-        await onSetProcedurePayment(fdiNumber, procId, paymentStatus);
-        const paidMsg = isAr ? 'تم تعليم الإجراء كمدفوع' : 'Procedure marked as paid';
-        const unpaidMsg = isAr ? 'تم إلغاء الدفع' : 'Payment cleared';
-        showToast(paymentStatus === 'paid' ? paidMsg : unpaidMsg);
-      } catch (e) {
-        showToast(isAr ? 'فشل تحديث حالة الدفع' : 'Failed to update payment', 'error');
-      }
-    },
-    [onSetProcedurePayment, showToast, isAr]
-  );
-
   const handleAddChiefComplaint = useCallback(
     async (payload) => {
       if (!onAddChiefComplaint) return;
@@ -542,7 +585,10 @@ export default function OdontogramView({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        minHeight: 520,
+        // A floor tall enough for the arch, but never taller than the screen —
+        // a fixed 520 pushed the panels below the fold on short laptops.
+        minHeight: { xs: 400, md: 480 },
+        maxHeight: isFullscreen ? 'none' : '86vh',
         border: '1px solid',
         // Odontogram-Modul card treatment: hairline border, softer radius.
         borderColor: odonPalette.line,
@@ -580,17 +626,10 @@ export default function OdontogramView({
           clearSelection();
         }}
         selectedCount={selectedTeeth.size}
-        onApplyBulk={applyBulk}
         onClearSelection={clearSelection}
         onCreateBridge={handleCreateBridge}
         bridges={bridges}
         onRemoveBridge={handleRemoveBridge}
-        zoom={zoom}
-        onZoomIn={zoomIn}
-        onZoomOut={zoomOut}
-        onZoomReset={zoomReset}
-        canZoomIn={zoom < ZOOM_MAX}
-        canZoomOut={zoom > ZOOM_MIN}
         lang={lang}
       />
 
@@ -608,6 +647,7 @@ export default function OdontogramView({
         {/* Arch area — always LTR so the odontogram layout (teeth + FDI numbers)
             stays anatomically correct and identical in both Arabic and English. */}
         <Box
+          ref={archRef}
           dir="ltr"
           sx={{
             flex: 1,
@@ -626,8 +666,7 @@ export default function OdontogramView({
           {/* Upper arch label */}
           <Typography
             variant="caption"
-            sx={{ color: odonPalette.muted }}
-            sx={{ mb: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
+            sx={{ color: odonPalette.muted, mb: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
           >
             {isAr ? 'الفك العلوي' : 'Upper Jaw (Maxilla)'}
           </Typography>
@@ -707,8 +746,7 @@ export default function OdontogramView({
           {/* Lower arch label */}
           <Typography
             variant="caption"
-            sx={{ color: odonPalette.muted }}
-            sx={{ mt: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
+            sx={{ color: odonPalette.muted, mt: 0.5, letterSpacing: 1, fontSize: '0.65rem' }}
           >
             {isAr ? 'الفك السفلي' : 'Lower Jaw (Mandible)'}
           </Typography>
@@ -734,36 +772,47 @@ export default function OdontogramView({
         />
       )}
 
-      {/* Chart + diagnosis */}
+      {/* Chart — full width; the palette sits beneath it rather than beside it */}
       <Box
         sx={{
-          display: 'grid',
-          gap: 2,
-          gridTemplateColumns: { xs: '1fr', lg: '1fr 320px' },
-          alignItems: 'stretch',
           ...(isFullscreen && {
             position: 'fixed',
             inset: 0,
             zIndex: 1400,
             p: 2,
-            gridTemplateRows: '1fr',
             backgroundColor: 'background.default',
             overflow: 'auto',
           }),
         }}
       >
         {chartCard}
-
-        <DiagnosisPanel
-          teethMap={teethMap}
-          activeCondition={activeCondition}
-          onSelect={setActiveCondition}
-          onClear={clearDiagnosis}
-          lang={lang}
-        />
       </Box>
 
-      {/* X-ray — before / after side by side, so it takes the full width */}
+      {/* Treatment plan — full width; the table carries six columns */}
+      {!isFullscreen && (
+        <TreatmentPlanPanel
+          teethMap={teethMap}
+          teeth={allTeeth}
+          onAddProcedure={handleAddProcedure}
+          onDeleteProcedure={handleDeleteProcedure}
+          unitServiceId={unitServiceId}
+          numbering={numbering}
+          lang={lang}
+        />
+      )}
+
+      {!isFullscreen && (
+        <NotesPanel
+          notes={chartData?.note_entries}
+          teeth={allTeeth}
+          onAddNote={onAddNote}
+          onDeleteNote={onDeleteNote}
+          numbering={numbering}
+          lang={lang}
+        />
+      )}
+
+      {/* X-ray — compact rows; nothing renders until a row is opened */}
       {!isFullscreen && (
         <XrayPanel
           xrays={chartData?.xrays}
@@ -772,36 +821,6 @@ export default function OdontogramView({
           numbering={numbering}
           lang={lang}
         />
-      )}
-
-      {/* Procedures · notes */}
-      {!isFullscreen && (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 2,
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-            alignItems: 'stretch',
-          }}
-        >
-          <ProceduresPanel
-            teethMap={teethMap}
-            teeth={allTeeth}
-            onAddProcedure={handleAddProcedure}
-            onDeleteProcedure={handleDeleteProcedure}
-            onSetPayment={handleSetProcedurePayment}
-            numbering={numbering}
-            lang={lang}
-          />
-          <NotesPanel
-            notes={chartData?.note_entries}
-            teeth={allTeeth}
-            onAddNote={onAddNote}
-            onDeleteNote={onDeleteNote}
-            numbering={numbering}
-            lang={lang}
-          />
-        </Box>
       )}
 
       {/* Tooth detail modal */}
@@ -814,6 +833,8 @@ export default function OdontogramView({
           onClose={() => setSelectedFdi(null)}
           onSaveTooth={handleModalSave}
           onRemoveBridge={handleRemoveBridge}
+          unitServiceId={unitServiceId}
+          customDiagnoses={customDiagnoses}
           lang={lang}
         />
       )}
@@ -830,7 +851,7 @@ OdontogramView.propTypes = {
   onSaveTooth: PropTypes.func,
   onAddProcedure: PropTypes.func,
   onDeleteProcedure: PropTypes.func,
-  onSetProcedurePayment: PropTypes.func,
+  unitServiceId: PropTypes.string,
   onAddChiefComplaint: PropTypes.func,
   onDeleteChiefComplaint: PropTypes.func,
   onUploadXray: PropTypes.func,
