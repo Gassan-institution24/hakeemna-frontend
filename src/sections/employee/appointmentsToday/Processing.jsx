@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
+import { lazy, useMemo, Suspense } from 'react';
 
 import { alpha, useTheme } from '@mui/material/styles';
 import {
@@ -12,6 +13,7 @@ import {
   Divider,
   Typography,
   CardContent,
+  CircularProgress,
 } from '@mui/material';
 
 import Rooms from './inside-rooms';
@@ -24,8 +26,11 @@ import ServicesProvided from './servicesProvided';
 import { useAuthContext } from '../../../auth/hooks';
 import Adjustabledocument from './adjustabledocument';
 import ProcessingCustomizer from './ProcessingCustomizer';
+import { useAclGuard } from '../../../auth/guard/acl-guard';
 import { useLocales, useTranslate } from '../../../locales';
+import useSpecialityGuard from '../../../auth/guard/speciality-guard';
 import { SECTION_KEYS, useProcessingLayout } from './use-processing-layout';
+import { useSubscriptionGuard } from '../../../auth/guard/subscription-guard';
 import { useGetEmployeeAdjustabledocument } from '../../../api/adjustable_document';
 import {
   useGetPatient,
@@ -34,6 +39,10 @@ import {
   useGetUSServiceTypes,
   useGetOneEntranceManagement,
 } from '../../../api';
+
+// Lazy, so the odontogram and its condition tables never reach the bundle a
+// non-dental encounter downloads.
+const PatientDentalChart = lazy(() => import('../patients/dental-chart/patient-dental-chart'));
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
 
@@ -130,6 +139,27 @@ export default function Processing() {
 
   const { sections, toggle, reset, isVisible } = useProcessingLayout(user?._id);
 
+  // ─── Dental chart (dentists only) ──────────────────────────────────────────
+  // A dentist charts the patient they are treating without leaving the encounter.
+  // Every other specialty sees this page exactly as before.
+  const { isDentist } = useSpecialityGuard();
+  const checkAcl = useAclGuard();
+  const { hasFeature } = useSubscriptionGuard();
+
+  // The entrance already carries both ids the chart needs — the populated patient
+  // and the raw unit_service_patient — so no extra fetch is required.
+  // Note `Entrance` is `[]` before it loads, which is truthy: gate on the id.
+  const dentalPatient = useMemo(
+    () =>
+      Entrance?.patient?._id
+        ? { _id: Entrance.unit_service_patient, patient: Entrance.patient }
+        : null,
+    [Entrance?.patient, Entrance?.unit_service_patient]
+  );
+
+  const showDentalChart =
+    isDentist && !!dentalPatient && checkAcl('dental_chart:read') && hasFeature('dental_chart');
+
   const patientName = curLangAr
     ? Entrance?.patient?.name_arabic || Entrance?.patient?.name_english
     : Entrance?.patient?.name_english || Entrance?.patient?.name_arabic;
@@ -213,6 +243,19 @@ export default function Processing() {
             </Stack>
           </CardContent>
         </Card>
+
+        {/* ── Dental chart — dentists only; brings its own card and header ── */}
+        {showDentalChart && (
+          <Suspense
+            fallback={
+              <Box display="flex" justifyContent="center" py={6}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <PatientDentalChart patient={dentalPatient} />
+          </Suspense>
+        )}
 
         {/* ── Optional: Visits history ── */}
         {isVisible(SECTION_KEYS.VISITS_HISTORY) && medRecord?.length > 0 && (
