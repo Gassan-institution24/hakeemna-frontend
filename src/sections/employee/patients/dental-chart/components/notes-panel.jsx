@@ -6,6 +6,7 @@ import {
   Chip,
   Table,
   Stack,
+  Paper,
   Button,
   Dialog,
   Select,
@@ -32,6 +33,7 @@ import Iconify from 'src/components/iconify';
 
 import PanelCard from './panel-card';
 import { toNotation } from '../constants/numbering';
+import { idOf, splitByVisit } from '../constants/visit-scope';
 
 // ----------------------------------------------------------------------
 
@@ -198,59 +200,101 @@ ViewNoteDialog.propTypes = {
 
 // ----------------------------------------------------------------------
 
-// The table deliberately hides the note body to stay compact; this dialog is the
-// way to read every note end to end without opening them one by one.
-function AllNotesDialog({ open, onClose, notes, numbering, lang }) {
+// ----------------------------------------------------------------------
+
+// Notes from earlier appointments, newest visit first. One card per visit so a
+// past consultation reads as a whole rather than as loose lines.
+function NotesHistoryDialog({ open, onClose, groups, numbering, lang }) {
   const isAr = lang === 'ar';
+  const total = groups.reduce((sum, group) => sum + group.rows.length, 0);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ fontSize: '1rem' }}>
-        {isAr ? `كل الملاحظات (${notes.length})` : `All Notes (${notes.length})`}
+        {isAr ? 'ملاحظات سابقة' : 'Previous notes'}
       </DialogTitle>
-      <DialogContent dividers>
-        {notes.length === 0 ? (
-          <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-            {isAr ? 'لا توجد ملاحظات بعد.' : 'No notes added yet.'}
-          </Typography>
+
+      <DialogContent dividers sx={{ backgroundColor: 'background.neutral' }}>
+        {groups.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" sx={{ py: 6, gap: 1 }}>
+            <Iconify icon="solar:history-linear" width={32} sx={{ color: 'text.disabled' }} />
+            <Typography variant="body2" color="text.secondary">
+              {isAr ? 'لا توجد ملاحظات سابقة.' : 'No previous notes on record.'}
+            </Typography>
+          </Stack>
         ) : (
-          <Stack divider={<Divider flexItem />} gap={2} sx={{ py: 1 }}>
-            {notes.map((note) => (
-              <Box key={note._id}>
+          <Stack gap={2} sx={{ py: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+              {isAr
+                ? `${total} ملاحظة عبر ${groups.length} زيارة`
+                : `${total} notes across ${groups.length} visits`}
+            </Typography>
+
+            {groups.map((group) => (
+              <Paper
+                key={group.key}
+                variant="outlined"
+                sx={{ borderRadius: 1.5, overflow: 'hidden', backgroundColor: 'background.paper' }}
+              >
                 <Stack
                   direction="row"
                   alignItems="center"
+                  justifyContent="space-between"
                   flexWrap="wrap"
                   gap={1}
-                  sx={{ mb: 0.75 }}
+                  sx={{
+                    px: 2,
+                    py: 1.25,
+                    borderBottom: '1px solid',
+                    borderColor: 'divider',
+                    backgroundColor: 'background.neutral',
+                  }}
                 >
-                  <Typography variant="caption" color="text.secondary">
-                    {note.created_at ? fDateTime(note.created_at) : '—'}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    ·
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {authorName(note.created_by, isAr)}
-                  </Typography>
-                  {note.tooth_fdi ? (
-                    <Chip
-                      size="small"
-                      variant="outlined"
-                      color="primary"
-                      label={toNotation(note.tooth_fdi, numbering)}
-                      sx={{ height: 20, fontSize: '0.7rem' }}
-                    />
-                  ) : null}
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <Iconify icon="solar:calendar-bold" width={16} sx={{ color: 'primary.main' }} />
+                    <Typography variant="subtitle2">
+                      {group.date ? fDate(group.date, 'dd MMM yyyy') : '—'}
+                    </Typography>
+                  </Stack>
+                  <Chip
+                    size="small"
+                    variant="outlined"
+                    label={`${group.rows.length} ${isAr ? 'ملاحظة' : 'notes'}`}
+                  />
                 </Stack>
-                <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
-                  {note.text}
-                </Typography>
-              </Box>
+
+                <Stack divider={<Divider flexItem />} gap={1.5} sx={{ p: 2 }}>
+                  {group.rows.map((note) => (
+                    <Box key={note._id}>
+                      <Stack direction="row" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 0.5 }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {note.created_at ? fDateTime(note.created_at) : '—'}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          · {authorName(note.created_by, isAr)}
+                        </Typography>
+                        {note.tooth_fdi ? (
+                          <Chip
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            label={toNotation(note.tooth_fdi, numbering)}
+                            sx={{ height: 20, fontSize: '0.7rem' }}
+                          />
+                        ) : null}
+                      </Stack>
+                      <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
+                        {note.text}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              </Paper>
             ))}
           </Stack>
         )}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose} size="small">
           {isAr ? 'إغلاق' : 'Close'}
@@ -260,50 +304,73 @@ function AllNotesDialog({ open, onClose, notes, numbering, lang }) {
   );
 }
 
-AllNotesDialog.propTypes = {
+NotesHistoryDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  notes: PropTypes.array,
+  groups: PropTypes.array,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };
 
 // ----------------------------------------------------------------------
 
-export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numbering, lang }) {
+export default function NotesPanel({
+  notes,
+  teeth,
+  onAddNote,
+  onDeleteNote,
+  visit,
+  numbering,
+  lang,
+}) {
   const isAr = lang === 'ar';
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewNote, setViewNote] = useState(null);
-  const [allOpen, setAllOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
-  const rows = [...(notes || [])].sort(
+  const sorted = [...(notes || [])].sort(
     (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)
   );
+
+  // In an appointment the panel shows only that appointment's notes; earlier
+  // ones move behind the history button. Standalone, this returns everything.
+  const { current: rows, history: historyGroups } = splitByVisit(
+    sorted.map((note) => ({ ...note, visitId: idOf(note.visit), date: note.created_at })),
+    visit?.id
+  );
+
+  const inVisit = Boolean(visit?.id);
+  const visitTitle = isAr ? 'ملاحظات هذا الموعد' : "This appointment's notes";
+  const plainTitle = isAr ? 'الملاحظات' : 'Notes';
+  const panelTitle = inVisit ? visitTitle : plainTitle;
 
   return (
     <PanelCard
       icon="solar:notes-bold"
-      title={`${isAr ? 'الملاحظات' : 'Notes'} (${rows.length})`}
+      title={`${panelTitle} (${rows.length})`}
       action={
         <Stack direction="row" spacing={1}>
-          <Button
-            size="small"
-            variant="outlined"
-            startIcon={<Iconify icon="solar:list-bold" width={16} />}
-            onClick={() => setAllOpen(true)}
-            disabled={rows.length === 0}
-          >
-            {isAr ? 'عرض الكل' : 'Show all'}
-          </Button>
-          <Button
-            size="small"
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" width={16} />}
-            onClick={() => setDialogOpen(true)}
-            disabled={!onAddNote}
-          >
-            {isAr ? 'إضافة' : 'Add Note'}
-          </Button>
+          {inVisit && (
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<Iconify icon="solar:history-bold" width={16} />}
+              onClick={() => setHistoryOpen(true)}
+              disabled={historyGroups.length === 0}
+            >
+              {isAr ? 'عرض السجل السابق' : 'Show old history'}
+            </Button>
+          )}
+          {onAddNote && (
+            <Button
+              size="small"
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" width={16} />}
+              onClick={() => setDialogOpen(true)}
+            >
+              {isAr ? 'إضافة' : 'Add Note'}
+            </Button>
+          )}
         </Stack>
       }
     >
@@ -376,10 +443,10 @@ export default function NotesPanel({ notes, teeth, onAddNote, onDeleteNote, numb
         lang={lang}
       />
 
-      <AllNotesDialog
-        open={allOpen}
-        onClose={() => setAllOpen(false)}
-        notes={rows}
+      <NotesHistoryDialog
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        groups={historyGroups}
         numbering={numbering}
         lang={lang}
       />
@@ -392,6 +459,8 @@ NotesPanel.propTypes = {
   teeth: PropTypes.arrayOf(PropTypes.number),
   onAddNote: PropTypes.func,
   onDeleteNote: PropTypes.func,
+  // The appointment being treated; its presence scopes the panel to that visit.
+  visit: PropTypes.object,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };

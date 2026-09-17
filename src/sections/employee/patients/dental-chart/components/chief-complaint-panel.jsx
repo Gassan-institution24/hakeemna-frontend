@@ -219,15 +219,16 @@ export default function ChiefComplaintPanel({
       icon="solar:chat-square-like-bold"
       title={`${isAr ? 'الشكوى الرئيسية' : 'Chief Complaint'} (${entries.length})`}
       action={
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" width={16} />}
-          onClick={() => setDialogOpen(true)}
-          disabled={!onAddComplaint}
-        >
-          {isAr ? 'إضافة' : 'Add'}
-        </Button>
+        onAddComplaint ? (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" width={16} />}
+            onClick={() => setDialogOpen(true)}
+          >
+            {isAr ? 'إضافة' : 'Add'}
+          </Button>
+        ) : null
       }
     >
       {entries.length === 0 ? (

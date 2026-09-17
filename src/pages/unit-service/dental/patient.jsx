@@ -13,7 +13,7 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import PatientDentalChart from 'src/sections/employee/patients/dental-chart/patient-dental-chart';
+import PatientDentalSummary from 'src/sections/employee/patients/dental-chart/patient-dental-summary';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ export default function DentalPatientPage() {
         />
 
         <ACLGuard permission="dental_chart:read">
-          {usPatientData?._id && <PatientDentalChart patient={usPatientData} />}
+          {usPatientData?._id && <PatientDentalSummary patient={usPatientData} />}
         </ACLGuard>
       </Container>
     </>

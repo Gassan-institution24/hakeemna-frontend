@@ -6,7 +6,13 @@ import {
   Box,
   Chip,
   Stack,
+  Paper,
+  Dialog,
   Button,
+  Divider,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
   Tooltip,
   Typography,
   IconButton,
@@ -20,6 +26,7 @@ import Iconify from 'src/components/iconify';
 import PanelCard from './panel-card';
 import XrayViewerDialog from './xray-viewer-dialog';
 import { toNotation } from '../constants/numbering';
+import { idOf, splitByVisit } from '../constants/visit-scope';
 
 // ----------------------------------------------------------------------
 
@@ -212,25 +219,159 @@ PhaseColumn.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function XrayPanel({ xrays, onUploadXray, onDeleteXray, numbering, lang }) {
+// Radiographs from earlier appointments, newest visit first. Rows stay compact
+// and load no pixels until one is opened — same contract as the panel itself.
+function XrayHistoryDialog({ open, onClose, groups, onOpenXray, numbering, lang }) {
+  const isAr = lang === 'ar';
+  const total = groups.reduce((sum, group) => sum + group.rows.length, 0);
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle sx={{ fontSize: '1rem' }}>
+        {isAr ? 'أشعة سابقة' : 'Previous x-rays'}
+      </DialogTitle>
+
+      <DialogContent dividers sx={{ backgroundColor: 'background.neutral' }}>
+        {groups.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" sx={{ py: 6, gap: 1 }}>
+            <Iconify icon="solar:history-linear" width={32} sx={{ color: 'text.disabled' }} />
+            <Typography variant="body2" color="text.secondary">
+              {isAr ? 'لا توجد أشعة سابقة.' : 'No previous x-rays on record.'}
+            </Typography>
+          </Stack>
+        ) : (
+          <Stack gap={2} sx={{ py: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+              {isAr
+                ? `${total} صورة عبر ${groups.length} زيارة`
+                : `${total} images across ${groups.length} visits`}
+            </Typography>
+
+            {groups.map((group) => (
+              <Paper
+                key={group.key}
+                variant="outlined"
+                sx={{ borderRadius: 1.5, overflow: 'hidden', backgroundColor: 'background.paper' }}
+              >
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  flexWrap="wrap"
+                  gap={1}
+                  sx={{
+                    px: 2,
+                    py: 1.25,
+                    borderBottom: '1px solid',
+                    borderColor: 'divider',
+                    backgroundColor: 'background.neutral',
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <Iconify icon="solar:calendar-bold" width={16} sx={{ color: 'primary.main' }} />
+                    <Typography variant="subtitle2">
+                      {group.date ? fDate(group.date, 'dd MMM yyyy') : '—'}
+                    </Typography>
+                  </Stack>
+                  <Chip
+                    size="small"
+                    variant="outlined"
+                    label={`${group.rows.length} ${isAr ? 'صورة' : 'images'}`}
+                  />
+                </Stack>
+
+                <Stack divider={<Divider flexItem />} sx={{ p: 1 }}>
+                  {group.rows.map((xray) => (
+                    <XrayRow
+                      key={xray._id}
+                      xray={xray}
+                      onOpen={onOpenXray}
+                      numbering={numbering}
+                      lang={lang}
+                    />
+                  ))}
+                </Stack>
+              </Paper>
+            ))}
+          </Stack>
+        )}
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onClose} size="small">
+          {isAr ? 'إغلاق' : 'Close'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+XrayHistoryDialog.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  groups: PropTypes.array,
+  onOpenXray: PropTypes.func.isRequired,
+  numbering: PropTypes.string,
+  lang: PropTypes.string,
+};
+
+// ----------------------------------------------------------------------
+
+export default function XrayPanel({
+  xrays,
+  onUploadXray,
+  onDeleteXray,
+  visit,
+  numbering,
+  lang,
+}) {
   const isAr = lang === 'ar';
   const [viewing, setViewing] = useState(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
-  // Newest first within each phase, so the latest film is the first tile.
-  const byPhase = useMemo(() => {
+  // In an appointment the panel shows only that appointment's films; everything
+  // earlier moves behind the history button. Standalone, `current` is the lot.
+  const { current, history: historyGroups } = useMemo(() => {
     const sorted = [...(xrays || [])].sort(
       (a, b) => new Date(b.taken_at || 0) - new Date(a.taken_at || 0)
     );
-    return {
-      before: sorted.filter((x) => x.phase === 'before'),
-      after: sorted.filter((x) => x.phase === 'after'),
-    };
-  }, [xrays]);
+    return splitByVisit(
+      sorted.map((xray) => ({ ...xray, visitId: idOf(xray.visit), date: xray.taken_at })),
+      visit?.id
+    );
+  }, [xrays, visit?.id]);
+
+  // Newest first within each phase, so the latest film is the first row.
+  const byPhase = useMemo(
+    () => ({
+      before: current.filter((x) => x.phase === 'before'),
+      after: current.filter((x) => x.phase === 'after'),
+    }),
+    [current]
+  );
+
+  const inVisit = Boolean(visit?.id);
+  const visitTitle = isAr ? 'أشعة هذا الموعد' : "This appointment's x-rays";
+  const plainTitle = isAr ? 'الأشعة' : 'X-Ray';
+  const panelTitle = inVisit ? visitTitle : plainTitle;
 
   return (
     <PanelCard
       icon="healthicons:x-ray-outline"
-      title={`${isAr ? 'الأشعة' : 'X-Ray'} (${(xrays || []).length})`}
+      title={`${panelTitle} (${current.length})`}
+      action={
+        inVisit ? (
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<Iconify icon="solar:history-bold" width={16} />}
+            onClick={() => setHistoryOpen(true)}
+            disabled={historyGroups.length === 0}
+          >
+            {isAr ? 'عرض السجل السابق' : 'Show old history'}
+          </Button>
+        ) : null
+      }
     >
       <Stack direction={{ xs: 'column', md: 'row' }} gap={2} alignItems="stretch">
         {PHASES.map((phase) => (
@@ -254,6 +395,15 @@ export default function XrayPanel({ xrays, onUploadXray, onDeleteXray, numbering
         numbering={numbering}
         lang={lang}
       />
+
+      <XrayHistoryDialog
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        groups={historyGroups}
+        onOpenXray={setViewing}
+        numbering={numbering}
+        lang={lang}
+      />
     </PanelCard>
   );
 }
@@ -262,6 +412,8 @@ XrayPanel.propTypes = {
   xrays: PropTypes.array,
   onUploadXray: PropTypes.func,
   onDeleteXray: PropTypes.func,
+  // The appointment being treated; its presence scopes the panel to that visit.
+  visit: PropTypes.object,
   numbering: PropTypes.string,
   lang: PropTypes.string,
 };

@@ -109,13 +109,16 @@ export async function deleteChiefComplaint(patientId, complaintId) {
 
 // `files` is a FileList / File[]; everything travels as multipart so DICOM and
 // plain images share one upload path.
-export async function uploadXrays(patientId, { phase, files, toothFdi, notes, takenAt }) {
+export async function uploadXrays(patientId, { phase, files, toothFdi, notes, takenAt, visit, appointment }) {
   const formData = new FormData();
   Array.from(files).forEach((file) => formData.append('file', file));
   formData.append('phase', phase);
   if (toothFdi) formData.append('tooth_fdi', toothFdi);
   if (notes) formData.append('notes', notes);
   if (takenAt) formData.append('taken_at', takenAt);
+  // Scopes the image to the appointment it was taken in.
+  if (visit) formData.append('visit', visit);
+  if (appointment) formData.append('appointment', appointment);
 
   const res = await axiosInstance.post(endpoints.dentalChart.xray(patientId), formData, {
     headers: { 'Content-Type': 'multipart/form-data' },

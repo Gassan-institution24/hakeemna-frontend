@@ -272,6 +272,7 @@ export default function OdontogramView({
   onAddProcedure,
   onDeleteProcedure,
   unitServiceId,
+  visit,
   onAddChiefComplaint,
   onDeleteChiefComplaint,
   onUploadXray,
@@ -796,6 +797,7 @@ export default function OdontogramView({
           onAddProcedure={handleAddProcedure}
           onDeleteProcedure={handleDeleteProcedure}
           unitServiceId={unitServiceId}
+          visit={visit}
           numbering={numbering}
           lang={lang}
         />
@@ -807,6 +809,7 @@ export default function OdontogramView({
           teeth={allTeeth}
           onAddNote={onAddNote}
           onDeleteNote={onDeleteNote}
+          visit={visit}
           numbering={numbering}
           lang={lang}
         />
@@ -818,6 +821,7 @@ export default function OdontogramView({
           xrays={chartData?.xrays}
           onUploadXray={handleUploadXray}
           onDeleteXray={handleDeleteXray}
+          visit={visit}
           numbering={numbering}
           lang={lang}
         />
@@ -852,6 +856,7 @@ OdontogramView.propTypes = {
   onAddProcedure: PropTypes.func,
   onDeleteProcedure: PropTypes.func,
   unitServiceId: PropTypes.string,
+  visit: PropTypes.object,
   onAddChiefComplaint: PropTypes.func,
   onDeleteChiefComplaint: PropTypes.func,
   onUploadXray: PropTypes.func,

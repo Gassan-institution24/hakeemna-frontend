@@ -1,5 +1,5 @@
 import ar from 'date-fns/locale/ar-SA';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
 import { Typography } from '@mui/material';
@@ -11,6 +11,34 @@ import { useAuthContext } from 'src/auth/hooks';
 // eslint-disable-next-line
 const { currentLang } = useLocales();
 const curLangAr = currentLang.value === 'ar';
+
+// ── Time zone ─────────────────────────────────────────────────────────────────
+//
+// Times render as a bare clock — no zone suffix.
+//
+// They are still rendered *in* a zone: the clinic's country when the app has
+// registered one, so staff read clinic times wherever they are sitting, and the
+// viewer's own browser zone otherwise. The registry exists because these are
+// plain functions called from hundreds of places and cannot read React context.
+let appTimeZone = null;
+
+export function setAppTimeZone(timeZone) {
+  appTimeZone = timeZone || null;
+}
+
+export function browserTimeZone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch (error) {
+    return 'UTC';
+  }
+}
+
+export function resolveTimeZone() {
+  return appTimeZone || browserTimeZone();
+}
+
+// ----------------------------------------------------------------------
 
 export const useUnitTime = () => {
   // const { t } = useTranslate();
@@ -41,20 +69,20 @@ export function useFDateTimeUnit() {
 
   const fDateUnit = (date, newFormat = 'dd MMMMMMMM yyyy') => {
     if (!date) return '';
-    const utcDate = zonedTimeToUtc(new Date(date), timeZone);
-    const unitDate = utcToZonedTime(utcDate, timeZone);
+    // The clinic's calendar day, which near midnight is not the viewer's.
+    const unitDate = utcToZonedTime(new Date(date), timeZone);
     return isValid(unitDate) ? format(unitDate, newFormat) : '';
   };
 
-  const fTimeUnit = (date, newFormat = 'p', hideTimezone = false) => {
+  const fTimeUnit = (date, newFormat = 'p') => {
     if (!date) return '';
-    const utcDate = zonedTimeToUtc(new Date(date), timeZone);
-    const unitDate = utcToZonedTime(utcDate, timeZone);
-    let formatted = format(unitDate, newFormat);
-    if (!hideTimezone) {
-      formatted += ` (${timeZone})`;
-    }
-    return formatted;
+    const dateObj = new Date(date);
+    if (!isValid(dateObj)) return '';
+
+    // The clinic's wall clock. This used to round-trip through zonedTimeToUtc,
+    // which cancelled itself out and printed the viewer's own clock instead.
+    const unitDate = utcToZonedTime(dateObj, timeZone);
+    return format(unitDate, newFormat);
   };
 
   return {
@@ -92,24 +120,16 @@ export function fTimeText(date, newFormat, arabic) {
   return `${relativeTime}`;
 }
 
-export function fDateTime(date, newFormat, hideTimezone = false) {
+export function fDateTime(date, newFormat) {
   const fm = newFormat || 'dd MMMMMMMM yyyy p';
 
   if (!date) return '';
 
   const dateObj = new Date(date);
-  let formattedDate = format(dateObj, fm, curLangAr ? { locale: ar } : null);
+  if (!isValid(dateObj)) return '';
 
-  if (!hideTimezone) {
-    const timezone =
-      dateObj.toString().match(/\(([^)]+)\)/)?.[1] ||
-      Intl.DateTimeFormat().resolvedOptions().timeZone ||
-      'UTC';
-
-    formattedDate += ` (${timezone})`;
-  }
-
-  return formattedDate;
+  const zoned = utcToZonedTime(dateObj, resolveTimeZone());
+  return format(zoned, fm, curLangAr ? { locale: ar } : null);
 }
 export function fDateAndTime(date, newFormat) {
   const fm = newFormat || 'dd MMMMMMMM yyyy';
@@ -117,22 +137,14 @@ export function fDateAndTime(date, newFormat) {
   return date ? format(new Date(date), fm, curLangAr ? { locale: ar } : null) : '';
 }
 
-export function fTime(date, newFormat, hideTimezone = false) {
+export function fTime(date, newFormat) {
   if (!date) return '';
   const fm = newFormat || 'p';
   const dateObj = new Date(date);
-  let formattedDate = format(dateObj, fm, curLangAr ? { locale: ar } : null);
+  if (!isValid(dateObj)) return '';
 
-  if (!hideTimezone) {
-    const timezone =
-      dateObj.toString().match(/\(([^)]+)\)/)?.[1] ||
-      Intl.DateTimeFormat().resolvedOptions().timeZone ||
-      'UTC';
-
-    formattedDate += ` (${timezone})`;
-  }
-
-  return formattedDate;
+  const zoned = utcToZonedTime(dateObj, resolveTimeZone());
+  return format(zoned, fm, curLangAr ? { locale: ar } : null);
 }
 export function fDm(date, newFormat) {
   const fm = newFormat || 'dd MMM';
