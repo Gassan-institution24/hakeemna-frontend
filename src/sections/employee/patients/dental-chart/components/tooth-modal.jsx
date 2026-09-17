@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import {
   Box,
   Grid,
@@ -14,7 +15,9 @@ import {
   Dialog,
   Select,
   Divider,
+  Tooltip,
   MenuItem,
+  TextField,
   InputLabel,
   Typography,
   IconButton,
@@ -25,6 +28,8 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+import { createDentalDiagnosis } from 'src/api/dental_diagnoses';
+
 import {
   CONDITIONS,
   getConditionColor,
@@ -32,8 +37,23 @@ import {
   getConditionsByKind,
 } from '../constants/conditions';
 
-const TOOTH_DIAGNOSES = getConditionsByKind('diagnosis', { toothLevel: true });
+// Procedures are a fixed catalogue, so they can be resolved once at module load.
+// Diagnoses cannot: the clinic's own entries arrive at runtime, so that list is
+// rebuilt inside the component whenever they change.
 const TOOTH_PROCEDURES = getConditionsByKind('procedure', { toothLevel: true });
+
+// Palette offered when defining a diagnosis, drawn from the colours the built-in
+// conditions already use so a custom entry does not look foreign on the chart.
+const CUSTOM_COLORS = [
+  { color: '#ECEFF1', stroke: '#90A4AE' },
+  { color: '#FFCDD2', stroke: '#E53935' },
+  { color: '#FFE0B2', stroke: '#FB8C00' },
+  { color: '#FFF9C4', stroke: '#FDD835' },
+  { color: '#C8E6C9', stroke: '#43A047' },
+  { color: '#B3E5FC', stroke: '#039BE5' },
+  { color: '#D1C4E9', stroke: '#8E24AA' },
+  { color: '#F8BBD0', stroke: '#D81B60' },
+];
 
 const SURFACES = ['occlusal', 'mesial', 'distal', 'buccal', 'lingual'];
 
@@ -57,6 +77,137 @@ ColorSwatch.propTypes = {
   size: PropTypes.number,
 };
 
+// ----------------------------------------------------------------------
+
+// Defines a diagnosis the built-in catalogue does not cover. It is saved against
+// the clinic, not this patient, so it is on the list for every chart afterwards.
+function AddDiagnosisDialog({ open, onClose, onCreated, unitServiceId, lang }) {
+  const isAr = lang === 'ar';
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [label, setLabel] = useState('');
+  const [labelAr, setLabelAr] = useState('');
+  const [paletteIndex, setPaletteIndex] = useState(0);
+  const [saving, setSaving] = useState(false);
+
+  const reset = () => {
+    setLabel('');
+    setLabelAr('');
+    setPaletteIndex(0);
+  };
+
+  const handleClose = () => {
+    if (saving) return;
+    reset();
+    onClose();
+  };
+
+  const handleSubmit = async () => {
+    if (!label.trim()) return;
+    setSaving(true);
+    try {
+      const created = await createDentalDiagnosis(unitServiceId, {
+        label: label.trim(),
+        label_arabic: labelAr.trim(),
+        color: CUSTOM_COLORS[paletteIndex].color,
+        stroke: CUSTOM_COLORS[paletteIndex].stroke,
+      });
+      enqueueSnackbar(isAr ? 'تمت إضافة التشخيص' : 'Diagnosis added', { variant: 'success' });
+      reset();
+      onCreated(created);
+      onClose();
+    } catch (err) {
+      enqueueSnackbar(err?.message || (isAr ? 'فشل الحفظ' : 'Error saving'), { variant: 'error' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
+      <DialogTitle sx={{ fontSize: '1rem' }}>
+        {isAr ? 'إضافة تشخيص جديد' : 'Add New Diagnosis'}
+      </DialogTitle>
+      <DialogContent>
+        <Stack gap={2} sx={{ mt: 1 }}>
+          <TextField
+            autoFocus
+            fullWidth
+            size="small"
+            label={isAr ? 'الاسم (بالإنجليزية)' : 'Name (English)'}
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+          />
+
+          <TextField
+            fullWidth
+            size="small"
+            label={isAr ? 'الاسم (بالعربية)' : 'Name (Arabic)'}
+            value={labelAr}
+            onChange={(e) => setLabelAr(e.target.value)}
+          />
+
+          <Box>
+            <Typography variant="caption" color="text.secondary">
+              {isAr ? 'لون المخطط' : 'Chart colour'}
+            </Typography>
+            <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 0.75 }}>
+              {CUSTOM_COLORS.map((c, i) => (
+                <Box
+                  key={c.color}
+                  component="button"
+                  type="button"
+                  onClick={() => setPaletteIndex(i)}
+                  aria-label={c.color}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    p: 0,
+                    cursor: 'pointer',
+                    borderRadius: 1,
+                    backgroundColor: c.color,
+                    border: '2px solid',
+                    borderColor: i === paletteIndex ? 'primary.main' : c.stroke,
+                    outline: i === paletteIndex ? '2px solid' : 'none',
+                    outlineColor: 'primary.light',
+                  }}
+                />
+              ))}
+            </Stack>
+          </Box>
+
+          <Typography variant="caption" color="text.secondary">
+            {isAr
+              ? 'سيكون هذا التشخيص متاحاً لكل مرضى العيادة.'
+              : 'This diagnosis becomes available for every patient in the clinic.'}
+          </Typography>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} size="small" disabled={saving}>
+          {isAr ? 'إلغاء' : 'Cancel'}
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={handleSubmit}
+          disabled={saving || !label.trim()}
+        >
+          {isAr ? 'حفظ' : 'Save'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+AddDiagnosisDialog.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onCreated: PropTypes.func.isRequired,
+  unitServiceId: PropTypes.string,
+  lang: PropTypes.string,
+};
+
 export default function ToothModal({
   open,
   fdiNumber,
@@ -67,8 +218,20 @@ export default function ToothModal({
   onClose,
   onSaveTooth,
   onRemoveBridge,
+  unitServiceId,
+  customDiagnoses,
 }) {
   const isAr = lang === 'ar';
+
+  // Rebuilt whenever the clinic's catalogue changes, so a diagnosis added from
+  // the button below appears in this list without reopening the dialog.
+  const toothDiagnoses = useMemo(
+    () => getConditionsByKind('diagnosis', { toothLevel: true }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [customDiagnoses]
+  );
+
+  const [addDiagnosisOpen, setAddDiagnosisOpen] = useState(false);
 
   // ── Tooth info state ──────────────────────────────────────────────────────
   const [wholeDiagnosis, setWholeDiagnosis] = useState('');
@@ -213,28 +376,47 @@ export default function ToothModal({
 
           {/* Whole-tooth diagnosis */}
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ fontSize: '0.8rem' }}>
-                {isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
-              </InputLabel>
-              <Select
-                value={wholeDiagnosis}
-                label={isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
-                onChange={(e) => setWholeDiagnosis(e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>{isAr ? 'لا شيء' : 'None'}</em>
-                </MenuItem>
-                {TOOTH_DIAGNOSES.map((c) => (
-                  <MenuItem key={c.id} value={c.id}>
-                    <Stack direction="row" alignItems="center" gap={1}>
-                      <ColorSwatch color={c.color} stroke={c.stroke} />
-                      <span>{isAr ? c.labelAr : c.label}</span>
-                    </Stack>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <FormControl fullWidth size="small">
+                <InputLabel sx={{ fontSize: '0.8rem' }}>
+                  {isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
+                </InputLabel>
+                <Select
+                  value={wholeDiagnosis}
+                  label={isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
+                  onChange={(e) => setWholeDiagnosis(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>{isAr ? 'لا شيء' : 'None'}</em>
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {toothDiagnoses.map((c) => (
+                    <MenuItem key={c.id} value={c.id}>
+                      <Stack direction="row" alignItems="center" gap={1}>
+                        <ColorSwatch color={c.color} stroke={c.stroke} />
+                        <span>{isAr ? c.labelAr : c.label}</span>
+                      </Stack>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {/* Define a diagnosis the catalogue is missing, without leaving
+                  the tooth being charted. */}
+              <Tooltip title={isAr ? 'إضافة تشخيص جديد' : 'Add a new diagnosis'}>
+                <span>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<AddIcon fontSize="small" />}
+                    onClick={() => setAddDiagnosisOpen(true)}
+                    disabled={!unitServiceId}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    {isAr ? 'جديد' : 'Add new'}
+                  </Button>
+                </span>
+              </Tooltip>
+            </Stack>
           </Grid>
 
           {/* Whole-tooth procedure / restoration */}
@@ -343,6 +525,15 @@ export default function ToothModal({
           {isAr ? 'حفظ' : 'Save'}
         </Button>
       </DialogActions>
+
+      <AddDiagnosisDialog
+        open={addDiagnosisOpen}
+        onClose={() => setAddDiagnosisOpen(false)}
+        // Select it straight away — the dentist opened this to chart it now.
+        onCreated={(created) => created?.key && setWholeDiagnosis(created.key)}
+        unitServiceId={unitServiceId}
+        lang={lang}
+      />
     </Dialog>
   );
 }
@@ -357,6 +548,8 @@ ToothModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSaveTooth: PropTypes.func.isRequired,
   onRemoveBridge: PropTypes.func,
+  unitServiceId: PropTypes.string,
+  customDiagnoses: PropTypes.array,
 };
 
 ToothModal.defaultProps = {

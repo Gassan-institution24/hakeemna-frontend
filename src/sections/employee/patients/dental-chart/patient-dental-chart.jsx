@@ -25,20 +25,20 @@ import {
   switchChartType,
   useGetDentalChart,
   addChiefComplaint,
-  setProcedurePayment,
   deleteChiefComplaint,
 } from '../../../../api/dental_chart';
 
 // ----------------------------------------------------------------------
 
-export default function PatientDentalChart({ patient }) {
+export default function PatientDentalChart({ patient, visit, onBillService }) {
   const patientId = patient?.patient?._id || patient?._id;
   const { currentLang } = useLocales();
   const lang = currentLang?.value === 'ar' ? 'ar' : 'en';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 
-  const unitServiceId = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id;
+  const unitServiceId =
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id;
 
   const formatToothPayloadDescription = useCallback((payload) => {
     const segments = [];
@@ -67,20 +67,20 @@ export default function PatientDentalChart({ patient }) {
     return segments.length > 0 ? segments.join('; ') : 'details changed';
   }, []);
 
-  const formatBulkSaveDescription = useCallback((updates) => {
-    const count = updates.length;
-    const preview = updates
-      .slice(0, 3)
-      .map(
-        (tooth) =>
-          `tooth ${tooth.fdi_number}: ${formatToothPayloadDescription(tooth)}`
-      )
-      .join(' | ');
+  const formatBulkSaveDescription = useCallback(
+    (updates) => {
+      const count = updates.length;
+      const preview = updates
+        .slice(0, 3)
+        .map((tooth) => `tooth ${tooth.fdi_number}: ${formatToothPayloadDescription(tooth)}`)
+        .join(' | ');
 
-    return count > 3
-      ? `Saved dental chart for ${count} teeth: ${preview} + ${count - 3} more.`
-      : `Saved dental chart for ${count} teeth: ${preview}`;
-  }, [formatToothPayloadDescription]);
+      return count > 3
+        ? `Saved dental chart for ${count} teeth: ${preview} + ${count - 3} more.`
+        : `Saved dental chart for ${count} teeth: ${preview}`;
+    },
+    [formatToothPayloadDescription]
+  );
 
   const createPatientFileRecord = useCallback(
     async (description) => {
@@ -144,19 +144,43 @@ export default function PatientDentalChart({ patient }) {
     [patientId, createPatientFileRecord, formatToothPayloadDescription]
   );
 
+  // Every line added during an appointment carries that visit and its date, so
+  // the panel can show one plan per visit rather than a scatter of records.
   const handleAddProcedure = useCallback(
     async (fdiNumber, payload) => {
       if (!patientId) return;
-      await addProcedure(patientId, fdiNumber, payload);
+      const stamped = visit
+        ? {
+            ...payload,
+            visit: visit.id,
+            appointment: visit.appointmentId || undefined,
+            date_performed: visit.date || payload.date_performed,
+          }
+        : payload;
+
+      await addProcedure(patientId, fdiNumber, stamped);
+
+      // A priced catalogue service joins the visit's billable services, so the
+      // invoice picks up its price without anyone re-entering it.
+      if (stamped.service_type && onBillService) {
+        try {
+          await onBillService(stamped.service_type);
+        } catch (err) {
+          console.error('billing dental service failed:', err);
+          enqueueSnackbar('Treatment saved, but adding it to the invoice failed', {
+            variant: 'warning',
+          });
+        }
+      }
+
       const description = payload.description || payload.description_arabic || 'Added procedure';
       const statusPart = payload.status ? `status ${payload.status}` : '';
-      const costPart = payload.cost !== undefined && payload.cost !== null ? `cost ${payload.cost}` : '';
+      const costPart =
+        payload.cost !== undefined && payload.cost !== null ? `cost ${payload.cost}` : '';
       const details = [description, statusPart, costPart].filter(Boolean).join(' | ');
-      await createPatientFileRecord(
-        `Added dental procedure to tooth ${fdiNumber}: ${details}.`
-      );
+      await createPatientFileRecord(`Added dental procedure to tooth ${fdiNumber}: ${details}.`);
     },
-    [patientId, createPatientFileRecord]
+    [patientId, createPatientFileRecord, visit, onBillService, enqueueSnackbar]
   );
 
   const handleDeleteProcedure = useCallback(
@@ -164,17 +188,6 @@ export default function PatientDentalChart({ patient }) {
       if (!patientId) return;
       await deleteProcedure(patientId, fdiNumber, procId);
       await createPatientFileRecord(`Deleted dental procedure ${procId} from tooth ${fdiNumber}.`);
-    },
-    [patientId, createPatientFileRecord]
-  );
-
-  const handleSetProcedurePayment = useCallback(
-    async (fdiNumber, procId, paymentStatus) => {
-      if (!patientId) return;
-      await setProcedurePayment(patientId, fdiNumber, procId, paymentStatus);
-      await createPatientFileRecord(
-        `Marked dental procedure ${procId} on tooth ${fdiNumber} as ${paymentStatus}.`
-      );
     },
     [patientId, createPatientFileRecord]
   );
@@ -200,12 +213,18 @@ export default function PatientDentalChart({ patient }) {
   const handleUploadXray = useCallback(
     async (phase, files) => {
       if (!patientId) return;
-      await uploadXrays(patientId, { phase, files });
+      await uploadXrays(patientId, {
+        phase,
+        files,
+        // Same scoping as notes: this appointment's images stay with it.
+        visit: visit?.id,
+        appointment: visit?.appointmentId,
+      });
       await createPatientFileRecord(
         `Uploaded ${files.length} dental x-ray file(s) — ${phase} treatment.`
       );
     },
-    [patientId, createPatientFileRecord]
+    [patientId, createPatientFileRecord, visit]
   );
 
   const handleDeleteXray = useCallback(
@@ -219,11 +238,12 @@ export default function PatientDentalChart({ patient }) {
   const handleAddNote = useCallback(
     async (payload) => {
       if (!patientId) return;
-      await addNote(patientId, payload);
+      // Stamped with the appointment, so the encounter lists only its own notes.
+      await addNote(patientId, visit ? { ...payload, visit: visit.id, appointment: visit.appointmentId || undefined } : payload);
       const scope = payload.tooth_fdi ? `tooth ${payload.tooth_fdi}` : 'chart';
       await createPatientFileRecord(`Added dental note (${scope}): ${payload.text}`);
     },
-    [patientId, createPatientFileRecord]
+    [patientId, createPatientFileRecord, visit]
   );
 
   const handleDeleteNote = useCallback(
@@ -295,7 +315,8 @@ export default function PatientDentalChart({ patient }) {
       onSaveTooth={handleSaveTooth}
       onAddProcedure={handleAddProcedure}
       onDeleteProcedure={handleDeleteProcedure}
-      onSetProcedurePayment={handleSetProcedurePayment}
+      unitServiceId={unitServiceId}
+      visit={visit}
       onAddChiefComplaint={handleAddChiefComplaint}
       onDeleteChiefComplaint={handleDeleteChiefComplaint}
       onUploadXray={handleUploadXray}
@@ -312,4 +333,8 @@ export default function PatientDentalChart({ patient }) {
 
 PatientDentalChart.propTypes = {
   patient: PropTypes.object,
+
+  // The appointment being treated, when the chart is opened from an encounter.
+  visit: PropTypes.object,
+  onBillService: PropTypes.func,
 };

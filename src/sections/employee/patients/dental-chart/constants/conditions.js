@@ -289,8 +289,39 @@ export const CONDITION_GROUPS = [
   { id: 'surgical', label: 'Surgical / Ortho', labelAr: 'جراحي / تقويم' },
 ];
 
+// ── Clinic-defined diagnoses ───────────────────────────────────────────────────
+// The list above is fixed; a clinic can add its own diagnoses from the tooth
+// dialog. Those are loaded at runtime and registered here so that every
+// getCondition-based lookup — crown colour, surface stroke, treatment-plan label
+// — resolves them exactly like a built-in, without the tooth components needing
+// to know they exist. The registry is module-level because those components read
+// the catalogue directly rather than through props.
+let CUSTOM_CONDITIONS = [];
+
+export const CUSTOM_PREFIX = 'custom:';
+
+export const isCustomCondition = (id) => String(id || '').startsWith(CUSTOM_PREFIX);
+
+// Maps the API shape onto the shape the chart already understands.
+export const setCustomConditions = (list) => {
+  CUSTOM_CONDITIONS = (Array.isArray(list) ? list : []).map((d) => ({
+    id: d.key,
+    label: d.label,
+    labelAr: d.label_arabic || d.label,
+    color: d.color || '#ECEFF1',
+    stroke: d.stroke || '#90A4AE',
+    kind: 'diagnosis',
+    toothLevel: true,
+    custom: true,
+    _id: d._id,
+  }));
+};
+
+export const getCustomConditions = () => CUSTOM_CONDITIONS;
+
 // ── Lookups ────────────────────────────────────────────────────────────────────
-export const getCondition = (id) => CONDITIONS.find((c) => c.id === id) || null;
+export const getCondition = (id) =>
+  CONDITIONS.find((c) => c.id === id) || CUSTOM_CONDITIONS.find((c) => c.id === id) || null;
 
 export const getConditionColor = (id) => getCondition(id)?.color || '#FFFFFF';
 export const getConditionStroke = (id) => getCondition(id)?.stroke || '#BDBDBD';
@@ -304,7 +335,7 @@ export const DIAGNOSES = CONDITIONS.filter((c) => c.kind === 'diagnosis' && !c.e
 export const PROCEDURES = CONDITIONS.filter((c) => c.kind === 'procedure');
 
 export const getConditionsByKind = (kind, { toothLevel } = {}) =>
-  CONDITIONS.filter(
+  [...CONDITIONS, ...CUSTOM_CONDITIONS].filter(
     (c) =>
       c.kind === kind &&
       !c.eraser &&

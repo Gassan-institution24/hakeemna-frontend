@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -6,6 +7,10 @@ import { usePathname } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
+
+import { setAppTimeZone } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -19,12 +24,29 @@ import { NavHiddenContext } from './nav-hidden-context';
 // ----------------------------------------------------------------------
 
 // Routes that hide the nav entirely and reach it through the header menu button.
-const HIDDEN_NAV_ROUTES = [/\/(mypatients|patients)\/(?!new$)[^/]+$/];
+const HIDDEN_NAV_ROUTES = [
+  /\/(mypatients|patients)\/(?!new$)[^/]+$/,
+  // The encounter page: the doctor is treating a patient and wants the whole
+  // width for it. Its own Back button returns to today's appointments.
+  /\/us\/processingpage\/[^/]+$/,
+];
 
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children }) {
   const settings = useSettingsContext();
+
+  // Staff read clinic times wherever they are sitting, so every formatted time
+  // in the app resolves against the clinic's country. Outside the dashboard —
+  // the patient portal — times fall back to the viewer's own browser zone.
+  const { user } = useAuthContext();
+  const clinicTimeZone =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.country?.time_zone || null;
+
+  useEffect(() => {
+    setAppTimeZone(clinicTimeZone);
+  }, [clinicTimeZone]);
 
   const lgUp = useResponsive('up', 'lg');
 

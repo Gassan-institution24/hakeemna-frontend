@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
+import { lazy, useMemo, Suspense, useCallback } from 'react';
 
 import { alpha, useTheme } from '@mui/material/styles';
 import {
@@ -12,7 +13,10 @@ import {
   Divider,
   Typography,
   CardContent,
+  CircularProgress,
 } from '@mui/material';
+
+import axiosInstance from 'src/utils/axios';
 
 import Rooms from './inside-rooms';
 import TabsView from './tabs-view';
@@ -24,8 +28,11 @@ import ServicesProvided from './servicesProvided';
 import { useAuthContext } from '../../../auth/hooks';
 import Adjustabledocument from './adjustabledocument';
 import ProcessingCustomizer from './ProcessingCustomizer';
+import { useAclGuard } from '../../../auth/guard/acl-guard';
 import { useLocales, useTranslate } from '../../../locales';
+import useSpecialityGuard from '../../../auth/guard/speciality-guard';
 import { SECTION_KEYS, useProcessingLayout } from './use-processing-layout';
+import { useSubscriptionGuard } from '../../../auth/guard/subscription-guard';
 import { useGetEmployeeAdjustabledocument } from '../../../api/adjustable_document';
 import {
   useGetPatient,
@@ -34,6 +41,10 @@ import {
   useGetUSServiceTypes,
   useGetOneEntranceManagement,
 } from '../../../api';
+
+// Lazy, so the odontogram and its condition tables never reach the bundle a
+// non-dental encounter downloads.
+const PatientDentalChart = lazy(() => import('../patients/dental-chart/patient-dental-chart'));
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
 
@@ -113,7 +124,9 @@ export default function Processing() {
   const theme = useTheme();
   const router = useRouter();
 
-  const { Entrance } = useGetOneEntranceManagement(id, { populate: 'all' });
+  const { Entrance, refetch: refetchEntrance } = useGetOneEntranceManagement(id, {
+    populate: 'all',
+  });
   const { medRecord } = useGetMedRecord(
     Entrance?.service_unit?._id,
     Entrance?.patient?._id,
@@ -130,6 +143,59 @@ export default function Processing() {
 
   const { sections, toggle, reset, isVisible } = useProcessingLayout(user?._id);
 
+  // ─── Dental chart (dentists only) ──────────────────────────────────────────
+  // A dentist charts the patient they are treating without leaving the encounter.
+  // Every other specialty sees this page exactly as before.
+  const { isDentist } = useSpecialityGuard();
+  const checkAcl = useAclGuard();
+  const { hasFeature } = useSubscriptionGuard();
+
+  // The entrance already carries both ids the chart needs — the populated patient
+  // and the raw unit_service_patient — so no extra fetch is required.
+  // Note `Entrance` is `[]` before it loads, which is truthy: gate on the id.
+  const dentalPatient = useMemo(
+    () =>
+      Entrance?.patient?._id
+        ? { _id: Entrance.unit_service_patient, patient: Entrance.patient }
+        : null,
+    [Entrance?.patient, Entrance?.unit_service_patient]
+  );
+
+  const showDentalChart =
+    isDentist && !!dentalPatient && checkAcl('dental_chart:read') && hasFeature('dental_chart');
+
+  // Identifies this appointment to the chart, so every treatment line added now
+  // is stamped with the same visit and the same date and reads as one plan.
+  const dentalVisit = useMemo(
+    () =>
+      Entrance?._id
+        ? {
+            id: Entrance._id,
+            appointmentId: Entrance.appointmentId || null,
+            date: Entrance.Appointment_date || Entrance.start_time || null,
+          }
+        : null,
+    [Entrance?._id, Entrance?.appointmentId, Entrance?.Appointment_date, Entrance?.start_time]
+  );
+
+  // Billing reuses the path the Services-provided card already uses: the
+  // entrance's Service_types is what the invoice form reads its line items and
+  // prices from, so a priced treatment simply joins that list.
+  const handleBillService = useCallback(
+    async (serviceTypeId) => {
+      if (!serviceTypeId || !Entrance?._id) return;
+      // Appended server-side with $push rather than read-modify-written here:
+      // two treatments added in quick succession would otherwise both write the
+      // array they each read, and the second would erase the first.
+      // Repeats are intentional — the same service done twice is two billed lines.
+      await axiosInstance.patch(`/api/entrance/${Entrance._id}/service-types`, {
+        service_types: [String(serviceTypeId)],
+      });
+      await refetchEntrance();
+    },
+    [Entrance?._id, refetchEntrance]
+  );
+
   const patientName = curLangAr
     ? Entrance?.patient?.name_arabic || Entrance?.patient?.name_english
     : Entrance?.patient?.name_english || Entrance?.patient?.name_arabic;
@@ -144,11 +210,28 @@ export default function Processing() {
     router.push(paths.employee.recored(id));
   };
 
+  // The dashboard nav is hidden on this route (see HIDDEN_NAV_ROUTES), so the
+  // encounter needs its own way back to the appointments board.
+  const handleBackToAppointments = () => {
+    router.push(paths.employee.appointmentsToday);
+  };
+
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <>
       <Stack spacing={3}>
+        {/* ── Back — the nav is hidden on this route, so this is the way out ── */}
+        <Box>
+          <Button
+            color="inherit"
+            onClick={handleBackToAppointments}
+            startIcon={<Iconify icon="eva:arrow-back-fill" width={18} />}
+          >
+            {t('back')}
+          </Button>
+        </Box>
+
         {/* ── Patient header card ── */}
         <Card
           sx={{
@@ -213,6 +296,23 @@ export default function Processing() {
             </Stack>
           </CardContent>
         </Card>
+
+        {/* ── Dental chart — dentists only; brings its own card and header ── */}
+        {showDentalChart && (
+          <Suspense
+            fallback={
+              <Box display="flex" justifyContent="center" py={6}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <PatientDentalChart
+              patient={dentalPatient}
+              visit={dentalVisit}
+              onBillService={handleBillService}
+            />
+          </Suspense>
+        )}
 
         {/* ── Optional: Visits history ── */}
         {isVisible(SECTION_KEYS.VISITS_HISTORY) && medRecord?.length > 0 && (
