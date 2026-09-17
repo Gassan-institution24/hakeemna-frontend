@@ -28,7 +28,6 @@ import {
   useGetKeywords,
   useGetCountries,
   // useGetCurrencies,
-  useGetSpecialties,
   useGetEmployeeEngagement,
   useGetEmployeeWorkGroups,
 } from 'src/api';
@@ -112,7 +111,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { data: employeeEngagementData } = useGetEmployeeEngagement(employeeEng?._id);
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
-  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -219,6 +217,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
       phone: employeeData?.phone || '',
       mobile_num: employeeData?.mobile_num || '',
       speciality: employeeData?.speciality?._id || null,
+      // Display only — never submitted; the owner owns this field.
+      speciality_label:
+        (curLangAr
+          ? employeeData?.speciality?.name_arabic || employeeData?.speciality?.name_english
+          : employeeData?.speciality?.name_english || employeeData?.speciality?.name_arabic) || '',
       gender: employeeData?.gender || '',
       birth_date: employeeData?.birth_date || null,
       scanned_identity: employeeData?.scanned_identity || null,
@@ -249,7 +252,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.currency ||
       //   currencies?.[0]?._id,
     }),
-    [employeeEngagementData, employeeData]
+    [employeeEngagementData, employeeData, curLangAr]
   );
 
   const methods = useForm({
@@ -321,6 +324,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const dataToSubmit = data;
+      // Only the clinic owner may change these; the server rejects it anyway.
+      delete dataToSubmit.speciality;
+      delete dataToSubmit.speciality_label;
       delete dataToSubmit.picture;
       delete dataToSubmit.scanned_identity;
       delete dataToSubmit.signature;
@@ -566,24 +572,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(3, 1fr)',
               }}
             >
-              <RHFAutocomplete
-                name="speciality"
+              {/* Speciality is set by the clinic owner, not here: it drives what
+                  the system lets a doctor do, so it is shown read-only. */}
+              <RHFTextField
+                name="speciality_label"
                 label={t('speciality')}
-                options={specialtiesData.map((speciality) => speciality._id)}
-                getOptionLabel={(option) =>
-                  specialtiesData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
-                  ]
-                }
-                renderOption={(props, option, idx) => (
-                  <li lang="ar" {...props} key={idx} value={option}>
-                    {
-                      specialtiesData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
-                      ]
-                    }
-                  </li>
-                )}
+                disabled
               />
               <RHFTextField
                 type="number"
