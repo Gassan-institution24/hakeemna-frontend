@@ -21,7 +21,6 @@ import { buildEmployeeEmail, getSelectedUnitService } from 'src/utils/employee-e
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import useOwnerGuard from 'src/auth/guard/owner-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
 
@@ -43,9 +42,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  // Speciality decides what the system lets a doctor do, so it belongs to
-  // whoever runs the clinic. Other staff see it, but cannot change it.
-  const { isOwner } = useOwnerGuard();
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { employeeTypesData } = useGetActiveEmployeeTypes();
@@ -297,8 +293,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               <RHFAutocomplete
                 name="speciality"
                 label={`${t('speciality')} *`}
-                disabled={!isOwner}
-                readOnly={!isOwner}
                 options={specialtiesData.map((speciality) => speciality._id)}
                 getOptionLabel={(option) =>
                   specialtiesData.find((one) => one._id === option)?.[
@@ -314,9 +308,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                     }
                   </li>
                 )}
-                helperText={
-                  isOwner ? undefined : t('Only the clinic owner can change the speciality')
-                }
               />
               <RHFSelect name="gender" label={`${t('gender')} *`}>
                 <MenuItem lang="ar" value="male">
