@@ -18,7 +18,7 @@ import {
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { useGetPatientIncomePaymentControl } from 'src/api';
 
 import Label from 'src/components/label';
@@ -51,8 +51,6 @@ function getPaidAmount(row) {
 
 export default function PatientFinancial({ patient }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const patientId = patient?.patient?._id;
 
@@ -68,7 +66,6 @@ export default function PatientFinancial({ patient }) {
 
   const TABLE_HEAD = [
     { id: 'code', label: t('Code') },
-    { id: 'unit_service', label: t('unit of service') },
     { id: 'concept', label: t('Concept') },
     { id: 'required_amount', label: t('Required Amount') },
     { id: 'paid_amount', label: t('Paid Amount') },
@@ -95,9 +92,6 @@ export default function PatientFinancial({ patient }) {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const unitServiceName = (us) =>
-    (curLangAr ? us?.name_arabic || us?.name_english : us?.name_english || us?.name_arabic) || '-';
-
   return (
     <Container sx={{ py: 3 }} maxWidth="xl">
       {/* Summary */}
@@ -121,7 +115,7 @@ export default function PatientFinancial({ patient }) {
       <Card>
         <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <Scrollbar>
-            <Table size="medium" sx={{ minWidth: 800 }}>
+            <Table size="medium" sx={{ minWidth: 720 }}>
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
@@ -135,13 +129,16 @@ export default function PatientFinancial({ patient }) {
                   const status = getStatus(row);
                   return (
                     <TableRow key={row._id} hover>
-                      <TableCell>{row.code || '-'}</TableCell>
-                      <TableCell>{unitServiceName(row.unit_service)}</TableCell>
-                      <TableCell>{row.concept || t(row.movements_type) || '-'}</TableCell>
-                      <TableCell>{fCurrency(row.required_amount || 0)}</TableCell>
-                      <TableCell>{fCurrency(getPaidAmount(row))}</TableCell>
-                      <TableCell>{row.due_date ? fDate(row.due_date) : '-'}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{row.code || '-'}</TableCell>
+                      <TableCell align="center">
+                        {row.concept || t(row.movements_type) || '-'}
+                      </TableCell>
+                      <TableCell align="center">{fCurrency(row.required_amount || 0)}</TableCell>
+                      <TableCell align="center">{fCurrency(getPaidAmount(row))}</TableCell>
+                      <TableCell align="center">
+                        {row.due_date ? fDate(row.due_date) : '-'}
+                      </TableCell>
+                      <TableCell align="center">
                         <Label variant="soft" color={STATUS_COLOR[status] || 'default'}>
                           {t(status)}
                         </Label>
@@ -176,7 +173,7 @@ PatientFinancial.propTypes = { patient: PropTypes.object };
 
 function SummaryItem({ label, value, color = 'text.primary' }) {
   return (
-    <Box sx={{ px: 3, py: 0.5, flex: 1 }}>
+    <Box sx={{ px: 3, py: 0.5, flex: 1, textAlign: 'center' }}>
       <Typography variant="body2" color="text.secondary">
         {label}
       </Typography>

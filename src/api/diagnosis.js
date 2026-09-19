@@ -47,6 +47,36 @@ export function useGetEntranceDiagnosis(id) {
   return { ...memoizedValue, refetch };
 }
 
+// Every diagnosis recorded for one unit-service patient.
+//
+// The key is the bare URL, not `[URL]`: wrapping a null key in an array makes it
+// truthy, so SWR would fire the request even without an id.
+//
+// The endpoint neither filters on `active` nor sorts, and it does not populate
+// the diagnosis refs -- callers should filter/sort themselves and read the
+// `primary_diagnosis_name` / `secondary_diagnosis_name` strings for labels.
+export function useGetUSPatientDiagnosis(id) {
+  const URL = endpoints.diagnosis.usPatient(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      usPatientDiagnosis: data || [],
+      length: data?.length,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 export function useGetOnePatientDiagnosis(id) {
   const URL = endpoints.diagnosis.patientDiagnosisOne(id);
 

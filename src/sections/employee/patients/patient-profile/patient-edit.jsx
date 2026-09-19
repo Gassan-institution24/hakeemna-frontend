@@ -20,7 +20,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFPhoneNumberCustom } from 'src
 
 // ----------------------------------------------------------------------
 
-export default function EditPatient({ patient }) {
+export default function EditPatient({ patient, onSaved }) {
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { t } = useTranslate();
@@ -61,6 +61,7 @@ export default function EditPatient({ patient }) {
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
     identification_num: Yup.string(),
+    file_code: Yup.string(),
     cloud_storage_link: Yup.string(),
   });
   
@@ -85,6 +86,7 @@ export default function EditPatient({ patient }) {
     smoking: patient?.smoking || '',
     other_medication_notes: patient?.other_medication_notes || '',
     identification_num: patient?.identification_num || '',
+    file_code: patient?.file_code || '',
     cloud_storage_link: patient?.cloud_storage_link || '',
   };
 
@@ -107,8 +109,21 @@ export default function EditPatient({ patient }) {
 
   const onSubmit = async (profileData) => {
     try {
-      await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
+      const payload = { ...profileData };
+
+      // The API refuses any change to identification_num on a patient with a
+      // linked account. The field is hidden for exactly those patients, but the
+      // form still submits '' for it, which the API reads as a change and
+      // rejects -- taking the whole save down with it. Send back what is stored.
+      if (patient?.patient) {
+        payload.identification_num = patient?.identification_num;
+      }
+
+      await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, payload);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
+      // The banner above this form shows the name, file number and other fields
+      // edited here, so it has to be told to reload rather than sit on stale values.
+      onSaved?.();
     } catch (error) {
       let errorMessage;
       if (typeof error === 'string') {
@@ -182,6 +197,15 @@ export default function EditPatient({ patient }) {
               )}
             />
           )}
+
+          {/* The clinic's own archive reference, kept for patients whose paper
+              file predates the system. Always editable — unlike the national
+              number it belongs to this clinic, not to the patient's identity. */}
+          <RHFTextField
+            name="file_code"
+            label={t('Old File Number')}
+            title={t('Archive Number')}
+          />
 
           <RHFSelect
             label={t('residence country')}
@@ -371,4 +395,6 @@ export default function EditPatient({ patient }) {
 
 EditPatient.propTypes = {
   patient: PropTypes.object.isRequired,
+  // Called after a successful save so the caller can refresh what it shows.
+  onSaved: PropTypes.func,
 };

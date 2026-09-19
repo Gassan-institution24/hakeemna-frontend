@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Card, Stack, Avatar, Container, Typography } from '@mui/material';
+import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useGetOneUSPatient } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
 
-import ProfileTabs from 'src/components/profile-tabs';
-
+import PatientOverview from 'src/sections/shared/patient-profile/overview';
+import { mergeUsPatient } from 'src/sections/shared/patient-profile/utils';
 import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
+import PatientProfileShell from 'src/sections/shared/patient-profile/patient-profile-shell';
+import { useProfileSection } from 'src/sections/shared/patient-profile/use-profile-section';
 import PatientFinancial from 'src/sections/employee/patients/patient-profile/patient-financial';
 import PatientSickLeaves from 'src/sections/employee/patients/patient-profile/patient-sick-leave';
 import PatientCommunication from 'src/sections/employee/patients/patient-profile/patient-communication';
@@ -18,170 +20,137 @@ import PatientMedicalReports from 'src/sections/employee/patients/patient-profil
 
 import PatientFile from '../patient-profile/patient-file';
 import EditPatient from '../patient-profile/patient-edit';
-import PatientAbout from '../patient-profile/patient-about';
-// import PatientUpload from '../patient-profile/patient-upload';
 import AppointmentsHistory from '../patient-profile/appoint-history';
-// import PatientSickLeaves from '../patient-profile/patient-sick-leave';
-// import PatientPrescriptions from '../patient-profile/patient-prescriptions';
-// import PatientMedicalReports from '../patient-profile/patient-medical-reports';
 
 // ----------------------------------------------------------------------
 
+// The endpoint takes populate as keys and resolves each to a whitelisted spec,
+// so this is a plain list rather than a mongoose populate graph.
+const POPULATE =
+  'patient drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet insurance nationality country city work_groups';
+
 export default function PatientProfile() {
   const { id } = useParams();
-  const { isMedLab } = useUSTypeGuard();
-  const { usPatientData } = useGetOneUSPatient(id, {
-    populate: [
-      {
-        path: 'patient',
-        populate: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet',
-      },
-      {
-        path: 'drug_allergies drugs_prescriptions diseases surgeries medicines eating_diet file_code',
-      },
-    ],
-  });
-
-  const patientData = usPatientData.patient ? usPatientData.patient : usPatientData;
-
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  const { isMedLab } = useUSTypeGuard();
 
+  const { usPatientData, loading } = useGetOneUSPatient(id, { populate: POPULATE });
 
-  const [currentTab, setCurrentTab] = useState('communication');
-  const TABS = [
-    // {
-    //   value: 'about',
-    //   label: t('about'),
-    // },
-    {
-      value: 'communication',
-      label: t('communication'),
-    },
-    !isMedLab && {
-      value: 'file',
-      label: t('file'),
-    },
-    !isMedLab && {
-      value: 'prescriptions',
-      label: t('prescriptions'),
-    },
-    !isMedLab && {
-      value: 'sick_leave',
-      label: t('sick leave'),
-    },
-    {
-      value: 'medical_reports',
-      label: t('medical reports'),
-    },
-    {
-      value: 'appointments',
-      label: t('appointments'),
-    },
-    {
-      value: 'financial',
-      label: t('financial information'),
-    },
-    {
-      value: 'upload',
-      label: t('upload files'),
-    },
-    // The dental chart now lives in its own sidebar section (paths.unitservice.dental).
-    {
-      value: 'edit',
-      label: t('edit'),
-    },
-  ].filter(Boolean);
+  // Shared with the doctor's profile. This used to replace the record with the
+  // linked patient account, which dropped the clinic's own fields -- file_code,
+  // code and work_groups all vanished for a verified patient.
+  const patientData = useMemo(() => mergeUsPatient(usPatientData), [usPatientData]);
 
-  function calculateAge(birthDate) {
-    if (birthDate) {
-      const today = new Date();
-      const dob = new Date(birthDate);
+  const pinned = useMemo(
+    () => [{ value: 'overview', label: t('Overview'), icon: 'solar:widget-5-bold-duotone' }],
+    [t]
+  );
 
-      const age = today.getFullYear() - dob.getFullYear();
-      if (age === 0) {
-        return `${today.getMonth() - dob.getMonth()} months`;
-      }
-      return `${age} years`;
+  // Same grouping as the doctor's profile, minus the sections a lab never has.
+  // A group left with no items is dropped by the rail, not shown empty.
+  const sections = useMemo(
+    () =>
+      [
+        {
+          key: 'clinical',
+          label: t('Clinical'),
+          items: [
+            !isMedLab && {
+              value: 'file',
+              label: t('File'),
+              icon: 'solar:folder-with-files-bold-duotone',
+            },
+            {
+              value: 'medical_reports',
+              label: t('Medical Reports'),
+              icon: 'solar:document-medicine-bold-duotone',
+            },
+            !isMedLab && {
+              value: 'prescriptions',
+              label: t('Prescriptions'),
+              icon: 'solar:pills-bold-duotone',
+            },
+          ].filter(Boolean),
+        },
+        {
+          key: 'patient_care',
+          label: t('Patient Care'),
+          items: [
+            !isMedLab && {
+              value: 'sick_leave',
+              label: t('Sick Leave'),
+              icon: 'solar:bed-bold-duotone',
+            },
+            {
+              value: 'communication',
+              label: t('Patient Communication'),
+              icon: 'solar:chat-round-dots-bold-duotone',
+            },
+          ].filter(Boolean),
+        },
+        {
+          key: 'administration',
+          label: t('Administration'),
+          items: [
+            { value: 'appointments', label: t('Appointments'), icon: 'solar:calendar-bold-duotone' },
+            {
+              value: 'financial',
+              label: t('Financial Information'),
+              icon: 'solar:wallet-money-bold-duotone',
+            },
+            { value: 'upload', label: t('Upload Files'), icon: 'solar:upload-bold-duotone' },
+            { value: 'edit', label: t('Patient Information'), icon: 'solar:user-id-bold-duotone' },
+          ],
+        },
+      ].filter((section) => section.items.length),
+    [t, isMedLab]
+  );
+
+  const validSections = useMemo(
+    () => [...pinned, ...sections.flatMap((one) => one.items)].map((one) => one.value),
+    [pinned, sections]
+  );
+
+  const [section, setSection] = useProfileSection(validSections);
+
+  const renderSection = () => {
+    switch (section) {
+      case 'overview':
+        return <PatientOverview patient={patientData} uspId={id} onNavigate={setSection} />;
+      case 'file':
+        return <PatientFile patient={usPatientData} />;
+      case 'medical_reports':
+        return <PatientMedicalReports patient={usPatientData} />;
+      case 'prescriptions':
+        return <PatientPrescriptions patient={usPatientData} />;
+      case 'sick_leave':
+        return <PatientSickLeaves patient={usPatientData} />;
+      case 'communication':
+        return <PatientCommunication patient={usPatientData} />;
+      case 'appointments':
+        return <AppointmentsHistory patient={usPatientData} />;
+      case 'financial':
+        return <PatientFinancial patient={usPatientData} />;
+      case 'upload':
+        return <PatientUpload patient={usPatientData} />;
+      case 'edit':
+        return <EditPatient patient={usPatientData} />;
+      default:
+        return null;
     }
-    return '';
-  }
-
-  const patientGeneralData = [
-    { title: 'age', value: calculateAge(patientData?.birth_date) },
-    { title: 'phone', value: patientData?.mobile_num1 },
-    { title: 'email', value: patientData?.email },
-    { title: 'file code', value: patientData?.file_code },
-    { title: 'height', value: patientData?.height, unit: 'cm' },
-    { title: 'weight', value: patientData?.weight, unit: 'kg' },
-    { title: 'smoking', value: patientData?.smoking },
-    { title: 'alcohol consumption', value: patientData?.alcohol_consumption },
-    { title: 'sport exercises', value: patientData?.sport_exercises },
-  ];
+  };
 
   return (
-    <Container maxWidth="xl">
-      <Card sx={{ px: 4, py: 2, mb: 4 }}>
-        <Stack direction={{ md: 'row' }} alignItems="center" gap={5}>
-          <Avatar
-            src={patientData?.profile_picture}
-            sx={{ width: { md: 100 }, height: { md: 100 } }}
-          />
-          <Stack gap={1}>
-            <Stack direction="row" alignItems="center" gap={1}>
-              <Typography variant="body2" color="text.secondary">
-                {t('patients')}
-              </Typography>
-              <Typography variant="body2" color="text.disabled">
-                /
-              </Typography>
-              <Typography variant="body2" color="text.primary" fontWeight={600}>
-                {curLangAr ? patientData?.name_arabic : patientData?.name_english}
-              </Typography>
-            </Stack>
-
-            <Typography variant="h6">
-              {curLangAr ? patientData?.name_arabic : patientData?.name_english}
-            </Typography>
-            <Box
-              rowGap={0.5}
-              columnGap={8}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                md: 'repeat(3, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              {patientGeneralData?.map((one, idx) => (
-                <Typography key={idx} variant="body2">
-                  <span style={{ fontWeight: 650, color: '#637381' }}>{t(one?.title)}</span>:{' '}
-                  <span dir={one.title === 'phone' ? 'ltr' : ''}>
-                    {t(one.value)} {one.unit}
-                  </span>
-                </Typography>
-              ))}
-            </Box>
-          </Stack>
-        </Stack>
-      </Card>
-      <ProfileTabs
-        tabs={TABS}
-        value={currentTab}
-        onChange={setCurrentTab}
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
-      {currentTab === 'about' && <PatientAbout patient={usPatientData} />}
-      {currentTab === 'communication' && <PatientCommunication patient={usPatientData} />}
-      {currentTab === 'file' && <PatientFile patient={usPatientData} />}
-      {currentTab === 'prescriptions' && <PatientPrescriptions patient={usPatientData} />}
-      {currentTab === 'sick_leave' && <PatientSickLeaves patient={usPatientData} />}
-      {currentTab === 'medical_reports' && <PatientMedicalReports patient={usPatientData} />}
-      {currentTab === 'appointments' && <AppointmentsHistory patient={usPatientData} />}
-      {currentTab === 'financial' && <PatientFinancial patient={usPatientData} />}
-      {currentTab === 'upload' && <PatientUpload patient={usPatientData} />}
-      {currentTab === 'edit' && <EditPatient patient={usPatientData} />}
-    </Container>
+    <PatientProfileShell
+      patient={patientData}
+      loading={loading}
+      backTo={paths.unitservice.patients.all}
+      pinned={pinned}
+      sections={sections}
+      section={section}
+      onChangeSection={setSection}
+    >
+      {renderSection()}
+    </PatientProfileShell>
   );
 }

@@ -63,6 +63,7 @@ export default function EditPatient({ patient }) {
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
+    file_code: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
@@ -85,6 +86,7 @@ export default function EditPatient({ patient }) {
     sport_exercises: patient?.sport_exercises || '',
     smoking: patient?.smoking || '',
     other_medication_notes: patient?.other_medication_notes || '',
+    file_code: patient?.file_code || '',
   };
 
   const methods = useForm({
@@ -105,7 +107,16 @@ export default function EditPatient({ patient }) {
 
   const onSubmit = async (profileData) => {
     try {
-      await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, profileData);
+      const payload = { ...profileData };
+
+      // This form has no identification_num field, so the value never reaches
+      // the request -- which the API reads as clearing it, and refuses for a
+      // patient with a linked account. Send back what is stored.
+      if (patient?.patient) {
+        payload.identification_num = patient?.identification_num;
+      }
+
+      await axios.patch(`${endpoints.usPatients.one(patient?._id)}`, payload);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();
@@ -139,6 +150,14 @@ export default function EditPatient({ patient }) {
                 name="name_arabic"
                 label={t('Name in arabic')}
                 onChange={handleArabicInputChange}
+              />
+
+              {/* The clinic's own archive reference, kept for patients whose
+                  paper file predates the system. */}
+              <RHFTextField
+                name="file_code"
+                label={t('Old File Number')}
+                title={t('Archive Number')}
               />
 
               <MuiTelInput

@@ -267,7 +267,11 @@ export default function AddOnePatient() {
             </MenuItem>
           </RHFSelect>
 
-          <RHFTextField name="file_code" label={t('File code')} />
+          <RHFTextField
+            name="file_code"
+            label={t('Old File Number')}
+            title={t('Archive Number')}
+          />
           <RHFDatePicker
             name="birth_date"
             type="date"

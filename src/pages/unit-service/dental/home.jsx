@@ -65,7 +65,7 @@ export default function DentalHomePage() {
   const TABLE_HEAD = [
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
-    { id: 'file_code', label: t('file code') },
+    { id: 'file_code', label: t('Old File Number'), hint: t('Archive Number') },
     { id: 'open', label: '', width: 60 },
   ];
 

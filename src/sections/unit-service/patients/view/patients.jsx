@@ -69,7 +69,7 @@ export default function PatientTableView() {
     { id: 'name_english', label: t('name in english') },
     { id: 'name_arabic', label: t('name in arabic') },
     { id: 'work_group', label: t('work group') },
-    { id: 'file_code', label: t('file code') },
+    { id: 'file_code', label: t('Old File Number'), hint: t('Archive Number') },
   ];
 
   const checkAcl = useAclGuard();
@@ -242,7 +242,7 @@ export default function PatientTableView() {
                       value: curLangAr ? row.work_group?.name_arabic : row.work_group?.name_english,
                     },
                     {
-                      label: t('file code'),
+                      label: t('Old File Number'),
                       value: row.file_code,
                     },
                   ]}

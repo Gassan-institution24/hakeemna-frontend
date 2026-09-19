@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,18 @@ export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
         <Tab
           key={tab.value}
           value={tab.value}
-          label={tab.label}
+          // The hover hint wraps the label rather than the Tab itself: Tabs clones
+          // its direct children to inject `selected`/`onChange`, so a Tooltip in
+          // that position would swallow them and break the tab.
+          label={
+            tab.tooltip ? (
+              <Tooltip title={tab.tooltip} arrow>
+                <span>{tab.label}</span>
+              </Tooltip>
+            ) : (
+              tab.label
+            )
+          }
           icon={tab.icon}
           iconPosition={tab.icon ? 'start' : undefined}
           sx={{
@@ -43,11 +55,15 @@ export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
             minWidth: 'auto',
             minHeight: 48,
             fontWeight: 500,
-            textTransform: 'none',
+            textTransform: 'capitalize',
             color: 'text.secondary',
             borderBottom: '2px solid transparent',
             '&:hover': { color: 'primary.dark' },
-            '&.Mui-selected': { color: 'primary.main', fontWeight: 600, borderColor: 'primary.main' },
+            '&.Mui-selected': {
+              color: 'primary.main',
+              fontWeight: 600,
+              borderColor: 'primary.main',
+            },
           }}
         />
       ))}
@@ -61,6 +77,7 @@ ProfileTabs.propTypes = {
       value: PropTypes.string,
       label: PropTypes.node,
       icon: PropTypes.node,
+      tooltip: PropTypes.node,
     })
   ),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),

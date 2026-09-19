@@ -47,7 +47,7 @@ const TABLE_HEAD = [
   { label: 'gender', width: 'calc(100%/8)' },
   { label: 'birth date', width: 'calc(100%/8)' },
   { label: 'marital status', width: 'calc(100%/8)' },
-  { label: 'file code', width: 'calc(100%/8)' },
+  { label: 'Old File Number', hint: 'Archive Number', width: 'calc(100%/8)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();

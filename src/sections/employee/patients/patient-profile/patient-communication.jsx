@@ -65,7 +65,7 @@ export default function PatientCommunication({ patient }) {
   const TABS = [
     {
       value: 'communication',
-      title: t('communication'),
+      title: t('Patient Communication'),
       label: <CommunicationContent patient={patient} data={data} refetch={refetch} showAdd={showAdd} setShowAdd={setShowAdd} t={t} />,
     },
     {

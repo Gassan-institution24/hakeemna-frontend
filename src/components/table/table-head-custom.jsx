@@ -54,6 +54,7 @@ export default function TableHeadCustom({
             key={idx}
             align={headCell.align || 'center'}
             sortDirection={orderBy === headCell.id ? order : false}
+            title={headCell.hint ? t(headCell.hint) : undefined}
             sx={{ width: headCell.width, minWidth: headCell.minWidth }}
           >
             {onSort ? (
