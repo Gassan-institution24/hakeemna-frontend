@@ -23,14 +23,14 @@ import NotesPanel from './components/notes-panel';
 import ToothModal from './components/tooth-modal';
 import { toNotation } from './constants/numbering';
 import useOdontogram from './hooks/use-odontogram';
-import { CONDITIONS, setCustomConditions } from './constants/conditions';
 import ChartHeader from './components/chart-header';
-import ChartToolbar from './components/chart-toolbar';
 import ViewOptions from './components/view-options';
+import ChartToolbar from './components/chart-toolbar';
+import { getHiddenTeeth } from './constants/tooth-states';
 import TreatmentPlanPanel from './components/treatment-plan-panel';
 import { getOdontogramPalette } from './constants/odontogram-theme';
-import { getHiddenTeeth } from './constants/tooth-states';
 import ChiefComplaintPanel from './components/chief-complaint-panel';
+import { CONDITIONS, setCustomConditions } from './constants/conditions';
 import {
   ADULT_UPPER,
   ADULT_LOWER,

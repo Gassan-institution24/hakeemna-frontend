@@ -6,20 +6,21 @@ import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
-import { useMediaQuery, Stack, Box, Paper, Typography, Divider } from '@mui/material';
+import { Box, Stack, Paper, Divider, Typography, useMediaQuery } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp, fDate } from 'src/utils/format-time';
+import { fDate, fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
@@ -40,8 +41,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
+
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
 
 import PatientHistoryRow from './appoint-history-row';
 import AddEmegencyAppointment from '../../appointments/add-emergency-appointment';
@@ -52,8 +53,7 @@ function MobileCardView({ row, t, isMedLab, onCancelRow, onViewRow }) {
   const DDL = usePopover();
 
   return (
-    <>
-      <Paper 
+    <Paper 
         elevation={1} 
         sx={{ 
           p: 2, 
@@ -209,7 +209,6 @@ function MobileCardView({ row, t, isMedLab, onCancelRow, onViewRow }) {
           <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{row.modifications_nums || 0}</Box>
         </CustomPopover>
       </Paper>
-    </>
   );
 }
 
@@ -321,9 +320,6 @@ const defaultFilters = {
   startDate: null,
   endDate: null,
 };
-
-
-
 export default function AppointHistoryView({ patient }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -336,7 +332,7 @@ export default function AppointHistoryView({ patient }) {
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'work_group', label: t('work group') },
     { id: 'note', label: t('note') },
-    isMedLab && { id: 'medicalAnalysis', label: t('medical analysis') },
+    isMedLab && { id: 'medicalAnalysis', label: t('Lab Test') },
     { id: 'status', label: t('status') },
     { id: '' },
   ].filter(Boolean);
@@ -474,13 +470,26 @@ export default function AppointHistoryView({ patient }) {
 
   return (
     <>
-      <Container 
-        maxWidth="xl" 
-        sx={{ 
-          px: { xs: 1, sm: 2 },
-          py: { xs: 1, sm: 2 }
-        }}
-      >
+      <Container maxWidth="xl" sx={{ px: { xs: 1, sm: 2 }, py: 3 }}>
+        {/* The add button used to float alone above the tab strip, inside the
+            card, with nothing naming the section it belonged to. */}
+        <ProfilePaneHeader
+          icon="solar:calendar-bold-duotone"
+          title={t('Appointments')}
+          count={appointmentsData?.length}
+          action={
+            <Button
+              onClick={() => addModal.onTrue()}
+              variant="contained"
+              color="error"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+              size={isMobile ? 'small' : 'medium'}
+            >
+              {t('new urgent appointment')}
+            </Button>
+          }
+        />
+
         <Card 
           sx={{ 
             boxShadow: { xs: 0, sm: 1 },
@@ -488,29 +497,6 @@ export default function AppointHistoryView({ patient }) {
             borderColor: 'divider'
           }}
         >
-          <Stack 
-            direction={{ xs: 'column', sm: 'row' }} 
-            justifyContent="flex-end" 
-            margin={{ xs: 1, sm: 2 }}
-            spacing={{ xs: 1, sm: 0 }}
-          >
-            <Button
-              component={RouterLink}
-              onClick={() => addModal.onTrue()}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-              size={isMobile ? 'small' : 'medium'}
-              sx={{
-                bgcolor: 'error.dark',
-                '&:hover': {
-                  bgcolor: 'error.main',
-                },
-                width: { xs: '100%', sm: 'auto' }
-              }}
-            >
-              {t('new urgent appointment')}
-            </Button>
-          </Stack>
           
           <Tabs
             value={filters.status}

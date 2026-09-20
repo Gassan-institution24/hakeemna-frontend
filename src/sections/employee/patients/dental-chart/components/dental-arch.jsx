@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Fragment, useRef, useState, useCallback, useLayoutEffect } from 'react';
+import { useRef, Fragment, useState, useCallback, useLayoutEffect } from 'react';
 
 import { Box, Stack, Typography } from '@mui/material';
 

@@ -32,8 +32,9 @@ import {
 
 import { fDate } from 'src/utils/format-time';
 
-import Iconify from 'src/components/iconify';
 import { useGetUSActiveServiceTypes } from 'src/api/service_types';
+
+import Iconify from 'src/components/iconify';
 
 import PanelCard from './panel-card';
 import { getSurfaceLabel } from '../constants/fdi';

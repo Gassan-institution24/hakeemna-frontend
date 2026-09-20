@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
-import { Card, Stack, Typography, IconButton } from '@mui/material';
+import { Stack, Tooltip, Typography, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -10,6 +10,9 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+
+import RecordCard from 'src/sections/shared/patient-profile/record-card';
+
 
 export default function InstructionItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -31,18 +34,35 @@ export default function InstructionItem({ one, refetch }) {
   };
 
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-        <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-        <IconButton color="error" onClick={handleDelete}>
-          <Iconify icon="mi:delete" />
-        </IconButton>
-      </Stack>
-      <Stack direction="row" gap={10} ml={1}>
-        <Typography variant="body2">{one?.adjustable_documents?.title}</Typography>
-        <Typography variant="body2">{one?.adjustable_documents?.applied}</Typography>
-      </Stack>
-    </Card>
+    // The document's own title leads, not the creation date: it is what a
+    // doctor scans this list for. The date drops to the subtitle.
+    <RecordCard
+      icon="solar:clipboard-text-bold-duotone"
+      color="warning"
+      title={one?.adjustable_documents?.title || t('Patient Instructions')}
+      subtitle={fDate(one.created_at)}
+      actions={
+        <Tooltip title={t('delete')}>
+          <IconButton color="error" onClick={handleDelete}>
+            <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
+        </Tooltip>
+      }
+      footer={
+        one?.adjustable_documents?.applied ? (
+          <Stack direction="row" alignItems="center" gap={0.75}>
+            <Iconify
+              icon="solar:clock-circle-bold-duotone"
+              width={16}
+              sx={{ color: 'text.disabled' }}
+            />
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              {`${t('applied')}: ${one.adjustable_documents.applied}`}
+            </Typography>
+          </Stack>
+        ) : null
+      }
+    />
   );
 }
 InstructionItem.propTypes = {

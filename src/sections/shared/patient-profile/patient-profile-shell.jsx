@@ -57,6 +57,7 @@ export default function PatientProfileShell({
           onToggleCollapse={() => update('collapsed', !state.collapsed)}
           collapseLabel={t('Collapse menu')}
           expandLabel={t('Expand menu')}
+          browseLabel={t('Section')}
         />
 
         <Box

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Card, Link, Stack, Button, Typography, IconButton, Chip } from '@mui/material';
+import { Box, Chip, Stack, Button, Tooltip, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -14,6 +14,11 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFUpload } from 'src/components/hook-form';
+
+import RecordCard, {
+  RecordBlock,
+  RecordAttachments,
+} from 'src/sections/shared/patient-profile/record-card';
 
 export default function FileItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -79,16 +84,46 @@ export default function FileItem({ one, refetch }) {
   const isDentalChartLog = one.source === 'dental_chart';
 
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
-      {editting ? (
-        <FormProvider methods={methods}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
+    <RecordCard
+      icon={
+        isDentalChartLog ? 'solar:health-bold-duotone' : 'solar:folder-with-files-bold-duotone'
+      }
+      color={isDentalChartLog ? 'info' : 'primary'}
+      title={editting ? t('patient record') : fDate(one.created_at)}
+      footer={!editting ? <RecordAttachments files={one.file} fallbackLabel={t('file')} /> : null}
+      badge={
+        isDentalChartLog ? (
+          <Chip
+            label={one.name || t('dental chart log')}
+            size="small"
+            color="info"
+            sx={{ fontWeight: 600, height: 24 }}
+          />
+        ) : null
+      }
+      actions={
+        // A dental chart log is written by the chart, not by hand, so it has no
+        // edit affordance at all.
+        // eslint-disable-next-line no-nested-ternary
+        editting ? (
+          <Tooltip title={t('cancel')}>
             <IconButton onClick={() => setEditting(false)}>
               <Iconify icon="mingcute:close-fill" />
             </IconButton>
-          </Stack>
+          </Tooltip>
+        ) : !isDentalChartLog ? (
+          <Tooltip title={t('edit')}>
+            <IconButton onClick={() => setEditting(true)}>
+              <Iconify icon="solar:pen-bold" />
+            </IconButton>
+          </Tooltip>
+        ) : null
+      }
+    >
+      {editting ? (
+        <FormProvider methods={methods}>
+          {/* The title and the cancel button are the card header's job now. */}
           <Stack gap={2}>
-            <Typography variant="subtitle1">{t('patient record')}</Typography>
             <RHFEditor
               lang="en"
               name="description"
@@ -113,42 +148,14 @@ export default function FileItem({ one, refetch }) {
           </Stack>
         </FormProvider>
       ) : (
-        <>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
-            <Stack direction="row" alignItems="center" gap={1}>
-              <Typography variant="subtitle2">{fDate(one.created_at)}</Typography>
-              {isDentalChartLog && (
-                <Chip
-                  label={one.name || t('dental chart log')}
-                  size="small"
-                  color="info"
-                  sx={{ fontWeight: 600, height: 24 }}
-                />
-              )}
-            </Stack>
-            {!isDentalChartLog && (
-              <IconButton onClick={() => setEditting(true)}>
-                <Iconify icon="lets-icons:edit-fill" />
-              </IconButton>
-            )}
-          </Stack>
-          <Stack gap={1} mt={1} ml={1}>
-            <Typography
-              textTransform="none"
-              variant="body2"
-              dangerouslySetInnerHTML={{ __html: one.description }}
-            />
-            <Stack direction="row" gap={1}>
-              {one.file?.map((file) => (
-                <Link href={file} target="_blank" sx={{ fontSize: 14 }}>
-                  {file.name || t('file')}
-                </Link>
-              ))}
-            </Stack>
-          </Stack>
-        </>
+        <RecordBlock>
+          <Box
+            sx={{ textTransform: 'none' }}
+            dangerouslySetInnerHTML={{ __html: one.description }}
+          />
+        </RecordBlock>
       )}
-    </Card>
+    </RecordCard>
   );
 }
 FileItem.propTypes = {

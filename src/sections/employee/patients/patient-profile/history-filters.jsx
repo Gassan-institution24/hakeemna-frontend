@@ -1,28 +1,25 @@
 import PropTypes from 'prop-types';
 
-
 import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  InputAdornment,
   Tab,
-  Tabs,
-  TextField,
   Box,
+  Card,
+  Grid,
+  Tabs,
+  Button,
+  TextField,
+  CardContent,
+  InputAdornment,
 } from '@mui/material';
-
-
 import {
   Search,
-  FilterList,
-  ArrowDownward,
-  ArrowUpward,
   History,
-  EventBusy,
-  Assignment,
   Receipt,
+  EventBusy,
+  FilterList,
+  Assignment,
+  ArrowUpward,
+  ArrowDownward,
   CalendarToday,
 } from '@mui/icons-material';
 
@@ -49,8 +46,7 @@ const HistoryFilters = ({
   const { t } = useTranslate();
 
   return (
-    <>
-      <Card sx={{ mb: 3, borderRadius: 3 }}>
+    <Card sx={{ mb: 3, borderRadius: 3 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={8}>
@@ -148,7 +144,6 @@ const HistoryFilters = ({
           </Box>
         </CardContent>
       </Card>
-    </>
   );
 };
 

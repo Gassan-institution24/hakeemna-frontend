@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import { memo } from 'react';
+import PropTypes from 'prop-types';
 
-import { getCrownTransform, getSurfaceLabel } from '../constants/fdi';
-import { getConditionColor } from '../constants/conditions';
 import ToothSurface from './tooth-surface';
+import { getConditionColor } from '../constants/conditions';
+import { getSurfaceLabel, getCrownTransform } from '../constants/fdi';
 
 // ── Wheel geometry (44 × 44, centre 22,22) ────────────────────────────────────
 const C = 22;

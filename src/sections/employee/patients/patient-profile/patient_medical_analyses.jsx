@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Stack, Button, Container } from '@mui/material';
-
 import { useTranslate } from 'src/locales';
 import { useGetMedicalAnalysisPatient } from 'src/api/medical_analysis_patient';
+
+import ProfilePane from 'src/sections/shared/patient-profile/profile-pane';
+import { RecordGrid } from 'src/sections/shared/patient-profile/record-card';
 
 import MedicalAnalysisItem from './items/medical analyses/medical_analyses';
 import MedicalAnalysesUpload from './items/medical analyses/medical_analyses-upload';
@@ -12,17 +13,28 @@ import MedicalAnalysesUpload from './items/medical analyses/medical_analyses-upl
 export default function PatientMedicalAnalyses({ patient }) {
   const { t } = useTranslate();
 
-  const { medicalAnalysisData, refetch } = useGetMedicalAnalysisPatient(patient?._id);
+  const { medicalAnalysisData, loading, error, refetch } = useGetMedicalAnalysisPatient(
+    patient?._id
+  );
 
   const [showAdd, setShowAdd] = React.useState(false);
+
+  const rows = Array.isArray(medicalAnalysisData) ? medicalAnalysisData : [];
+
   return (
-    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
-          {showAdd ? t('X') : t('new medical analysis')}
-        </Button>
-      </Stack>
-      {showAdd && (
+    <ProfilePane
+      icon="solar:test-tube-bold-duotone"
+      title={t('Lab Results')}
+      count={rows.length}
+      loading={loading}
+      error={error}
+      isEmpty={!rows.length}
+      emptyTitle={t('No lab results')}
+      emptyDescription={t('Laboratory analyses recorded for this patient appear here.')}
+      addLabel={t('New Lab Result')}
+      adding={showAdd}
+      onToggleAdd={() => setShowAdd((open) => !open)}
+      form={
         <MedicalAnalysesUpload
           patient={patient}
           refetch={() => {
@@ -30,12 +42,14 @@ export default function PatientMedicalAnalyses({ patient }) {
             refetch();
           }}
         />
-      )}
-
-      {medicalAnalysisData?.map((one) => (
-        <MedicalAnalysisItem key={one._id} one={one} patient={patient} refetch={refetch} />
-      ))}
-    </Container>
+      }
+    >
+      <RecordGrid min={460}>
+        {rows.map((one) => (
+          <MedicalAnalysisItem key={one._id} one={one} patient={patient} refetch={refetch} />
+        ))}
+      </RecordGrid>
+    </ProfilePane>
   );
 }
 PatientMedicalAnalyses.propTypes = { patient: PropTypes.object };

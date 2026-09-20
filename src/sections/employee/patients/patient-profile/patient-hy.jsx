@@ -2,22 +2,16 @@
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 
+import { Card, Alert, Stack, Skeleton, Container } from '@mui/material';
 
-import {
-  Alert,
-  Container,
-  LinearProgress,
-  Typography,
-} from '@mui/material';
-
-
-import { useGetPatientHistoryDataForUs } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useGetPatientHistoryDataForUs } from 'src/api';
 
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
 
+import HistoryList from './history-list';
 import HistorySummary from './history-summary';
 import HistoryFilters from './history-filters';
-import HistoryList from './history-list';
 import HistoryDetailsDialog from './history-details-dialog';
 
 function PatientHistory({ patient }) {
@@ -97,11 +91,30 @@ function PatientHistory({ patient }) {
     setCurrentPage(value);
   };
 
+  const header = (
+    <ProfilePaneHeader
+      icon="solar:history-bold-duotone"
+      title={t('Visit History')}
+      count={historyDataForPatient?.data?.history?.length}
+    />
+  );
+
+  // A bare progress bar over a centred "Loading..." line told you nothing about
+  // the shape of what was coming. Skeletons in the real layout do.
   if (loading) {
     return (
       <Container maxWidth="xl" sx={{ py: 3 }}>
-        <LinearProgress />
-        <Typography sx={{ mt: 2, textAlign: 'center' }}>{t('Loading patient history...')}</Typography>
+        {header}
+        <Stack gap={2}>
+          <Skeleton variant="rounded" height={96} />
+          <Skeleton variant="rounded" height={72} />
+          {[0, 1, 2].map((row) => (
+            <Card key={row} sx={{ p: 2 }}>
+              <Skeleton variant="text" width={200} height={28} />
+              <Skeleton variant="text" width="80%" />
+            </Card>
+          ))}
+        </Stack>
       </Container>
     );
   }
@@ -109,6 +122,7 @@ function PatientHistory({ patient }) {
   if (error) {
     return (
       <Container maxWidth="xl" sx={{ py: 3 }}>
+        {header}
         <Alert severity="error">
           {t('Error loading patient history')}: {error.message}
         </Alert>
@@ -120,6 +134,8 @@ function PatientHistory({ patient }) {
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
+      {header}
+
       <HistorySummary summary={historyData?.summary} history={historyData?.history} />
       <HistoryFilters
         searchTerm={searchTerm}

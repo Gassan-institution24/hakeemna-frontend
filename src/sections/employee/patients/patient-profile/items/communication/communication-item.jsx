@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Card, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Stack, Button, Tooltip, IconButton } from '@mui/material';
 
 import { ConvertToHTML } from 'src/utils/convert-to-html';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -15,6 +15,8 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFDatePicker } from 'src/components/hook-form';
+
+import RecordCard, { RecordBlock } from 'src/sections/shared/patient-profile/record-card';
 
 export default function CommunicationItem({ one, refetch }) {
   const { t } = useTranslate();
@@ -57,16 +59,21 @@ export default function CommunicationItem({ one, refetch }) {
   });
 
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
+    <RecordCard
+      icon="solar:chat-round-dots-bold-duotone"
+      title={editting ? t('communication') : fDateAndTime(one?.date) || fDateTime(one.created_at)}
+      subtitle={!editting ? fDateTime(one.created_at) : null}
+      actions={
+        <Tooltip title={editting ? t('cancel') : t('edit')}>
+          <IconButton onClick={() => setEditting(!editting)}>
+            <Iconify icon={editting ? 'mingcute:close-fill' : 'solar:pen-bold'} />
+          </IconButton>
+        </Tooltip>
+      }
+    >
       {editting ? (
         <FormProvider methods={methods}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <IconButton onClick={() => setEditting(false)}>
-              <Iconify icon="mingcute:close-fill" />
-            </IconButton>
-          </Stack>
           <Stack gap={2}>
-            <Typography variant="subtitle1">{t('communication')}</Typography>
             <RHFDatePicker name="date" label={t('date')} />
             <RHFEditor
               lang="en"
@@ -82,29 +89,9 @@ export default function CommunicationItem({ one, refetch }) {
           </Stack>
         </FormProvider>
       ) : (
-        <>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
-            <Typography variant="subtitle2">{fDateTime(one.created_at)}</Typography>
-            <IconButton onClick={() => setEditting(true)}>
-              <Iconify icon="lets-icons:edit-fill" />
-            </IconButton>
-          </Stack>
-          {/* <Typography variant='subtitle2'>{t('prescription')}:</Typography> */}
-          <Stack mt={1} ml={1} gap={1}>
-            <Stack direction="row" gap={3}>
-              <Typography variant="body2" color="text.disabled">
-                {t('date')}
-              </Typography>
-              <Typography variant="body2">{fDateAndTime(one?.date)}</Typography>
-            </Stack>
-            <Typography variant="body2" color="text.disabled">
-              {t('description')}
-            </Typography>
-            <Typography variant="body2">{ConvertToHTML(one?.description)}</Typography>
-          </Stack>
-        </>
+        <RecordBlock>{ConvertToHTML(one?.description)}</RecordBlock>
       )}
-    </Card>
+    </RecordCard>
   );
 }
 CommunicationItem.propTypes = {

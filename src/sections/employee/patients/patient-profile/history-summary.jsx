@@ -2,23 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 import {
-  Assignment,
-  History,
-  LocalPharmacy as Medication,
-  Warning,
-} from '@mui/icons-material';
-
-
-import {
-  Avatar,
   Box,
   Grid,
   Paper,
   Stack,
+  Avatar,
   Typography,
 } from '@mui/material';
+import {
+  History,
+  Warning,
+  Assignment,
+  LocalPharmacy as Medication,
+} from '@mui/icons-material';
 
 import { useTranslate } from 'src/locales';
 

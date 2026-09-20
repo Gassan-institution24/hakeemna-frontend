@@ -19,6 +19,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFPhoneNumberCustom } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
 
 export default function EditPatient({ patient, onSaved }) {
   const { enqueueSnackbar } = useSnackbar();
@@ -139,6 +140,12 @@ export default function EditPatient({ patient, onSaved }) {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <ProfilePaneHeader
+        icon="solar:user-id-bold-duotone"
+        title={t('Patient Information')}
+        subtitle={t('Identity and contact details held by this clinic')}
+      />
+
       <Card sx={{ 
         p: { xs: 2, sm: 3 }, 
         mx: 0, 

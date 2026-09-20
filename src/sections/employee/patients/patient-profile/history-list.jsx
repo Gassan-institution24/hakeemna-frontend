@@ -2,16 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
+import { History as HistoryIcon } from '@mui/icons-material';
 import {
   Box,
-  Pagination,
   Paper,
   Stack,
+  Pagination,
   Typography,
 } from '@mui/material';
-
-import { History as HistoryIcon } from '@mui/icons-material';
 
 import { useTranslate } from 'src/locales';
 

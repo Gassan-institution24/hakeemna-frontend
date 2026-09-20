@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
-import { Box, Chip, Stack, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { Box, Chip, Stack, Tooltip, Typography, useMediaQuery } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
-import ToothSVG, { STATUS_COLORS, UPPER_TEETH, LOWER_TEETH } from './tooth-svg';
 import ToothDialog from './tooth-dialog';
+import ToothSVG, { UPPER_TEETH, LOWER_TEETH, STATUS_COLORS } from './tooth-svg';
 
 // ----------------------------------------------------------------------
 

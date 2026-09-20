@@ -1,11 +1,15 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
 
+import { Button } from '@mui/material';
+
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 import { useGetOneUSPatient } from 'src/api';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+
+import Iconify from 'src/components/iconify';
 
 import PatientOverview from 'src/sections/shared/patient-profile/overview';
 import { mergeUsPatient } from 'src/sections/shared/patient-profile/utils';
@@ -99,7 +103,6 @@ export default function PatientProfile() {
               icon: 'solar:wallet-money-bold-duotone',
             },
             { value: 'upload', label: t('Upload Files'), icon: 'solar:upload-bold-duotone' },
-            { value: 'edit', label: t('Patient Information'), icon: 'solar:user-id-bold-duotone' },
           ],
         },
       ].filter((section) => section.items.length),
@@ -107,7 +110,7 @@ export default function PatientProfile() {
   );
 
   const validSections = useMemo(
-    () => [...pinned, ...sections.flatMap((one) => one.items)].map((one) => one.value),
+    () => [...pinned, ...sections.flatMap((one) => one.items)].map((one) => one.value).concat('edit'),
     [pinned, sections]
   );
 
@@ -144,6 +147,17 @@ export default function PatientProfile() {
     <PatientProfileShell
       patient={patientData}
       loading={loading}
+      bannerActions={
+        // Same placement as the doctor's profile; this one has no Call button.
+        <Button
+          variant={section === 'edit' ? 'contained' : 'outlined'}
+          color="inherit"
+          onClick={() => setSection('edit')}
+          startIcon={<Iconify icon="solar:user-id-bold-duotone" />}
+        >
+          {t('Patient Information')}
+        </Button>
+      }
       backTo={paths.unitservice.patients.all}
       pinned={pinned}
       sections={sections}

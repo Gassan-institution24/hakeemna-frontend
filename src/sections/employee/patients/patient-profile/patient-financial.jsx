@@ -8,6 +8,7 @@ import {
   Table,
   Divider,
   TableRow,
+  Skeleton,
   Container,
   TableBody,
   TableCell,
@@ -23,13 +24,14 @@ import { useGetPatientIncomePaymentControl } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   TableNoData,
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
 
 // ----------------------------------------------------------------------
 
@@ -73,18 +75,42 @@ export default function PatientFinancial({ patient }) {
     { id: 'status', label: t('Status') },
   ];
 
+  const header = (
+    <ProfilePaneHeader
+      icon="solar:wallet-money-bold-duotone"
+      title={t('Financial Information')}
+      count={rows.length}
+    />
+  );
+
+  // A walk-in with no linked patient account has no ledger to show. Say that
+  // under the same heading rather than swapping the whole pane for one line.
   if (!patientId) {
     return (
-      <Container sx={{ py: 5 }} maxWidth="xl">
-        <Typography textAlign="center" color="text.secondary">
-          {t('No financial records')}
-        </Typography>
+      <Container sx={{ py: 3 }} maxWidth="xl">
+        {header}
+        <Card sx={{ py: 8, textAlign: 'center' }}>
+          <Typography color="text.secondary">{t('No financial records')}</Typography>
+        </Card>
       </Container>
     );
   }
 
+  // A full-screen LoadingScreen used to take over here, blanking the banner and
+  // the rail with it -- so the whole chart flickered when you opened this one
+  // section. The skeleton stays inside the pane instead.
   if (loading) {
-    return <LoadingScreen />;
+    return (
+      <Container sx={{ py: 3 }} maxWidth="xl">
+        {header}
+        <Card sx={{ mb: 3, p: 2 }}>
+          <Skeleton variant="rounded" height={56} />
+        </Card>
+        <Card sx={{ p: 2 }}>
+          <Skeleton variant="rounded" height={320} />
+        </Card>
+      </Container>
+    );
   }
 
   const paginated = rows.slice(
@@ -94,6 +120,8 @@ export default function PatientFinancial({ patient }) {
 
   return (
     <Container sx={{ py: 3 }} maxWidth="xl">
+      {header}
+
       {/* Summary */}
       <Card sx={{ mb: 3 }}>
         <Stack

@@ -36,6 +36,8 @@ import {
   RHFDatePicker,
 } from 'src/components/hook-form';
 
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
+
 export default function PatientUpload({ patient }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
@@ -227,13 +229,23 @@ export default function PatientUpload({ patient }) {
     setValue('drugs', [defaultDrug]);
   }, [defaultDrug, setValue]);
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ py: 3 }}>
+      {/* This section is not a file uploader -- it is one long form that repeats
+          the add form of six other sections on a single page. The subtitle at
+          least says so, since the rail label does not. */}
+      <ProfilePaneHeader
+        icon="solar:upload-bold-duotone"
+        title={t('Upload Files')}
+        subtitle={t('Record several kinds of entry for this patient at once')}
+      />
+
       <FormProvider methods={methods}>
         <Card sx={{ p: 2, mb: 4 }}>
           <Typography variant="subtitle1">{t('prescription')}</Typography>
           {!loading &&
             fields.map((one, index) => (
               <Stack
+                key={one.id || index}
                 direction="row"
                 flexWrap="wrap"
                 alignItems="center"
@@ -242,7 +254,7 @@ export default function PatientUpload({ patient }) {
                 mt={2}
               >
                 <Autocomplete
-                  sx={{ minWidth: 300, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                   options={medicinesData}
                   onChange={(event, newValue) =>
                     setValue(`drugs[${index}].medicines`, newValue?._id)
@@ -258,29 +270,29 @@ export default function PatientUpload({ patient }) {
                   )}
                 />
                 <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                   name={`drugs[${index}].Frequency_per_day`}
                   label={t('frequency')}
                 />
                 <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                   name={`drugs[${index}].Start_time`}
                   label={t('start date')}
                 />
                 <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                   name={`drugs[${index}].End_time`}
                   label={t('end date')}
                   shouldDisableDate={(date) => date < new Date(watch(`drugs[${index}].Start_time`))}
                 />
                 <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                   name={`drugs[${index}].Doctor_Comments`}
                   label={t('doctor comment')}
                 />
                 <RHFCheckbox
                   onChange={() => chronicChange(index)}
-                  sx={{ minWidth: 300, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                   name={`drugs[${index}].chronic`}
                   label={t('chronic')}
                 />

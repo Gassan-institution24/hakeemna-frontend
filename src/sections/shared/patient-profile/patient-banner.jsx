@@ -175,7 +175,18 @@ export default function PatientBanner({ patient, loading, actions, backTo }) {
         </Stack>
 
         {actions && (
-          <Stack direction="row" gap={1} flexWrap="wrap" sx={{ ml: 'auto' }}>
+          <Stack
+            direction="row"
+            gap={1}
+            flexWrap="wrap"
+            sx={{
+              ml: 'auto',
+              width: { xs: 1, sm: 'auto' },
+              // On a phone the buttons split the row evenly rather than
+              // wrapping one under the other at ragged widths.
+              '& > *': { flex: { xs: 1, sm: 'none' } },
+            }}
+          >
             {actions}
           </Stack>
         )}

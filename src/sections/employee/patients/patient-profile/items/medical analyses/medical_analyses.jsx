@@ -117,7 +117,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
     }
   };
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
+    <Card sx={{ p: { xs: 2, md: 2.5 } }}>
       {editing ? (
         <FormProvider methods={methods}>
           <Stack spacing={2}>
@@ -139,7 +139,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
                   getOptionLabel={(option) =>
                     curLangAr ? option?.name_arabic || '' : option?.name_english || ''
                   }
-                  renderInput={(params) => <TextField {...params} label={t('medical analysis')} />}
+                  renderInput={(params) => <TextField {...params} label={t('Lab Test')} />}
                 />
 
                 <TextField
@@ -212,7 +212,7 @@ export default function MedicalAnalysisItem({ one, patient, refetch }) {
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
           >
             <Typography variant="body2" color="text.disabled">
-              {t('medical analysis')}
+              {t('Lab Test')}
             </Typography>
             <Typography variant="body2" color="text.disabled">
               {t('group')}

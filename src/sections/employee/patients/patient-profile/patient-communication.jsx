@@ -1,102 +1,88 @@
-import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState, useCallback } from 'react';
 
-import { Stack, Button, Container, Tabs, Tab, Box } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSPCommunication } from 'src/api/usp_communication';
 
+import ProfilePane from 'src/sections/shared/patient-profile/profile-pane';
+import { RecordGrid } from 'src/sections/shared/patient-profile/record-card';
 import UnitServiceVideoCallsTableView from 'src/sections/unit-service/videocalls/UnitServiceVideoCallsTableView';
 
 import CommunicationItem from './items/communication/communication-item';
 import CommunicationUpload from './items/communication/communication-upload';
 
-function CommunicationContent({ patient, data, refetch, showAdd, setShowAdd, t }) {
-  return (
-    <>
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
-          {showAdd ? t('X') : t('new communication')}
-        </Button>
-      </Stack>
-      {showAdd && (
-        <CommunicationUpload
-          patient={patient}
-          refetch={() => {
-            setShowAdd(false);
-            refetch();
-          }}
-        />
-      )}
-      {data?.map((one, idx) => (
-        <CommunicationItem key={idx} one={one} refetch={refetch} />
-      ))}
-    </>
-  );
-}
-
-CommunicationContent.propTypes = {
-  patient: PropTypes.object,
-  data: PropTypes.array,
-  refetch: PropTypes.func,
-  showAdd: PropTypes.bool,
-  setShowAdd: PropTypes.func,
-  t: PropTypes.func,
-};
-
 export default function PatientCommunication({ patient }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const { data, refetch } = useGetUSPCommunication({
+  const { data, loading, error, refetch } = useGetUSPCommunication({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     patient: patient?.patient?._id,
     unit_service_patient: patient?._id,
   });
 
-  const [showAdd, setShowAdd] = React.useState(false);
+  const [showAdd, setShowAdd] = useState(false);
   const [currentTab, setCurrentTab] = useState('communication');
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
 
-  const TABS = [
-    {
-      value: 'communication',
-      title: t('Patient Communication'),
-      label: <CommunicationContent patient={patient} data={data} refetch={refetch} showAdd={showAdd} setShowAdd={setShowAdd} t={t} />,
-    },
-    {
-      value: 'video_calls',
-      title: t('Video calls'),
-      label: <UnitServiceVideoCallsTableView patient={patient} />,
-    },
-  ];
+  const rows = Array.isArray(data) ? data : [];
+  const onMessages = currentTab === 'communication';
+
+  // The two tabs used to be built as an array whose `label` held a whole
+  // rendered subtree, so both were constructed on every render whichever one was
+  // showing -- and the video call table mounted its own fetch behind the tab you
+  // were not looking at.
+  const renderTabs = (
+    <Tabs value={currentTab} onChange={handleChangeTab} sx={{ minHeight: 40 }}>
+      <Tab value="communication" label={t('Messages')} sx={{ minHeight: 40 }} />
+      <Tab value="video_calls" label={t('Video calls')} sx={{ minHeight: 40 }} />
+    </Tabs>
+  );
 
   return (
-    <Container sx={{ backgroundColor: 'background.neutral', py: 3 }} maxWidth="xl">
-      <Tabs value={currentTab} onChange={handleChangeTab}>
-        {TABS.map((tab) => (
-          <Tab key={tab.value} value={tab.value} label={t(tab.title)} />
-        ))}
-      </Tabs>
-
-      {TABS.map(
-        (tab) =>
-          tab.value === currentTab && (
-            <Box
-              key={tab.value}
-              sx={{
-                pt: 3,
-              }}
-            >
-              {tab.label}
-            </Box>
-          )
+    <ProfilePane
+      icon="solar:chat-round-dots-bold-duotone"
+      title={t('Patient Communication')}
+      toolbar={renderTabs}
+      count={onMessages ? rows.length : undefined}
+      loading={onMessages && loading}
+      error={onMessages ? error : undefined}
+      isEmpty={onMessages && !rows.length}
+      emptyTitle={t('No messages')}
+      emptyDescription={t('Messages exchanged with this patient appear here.')}
+      // The add form belongs to the messages tab only; on the video call tab
+      // there is nothing for it to create.
+      addLabel={onMessages ? t('New Communication') : undefined}
+      adding={showAdd}
+      onToggleAdd={onMessages ? () => setShowAdd((open) => !open) : undefined}
+      form={
+        onMessages ? (
+          <CommunicationUpload
+            patient={patient}
+            refetch={() => {
+              setShowAdd(false);
+              refetch();
+            }}
+          />
+        ) : null
+      }
+    >
+      {onMessages ? (
+        <RecordGrid min={420}>
+          {rows.map((one) => (
+            <CommunicationItem key={one._id} one={one} refetch={refetch} />
+          ))}
+        </RecordGrid>
+      ) : (
+        <UnitServiceVideoCallsTableView patient={patient} />
       )}
-    </Container>
+    </ProfilePane>
   );
 }
 PatientCommunication.propTypes = { patient: PropTypes.object };

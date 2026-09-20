@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Stack, Button, Container } from '@mui/material';
-
 import { useTranslate } from 'src/locales';
 import { useGetdoctorreports } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+
+import ProfilePane from 'src/sections/shared/patient-profile/profile-pane';
+import { RecordGrid } from 'src/sections/shared/patient-profile/record-card';
 
 import FileItem from './items/file/file-item';
 import PatientFileUpload from './items/file/file-upload';
@@ -13,7 +14,7 @@ import PatientFileUpload from './items/file/file-upload';
 export default function PatientFile({ patient }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const { data, refetch } = useGetdoctorreports({
+  const { data, loading, error, refetch } = useGetdoctorreports({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     patient: patient?.patient?._id,
@@ -21,14 +22,26 @@ export default function PatientFile({ patient }) {
   });
 
   const [showAdd, setShowAdd] = React.useState(false);
+
+  const rows = Array.isArray(data) ? data : [];
+
   return (
-    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
-          {showAdd ? t('X') : t('new information')}
-        </Button>
-      </Stack>
-      {showAdd && (
+    <ProfilePane
+      icon="solar:folder-with-files-bold-duotone"
+      title={t('File')}
+      // "File", "Medical Reports" and "Upload Files" are three nearby names, and
+      // nothing in the rail says which holds what. The subtitle does.
+      subtitle={t("The doctor's own notes on this patient")}
+      count={rows.length}
+      loading={loading}
+      error={error}
+      isEmpty={!rows.length}
+      emptyTitle={t('Nothing in the file yet')}
+      emptyDescription={t('Notes recorded about this patient appear here.')}
+      addLabel={t('New Information')}
+      adding={showAdd}
+      onToggleAdd={() => setShowAdd((open) => !open)}
+      form={
         <PatientFileUpload
           patient={patient}
           refetch={() => {
@@ -36,11 +49,14 @@ export default function PatientFile({ patient }) {
             refetch();
           }}
         />
-      )}
-      {data?.map((one, idx) => (
-        <FileItem key={idx} one={one} refetch={refetch} />
-      ))}
-    </Container>
+      }
+    >
+      <RecordGrid>
+        {rows.map((one) => (
+          <FileItem key={one._id} one={one} refetch={refetch} />
+        ))}
+      </RecordGrid>
+    </ProfilePane>
   );
 }
 PatientFile.propTypes = { patient: PropTypes.object };

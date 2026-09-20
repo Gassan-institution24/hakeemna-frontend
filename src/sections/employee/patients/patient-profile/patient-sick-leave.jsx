@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Stack, Button, Container } from '@mui/material';
-
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetSickLeaves } from 'src/api/sick_leave';
+
+import ProfilePane from 'src/sections/shared/patient-profile/profile-pane';
+import { RecordGrid } from 'src/sections/shared/patient-profile/record-card';
 
 import SickLeaveItem from './items/sick-leave/sick-leave-item';
 import SickLeaveUpload from './items/sick-leave/sick-leave-upload';
@@ -13,7 +14,7 @@ import SickLeaveUpload from './items/sick-leave/sick-leave-upload';
 export default function PatientSickLeaves({ patient }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const { data, refetch } = useGetSickLeaves({
+  const { data, loading, error, refetch } = useGetSickLeaves({
     unit_service:
       user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id,
     patient: patient?.patient?._id,
@@ -21,14 +22,23 @@ export default function PatientSickLeaves({ patient }) {
   });
 
   const [showAdd, setShowAdd] = React.useState(false);
+
+  const rows = Array.isArray(data) ? data : [];
+
   return (
-    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
-          {showAdd ? t('X') : t('new sick leave')}
-        </Button>
-      </Stack>
-      {showAdd && (
+    <ProfilePane
+      icon="solar:bed-bold-duotone"
+      title={t('Sick Leave')}
+      count={rows.length}
+      loading={loading}
+      error={error}
+      isEmpty={!rows.length}
+      emptyTitle={t('No sick leave issued')}
+      emptyDescription={t('Sick leave certificates issued to this patient appear here.')}
+      addLabel={t('New Sick Leave')}
+      adding={showAdd}
+      onToggleAdd={() => setShowAdd((open) => !open)}
+      form={
         <SickLeaveUpload
           patient={patient}
           refetch={() => {
@@ -36,11 +46,14 @@ export default function PatientSickLeaves({ patient }) {
             refetch();
           }}
         />
-      )}
-      {data?.map((one, idx) => (
-        <SickLeaveItem key={idx} one={one} refetch={refetch} />
-      ))}
-    </Container>
+      }
+    >
+      <RecordGrid>
+        {rows.map((one) => (
+          <SickLeaveItem key={one._id} one={one} refetch={refetch} />
+        ))}
+      </RecordGrid>
+    </ProfilePane>
   );
 }
 PatientSickLeaves.propTypes = { patient: PropTypes.object };

@@ -2,47 +2,39 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-
 import {
-  Avatar,
-  Badge,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Collapse,
-  Divider,
-  Grid,
-  IconButton,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-
-
-import {
-  AccessTime,
-  Assignment,
-  CalendarToday,
-  CheckCircle,
-  EventBusy,
-  ExpandLess,
-  ExpandMore,
   Groups,
-  LocalHospital,
   Receipt,
   Timeline,
+  EventBusy,
+  AccessTime,
+  Assignment,
+  ExpandLess,
+  ExpandMore,
+  CheckCircle,
+  CalendarToday,
+  LocalHospital,
 } from '@mui/icons-material';
-
+import {
+  Box,
+  Card,
+  Chip,
+  Grid,
+  Badge,
+  Paper,
+  Stack,
+  Avatar,
+  Button,
+  Collapse,
+  CardHeader,
+  IconButton,
+  Typography,
+  CardContent,
+  LinearProgress,
+} from '@mui/material';
 
 import { fDate, fDateTime } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 
 

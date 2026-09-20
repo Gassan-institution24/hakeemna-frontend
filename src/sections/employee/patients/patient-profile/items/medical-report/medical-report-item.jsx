@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Card, Link, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -14,6 +14,11 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFUpload } from 'src/components/hook-form';
+
+import RecordCard, {
+  RecordBlock,
+  RecordAttachments,
+} from 'src/sections/shared/patient-profile/record-card';
 
 import MedicalReportPDF from './MedicalReportPDF';
 
@@ -87,16 +92,46 @@ export default function MedicalReportItem({ one, refetch }) {
     setOpenPreview(true);
   };
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
-      {editting ? (
-        <FormProvider methods={methods}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
+    <RecordCard
+      icon="solar:document-medicine-bold-duotone"
+      color="success"
+      title={editting ? t('medical report') : fDate(one.created_at)}
+      footer={!editting ? <RecordAttachments files={one.file} fallbackLabel={t('file')} /> : null}
+      actions={
+        editting ? (
+          <Tooltip title={t('cancel')}>
             <IconButton onClick={() => setEditting(false)}>
               <Iconify icon="mingcute:close-fill" />
             </IconButton>
-          </Stack>
+          </Tooltip>
+        ) : (
+          <>
+            <Box key={currentLang.value}>
+              <Tooltip title={t('Print')}>
+                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
+                  <Iconify icon="solar:printer-minimalistic-bold" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+            <Tooltip title={t('edit')}>
+              <IconButton
+                onClick={() => {
+                  reset({ file: one?.file || [], description: one?.description || '' });
+                  setEditting(true);
+                }}
+              >
+                <Iconify icon="solar:pen-bold" />
+              </IconButton>
+            </Tooltip>
+          </>
+        )
+      }
+    >
+      {editting ? (
+        <FormProvider methods={methods}>
+          {/* The title and the cancel button are the card header's job now. */}
           <Stack gap={2}>
-            <Typography variant="subtitle1">{t('medical report')}</Typography>
             <RHFEditor
               lang="en"
               name="description"
@@ -121,47 +156,12 @@ export default function MedicalReportItem({ one, refetch }) {
           </Stack>
         </FormProvider>
       ) : (
-        <>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 18 }}>
-              {fDate(one.created_at)}
-            </Typography>
-
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Box key={currentLang.value}>
-                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
-                  <Iconify icon="solar:printer-minimalistic-bold" />
-                </IconButton>
-              </Box>
-              <IconButton
-                onClick={() => {
-                  reset({
-                    file: one?.file || [],
-                    description: one?.description || '',
-                  });
-                  setEditting(true);
-                }}
-              >
-                <Iconify icon="lets-icons:edit-fill" />
-              </IconButton>
-            </Stack>
-          </Stack>
-
-          <Stack gap={1} mt={1} ml={1}>
-            <Typography
-              textTransform="none"
-              variant="body2"
-              dangerouslySetInnerHTML={{ __html: one.description }}
-            />
-            <Stack direction="row" gap={1}>
-              {one.file?.map((file) => (
-                <Link href={file} target="_blank" sx={{ fontSize: 14 }}>
-                  {file.name || t('file')}
-                </Link>
-              ))}
-            </Stack>
-          </Stack>
-        </>
+        <RecordBlock>
+          <Box
+            sx={{ textTransform: 'none' }}
+            dangerouslySetInnerHTML={{ __html: one.description }}
+          />
+        </RecordBlock>
       )}
       {/* PDF PREVIEW DIALOG */}
       {openPreview && selectedReport && (
@@ -171,7 +171,7 @@ export default function MedicalReportItem({ one, refetch }) {
           report={selectedReport}
         />
       )}
-    </Card>
+    </RecordCard>
   );
 }
 MedicalReportItem.propTypes = {

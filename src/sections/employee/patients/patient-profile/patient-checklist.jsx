@@ -9,7 +9,9 @@ import {
   Box,
   Card,
   Radio,
+  Stack,
   Button,
+  Divider,
   Checkbox,
   TextField,
   FormGroup,
@@ -25,6 +27,8 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetCheckList, useGetMyCheckLists, useGetUSPatientCheckList } from 'src/api';
 
 import FormProvider from 'src/components/hook-form/form-provider';
+
+import { ProfilePaneHeader } from 'src/sections/shared/patient-profile/profile-pane';
 
 export default function PatientCheckList({ patient }) {
   const { t } = useTranslate();
@@ -56,8 +60,6 @@ export default function PatientCheckList({ patient }) {
     answer: Yup.mixed(),
   });
 
-  console.log('patient', patient?._id);
-
   const defaultValues = {
     patient: patient?.patient?._id || patient?._id,
     unit_service_patient: patient?._id,
@@ -85,132 +87,196 @@ export default function PatientCheckList({ patient }) {
     });
   }, [user, patient, reset]);
 
-  return (
-    <Card sx={{ mt: 3 }}>
-      <Box sx={{ display: 'flex' }}>
-        <Box sx={{ width: '70%', p: 2 }}>
-          <Box sx={{ height: '400px', overflowY: 'auto' }}>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                // maxWidth: 500, // Set the maximum width to 300px
-                // overflowX: 'auto', // Enable horizontal scrolling if content exceeds maxWidth
-              }}
-            >
-              {CheckListData?.map((info, index) => (
-                <Button
-                  key={index}
-                  sx={{ mt: 2, ml: 2, bgcolor: '#EDEFF2' }}
-                  onClick={() => setTheId(info?._id)}
-                >
-                  {info?.title}{' '}
-                  {/* <Iconify icon="lets-icons:arhive-import" sx={{ ml: 2 }} width={21} /> */}
-                </Button>
-              ))}
-            </Box>
+  const questionnaires = Array.isArray(CheckListData) ? CheckListData : [];
+  const answers = Array.isArray(answer) ? answer : [];
 
-            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-              <Box sx={{ m: 3 }}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom: 0.5, mt: 2, mb: 2 }}>
-                  <Typography>{data?.title}</Typography>
-                  {data && (
-                    <Typography sx={{ p: 1, bgcolor: '#EDEFF2', width: '100%', mt: 2 }}>
-                      {data?.description}
+  return (
+    <Box>
+      <ProfilePaneHeader
+        icon="solar:checklist-minimalistic-bold-duotone"
+        title={t('Questionnaires')}
+        subtitle={t('Questions and assessments to evaluate the patient')}
+        count={answers.length}
+      />
+
+      {/* Was a hard 70/30 flex split that never stacked, so on a phone the answer
+          column was squeezed into a third of an already narrow screen. */}
+      <Card>
+        <Stack direction={{ xs: 'column', md: 'row' }} divider={<Divider flexItem />}>
+          <Box sx={{ flex: 1, p: 2, minWidth: 0 }}>
+            {questionnaires.length === 0 ? (
+              <Typography
+                variant="body2"
+                sx={{ color: 'text.disabled', py: 4, textAlign: 'center' }}
+              >
+                {t('No questionnaires available')}
+              </Typography>
+            ) : (
+              <Stack direction="row" flexWrap="wrap" gap={1}>
+                {questionnaires.map((info) => {
+                  const selected = info?._id === thId;
+                  return (
+                    // These used to be identical grey blobs with no selected
+                    // state, so nothing said which form you were filling in.
+                    <Button
+                      key={info?._id}
+                      size="small"
+                      variant={selected ? 'contained' : 'outlined'}
+                      color={selected ? 'primary' : 'inherit'}
+                      onClick={() => setTheId(info?._id)}
+                    >
+                      {info?.title}
+                    </Button>
+                  );
+                })}
+              </Stack>
+            )}
+
+            <Divider sx={{ my: 2, borderStyle: 'dashed' }} />
+
+            {!data ? (
+              <Typography
+                variant="body2"
+                sx={{ color: 'text.disabled', py: 4, textAlign: 'center' }}
+              >
+                {t('Select a questionnaire to begin')}
+              </Typography>
+            ) : (
+              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1">{data?.title}</Typography>
+
+                  {data?.description && (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        mt: 1,
+                        p: 1.5,
+                        borderRadius: 1,
+                        color: 'text.secondary',
+                        // Was #EDEFF2, which stayed pale grey in dark mode and
+                        // put near-white body text on it.
+                        bgcolor: 'background.neutral',
+                      }}
+                    >
+                      {data.description}
                     </Typography>
                   )}
                 </Box>
-                {data?.questions?.map((questions, ii) => (
-                  <Box key={ii} sx={{ display: 'block' }}>
-                    {questions?.answer_way === 'Text' && (
-                      <Controller
-                        name={`answer_${questions?._id}`}
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            sx={{ m: 2, width: '80%' }}
-                            fullWidth
-                            label={questions?.question}
-                          />
-                        )}
-                      />
-                    )}
-                    {questions?.answer_way === 'Options' && (
-                      <Box sx={{ m: 2 }}>
-                        <Typography>{questions?.question}</Typography>
-                        <Controller
-                          name={`answer_${questions?._id}`}
-                          control={control}
-                          render={({ field }) => (
-                            <FormGroup>
-                              {questions?.options?.map((option, index) => (
-                                <FormControlLabel
-                                  key={index}
-                                  control={
-                                    <Checkbox
-                                      checked={field.value?.includes(option) || false}
-                                      onChange={(e) => {
-                                        const valueArray = field.value || [];
-                                        if (e.target.checked) {
-                                          field.onChange([...valueArray, option]);
-                                        } else {
-                                          field.onChange(
-                                            valueArray.filter((item) => item !== option)
-                                          );
-                                        }
-                                      }}
-                                    />
-                                  }
-                                  label={option}
-                                />
-                              ))}
-                            </FormGroup>
-                          )}
-                        />
-                      </Box>
-                    )}
-                    {questions?.answer_way === 'Yes No' && (
-                      <Box sx={{ m: 2, border: 1, p: 2 }}>
-                        <Typography sx={{ m: 2 }}>{questions?.question}</Typography>
-                        <Controller
-                          name={`answer_${questions?._id}`}
-                          control={control}
-                          render={({ field }) => (
-                            <RadioGroup {...field}>
-                              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                              <FormControlLabel value="No" control={<Radio />} label="No" />
-                            </RadioGroup>
-                          )}
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                ))}
-              </Box>
 
-              {data && (
-                <Button type="submit" disabled={isSubmitting} variant="contained" sx={{ m: 3 }}>
+                <Stack gap={2}>
+                  {data?.questions?.map((questions) => (
+                    <Box key={questions?._id}>
+                      {questions?.answer_way === 'Text' && (
+                        <Controller
+                          name={`answer_${questions?._id}`}
+                          control={control}
+                          render={({ field }) => (
+                            <TextField {...field} fullWidth label={questions?.question} />
+                          )}
+                        />
+                      )}
+
+                      {questions?.answer_way === 'Options' && (
+                        <Box>
+                          <Typography variant="subtitle2">{questions?.question}</Typography>
+                          <Controller
+                            name={`answer_${questions?._id}`}
+                            control={control}
+                            render={({ field }) => (
+                              <FormGroup>
+                                {questions?.options?.map((option) => (
+                                  <FormControlLabel
+                                    key={option}
+                                    control={
+                                      <Checkbox
+                                        checked={field.value?.includes(option) || false}
+                                        onChange={(e) => {
+                                          const valueArray = field.value || [];
+                                          if (e.target.checked) {
+                                            field.onChange([...valueArray, option]);
+                                          } else {
+                                            field.onChange(
+                                              valueArray.filter((item) => item !== option)
+                                            );
+                                          }
+                                        }}
+                                      />
+                                    }
+                                    label={option}
+                                  />
+                                ))}
+                              </FormGroup>
+                            )}
+                          />
+                        </Box>
+                      )}
+
+                      {questions?.answer_way === 'Yes No' && (
+                        <Box
+                          sx={{
+                            p: 2,
+                            borderRadius: 1,
+                            border: (theme) => `solid 1px ${theme.palette.divider}`,
+                          }}
+                        >
+                          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            {questions?.question}
+                          </Typography>
+                          <Controller
+                            name={`answer_${questions?._id}`}
+                            control={control}
+                            render={({ field }) => (
+                              <RadioGroup {...field} row>
+                                {/* Were hardcoded English in an app that ships
+                                    Arabic. */}
+                                <FormControlLabel
+                                  value="Yes"
+                                  control={<Radio />}
+                                  label={t('Yes')}
+                                />
+                                <FormControlLabel value="No" control={<Radio />} label={t('No')} />
+                              </RadioGroup>
+                            )}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
+                </Stack>
+
+                <Button type="submit" disabled={isSubmitting} variant="contained" sx={{ mt: 3 }}>
                   {t('save')}
                 </Button>
-              )}
-            </FormProvider>
+              </FormProvider>
+            )}
           </Box>
-        </Box>
-        <Box sx={{ width: '30%', p: 2, borderLeft: 1, borderColor: 'divider' }}>
-          <Typography sx={{ textAlign: 'center', mb: 2 }} variant="h4">
-            {t('Answers')}
-          </Typography>
 
-          {answer?.map((answersAndQ, index) => (
-            <Typography key={index}>
-              {answersAndQ?.question?.question}:{' '}
-              <span style={{ fontSize: 13 }}>{answersAndQ?.answer}</span>
+          <Box sx={{ width: { xs: 1, md: 320 }, flexShrink: 0, p: 2 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1.5 }}>
+              {t('Answers')}
             </Typography>
-          ))}
-        </Box>
-      </Box>
-    </Card>
+
+            {answers.length === 0 ? (
+              <Typography variant="body2" sx={{ color: 'text.disabled' }}>
+                {t('No answers recorded')}
+              </Typography>
+            ) : (
+              <Stack gap={1.5}>
+                {answers.map((answersAndQ) => (
+                  <Box key={answersAndQ?._id}>
+                    <Typography variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
+                      {answersAndQ?.question?.question}
+                    </Typography>
+                    <Typography variant="body2">{String(answersAndQ?.answer ?? '-')}</Typography>
+                  </Box>
+                ))}
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+      </Card>
+    </Box>
   );
 }
 PatientCheckList.propTypes = {

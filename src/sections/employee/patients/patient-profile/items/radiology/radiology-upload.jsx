@@ -155,7 +155,8 @@ export default function RadiologyUpload({ patient, refetch }) {
               <Stack>
                 <Autocomplete
                   sx={{
-                    minWidth: 300,
+                    width: 1,
+                    minWidth: { sm: 300 },
                     flex: 1,
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
@@ -190,7 +191,7 @@ export default function RadiologyUpload({ patient, refetch }) {
                 </Typography>
               </Stack>
               <RHFTextField
-                sx={{ minWidth: 350, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                 name={`radiology[${index}].Doctor_Comments`}
                 label={t('doctor comment')}
               />

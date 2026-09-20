@@ -4,6 +4,8 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 
+import Iconify from 'src/components/iconify';
+
 // ----------------------------------------------------------------------
 
 export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
@@ -47,7 +49,7 @@ export default function ProfileTabs({ tabs, value, onChange, sx, ...other }) {
               tab.label
             )
           }
-          icon={tab.icon}
+          icon={typeof tab.icon === 'string' ? <Iconify icon={tab.icon} width={20} /> : tab.icon}
           iconPosition={tab.icon ? 'start' : undefined}
           sx={{
             px: 2,

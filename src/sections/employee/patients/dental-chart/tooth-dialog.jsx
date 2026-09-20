@@ -1,6 +1,10 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
+import ToothIcon from '@mui/icons-material/Mood';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { TabList, TabPanel, TabContext } from '@mui/lab';
 import {
   Box,
   Tab,
@@ -23,12 +27,9 @@ import {
   DialogContent,
   CircularProgress,
 } from '@mui/material';
-import { TabList, TabPanel, TabContext } from '@mui/lab';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloseIcon from '@mui/icons-material/Close';
-import ToothIcon from '@mui/icons-material/Mood';
 
 import { fDate } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 
 import { STATUS_COLORS, STATUS_STROKE } from './tooth-svg';

@@ -165,7 +165,8 @@ export default function PrescriptionUpload({ patient, refetch }) {
               <Stack>
                 <Autocomplete
                   sx={{
-                    minWidth: 300,
+                    width: 1,
+                    minWidth: { sm: 300 },
                     flex: 1,
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
@@ -192,29 +193,29 @@ export default function PrescriptionUpload({ patient, refetch }) {
                 </Typography>
               </Stack>
               <RHFTextField
-                sx={{ minWidth: 350, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                 name={`drugs[${index}].Frequency_per_day`}
                 label={t('frequency')}
               />
               <RHFDatePicker
-                sx={{ minWidth: 200, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                 name={`drugs[${index}].Start_time`}
                 label={t('start date')}
               />
               <RHFDatePicker
-                sx={{ minWidth: 200, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                 name={`drugs[${index}].End_time`}
                 label={t('end date')}
                 shouldDisableDate={(date) => date < new Date(watch(`drugs[${index}].Start_time`))}
               />
               <RHFTextField
-                sx={{ minWidth: 350, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                 name={`drugs[${index}].Doctor_Comments`}
                 label={t('doctor comment')}
               />
               <RHFCheckbox
                 onChange={() => chronicChange(index)}
-                sx={{ minWidth: 300, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                 name={`drugs[${index}].chronic`}
                 label={t('chronic')}
               />
@@ -302,7 +303,7 @@ export default function PrescriptionUpload({ patient, refetch }) {
                         name={`drugs[${index}].Frequency_per_day`}
                         label={t('frequency')}
                         disabled
-                        sx={{ minWidth: 250, flex: 1 }}
+                        sx={{ width: 1, minWidth: { sm: 250 }, flex: 1 }}
                       />
                     )}
                     {dialogMethods.watch(`drugs[${index}].Doctor_Comments`) && (
@@ -311,16 +312,16 @@ export default function PrescriptionUpload({ patient, refetch }) {
                         label={t('doctor comment')}
                         disabled
                         multiline
-                        sx={{ minWidth: 300, flex: 1 }}
+                        sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                       />
                     )}
                     <RHFDatePicker
-                      sx={{ minWidth: 200, flex: 1 }}
+                      sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                       name={`drugs[${index}].Start_time`}
                       label={t('start date')}
                     />
                     <RHFDatePicker
-                      sx={{ minWidth: 200, flex: 1 }}
+                      sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                       name={`drugs[${index}].End_time`}
                       label={t('end date')}
                       shouldDisableDate={(date) =>

@@ -125,7 +125,7 @@ export default function PrescriptionItem({ one, refetch }) {
                 mt={2}
               >
                 <Autocomplete
-                  sx={{ minWidth: 300, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                   options={medicinesData}
                   onChange={(event, newValue) =>
                     setValue(`medicines[${index}].medicines`, newValue?._id)
@@ -141,17 +141,17 @@ export default function PrescriptionItem({ one, refetch }) {
                   )}
                 />
                 <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                   name={`medicines[${index}].Frequency_per_day`}
                   label={t('frequency')}
                 />
                 <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                   name={`medicines[${index}].Start_time`}
                   label={t('start date')}
                 />
                 <RHFDatePicker
-                  sx={{ minWidth: 200, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 200 }, flex: 1 }}
                   name={`medicines[${index}].End_time`}
                   label={t('end date')}
                   shouldDisableDate={(date) =>
@@ -159,13 +159,13 @@ export default function PrescriptionItem({ one, refetch }) {
                   }
                 />
                 <RHFTextField
-                  sx={{ minWidth: 350, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                   name={`medicinesv[${index}].Doctor_Comments`}
                   label={t('doctor comment')}
                 />
                 <RHFCheckbox
                   onChange={() => chronicChange(index)}
-                  sx={{ minWidth: 300, flex: 1 }}
+                  sx={{ width: 1, minWidth: { sm: 300 }, flex: 1 }}
                   name={`medicines[${index}].chronic`}
                   label={t('chronic')}
                 />

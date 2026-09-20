@@ -1,41 +1,37 @@
 
-import PropTypes from 'prop-types';
 import React from 'react';
-
+import PropTypes from 'prop-types';
 
 import {
-  AccessTime,
-  Assignment,
-  CalendarToday,
-  CheckCircle,
-  EventBusy,
   Receipt,
   Schedule,
   Timeline,
+  EventBusy,
+  AccessTime,
+  Assignment,
+  CheckCircle,
+  CalendarToday,
 } from '@mui/icons-material';
-
-
 import {
-  Box,
-  Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
   Grid,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Stack,
+  Button,
+  Dialog,
+  Divider,
+  ListItem,
   Typography,
+  DialogTitle,
+  ListItemIcon,
+  ListItemText,
+  DialogActions,
+  DialogContent,
 } from '@mui/material';
 
-
 import { fDate, fDateTime } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 
 

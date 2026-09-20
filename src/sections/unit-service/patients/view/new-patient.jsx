@@ -1,8 +1,8 @@
-import Container from '@mui/material/Container';
-
 import { useState, useCallback } from 'react';
+
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 

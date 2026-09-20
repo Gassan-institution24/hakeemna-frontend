@@ -144,7 +144,7 @@ export default function RadiologyItem({ one, patient, refetch }) {
     }
   };
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
+    <Card sx={{ p: { xs: 2, md: 2.5 } }}>
       {editing ? (
         <FormProvider methods={methods}>
           <Stack spacing={2}>

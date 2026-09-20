@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Stack, Button, Container } from '@mui/material';
-
 import { useTranslate } from 'src/locales';
 import { useGetRadiologyPatient } from 'src/api/radiology_patient';
+
+import ProfilePane from 'src/sections/shared/patient-profile/profile-pane';
+import { RecordGrid } from 'src/sections/shared/patient-profile/record-card';
 
 import RadiologyItem from './items/radiology/RadiologyItem';
 import RadiologyUpload from './items/radiology/radiology-upload';
@@ -12,18 +13,26 @@ import RadiologyUpload from './items/radiology/radiology-upload';
 export default function PatientRadiology({ patient }) {
   const { t } = useTranslate();
 
-  const { radiologyData, refetch } = useGetRadiologyPatient(patient?._id);
+  const { radiologyData, loading, error, refetch } = useGetRadiologyPatient(patient?._id);
 
   const [showAdd, setShowAdd] = React.useState(false);
 
+  const rows = Array.isArray(radiologyData) ? radiologyData : [];
+
   return (
-    <Container sx={{ py: 3, backgroundColor: 'background.neutral' }} maxWidth="xl">
-      <Stack sx={{ mb: 2 }} direction="row" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => setShowAdd(!showAdd)}>
-          {showAdd ? t('X') : t('new radiology')}
-        </Button>
-      </Stack>
-      {showAdd && (
+    <ProfilePane
+      icon="solar:bone-bold-duotone"
+      title={t('Radiology')}
+      count={rows.length}
+      loading={loading}
+      error={error}
+      isEmpty={!rows.length}
+      emptyTitle={t('No radiology studies')}
+      emptyDescription={t('Imaging studies recorded for this patient appear here.')}
+      addLabel={t('New Radiology')}
+      adding={showAdd}
+      onToggleAdd={() => setShowAdd((open) => !open)}
+      form={
         <RadiologyUpload
           patient={patient}
           refetch={() => {
@@ -31,11 +40,14 @@ export default function PatientRadiology({ patient }) {
             refetch();
           }}
         />
-      )}
-      {radiologyData?.map((one) => (
-        <RadiologyItem key={one._id} one={one} patient={patient} refetch={refetch} />
-      ))}
-    </Container>
+      }
+    >
+      <RecordGrid min={460}>
+        {rows.map((one) => (
+          <RadiologyItem key={one._id} one={one} patient={patient} refetch={refetch} />
+        ))}
+      </RecordGrid>
+    </ProfilePane>
   );
 }
 PatientRadiology.propTypes = { patient: PropTypes.object };

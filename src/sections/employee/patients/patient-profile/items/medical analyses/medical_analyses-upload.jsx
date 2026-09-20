@@ -101,7 +101,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
       if (!data.analyses?.length || data.analyses.some((one) => !one.medical_analysis)) {
-        enqueueSnackbar(t('please choose medical analysis'), { variant: 'error' });
+        enqueueSnackbar(t('please choose lab test'), { variant: 'error' });
         return;
       }
 
@@ -119,7 +119,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
       methods.reset({ analyses: [defaultAnalysis] });
 
       refetch();
-      enqueueSnackbar(t('medical analysis added successfully'));
+      enqueueSnackbar(`${t('Lab Result')} ${t('added successfully')}`);
     } catch (e) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, { variant: 'error' });
     }
@@ -130,7 +130,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
   return (
     <FormProvider methods={methods}>
       <Card sx={{ p: 2, mb: 4 }}>
-        <Typography variant="subtitle1">{t('medical analysis')}</Typography>
+        <Typography variant="subtitle1">{t('New Lab Result')}</Typography>
         <Tabs value={tab} onChange={(e, v) => setTab(v)}>
           <Tab label={t('manual entry')} />
           {favoriteMedicalAnalysis?.length && <Tab label={t('favorites')} />}
@@ -142,7 +142,8 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
               <Stack>
                 <Autocomplete
                   sx={{
-                    minWidth: 300,
+                    width: 1,
+                    minWidth: { sm: 300 },
                     flex: 1,
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
@@ -171,7 +172,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                     curLangAr ? option.name_arabic : option.name_english
                   }
                   renderInput={(params) => (
-                    <TextField {...params} label={t('medical analysis')} variant="outlined" />
+                    <TextField {...params} label={t('Lab Test')} variant="outlined" />
                   )}
                 />
                 <Typography variant="caption" sx={{ color: 'error.main' }}>
@@ -179,7 +180,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 </Typography>
               </Stack>
               <RHFTextField
-                sx={{ minWidth: 350, flex: 1 }}
+                sx={{ width: 1, minWidth: { sm: 350 }, flex: 1 }}
                 name={`analyses[${index}].Doctor_Comments`}
                 label={t('doctor comment')}
               />
@@ -207,7 +208,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 >
                   <ListItemText
                     primary={curLangAr ? fav.favorite_name_ar : fav.favorite_name}
-                    secondary={`${fav.medical_analysis.length} ${t('medical analysis')}`}
+                    secondary={`${fav.medical_analysis.length} ${t('Lab Test')}`}
                   />
                 </ListItemButton>
               ))}
@@ -291,7 +292,7 @@ export default function MedicalAnalysesUpload({ patient, refetch }) {
                 })),
               });
 
-              enqueueSnackbar(t('medical analysis added successfully'));
+              enqueueSnackbar(`${t('Lab Result')} ${t('added successfully')}`);
               setOpenDialog(false);
               refetch();
             }}

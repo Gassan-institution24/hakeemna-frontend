@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Card, Stack, Button, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import { ConvertToHTML } from 'src/utils/convert-to-html';
@@ -15,6 +15,11 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFEditor, RHFDatePicker } from 'src/components/hook-form';
+
+import RecordCard, {
+  RecordStat,
+  RecordBlock,
+} from 'src/sections/shared/patient-profile/record-card';
 
 import PdfPreviewDialogPrescriptionPDF from './SickLeavePDF';
 
@@ -79,17 +84,64 @@ export default function SickLeaveItem({ one, refetch }) {
   };
 
 
+  const handleEdit = () => {
+    reset({
+      Medical_sick_leave_start: one?.Medical_sick_leave_start || null,
+      Medical_sick_leave_end: one?.Medical_sick_leave_end || null,
+      description: htmlToPlainText(one?.description),
+    });
+    setEditting(true);
+  };
+
+  // The substance of a sick leave is how long it runs, and nothing on the card
+  // used to say so -- you had to subtract two dates yourself.
+  const days = (() => {
+    const from = one?.Medical_sick_leave_start && new Date(one.Medical_sick_leave_start);
+    const to = one?.Medical_sick_leave_end && new Date(one.Medical_sick_leave_end);
+    if (!from || !to || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return null;
+    return Math.max(1, Math.round((to - from) / 86400000) + 1);
+  })();
+
   return (
-    <Card sx={{ py: 3, px: 5, mb: 2 }}>
-      {editting ? (
-        <FormProvider methods={methods}>
-          <Stack direction="row" justifyContent="flex-end" alignItems="center" gap={2}>
+    <RecordCard
+      icon="solar:bed-bold-duotone"
+      color="info"
+      title={editting ? t('sick leave') : fDate(one.created_at)}
+      subtitle={
+        !editting && one?.Medical_sick_leave_start
+          ? // An en dash, not an arrow: an arrow would point the wrong way in Arabic.
+            `${fDate(one.Medical_sick_leave_start)} \u2013 ${fDate(one.Medical_sick_leave_end)}`
+          : null
+      }
+      actions={
+        editting ? (
+          <Tooltip title={t('cancel')}>
             <IconButton onClick={() => setEditting(false)}>
               <Iconify icon="mingcute:close-fill" />
             </IconButton>
-          </Stack>
+          </Tooltip>
+        ) : (
+          <>
+            <Box key={currentLang.value}>
+              <Tooltip title={t('Print')}>
+                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
+                  <Iconify icon="solar:printer-minimalistic-bold" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+            <Tooltip title={t('edit')}>
+              <IconButton onClick={handleEdit}>
+                <Iconify icon="solar:pen-bold" />
+              </IconButton>
+            </Tooltip>
+          </>
+        )
+      }
+    >
+      {editting ? (
+        <FormProvider methods={methods}>
           <Stack gap={2}>
-            <Typography variant="subtitle1">{t('sick leave')}</Typography>
             <RHFDatePicker name="Medical_sick_leave_start" label={t('start date')} />
             <RHFDatePicker name="Medical_sick_leave_end" label={t('end date')} />
             <RHFEditor
@@ -106,60 +158,23 @@ export default function SickLeaveItem({ one, refetch }) {
           </Stack>
         </FormProvider>
       ) : (
-        <>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              {fDate(one.created_at)}
-            </Typography>
+        <Stack gap={2}>
+          {days !== null && (
+            <RecordStat value={days} unit={t('days')} label={t('duration')} color="info.main" />
+          )}
 
-            <Stack direction="row" gap={1}>
-              <Box key={currentLang.value}>
-                <IconButton color="primary" onClick={() => openPdfDialog(one)}>
-                  <Iconify icon="solar:printer-minimalistic-bold" />
-                </IconButton>
-              </Box>
-
-              <IconButton
-                onClick={() => {
-                  reset({
-                    Medical_sick_leave_start: one?.Medical_sick_leave_start || null,
-                    Medical_sick_leave_end: one?.Medical_sick_leave_end || null,
-                    description: htmlToPlainText(one?.description),
-                  });
-                  setEditting(true);
-                }}
-              >
-                <Iconify icon="lets-icons:edit-fill" />
-              </IconButton>
-            </Stack>
-          </Stack>
-
-          <Stack mt={1} ml={1} gap={1}>
-            <Stack direction="row" gap={3}>
-              <Typography variant="body2" color="text.disabled">
-                {t('start date')}
-              </Typography>
-              <Typography variant="body2">{fDate(one?.Medical_sick_leave_start)}</Typography>
-            </Stack>
-            <Stack direction="row" gap={3}>
-              <Typography variant="body2" color="text.disabled">
-                {t('end date')}
-              </Typography>
-              <Typography variant="body2">{fDate(one?.Medical_sick_leave_end)}</Typography>
-            </Stack>
-            <Typography variant="body2" color="text.disabled">
-              {t('description')}
-            </Typography>
-            <Typography variant="body2">{ConvertToHTML(one?.description)}</Typography>
-          </Stack>
-        </>
+          {!!one?.description && (
+            <RecordBlock>{ConvertToHTML(one?.description)}</RecordBlock>
+          )}
+        </Stack>
       )}
+
       <PdfPreviewDialogPrescriptionPDF
         open={openPreview}
         onClose={() => setOpenPreview(false)}
         report={selectedReport}
       />
-    </Card>
+    </RecordCard>
   );
 }
 SickLeaveItem.propTypes = {

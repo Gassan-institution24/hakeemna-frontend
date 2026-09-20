@@ -8,6 +8,8 @@ import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 import { useGetOneUSPatient } from 'src/api';
 
+import Iconify from 'src/components/iconify';
+
 import PatientOverview from 'src/sections/shared/patient-profile/overview';
 import { mergeUsPatient } from 'src/sections/shared/patient-profile/utils';
 import PatientProfileShell from 'src/sections/shared/patient-profile/patient-profile-shell';
@@ -112,11 +114,6 @@ export default function PatientProfile() {
             icon: 'solar:wallet-money-bold-duotone',
           },
           { value: 'upload', label: t('Upload Files'), icon: 'solar:upload-bold-duotone' },
-          {
-            value: 'edit',
-            label: t('Patient Information'),
-            icon: 'solar:user-id-bold-duotone',
-          },
         ],
       },
     ],
@@ -124,14 +121,13 @@ export default function PatientProfile() {
   );
 
   const validSections = useMemo(
-    () => [...pinned, ...sections.flatMap((one) => one.items)].map((one) => one.value),
+    () => [...pinned, ...sections.flatMap((one) => one.items)].map((one) => one.value).concat('edit'),
     [pinned, sections]
   );
 
-  // Opens on the visit record rather than the overview: the first thing a doctor
-  // wants is what happened last time, and the overview stays one click away at
-  // the top of the rail.
-  const [section, setSection] = useProfileSection(validSections, 'history');
+  // Opens on the overview, same as the unit-service profile. Visit History is
+  // the first item under Clinical if that is what you want instead.
+  const [section, setSection] = useProfileSection(validSections);
 
   const renderSection = () => {
     switch (section) {
@@ -172,16 +168,31 @@ export default function PatientProfile() {
     }
   };
 
-  const bannerActions = canCall ? (
-    <Button
-      sx={{ minWidth: 120 }}
-      variant="contained"
-      onClick={handleCall}
-      disabled={!isPatientOnline}
-    >
-      {t('Call')}
-    </Button>
-  ) : null;
+  // Patient Information sits beside Call rather than in the rail: it is the
+  // record's own identity, not one of the clinical sections filed under it.
+  const bannerActions = (
+    <>
+      {canCall && (
+        <Button
+          sx={{ minWidth: 120 }}
+          variant="contained"
+          onClick={handleCall}
+          disabled={!isPatientOnline}
+        >
+          {t('Call')}
+        </Button>
+      )}
+
+      <Button
+        variant={section === 'edit' ? 'contained' : 'outlined'}
+        color="inherit"
+        onClick={() => setSection('edit')}
+        startIcon={<Iconify icon="solar:user-id-bold-duotone" />}
+      >
+        {t('Patient Information')}
+      </Button>
+    </>
+  );
 
   return (
     <PatientProfileShell
