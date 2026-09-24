@@ -2140,5 +2140,14 @@
   "Lab Test": "التحليل",
   "please choose lab test": "يرجى اختيار التحليل",
   "Section": "القسم",
-  "Leave blank to keep the current password": "اتركها فارغة للإبقاء على كلمة المرور الحالية"
+  "Leave blank to keep the current password": "اتركها فارغة للإبقاء على كلمة المرور الحالية",
+  "owner": "المالك",
+  "Not linked to a work group": "غير مرتبط بمجموعة عمل",
+  "These roles are not tied to any work group": "هذه الأدوار غير مرتبطة بأي مجموعة عمل",
+  "Assigned from another work group": "معيّن من مجموعة عمل أخرى",
+  "Already held, but the work group is no longer one of theirs": "معيّن مسبقاً، لكن مجموعة العمل لم تعد من مجموعاته",
+  "Could not load the roles for this clinic": "تعذّر تحميل الأدوار لهذه المنشأة",
+  "This employee is not in any work group, and roles are defined per work group. Add them to a work group first.": "هذا الموظف ليس ضمن أي مجموعة عمل، والأدوار تُعرّف لكل مجموعة عمل. أضفه إلى مجموعة عمل أولاً.",
+  "No role is linked to this employee’s work groups yet": "لا يوجد دور مرتبط بمجموعات عمل هذا الموظف حتى الآن",
+  "Create a role for one of these work groups, or link an existing role to it.": "أنشئ دوراً لإحدى مجموعات العمل هذه، أو اربط دوراً موجوداً بها."
 }

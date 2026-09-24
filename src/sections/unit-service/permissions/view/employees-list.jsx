@@ -627,13 +627,18 @@ export default function EmployeesTableView() {
         onClose={() => setAssignRoleTarget(null)}
         engagement={assignRoleTarget}
         unitServiceId={unitServiceId}
-        workGroupId={
-          workGroupsData.find((wg) =>
-            wg.employees?.some(
-              (emp) => (emp._id || emp) === assignRoleTarget?._id
-            )
-          )?._id
-        }
+        // EVERY work group this engagement belongs to, not the first one that matched.
+        //
+        // An employee is deliberately allowed in several work groups, and each group carries its
+        // own roles. This used to be `.find(...)?._id` — one group — and since the groups come
+        // back ordered by Arabic name (the query is served by the unit_service+name_arabic
+        // index), the one that won was effectively arbitrary. Roles belonging to the employee's
+        // other groups were filtered out of the dialog: link a role to a group, add the employee
+        // to it, and the dialog still says "No roles available" because a different group of
+        // theirs sorted first.
+        workGroups={workGroupsData.filter((wg) =>
+          wg.employees?.some((emp) => String(emp?._id || emp) === String(assignRoleTarget?._id))
+        )}
         onSaved={refetch}
       />
 

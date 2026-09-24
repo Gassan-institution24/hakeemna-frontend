@@ -341,5 +341,16 @@
   "divorced": "Divorced",
   "widowed": "Widowed",
   "separated": "Separated",
-  "Leave blank to keep the current password": "Leave blank to keep the current password"
+  "Leave blank to keep the current password": "Leave blank to keep the current password",
+  "owner": "Owner",
+  "work group": "Work group",
+  "work groups": "Work groups",
+  "Not linked to a work group": "Not linked to a work group",
+  "These roles are not tied to any work group": "These roles are not tied to any work group",
+  "Assigned from another work group": "Assigned from another work group",
+  "Already held, but the work group is no longer one of theirs": "Already held, but the work group is no longer one of theirs",
+  "Could not load the roles for this clinic": "Could not load the roles for this clinic",
+  "This employee is not in any work group, and roles are defined per work group. Add them to a work group first.": "This employee is not in any work group, and roles are defined per work group. Add them to a work group first.",
+  "No role is linked to this employee’s work groups yet": "No role is linked to this employee’s work groups yet",
+  "Create a role for one of these work groups, or link an existing role to it.": "Create a role for one of these work groups, or link an existing role to it."
 }

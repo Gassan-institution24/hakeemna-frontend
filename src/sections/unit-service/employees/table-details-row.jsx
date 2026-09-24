@@ -13,6 +13,7 @@ import { fDate } from 'src/utils/format-time';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -34,6 +35,7 @@ export default function UnitServiceEmployeesRow({
 }) {
   const {
     employee,
+    is_owner,
     visibility_online_appointment,
     visibility_US_page,
     adjust_schedual,
@@ -101,6 +103,14 @@ const codeResult =
         align="center"
       >
         {curLangAr ? employee?.name_arabic : employee?.name_english}
+        {/* The owner flag lives on the engagement, not the user. It is the one thing that grants
+            unconditional access, so it has to be visible wherever staff are listed — otherwise
+            "why can this person see everything?" has no answer on screen. */}
+        {is_owner && (
+          <Label variant="soft" color="warning" sx={{ ml: 1, fontSize: '10px' }}>
+            {t('owner')}
+          </Label>
+        )}
       </TableCell>
       <TableCell align="center">
         {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
