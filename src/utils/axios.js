@@ -601,6 +601,7 @@ export const endpoints = {
     all: '/api/entrance',
     inwatingnow: '/api/entrance/inwatingnow',
     one: (id) => (!id ? null : `/api/entrance/${id}`),
+    patient: (id) => (!id ? null : `/api/entrance/patient/${id}`),
     inwating: (id) => (!id ? null : `/api/entrance/inwating/${id}`),
     wating: (id) => (!id ? null : `/api/entrance/wating/${id}`),
     inrooms: (id) => (!id ? null : `/api/entrance/inrooms/${id}`),

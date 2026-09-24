@@ -148,3 +148,32 @@ export function useGetEntranceManagementByActivity(id, usId) {
 
   return { ...memoizedValue, refetch };
 }
+
+/**
+ * Every visit one patient has made to this clinic, newest first.
+ *
+ * Backs the Visits section of the patient file. The server scopes the list to the caller's work
+ * groups, so this returns the visits they are allowed to see rather than the whole history.
+ */
+export function useGetPatientEntrances(uspId) {
+  const URL = endpoints.entranceManagement.patient(uspId);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      visits: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  const refetch = async () => {
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}

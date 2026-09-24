@@ -183,7 +183,16 @@ export default function ProfileRail({
           open={open}
           onClose={() => setOpen(false)}
           PaperProps={{
-            sx: { maxHeight: '80vh', borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+            sx: {
+              maxHeight: '80vh',
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+              // Same reason as the desktop rail: without an explicit flex column and a
+              // shrinkable scroll area the list overflows 80vh and the sheet clips the last
+              // sections instead of scrolling to them.
+              display: 'flex',
+              flexDirection: 'column',
+            },
           }}
         >
           <Box
@@ -198,7 +207,11 @@ export default function ProfileRail({
             }}
           />
 
-          <Scrollbar>{renderList({ compact: false })}</Scrollbar>
+          <Box sx={{ flex: 1, minHeight: 0, display: 'flex', overflow: 'hidden' }}>
+            <Scrollbar sx={{ flex: 1, maxHeight: '100%' }}>
+              {renderList({ compact: false })}
+            </Scrollbar>
+          </Box>
         </Drawer>
       </>
     );
@@ -222,7 +235,18 @@ export default function ProfileRail({
       }}
       {...other}
     >
-      <Scrollbar sx={{ flex: 1 }}>{renderList({ compact: collapsed })}</Scrollbar>
+      {/* The scroll area needs its own wrapper with `minHeight: 0`.
+          A flex item defaults to `min-height: auto`, which refuses to shrink below its content,
+          so with fifteen sections the list grew past the Card's maxHeight and the Card — which
+          clips by default — simply cut the bottom items off with no scrollbar to reach them.
+          On a 1366x768 laptop that hid the whole Administration group in both the expanded and
+          the collapsed state. `minHeight: 0` lets it shrink so Scrollbar actually gets a bounded
+          box to scroll inside. */}
+      <Box sx={{ flex: 1, minHeight: 0, display: 'flex', overflow: 'hidden' }}>
+        <Scrollbar sx={{ flex: 1, maxHeight: '100%' }}>
+          {renderList({ compact: collapsed })}
+        </Scrollbar>
+      </Box>
 
       {onToggleCollapse && (
         <>

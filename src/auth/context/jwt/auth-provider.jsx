@@ -64,13 +64,20 @@ export function AuthProvider({ children }) {
 
         const response = await axios.get(endpoints.auth.me);
 
-        const { user } = response.data;
+        // The server narrows every scoped list to the caller's work groups, so the UI needs to
+        // know what that scope is — both to label it and to explain an empty screen rather than
+        // leaving the user staring at a blank grid. /me resolves them for the ACTIVE engagement,
+        // which is why they are read from here and not fetched separately: this endpoint is also
+        // what switches the active clinic, so a separate call would be a request out of date.
+        const { user, workGroups = [], workGroupIds = [] } = response.data;
 
         dispatch({
           type: 'INITIAL',
           payload: {
             user: {
               ...user,
+              workGroups,
+              workGroupIds,
               accessToken,
             },
           },

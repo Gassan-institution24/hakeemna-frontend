@@ -13,6 +13,7 @@ import Iconify from 'src/components/iconify';
 
 import PatientOverview from 'src/sections/shared/patient-profile/overview';
 import { mergeUsPatient } from 'src/sections/shared/patient-profile/utils';
+import PatientVisits from 'src/sections/shared/patient-profile/patient-visits';
 import PatientUpload from 'src/sections/employee/patients/patient-profile/patient-upload';
 import PatientProfileShell from 'src/sections/shared/patient-profile/patient-profile-shell';
 import { useProfileSection } from 'src/sections/shared/patient-profile/use-profile-section';
@@ -59,6 +60,7 @@ export default function PatientProfile() {
           key: 'clinical',
           label: t('Clinical'),
           items: [
+            { value: 'visits', label: t('Visits'), icon: 'solar:door-bold-duotone' },
             !isMedLab && {
               value: 'file',
               label: t('File'),
@@ -120,6 +122,8 @@ export default function PatientProfile() {
     switch (section) {
       case 'overview':
         return <PatientOverview patient={patientData} uspId={id} onNavigate={setSection} />;
+      case 'visits':
+        return <PatientVisits patient={usPatientData} />;
       case 'file':
         return <PatientFile patient={usPatientData} />;
       case 'medical_reports':

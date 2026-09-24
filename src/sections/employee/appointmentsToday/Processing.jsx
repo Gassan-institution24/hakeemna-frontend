@@ -182,14 +182,18 @@ export default function Processing() {
   // entrance's Service_types is what the invoice form reads its line items and
   // prices from, so a priced treatment simply joins that list.
   const handleBillService = useCallback(
-    async (serviceTypeId) => {
+    async (serviceTypeId, price) => {
       if (!serviceTypeId || !Entrance?._id) return;
       // Appended server-side with $push rather than read-modify-written here:
       // two treatments added in quick succession would otherwise both write the
       // array they each read, and the second would erase the first.
       // Repeats are intentional — the same service done twice is two billed lines.
+      //
+      // `prices` is positional with `service_types`. The server keeps only real numbers, so a
+      // treatment with no price of its own still falls back to the catalogue.
       await axiosInstance.patch(`/api/entrance/${Entrance._id}/service-types`, {
         service_types: [String(serviceTypeId)],
+        prices: [Number.isFinite(Number(price)) ? Number(price) : null],
       });
       await refetchEntrance();
     },

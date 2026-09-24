@@ -11,6 +11,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSActiveWorkGroups } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
@@ -25,8 +27,25 @@ export default function InvoiceTableToolbar({
   // stakeholders,
 }) {
   const { t } = useTranslate();
+  const { user } = useAuthContext();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  // Same source the invoicing screen already uses for its group dropdown.
+  //
+  // This filter narrows WITHIN what the server already returns — it is not the security boundary.
+  // The server scopes every invoice query to the caller's work groups regardless of what is sent
+  // (utils/queryScope.js), so picking a group here can only ever subtract, never reveal.
+  const { workGroupsData } = useGetUSActiveWorkGroups(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+
+  const handleFilterWorkGroup = useCallback(
+    (event) => {
+      onFilters('work_group', event.target.value);
+    },
+    [onFilters]
+  );
 
   const handleFilterPatient = useCallback(
     (event) => {
@@ -103,6 +122,30 @@ export default function InvoiceTableToolbar({
           },
         }}
       />
+
+      <FormControl
+        sx={{
+          flexShrink: 0,
+          width: { xs: 1, md: 180 },
+        }}
+      >
+        <InputLabel>{t('work group')}</InputLabel>
+
+        <Select
+          onChange={handleFilterWorkGroup}
+          input={<OutlinedInput label={t('work group')} />}
+          sx={{ textTransform: 'capitalize' }}
+          value={filters.work_group}
+        >
+          <MenuItem value="">{t('all')}</MenuItem>
+          <Divider />
+          {workGroupsData?.map((option) => (
+            <MenuItem key={option._id} value={option._id}>
+              {curLangAr ? option.name_arabic : option.name_english}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       <FormControl
         sx={{

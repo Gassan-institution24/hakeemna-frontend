@@ -162,9 +162,13 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
 
       // A priced catalogue service joins the visit's billable services, so the
       // invoice picks up its price without anyone re-entering it.
+      //
+      // The cost goes with it. Only the service id used to be sent, so the invoice and the
+      // appointment view both re-derived the price from the catalogue — a clinician who changed
+      // the figure in Add treatment saw it saved on the chart and ignored everywhere else.
       if (stamped.service_type && onBillService) {
         try {
-          await onBillService(stamped.service_type);
+          await onBillService(stamped.service_type, stamped.cost);
         } catch (err) {
           console.error('billing dental service failed:', err);
           enqueueSnackbar('Treatment saved, but adding it to the invoice failed', {

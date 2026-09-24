@@ -44,7 +44,10 @@ export default function AccountChangePassword() {
         t('New password must be different than old password'),
         (value, { parent }) => value !== parent.passwordCurrent
       ),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], t('Passwords must match')),
+    // .required first: oneOf alone passes for an empty value, so a blank confirm was accepted.
+    confirmPassword: Yup.string()
+      .required(t('required field'))
+      .oneOf([Yup.ref('password')], t('Passwords must match')),
   });
 
   const defaultValues = {
@@ -102,7 +105,14 @@ export default function AccountChangePassword() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-        <RHFTextField value={user?.email} name="email" />
+        {/* Read-only: it identifies which account is being changed, and a hardcoded
+              `value` prop meant it could never be typed into anyway. */}
+          <RHFTextField
+            name="email"
+            label={t('email')}
+            value={user?.email || ''}
+            InputProps={{ readOnly: true }}
+          />
         <RHFTextField
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}

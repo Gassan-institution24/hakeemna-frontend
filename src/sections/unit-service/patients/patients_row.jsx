@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -22,7 +23,11 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
-  const { _id, file_code, patient, work_group, name_english, name_arabic } = row;
+  const { _id, file_code, patient, name_english, name_arabic } = row;
+
+  // unit_service_patient carries a legacy scalar and an authoritative array; which one is
+  // populated depends on how the patient was registered, so accept either.
+  const work_group = row.work_group || row.work_groups?.[0] || null;
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -79,15 +84,30 @@ export default function USPatientsTableRow({ row, selected, onDeleteRow }) {
             </Box>
           </Tooltip>
         </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: row.color,
-        }}
-        onClick={clickHandler}
-        align="center"
-      >
-        {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+      <TableCell sx={{ cursor: 'pointer' }} onClick={clickHandler} align="center">
+        {/* The group's colour is a swatch, not the text colour. Several palette slots sit below
+            3:1 against the surface — fine for a shape read at a glance, not for a word someone
+            has to read. The name carries identity; the dot only speeds up scanning. */}
+        {work_group ? (
+          <Stack direction="row" alignItems="center" justifyContent="center" gap={0.75}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                flexShrink: 0,
+                borderRadius: '50%',
+                bgcolor: row.color || 'transparent',
+                border: (muiTheme) =>
+                  row.color ? 'none' : `1px dashed ${muiTheme.palette.divider}`,
+              }}
+            />
+            <Box component="span">
+              {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+            </Box>
+          </Stack>
+        ) : (
+          '-'
+        )}
       </TableCell>
       <TableCell
         sx={{

@@ -11,6 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Button,
   Dialog,
+  MenuItem,
   Container,
   TextField,
   DialogTitle,
@@ -24,6 +25,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { createPriceResolver } from 'src/utils/entrance-service-prices';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -36,7 +38,12 @@ import {
 } from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import FormProvider, { RHFCheckbox, RHFTextField, RHFRadioGroup } from 'src/components/hook-form';
+import FormProvider, {
+  RHFSelect,
+  RHFCheckbox,
+  RHFTextField,
+  RHFRadioGroup,
+} from 'src/components/hook-form';
 
 import InvoiceNewEditAddress from './invoice-new-edit-address';
 import InvoiceNewEditDetails from './invoice-new-edit-details';
@@ -87,6 +94,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     createDate: Yup.mixed().nullable().required(t('required field')),
     patient: Yup.mixed().nullable(),
     unit_service: Yup.mixed(),
+    work_group: Yup.mixed().nullable(),
     appointment: Yup.mixed().nullable(),
     entrance: Yup.mixed().nullable(),
     employee: Yup.mixed(),
@@ -145,6 +153,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         entranceInfo?.work_shift ||
         appointmentInfo?.work_shift ||
         null,
+      // Decides who can see this invoice afterwards (utils/queryScope.js on the server).
+      // The server re-derives it from the appointment or entrance and ignores whatever is sent
+      // when one of those is present, so this only ever matters for a manual invoice.
+      work_group:
+        currentInvoice?.work_group?._id ||
+        currentInvoice?.work_group ||
+        entranceInfo?.work_group ||
+        appointmentInfo?.work_group ||
+        (user?.workGroupIds?.length === 1 ? user.workGroupIds[0] : null),
       dueDate: currentInvoice?.dueDate || null,
       entrance: currentInvoice?.entrance || entrance || null,
       appointment: currentInvoice?.appointment || appointment || entranceInfo?.appointment || null,
@@ -156,16 +173,27 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       totalAmount: currentInvoice?.totalAmount || 0,
       items: currentInvoice?.Provided_services ||
         (entranceInfo?.Service_types?.length > 0 &&
-          entranceInfo?.Service_types?.map((one) => ({
-            service_type: one._id || null,
-            activity: null,
-            quantity: 1,
-            price_per_unit: Number(one.Price_per_unit) || 0,
-            subtotal: Number(one.Price_per_unit) || 0,
-            discount_amount: 0,
-            tax: 0,
-            total: Number(one.Price_per_unit) || 0,
-          }))) || [
+          (() => {
+            // A price recorded during the visit wins over the catalogue's. A dental treatment
+            // added at a price the clinician typed used to be re-priced from the catalogue here,
+            // so the figure they entered never reached the bill. Built once per pass because the
+            // resolver consumes overrides in order.
+            const priceFor = createPriceResolver(entranceInfo?.Service_prices);
+
+            return entranceInfo.Service_types.map((one) => {
+              const price = priceFor(one);
+              return {
+                service_type: one._id || null,
+                activity: null,
+                quantity: 1,
+                price_per_unit: price,
+                subtotal: price,
+                discount_amount: 0,
+                tax: 0,
+                total: price,
+              };
+            });
+          })()) || [
           {
             service_type: null,
             activity: null,
@@ -179,7 +207,15 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         ],
       payment_details: currentInvoice?.payment_details || [],
     }),
-    [currentInvoice, user?.employee, entrance, appointment, appointmentInfo, entranceInfo]
+    [
+      currentInvoice,
+      user?.employee,
+      user?.workGroupIds,
+      entrance,
+      appointment,
+      appointmentInfo,
+      entranceInfo,
+    ]
   );
 
   const methods = useForm({
@@ -216,7 +252,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         if (entrance) {
           const { data } = await axiosInstance.get(endpoints.entranceManagement.one(entrance), {
             params: {
-              select: 'Service_types patient unit_service_patient work_shift appointment',
+              select: 'Service_types Service_prices patient unit_service_patient work_shift appointment',
               populate: [
                 { path: 'Service_types', select: 'name_english name_arabic Price_per_unit' },
               ],
@@ -350,6 +386,22 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         <FormProvider methods={methods}>
           <Card>
             <InvoiceNewEditAddress />
+
+            {/* Only worth asking when the answer is ambiguous. With one group the server defaults
+                to it, and with an appointment the server takes the group from there and ignores
+                this — but a multi-group accountant raising a manual invoice has to choose, or the
+                invoice lands with no owner and disappears from their own list. */}
+            {!watch().appointment && !watch().entrance && user?.workGroups?.length > 1 && (
+              <Stack sx={{ px: 3, py: 2 }}>
+                <RHFSelect name="work_group" label={t('work group')}>
+                  {user.workGroups.map((group) => (
+                    <MenuItem key={group._id} value={group._id}>
+                      {curLangAr ? group.name_arabic : group.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              </Stack>
+            )}
 
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
             <InvoiceNewEditStatusDate />

@@ -47,7 +47,10 @@ export default function AccountChangePassword() {
         t('New password must be different than old password'),
         (value, { parent }) => value !== parent.passwordCurrent
       ),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], t('Passwords must match')),
+    // .required first: oneOf alone passes for an empty value, so a blank confirm was accepted.
+    confirmPassword: Yup.string()
+      .required(t('required field'))
+      .oneOf([Yup.ref('password')], t('Passwords must match')),
   });
 
   const defaultValues = {
@@ -112,7 +115,7 @@ export default function AccountChangePassword() {
         <RHFTextField
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
-          label="Current Password"
+          label={t('current password')}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -128,7 +131,7 @@ export default function AccountChangePassword() {
 
         <RHFTextField
           name="password"
-          label="New Password"
+          label={t('new password')}
           type={showpassword.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -141,8 +144,8 @@ export default function AccountChangePassword() {
           }}
           helperText={
             <Stack component="span" direction="row" alignItems="center">
-              <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be minimum
-              8+
+              <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} />
+              {`${t('must be at least')} 8+`}
             </Stack>
           }
         />
@@ -150,7 +153,7 @@ export default function AccountChangePassword() {
         <RHFTextField
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
-          label="Confirm New Password"
+          label={t('confirm new password')}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -171,7 +174,7 @@ export default function AccountChangePassword() {
           loading={isSubmitting}
           sx={{ ml: 'auto' }}
         >
-          Save Changes
+          {t('save changes')}
         </LoadingButton>
       </Stack>
     </FormProvider>

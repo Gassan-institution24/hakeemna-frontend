@@ -43,6 +43,7 @@ const TABLE_HEAD = [
   { id: 'created_at', label: 'date' },
   { id: 'patient', label: 'patient' },
   { id: 'Balance', label: 'total amount' },
+  { id: 'work_group', label: 'work group' },
   { id: 'invoiceId', label: 'invoiceId' },
   { id: 'sent_to_the_envoicing_system', label: 'sent to the envoicing system' },
   { id: 'status', label: 'status' },
@@ -51,6 +52,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   employee: '',
+  work_group: '',
   patient: '',
   service: '',
   status: 'all',
@@ -81,7 +83,7 @@ export default function InvoiceListView() {
       rowsPerPage: table.rowsPerPage || 10,
       order: table.order || 'desc',
       select:
-        'sequence_number created_at unit_service Provided_services invoiceId patient employee Balance status updated_at sent_to_the_envoicing_system service_type Subtotal_Amount quantity Total_discount_amount Total_Amount concept',
+        'sequence_number created_at unit_service work_group Provided_services invoiceId patient employee Balance status updated_at sent_to_the_envoicing_system service_type Subtotal_Amount quantity Total_discount_amount Total_Amount concept',
       populate: [
         {
           path: 'unit_service',
@@ -89,6 +91,7 @@ export default function InvoiceListView() {
             'name_english name_arabic Secret_Key Activity_Number ClientId CompanyID RegistrationName',
         },
         { path: 'stakeholder', select: 'name_english name_arabic' },
+        { path: 'work_group', select: 'name_english name_arabic' },
         {
           path: 'Provided_services',
           select: 'service_type',

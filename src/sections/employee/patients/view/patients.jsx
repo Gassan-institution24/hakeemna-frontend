@@ -28,6 +28,7 @@ import {
 import { useSnackbar } from 'notistack';
 
 import { Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
@@ -85,14 +86,18 @@ export default function PatientTableView() {
   const { patientsData, refetch, length } = useGetUSPatients(
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service?._id,
     {
-      select: 'code patient name_english name_arabic file_code',
+      // work_group AND work_groups: a projection that leaves them out gives populate nothing
+      // to fill, which is why the work group column was blank. Older rows carry the scalar,
+      // booking maintains the array, so both are needed.
+      select: 'code patient name_english name_arabic file_code work_group work_groups',
       populate: [
         {
           path: 'patient',
           select: 'name_english name_arabic sequence_number',
           populate: { path: 'nationality', select: 'code' },
         },
-        { path: 'work_group', select: 'name_english name_arabic' },
+        { path: 'work_group', select: 'name_english name_arabic color' },
+        { path: 'work_groups', select: 'name_english name_arabic color' },
       ],
       employee: user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?._id,
       page: table.page || 0,
@@ -103,9 +108,13 @@ export default function PatientTableView() {
     }
   );
 // here adel
+  const theme = useTheme();
   const router = useRouter();
 
-  const patientsDataWithColors = addWorkGroupColors(patientsData, 'hex');
+  // Colours come from each work group's stored colour now, so a group looks the same on
+  // every screen and between reloads. The second argument is the theme mode, which picks
+  // the palette's dark-surface step.
+  const patientsDataWithColors = addWorkGroupColors(patientsData, theme.palette.mode === 'dark');
 
   const canReset = !!filters?.name || filters.status !== 'active';
 

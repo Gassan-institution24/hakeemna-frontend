@@ -61,6 +61,7 @@ export default function MovementTableRow({
     modifications_nums,
     sent_to_the_envoicing_system,
     invoiceId,
+    work_group,
     concept,
   } = row;
 
@@ -157,6 +158,11 @@ export default function MovementTableRow({
 
         <TableCell align="center">
           {fCurrency(stakeholder ? -Balance : Balance, Currency?.symbol)}
+        </TableCell>
+        <TableCell align="center">
+          {/* Null for supplier expenses and for invoices raised outside any group — those stay
+              visible to admins and owners only, so an em dash is the honest rendering. */}
+          {(curLangAr ? work_group?.name_arabic : work_group?.name_english) || '—'}
         </TableCell>
         <TableCell align="center">{invoiceId}</TableCell>
         <TableCell align="center">

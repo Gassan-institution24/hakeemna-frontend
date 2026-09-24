@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'src/routes/hooks';
 
 import { fDate } from 'src/utils/format-time';
+import { getWorkGroupColor } from 'src/utils/workgroup_colors';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -62,7 +63,16 @@ export default function PatientBanner({ patient, loading, actions, backTo }) {
   const isVerified = !!patient.patient?._id;
 
   const age = calculateAge(patient.birth_date);
-  const workGroup = getLocalizedName(patient.work_groups?.[0], curLangAr);
+  const group = patient.work_groups?.[0] || patient.work_group;
+  const workGroup = getLocalizedName(group, curLangAr);
+  const workGroupColor = getWorkGroupColor(group, theme.palette.mode === 'dark');
+
+  // City and country arrive populated; fall back to the bare value if only an id came through,
+  // and join with a comma only when both are present so a half-filled record reads as short
+  // rather than as "Amman, " with a dangling separator.
+  const city = getLocalizedName(patient.city, curLangAr) || '';
+  const country = getLocalizedName(patient.country, curLangAr) || '';
+  const place = [city, country].filter(Boolean).join(', ');
 
   // Values that are enum members get translated; free text and numbers never do.
   const facts = [
@@ -75,7 +85,6 @@ export default function PatientBanner({ patient, loading, actions, backTo }) {
       color: 'error',
     },
     patient.pregnant === true && { key: 'pregnant', label: t('Pregnant'), color: 'secondary' },
-    patient.code && { key: 'code', label: `${t('code')}: ${patient.code}` },
     patient.file_code && {
       key: 'file',
       label: `${t('Old File Number')}: ${patient.file_code}`,
@@ -86,7 +95,21 @@ export default function PatientBanner({ patient, loading, actions, backTo }) {
       label: `${t('Personal identification number')}: ${patient.identification_num}`,
     },
     patient.mobile_num1 && { key: 'phone', label: patient.mobile_num1, dir: 'ltr' },
-    workGroup && { key: 'group', label: workGroup },
+    // Where the patient is. Absent from the banner until now, which meant a receptionist
+    // confirming an address had to open the edit form to see one. `city` and `country` arrive
+    // populated, so fall back to the raw value when only an id came through.
+    place && { key: 'place', label: place, icon: 'solar:map-point-bold-duotone' },
+    patient.address && {
+      key: 'address',
+      label: patient.address,
+      icon: 'solar:home-2-bold-duotone',
+    },
+    workGroup && {
+      key: 'group',
+      label: workGroup,
+      // The group's own colour, so the same group reads the same everywhere in the app.
+      swatch: workGroupColor,
+    },
     patient.status === 'inactive' && {
       key: 'status',
       label: t('Inactive'),
@@ -150,12 +173,44 @@ export default function PatientBanner({ patient, loading, actions, backTo }) {
                   {patient.patient?.online ? t('Online') : t('Offline')}
                 </Label>
               )}
+
+              {/* The patient number belongs on the identity line, not buried among the clinical
+                  chips below: it is how staff refer to this record out loud and on paper, so it
+                  is read far more often than blood type or date of birth. Sits last on the row,
+                  after the account state. */}
+              {patient.code && (
+                <Label color="info" variant="soft">
+                  <Box component="span" dir="ltr">{`${t('code')}: ${patient.code}`}</Box>
+                </Label>
+              )}
             </Stack>
 
             <Stack direction="row" gap={0.75} flexWrap="wrap" useFlexGap>
               {facts.map((fact) => {
                 const chip = (
                   <Label key={fact.key} color={fact.color || 'default'} variant="soft">
+                    {/* A swatch only ever accompanies the name it belongs to — several palette
+                        slots are below 3:1 on the surface, so the colour is a scanning aid and
+                        the text carries the meaning. */}
+                    {fact.swatch && (
+                      <Box
+                        component="span"
+                        sx={{
+                          width: 8,
+                          height: 8,
+                          mr: 0.75,
+                          flexShrink: 0,
+                          borderRadius: '50%',
+                          bgcolor: fact.swatch,
+                          display: 'inline-block',
+                        }}
+                      />
+                    )}
+
+                    {fact.icon && (
+                      <Iconify icon={fact.icon} width={14} sx={{ mr: 0.5, flexShrink: 0 }} />
+                    )}
+
                     <Box component="span" dir={fact.dir}>
                       {fact.label}
                     </Box>

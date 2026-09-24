@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import {
@@ -95,6 +95,17 @@ const COUNTRIES = [
 
 const JORDAN = COUNTRIES.find((c) => c.code === 'JO');
 
+/**
+ * True when a phone value is only a dialling code, i.e. the field was seeded but never filled.
+ *
+ * The control always writes a country code so the flag button has something to show, which means
+ * "empty" and "+962" are the same state to a person looking at the form. A schema that treats
+ * '+962' as a real value rejects an untouched field with "Invalid phone number" and gives no way
+ * out. Validate with this instead.
+ */
+export const isDiallingCodeOnly = (value) =>
+  !value || COUNTRIES.some((c) => value === c.callingCode);
+
 // ----------------------------------------------------------------------
 
 export default function RHFPhoneNumberCustom({ name, helperText, label }) {
@@ -112,13 +123,28 @@ export default function RHFPhoneNumberCustom({ name, helperText, label }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [search, setSearch] = useState('');
 
-  if (!currentValue && JORDAN) {
-    setValue(name, JORDAN.callingCode, {
-      shouldValidate: false,
-      shouldDirty: false,
-      shouldTouch: false,
-    });
-  }
+  // Seed the dialling code for an empty field, in an effect rather than during render.
+  //
+  // This used to run inline in the render body — a state update to another component while
+  // rendering, which React does not guarantee. Worse, it made an empty field look filled: the
+  // value became '+962', which is not a valid number, so any form validating the field with
+  // matchIsValidTel refused to submit while showing what looked like a filled-in phone. A clinic
+  // with no phone on record could not save its profile at all.
+  //
+  // Seeding is still the right default — the country button has to show something — but the
+  // value is only written once, and `isDiallingCodeOnly` below lets a schema treat it as empty.
+  useEffect(() => {
+    if (!currentValue && JORDAN) {
+      setValue(name, JORDAN.callingCode, {
+        shouldValidate: false,
+        shouldDirty: false,
+        shouldTouch: false,
+      });
+    }
+    // Only on mount, and only for a field that arrived empty: re-running this would fight the
+    // user as they clear the field to retype it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const filtered = COUNTRIES.filter(
     (c) =>

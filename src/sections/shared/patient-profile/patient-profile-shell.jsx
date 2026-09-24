@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Box, Stack, Container } from '@mui/material';
-
-import { useLocalStorage } from 'src/hooks/use-local-storage';
-
-import { useTranslate } from 'src/locales';
-
-import ProfileRail from 'src/components/profile-rail';
-import { useSettingsContext } from 'src/components/settings';
+import ProfileShell from 'src/components/profile-shell';
 
 import PatientBanner from './patient-banner';
 
@@ -15,12 +8,9 @@ import PatientBanner from './patient-banner';
 
 const STORAGE_KEY = 'patient-profile-rail';
 
-// The frame both patient profiles render inside: identity banner on top, a
-// grouped section rail beside the active pane.
-//
-// Panes are handed through untouched — they each bring their own Container and
-// their own background, and rewriting fifteen of them is a separate job from
-// changing the frame around them.
+// The patient flavour of the shared profile frame: the generic shell
+// (src/components/profile-shell) supplies the layout and the rail, this supplies the patient
+// identity banner. The employee and unit-service profiles do the same with their own banners.
 export default function PatientProfileShell({
   patient,
   loading,
@@ -32,51 +22,24 @@ export default function PatientProfileShell({
   onChangeSection,
   children,
 }) {
-  const { t } = useTranslate();
-  const settings = useSettingsContext();
-
-  // useLocalStorage merges objects into state, so it needs one.
-  const { state, update } = useLocalStorage(STORAGE_KEY, { collapsed: false });
-
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ pt: 2, pb: 4 }}>
-      <PatientBanner
-        patient={patient}
-        loading={loading}
-        actions={bannerActions}
-        backTo={backTo}
-      />
-
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ mt: 2 }}>
-        <ProfileRail
-          pinned={pinned}
-          sections={sections}
-          value={section}
-          onChange={onChangeSection}
-          collapsed={state.collapsed}
-          onToggleCollapse={() => update('collapsed', !state.collapsed)}
-          collapseLabel={t('Collapse menu')}
-          expandLabel={t('Expand menu')}
-          browseLabel={t('Section')}
+    <ProfileShell
+      storageKey={STORAGE_KEY}
+      banner={
+        <PatientBanner
+          patient={patient}
+          loading={loading}
+          actions={bannerActions}
+          backTo={backTo}
         />
-
-        <Box
-          sx={{
-            flex: 1,
-            // Without this a pane with a wide table (financial, appointments)
-            // refuses to shrink and pushes the rail off the page.
-            minWidth: 0,
-            // Panes wrap themselves in an xl Container. Nested inside this one
-            // that doubles the horizontal padding, so neutralise the pane's own
-            // — direct children only, so inner containers are left alone. The
-            // doubled specificity beats MUI's .MuiContainer-maxWidthXl.
-            '&& > .MuiContainer-root': { maxWidth: 'none', px: 0 },
-          }}
-        >
-          {children}
-        </Box>
-      </Stack>
-    </Container>
+      }
+      pinned={pinned}
+      sections={sections}
+      section={section}
+      onChangeSection={onChangeSection}
+    >
+      {children}
+    </ProfileShell>
   );
 }
 

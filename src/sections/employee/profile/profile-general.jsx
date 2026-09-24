@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { matchIsValidTel } from 'mui-tel-input';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,7 +13,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {
   Chip,
-  Button,
   Divider,
   Tooltip,
   MenuItem,
@@ -34,7 +33,7 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import PageSelector from 'src/components/page-selector';
+import { isDiallingCodeOnly } from 'src/components/hook-form/rhfPhoneNumberCustom';
 import FormProvider, {
   RHFSelect,
   RHFEditor,
@@ -102,14 +101,29 @@ const languages = [
   'Yorùbá', // Yoruba
 ];
 
-export default function AccountGeneral({ employeeData, refetch }) {
-  const { enqueueSnackbar } = useSnackbar();
-  const [page, setPage] = useState('information');
-  const employeeEng = employeeData?.employee_engagements?.[employeeData.selected_engagement];
-  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id);
-  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng?._id);
+// `section` comes from the profile rail, which already navigates — the form no longer carries
+// its own wizard. The old three-step flow had no validation between steps (`handleNext` awaited
+// nothing) and only offered Save on the last one, so a bad name entered on step one first
+// surfaced as a toast after reaching step three.
+/**
+ * Drop rows where every value is blank.
+ *
+ * `certifications`, `memberships` and `other` each seed one empty row so the form has a line to
+ * type into. Submitted untouched, that placeholder becomes a real stored record.
+ */
+const dropEmptyRows = (rows) =>
+  (rows || []).filter((row) =>
+    Object.values(row || {}).some((value) => value !== '' && value !== null && value !== undefined)
+  );
 
-  const { data: employeeEngagementData } = useGetEmployeeEngagement(employeeEng?._id);
+export default function AccountGeneral({ employeeData, refetch, section = 'identity' }) {
+  const { enqueueSnackbar } = useSnackbar();
+  const employeeEng = employeeData?.employee_engagements?.[employeeData.selected_engagement];
+  // One fetch, used for both the readout rows and the fees defaults — it was called twice with
+  // the same argument under two names.
+  const { data: employeeEngData } = useGetEmployeeEngagement(employeeEng?._id);
+  const employeeEngagementData = employeeEngData;
+  const { workGroupsData } = useGetEmployeeWorkGroups(employeeEng?._id);
 
   const { countriesData } = useGetCountries({ select: 'name_english name_arabic' });
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
@@ -117,16 +131,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const pages = [
-    { label: t('General Information'), active: page === 'information' },
-    { label: t('Profession Practice Profile'), active: page === 'profile' },
-    { label: t('Verification Document'), active: page === 'verification' },
-  ];
 
   const UpdateUserSchema = Yup.object().shape({
-    employee_type: Yup.string().required(t('required field')),
+    // Not required: employee_type is shown as text (it is assigned by the clinic, not chosen
+    // here) and nationality's select is disabled. Requiring a field with no usable input can only
+    // block a save with nowhere to fix it.
+    employee_type: Yup.string().nullable(),
+    // Not required: there is no email input on this form any more (it is the login identity and
+    // is changed elsewhere), so requiring it could only block a save with nowhere to fix it. The
+    // format tests are kept so a value arriving from the server is still checked before it is
+    // sent back.
     email: Yup.string()
-      .required(t('required field'))
       .test(
         'no-capital-letters',
         t('Email must not contain capital letters'),
@@ -176,14 +191,25 @@ export default function AccountGeneral({ employeeData, refetch }) {
             /[\u0600-\u06FF]$/.test(value) &&
             !/[-.]{2,}/.test(value))
       ),
-    nationality: Yup.string().required(t('required field')),
+    nationality: Yup.string().nullable(),
     profrssion_practice_num: Yup.string(),
     identification_num: Yup.string(),
-    tax_num: Yup.string(),
+    // The input is type="number", and RHFTextField coerces with Number() — so type it as one.
+    tax_num: Yup.number().nullable().transform((v) => (Number.isNaN(v) ? null : v)),
+    // The control seeds '+962' so its flag button has something to show, which makes an untouched
+    // field look filled. Report that as "required" rather than "invalid": the number is missing,
+    // not wrong, and telling someone their empty field is invalid sends them looking for a typo.
+    // Two tests rather than one, so the message matches the problem: a field holding only the
+    // seeded dialling code is EMPTY, not wrong, and "Invalid phone number" would send someone
+    // hunting for a typo in a field they never filled in. The first failure is the one reported.
     phone: Yup.string()
-      .required(t('required field'))
-      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
-    mobile_num: Yup.string(),
+      .test('phone-required', t('required field'), (value) => !isDiallingCodeOnly(value))
+      .test('phone-valid', t('Invalid phone number'), (value) =>
+        isDiallingCodeOnly(value) ? true : matchIsValidTel(value)
+      ),
+    mobile_num: Yup.string().test('mobile', t('Invalid phone number'), (value) =>
+      isDiallingCodeOnly(value) ? true : matchIsValidTel(value)
+    ),
     speciality: Yup.string().nullable(),
     gender: Yup.string(),
     birth_date: Yup.mixed(),
@@ -263,19 +289,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
     setValue,
     handleSubmit,
     control,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
+  // Guarded on isDirty. handleDrop uploads a file and then refetches, which produces a new
+  // defaultValues object and re-ran this reset — so dropping a signature mid-edit discarded
+  // every other unsaved field on the form.
   useEffect(() => {
-    if (Object.keys(errors).length) {
-      Object.keys(errors).forEach((key, idx) =>
-        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
-      );
-    }
-  }, [errors, enqueueSnackbar]);
-
-  useEffect(() => {
-    reset(defaultValues);
+    if (!isDirty) reset(defaultValues);
+    // isDirty deliberately omitted: this should run when new data arrives, not the moment the
+    // form becomes dirty.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues, reset]);
 
   const values = watch();
@@ -318,22 +342,46 @@ export default function AccountGeneral({ employeeData, refetch }) {
     [setValue, curLangAr, employeeData, enqueueSnackbar, refetch, values, t]
   );
 
+  /**
+   * Submit was blocked by validation.
+   *
+   * Every field is validated whether or not its section is on screen, so a bad value somewhere
+   * else is the one case where the error genuinely cannot be seen. One toast naming the fields —
+   * on submit only, unlike the old effect that fired one per error on every render.
+   */
+  const onInvalid = (formErrors) => {
+    const names = Object.keys(formErrors || {});
+    if (!names.length) return;
+    enqueueSnackbar(`${t('required field')}: ${names.map((n) => t(n)).join(', ')}`, {
+      variant: 'error',
+    });
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const dataToSubmit = data;
-      delete dataToSubmit.picture;
-      delete dataToSubmit.scanned_identity;
-      delete dataToSubmit.signature;
-      delete dataToSubmit.stamp;
+      // The file fields were uploaded on drop; sending them again would post File objects as JSON.
+      const {
+        // eslint-disable-next-line no-unused-vars -- destructured to omit from the payload
+        picture, scanned_identity, signature, stamp,
+        ...dataToSubmit
+      } = data;
+
+      // The three repeatable lists seed one blank row so the UI has something to show. Left
+      // untouched they were saved as [{ name: '', institution: '', year: null }] — a row that
+      // renders as an empty certificate forever after.
+      dataToSubmit.certifications = dropEmptyRows(data.certifications);
+      dataToSubmit.memberships = dropEmptyRows(data.memberships);
+      dataToSubmit.other = dropEmptyRows(data.other);
+
       await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
+      // `currency` used to be read off `data` here, but it is in neither the schema nor the
+      // defaults, so this always sent `currency: undefined`.
       await axios.patch(endpoints.employee_engagements.one(employeeEng?._id), {
         fees: data.fees,
         fees_after_discount: data.fees_after_discount,
-        currency: data?.currency,
       });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
-      setPage('information');
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -344,44 +392,34 @@ export default function AccountGeneral({ employeeData, refetch }) {
       );
       console.error(error);
     }
-  });
+  }, onInvalid);
 
+  // Both handlers used to DROP any keystroke failing their regex — the character simply never
+  // appeared and nothing said why. Typing a Latin letter into the Arabic name looked like a
+  // broken keyboard.
+  //
+  // The value is accepted now and the schema reports it ("Arabic letters only" /
+  // "English letters only") under the field, which is the same rule stated out loud.
   const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
-
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
+    methods.setValue(event.target.name, event.target.value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-().]*$/; // Range for Arabic characters
-
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
-  const handleBack = () => {
-    if (page === 'profile') setPage('information');
-    if (page === 'verification') setPage('profile');
-  };
-  const handleNext = async () => {
-    if (page === 'information') {
-      setPage('profile');
-    }
-    if (page === 'profile') {
-      setPage('verification');
-    }
+    methods.setValue(event.target.name, event.target.value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Card sx={{ p: 3 }}>
-        <PageSelector pages={pages} />
-        <br />
-        {page === 'information' && (
+        {section === 'identity' && (
           <Box sx={{ px: 3 }}>
             <Typography mb={2} variant="h6">
               {t('General Information')}
@@ -457,7 +495,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     render={({ field, fieldState: { error } }) => (
                       <DatePicker
                         label={t('birth date')}
-                        value={new Date(values.birth_date ? values.birth_date : '')}
+                        // new Date('') is Invalid Date, which MUI renders as a broken field rather than an
+                    // empty one. null is how a date picker says "nothing selected".
+                    value={values.birth_date ? new Date(values.birth_date) : null}
                         onChange={(newValue) => {
                           field.onChange(newValue);
                         }}
@@ -488,6 +528,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 </Box>
               </Box>
             </Box>
+          </Box>
+        )}
+
+        {section === 'contact' && (
+          <Box sx={{ px: 3 }}>
+            <Typography mb={2} variant="h6">
+              {t('contact')}
+            </Typography>
             <Box
               rowGap={3}
               columnGap={2}
@@ -499,16 +547,24 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 md: 'repeat(3, 1fr)',
               }}
             >
-              <RHFTextField type="email" name="email" label={`${t('email')} :`} />
+              {/* Email is not edited here. It is the account's login identity and it already
+                  shows in the identity banner above, so a second, editable copy in Contact was
+                  both duplicated and the wrong place to change it. */}
               <RHFPhoneNumberCustom name="phone" label={t('phone number')} />
               <RHFPhoneNumberCustom name="mobile_num" label={t('alternative mobile number')} />
-              <RHFTextField name="identification_num" label={`${t('National ID number')} :`} />
+              <RHFTextField name="identification_num" label={t('National ID number')} />
               <RHFTextField
                 name="profrssion_practice_num"
-                label={`${t('profrssion practice number')} :`}
+                label={t('profrssion practice number')}
               />
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
             </Box>
+          </Box>
+        )}
+
+        {/* Assigned by the clinic, not chosen here — so it is a readout, shown alongside identity. */}
+        {section === 'identity' && (
+          <Box sx={{ px: 3 }}>
             <Divider flexItem sx={{ borderStyle: 'solid', py: 3 }} />
             <Typography my={2} variant="h6">
               {t('Job Position Information')}
@@ -550,7 +606,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
             </Box>
           </Box>
         )}
-        {page === 'profile' && (
+        {section === 'professional' && (
           <>
             <Typography variant="h6">{t('Professional definition elements')}</Typography>
             <Typography variant="body1">
@@ -690,7 +746,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
             />
           </>
         )}
-        {page === 'verification' && (
+        {section === 'documents' && (
           <Box sx={{ p: 1, px: 5, display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Typography variant="h6">{t('Personal Authentication Elements')}</Typography>
             <Box
@@ -762,22 +818,23 @@ export default function AccountGeneral({ employeeData, refetch }) {
           </Box>
         )}
 
-        <Stack spacing={3} direction="row" justifyContent="flex-end" gap={2} sx={{ mt: 3 }}>
-          {page !== 'information' && (
-            <Button variant="contained" color="warning" onClick={handleBack}>
-              {t('Back')}
-            </Button>
-          )}
-          {page !== 'verification' && (
-            <Button variant="contained" color="secondary" onClick={handleNext}>
-              {t('Next')}
-            </Button>
-          )}
-          {page === 'verification' && (
-            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-              {t('save changes')}
-            </LoadingButton>
-          )}
+        {/* Save is always available. It used to appear only on the last step, so editing a name
+            meant clicking through two more screens to commit it. */}
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          sx={{
+            mt: 3,
+            pt: 2,
+            position: 'sticky',
+            bottom: 0,
+            bgcolor: 'background.paper',
+            borderTop: (muiTheme) => `1px solid ${muiTheme.palette.divider}`,
+          }}
+        >
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            {t('save changes')}
+          </LoadingButton>
         </Stack>
       </Card>
     </FormProvider>
@@ -786,4 +843,5 @@ export default function AccountGeneral({ employeeData, refetch }) {
 AccountGeneral.propTypes = {
   employeeData: PropTypes.object,
   refetch: PropTypes.func,
+  section: PropTypes.oneOf(['identity', 'contact', 'professional', 'documents']),
 };

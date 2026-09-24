@@ -23,6 +23,7 @@ import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
 import { fDate, fDateTime } from 'src/utils/format-time';
+import { createPriceResolver } from 'src/utils/entrance-service-prices';
 
 import { useLocales } from 'src/locales';
 import { useGetUSServiceTypes } from 'src/api/service_types';
@@ -54,11 +55,6 @@ const idOf = (value) => {
   return String(value._id || value);
 };
 
-// `Price_per_unit` is a String on service_types and may be blank or non-numeric.
-const priceOf = (service) => {
-  const raw = Number(service?.Price_per_unit);
-  return Number.isFinite(raw) ? raw : 0;
-};
 
 // A duration stored as a Date offset from the epoch, which is how process_time
 // is written. Rendered as hours and minutes rather than a meaningless 1970 date.
@@ -318,6 +314,11 @@ export default function ViewPage() {
     const catalogue = new Map(
       (Array.isArray(serviceTypesData) ? serviceTypesData : []).map((s) => [String(s._id), s])
     );
+    // Prefers a price recorded for this visit over the catalogue's — a dental treatment added at
+    // a price the clinician typed is charged at that price, and this view has to agree with the
+    // invoice about what it is. Stateful, so it must be built fresh for each pass over the rows.
+    const priceFor = createPriceResolver(Entrance?.Service_prices);
+
     // One row per entry, never deduplicated: the same service performed twice in
     // a visit is two billed lines, and that is what the invoice charges for.
     const rows = (Entrance?.Service_types || []).map((entry, index) => {
@@ -327,12 +328,13 @@ export default function ViewPage() {
       return {
         key: `${serviceId}-${index}`,
         name: nameOf(service, isAr) || (isAr ? 'خدمة' : 'Service'),
-        price: priceOf(service),
+        // Resolved by id, so it still lines up after the services-provided card rewrites the list.
+        price: priceFor(service || serviceId),
         known: Boolean(service),
       };
     });
     return { rows, total: rows.reduce((sum, row) => sum + row.price, 0) };
-  }, [Entrance?.Service_types, serviceTypesData, isAr]);
+  }, [Entrance?.Service_types, Entrance?.Service_prices, serviceTypesData, isAr]);
 
   const patientName =
     nameOf(Entrance?.patient, isAr) || nameOf(patient, isAr) || (isAr ? 'مريض' : 'Patient');

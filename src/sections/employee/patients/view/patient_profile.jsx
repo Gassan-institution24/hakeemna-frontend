@@ -12,6 +12,7 @@ import Iconify from 'src/components/iconify';
 
 import PatientOverview from 'src/sections/shared/patient-profile/overview';
 import { mergeUsPatient } from 'src/sections/shared/patient-profile/utils';
+import PatientVisits from 'src/sections/shared/patient-profile/patient-visits';
 import PatientProfileShell from 'src/sections/shared/patient-profile/patient-profile-shell';
 import { useProfileSection } from 'src/sections/shared/patient-profile/use-profile-section';
 import { usePatientVideoCall } from 'src/sections/shared/patient-profile/use-patient-video-call';
@@ -65,6 +66,7 @@ export default function PatientProfile() {
         label: t('Clinical'),
         items: [
           { value: 'history', label: t('Visit History'), icon: 'solar:history-bold-duotone' },
+          { value: 'visits', label: t('Visits'), icon: 'solar:door-bold-duotone' },
           { value: 'file', label: t('File'), icon: 'solar:folder-with-files-bold-duotone' },
           {
             value: 'medical_reports',
@@ -135,6 +137,8 @@ export default function PatientProfile() {
         return (
           <PatientOverview patient={patientData} uspId={id} onNavigate={setSection} />
         );
+      case 'visits':
+        return <PatientVisits patient={usPatientData} />;
       case 'history':
         return <PatientHistory patient={usPatientData} />;
       case 'file':
