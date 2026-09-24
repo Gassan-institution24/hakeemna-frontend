@@ -2139,5 +2139,6 @@
   "Lab Result": "نتيجة تحليل",
   "Lab Test": "التحليل",
   "please choose lab test": "يرجى اختيار التحليل",
-  "Section": "القسم"
+  "Section": "القسم",
+  "Leave blank to keep the current password": "اتركها فارغة للإبقاء على كلمة المرور الحالية"
 }

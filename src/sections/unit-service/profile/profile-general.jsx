@@ -64,6 +64,62 @@ const nameById = (list, id, isArabic) => {
   );
 };
 
+/**
+ * A FormSection heading with its icon, so the groups in the left column share one heading style.
+ *
+ * They were a mix before: `identity` was a bare FormSection title while `visibility information`
+ * and `financial information` hand-rolled a Typography with an Iconify inside it, which put their
+ * text on a slightly different baseline and at a different distance from the fields below.
+ */
+function SectionTitle({ icon, label }) {
+  return (
+    <Stack direction="row" alignItems="center" gap={1}>
+      <Iconify icon={icon} width={18} sx={{ color: 'primary.main', flexShrink: 0 }} />
+      {label}
+    </Stack>
+  );
+}
+
+SectionTitle.propTypes = {
+  icon: PropTypes.string,
+  label: PropTypes.node,
+};
+
+/**
+ * The fields a checkbox reveals, drawn as a branch off it.
+ *
+ * The rule down the leading edge is what ties them to the toggle above — without it a set of
+ * inputs that appears out of nowhere when a box is ticked reads as a separate, unrelated group.
+ * Physical properties on purpose: the app runs everything through stylis-plugin-rtl
+ * (src/theme/options/right-to-left.jsx), which mirrors them for Arabic. Mixing in a logical
+ * property here would leave the border on one side and its padding on the other.
+ */
+function ConditionalFields({ title, children }) {
+  return (
+    <Stack
+      spacing={2}
+      sx={{
+        mt: 0.5,
+        py: 2,
+        pl: 2,
+        ml: 1.25,
+        borderLeft: '2px solid',
+        borderColor: 'divider',
+      }}
+    >
+      <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'fontWeightSemiBold' }}>
+        {title}
+      </Typography>
+      {children}
+    </Stack>
+  );
+}
+
+ConditionalFields.propTypes = {
+  title: PropTypes.node,
+  children: PropTypes.node,
+};
+
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ unitServiceData }) {
@@ -357,10 +413,16 @@ export default function AccountGeneral({ unitServiceData }) {
               name="company_logo"
               onDrop={handleDrop}
             />
+            {/* `textAlign: 'center'` on the Card is there for the avatar uploader above, and it
+                inherits. Every group below is a form, and centred form copy is hard to scan: the
+                long checkbox labels in the financial group wrapped to two and three centred lines
+                with their checkboxes hanging off to the side. Reset it once here, at the top of
+                the form area, rather than per section — `start` and not `left` so the Arabic UI
+                still aligns to the right. */}
             <Box
               rowGap={3}
               columnGap={2}
-              sx={{ mt: 5 }}
+              sx={{ mt: 5, textAlign: 'start' }}
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
@@ -370,7 +432,7 @@ export default function AccountGeneral({ unitServiceData }) {
               {/* Real inputs now. These were a plain TextField with a `value` and no `onChange`,
                   which React treats as permanently read-only — the Arabic name was marked
                   required and would not accept a keystroke. */}
-              <FormSection title={t('identity')} sx={{ textAlign: 'start' }}>
+              <FormSection title={t('identity')}>
                 <Stack spacing={2.5}>
                   <RHFTextField name="name_english" label={t('name english')} />
                   <RHFTextField name="name_arabic" label={t('name arabic')} />
@@ -382,14 +444,10 @@ export default function AccountGeneral({ unitServiceData }) {
               {/* Hidden for demo accounts: a demo clinic is never listed publicly, so this
                   switch would do nothing. The server pins show_on_homepage off and excludes
                   demo clinics from every public query — see backend utils/demoAccount.js. */}
-              <Stack alignItems="flex-start" gap={1} sx={{ display: isDemoUser(user) ? 'none' : undefined }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                >
-                  <Iconify icon="solar:eye-bold-duotone" width={18} sx={{ color: 'primary.main' }} />
-                  {t('visibility information')}
-                </Typography>
+              <FormSection
+                title={<SectionTitle icon="solar:eye-bold-duotone" label={t('visibility information')} />}
+                sx={{ display: isDemoUser(user) ? 'none' : undefined }}
+              >
                 <RHFCheckbox
                   name="show_on_homepage"
                   label={t('show on home page')}
@@ -427,16 +485,16 @@ export default function AccountGeneral({ unitServiceData }) {
                     }
                   }}
                 />
-              </Stack>
+              </FormSection>
 
-              <Stack alignItems="flex-start" gap={1}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                >
-                  <Iconify icon="solar:banknote-2-bold-duotone" width={18} sx={{ color: 'primary.main' }} />
-                  {t('financial information')}
-                </Typography>
+              <FormSection
+                title={
+                  <SectionTitle
+                    icon="solar:banknote-2-bold-duotone"
+                    label={t('financial information')}
+                  />
+                }
+              >
                 <RHFCheckbox
                   name="has_tax"
                   label={t('subject to sales tax')}
@@ -548,6 +606,46 @@ export default function AccountGeneral({ unitServiceData }) {
                     }
                   }}
                 />
+
+                {/* The credentials belong to the toggle directly above, so they are nested under
+                    it rather than sitting in their own block further down the column, where the
+                    connection between "yes, we are registered" and the five fields asking for the
+                    registration details was left to the reader to guess. */}
+                {values.invoicing_system && (
+                  <ConditionalFields title={t('Jordanian National Billing System Information')}>
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="RegistrationName"
+                      label={t('Registration Name')}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="CompanyID"
+                      label={t('Company ID')}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="Activity_Number"
+                      label={t('Activity Number')}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="ClientId"
+                      label={t('Client Id')}
+                    />
+                    <RHFTextField
+                      type="string"
+                      variant="filled"
+                      name="Secret_Key"
+                      label={t('Secret Key')}
+                    />
+                  </ConditionalFields>
+                )}
+
                 <RHFCheckbox
                   name="claim_registered"
                   label={t('Registered with insurance claim system')}
@@ -585,69 +683,24 @@ export default function AccountGeneral({ unitServiceData }) {
                     }
                   }}
                 />
-              </Stack>
-
-              <Stack alignItems="flex-start" gap={1}>
-                {values.invoicing_system && (
-                  <>
-                    <Typography variant="subtitle1">
-                      {t('Jordanian National Billing System Information')}
-                    </Typography>
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="RegistrationName"
-                      label={`${t('Registration Name')} :`}
-                    />
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="CompanyID"
-                      label={`${t('Company ID')} :`}
-                    />
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="Activity_Number"
-                      label={`${t('Activity Number')} :`}
-                    />
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="ClientId"
-                      label={`${t('Client Id')} :`}
-                    />
-                    <RHFTextField
-                      type="string"
-                      variant="filled"
-                      name="Secret_Key"
-                      label={`${t('Secret Key')} :`}
-                    />
-                  </>
-                )}
-              </Stack>
-              <Stack alignItems="flex-start" gap={1}>
 
                 {values.claim_registered && (
-                  <>
-                    <Typography variant="subtitle1">
-                      {t('Insurance Claim System Information')}
-                    </Typography>
+                  <ConditionalFields title={t('Insurance Claim System Information')}>
                     <RHFTextField
                       variant="filled"
                       name="claim_username"
-                      label={`${t('claim Username')} :`}
+                      label={t('claim Username')}
                     />
-
                     <RHFTextField
                       variant="filled"
                       name="claim_password"
                       type="password"
-                      label={`${t('claim Password')} :`}
+                      label={t('claim Password')}
+                      helperText={t('Leave blank to keep the current password')}
                     />
-                  </>
+                  </ConditionalFields>
                 )}
-              </Stack>
+              </FormSection>
             </Box>
           </Card>
         </Grid>
