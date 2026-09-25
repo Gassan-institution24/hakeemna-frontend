@@ -1,23 +1,25 @@
+import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+
+import { useDebounce } from 'src/hooks/use-debounce';
 
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetPatient,
-  useGetUSPatient,
-  useGetUnitservice,
+  useGetUSPatients,
   useGetOneUSPatient,
   useGetOneEntranceManagement,
 } from 'src/api';
 
-import { RHFAutocomplete } from 'src/components/hook-form';
-
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditAddress() {
-  const { control, watch } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const { append } = useFieldArray({
     control,
@@ -52,12 +54,17 @@ export default function InvoiceNewEditAddress() {
       { path: 'city', select: 'name_english name_arabic' },
     ],
   });
-  const { data: USData } = useGetUnitservice(unit_service);
   const { Entrance } = useGetOneEntranceManagement(entrance, {
     select: 'activity_happened',
     populate: [{ path: 'activity_happened', select: 'name_english name_arabic' }],
   });
-  const { patientsData } = useGetUSPatient(USData?._id, { select: 'name_english name_arabic' });
+  // The clinic's own patient records (unit_service_patients), searched on the server.
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 400);
+  const { patientsData } = useGetUSPatients(unit_service, {
+    name: debouncedSearch || undefined,
+    select: 'name_english name_arabic patient mobile_num1 file_code',
+  });
 
   return (
     <Stack direction={{ md: 'row' }}>
@@ -89,30 +96,56 @@ export default function InvoiceNewEditAddress() {
             </Stack>
           )}
 
-          {!patient && !unit_service_patient && (
-            <Stack direction="row" justifyContent="flex-start">
-              <RHFAutocomplete
-                lang="ar"
-                sx={{ minWidth: 200 }}
-                name="patient"
-                options={patientsData.map((speciality) => speciality._id)}
-                getOptionLabel={(option) =>
-                  patientsData.find((one) => one._id === option)?.[
-                    curLangAr ? 'name_arabic' : 'name_english'
-                  ]
-                }
-                renderOption={(props, option, idx) => (
-                  <li lang="ar" {...props} key={idx} value={option}>
-                    {
-                      patientsData.find((one) => one._id === option)?.[
-                        curLangAr ? 'name_arabic' : 'name_english'
-                      ]
-                    }
-                  </li>
-                )}
+          {/* Always offered, so the invoice can be addressed to someone else — including a
+              patient the clinic added without a Hakeemna account (unit_service_patient only). */}
+          <Autocomplete
+            sx={{ mt: 1.5, maxWidth: 360 }}
+            size="small"
+            options={patientsData}
+            filterOptions={(options) => options} // the server already searched
+            getOptionLabel={(option) =>
+              (curLangAr ? option?.name_arabic : option?.name_english) ||
+              option?.name_english ||
+              option?.name_arabic ||
+              ''
+            }
+            isOptionEqualToValue={(a, b) => a._id === b._id}
+            value={null}
+            inputValue={search}
+            onInputChange={(_e, value, reason) => reason !== 'reset' && setSearch(value)}
+            onChange={(_e, option) => {
+              if (!option) return;
+              setValue('unit_service_patient', option._id, { shouldDirty: true });
+              setValue('patient', option.patient?._id || option.patient || null, {
+                shouldDirty: true,
+              });
+              setSearch('');
+            }}
+            noOptionsText={t('no data')}
+            renderOption={(props, option) => (
+              <li {...props} key={option._id}>
+                <Stack>
+                  <Typography variant="body2">
+                    {(curLangAr ? option.name_arabic : option.name_english) ||
+                      option.name_english ||
+                      option.name_arabic}
+                  </Typography>
+                  {(option.mobile_num1 || option.file_code) && (
+                    <Typography variant="caption" color="text.secondary">
+                      {[option.file_code, option.mobile_num1].filter(Boolean).join(' · ')}
+                    </Typography>
+                  )}
+                </Stack>
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={patient || unit_service_patient ? t('change patient') : t('choose patient')}
+                placeholder={t('search by name, phone or file number')}
               />
-            </Stack>
-          )}
+            )}
+          />
         </Stack>
       </Stack>
       {Entrance?.activity_happened?.length > 0 && (

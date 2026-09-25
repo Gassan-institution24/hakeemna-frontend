@@ -18,6 +18,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
@@ -74,6 +75,7 @@ export default function AppointmentsView() {
   const router = useRouter();
 
   const { user } = useAuthContext();
+  const checkAcl = useAclGuard();
 
   const addModal = useBoolean();
 
@@ -161,6 +163,19 @@ export default function AppointmentsView() {
           },
           { name: t('invoicing') },
         ]}
+        action={
+          checkAcl('accounting:create') && (
+            // A standalone invoice: no appointment or entrance behind it. The form asks
+            // which work group owns it, and only that group's members can see it.
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+              onClick={() => router.push(`${paths.unitservice.accounting.economicmovements.add}?manual=1`)}
+            >
+              {t('new invoice')}
+            </Button>
+          )
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
 import {
@@ -17,14 +17,12 @@ import {
   createFilterOptions,
 } from '@mui/material';
 
-import { useParams } from '../../../routes/hooks';
-
-import { fDateTime } from '../../../utils/format-time';
-
 import axiosInstance from '../../../utils/axios';
+import { useParams } from '../../../routes/hooks';
 import Iconify from '../../../components/iconify';
+import { fDateTime } from '../../../utils/format-time';
 import { useLocales, useTranslate } from '../../../locales';
-import { useGetdiagnosis, useGetOnePatientDiagnosis } from '../../../api/diagnosis';
+import { useGetOnePatientDiagnosis, useGetSpecialityDiagnoses } from '../../../api/diagnosis';
 
 const filter = createFilterOptions();
 
@@ -57,7 +55,7 @@ export default function DiagnosisPage() {
   const navigate = useNavigate();
 
   const { patientDiagnosis, loading, refetch } = useGetOnePatientDiagnosis(id);
-  const { diagnosisData } = useGetdiagnosis();
+  const { diagnosisData } = useGetSpecialityDiagnoses();
 
   const [editing, setEditing]       = useState(false);
   const [saving, setSaving]         = useState(false);

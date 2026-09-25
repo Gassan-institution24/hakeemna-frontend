@@ -101,6 +101,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                   { label: 'credit card', value: 'credit_card' },
                   { label: 'bank transfer', value: 'bank_transfer' },
                   { label: 'instant bank transfer', value: 'instant_transfer' },
+                  { label: 'Accounts Receivable Invoice', value: 'accounts_receivable' },
                 ].map((one, idx) => (
                   <MenuItem key={idx} value={one.value}>
                     {t(one.label)}
@@ -151,6 +152,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                     { label: 'credit card', value: 'credit_card' },
                     { label: 'bank transfer', value: 'bank_transfer' },
                     { label: 'instant bank transfer', value: 'instant_transfer' },
+                    { label: 'Accounts Receivable Invoice', value: 'accounts_receivable' },
                   ].map((one, idx) => (
                     <MenuItem key={idx} value={one.value}>
                       {t(one.label)}

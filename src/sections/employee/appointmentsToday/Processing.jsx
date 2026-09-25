@@ -153,13 +153,15 @@ export default function Processing() {
   // The entrance already carries both ids the chart needs — the populated patient
   // and the raw unit_service_patient — so no extra fetch is required.
   // Note `Entrance` is `[]` before it loads, which is truthy: gate on the id.
-  const dentalPatient = useMemo(
-    () =>
-      Entrance?.patient?._id
-        ? { _id: Entrance.unit_service_patient, patient: Entrance.patient }
-        : null,
-    [Entrance?.patient, Entrance?.unit_service_patient]
-  );
+  //
+  // A patient added by the clinic without a Hakeemna account has no `patient` at
+  // all, only the unit_service_patient — the chart is then keyed by that id.
+  const dentalPatient = useMemo(() => {
+    const uspId = Entrance?.unit_service_patient?._id || Entrance?.unit_service_patient;
+    if (Entrance?.patient?._id) return { _id: uspId, patient: Entrance.patient };
+    if (uspId) return { _id: uspId, patient: null };
+    return null;
+  }, [Entrance?.patient, Entrance?.unit_service_patient]);
 
   const showDentalChart =
     isDentist && !!dentalPatient && checkAcl('dental_chart:read') && hasFeature('dental_chart');

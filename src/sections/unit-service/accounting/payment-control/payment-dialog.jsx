@@ -97,6 +97,7 @@ export default function PaymentDialog({ open, onClose, row, refetch }) {
                 { label: 'credit card', value: 'credit_card' },
                 { label: 'bank transfer', value: 'bank_transfer' },
                 { label: 'instant bank transfer', value: 'instant_transfer' },
+                { label: 'Accounts Receivable Invoice', value: 'accounts_receivable' },
               ]}
             />
           </Stack>

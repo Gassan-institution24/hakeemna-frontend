@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import useUndoRedo from './use-undo-redo';
 import { getCondition } from '../constants/conditions';
@@ -12,6 +12,37 @@ function buildTeethMap(teethArray) {
     });
   }
   return map;
+}
+
+// The fields the chart edits and saves — everything else on a tooth (procedures,
+// audit data) always comes from the server.
+const SURFACE_KEYS = ['occlusal', 'incisal', 'mesial', 'distal', 'buccal', 'lingual'];
+
+function pickClinical(tooth) {
+  const out = { fdi_number: tooth.fdi_number, surfaces: tooth.surfaces || {} };
+  ['whole_diagnosis', 'whole_condition', 'whole_status', 'notes', 'notes_arabic', 'treatment_plan', 'mobility_grade'].forEach(
+    (key) => {
+      if (key in tooth) out[key] = tooth[key];
+    }
+  );
+  return out;
+}
+
+const norm = (v) => (v === undefined || v === '' ? null : v);
+
+function sameClinicalData(local, server) {
+  const srv = server || {};
+  if (norm(local.whole_diagnosis) !== norm(srv.whole_diagnosis)) return false;
+  if (norm(local.whole_condition) !== norm(srv.whole_condition)) return false;
+  if (local.whole_condition && norm(local.whole_status) && local.whole_status !== srv.whole_status)
+    return false;
+  return SURFACE_KEYS.every((key) => {
+    const a = local.surfaces?.[key] || {};
+    const b = srv.surfaces?.[key] || {};
+    if (norm(a.diagnosis) !== norm(b.diagnosis)) return false;
+    if (norm(a.condition) !== norm(b.condition)) return false;
+    return !a.condition || !a.status || a.status === b.status;
+  });
 }
 
 export default function useOdontogram({ chartData, onSave }) {
@@ -30,15 +61,47 @@ export default function useOdontogram({ chartData, onSave }) {
   const [selectedTeeth, setSelectedTeeth] = useState(new Set());
   const [bridges, setBridges] = useState([]); // fixed prostheses (read from API)
 
+  // Teeth edited locally and not yet confirmed by the server. The chart refetches
+  // on every note / procedure / x-ray / window focus, and that refetch used to
+  // replace the whole map — wiping whatever the doctor had just painted.
+  const pendingRef = useRef(new Set());
+  const teethMapRef = useRef(teethMap);
+  teethMapRef.current = teethMap;
+
   // ── Sync from API data ────────────────────────────────────────────────────
   useEffect(() => {
-    if (chartData) {
-      resetHistory(buildTeethMap(chartData.teeth));
-      setChartTypeLocal(chartData.chart_type || 'adult');
-      setBridges(Array.isArray(chartData.bridges) ? chartData.bridges : []);
-      setIsDirty(false);
+    if (!chartData) return;
+    const serverMap = buildTeethMap(chartData.teeth);
+    const pending = pendingRef.current;
+
+    if (pending.size === 0) {
+      resetHistory(serverMap);
+    } else {
+      // Keep local edits on pending teeth (taking the server's procedures etc.),
+      // and drop a tooth from pending once the server holds the same values.
+      const local = teethMapRef.current;
+      const merged = { ...serverMap };
+      pending.forEach((fdi) => {
+        const mine = local[fdi];
+        if (!mine) return;
+        if (sameClinicalData(mine, serverMap[fdi])) {
+          pending.delete(fdi);
+        } else {
+          merged[fdi] = { ...(serverMap[fdi] || {}), ...pickClinical(mine) };
+        }
+      });
+      setTeethMap(merged, true);
     }
-  }, [chartData, resetHistory]);
+
+    setChartTypeLocal(chartData.chart_type || 'adult');
+    setBridges(Array.isArray(chartData.bridges) ? chartData.bridges : []);
+    setIsDirty(pending.size > 0);
+  }, [chartData, resetHistory, setTeethMap]);
+
+  const markPending = useCallback((fdis) => {
+    fdis.forEach((fdi) => pendingRef.current.add(Number(fdi)));
+    setIsDirty(true);
+  }, []);
 
   // Auto-save intentionally removed — doctor triggers save manually via toolbar.
 
@@ -91,9 +154,9 @@ export default function useOdontogram({ chartData, onSave }) {
         return { ...prev, [fdiNumber]: tooth };
       });
 
-      setIsDirty(true);
+      markPending([fdiNumber]);
     },
-    [activeCondition, activeStatus, setTeethMap]
+    [activeCondition, activeStatus, setTeethMap, markPending]
   );
 
   // ── Bulk apply to selected teeth ──────────────────────────────────────────
@@ -122,10 +185,10 @@ export default function useOdontogram({ chartData, onSave }) {
       return next;
     });
 
+    markPending([...selectedTeeth]);
     setSelectedTeeth(new Set());
     setMultiSelect(false);
-    setIsDirty(true);
-  }, [activeCondition, activeStatus, selectedTeeth, setTeethMap]);
+  }, [activeCondition, activeStatus, selectedTeeth, setTeethMap, markPending]);
 
   // ── Remove one diagnosis everywhere it appears on the chart ───────────────
   const clearDiagnosis = useCallback(
@@ -146,9 +209,17 @@ export default function useOdontogram({ chartData, onSave }) {
         });
         return next;
       });
-      setIsDirty(true);
+      markPending(
+        Object.values(teethMapRef.current)
+          .filter(
+            (tooth) =>
+              tooth.whole_diagnosis === diagnosisId ||
+              Object.values(tooth.surfaces || {}).some((srf) => srf?.diagnosis === diagnosisId)
+          )
+          .map((tooth) => tooth.fdi_number)
+      );
     },
-    [setTeethMap]
+    [setTeethMap, markPending]
   );
 
   // ── Toggle tooth in multi-select ──────────────────────────────────────────
@@ -191,10 +262,22 @@ export default function useOdontogram({ chartData, onSave }) {
         ...prev,
         [fdi]: { ...(prev[fdi] || { fdi_number: fdi }), ...updates },
       }));
-      setIsDirty(true);
+      markPending([fdi]);
     },
-    [setTeethMap]
+    [setTeethMap, markPending]
   );
+
+  // Undo/redo can touch any tooth, so everything on the chart is re-checked
+  // against the server on the next sync.
+  const undoEdit = useCallback(() => {
+    markPending(Object.keys(teethMapRef.current));
+    undo();
+  }, [undo, markPending]);
+
+  const redoEdit = useCallback(() => {
+    markPending(Object.keys(teethMapRef.current));
+    redo();
+  }, [redo, markPending]);
 
   return {
     teethMap,
@@ -218,8 +301,8 @@ export default function useOdontogram({ chartData, onSave }) {
     updateToothData,
     applyBulk,
     clearDiagnosis,
-    undo,
-    redo,
+    undo: undoEdit,
+    redo: redoEdit,
     canUndo,
     canRedo,
   };

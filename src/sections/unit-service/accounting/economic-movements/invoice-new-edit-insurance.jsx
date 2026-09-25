@@ -72,6 +72,7 @@ export default function InvoiceNewEditInsurance({ open, onClose, onSubmit }) {
                 { label: t('credit card'), value: 'credit_card' },
                 { label: t('bank transfer'), value: 'bank_transfer' },
                 { label: t('instant bank transfer'), value: 'instant_transfer' },
+                { label: t('Accounts Receivable Invoice'), value: 'accounts_receivable' },
               ]}
             />
           )}

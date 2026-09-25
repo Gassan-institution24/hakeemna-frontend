@@ -23,6 +23,7 @@ import {
   IconButton,
   DialogTitle,
   FormControl,
+  Autocomplete,
   DialogActions,
   DialogContent,
   CircularProgress,
@@ -33,6 +34,8 @@ import { createDentalDiagnosis } from 'src/api/dental_diagnoses';
 import {
   CONDITIONS,
   getConditionColor,
+  getConditionLabel,
+  getTableDiagnoses,
   getConditionStroke,
   getConditionsByKind,
 } from '../constants/conditions';
@@ -220,16 +223,28 @@ export default function ToothModal({
   onRemoveBridge,
   unitServiceId,
   customDiagnoses,
+  tableDiagnoses,
 }) {
   const isAr = lang === 'ar';
 
-  // Rebuilt whenever the clinic's catalogue changes, so a diagnosis added from
-  // the button below appears in this list without reopening the dialog.
+  // Rebuilt whenever the clinic's catalogue or the diagnoses table changes, so a
+  // diagnosis added from the button below appears without reopening the dialog.
+  // Only diagnoses stored in the database are offered here: the clinic's own, then
+  // the dental half of the diagnoses table. The chart's built-in states (missing,
+  // impacted, …) stay on the paint palette, where they drive the tooth artwork.
   const toothDiagnoses = useMemo(
-    () => getConditionsByKind('diagnosis', { toothLevel: true }),
+    () => [
+      ...getConditionsByKind('diagnosis', { toothLevel: true }).filter((c) => c.custom),
+      ...getTableDiagnoses(),
+    ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [customDiagnoses]
+    [customDiagnoses, tableDiagnoses]
   );
+
+  const diagnosisGroup = (c) => {
+    if (c.fromTable) return isAr ? 'جدول التشخيصات (ICD-10)' : 'Diagnoses table (ICD-10)';
+    return isAr ? 'تشخيصات العيادة' : 'Clinic diagnoses';
+  };
 
   const [addDiagnosisOpen, setAddDiagnosisOpen] = useState(false);
 
@@ -377,28 +392,43 @@ export default function ToothModal({
           {/* Whole-tooth diagnosis */}
           <Grid item xs={12} sm={6}>
             <Stack direction="row" alignItems="center" gap={1}>
-              <FormControl fullWidth size="small">
-                <InputLabel sx={{ fontSize: '0.8rem' }}>
-                  {isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
-                </InputLabel>
-                <Select
-                  value={wholeDiagnosis}
-                  label={isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
-                  onChange={(e) => setWholeDiagnosis(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>{isAr ? 'لا شيء' : 'None'}</em>
-                  </MenuItem>
-                  {toothDiagnoses.map((c) => (
-                    <MenuItem key={c.id} value={c.id}>
-                      <Stack direction="row" alignItems="center" gap={1}>
-                        <ColorSwatch color={c.color} stroke={c.stroke} />
-                        <span>{isAr ? c.labelAr : c.label}</span>
-                      </Stack>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              {/* Searchable: the diagnoses table can run to hundreds of entries. */}
+              <Autocomplete
+                fullWidth
+                size="small"
+                options={toothDiagnoses}
+                groupBy={diagnosisGroup}
+                value={
+                  toothDiagnoses.find((c) => c.id === wholeDiagnosis) ||
+                  // A saved value not offered here (e.g. a palette state such as
+                  // "missing") still shows by its name, rather than blanking.
+                  (wholeDiagnosis
+                    ? {
+                        id: wholeDiagnosis,
+                        label: getConditionLabel(wholeDiagnosis, 'en'),
+                        labelAr: getConditionLabel(wholeDiagnosis, 'ar'),
+                      }
+                    : null)
+                }
+                onChange={(_e, option) => setWholeDiagnosis(option?.id || '')}
+                getOptionLabel={(c) => (isAr ? c.labelAr || c.label : c.label) || ''}
+                isOptionEqualToValue={(a, b) => a.id === b.id}
+                renderOption={(props, c) => (
+                  <li {...props} key={c.id}>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                      <ColorSwatch color={c.color} stroke={c.stroke} />
+                      <span>{isAr ? c.labelAr || c.label : c.label}</span>
+                    </Stack>
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={isAr ? 'تشخيص السن' : 'Tooth Diagnosis'}
+                    placeholder={isAr ? 'ابحث بالاسم أو الرمز' : 'Search by name or code'}
+                  />
+                )}
+              />
 
               {/* Define a diagnosis the catalogue is missing, without leaving
                   the tooth being charted. */}
@@ -550,6 +580,7 @@ ToothModal.propTypes = {
   onRemoveBridge: PropTypes.func,
   unitServiceId: PropTypes.string,
   customDiagnoses: PropTypes.array,
+  tableDiagnoses: PropTypes.array,
 };
 
 ToothModal.defaultProps = {

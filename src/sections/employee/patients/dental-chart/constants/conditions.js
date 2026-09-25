@@ -319,9 +319,46 @@ export const setCustomConditions = (list) => {
 
 export const getCustomConditions = () => CUSTOM_CONDITIONS;
 
+// ── Diagnoses table (super admin, ICD-10) ──────────────────────────────────────
+// The shared diagnoses catalogue managed from super admin → Tables → Diagnoses.
+// Registered like the clinic list so labels resolve everywhere, but kept out of
+// getConditionsByKind: it runs to hundreds of entries, which belong in the tooth
+// dialog's search box, not the paint palette. Stored on a tooth as `icd:<code>`
+// (or `dx:<_id>` for an entry without a code) so the value survives a re-import.
+let TABLE_DIAGNOSES = [];
+
+export const TABLE_PREFIXES = ['icd:', 'dx:'];
+
+export const tableDiagnosisId = (d) => (d.icd_code ? `icd:${d.icd_code.trim()}` : `dx:${d._id}`);
+
+export const setTableDiagnoses = (list) => {
+  const seen = new Set();
+  TABLE_DIAGNOSES = (Array.isArray(list) ? list : [])
+    .filter((d) => d?.name && d.active !== false)
+    .map((d) => {
+      const code = d.icd_code?.trim();
+      return {
+        id: tableDiagnosisId(d),
+        label: code ? `${code} — ${d.name}` : d.name,
+        labelAr: code ? `${code} — ${d.name}` : d.name,
+        color: '#E1F5FE',
+        stroke: '#0288D1',
+        kind: 'diagnosis',
+        toothLevel: true,
+        fromTable: true,
+      };
+    })
+    .filter((c) => (seen.has(c.id) ? false : seen.add(c.id)));
+};
+
+export const getTableDiagnoses = () => TABLE_DIAGNOSES;
+
 // ── Lookups ────────────────────────────────────────────────────────────────────
 export const getCondition = (id) =>
-  CONDITIONS.find((c) => c.id === id) || CUSTOM_CONDITIONS.find((c) => c.id === id) || null;
+  CONDITIONS.find((c) => c.id === id) ||
+  CUSTOM_CONDITIONS.find((c) => c.id === id) ||
+  TABLE_DIAGNOSES.find((c) => c.id === id) ||
+  null;
 
 export const getConditionColor = (id) => getCondition(id)?.color || '#FFFFFF';
 export const getConditionStroke = (id) => getCondition(id)?.stroke || '#BDBDBD';

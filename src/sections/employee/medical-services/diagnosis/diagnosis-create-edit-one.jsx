@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
-import { useGetdiagnosis } from 'src/api';
+import { useGetSpecialityDiagnoses } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -26,7 +26,7 @@ export default function DiagnosisNewEditForm({ currentFavorite }) {
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { diagnosisData } = useGetdiagnosis();
+  const { diagnosisData } = useGetSpecialityDiagnoses();
 
   const schema = Yup.object().shape({
     name_arabic: Yup.string().required(t('arabic name is required')),

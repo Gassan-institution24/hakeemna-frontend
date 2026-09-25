@@ -3,6 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
+import useSpecialityGuard from 'src/auth/guard/speciality-guard';
+
 export function useGetdiagnosis(query) {
   const URL = [endpoints.diagnosis.all, { params: query }];
 
@@ -25,6 +27,14 @@ export function useGetdiagnosis(query) {
 
   return { ...memoizedValue, refetch };
 }
+
+// The diagnoses table split by who uses it: dentists get the `dental` entries,
+// every other specialty the `general` ones (see super admin → Tables → Diagnoses).
+export function useGetSpecialityDiagnoses() {
+  const { isDentist } = useSpecialityGuard();
+  return useGetdiagnosis({ category: isDentist ? 'dental' : 'general' });
+}
+
 export function useGetEntranceDiagnosis(id) {
   const URL = [endpoints.diagnosis.entrance(id)];
 

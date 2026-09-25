@@ -9,6 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
+  Alert,
   Button,
   Dialog,
   MenuItem,
@@ -34,6 +35,7 @@ import {
   useGetServiceType,
   useGetUnitservice,
   useGetOneUSPatient,
+  useGetUSActiveWorkGroups,
   useGetOneEntranceManagement,
 } from 'src/api';
 
@@ -59,16 +61,34 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const searchParams = useSearchParams();
   const appointment = searchParams.get('appointment');
   const entrance = searchParams.get('entrance');
+  // Opened from Invoicing → "New invoice": a standalone invoice with no appointment
+  // or entrance, which must still name the work group allowed to see it.
+  const standalone = searchParams.get('manual') === '1' && !appointment && !entrance;
+  const { user } = useAuthContext();
+  const userUnitServiceId =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id;
+
   const { Entrance } = useGetOneEntranceManagement(entrance);
   const [entranceInfo, setEntranceInfo] = useState();
   const { data: PatientData } = useGetPatient(Entrance?.patient);
-  const { data: unitData } = useGetUnitservice(Entrance?.service_unit);
+  // Without an entrance the invoice belongs to the user's own clinic.
+  const { data: unitData } = useGetUnitservice(
+    Entrance?.service_unit || (!entrance ? userUnitServiceId : undefined)
+  );
   const { usPatientData } = useGetOneUSPatient(Entrance?.unit_service_patient);
   const [appointmentInfo, setAppointmentInfo] = useState();
   const [invoicing, setInvoicing] = useState(false);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
-  const { user } = useAuthContext();
+  // Owners and admins may file into any group of the clinic; everyone else only into
+  // the groups they belong to (the server enforces the same rule, isScopeBypassed).
+  const canUseAnyGroup =
+    ['superadmin', 'admin'].includes(user?.role) ||
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.is_owner === true;
+  const { workGroupsData: clinicGroups } = useGetUSActiveWorkGroups(
+    canUseAnyGroup ? userUnitServiceId : undefined
+  );
+  const groupOptions = canUseAnyGroup && clinicGroups?.length ? clinicGroups : user?.workGroups || [];
   const dialog = useBoolean(false);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -94,7 +114,9 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     createDate: Yup.mixed().nullable().required(t('required field')),
     patient: Yup.mixed().nullable(),
     unit_service: Yup.mixed(),
-    work_group: Yup.mixed().nullable(),
+    work_group: standalone
+      ? Yup.mixed().required(t('required field'))
+      : Yup.mixed().nullable(),
     appointment: Yup.mixed().nullable(),
     entrance: Yup.mixed().nullable(),
     employee: Yup.mixed(),
@@ -315,7 +337,10 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
     try {
-      const invoice = await axiosInstance.post(endpoints.economec_movements.all, data);
+      const invoice = await axiosInstance.post(
+        endpoints.economec_movements.all,
+        standalone ? { ...data, require_work_group: true } : data
+      );
       const movementId = invoice?.data?.movement?._id;
       const subtotal = data.subtotal || 0;
       const quantity = totalQuantity;
@@ -391,10 +416,21 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                 to it, and with an appointment the server takes the group from there and ignores
                 this — but a multi-group accountant raising a manual invoice has to choose, or the
                 invoice lands with no owner and disappears from their own list. */}
-            {!watch().appointment && !watch().entrance && user?.workGroups?.length > 1 && (
+            {standalone && groupOptions.length === 0 && (
+              <Alert severity="warning" sx={{ mx: 3, my: 2 }}>
+                {t(
+                  'You do not belong to any work group, so you cannot create an invoice. Ask an admin to add you to a work group.'
+                )}
+              </Alert>
+            )}
+
+            {/* A standalone invoice always shows it: the chosen group is who can see it. */}
+            {!watch().appointment &&
+              !watch().entrance &&
+              (standalone ? groupOptions.length > 0 : user?.workGroups?.length > 1) && (
               <Stack sx={{ px: 3, py: 2 }}>
                 <RHFSelect name="work_group" label={t('work group')}>
-                  {user.workGroups.map((group) => (
+                  {(standalone ? groupOptions : user.workGroups).map((group) => (
                     <MenuItem key={group._id} value={group._id}>
                       {curLangAr ? group.name_arabic : group.name_english}
                     </MenuItem>
@@ -417,6 +453,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                     { label: t('credit card'), value: 'credit_card' },
                     { label: t('bank transfer'), value: 'bank_transfer' },
                     { label: t('instant bank transfer'), value: 'instant_transfer' },
+                    { label: t('Accounts Receivable Invoice'), value: 'accounts_receivable' },
                   ]}
                 />
               </Stack>

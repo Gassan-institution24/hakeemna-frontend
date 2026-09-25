@@ -15,6 +15,7 @@ import {
   DialogContent,
 } from '@mui/material';
 
+import { useGetdiagnosis } from 'src/api/diagnosis';
 import { useGetDentalDiagnoses } from 'src/api/dental_diagnoses';
 
 import XrayPanel from './components/xray-panel';
@@ -30,7 +31,7 @@ import { getHiddenTeeth } from './constants/tooth-states';
 import TreatmentPlanPanel from './components/treatment-plan-panel';
 import { getOdontogramPalette } from './constants/odontogram-theme';
 import ChiefComplaintPanel from './components/chief-complaint-panel';
-import { CONDITIONS, setCustomConditions } from './constants/conditions';
+import { CONDITIONS, setTableDiagnoses, setCustomConditions } from './constants/conditions';
 import {
   ADULT_UPPER,
   ADULT_LOWER,
@@ -303,6 +304,12 @@ export default function OdontogramView({
   const { diagnoses: customDiagnoses } = useGetDentalDiagnoses(unitServiceId);
 
   useMemo(() => setCustomConditions(customDiagnoses), [customDiagnoses]);
+
+  // The dental half of the diagnoses table (super admin → Tables → Diagnoses), offered in the
+  // tooth dialog's diagnosis search.
+  const { diagnosisData: tableDiagnoses } = useGetdiagnosis({ category: 'dental' });
+
+  useMemo(() => setTableDiagnoses(tableDiagnoses), [tableDiagnoses]);
 
   const archRef = useRef(null);
   const [archWidth, setArchWidth] = useState(0);
@@ -839,6 +846,7 @@ export default function OdontogramView({
           onRemoveBridge={handleRemoveBridge}
           unitServiceId={unitServiceId}
           customDiagnoses={customDiagnoses}
+          tableDiagnoses={tableDiagnoses}
           lang={lang}
         />
       )}

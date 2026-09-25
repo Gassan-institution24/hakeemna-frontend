@@ -30,8 +30,8 @@ import { useAuthContext } from '../../../auth/hooks';
 import { useBoolean } from '../../../hooks/use-boolean';
 import { useLocales, useTranslate } from '../../../locales';
 import { useGetFavoriteDiagnosis } from '../../../api/doctor_favorite';
-import { useGetdiagnosis, useGetEntranceDiagnosis } from '../../../api';
 import FormProvider, { RHFTextField } from '../../../components/hook-form';
+import { useGetEntranceDiagnosis, useGetSpecialityDiagnoses } from '../../../api';
 
 const filter = createFilterOptions();
 
@@ -54,7 +54,7 @@ export default function Diagnosis({ Entrance }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { diagnosisData } = useGetdiagnosis();
+  const { diagnosisData } = useGetSpecialityDiagnoses();
   const { EntranceDiagnosis, refetch } = useGetEntranceDiagnosis(Entrance?._id);
   const { favoriteDiagnosis, refetch: refetchFavorites } = useGetFavoriteDiagnosis();
 

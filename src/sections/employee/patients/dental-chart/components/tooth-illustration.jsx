@@ -73,7 +73,20 @@ function ToothIllustration({
     svg.querySelectorAll('[data-active]').forEach((node) => {
       const { id } = node;
       if (!id || !MANAGED_LAYERS.has(id)) return;
-      node.setAttribute('data-active', activeLayers.has(id) ? '1' : '0');
+      const on = activeLayers.has(id);
+      node.setAttribute('data-active', on ? '1' : '0');
+
+      // Some layers are groups whose pieces (`tooth-healthy-pulp-1`, `-2`, …) were
+      // authored off by the prune pass too — without this the group turns on and
+      // draws nothing (the premolar/molar pulp, beauty pass, sealant, crown prep).
+      // Only the numbered/outer/inner/occlusal parts are enabled; named variants
+      // such as `implant-bar` stay off.
+      if (on && node.tagName.toLowerCase() === 'g') {
+        const part = new RegExp(`^${id}-(\\d+|outer|inner|occlusal)$`);
+        node.querySelectorAll('[data-active="0"]').forEach((child) => {
+          if (part.test(child.id)) child.setAttribute('data-active', '1');
+        });
+      }
     });
 
     // View toggles are applied *after* the data pass so they win. They are display

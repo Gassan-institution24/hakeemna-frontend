@@ -30,6 +30,8 @@ import {
 
 // ----------------------------------------------------------------------
 
+const SURFACE_KEYS = ['occlusal', 'incisal', 'mesial', 'distal', 'buccal', 'lingual'];
+
 export default function PatientDentalChart({ patient, visit, onBillService }) {
   const patientId = patient?.patient?._id || patient?._id;
   const { currentLang } = useLocales();
@@ -118,7 +120,17 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
         whole_diagnosis: tooth.whole_diagnosis || null,
         whole_condition: tooth.whole_condition || null,
         whole_status: tooth.whole_status || null,
-        surfaces: tooth.surfaces || {},
+        // Every surface is sent, cleared ones as nulls — the API only writes the
+        // keys it receives, so an erased surface would otherwise come back.
+        surfaces: SURFACE_KEYS.reduce((acc, key) => {
+          const surface = tooth.surfaces?.[key] || {};
+          acc[key] = {
+            diagnosis: surface.diagnosis || null,
+            condition: surface.condition || null,
+            ...(surface.status ? { status: surface.status } : {}),
+          };
+          return acc;
+        }, {}),
         notes: tooth.notes || '',
         notes_arabic: tooth.notes_arabic || '',
         treatment_plan: tooth.treatment_plan || '',
