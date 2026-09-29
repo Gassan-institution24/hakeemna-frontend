@@ -15,6 +15,7 @@ import XrayPanel from './components/xray-panel';
 import NotesPanel from './components/notes-panel';
 import { getSurfaceLabel } from './constants/fdi';
 import { toNotation } from './constants/numbering';
+import PeriodontalView from './perio/periodontal-view';
 import TreatmentPlanPanel from './components/treatment-plan-panel';
 import ChiefComplaintPanel from './components/chief-complaint-panel';
 import { getConditionColor, getConditionLabel, setCustomConditions } from './constants/conditions';
@@ -230,6 +231,11 @@ export default function PatientDentalSummary({ patient }) {
             </Table>
           </Box>
         )}
+      </PanelCard>
+
+      {/* Periodontal exams — read-only history; charting happens in the appointment */}
+      <PanelCard icon="mdi:chart-bell-curve-cumulative" title={isAr ? 'مخطط دواعم السن' : 'Periodontal chart'}>
+        <PeriodontalView chartData={chartData} readOnly />
       </PanelCard>
 
       {/* Full treatment history — no visit passed, so nothing is scoped away */}

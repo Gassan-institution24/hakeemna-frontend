@@ -59,3 +59,10 @@ against the new version instead, or the chart will render every clinical state s
 Layer ids are upstream's activation contract and are identical across templates
 (see their `tools/toothgen/README.md`). The mapping from Hakeemna conditions to these ids lives in
 `../../constants/tooth-layers.js`.
+
+## Periodontal chart
+
+The periodontal chart (`../../perio/`) does **not** use these assets or any upstream code. Its tooth
+outlines are Hakeemna's own parametric shapes (`../../constants/tooth-shapes.js`). Upstream's
+`PerioChart` (same MIT repository) was consulted only as a clinical reference for site naming
+(MB/B/DB/ML/L/DL) and value ranges (PD 1–15 mm, GM −10…+20 mm).

@@ -509,6 +509,8 @@ export const endpoints = {
     clearTooth: (patientId, toothNumber) =>
       !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/clear`,
     bulk: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/bulk`),
+    periodontal: (patientId) =>
+      !patientId ? null : `/api/dental-chart/${patientId}/periodontal`,
     addProcedure: (patientId, toothNumber) =>
       !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure`,
     updateProcedure: (patientId, toothNumber, procedureId) =>

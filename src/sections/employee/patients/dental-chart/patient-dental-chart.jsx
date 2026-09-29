@@ -1,15 +1,19 @@
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
 import { useSnackbar } from 'notistack';
+import { useState, useCallback } from 'react';
 
-import { Box, Alert, CircularProgress } from '@mui/material';
+import { Box, Alert, Stack, ToggleButton, CircularProgress, ToggleButtonGroup } from '@mui/material';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 
 import OdontogramView from './odontogram-view';
+import PeriodontalView from './perio/periodontal-view';
 import {
   addNote,
   deleteNote,
@@ -25,6 +29,7 @@ import {
   switchChartType,
   useGetDentalChart,
   addChiefComplaint,
+  savePeriodontalExam,
   deleteChiefComplaint,
 } from '../../../../api/dental_chart';
 
@@ -38,6 +43,8 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
   const lang = currentLang?.value === 'ar' ? 'ar' : 'en';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslate();
+  const checkAcl = useAclGuard();
 
   const unitServiceId =
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id;
@@ -306,6 +313,35 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
     [patientId, createPatientFileRecord]
   );
 
+  // ── Periodontal chart (separate view beside the odontogram) ─────────────────
+  const [view, setView] = useState('odontogram'); // 'odontogram' | 'perio'
+  // Mounted on first open, then kept, so unsaved probing survives a switch back.
+  const [perioOpened, setPerioOpened] = useState(false);
+  const canEditChart = checkAcl('dental_chart:update') || checkAcl('dental_chart:create');
+
+  const handleViewChange = (_e, next) => {
+    if (!next) return;
+    if (next === 'perio') setPerioOpened(true);
+    setView(next);
+  };
+
+  // One request for the whole exam of this visit; returns the updated chart.
+  const handleSavePeriodontal = useCallback(
+    async (payload) => {
+      if (!patientId) return null;
+      const res = await savePeriodontalExam(patientId, payload);
+      const updated = res?.data;
+      const exam = updated?.periodontal_exams?.find((e) => String(e._id) === String(res?.exam_id));
+      const sites = (exam?.teeth || []).reduce(
+        (sum, tooth) => sum + Object.values(tooth.sites || {}).filter((s) => s?.pd).length,
+        0
+      );
+      await createPatientFileRecord(`Saved periodontal chart: ${sites} probing site(s) recorded.`);
+      return updated;
+    },
+    [patientId, createPatientFileRecord]
+  );
+
   if (!patientId) {
     return <Alert severity="warning">Patient ID not found</Alert>;
   }
@@ -322,7 +358,49 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
     return <Alert severity="error">Failed to load dental chart</Alert>;
   }
 
+  const showPerio = view === 'perio';
+
   return (
+    <Stack gap={1.5}>
+      <ToggleButtonGroup
+        exclusive
+        size="small"
+        value={view}
+        onChange={handleViewChange}
+        sx={{ alignSelf: 'flex-start' }}
+      >
+        <ToggleButton value="odontogram" sx={{ px: 2, gap: 0.75 }}>
+          <Iconify icon="mdi:tooth-outline" width={18} />
+          {t('Odontogram')}
+        </ToggleButton>
+        <ToggleButton value="perio" sx={{ px: 2, gap: 0.75 }}>
+          <Iconify icon="mdi:chart-bell-curve-cumulative" width={18} />
+          {t('Periodontal Chart')}
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      {perioOpened && (
+        <Box sx={{ display: showPerio ? 'block' : 'none' }}>
+          <PeriodontalView
+            chartData={chartData}
+            visit={visit}
+            readOnly={!canEditChart}
+            onSaveExam={handleSavePeriodontal}
+          />
+        </Box>
+      )}
+
+      {/* The odontogram stays mounted — and laid out — while the periodontal chart
+          is shown, so its state, unsaved edits and measured sizes (tooth auto-fit,
+          bridge beams) are exactly as they were on switching back. */}
+      <Box
+        aria-hidden={showPerio || undefined}
+        style={
+          showPerio
+            ? { visibility: 'hidden', height: 0, overflow: 'hidden', pointerEvents: 'none' }
+            : undefined
+        }
+      >
     <OdontogramView
       patientId={String(patientId)}
       chartData={chartData}
@@ -344,6 +422,8 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
       onAddNote={handleAddNote}
       onDeleteNote={handleDeleteNote}
     />
+      </Box>
+    </Stack>
   );
 }
 
