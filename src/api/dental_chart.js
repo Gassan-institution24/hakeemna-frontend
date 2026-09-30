@@ -34,6 +34,22 @@ export async function updateTooth(patientId, toothNumber, payload) {
   return res.data;
 }
 
+// Periodontal exam of one visit, saved whole in a single request.
+// 4xx responses are handled here rather than by the shared interceptor, which
+// drops the status — a 409 (someone else saved this exam) must stay recognisable.
+export async function savePeriodontalExam(patientId, payload) {
+  const res = await axiosInstance.put(endpoints.dentalChart.periodontal(patientId), payload, {
+    validateStatus: (status) => status < 500,
+  });
+  if (res.status >= 400) {
+    const error = new Error(res.data?.message || 'Failed to save periodontal chart');
+    error.status = res.status;
+    throw error;
+  }
+  await invalidate(patientId);
+  return res.data;
+}
+
 export async function bulkUpdateTeeth(patientId, updates) {
   const res = await axiosInstance.post(endpoints.dentalChart.bulk(patientId), { updates });
   await invalidate(patientId);

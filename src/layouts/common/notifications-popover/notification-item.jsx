@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import { Button } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import axios from 'src/utils/axios';
 import { fToNow } from 'src/utils/format-time';
+
 import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -110,6 +113,23 @@ export default function NotificationItem({ notification, handleClick }) {
     </Stack>
   );
 
+  // A salary report released for this employee: go straight to signing it.
+  const signAction = notification.type === 'SALARY_READY_TO_SIGN' && notification.action?.url && (
+    <Stack direction="row" sx={{ mt: 1.5 }}>
+      <Button
+        size="small"
+        variant="contained"
+        startIcon={<Iconify icon="solar:pen-new-square-linear" width={16} />}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleClick(notification._id, notification.action.url);
+        }}
+      >
+        {t('Sign')}
+      </Button>
+    </Stack>
+  );
+
   return (
     <ListItemButton
       disableRipple
@@ -126,6 +146,7 @@ export default function NotificationItem({ notification, handleClick }) {
       <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
         {renderText}
         {notification.type === 'FAMILY_INVITE' && isUnread && friendAction}
+        {signAction}
       </Stack>
     </ListItemButton>
   );
