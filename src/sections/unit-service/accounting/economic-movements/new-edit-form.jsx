@@ -88,7 +88,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   const { workGroupsData: clinicGroups } = useGetUSActiveWorkGroups(
     canUseAnyGroup ? userUnitServiceId : undefined
   );
-  const groupOptions = canUseAnyGroup && clinicGroups?.length ? clinicGroups : user?.workGroups || [];
+  const groupOptions =
+    canUseAnyGroup && clinicGroups?.length ? clinicGroups : user?.workGroups || [];
   const dialog = useBoolean(false);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -114,9 +115,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     createDate: Yup.mixed().nullable().required(t('required field')),
     patient: Yup.mixed().nullable(),
     unit_service: Yup.mixed(),
-    work_group: standalone
-      ? Yup.mixed().required(t('required field'))
-      : Yup.mixed().nullable(),
+    work_group: standalone ? Yup.mixed().required(t('required field')) : Yup.mixed().nullable(),
     appointment: Yup.mixed().nullable(),
     entrance: Yup.mixed().nullable(),
     employee: Yup.mixed(),
@@ -228,6 +227,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           },
         ],
       payment_details: currentInvoice?.payment_details || [],
+      patient_paid_method: 'cash',
     }),
     [
       currentInvoice,
@@ -274,7 +274,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         if (entrance) {
           const { data } = await axiosInstance.get(endpoints.entranceManagement.one(entrance), {
             params: {
-              select: 'Service_types Service_prices patient unit_service_patient work_shift appointment',
+              select:
+                'Service_types Service_prices patient unit_service_patient work_shift work_group appointment',
               populate: [
                 { path: 'Service_types', select: 'name_english name_arabic Price_per_unit' },
               ],
@@ -283,7 +284,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           setEntranceInfo(data);
         } else if (appointment) {
           const { data } = await axiosInstance.get(endpoints.appointments.one(appointment), {
-            params: { select: 'patient unit_service_patient work_shift' },
+            params: { select: 'patient unit_service_patient work_shift work_group' },
           });
           setAppointmentInfo(data);
         }
@@ -428,16 +429,16 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
             {!watch().appointment &&
               !watch().entrance &&
               (standalone ? groupOptions.length > 0 : user?.workGroups?.length > 1) && (
-              <Stack sx={{ px: 3, py: 2 }}>
-                <RHFSelect name="work_group" label={t('work group')}>
-                  {(standalone ? groupOptions : user.workGroups).map((group) => (
-                    <MenuItem key={group._id} value={group._id}>
-                      {curLangAr ? group.name_arabic : group.name_english}
-                    </MenuItem>
-                  ))}
-                </RHFSelect>
-              </Stack>
-            )}
+                <Stack sx={{ px: 3, py: 2 }}>
+                  <RHFSelect name="work_group" label={t('work group')}>
+                    {(standalone ? groupOptions : user.workGroups).map((group) => (
+                      <MenuItem key={group._id} value={group._id}>
+                        {curLangAr ? group.name_arabic : group.name_english}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                </Stack>
+              )}
 
             {watch().detailedTaxes ? <InvoiceNewEditTaxDetails /> : <InvoiceNewEditDetails />}
             <InvoiceNewEditStatusDate />
@@ -455,6 +456,45 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
                     { label: t('instant bank transfer'), value: 'instant_transfer' },
                     { label: t('Accounts Receivable Invoice'), value: 'accounts_receivable' },
                   ]}
+                />
+              </Stack>
+            )}
+
+            {/* Accounts Receivable (ذمم): what the patient pays now; the rest stays outstanding
+                and is collected later from payment control. */}
+            {watch().status === 'paid' && watch().payment_method === 'accounts_receivable' && (
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ px: 3, py: 1 }}>
+                <RHFTextField
+                  type="number"
+                  name="patient_paid"
+                  label={t('Amount paid now')}
+                  placeholder="0"
+                  sx={{ maxWidth: { sm: 220 } }}
+                />
+                <RHFSelect
+                  name="patient_paid_method"
+                  label={t('payment method')}
+                  sx={{ maxWidth: { sm: 220 } }}
+                >
+                  {[
+                    { label: 'cash', value: 'cash' },
+                    { label: 'credit card', value: 'credit_card' },
+                    { label: 'bank transfer', value: 'bank_transfer' },
+                    { label: 'instant bank transfer', value: 'instant_transfer' },
+                  ].map((one) => (
+                    <MenuItem key={one.value} value={one.value}>
+                      {t(one.label)}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <TextField
+                  disabled
+                  label={t('Remaining amount')}
+                  value={Math.max(
+                    0,
+                    (Number(watch().totalAmount) || 0) - (Number(watch().patient_paid) || 0)
+                  ).toFixed(2)}
+                  sx={{ maxWidth: { sm: 220 } }}
                 />
               </Stack>
             )}

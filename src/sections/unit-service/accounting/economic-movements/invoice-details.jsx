@@ -20,6 +20,7 @@ import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useGetIncomePaymentControl } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -43,6 +44,41 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     paddingBottom: theme.spacing(1),
   },
 }));
+
+// ----------------------------------------------------------------------
+
+// Paid / remaining for an Accounts Receivable (ذمم) invoice, from its payment-control rows.
+function ReceivableSummary({ invoiceId }) {
+  const { t } = useTranslate();
+  const { totals } = useGetIncomePaymentControl({
+    economic_movement: invoiceId,
+    page: 0,
+    rowsPerPage: 1,
+  });
+
+  return (
+    <>
+      <StyledTableRow>
+        <TableCell colSpan={3} />
+        <TableCell sx={{ color: 'text.secondary' }}>{t('Paid amount')}</TableCell>
+        <TableCell width={140} sx={{ color: 'success.main' }}>
+          {fCurrency(totals.paidTotal || 0)}
+        </TableCell>
+      </StyledTableRow>
+      <StyledTableRow>
+        <TableCell colSpan={3} />
+        <TableCell sx={{ color: 'text.secondary' }}>{t('Remaining amount')}</TableCell>
+        <TableCell width={140} sx={{ color: 'error.main', typography: 'subtitle2' }}>
+          {fCurrency(totals.pendingTotal || 0)}
+        </TableCell>
+      </StyledTableRow>
+    </>
+  );
+}
+
+ReceivableSummary.propTypes = {
+  invoiceId: PropTypes.string,
+};
 
 // ----------------------------------------------------------------------
 
@@ -107,6 +143,8 @@ export default function InvoiceDetails({ invoice, refetch }) {
           {fCurrency(invoice.Total_Amount)}
         </TableCell>
       </StyledTableRow>
+
+      {invoice.is_receivable && <ReceivableSummary invoiceId={invoice._id} />}
     </>
   );
 
@@ -224,6 +262,11 @@ export default function InvoiceDetails({ invoice, refetch }) {
             >
               {t(invoice.status)}
             </Label>
+            {invoice.is_receivable && (
+              <Label variant="soft" color="error">
+                {t('Accounts Receivable Invoice')}
+              </Label>
+            )}
 
             <Typography variant="h6">
               {' '}

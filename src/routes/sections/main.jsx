@@ -27,6 +27,8 @@ const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
 const ViewBlogs = lazy(() => import('src/pages/home/view-blog'));
 const DigitalTrust = lazy(() => import('src/pages/home/DigitalTrust'));
+// Public page a dental lab opens from a shared link — no login, no site chrome.
+const SharedLabRequestPage = lazy(() => import('src/pages/lab-request/shared'));
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +59,14 @@ export const mainRoutes = [
       { path: 'blogs/:id', element: <ViewBlogs /> },
       { path: 'serviceunit/:id', element: <ServiceUnitPage /> },
     ],
+  },
+  {
+    path: 'lab-request/:token',
+    element: (
+      <Suspense fallback={<SplashScreen />}>
+        <SharedLabRequestPage />
+      </Suspense>
+    ),
   },
   {
     element: (

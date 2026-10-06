@@ -495,6 +495,19 @@ export const endpoints = {
     one: (id) => (!id ? null : `/api/patient/${id}`),
     resend: (id) => (!id ? null : `/api/patient/resend_id/${id}`),
   },
+  labRequests: {
+    create: '/api/lab-requests',
+    byPatient: (uspId) => (!uspId ? null : `/api/lab-requests/patient/${uspId}`),
+    one: (id) => (!id ? null : `/api/lab-requests/${id}`),
+    images: (id) => `/api/lab-requests/${id}/images`,
+    image: (id, imageId) => `/api/lab-requests/${id}/images/${imageId}`,
+    messages: (id) => `/api/lab-requests/${id}/messages`,
+    regenerate: (id) => `/api/lab-requests/${id}/share/regenerate`,
+    // Public — the lab opens these through the shared link, without an account.
+    shared: (token) => (!token ? null : `/api/lab-requests/shared/${token}`),
+    sharedMessages: (token) => `/api/lab-requests/shared/${token}/messages`,
+    sharedImages: (token) => `/api/lab-requests/shared/${token}/images`,
+  },
   dentalDiagnoses: {
     // Clinic-defined diagnoses, added from the tooth dialog's "Add new" button.
     byUnitService: (unitServiceId) =>
