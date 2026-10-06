@@ -1076,6 +1076,7 @@ export const endpoints = {
   },
   whatsapp: {
     send: '/api/whatsapp/send',
+    templates: '/api/whatsapp/templates',
   },
   roles: {
     all: '/api/roles',
