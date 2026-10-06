@@ -7,6 +7,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 import { useGetOneUSPatient } from 'src/api';
+import useSpecialityGuard from 'src/auth/guard/speciality-guard';
 
 import Iconify from 'src/components/iconify';
 
@@ -26,6 +27,7 @@ import PatientCheckList from '../patient-profile/patient-checklist';
 import PatientRadiology from '../patient-profile/patient-radiology';
 import AppointmentsHistory from '../patient-profile/appoint-history';
 import PatientSickLeaves from '../patient-profile/patient-sick-leave';
+import PatientLabRequests from '../patient-profile/patient-lab-requests';
 import PatientInstructions from '../patient-profile/patient-instructions';
 import PatientPrescriptions from '../patient-profile/patient-prescriptions';
 import PatientCommunication from '../patient-profile/patient-communication';
@@ -42,6 +44,7 @@ const POPULATE =
 export default function PatientProfile() {
   const { id } = useParams();
   const { t } = useTranslate();
+  const { isDentist } = useSpecialityGuard();
 
   const { usPatientData, loading, refetch } = useGetOneUSPatient(id, { populate: POPULATE });
 
@@ -80,6 +83,10 @@ export default function PatientProfile() {
             icon: 'solar:test-tube-bold-duotone',
           },
           { value: 'radiology', label: t('Radiology'), icon: 'solar:bone-bold-duotone' },
+          // Dental lab prescriptions — only a dentist sends work to a dental lab.
+          ...(isDentist
+            ? [{ value: 'lab_requests', label: t('Lab Requests'), icon: 'mdi:tooth-outline' }]
+            : []),
         ],
       },
       {
@@ -119,7 +126,7 @@ export default function PatientProfile() {
         ],
       },
     ],
-    [t]
+    [t, isDentist]
   );
 
   const validSections = useMemo(
@@ -151,6 +158,8 @@ export default function PatientProfile() {
         return <PatientMedicalAnalyses patient={usPatientData} />;
       case 'radiology':
         return <PatientRadiology patient={usPatientData} />;
+      case 'lab_requests':
+        return isDentist ? <PatientLabRequests patient={usPatientData} /> : null;
       case 'sick_leave':
         return <PatientSickLeaves patient={usPatientData} />;
       case 'instructions':

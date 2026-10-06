@@ -46,7 +46,9 @@ export default function InvoiceNewEditAddress() {
 
   const values = watch();
 
-  const { unit_service, patient, entrance, unit_service_patient } = values;
+  const { unit_service, patient, entrance, appointment, unit_service_patient } = values;
+  // An invoice raised from an appointment or entrance belongs to that visit's patient.
+  const lockedPatient = Boolean(appointment || entrance);
   const { data } = useGetPatient(patient);
   const { usPatientData } = useGetOneUSPatient(unit_service_patient, {
     populate: [
@@ -96,56 +98,60 @@ export default function InvoiceNewEditAddress() {
             </Stack>
           )}
 
-          {/* Always offered, so the invoice can be addressed to someone else — including a
+          {/* Offered on a manual invoice, so it can be addressed to someone else — including a
               patient the clinic added without a Hakeemna account (unit_service_patient only). */}
-          <Autocomplete
-            sx={{ mt: 1.5, maxWidth: 360 }}
-            size="small"
-            options={patientsData}
-            filterOptions={(options) => options} // the server already searched
-            getOptionLabel={(option) =>
-              (curLangAr ? option?.name_arabic : option?.name_english) ||
-              option?.name_english ||
-              option?.name_arabic ||
-              ''
-            }
-            isOptionEqualToValue={(a, b) => a._id === b._id}
-            value={null}
-            inputValue={search}
-            onInputChange={(_e, value, reason) => reason !== 'reset' && setSearch(value)}
-            onChange={(_e, option) => {
-              if (!option) return;
-              setValue('unit_service_patient', option._id, { shouldDirty: true });
-              setValue('patient', option.patient?._id || option.patient || null, {
-                shouldDirty: true,
-              });
-              setSearch('');
-            }}
-            noOptionsText={t('no data')}
-            renderOption={(props, option) => (
-              <li {...props} key={option._id}>
-                <Stack>
-                  <Typography variant="body2">
-                    {(curLangAr ? option.name_arabic : option.name_english) ||
-                      option.name_english ||
-                      option.name_arabic}
-                  </Typography>
-                  {(option.mobile_num1 || option.file_code) && (
-                    <Typography variant="caption" color="text.secondary">
-                      {[option.file_code, option.mobile_num1].filter(Boolean).join(' · ')}
+          {!lockedPatient && (
+            <Autocomplete
+              sx={{ mt: 1.5, maxWidth: 360 }}
+              size="small"
+              options={patientsData}
+              filterOptions={(options) => options} // the server already searched
+              getOptionLabel={(option) =>
+                (curLangAr ? option?.name_arabic : option?.name_english) ||
+                option?.name_english ||
+                option?.name_arabic ||
+                ''
+              }
+              isOptionEqualToValue={(a, b) => a._id === b._id}
+              value={null}
+              inputValue={search}
+              onInputChange={(_e, value, reason) => reason !== 'reset' && setSearch(value)}
+              onChange={(_e, option) => {
+                if (!option) return;
+                setValue('unit_service_patient', option._id, { shouldDirty: true });
+                setValue('patient', option.patient?._id || option.patient || null, {
+                  shouldDirty: true,
+                });
+                setSearch('');
+              }}
+              noOptionsText={t('no data')}
+              renderOption={(props, option) => (
+                <li {...props} key={option._id}>
+                  <Stack>
+                    <Typography variant="body2">
+                      {(curLangAr ? option.name_arabic : option.name_english) ||
+                        option.name_english ||
+                        option.name_arabic}
                     </Typography>
-                  )}
-                </Stack>
-              </li>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={patient || unit_service_patient ? t('change patient') : t('choose patient')}
-                placeholder={t('search by name, phone or file number')}
-              />
-            )}
-          />
+                    {(option.mobile_num1 || option.file_code) && (
+                      <Typography variant="caption" color="text.secondary">
+                        {[option.file_code, option.mobile_num1].filter(Boolean).join(' · ')}
+                      </Typography>
+                    )}
+                  </Stack>
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={
+                    patient || unit_service_patient ? t('change patient') : t('choose patient')
+                  }
+                  placeholder={t('search by name, phone or file number')}
+                />
+              )}
+            />
+          )}
         </Stack>
       </Stack>
       {Entrance?.activity_happened?.length > 0 && (
