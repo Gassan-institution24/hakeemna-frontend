@@ -37,8 +37,8 @@ import { useGetEmployeeAdjustabledocument } from '../../../api/adjustable_docume
 import {
   useGetPatient,
   useGetMedRecord,
-  useGetMyCheckLists,
   useGetUSServiceTypes,
+  useGetPatientQuestionnaires,
   useGetOneEntranceManagement,
 } from '../../../api';
 
@@ -133,8 +133,9 @@ export default function Processing() {
     Entrance?.unit_service_patient
   );
   const { data } = useGetPatient(Entrance?.patient?._id);
-  const { CheckListData } = useGetMyCheckLists(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+  // Only offer the section when the clinic has questionnaires switched on.
+  const { forms: questionnaireForms } = useGetPatientQuestionnaires(
+    Entrance?.unit_service_patient?._id || Entrance?.unit_service_patient
   );
   const { adjustabledocument } = useGetEmployeeAdjustabledocument(user?.employee?._id);
   const { serviceTypesData } = useGetUSServiceTypes(
@@ -358,11 +359,11 @@ export default function Processing() {
         )}
 
         {/* ── Optional: Checklist ── */}
-        {isVisible(SECTION_KEYS.CHECK_LIST) && CheckListData?.length > 0 && (
+        {isVisible(SECTION_KEYS.CHECK_LIST) && questionnaireForms.length > 0 && (
           <SectionCard
             icon="octicon:checklist-16"
             color="info"
-            title={t('Choose a Check List')}
+            title={t('Questionnaires')}
             theme={theme}
           >
             <CheckList />

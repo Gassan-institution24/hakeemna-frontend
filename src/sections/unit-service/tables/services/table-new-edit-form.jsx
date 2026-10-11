@@ -9,7 +9,15 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Divider, Checkbox, MenuItem, Typography, FormControlLabel } from '@mui/material';
+import {
+  Divider,
+  Checkbox,
+  MenuItem,
+  TextField,
+  Typography,
+  Autocomplete,
+  FormControlLabel,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -21,12 +29,13 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
+import useSpecialityGuard from 'src/auth/guard/speciality-guard';
 import {
   useGetTaxes,
   useGetAnalyses,
   useGetDeductions,
   useGetUSActiveWorkShifts,
-  useGetActiveMeasurmentTypes,
+  useGetSpecialityServices,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -46,7 +55,6 @@ export default function TableNewEditForm({ currentTable }) {
   const myUS =
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
 
-  const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { taxesData } = useGetTaxes();
   const { deductionsData } = useGetDeductions();
   const { workShiftsData } = useGetUSActiveWorkShifts(myUS?._id);
@@ -59,6 +67,20 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { analysesData } = useGetAnalyses();
 
+  // Optional link to the superadmin's speciality list: picking one fills (and locks) the names,
+  // the clinic only sets its own price. Lists the speciality of the service being edited, else
+  // the logged-in employee's own speciality.
+  const { specialityId: mySpeciality } = useSpecialityGuard();
+  const catalogueSpeciality =
+    currentTable?.speciality_service?.speciality?._id ||
+    currentTable?.speciality_service?.speciality ||
+    mySpeciality;
+  const { services: catalogue } = useGetSpecialityServices(catalogueSpeciality || null);
+  const [linked, setLinked] = useState(currentTable?.speciality_service || null);
+  useEffect(() => {
+    setLinked(currentTable?.speciality_service || null);
+  }, [currentTable]);
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -69,7 +91,6 @@ export default function TableNewEditForm({ currentTable }) {
     description_arabic: Yup.string(),
     description_english: Yup.string(),
     work_shift: Yup.string().nullable(),
-    Measurement_type: Yup.string().required(t('required field')),
     Price_per_unit: Yup.string().required(t('required field')),
     place_of_service: Yup.string(),
     tax: Yup.string().nullable(),
@@ -84,7 +105,6 @@ export default function TableNewEditForm({ currentTable }) {
       description_english: currentTable?.description_english || '',
       unit_service: myUS?._id,
       work_shift: currentTable?.work_shift?._id || null,
-      Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
       tax: currentTable?.tax || null,
       deduction: currentTable?.deduction || null,
@@ -131,17 +151,20 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // An empty value on edit unlinks it; the server keeps the names it already has.
+      const payload = { ...data, speciality_service: linked?._id || (currentTable ? '' : undefined) };
       if (currentTable) {
-        await axiosInstance.patch(endpoints.service_types.one(currentTable._id), data);
+        await axiosInstance.patch(endpoints.service_types.one(currentTable._id), payload);
         router.push(paths.unitservice.tables.services.root);
       } else {
-        await axiosInstance.post(endpoints.service_types.all, data);
+        await axiosInstance.post(endpoints.service_types.all, payload);
       }
       reset();
+      setLinked(null);
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error, { variant: 'error' });
+      enqueueSnackbar(error?.message || String(error), { variant: 'error' });
     }
   });
 
@@ -154,6 +177,40 @@ export default function TableNewEditForm({ currentTable }) {
       <Grid container spacing={3}>
         <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
+            {!isMedLab && (
+              <Autocomplete
+                sx={{ mb: 3 }}
+                options={catalogue}
+                value={linked}
+                onChange={(e, value) => {
+                  setLinked(value);
+                  if (value) {
+                    methods.setValue('name_english', value.name_english || value.name_arabic || '', {
+                      shouldValidate: true,
+                    });
+                    methods.setValue('name_arabic', value.name_arabic || '');
+                  }
+                }}
+                getOptionLabel={(option) =>
+                  [option.code, curLangAr ? option.name_arabic || option.name_english : option.name_english]
+                    .filter(Boolean)
+                    .join(' · ')
+                }
+                isOptionEqualToValue={(option, value) => option._id === value._id}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={t('From speciality list')}
+                    placeholder={t('Search code or service...')}
+                    helperText={
+                      linked
+                        ? t('Name and code come from the speciality list — set your own price below.')
+                        : t('Optional — leave empty for a service of your own.')
+                    }
+                  />
+                )}
+              />
+            )}
             <Box
               rowGap={3}
               columnGap={2}
@@ -192,6 +249,7 @@ export default function TableNewEditForm({ currentTable }) {
                   onChange={handleEnglishInputChange}
                   name="name_english"
                   label={t('name english')}
+                  disabled={!!linked}
                 />
               )}
               {!isMedLab && (
@@ -199,6 +257,7 @@ export default function TableNewEditForm({ currentTable }) {
                   onChange={handleArabicInputChange}
                   name="name_arabic"
                   label={t('name arabic')}
+                  disabled={!!linked}
                 />
               )}
 
@@ -225,13 +284,6 @@ export default function TableNewEditForm({ currentTable }) {
                   </Typography>
                   <Iconify icon="material-symbols:new-window-sharp" />
                 </MenuItem>
-              </RHFSelect>
-              <RHFSelect name="Measurement_type" label={t('measurement type')}>
-                {measurmentTypesData.map((type, idx) => (
-                  <MenuItem lang="ar" key={idx} value={type._id}>
-                    {curLangAr ? type.name_arabic : type.name_english}
-                  </MenuItem>
-                ))}
               </RHFSelect>
               <RHFTextField type="number" name="Price_per_unit" label={t('price per unit')} />
               <RHFSelect name="place_of_service" label={t('place of service')}>

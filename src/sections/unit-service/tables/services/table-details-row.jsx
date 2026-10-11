@@ -31,6 +31,7 @@ export default function TableDetailsRow({
 }) {
   const {
     sequence_number,
+    speciality_service,
     name_english,
     name_arabic,
     description_english,
@@ -38,7 +39,6 @@ export default function TableDetailsRow({
     work_shift,
     Price_per_unit,
     currency,
-    Measurement_type,
     status,
     created_at,
     user_creation,
@@ -69,13 +69,15 @@ export default function TableDetailsRow({
         <Box>{sequence_number}</Box>
       </TableCell>
 
+      {/* Set when the service comes from the speciality list (e.g. D001). */}
+      <TableCell align="center" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
+        {speciality_service?.code || '—'}
+      </TableCell>
+
       <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
       <TableCell align="center">{curLangAr ? description_arabic : description_english}</TableCell>
       <TableCell align="center">
         {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
-      </TableCell>
-      <TableCell align="center">
-        {curLangAr ? Measurement_type?.name_arabic : Measurement_type?.name_english}
       </TableCell>
       <TableCell align="center">
         {Price_per_unit} {currency?.symbol}

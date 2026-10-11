@@ -29,8 +29,12 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+import { fDate } from 'src/utils/format-time';
+
 import { createDentalDiagnosis } from 'src/api/dental_diagnoses';
 
+import SurfaceWheel from './surface-wheel';
+import { getSurfaceLabel } from '../constants/fdi';
 import {
   CONDITIONS,
   getConditionColor,
@@ -58,7 +62,7 @@ const CUSTOM_COLORS = [
   { color: '#F8BBD0', stroke: '#D81B60' },
 ];
 
-const SURFACES = ['occlusal', 'mesial', 'distal', 'buccal', 'lingual'];
+const SURFACES = ['buccal', 'mesial', 'lingual', 'distal', 'occlusal'];
 
 function ColorSwatch({ color, stroke, size = 14 }) {
   return (
@@ -247,6 +251,9 @@ export default function ToothModal({
   };
 
   const [addDiagnosisOpen, setAddDiagnosisOpen] = useState(false);
+  // Which field "Add new" fills once the new diagnosis is created: the whole tooth or one part.
+  const [addDiagnosisTarget, setAddDiagnosisTarget] = useState('whole');
+  const [selectedSurface, setSelectedSurface] = useState(null);
 
   // ── Tooth info state ──────────────────────────────────────────────────────
   const [wholeDiagnosis, setWholeDiagnosis] = useState('');
@@ -275,6 +282,7 @@ export default function ToothModal({
         };
       });
       setSurfaceEdits(edits);
+      setSelectedSurface(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fdiNumber]);
@@ -287,8 +295,17 @@ export default function ToothModal({
         whole_diagnosis: wholeDiagnosis || null,
         whole_condition: wholeCondition || null,
         whole_status: wholeStatus,
+        // Each part goes back exactly as saved, with only its diagnosis replaced: the dialog
+        // edits diagnoses, not restorations. The server only touches (and stamps) the parts
+        // whose values changed, and the chart's local copy keeps each part's restoration.
+        surfaces: SURFACES.reduce((acc, key) => {
+          acc[key] = {
+            ...(toothData?.surfaces?.[key] || {}),
+            diagnosis: surfaceEdits[key]?.diagnosis || null,
+          };
+          return acc;
+        }, {}),
       };
-      // Apply surface changes
       await onSaveTooth(fdiNumber, payload, surfaceEdits);
       enqueueSnackbar(isAr ? 'تم الحفظ بنجاح' : 'Saved successfully', { variant: 'success' });
       // Close only once the save actually succeeded — a failure keeps the dialog
@@ -299,6 +316,41 @@ export default function ToothModal({
     } finally {
       setInfoSaving(false);
     }
+  };
+
+  // A saved value not offered in the list (e.g. a palette state such as "missing") still shows
+  // by its name rather than blanking.
+  const diagnosisOption = (id) =>
+    toothDiagnoses.find((c) => c.id === id) ||
+    (id ? { id, label: getConditionLabel(id, 'en'), labelAr: getConditionLabel(id, 'ar') } : null);
+
+  const setSurfaceDiagnosis = (key, id) =>
+    setSurfaceEdits((prev) => ({ ...prev, [key]: { ...(prev[key] || {}), diagnosis: id || '' } }));
+
+  // Parts changed in this dialog and not saved yet.
+  const editedSurfaces = SURFACES.filter(
+    (key) => (surfaceEdits[key]?.diagnosis || '') !== (toothData?.surfaces?.[key]?.diagnosis || '')
+  );
+
+  // What the wheel shows: the parts as they will be saved.
+  const previewTooth = {
+    surfaces: SURFACES.reduce((acc, key) => {
+      acc[key] = {
+        ...(toothData?.surfaces?.[key] || {}),
+        diagnosis: surfaceEdits[key]?.diagnosis || null,
+      };
+      return acc;
+    }, {}),
+  };
+
+  const updatedByName = (user) => {
+    if (!user || typeof user !== 'object') return '';
+    const src = user.employee || user;
+    return (
+      (isAr ? src.name_arabic || src.name_english : src.name_english || src.name_arabic) ||
+      user.email ||
+      ''
+    );
   };
 
   if (!fdiNumber) return null;
@@ -438,7 +490,10 @@ export default function ToothModal({
                     size="small"
                     variant="outlined"
                     startIcon={<AddIcon fontSize="small" />}
-                    onClick={() => setAddDiagnosisOpen(true)}
+                    onClick={() => {
+                      setAddDiagnosisTarget('whole');
+                      setAddDiagnosisOpen(true);
+                    }}
                     disabled={!unitServiceId}
                     sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
                   >
@@ -475,69 +530,129 @@ export default function ToothModal({
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ fontSize: '0.8rem' }}>
-                {isAr ? 'نوع العلاج' : 'Treatment Status'}
-              </InputLabel>
-              <Select
-                value={wholeStatus}
-                label={isAr ? 'نوع العلاج' : 'Treatment Status'}
-                onChange={(e) => setWholeStatus(e.target.value)}
-              >
-                <MenuItem value="existing">
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    <Box
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: 0.5,
-                        border: '1.5px solid #BDBDBD',
-                        bgcolor: 'transparent',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <span>{isAr ? 'حالي' : 'Existing'}</span>
-                  </Stack>
-                </MenuItem>
-                <MenuItem value="planned">
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    <Box
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: 0.5,
-                        border: '2px dashed #1565C0',
-                        bgcolor: 'transparent',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <Box component="span" sx={{ color: '#1565C0', fontWeight: 600 }}>
-                      {isAr ? 'مخطط' : 'Planned'}
-                    </Box>
-                  </Stack>
-                </MenuItem>
-                <MenuItem value="completed">
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    <Box
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: 0.5,
-                        border: '2px solid #2E7D32',
-                        bgcolor: '#2E7D32',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <Box component="span" sx={{ color: '#2E7D32', fontWeight: 600 }}>
-                      {isAr ? 'مكتمل' : 'Completed'}
-                    </Box>
-                  </Stack>
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+          {/* ── Tooth parts: a diagnosis per surface, not only for the whole tooth ── */}
+          <Grid item xs={12}>
+            <Divider sx={{ mb: 1.5 }} />
+            <Typography variant="subtitle2">{isAr ? 'أجزاء السن' : 'Tooth parts'}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              {isAr
+                ? 'اضغط على جزء من السن ثم اختر تشخيصه. الأجزاء المعدلة مميزة باللون البرتقالي.'
+                : 'Click a part of the tooth, then choose its diagnosis. Edited parts are marked in orange.'}
+            </Typography>
 
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              gap={2}
+              alignItems={{ xs: 'center', sm: 'flex-start' }}
+              sx={{ mt: 1.5 }}
+            >
+              <Box sx={{ flexShrink: 0 }}>
+                <SurfaceWheel
+                  fdiNumber={fdiNumber}
+                  toothData={previewTooth}
+                  size={150}
+                  lang={lang}
+                  selected={selectedSurface}
+                  edited={editedSurfaces}
+                  onSurfaceClick={(_fdi, key) => setSelectedSurface(key)}
+                />
+              </Box>
+
+              <Stack gap={1} sx={{ flex: 1, width: 1 }}>
+                {SURFACES.map((key) => {
+                  const saved = toothData?.surfaces?.[key] || {};
+                  const isEdited = editedSurfaces.includes(key);
+                  const isSelected = selectedSurface === key;
+                  const value = surfaceEdits[key]?.diagnosis || '';
+                  return (
+                    <Stack
+                      key={key}
+                      direction="row"
+                      alignItems="center"
+                      gap={1}
+                      onClick={() => setSelectedSurface(key)}
+                      sx={{
+                        p: 0.75,
+                        borderRadius: 1,
+                        border: '1px solid',
+                        borderColor: isSelected ? 'primary.main' : 'divider',
+                        bgcolor: isEdited ? 'rgba(245,124,0,0.08)' : 'transparent',
+                      }}
+                    >
+                      <Box sx={{ width: 84, flexShrink: 0 }}>
+                        <Typography variant="body2" fontWeight={600}>
+                          {getSurfaceLabel(key, fdiNumber, lang)}
+                        </Typography>
+                        {isEdited && (
+                          <Chip
+                            size="small"
+                            color="warning"
+                            label={isAr ? 'معدل' : 'Edited'}
+                            sx={{ height: 18, fontSize: '0.65rem' }}
+                          />
+                        )}
+                        {!isEdited && saved.diagnosis && saved.updated_at && (
+                          <Tooltip
+                            title={[updatedByName(saved.updated_by), fDate(saved.updated_at)]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          >
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ display: 'block', lineHeight: 1.2 }}
+                            >
+                              {isAr ? 'حُدّث' : 'Updated'} {fDate(saved.updated_at, 'dd/MM')}
+                            </Typography>
+                          </Tooltip>
+                        )}
+                      </Box>
+                      <Autocomplete
+                        fullWidth
+                        size="small"
+                        options={toothDiagnoses}
+                        groupBy={diagnosisGroup}
+                        value={diagnosisOption(value)}
+                        onOpen={() => setSelectedSurface(key)}
+                        onChange={(_e, option) => setSurfaceDiagnosis(key, option?.id)}
+                        getOptionLabel={(c) => (isAr ? c.labelAr || c.label : c.label) || ''}
+                        isOptionEqualToValue={(a, b) => a.id === b.id}
+                        renderOption={(props, c) => (
+                          <li {...props} key={c.id}>
+                            <Stack direction="row" alignItems="center" gap={1}>
+                              <ColorSwatch color={c.color} stroke={c.stroke} />
+                              <span>{isAr ? c.labelAr || c.label : c.label}</span>
+                            </Stack>
+                          </li>
+                        )}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder={isAr ? 'لا يوجد تشخيص' : 'No diagnosis'}
+                          />
+                        )}
+                      />
+                      <Tooltip title={isAr ? 'إضافة تشخيص جديد' : 'Add a new diagnosis'}>
+                        <span>
+                          <IconButton
+                            size="small"
+                            disabled={!unitServiceId}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAddDiagnosisTarget(key);
+                              setAddDiagnosisOpen(true);
+                            }}
+                          >
+                            <AddIcon fontSize="small" />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </Stack>
+                  );
+                })}
+              </Stack>
+            </Stack>
+          </Grid>
         </Grid>
       </DialogContent>
 
@@ -560,7 +675,11 @@ export default function ToothModal({
         open={addDiagnosisOpen}
         onClose={() => setAddDiagnosisOpen(false)}
         // Select it straight away — the dentist opened this to chart it now.
-        onCreated={(created) => created?.key && setWholeDiagnosis(created.key)}
+        onCreated={(created) => {
+          if (!created?.key) return;
+          if (addDiagnosisTarget === 'whole') setWholeDiagnosis(created.key);
+          else setSurfaceDiagnosis(addDiagnosisTarget, created.key);
+        }}
         unitServiceId={unitServiceId}
         lang={lang}
       />

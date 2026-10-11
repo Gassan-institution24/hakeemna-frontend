@@ -767,7 +767,7 @@ export function useNavData() {
             show:
               checkAccess('appointments:read', 'appointments') &&
               !isMedLab,
-            title: t('checklist'),
+            title: t('Questionnaires'),
             path: paths.employee.checklist.root,
             navItemId: 'EMChecklistNav',
             'data-test': 'employee-nav-item-documents-checklist',

@@ -1,316 +1,284 @@
-import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useMemo, useEffect } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, useFieldArray, useFormContext } from 'react-hook-form';
-import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { useMemo, useState } from 'react';
 
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Box,
-  Radio,
+  Card,
+  Grid,
+  Stack,
   Button,
+  Switch,
   Divider,
   MenuItem,
-  Container,
+  TextField,
   IconButton,
   Typography,
+  CardHeader,
+  FormControlLabel,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
-
-import { useGetSpecialties } from 'src/api';
+import { useTranslate } from 'src/locales';
+import { useGetSpecialties, saveQuestionnaireTemplate } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import QuestionnaireForm from 'src/components/questionnaire/questionnaire-form';
+import { allQuestions, blankQuestion } from 'src/components/questionnaire/utils';
+import QuestionListBuilder from 'src/components/questionnaire/question-list-builder';
 
 // ----------------------------------------------------------------------
 
+const blankSection = () => ({ title: '', title_arabic: '', questions: [blankQuestion()] });
+
+// Superadmin builder for a speciality questionnaire. Clinics of that speciality switch it on from
+// their own Questionnaires page and may add questions after it — they cannot change these.
 export default function NewEditForm({ currentRow }) {
   const router = useRouter();
+  const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
+  const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
 
-  const ChecklistSchema = Yup.object().shape({
-    title: Yup.string().nullable().required('title is required'),
-    speciality: Yup.string().nullable(),
-    description: Yup.string(),
-    questions: Yup.array().of(
-      Yup.object({
-        question: Yup.string(),
-        answer_way: Yup.string(),
-        category: Yup.string(),
-        options: Yup.array().nullable(),
-      })
-    ),
-  });
+  const [values, setValues] = useState(() => ({
+    title: currentRow?.title || '',
+    title_arabic: currentRow?.title_arabic || '',
+    description: currentRow?.description || '',
+    description_arabic: currentRow?.description_arabic || '',
+    speciality: currentRow?.speciality?._id || currentRow?.speciality || '',
+    active: currentRow?.active ?? true,
+    sections: currentRow?.sections?.length ? currentRow.sections : [blankSection()],
+  }));
+  const [saving, setSaving] = useState(false);
+  const [previewAnswers, setPreviewAnswers] = useState({});
+  const [previewAr, setPreviewAr] = useState(false);
 
-  const { specialtiesData } = useGetSpecialties({ select: 'name_english' });
+  const set = (patch) => setValues((prev) => ({ ...prev, ...patch }));
 
-  const defaultValues = useMemo(
-    () => ({
-      title: currentRow?.title || '',
-      speciality: currentRow?.speciality || null,
-      description: currentRow?.description || '',
-      questions: currentRow?.questions || [
-        {
-          question: '',
-          answer_way: 'Text',
-          category: '',
-          options: [''],
-        },
-      ],
-    }),
-    [currentRow]
-  );
+  const setSection = (index, patch) =>
+    set({ sections: values.sections.map((s, i) => (i === index ? { ...s, ...patch } : s)) });
 
-  const methods = useForm({
-    resolver: yupResolver(ChecklistSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    handleSubmit,
-    control,
-    watch,
-    formState: { isSubmitting },
-  } = methods;
-
-  const values = watch();
-
-  const { fields, append, remove, move } = useFieldArray({
-    control,
-    name: 'questions',
-  });
-
-  const handleAdd = () => {
-    append({
-      question: '',
-      answer_way: '',
-      options: [''],
-    });
+  const moveSection = (index, delta) => {
+    const target = index + delta;
+    if (target < 0 || target >= values.sections.length) return;
+    const next = [...values.sections];
+    [next[index], next[target]] = [next[target], next[index]];
+    set({ sections: next });
   };
 
-  useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
+  const questionCount = useMemo(() => allQuestions(values).length, [values]);
 
-  const handleRemove = (index) => {
-    remove(index);
-  };
+  const handleSave = async () => {
+    if (!values.title.trim()) {
+      enqueueSnackbar(t('title is required'), { variant: 'error' });
+      return;
+    }
+    if (!values.speciality) {
+      enqueueSnackbar(t('Choose a speciality'), { variant: 'error' });
+      return;
+    }
+    const unlabeled = allQuestions(values).some((q) => !q.label?.trim() && !q.label_arabic?.trim());
+    if (unlabeled) {
+      enqueueSnackbar(t('Every question needs a label'), { variant: 'error' });
+      return;
+    }
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-    move(result.source.index, result.destination.index);
-  };
-
-  const handleCreateAndSend = handleSubmit(async (data) => {
     try {
-      if (currentRow) {
-        await axiosInstance.patch(endpoints.checklist.one(currentRow._id), {
-          ...data,
-          general: true,
-        });
-        enqueueSnackbar('updated successfully');
-      } else {
-        await axiosInstance.post(endpoints.checklist.all, { ...data, general: true });
-        enqueueSnackbar('created successfully');
-      }
-      reset();
+      setSaving(true);
+      await saveQuestionnaireTemplate(currentRow?._id, values);
+      enqueueSnackbar(currentRow ? t('updated successfully') : t('created successfully'));
       router.push(paths.superadmin.tables.checklist.root);
     } catch (error) {
-      enqueueSnackbar(error.message, { variant: 'error' });
-      console.error(error);
+      enqueueSnackbar(error?.message || t('Something went wrong'), { variant: 'error' });
+    } finally {
+      setSaving(false);
     }
-  });
+  };
 
   return (
-    <Container maxWidth="xl">
-      <FormProvider methods={methods}>
-        <Card>
-          <Stack spacing={2} sx={{ width: 1, p: 3 }} alignItems="center">
-            <RHFTextField name="title" label="title" sx={{ width: { md: 0.6, xs: 1 } }} />
-            <RHFSelect
-              size="small"
-              name="speciality"
-              label="speciality"
-              sx={{ width: { md: 0.3, xs: 1 } }}
-            >
-              {specialtiesData.map((one, idx) => (
-                <MenuItem key={idx} value={one._id}>
-                  {one.name_english}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-            <RHFTextField
-              size="small"
-              name="description"
-              label="description"
-              sx={{ width: { md: 0.5, xs: 1 } }}
-            />
-          </Stack>
-        </Card>
-        <Box sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
-            questions:
-          </Typography>
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="droppable-questions">
-              {(provided) => (
-                <Stack spacing={4} {...provided.droppableProps} ref={provided.innerRef}>
-                  {fields.map((item, index) => (
-                    <Draggable key={item.id} draggableId={item.id} index={index}>
-                      {(provide) => (
-                        <Card
-                          sx={{ p: 3 }}
-                          ref={provide.innerRef}
-                          {...provide.draggableProps}
-                          {...provide.dragHandleProps}
-                        >
-                          <Stack alignItems="flex-end" spacing={1.5}>
-                            <Stack spacing={2} sx={{ width: 1 }}>
-                              <Stack
-                                direction={{ xs: 'column', md: 'row' }}
-                                justifyContent="space-between"
-                                spacing={2}
-                                sx={{ width: 1 }}
-                              >
-                                <RHFTextField
-                                  size="small"
-                                  name={`questions[${index}].question`}
-                                  label="question"
-                                  InputLabelProps={{ shrink: true }}
-                                  sx={{ width: 1 }}
-                                />
-                                <RHFSelect
-                                  name={`questions[${index}].answer_way`}
-                                  size="small"
-                                  label="answer_way"
-                                  InputLabelProps={{ shrink: true }}
-                                  sx={{ width: { md: 0.5, xs: 1 } }}
-                                >
-                                  {['Text', 'Yes No', 'Options'].map((one) => (
-                                    <MenuItem key={one} value={one}>
-                                      {one}
-                                    </MenuItem>
-                                  ))}
-                                </RHFSelect>
-                                <RHFTextField
-                                  size="small"
-                                  name={`questions[${index}].category`}
-                                  label="category"
-                                  InputLabelProps={{ shrink: true }}
-                                  sx={{ width: { md: 0.5, xs: 1 } }}
-                                />
-                                <Button
-                                  size="small"
-                                  color="error"
-                                  onClick={() => handleRemove(index)}
-                                >
-                                  <Iconify icon="solar:trash-bin-trash-bold" />
-                                </Button>
-                              </Stack>
-                              {values.questions[index].answer_way === 'Options' && (
-                                <Stack
-                                  justifyContent="flex-end"
-                                  alignItems="start"
-                                  spacing={1}
-                                  sx={{ width: 0.8 }}
-                                >
-                                  <QuestionOptions index={index} />
-                                </Stack>
-                              )}
-                            </Stack>
-                          </Stack>
-                        </Card>
-                      )}
-                    </Draggable>
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={7}>
+        <Stack spacing={3}>
+          <Card sx={{ p: 3 }}>
+            <Stack spacing={2}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <TextField
+                  fullWidth
+                  label={t('Title (English)')}
+                  value={values.title}
+                  onChange={(e) => set({ title: e.target.value })}
+                />
+                <TextField
+                  fullWidth
+                  label={t('Title (Arabic)')}
+                  value={values.title_arabic}
+                  onChange={(e) => set({ title_arabic: e.target.value })}
+                  inputProps={{ dir: 'rtl' }}
+                />
+              </Stack>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+                <TextField
+                  select
+                  fullWidth
+                  label={t('speciality')}
+                  value={values.speciality}
+                  onChange={(e) => set({ speciality: e.target.value })}
+                  helperText={t('Clinics of this speciality will see it first')}
+                >
+                  {specialtiesData.map((one) => (
+                    <MenuItem key={one._id} value={one._id}>
+                      {one.name_english}
+                      {one.name_arabic ? ` — ${one.name_arabic}` : ''}
+                    </MenuItem>
                   ))}
-                  {provided.placeholder}
+                </TextField>
+                <FormControlLabel
+                  sx={{ flexShrink: 0 }}
+                  control={
+                    <Switch
+                      checked={values.active}
+                      onChange={(e) => set({ active: e.target.checked })}
+                    />
+                  }
+                  label={t('Published')}
+                />
+              </Stack>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  label={t('Intro for the patient (English)')}
+                  value={values.description}
+                  onChange={(e) => set({ description: e.target.value })}
+                />
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  label={t('Intro for the patient (Arabic)')}
+                  value={values.description_arabic}
+                  onChange={(e) => set({ description_arabic: e.target.value })}
+                  inputProps={{ dir: 'rtl' }}
+                />
+              </Stack>
+            </Stack>
+          </Card>
+
+          {values.sections.map((section, index) => (
+            <Card key={index}>
+              <CardHeader
+                title={`${t('Section')} ${index + 1}`}
+                action={
+                  <Stack direction="row">
+                    <IconButton disabled={index === 0} onClick={() => moveSection(index, -1)}>
+                      <Iconify icon="eva:arrow-upward-fill" />
+                    </IconButton>
+                    <IconButton
+                      disabled={index === values.sections.length - 1}
+                      onClick={() => moveSection(index, 1)}
+                    >
+                      <Iconify icon="eva:arrow-downward-fill" />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      disabled={values.sections.length === 1}
+                      onClick={() =>
+                        set({ sections: values.sections.filter((_, i) => i !== index) })
+                      }
+                    >
+                      <Iconify icon="solar:trash-bin-trash-bold" />
+                    </IconButton>
+                  </Stack>
+                }
+              />
+              <Stack spacing={2} sx={{ p: 3 }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label={t('Section title (English)')}
+                    placeholder="Medical history"
+                    value={section.title}
+                    onChange={(e) => setSection(index, { title: e.target.value })}
+                  />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label={t('Section title (Arabic)')}
+                    placeholder="التاريخ الطبي"
+                    value={section.title_arabic}
+                    onChange={(e) => setSection(index, { title_arabic: e.target.value })}
+                    inputProps={{ dir: 'rtl' }}
+                  />
                 </Stack>
-              )}
-            </Droppable>
-          </DragDropContext>
+                <QuestionListBuilder
+                  questions={section.questions}
+                  preceding={values.sections.slice(0, index).flatMap((s) => s.questions)}
+                  onChange={(questions) => setSection(index, { questions })}
+                />
+              </Stack>
+            </Card>
+          ))}
 
-          <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
-
-          <Stack
-            spacing={3}
-            direction={{ xs: 'column', md: 'row' }}
-            alignItems={{ xs: 'flex-end', md: 'center' }}
-          >
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Button
-              size="small"
-              color="primary"
+              variant="outlined"
               startIcon={<Iconify icon="mingcute:add-line" />}
-              onClick={handleAdd}
-              sx={{ flexShrink: 0 }}
+              onClick={() => set({ sections: [...values.sections, blankSection()] })}
             >
-              Add Item
+              {t('Add section')}
             </Button>
+            <LoadingButton variant="contained" size="large" loading={saving} onClick={handleSave}>
+              {currentRow ? t('Update') : t('Create')}
+            </LoadingButton>
           </Stack>
-        </Box>
-
-        <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 1 }}>
-          <LoadingButton variant="contained" loading={isSubmitting} onClick={handleCreateAndSend}>
-            {currentRow ? 'Update' : 'Create'}
-          </LoadingButton>
         </Stack>
-      </FormProvider>
-    </Container>
+      </Grid>
+
+      {/* Live preview — exactly what the patient will tap through. */}
+      <Grid item xs={12} md={5}>
+        <Card sx={{ position: { md: 'sticky' }, top: { md: 88 } }}>
+          <CardHeader
+            title={t('Preview')}
+            subheader={`${questionCount} ${t('questions')}`}
+            action={
+              <Button size="small" onClick={() => setPreviewAr((v) => !v)}>
+                {previewAr ? 'English' : 'العربية'}
+              </Button>
+            }
+          />
+          <Divider sx={{ mt: 2 }} />
+          <Box
+            dir={previewAr ? 'rtl' : 'ltr'}
+            sx={{ p: 3, maxHeight: { md: 'calc(100vh - 220px)' }, overflowY: 'auto' }}
+          >
+            <Typography variant="h5" sx={{ mb: 1 }}>
+              {(previewAr ? values.title_arabic || values.title : values.title) ||
+                t('Untitled questionnaire')}
+            </Typography>
+            {(previewAr ? values.description_arabic : values.description) && (
+              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+                {previewAr ? values.description_arabic : values.description}
+              </Typography>
+            )}
+            <QuestionnaireForm
+              form={values}
+              answers={previewAnswers}
+              isAr={previewAr}
+              onChange={(key, value) => setPreviewAnswers((prev) => ({ ...prev, [key]: value }))}
+            />
+          </Box>
+        </Card>
+      </Grid>
+    </Grid>
   );
 }
 
 NewEditForm.propTypes = {
   currentRow: PropTypes.object,
-};
-
-function QuestionOptions({ index }) {
-  const { control } = useFormContext();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: `questions[${index}].options`,
-  });
-
-  const handleAdd = () => {
-    append(' ');
-  };
-
-  const handleRemove = (idx) => {
-    remove(idx);
-  };
-
-  return (
-    <>
-      {fields.map((item, idx) => (
-        <Stack key={item.id} direction="row" alignItems="center">
-          <Radio disabled />
-          <RHFTextField
-            size="small"
-            variant="standard"
-            name={`questions[${index}].options[${idx}]`}
-          />
-          <Stack direction="row">
-            <IconButton size="small" color="error" onClick={() => handleRemove(idx)}>
-              <Iconify icon="ic:round-close" />
-            </IconButton>
-          </Stack>
-        </Stack>
-      ))}
-      <Button color="primary" size="small" sx={{ fontSize: 12 }} onClick={handleAdd}>
-        <Iconify icon="ph:plus-bold" />
-        add option
-      </Button>
-    </>
-  );
-}
-QuestionOptions.propTypes = {
-  index: PropTypes.number,
 };

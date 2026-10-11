@@ -2,8 +2,8 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import ToothSurface from './tooth-surface';
-import { getConditionColor } from '../constants/conditions';
 import { getSurfaceLabel, getCrownTransform } from '../constants/fdi';
+import { getCondition, getConditionColor, getConditionStroke } from '../constants/conditions';
 
 // ── Wheel geometry (44 × 44, centre 22,22) ────────────────────────────────────
 const C = 22;
@@ -48,27 +48,52 @@ const ZONES = {
 };
 const ZONE_KEYS = ['buccal', 'mesial', 'lingual', 'distal', 'occlusal'];
 
+// Used when a diagnosis is not in any loaded catalogue (e.g. the table has not loaded yet), so a
+// diagnosed part is still visibly marked instead of falling back to white/grey.
+const DIAGNOSIS_FALLBACK = '#0288D1';
+
+const hexToRgba = (hex, alpha) => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || ''));
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`; // eslint-disable-line no-bitwise
+};
+
+// Strong colour of a part's diagnosis — the catalogue stroke, which stays visible at chart size
+// where many diagnosis fills (e.g. the ICD table's pale blue) do not.
+const diagnosisStroke = (id) => (getCondition(id) ? getConditionStroke(id) : DIAGNOSIS_FALLBACK);
+
+// Every part shows its own state, even when the whole tooth also carries a diagnosis or a
+// restoration — a diagnosed part must never be greyed out. A restoration fills the part with its
+// colour; a diagnosis-only part is tinted with the diagnosis colour.
 function zoneFill(toothData, key) {
-  // A whole-tooth restoration or diagnosis greys the wheel out (charting
-  // happens on the tooth itself in that case).
-  if (toothData?.whole_condition || toothData?.whole_diagnosis) return NEUTRAL;
   const surf = toothData?.surfaces?.[key];
-  // Restoration colour takes precedence; otherwise show the diagnosis colour.
-  const id = surf?.condition || surf?.diagnosis;
-  return id ? getConditionColor(id) : NEUTRAL;
+  if (surf?.condition) return getConditionColor(surf.condition);
+  if (surf?.diagnosis) return hexToRgba(diagnosisStroke(surf.diagnosis), 0.45);
+  return NEUTRAL;
 }
 
 /**
  * 5-zone surface wheel used to chart individual tooth surfaces.
  * Mirrors the tooth's quadrant so buccal/lingual/mesial/distal stay correct.
  */
-function SurfaceWheel({ fdiNumber, toothData, onSurfaceClick, size, lang }) {
+function SurfaceWheel({
+  fdiNumber,
+  toothData,
+  onSurfaceClick,
+  size,
+  lang,
+  selected,
+  edited,
+}) {
   const transform = getCrownTransform(fdiNumber);
 
   // Treatment status ring. 'watch' is no longer a treatment status — only the
   // "Watch" *diagnosis* still draws the dotted amber ring.
   const wholeStatus = toothData?.whole_status;
-  const surfaceVals = Object.values(toothData?.surfaces || {}).filter((s) => s?.condition || s?.diagnosis);
+  const surfaceVals = Object.values(toothData?.surfaces || {}).filter(
+    (s) => s?.condition || s?.diagnosis
+  );
   const statuses = surfaceVals.map((s) => s?.status);
   const hasWatchDx =
     surfaceVals.some((s) => s?.diagnosis === 'watch') || toothData?.whole_diagnosis === 'watch';
@@ -100,16 +125,77 @@ function SurfaceWheel({ fdiNumber, toothData, onSurfaceClick, size, lang }) {
             onSurfaceClick={onSurfaceClick}
           />
         ))}
+
+        {/* Diagnosed parts get an outline in the diagnosis colour, so the finding stays visible
+            even under a restoration's fill. */}
+        {ZONE_KEYS.filter((key) => toothData?.surfaces?.[key]?.diagnosis).map((key) => (
+          <path
+            key={`dx-${key}`}
+            d={ZONES[key]}
+            fill="none"
+            stroke={diagnosisStroke(toothData.surfaces[key].diagnosis)}
+            strokeWidth="2"
+            style={{ pointerEvents: 'none' }}
+          />
+        ))}
+
+        {/* Tooth dialog only: parts changed but not saved yet, then the part being edited. */}
+        {(edited || []).map((key) => (
+          <path
+            key={`edited-${key}`}
+            d={ZONES[key]}
+            fill="none"
+            stroke="#F57C00"
+            strokeWidth="1.6"
+            strokeDasharray="2 1.4"
+            style={{ pointerEvents: 'none' }}
+          />
+        ))}
+        {selected && ZONES[selected] && (
+          <path
+            d={ZONES[selected]}
+            fill="rgba(25,118,210,0.12)"
+            stroke="#1976D2"
+            strokeWidth="1.8"
+            style={{ pointerEvents: 'none' }}
+          />
+        )}
       </g>
 
       {hasPlanned && (
-        <circle cx="22" cy="22" r="21" fill="none" stroke="#1565C0" strokeWidth="1.6" strokeDasharray="4 2.5" style={{ pointerEvents: 'none' }} />
+        <circle
+          cx="22"
+          cy="22"
+          r="21"
+          fill="none"
+          stroke="#1565C0"
+          strokeWidth="1.6"
+          strokeDasharray="4 2.5"
+          style={{ pointerEvents: 'none' }}
+        />
       )}
       {hasCompleted && (
-        <circle cx="22" cy="22" r="21" fill="none" stroke="#2E7D32" strokeWidth="1.6" style={{ pointerEvents: 'none' }} />
+        <circle
+          cx="22"
+          cy="22"
+          r="21"
+          fill="none"
+          stroke="#2E7D32"
+          strokeWidth="1.6"
+          style={{ pointerEvents: 'none' }}
+        />
       )}
       {hasWatch && (
-        <circle cx="22" cy="22" r="21" fill="none" stroke="#F9A825" strokeWidth="1.6" strokeDasharray="2.5 2" style={{ pointerEvents: 'none' }} />
+        <circle
+          cx="22"
+          cy="22"
+          r="21"
+          fill="none"
+          stroke="#F9A825"
+          strokeWidth="1.6"
+          strokeDasharray="2.5 2"
+          style={{ pointerEvents: 'none' }}
+        />
       )}
     </svg>
   );
@@ -121,12 +207,16 @@ SurfaceWheel.propTypes = {
   onSurfaceClick: PropTypes.func.isRequired,
   size: PropTypes.number,
   lang: PropTypes.string,
+  selected: PropTypes.string,
+  edited: PropTypes.arrayOf(PropTypes.string),
 };
 
 SurfaceWheel.defaultProps = {
   toothData: null,
   size: 34,
   lang: 'en',
+  selected: null,
+  edited: null,
 };
 
 export default memo(SurfaceWheel);

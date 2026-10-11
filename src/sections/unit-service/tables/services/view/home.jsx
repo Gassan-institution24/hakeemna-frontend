@@ -57,6 +57,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
+import AddFromSpecialityDialog from '../add-from-speciality-dialog';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
@@ -79,10 +80,10 @@ export default function ServicesTableView() {
 
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
+    { id: 'speciality_code', label: t('code') },
     { id: 'name', label: t('name') },
     { id: 'description', label: t('description') },
     { id: 'work_shift', label: t('work shift') },
-    { id: 'Measurement_type', label: t('measurment type') },
     { id: 'Price_per_unit', label: t('price per unit') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
@@ -106,6 +107,7 @@ export default function ServicesTableView() {
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
+  const fromSpeciality = useBoolean();
 
   const { serviceTypesData, loading, refetch } = useGetUSServiceTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -343,14 +345,23 @@ export default function ServicesTableView() {
           ]}
           action={
             checkAcl('management_tables:create') && (
-              <Button
-                component={RouterLink}
-                href={paths.unitservice.tables.services.new}
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
-                {t('new service')}
-              </Button>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<Iconify icon="solar:list-check-bold" />}
+                  onClick={fromSpeciality.onTrue}
+                >
+                  {t('Add from speciality list')}
+                </Button>
+                <Button
+                  component={RouterLink}
+                  href={paths.unitservice.tables.services.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  {t('new service')}
+                </Button>
+              </Box>
             )
           }
           sx={{
@@ -433,6 +444,10 @@ export default function ServicesTableView() {
                         value: row.sequence_number,
                       },
                       {
+                        label: t('code'),
+                        value: row.speciality_service?.code,
+                      },
+                      {
                         label: t('description'),
                         value: curLangAr ? row.description_arabic : row.description_english,
                       },
@@ -441,12 +456,6 @@ export default function ServicesTableView() {
                         value: curLangAr
                           ? row.work_shift?.name_arabic
                           : row.work_shift?.name_english,
-                      },
-                      {
-                        label: t('measurment type'),
-                        value: curLangAr
-                          ? row.Measurement_type?.name_arabic
-                          : row.Measurement_type?.name_english,
                       },
                       {
                         label: t('price per unit'),
@@ -670,6 +679,18 @@ export default function ServicesTableView() {
           </Button>
         }
       />
+      {fromSpeciality.value && (
+        <AddFromSpecialityDialog
+          open
+          clinicServices={serviceTypesData}
+          onClose={fromSpeciality.onFalse}
+          onAdded={() => {
+            fromSpeciality.onFalse();
+            refetch();
+          }}
+        />
+      )}
+
       <ConfirmDialog
         open={confirmActivate.value}
         onClose={confirmActivate.onFalse}

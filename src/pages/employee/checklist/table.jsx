@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import ChecklistTableView from 'src/sections/employee/checklist/view/checklist-table-view';
+import ClinicQuestionnairesView from 'src/sections/shared/questionnaires/clinic-questionnaires-view';
 
 // ----------------------------------------------------------------------
 
@@ -8,11 +8,10 @@ export default function TableDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: my checklist</title>
-        <meta name="description" content="meta" />
+        <title> Dashboard: Questionnaires</title>
       </Helmet>
 
-      <ChecklistTableView />
+      <ClinicQuestionnairesView />
     </>
   );
 }

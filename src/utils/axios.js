@@ -219,6 +219,12 @@ export const endpoints = {
     many: '/api/specialities/many',
     one: (id) => (!id ? null : `/api/specialities/${id}`),
   },
+  // Superadmin catalogue of services per speciality (e.g. Dentistry → D001 Comprehensive exam).
+  specialityServices: {
+    all: '/api/specialityservices',
+    import: '/api/specialityservices/import',
+    one: (id) => `/api/specialityservices/${id}`,
+  },
   subspecialities: {
     all: '/api/subspecialities/',
     many: '/api/subspecialities/many',
@@ -348,6 +354,8 @@ export const endpoints = {
     all: '/api/servicetypes',
     active: '/api/servicetypes/active',
     one: (id) => (!id ? null : `/api/servicetypes/${id}`),
+    // The clinic adds services from its speciality list, each with its own price.
+    fromSpeciality: '/api/servicetypes/from-speciality',
     unit_service: {
       all: (id) => (!id ? null : `/api/servicetypes/unitservice/${id}`),
       active: (id) => (!id ? null : `/api/servicetypes/unitservice/${id}/active`),
@@ -494,6 +502,17 @@ export const endpoints = {
     onefamilyType: (id) => (!id ? null : `/api/family/${id}`),
     one: (id) => (!id ? null : `/api/patient/${id}`),
     resend: (id) => (!id ? null : `/api/patient/resend_id/${id}`),
+  },
+  questionnaires: {
+    templates: '/api/questionnaires/templates',
+    template: (id) => (!id ? null : `/api/questionnaires/templates/${id}`),
+    clinic: '/api/questionnaires/clinic',
+    clinicTemplate: (id) => `/api/questionnaires/clinic/${id}`,
+    patientForms: (uspId) => (!uspId ? null : `/api/questionnaires/patient/${uspId}`),
+    patientResponses: (uspId) =>
+      !uspId ? null : `/api/questionnaires/responses/patient/${uspId}`,
+    responses: '/api/questionnaires/responses',
+    response: (id) => `/api/questionnaires/responses/${id}`,
   },
   labRequests: {
     create: '/api/lab-requests',

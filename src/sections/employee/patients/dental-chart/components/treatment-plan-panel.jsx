@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import {
   Box,
@@ -40,6 +40,7 @@ import PanelCard from './panel-card';
 import { getSurfaceLabel } from '../constants/fdi';
 import { toNotation } from '../constants/numbering';
 import { idOf, splitByVisit } from '../constants/visit-scope';
+import AddServiceFromSpecialityDialog from './add-service-from-speciality-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -63,9 +64,7 @@ const performerName = (performedBy, isAr) => {
   if (!performedBy || typeof performedBy === 'string') return '—';
   // The name lives on the linked employee; the user only carries the email.
   const src = performedBy.employee || performedBy;
-  const full = isAr
-    ? src.name_arabic || src.name_english
-    : src.name_english || src.name_arabic;
+  const full = isAr ? src.name_arabic || src.name_english : src.name_english || src.name_arabic;
 
   if (!full) return performedBy.email || '—';
 
@@ -99,6 +98,19 @@ const serviceLabel = (service, isAr) => {
   return name || '';
 };
 
+// The catalogue code (e.g. D011) of a clinic service that comes from the speciality list.
+const serviceCode = (service) =>
+  service && typeof service === 'object' ? service.speciality_service?.code || '' : '';
+
+// Speciality-list services first, in code order (D2 before D10), then the clinic's own ones by name.
+const sortServices = (list) =>
+  [...list].sort((a, b) => {
+    const ca = serviceCode(a);
+    const cb = serviceCode(b);
+    if (ca && cb) return ca.localeCompare(cb, undefined, { numeric: true });
+    if (ca || cb) return ca ? -1 : 1;
+    return serviceLabel(a, false).localeCompare(serviceLabel(b, false));
+  });
 
 // One flat, most-recent-first list of the actual procedure records. Painting a
 // tooth appends such a record on the server, so this is a real history: every
@@ -158,11 +170,40 @@ function AddTreatmentDialog({
   const [saving, setSaving] = useState(false);
 
   // The clinic's own catalogue — same source the accounting module prices from.
-  const { serviceTypesData, loading: servicesLoading } = useGetUSActiveServiceTypes(unitServiceId);
+  const {
+    serviceTypesData,
+    loading: servicesLoading,
+    refetch: refetchServices,
+  } = useGetUSActiveServiceTypes(unitServiceId);
+
+  // "Add new": a service picked from the speciality list joins the clinic's services; once the
+  // reloaded list contains it, it is selected here with the price just set.
+  const [addServiceOpen, setAddServiceOpen] = useState(false);
+  const [pendingService, setPendingService] = useState(null); // { id, price }
   const services = useMemo(
-    () => (Array.isArray(serviceTypesData) ? serviceTypesData : []),
+    () => sortServices(Array.isArray(serviceTypesData) ? serviceTypesData : []),
     [serviceTypesData]
   );
+  const groupLabel = (option) => {
+    if (serviceCode(option)) {
+      const spec = option.speciality_service?.speciality;
+      const specName = isAr ? spec?.name_arabic || spec?.name_english : spec?.name_english;
+      return specName || (isAr ? 'خدمات التخصص' : 'Speciality services');
+    }
+    return isAr ? 'خدمات العيادة الأخرى' : 'Other clinic services';
+  };
+
+  useEffect(() => {
+    if (!pendingService) return;
+    const added = services.find(
+      (one) => String(one.speciality_service?._id || one.speciality_service) === pendingService.id
+    );
+    if (!added) return;
+    setService(added);
+    setDescription(serviceLabel(added, isAr) || added.name_english || '');
+    setCost(String(pendingService.price));
+    setPendingService(null);
+  }, [services, pendingService, isAr]);
 
   // Inside an appointment every line belongs to that visit and shares its date,
   // so the date is shown but not editable.
@@ -231,9 +272,7 @@ function AddTreatmentDialog({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ fontSize: '1rem' }}>
-        {isAr ? 'إضافة علاج' : 'Add treatment'}
-      </DialogTitle>
+      <DialogTitle sx={{ fontSize: '1rem' }}>{isAr ? 'إضافة علاج' : 'Add treatment'}</DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ mt: 1 }}>
           <FormControl size="small" fullWidth>
@@ -251,43 +290,73 @@ function AddTreatmentDialog({
             </Select>
           </FormControl>
 
-          <Autocomplete
-            freeSolo
-            size="small"
-            options={services}
-            value={service}
-            loading={servicesLoading}
-            onChange={handleServiceChange}
-            getOptionLabel={(option) => serviceLabel(option, isAr)}
-            isOptionEqualToValue={(option, value) => option?._id === value?._id}
-            renderOption={(props, option) => (
-              <li {...props} key={option._id}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  sx={{ width: '100%', gap: 2 }}
-                >
-                  <Typography variant="body2">{serviceLabel(option, isAr)}</Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {servicePrice(option) > 0 ? servicePrice(option) : '—'}
-                  </Typography>
-                </Stack>
-              </li>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={isAr ? 'العلاج / الخدمة' : 'Treatment / service'}
-                placeholder={isAr ? 'اختر من الخدمات...' : 'Pick from services…'}
-                helperText={
-                  isAr
-                    ? 'اختر خدمة ليتم تعبئة السعر تلقائياً، أو اكتب علاجاً مخصصاً'
-                    : 'Pick a service to auto-fill its price, or type a one-off treatment'
-                }
-              />
-            )}
-          />
+          <Stack direction="row" alignItems="flex-start" gap={1}>
+            <Autocomplete
+              freeSolo
+              fullWidth
+              size="small"
+              options={services}
+              value={service}
+              loading={servicesLoading}
+              onChange={handleServiceChange}
+              groupBy={groupLabel}
+              // The code is part of the label so typing "D011" finds the service.
+              getOptionLabel={(option) =>
+                [serviceCode(option), serviceLabel(option, isAr)].filter(Boolean).join(' · ')
+              }
+              isOptionEqualToValue={(option, value) => option?._id === value?._id}
+              renderOption={(props, option) => (
+                <li {...props} key={option._id}>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{ width: '100%', gap: 2 }}
+                  >
+                    <Stack direction="row" alignItems="center" gap={1} sx={{ minWidth: 0 }}>
+                      {serviceCode(option) && (
+                        <Typography
+                          variant="caption"
+                          sx={{ fontFamily: 'monospace', fontWeight: 700, color: 'primary.main' }}
+                        >
+                          {serviceCode(option)}
+                        </Typography>
+                      )}
+                      <Typography variant="body2">{serviceLabel(option, isAr)}</Typography>
+                    </Stack>
+                    <Typography variant="caption" color="text.secondary">
+                      {servicePrice(option) > 0 ? servicePrice(option) : '—'}
+                    </Typography>
+                  </Stack>
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={isAr ? 'العلاج / الخدمة' : 'Treatment / service'}
+                  placeholder={isAr ? 'اختر من الخدمات...' : 'Pick from services…'}
+                  helperText={
+                    isAr
+                      ? 'اختر خدمة ليتم تعبئة السعر تلقائياً، أو اكتب علاجاً مخصصاً'
+                      : 'Pick a service to auto-fill its price, or type a one-off treatment'
+                  }
+                />
+              )}
+            />
+            <Tooltip
+              title={isAr ? 'إضافة خدمة من قائمة التخصص' : 'Add a service from the speciality list'}
+            >
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => setAddServiceOpen(true)}
+                startIcon={<Iconify icon="mingcute:add-line" width={16} />}
+                sx={{ whiteSpace: 'nowrap', flexShrink: 0, height: 40 }}
+              >
+                {isAr ? 'جديد' : 'Add new'}
+              </Button>
+            </Tooltip>
+          </Stack>
 
           <FormControl size="small" fullWidth>
             <InputLabel>{isAr ? 'الحالة' : 'Status'}</InputLabel>
@@ -330,6 +399,20 @@ function AddTreatmentDialog({
           />
         </Stack>
       </DialogContent>
+      {addServiceOpen && (
+        <AddServiceFromSpecialityDialog
+          open
+          lang={lang}
+          clinicServices={services}
+          onClose={() => setAddServiceOpen(false)}
+          onAdded={async (entry, price) => {
+            setAddServiceOpen(false);
+            setPendingService({ id: String(entry._id), price });
+            await refetchServices();
+          }}
+        />
+      )}
+
       <DialogActions>
         <Button onClick={handleClose} size="small" disabled={saving}>
           {isAr ? 'إلغاء' : 'Cancel'}
@@ -520,7 +603,11 @@ function HistoryDialog({ open, onClose, groups, numbering, lang }) {
                 <Paper
                   key={group.key}
                   variant="outlined"
-                  sx={{ borderRadius: 1.5, overflow: 'hidden', backgroundColor: 'background.paper' }}
+                  sx={{
+                    borderRadius: 1.5,
+                    overflow: 'hidden',
+                    backgroundColor: 'background.paper',
+                  }}
                 >
                   <Stack
                     direction="row"

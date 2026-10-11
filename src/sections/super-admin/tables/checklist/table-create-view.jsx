@@ -12,7 +12,7 @@ export default function TableCreateView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Create a new checklist"
+        heading="New speciality questionnaire"
         links={[
           {
             name: 'dashboard',
@@ -23,10 +23,10 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'checklists',
+            name: 'questionnaires',
             href: paths.superadmin.tables.checklist.root,
           },
-          { name: 'New checklist' },
+          { name: 'New questionnaire' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

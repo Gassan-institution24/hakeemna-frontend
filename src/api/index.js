@@ -57,6 +57,8 @@ export * from './departments';
 export * from './work_shifts';
 export * from './work_groups';
 export * from './check_list';
+export * from './questionnaires';
+export * from './speciality_services';
 export * from './prescription';
 export * from './specialities';
 export * from './stakeholders';

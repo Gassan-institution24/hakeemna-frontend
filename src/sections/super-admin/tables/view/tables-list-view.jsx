@@ -84,6 +84,7 @@ export default function TablesListView() {
       { tableName: 'deduction_config', documents: [] },
       // { tableName: 'rooms', documents: [] },
       { tableName: 'specialities', documents: [] }, //
+      { tableName: 'speciality_services', documents: [] }, //
       { tableName: 'sub_specialities', documents: [] }, //
       { tableName: 'countries', documents: [] }, //
       { tableName: 'added_value_tax_GD', documents: [] },

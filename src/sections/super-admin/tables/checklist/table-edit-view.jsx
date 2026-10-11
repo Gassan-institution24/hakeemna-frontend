@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetCheckList } from 'src/api';
+import { useGetQuestionnaireTemplate } from 'src/api';
 
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -16,11 +16,11 @@ export default function TableEditView() {
   // const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { data } = useGetCheckList(id);
+  const { template: data } = useGetQuestionnaireTemplate(id);
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Update checklist"
+        heading="Update questionnaire"
         links={[
           {
             name: 'dashboard',
@@ -31,7 +31,7 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'checklists',
+            name: 'questionnaires',
             href: paths.superadmin.tables.checklist.root,
           },
           { name: 'Update' },

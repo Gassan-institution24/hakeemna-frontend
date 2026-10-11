@@ -94,9 +94,8 @@ const PatientNewPage = lazy(() => import('src/pages/employee/patients/new-patien
 const VideoCallPage = lazy(() => import('src/pages/employee/patients/videoCallPage'));
 
 // CHECKLIST
+// Questionnaires: the clinic switches on the superadmin's speciality forms here.
 const ChecklistPage = lazy(() => import('src/pages/employee/checklist/table'));
-const ChecklistNewPage = lazy(() => import('src/pages/employee/checklist/new'));
-const ChecklistEditPage = lazy(() => import('src/pages/employee/checklist/edit'));
 
 // ADJUSTABLE DOC
 const AdjustPage = lazy(() => import('src/pages/employee/adjustable-doc/table'));
@@ -193,8 +192,6 @@ export const unitServiceEmployeeDashboardRoutes = [
         children: [
           { element: <ChecklistPage />, index: true },
           { path: 'list', element: <ChecklistPage /> },
-          { path: 'new', element: <ChecklistNewPage /> },
-          { path: ':id/edit', element: <ChecklistEditPage /> },
         ],
       },
       {

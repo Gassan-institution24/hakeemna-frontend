@@ -1,157 +1,68 @@
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useCallback } from 'react';
+import { useMemo, useState } from 'react';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import { ListItemText } from '@mui/material';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import TableContainer from '@mui/material/TableContainer';
+import {
+  Box,
+  Card,
+  Chip,
+  Stack,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  InputAdornment,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useGetCheckLists } from 'src/api';
-
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { LoadingScreen } from 'src/components/loading-screen';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import {
-  useTable,
-  TableNoData,
-  getComparator,
-  TableHeadCustom,
-  TablePaginationCustom,
-} from 'src/components/table'; /// edit
 import { fDate } from 'src/utils/format-time';
 
-import CustomPopover from 'src/components/custom-popover';
+import { useGetQuestionnaireTemplates } from 'src/api';
 
-import TableDetailRow from '../checklist/table-details-row'; /// edit
-import MobileRow from '../../mobile-row';
-import TableDetailToolbar from '../table-details-toolbar';
-import TableDetailFiltersResult from '../table-details-filters-result';
-
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'title', label: 'title' },
-  { id: 'speciality', label: 'speciality' },
-  { id: 'description', label: 'description' },
-  { id: '', width: 88 },
-];
-
-const defaultFilters = {
-  name: '',
-};
+import Iconify from 'src/components/iconify';
+import EmptyContent from 'src/components/empty-content';
+import { LoadingScreen } from 'src/components/loading-screen';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { allQuestions } from 'src/components/questionnaire/utils';
 
 // ----------------------------------------------------------------------
 
+// Superadmin: speciality questionnaires, grouped by speciality. Clinics pick these up from their
+// own Questionnaires page.
 export default function ChecklistTableView() {
-  const table = useTable({ defaultOrderBy: 'code' });
-
-  const componentRef = useRef();
-  const isMobile = useMediaQuery('(max-width: 899px)');
-  const [ddlAnchorEl, setDdlAnchorEl] = useState(null);
-  const [ddlRow, setDdlRow] = useState(null);
-
-  const ddlOpen = Boolean(ddlAnchorEl);
-  // const settings = useSettingsContext();
-
   const router = useRouter();
+  const { templates, loading } = useGetQuestionnaireTemplates();
+  const [search, setSearch] = useState('');
 
-  const { CheckListData, loading } = useGetCheckLists();
-
-  const [filters, setFilters] = useState(defaultFilters);
-
-  const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
-      : false;
-
-  const dataFiltered = applyFilter({
-    inputData: CheckListData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
-
-  const canReset = !!filters?.name;
-
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const printHandler = useReactToPrint({
-    content: () => componentRef.current,
-  });
-
-  const handleDownload = () => {
-    const excelBody = dataFiltered.reduce((acc, data) => {
-      acc.push({
-        code: data.code,
-        name: data.name_english,
-        country: data.country?.name_english,
-        status: data.status,
-      });
-      return acc;
-    }, []);
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(excelBody);
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  const groups = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    const filtered = templates.filter(
+      (one) =>
+        !query ||
+        [one.title, one.title_arabic, one.speciality?.name_english, one.speciality?.name_arabic]
+          .filter(Boolean)
+          .some((text) => text.toLowerCase().includes(query))
+    );
+    const bySpeciality = new Map();
+    filtered.forEach((one) => {
+      const name = one.speciality?.name_english || '—';
+      if (!bySpeciality.has(name)) bySpeciality.set(name, []);
+      bySpeciality.get(name).push(one);
     });
-    saveAs(data, 'checklist.xlsx'); /// edit
-  };
+    return [...bySpeciality.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [templates, search]);
 
-  const handleFilters = useCallback(
-    (name, value) => {
-      table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [table]
-  );
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.checklist.edit(id));
-    },
-    [router]
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  if (loading) return <LoadingScreen />;
 
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="checklist" /// edit
+        heading="Questionnaires"
         links={[
-          {
-            name: 'dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Tables',
-            href: paths.superadmin.tables.list,
-          },
-          { name: 'checklist' },
+          { name: 'dashboard', href: paths.superadmin.root },
+          { name: 'Tables', href: paths.superadmin.tables.list },
+          { name: 'Questionnaires' },
         ]}
         action={
           <Button
@@ -160,212 +71,111 @@ export default function ChecklistTableView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New checklist
+            New questionnaire
           </Button>
         }
-        sx={{
-          mb: { xs: 3, md: 5 },
+        sx={{ mb: { xs: 3, md: 5 } }}
+      />
+
+      <TextField
+        fullWidth
+        placeholder="Search by title or speciality..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 3, maxWidth: 480 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+            </InputAdornment>
+          ),
         }}
       />
 
-      <Card>
-        <TableDetailToolbar
-          onPrint={printHandler}
-          filters={filters}
-          onFilters={handleFilters}
-          onDownload={handleDownload}
-          //
-          canReset={canReset}
-          onResetFilters={handleResetFilters}
+      {!groups.length && (
+        <EmptyContent
+          filled
+          title="No questionnaires yet"
+          description="Create one per speciality — clinics of that speciality can then switch it on."
+          sx={{ py: 10 }}
         />
+      )}
 
-        {canReset && (
-          <TableDetailFiltersResult
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            onResetFilters={handleResetFilters}
-            //
-            results={dataFiltered.length}
-            sx={{ p: 2.5, pt: 0 }}
-          />
-        )}
-
-        {isMobile ? (
-          <>
-            {dataFiltered
-              .slice(
-                table.page * table.rowsPerPage,
-                table.page * table.rowsPerPage + table.rowsPerPage
-              )
-              .map((row) => (
-                <MobileRow
-                  key={row?._id}
-                  title={row?.title}
-                  fields={[
-                    {
-                      label: 'Code',
-                      value: row?.code,
-                    },
-                    {
-                      label: 'Speciality',
-                      value: row?.speciality?.name_english,
-                    },
-                    { label: 'Description', value: row?.description },
-                  ]}
-                  actions={[
-                    {
-                      label: 'Edit',
-                      icon: 'fluent:edit-32-filled',
-                      onClick: () => handleEditRow(row._id),
-                    },
-                    {
-                      label: 'DDL',
-                      icon: 'carbon:data-quality-definition',
-                      onClick: (event) => {
-                        setDdlRow(row);
-                        setDdlAnchorEl(event.currentTarget);
-                      },
-                    },
-                  ]}
-                />
+      <Stack spacing={4}>
+        {groups.map(([speciality, rows]) => (
+          <Box key={speciality}>
+            <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+              {speciality}
+            </Typography>
+            <Box
+              sx={{
+                mt: 1,
+                display: 'grid',
+                gap: 2,
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                  lg: 'repeat(3, minmax(0, 1fr))',
+                },
+              }}
+            >
+              {rows.map((row) => (
+                <Card
+                  key={row._id}
+                  onClick={() => router.push(paths.superadmin.tables.checklist.edit(row._id))}
+                  sx={{
+                    p: 2.5,
+                    cursor: 'pointer',
+                    '&:hover': { boxShadow: (theme) => theme.customShadows?.z16 },
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={1}
+                  >
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography variant="subtitle1" noWrap>
+                        {row.title}
+                      </Typography>
+                      {row.title_arabic && (
+                        <Typography
+                          variant="body2"
+                          sx={{ color: 'text.secondary' }}
+                          noWrap
+                          dir="rtl"
+                        >
+                          {row.title_arabic}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Chip
+                      size="small"
+                      label={row.active ? 'Published' : 'Hidden'}
+                      color={row.active ? 'success' : 'default'}
+                      variant="soft"
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{ mt: 2, color: 'text.secondary', typography: 'caption' }}
+                  >
+                    <span>#{row.code}</span>
+                    <span>{row.sections?.length || 0} sections</span>
+                    <span>{allQuestions(row).length} questions</span>
+                    <span>v{row.version || 1}</span>
+                    <Box component="span" sx={{ flexGrow: 1, textAlign: 'end' }}>
+                      {fDate(row.updated_at)}
+                    </Box>
+                  </Stack>
+                </Card>
               ))}
-          </>
-        ) : (
-          <TableContainer>
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                />
-
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-        )}
-        <CustomPopover
-          open={ddlOpen}
-          onClose={() => setDdlAnchorEl(null)}
-          anchorEl={ddlAnchorEl}
-          arrow="right-top"
-          sx={{
-            padding: 2,
-            fontSize: '14px',
-            minWidth: 260,
-          }}
-        >
-          {ddlRow && (
-            <>
-              <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-                <ListItemText
-                  primary={fDate(ddlRow.created_at, 'dd MMMMMMMM yyyy')}
-                  secondary={fDate(ddlRow.created_at, 'p')}
-                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-                  secondaryTypographyProps={{
-                    component: 'span',
-                    typography: 'caption',
-                  }}
-                />
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-                {ddlRow.user_creation?.email}
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-                {ddlRow.ip_address_user_creation}
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-                <ListItemText
-                  primary={fDate(ddlRow.updated_at, 'dd MMMMMMMM yyyy')}
-                  secondary={fDate(ddlRow.updated_at, 'p')}
-                  primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-                  secondaryTypographyProps={{
-                    component: 'span',
-                    typography: 'caption',
-                  }}
-                />
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-                {ddlRow.user_modification?.email}
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
-              <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
-                {ddlRow.ip_address_user_modification}
-              </Box>
-              <Box sx={{ pt: 1, fontWeight: 600 }}>
-                Modifications No: {ddlRow.modifications_nums}
-              </Box>
-            </>
-          )}
-        </CustomPopover>
-
-        <TablePaginationCustom
-          count={dataFiltered.length}
-          page={table.page}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
-          dense={table.dense}
-          onChangeDense={table.onChangeDense}
-        />
-      </Card>
+            </Box>
+          </Box>
+        ))}
+      </Stack>
     </Container>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name } = filters;
-
-  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el, idx) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (data) =>
-        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?._id === name ||
-        JSON.stringify(data.code) === name
-    );
-  }
-
-  return inputData;
 }

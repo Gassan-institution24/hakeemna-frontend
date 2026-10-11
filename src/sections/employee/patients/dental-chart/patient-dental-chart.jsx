@@ -63,9 +63,10 @@ export default function PatientDentalChart({ patient, visit, onBillService }) {
 
     const surfaceEntries = payload.surfaces ? Object.entries(payload.surfaces) : [];
     const surfaceChanges = surfaceEntries
-      .filter(([, surface]) => surface?.condition || surface?.status)
+      .filter(([, surface]) => surface?.diagnosis || surface?.condition || surface?.status)
       .map(([surface, values]) => {
         const parts = [];
+        if (values.diagnosis) parts.push(`diagnosis ${values.diagnosis}`);
         if (values.condition) parts.push(values.condition);
         if (values.status) parts.push(values.status);
         return `${surface}: ${parts.join(' / ')}`;

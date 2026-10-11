@@ -101,6 +101,9 @@ const DepartmentCreatePage = lazy(() => import('src/pages/super-admin/tables/dep
 const DepartmentEditPage = lazy(() => import('src/pages/super-admin/tables/departments/edit'));
 // SPECIALITIES
 const SpecialitiesTablePage = lazy(() => import('src/pages/super-admin/tables/specialities/table'));
+const SpecialityServicesPage = lazy(
+  () => import('src/pages/super-admin/tables/speciality-services/table')
+);
 const SpecialityCreatePage = lazy(() => import('src/pages/super-admin/tables/specialities/new'));
 const SpecialityEditPage = lazy(() => import('src/pages/super-admin/tables/specialities/edit'));
 // TICKET CATEGORIES
@@ -1089,6 +1092,7 @@ export const dashboardRoutes = [
               { path: ':id/edit', element: <SpecialityEditPage /> },
             ],
           },
+          { path: 'speciality_services', element: <SpecialityServicesPage /> },
           {
             path: 'ticket_categories',
             children: [
