@@ -508,6 +508,9 @@ export const endpoints = {
     template: (id) => (!id ? null : `/api/questionnaires/templates/${id}`),
     clinic: '/api/questionnaires/clinic',
     clinicTemplate: (id) => `/api/questionnaires/clinic/${id}`,
+    // The clinic's own questionnaires.
+    own: '/api/questionnaires/clinic/own',
+    ownOne: (id) => `/api/questionnaires/clinic/own/${id}`,
     patientForms: (uspId) => (!uspId ? null : `/api/questionnaires/patient/${uspId}`),
     patientResponses: (uspId) =>
       !uspId ? null : `/api/questionnaires/responses/patient/${uspId}`,

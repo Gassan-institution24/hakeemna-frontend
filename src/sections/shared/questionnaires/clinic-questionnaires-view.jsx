@@ -28,20 +28,28 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
-import { saveClinicQuestionnaire, useGetClinicQuestionnaires } from 'src/api';
+import {
+  deleteOwnQuestionnaire,
+  saveClinicQuestionnaire,
+  useGetClinicQuestionnaires,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { textOf, allQuestions } from 'src/components/questionnaire/utils';
 import QuestionnaireForm from 'src/components/questionnaire/questionnaire-form';
 import QuestionListBuilder from 'src/components/questionnaire/question-list-builder';
 
+import QuestionnaireBuilder from 'src/sections/super-admin/tables/checklist/table-new-edit-form';
+
 // ----------------------------------------------------------------------
 
-// Clinic page: the superadmin's ready-made questionnaires, the employee's own speciality first.
-// One switch turns a form on for every patient; clinic questions are appended after it.
+// Clinic page: the clinic's own questionnaires, then the superadmin's ready-made ones (the
+// employee's own speciality first). One switch turns a form on for every patient; clinic
+// questions can be appended after a ready-made one.
 export default function ClinicQuestionnairesView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -55,14 +63,31 @@ export default function ClinicQuestionnairesView() {
   const [busy, setBusy] = useState(null);
   const [preview, setPreview] = useState(null);
   const [editingExtras, setEditingExtras] = useState(null);
+  // {} = new own questionnaire, a template = editing an own one.
+  const [building, setBuilding] = useState(null);
+  const [deleting, setDeleting] = useState(null);
 
-  const [mine, others] = useMemo(() => {
-    const matched = templates.filter((one) => one.matches_speciality);
+  const [owned, mine, others] = useMemo(() => {
+    const shared = templates.filter((one) => !one.owned);
+    const matched = shared.filter((one) => one.matches_speciality);
     // A form already switched on stays in the main list even if it is from another speciality.
-    const otherOn = templates.filter((one) => !one.matches_speciality && one.clinic_active);
-    const otherOff = templates.filter((one) => !one.matches_speciality && !one.clinic_active);
-    return [[...matched, ...otherOn], otherOff];
+    const otherOn = shared.filter((one) => !one.matches_speciality && one.clinic_active);
+    const otherOff = shared.filter((one) => !one.matches_speciality && !one.clinic_active);
+    return [templates.filter((one) => one.owned), [...matched, ...otherOn], otherOff];
   }, [templates]);
+
+  const handleDelete = async () => {
+    try {
+      await deleteOwnQuestionnaire(deleting._id);
+      enqueueSnackbar(t('Questionnaire deleted'));
+    } catch (error) {
+      enqueueSnackbar((isAr && error?.arabic_message) || error?.message || t('Something went wrong'), {
+        variant: 'error',
+      });
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   const toggle = async (template, active) => {
     try {
@@ -93,6 +118,8 @@ export default function ClinicQuestionnairesView() {
       onToggle={(active) => toggle(template, active)}
       onPreview={() => setPreview(template)}
       onEditExtras={() => setEditingExtras(template)}
+      onEdit={() => setBuilding(template)}
+      onDelete={() => setDeleting(template)}
     />
   );
 
@@ -104,11 +131,22 @@ export default function ClinicQuestionnairesView() {
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('Questionnaires') },
         ]}
+        action={
+          canManage && (
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+              onClick={() => setBuilding({})}
+            >
+              {t('Create our own questionnaire')}
+            </Button>
+          )
+        }
         sx={{ mb: 2 }}
       />
       <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3, maxWidth: 720 }}>
         {t(
-          'Switch on the forms your clinic uses. They appear in every patient file, pre-filled from the patient record, and can be sent to the patient to fill on their phone.'
+          'Create your own questionnaires or switch on ready-made ones. Every questionnaire that is on appears in each patient file, pre-filled from the patient record.'
         )}
       </Typography>
 
@@ -130,9 +168,20 @@ export default function ClinicQuestionnairesView() {
         <EmptyContent
           filled
           title={t('No questionnaires available yet')}
-          description={t('Hakeemna adds ready-made forms per speciality — check back soon.')}
+          description={t('Create your own questionnaire, or check back for ready-made forms per speciality.')}
           sx={{ py: 10 }}
         />
+      )}
+
+      {!!owned.length && (
+        <>
+          <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+            {t("Your clinic's questionnaires")}
+          </Typography>
+          <Stack spacing={2} sx={{ mt: 1, mb: 4 }}>
+            {owned.map(renderCard)}
+          </Stack>
+        </>
       )}
 
       {!!mine.length && (
@@ -169,6 +218,42 @@ export default function ClinicQuestionnairesView() {
 
       {preview && <PreviewDialog template={preview} isAr={isAr} onClose={() => setPreview(null)} />}
 
+      {building && (
+        <Dialog fullScreen open onClose={() => setBuilding(null)}>
+          <DialogTitle>
+            <Stack direction="row" alignItems="center">
+              <Box sx={{ flexGrow: 1 }}>
+                {building._id ? t('Edit questionnaire') : t('Create our own questionnaire')}
+              </Box>
+              <IconButton onClick={() => setBuilding(null)}>
+                <Iconify icon="mingcute:close-line" />
+              </IconButton>
+            </Stack>
+          </DialogTitle>
+          <DialogContent dividers sx={{ bgcolor: 'background.neutral' }}>
+            <Box sx={{ py: 2 }}>
+              <QuestionnaireBuilder
+                mode="clinic"
+                currentRow={building._id ? building : undefined}
+                onSaved={() => setBuilding(null)}
+              />
+            </Box>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      <ConfirmDialog
+        open={!!deleting}
+        onClose={() => setDeleting(null)}
+        title={t('Delete questionnaire')}
+        content={t('It will disappear from patient files. Answers already given stay readable.')}
+        action={
+          <Button variant="contained" color="error" onClick={handleDelete}>
+            {t('delete')}
+          </Button>
+        }
+      />
+
       {editingExtras && (
         <ExtrasDialog template={editingExtras} isAr={isAr} onClose={() => setEditingExtras(null)} />
       )}
@@ -178,7 +263,17 @@ export default function ClinicQuestionnairesView() {
 
 // ----------------------------------------------------------------------
 
-function TemplateCard({ template, isAr, canManage, busy, onToggle, onPreview, onEditExtras }) {
+function TemplateCard({
+  template,
+  isAr,
+  canManage,
+  busy,
+  onToggle,
+  onPreview,
+  onEditExtras,
+  onEdit,
+  onDelete,
+}) {
   const { t } = useTranslate();
   const questionCount = allQuestions(template).length;
   const extraCount = template.extra_questions?.length || 0;
@@ -201,15 +296,19 @@ function TemplateCard({ template, isAr, canManage, busy, onToggle, onPreview, on
             </Typography>
           )}
           <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 1.5 }}>
-            <Chip
-              size="small"
-              variant="soft"
-              label={
-                isAr
-                  ? template.speciality?.name_arabic || template.speciality?.name_english
-                  : template.speciality?.name_english
-              }
-            />
+            {template.owned ? (
+              <Chip size="small" variant="soft" color="info" label={t('Your clinic')} />
+            ) : (
+              <Chip
+                size="small"
+                variant="soft"
+                label={
+                  isAr
+                    ? template.speciality?.name_arabic || template.speciality?.name_english
+                    : template.speciality?.name_english
+                }
+              />
+            )}
             <Chip size="small" variant="outlined" label={`${questionCount} ${t('questions')}`} />
             {extraCount > 0 && (
               <Chip
@@ -226,7 +325,17 @@ function TemplateCard({ template, isAr, canManage, busy, onToggle, onPreview, on
           <Button size="small" color="inherit" onClick={onPreview}>
             {t('Preview')}
           </Button>
-          {canManage && template.clinic_active && (
+          {canManage && template.owned && (
+            <>
+              <Button size="small" color="inherit" onClick={onEdit}>
+                {t('edit')}
+              </Button>
+              <IconButton size="small" color="error" onClick={onDelete}>
+                <Iconify icon="solar:trash-bin-trash-bold" />
+              </IconButton>
+            </>
+          )}
+          {canManage && !template.owned && template.clinic_active && (
             <Button size="small" color="inherit" onClick={onEditExtras}>
               {t('Add clinic questions')}
             </Button>
@@ -256,6 +365,8 @@ TemplateCard.propTypes = {
   onToggle: PropTypes.func,
   onPreview: PropTypes.func,
   onEditExtras: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------

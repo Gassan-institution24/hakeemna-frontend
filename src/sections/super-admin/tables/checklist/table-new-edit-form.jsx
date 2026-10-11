@@ -23,7 +23,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
-import { useGetSpecialties, saveQuestionnaireTemplate } from 'src/api';
+import { useGetSpecialties, saveOwnQuestionnaire, saveQuestionnaireTemplate } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import QuestionnaireForm from 'src/components/questionnaire/questionnaire-form';
@@ -34,9 +34,13 @@ import QuestionListBuilder from 'src/components/questionnaire/question-list-buil
 
 const blankSection = () => ({ title: '', title_arabic: '', questions: [blankQuestion()] });
 
-// Superadmin builder for a speciality questionnaire. Clinics of that speciality switch it on from
-// their own Questionnaires page and may add questions after it — they cannot change these.
-export default function NewEditForm({ currentRow }) {
+// Questionnaire builder.
+// - superadmin (default): a speciality questionnaire that clinics of that speciality switch on and
+//   may add questions after — they cannot change it.
+// - clinic: the clinic's own questionnaire, visible only to that clinic; no speciality or publish
+//   switch, and `onSaved` is called instead of navigating away.
+export default function NewEditForm({ currentRow, mode = 'superadmin', onSaved }) {
+  const isClinic = mode === 'clinic';
   const router = useRouter();
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
@@ -71,11 +75,11 @@ export default function NewEditForm({ currentRow }) {
   const questionCount = useMemo(() => allQuestions(values).length, [values]);
 
   const handleSave = async () => {
-    if (!values.title.trim()) {
+    if (!values.title.trim() && !(isClinic && values.title_arabic.trim())) {
       enqueueSnackbar(t('title is required'), { variant: 'error' });
       return;
     }
-    if (!values.speciality) {
+    if (!isClinic && !values.speciality) {
       enqueueSnackbar(t('Choose a speciality'), { variant: 'error' });
       return;
     }
@@ -87,9 +91,21 @@ export default function NewEditForm({ currentRow }) {
 
     try {
       setSaving(true);
-      await saveQuestionnaireTemplate(currentRow?._id, values);
+      if (isClinic) {
+        // A clinic's own questionnaire has no speciality or publish switch.
+        await saveOwnQuestionnaire(currentRow?._id, {
+          title: values.title,
+          title_arabic: values.title_arabic,
+          description: values.description,
+          description_arabic: values.description_arabic,
+          sections: values.sections,
+        });
+      } else {
+        await saveQuestionnaireTemplate(currentRow?._id, values);
+      }
       enqueueSnackbar(currentRow ? t('updated successfully') : t('created successfully'));
-      router.push(paths.superadmin.tables.checklist.root);
+      if (onSaved) onSaved();
+      else router.push(paths.superadmin.tables.checklist.root);
     } catch (error) {
       enqueueSnackbar(error?.message || t('Something went wrong'), { variant: 'error' });
     } finally {
@@ -119,6 +135,7 @@ export default function NewEditForm({ currentRow }) {
                 />
               </Stack>
 
+              {!isClinic && (
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
                 <TextField
                   select
@@ -146,6 +163,7 @@ export default function NewEditForm({ currentRow }) {
                   label={t('Published')}
                 />
               </Stack>
+              )}
 
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
@@ -281,4 +299,6 @@ export default function NewEditForm({ currentRow }) {
 
 NewEditForm.propTypes = {
   currentRow: PropTypes.object,
+  mode: PropTypes.oneOf(['superadmin', 'clinic']),
+  onSaved: PropTypes.func,
 };

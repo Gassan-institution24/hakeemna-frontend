@@ -2502,5 +2502,14 @@
   "Add to my services": "إضافة إلى خدماتي",
   "From speciality list": "من قائمة التخصص",
   "Name and code come from the speciality list — set your own price below.": "الاسم والرمز من قائمة التخصص — حدد سعرك أدناه.",
-  "Optional — leave empty for a service of your own.": "اختياري — اتركه فارغاً لإضافة خدمة خاصة بك."
+  "Optional — leave empty for a service of your own.": "اختياري — اتركه فارغاً لإضافة خدمة خاصة بك.",
+  "Create our own questionnaire": "إنشاء استبيان خاص بنا",
+  "Edit questionnaire": "تعديل الاستبيان",
+  "Your clinic's questionnaires": "استبيانات عيادتك",
+  "Your clinic": "عيادتك",
+  "Questionnaire deleted": "تم حذف الاستبيان",
+  "Delete questionnaire": "حذف الاستبيان",
+  "It will disappear from patient files. Answers already given stay readable.": "سيختفي من ملفات المرضى. الإجابات السابقة تبقى قابلة للقراءة.",
+  "Create your own questionnaires or switch on ready-made ones. Every questionnaire that is on appears in each patient file, pre-filled from the patient record.": "أنشئ استبياناتك الخاصة أو فعّل الجاهزة منها. كل استبيان مفعّل يظهر في ملف كل مريض معبأً مسبقاً من سجله.",
+  "Create your own questionnaire, or check back for ready-made forms per speciality.": "أنشئ استبيانك الخاص، أو تحقق لاحقاً من النماذج الجاهزة لكل تخصص."
 }

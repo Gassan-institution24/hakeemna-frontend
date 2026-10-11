@@ -59,6 +59,20 @@ export function useGetClinicQuestionnaires() {
   return { ...memoizedValue, refetch: () => mutate(URL) };
 }
 
+// The clinic's own questionnaire: created switched on, visible only to this clinic.
+export async function saveOwnQuestionnaire(id, payload) {
+  const res = id
+    ? await axiosInstance.patch(endpoints.questionnaires.ownOne(id), payload)
+    : await axiosInstance.post(endpoints.questionnaires.own, payload);
+  mutate(endpoints.questionnaires.clinic);
+  return res.data;
+}
+
+export async function deleteOwnQuestionnaire(id) {
+  await axiosInstance.delete(endpoints.questionnaires.ownOne(id));
+  mutate(endpoints.questionnaires.clinic);
+}
+
 export async function saveClinicQuestionnaire(templateId, payload) {
   const res = await axiosInstance.put(endpoints.questionnaires.clinicTemplate(templateId), payload);
   mutate(endpoints.questionnaires.clinic);
