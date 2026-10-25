@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
 import { useLocales } from 'src/locales';
+import useExperience, { EXPERIENCE } from 'src/experience/use-experience';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -15,10 +16,13 @@ import RTL from './options/right-to-left';
 import { typography } from './typography';
 // system
 import { customShadows } from './custom-shadows';
-import { createPresets } from './options/presets';
 import { componentsOverrides } from './overrides';
 import { createContrast } from './options/contrast';
+import { createPresets, createDentalPresets } from './options/presets';
 // options
+
+// The dental brand is fixed, so it is built once rather than on every render.
+const DENTAL_PRESETS = createDentalPresets();
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +31,14 @@ export default function ThemeProvider({ children }) {
 
   const settings = useSettingsContext();
 
-  const presets = createPresets(settings.themeColorPresets);
+  const experience = useExperience();
+
+  // Medicine keeps the user's chosen preset exactly as before; Dental always wears
+  // its own brand colours, whatever the settings drawer says.
+  const presets =
+    experience === EXPERIENCE.DENTAL
+      ? DENTAL_PRESETS
+      : createPresets(settings.themeColorPresets);
 
   const contrast = createContrast(settings.themeContrast, settings.themeMode);
 

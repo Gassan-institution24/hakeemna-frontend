@@ -5,6 +5,7 @@ import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
+import { alpha } from '@mui/material/styles';
 import { Badge, Divider, Tooltip, MenuItem, Typography, IconButton } from '@mui/material';
 
 import { usePathname } from 'src/routes/hooks';
@@ -17,6 +18,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetUnreadMsgs } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import useExperience, { EXPERIENCE } from 'src/experience/use-experience';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -51,6 +53,7 @@ export default function NavVertical({ openNav, onCloseNav, temporary = false }) 
   const USData =
     user?.employee?.employee_engagements?.[user?.employee.selected_engagement]?.unit_service;
   const isEmployee = ['employee', 'admin'].includes(user?.role);
+  const isDental = useExperience() === EXPERIENCE.DENTAL;
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -305,6 +308,25 @@ export default function NavVertical({ openNav, onCloseNav, temporary = false }) 
         >
           <Iconify width={23} icon="material-symbols:help-outline" />
         </Box>
+      )}
+      {isDental && (
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          sx={{
+            mx: 2,
+            mt: 2,
+            px: 1.5,
+            py: 1,
+            borderRadius: 1.5,
+            color: 'primary.dark',
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+          }}
+        >
+          <Iconify icon="mdi:tooth-outline" width={22} />
+          <Typography variant="subtitle2">{t('Hakeemna 360 Dental')}</Typography>
+        </Stack>
       )}
       {isEmployee && (
         <Tooltip title={t('unit of service code')}>

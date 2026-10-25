@@ -475,6 +475,38 @@ export default function Header() {
                   {t('login')}
                 </Button>
               </m.div>
+
+              {/* Dental — switches to the dental product */}
+              <m.div
+                whileHover={{ y: -1 }}
+                whileTap={{ y: 0 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              >
+                <Button
+                  component={RouterLink}
+                  href={paths.dental.root}
+                  variant="contained"
+                  startIcon={<Iconify icon="mdi:tooth-outline" width={18} />}
+                  sx={{
+                    bgcolor: '#0E9F96',
+                    color: '#fff',
+                    borderRadius: '20px',
+                    px: 2.25,
+                    py: 0.8,
+                    fontWeight: 600,
+                    fontSize: curLangAr ? 13.5 : 12.5,
+                    letterSpacing: 0.1,
+                    whiteSpace: 'nowrap',
+                    textTransform: 'none',
+                    boxShadow: 'none',
+                    transition: 'all 0.2s ease',
+                    '&:hover': { bgcolor: '#0A6E6A', boxShadow: 'none' },
+                    '&:focus-visible': { outline: '2px solid #0E9F96', outlineOffset: 3 },
+                  }}
+                >
+                  {t('Dental')}
+                </Button>
+              </m.div>
             </Stack>
           </m.div>
         )}
