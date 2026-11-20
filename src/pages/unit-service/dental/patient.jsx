@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
+import { Helmet } from 'react-helmet-async';
 
 import { Button, Container } from '@mui/material';
 
@@ -7,8 +7,8 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetOneUSPatient } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

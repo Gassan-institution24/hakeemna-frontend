@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
 import {
     Dialog,
+    Button,
     DialogTitle,
     DialogContent,
-    DialogActions,
-    Button
+    DialogActions
 } from '@mui/material';
-import PropTypes from 'prop-types';
 
 const GlobalModal = ({ open, title, content, actions, onClose }) => {
     // If content is a function, use local state and pass handlers

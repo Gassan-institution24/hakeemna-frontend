@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
-import CompaniesTableView from 'src/sections/super-admin/tables/view/companies-table-view';
 import { ModalProvider } from 'src/context/Modal';
+
+import CompaniesTableView from 'src/sections/super-admin/tables/view/companies-table-view';
 
 // ----------------------------------------------------------------------
 

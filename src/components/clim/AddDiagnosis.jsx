@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useRef, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 
 import axiosInstance from 'src/utils/axios';
+
 import { useLocales } from 'src/locales';
 
 export default function AddDiagnosis({ onDataChange }) {

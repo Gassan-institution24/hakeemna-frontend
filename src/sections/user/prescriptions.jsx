@@ -3,11 +3,11 @@ import { Font } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import { Tooltip, useTheme, useMediaQuery } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import { Tooltip, useTheme, useMediaQuery } from '@mui/material';
 
 import { fDateAndTime } from 'src/utils/format-time';
 

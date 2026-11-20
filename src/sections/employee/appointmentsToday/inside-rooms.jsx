@@ -6,7 +6,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 import {
   Box,
   Card,
-  Chip,
   Grid,
   Stack,
   Button,
@@ -41,6 +40,7 @@ import Iconify from 'src/components/iconify';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// eslint-disable-next-line no-unused-vars
 const formatTextWithLineBreaks = (text) => {
   if (!text) return '';
   const words = text.split(' ');
@@ -167,6 +167,7 @@ export default function Rooms() {
 
   // ─── Derived ──────────────────────────────────────────────────────────────
 
+  // eslint-disable-next-line no-unused-vars
   const currentActivityName = curLangAr
     ? Entrance?.Current_activity?.name_arabic || Entrance?.Current_activity?.name_english
     : Entrance?.Current_activity?.name_english;
@@ -488,6 +489,7 @@ export default function Rooms() {
                   const isCurrent =
                     Entrance?.Current_activity?.name_english === rooms?.activities?.name_english;
 
+                  // eslint-disable-next-line no-unused-vars
                   const employeeNames = Array.isArray(rooms.employee)
                     ? rooms.employee
                         .map((emp) => emp.name_english)

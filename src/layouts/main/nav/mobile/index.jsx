@@ -1,5 +1,5 @@
-import { m, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { m, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';

@@ -250,6 +250,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     reset,
     setValue,
     handleSubmit,
+    // eslint-disable-next-line no-unused-vars
     formState: { isSubmitting },
   } = methods;
   useEffect(() => {

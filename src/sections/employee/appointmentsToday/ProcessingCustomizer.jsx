@@ -21,7 +21,7 @@ import Iconify from '../../../components/iconify';
 // ─── Section Row ──────────────────────────────────────────────────────────────
 
 function SectionRow({ section, onToggle, theme, t }) {
-  const color = section.color;
+  const {color} = section;
   const palette = theme.palette[color] || theme.palette.primary;
 
   return (

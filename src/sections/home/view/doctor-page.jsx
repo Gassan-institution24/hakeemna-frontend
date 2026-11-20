@@ -30,7 +30,6 @@ import ReviewsSection from '../components/reviews-section';
 import JwtRegisterView from '../../auth/jwt-register-view';
 import DoctorCredentials from '../doctor/doctor-credentials';
 import StickyBookingBar from '../components/sticky-booking-bar';
-import DoctorRelatedCarousel from '../doctor/doctor-related-carousel';
 
 export default function DoctorPage({ employeeData }) {
   const { t } = useTranslate();

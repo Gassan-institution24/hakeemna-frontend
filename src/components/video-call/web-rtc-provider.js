@@ -22,6 +22,7 @@ export const WebRTCProvider = ({ children }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [peerInstance, setPeerInstance] = useState(null);
 

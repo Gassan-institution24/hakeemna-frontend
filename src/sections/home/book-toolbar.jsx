@@ -32,6 +32,7 @@ export default function BookToolbar({ filters, filterChange }) {
     name: '',
   });
 
+  // eslint-disable-next-line no-unused-vars
   const changeSearch = (name, value) => {
     setSearch({ ...search, [name]: value });
   };

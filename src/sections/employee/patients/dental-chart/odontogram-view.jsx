@@ -285,6 +285,7 @@ export default function OdontogramView({
   onAddNote,
   onDeleteNote,
 }) {
+  // eslint-disable-next-line no-unused-vars
   const [snapshotOpen, setSnapshotOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const muiTheme = useTheme();
@@ -468,6 +469,7 @@ export default function OdontogramView({
     [setChartTypeLocal, onChartTypeChange, showToast, isAr]
   );
 
+  // eslint-disable-next-line no-unused-vars
   const handleSaveNow = useCallback(async () => {
     if (!onSave) return;
     try {
@@ -477,10 +479,12 @@ export default function OdontogramView({
     }
   }, [onSave, teethMap, chartType, showToast, isAr]);
 
+  // eslint-disable-next-line no-unused-vars
   const handleSnapshot = useCallback(() => {
     setSnapshotOpen(true);
   }, []);
 
+  // eslint-disable-next-line no-unused-vars
   const handleSnapshotSave = useCallback(
     async (label) => {
       if (!onSnapshot) return;

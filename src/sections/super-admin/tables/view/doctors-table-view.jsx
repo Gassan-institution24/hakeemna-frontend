@@ -61,6 +61,7 @@ const defaultFilters = {
 
 export default function CompaniesTableView() {
   /// edit
+  // eslint-disable-next-line no-unused-vars
   const [showAll, setShowAll] = useState(false);
   const TABLE_HEAD = [
     /// to edit
@@ -85,6 +86,7 @@ export default function CompaniesTableView() {
   const ddlOpen = Boolean(ddlAnchorEl);
   // const settings = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
+  // eslint-disable-next-line no-unused-vars
   const [savingNotes, setSavingNotes] = useState({});
 
   const router = useRouter();

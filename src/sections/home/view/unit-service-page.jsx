@@ -16,14 +16,11 @@ import MapEmbed from '../components/map-embed';
 import ClinicHero from '../clinic/clinic-hero';
 import ClinicAbout from '../clinic/clinic-about';
 import FaqSection from '../components/faq-section';
-import ClinicServices from '../clinic/clinic-services';
 import SectionHeading from '../components/section-heading';
 import ReviewsSection from '../components/reviews-section';
-import ClinicDepartments from '../clinic/clinic-departments';
 import ClinicDoctorsList from '../clinic/clinic-doctors-list';
 import StickyBookingBar from '../components/sticky-booking-bar';
 import { normalizeDay } from '../components/working-hours-widget';
-import ClinicRelatedCarousel from '../clinic/clinic-related-carousel';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +36,7 @@ export default function UnitServicePage({ USData }) {
     address,
     location_gps,
     phone,
+    // eslint-disable-next-line no-unused-vars
     sector_type,
     city,
     work_days,

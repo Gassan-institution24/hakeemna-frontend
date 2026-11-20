@@ -1,5 +1,5 @@
-import { createContext, useContext, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMemo, useState, useEffect, useContext, useCallback, createContext } from 'react';
 
 const STORAGE_KEY = 'companies_table_filters';
 

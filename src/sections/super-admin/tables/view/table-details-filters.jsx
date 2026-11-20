@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
-import { Box, Stack, Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
+
+import { Box, Select, Button, MenuItem, InputLabel, FormControl } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 
 export default function TableDetailFilters({
@@ -12,7 +14,7 @@ export default function TableDetailFilters({
   onReset,
 }) {
   const handleChange = (field) => (event) => {
-    const value = event.target.value;
+    const {value} = event.target;
     onFilters(field, value === '' ? undefined : value);
   };
 

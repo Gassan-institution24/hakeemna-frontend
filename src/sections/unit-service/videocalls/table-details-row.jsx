@@ -12,7 +12,6 @@ import { fDate } from 'src/utils/format-time';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -36,6 +35,7 @@ export default function UnitServiceVideoCallsRow({ row }) {
 
   const { t } = useTranslate();
 
+  // eslint-disable-next-line no-unused-vars
   const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();

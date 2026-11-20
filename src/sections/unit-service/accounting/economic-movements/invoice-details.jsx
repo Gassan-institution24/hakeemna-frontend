@@ -6,8 +6,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
-import { TableFooter } from '@mui/material';
-import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';

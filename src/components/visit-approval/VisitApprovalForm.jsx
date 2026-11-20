@@ -4,26 +4,26 @@ import { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
-  Button,
   Card,
-  CardContent,
-  CircularProgress,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
   Alert,
   Stack,
+  Button,
+  Select,
   Dialog,
+  MenuItem,
+  TextField,
+  InputLabel,
+  Typography,
+  CardContent,
+  FormControl,
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
 } from '@mui/material';
 
-import { submitVisitApproval, checkVisitApproval } from '../../services/visitApprovalService';
+import { checkVisitApproval, submitVisitApproval } from '../../services/visitApprovalService';
 
 /**
  * VisitApprovalForm Component
@@ -56,6 +56,7 @@ export default function VisitApprovalForm({
   // Response state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [success, setSuccess] = useState(false);
   const [formNumber, setFormNumber] = useState(null);
   const [pollingState, setPollingState] = useState(null); // { requestId, entityId, strategy }

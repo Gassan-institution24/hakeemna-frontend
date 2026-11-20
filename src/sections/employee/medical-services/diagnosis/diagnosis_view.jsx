@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { useParams } from 'src/routes/hooks';
 
 import { Box, Card, Stack, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { fDate } from 'src/utils/format-time';
 

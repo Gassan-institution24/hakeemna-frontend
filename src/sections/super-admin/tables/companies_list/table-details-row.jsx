@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useModal } from 'src/context/Modal';
+import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import { Stack, TextField, ListItemText, InputAdornment, Button } from '@mui/material';
+import { Stack, Button, TextField, ListItemText } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useModal } from 'src/context/Modal';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -80,6 +81,7 @@ export default function TableDetailsRow({
     type_of_specialty_1,
     type_of_specialty_2,
     status,
+    // eslint-disable-next-line no-unused-vars
     com_note,
     created_at,
     user_creation,
@@ -103,6 +105,7 @@ export default function TableDetailsRow({
   };
 
   // Custom hook to set initial value only once
+  // eslint-disable-next-line no-unused-vars
   function useInitialValue(setValue, value) {
     useEffect(() => {
       setValue(value);

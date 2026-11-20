@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Box, TextField, MenuItem } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import { Box, MenuItem, TextField } from '@mui/material';
 
 export default function PhoneWithCountry({ countries = [], value = { number: '', country: null }, onChange, label }) {
   const [error, setError] = useState('');

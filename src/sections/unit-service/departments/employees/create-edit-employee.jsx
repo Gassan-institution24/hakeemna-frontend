@@ -209,6 +209,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
         router.push(paths.unitservice.departments.employees.root(departmentData._id));
       } else {
+        // eslint-disable-next-line no-unused-vars
         const submit = await axiosInstance.post(endpoints.auth.register, {
           role: 'employee',
           userName: data.name_english,

@@ -1,5 +1,5 @@
-import React, { createContext, useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { useMemo, useState, useCallback, createContext } from 'react';
 
 const ModalContext = createContext();
 export const useModal = ()=> React.useContext(ModalContext);

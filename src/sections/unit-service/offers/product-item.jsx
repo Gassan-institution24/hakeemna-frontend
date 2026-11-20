@@ -47,6 +47,7 @@ export default function ProductItem({ product }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  // eslint-disable-next-line no-unused-vars
   const linkTo = paths.unitservice.products.info(_id);
 
   const handleAddCart = async () => {

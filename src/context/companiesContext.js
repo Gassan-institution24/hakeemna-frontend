@@ -1,5 +1,5 @@
-import React, { createContext, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useMemo, useState, useEffect, createContext } from 'react';
 
 const STORAGE_KEY = 'companies_table_state';
 

@@ -39,6 +39,7 @@ export default function NotificationsPopoverPatient() {
   const { user } = useAuthContext();
   const smUp = useResponsive('up', 'sm');
 
+  // eslint-disable-next-line no-unused-vars
   const [page, setPage] = useState(1);
   const [allNotifications, setAllNotifications] = useState([]);
 

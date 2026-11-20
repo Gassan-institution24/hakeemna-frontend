@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
 import {
   Box,
   Card,
+  Stack,
+  Paper,
   Button,
   Container,
   Typography,
   CardContent,
-  IconButton,
-  Stack,
-  Paper,
 } from '@mui/material';
 
-import { useSnackbar } from 'notistack';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -21,8 +19,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetUnitServiceQrCode } from 'src/api/unit_services';
 
 import Iconify from 'src/components/iconify';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import { LoadingScreen } from 'src/components/loading-screen';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 export default function QrCodePage() {
   const { user } = useAuthContext();

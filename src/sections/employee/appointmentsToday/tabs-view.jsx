@@ -5,18 +5,16 @@ import { useState, useCallback } from 'react';
 import { Tab, Box, Tabs, Stack } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 
-import { useTranslate } from '../../../locales';
-import { useGetOneEntranceManagement } from '../../../api';
-
-import Iconify from '../../../components/iconify';
-
 import SickLeave from './sickLeave';
 import Radiology from './radiology';
 import Diagnosis from './diagnosis';
 import Prescription from './prescription';
 import Doctorreport from './doctor-report';
 import Medicalreport from './medical-report';
+import { useTranslate } from '../../../locales';
 import MedicalAnalysis from './medical-analysis';
+import Iconify from '../../../components/iconify';
+import { useGetOneEntranceManagement } from '../../../api';
 
 // ─── Tab definitions ──────────────────────────────────────────────────────────
 

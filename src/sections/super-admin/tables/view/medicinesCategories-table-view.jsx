@@ -17,10 +17,13 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
+import { fDate } from 'src/utils/format-time';
+
 import { useGetMedicinesCategories } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import CustomPopover from 'src/components/custom-popover';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -30,13 +33,10 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
-import { fDate } from 'src/utils/format-time';
 
-import CustomPopover from 'src/components/custom-popover';
-
-import TableDetailRow from '../medicinesCategories/table-details-row';
 import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
+import TableDetailRow from '../medicinesCategories/table-details-row';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------

@@ -43,6 +43,7 @@ const LOWER_ANTERIOR_SCALE = { incisor: 0.72, canine: 0.9 };
 
 // ── Occlusal / incisal edge, drawn left-corner → right-corner ─────────────────
 function edgePath(type, woc, yTop) {
+  // eslint-disable-next-line no-unused-vars
   const l = CX - woc;
   const r = CX + woc;
   switch (type) {

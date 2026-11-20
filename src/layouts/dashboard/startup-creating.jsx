@@ -8,9 +8,9 @@ import {
   Chip,
   Alert,
   Stack,
+  Divider,
   Collapse,
   Checkbox,
-  Divider,
   Typography,
 } from '@mui/material';
 
@@ -21,6 +21,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
 import {
   useGetUSRooms,
   useGetUSWorkGroups,
@@ -28,7 +29,6 @@ import {
   useGetUSDepartments,
   useGetMedicineCategoriesBySpeciality,
 } from 'src/api';
-import { useGetFavoriteMedication } from 'src/api/doctor_favorite';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';

@@ -242,6 +242,7 @@ export default function TableNewEditForm({ currentTable }) {
     }
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const submit = await axiosInstance.post(endpoints.auth.register, {
         role: 'employee',
         userName: data.name_english,

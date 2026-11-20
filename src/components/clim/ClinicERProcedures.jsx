@@ -19,6 +19,7 @@ import {
   ListItemButton,
   CircularProgress,
 } from '@mui/material';
+
 import { useLocales } from 'src/locales';
 
 /* ================= STATIC DATA ================= */

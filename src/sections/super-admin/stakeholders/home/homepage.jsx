@@ -26,7 +26,6 @@ import { useTranslate } from 'src/locales';
 import { useGetStakeholders } from 'src/api';
 
 import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';

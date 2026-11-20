@@ -31,9 +31,9 @@ import { useGetYearlyReports } from 'src/api/yearly_reports';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import YearlyReportDetailsModal from './YearlyReportDetailsModal';
 import YearlyReportRow from './yearly-report-row';
 import AttendanceToolbar from './attendance-toolbar';
+import YearlyReportDetailsModal from './YearlyReportDetailsModal';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------

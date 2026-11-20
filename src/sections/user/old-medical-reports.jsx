@@ -62,6 +62,7 @@ export default function OldMedicalReports() {
   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties({ select: 'name_english name_arabic' });
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
+  // eslint-disable-next-line no-unused-vars
   const [spName, setspName] = useState('');
 
   const [filtersbyname, setFiltersbyname] = useState();

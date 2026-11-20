@@ -13,6 +13,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function CallDialog() {
   const [open, setOpen] = useState(false);
   const [callerName, setCallerName] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [roomUrl, setRoomUrl] = useState('');
   const callerSocketRef = useRef(null);
 

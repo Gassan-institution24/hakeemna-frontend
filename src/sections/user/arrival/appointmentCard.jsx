@@ -1,15 +1,18 @@
 import PropTypes from 'prop-types';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import { useLocales } from 'src/locales';
 import { useState, useEffect } from 'react';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 import { fTime } from 'src/utils/format-time';
+
+import { useLocales } from 'src/locales';
 
 export default function AppointmentCard({ appointment, t, handleConfirmArrival }) {
   const { currentLang } = useLocales();

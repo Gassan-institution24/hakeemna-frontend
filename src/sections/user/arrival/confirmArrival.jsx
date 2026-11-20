@@ -1,16 +1,21 @@
-import { useTranslate,useLocales } from 'src/locales';
 import { useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useGetUnitservice } from 'src/api/unit_services';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { useGetQrCodeAppointments } from 'src/api/appointments';
-import { useAuthContext } from 'src/auth/hooks';
-import { enqueueSnackbar } from 'notistack';
-import {LoadingScreen} from 'src/components/loading-screen';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales,useTranslate } from 'src/locales';
+import { useGetUnitservice } from 'src/api/unit_services';
+import { useGetQrCodeAppointments } from 'src/api/appointments';
+
+import {LoadingScreen} from 'src/components/loading-screen';
+
 import AppointmentCard from './appointmentCard';
 
 export default function ConfirmArrival() {

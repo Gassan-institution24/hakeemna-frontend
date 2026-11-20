@@ -56,6 +56,7 @@ export default function useOdontogram({ chartData, onSave }) {
   const [selectedFdi, setSelectedFdi] = useState(null); // tooth open in modal
   const [chartType, setChartTypeLocal] = useState('adult');
   const [isDirty, setIsDirty] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [isSaving, setIsSaving] = useState(false);
   const [multiSelect, setMultiSelect] = useState(false); // bulk-apply mode
   const [selectedTeeth, setSelectedTeeth] = useState(new Set());

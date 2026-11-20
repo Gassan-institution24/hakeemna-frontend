@@ -50,6 +50,7 @@ export default function CountriesTableRow({
   const DDL = usePopover();
   const popover = usePopover();
   const { t } = useTranslate();
+  // eslint-disable-next-line no-unused-vars
   const { setIdToCall, idToCall, callUser } = useWebRTC();
 
   // Single source of truth for demo presentation — see src/utils/demo.js.

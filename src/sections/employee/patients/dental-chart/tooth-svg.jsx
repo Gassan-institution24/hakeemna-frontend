@@ -29,6 +29,7 @@ export const UPPER_TEETH = [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 
 export const LOWER_TEETH = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 
 // Tooth shape: molars wider, incisors narrower
+// eslint-disable-next-line no-unused-vars
 const TOOTH_WIDTHS = {
   1: 18, 2: 18, 3: 20, 4: 16, 5: 16, 6: 22, 7: 22, 8: 22,
   9: 22, 10: 22, 11: 22, 12: 16, 13: 16, 14: 20, 15: 18, 16: 18,

@@ -3,10 +3,10 @@ import { Outlet } from 'react-router-dom';
 
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UserDashboardLayout from 'src/layouts/dashboard/index-user';
+import ArrivalPage from 'src/pages/dashboard/user/arrival/arrival';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import ArrivalPage from 'src/pages/dashboard/user/arrival/arrival';
 import CallDialog from '../../sections/user/call-dialog';
 // import TableCreatePage from 'src/pages/dashboard/tables/new';
 // import TableEditPage from 'src/pages/dashboard/tables/edit';

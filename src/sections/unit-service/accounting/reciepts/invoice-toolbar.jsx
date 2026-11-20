@@ -1,6 +1,5 @@
-import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { pdf, PDFViewer } from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';

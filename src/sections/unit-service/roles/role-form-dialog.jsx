@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,12 +15,13 @@ import DialogActions from '@mui/material/DialogActions';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useGetPermissionsList } from 'src/api/roles';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSActiveWorkGroups } from 'src/api/work_groups';
 import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { useLocales, useTranslate } from 'src/locales';
 
 const PERMISSION_ALIASES = {
   'old_patient:read': 'institution_patients:read',

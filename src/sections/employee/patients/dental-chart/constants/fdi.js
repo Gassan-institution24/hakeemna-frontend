@@ -61,6 +61,7 @@ export const getCrownTransform = (fdi) => {
 // Returns { count, height }
 export const getRootConfig = (fdi) => {
   const type = getToothType(fdi);
+  // eslint-disable-next-line no-unused-vars
   const q = getQuadrant(fdi);
   const upper = isUpperArch(fdi);
 

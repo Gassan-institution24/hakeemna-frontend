@@ -1,6 +1,7 @@
-import { Helmet } from 'react-helmet-async';
-import VideoCallsTableView from 'src/sections/super-admin/videocalls/view';
 import { PropTypes } from 'prop-types';
+import { Helmet } from 'react-helmet-async';
+
+import VideoCallsTableView from 'src/sections/super-admin/videocalls/view';
 // ----------------------------------------------------------------------
 
 export default function VideoCallsHomePage({unitServiceId=null}) {

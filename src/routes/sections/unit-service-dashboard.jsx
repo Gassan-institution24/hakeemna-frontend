@@ -110,6 +110,7 @@ const PaymentControlHomePage = lazy(
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
 const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
 const InvoicingHomePage = lazy(() => import('src/pages/unit-service/accounting/invoicing/home'));
+// eslint-disable-next-line no-unused-vars
 const ClaimHomePage = lazy(() => import('src/pages/unit-service/accounting/claim/home'));
 const ClaimCompanyPage = lazy(() => import('src/pages/unit-service/accounting/claim/companyPage'));
 const ClaimPatientVisitView = lazy(

@@ -1,22 +1,20 @@
 import PropTypes from 'prop-types';
 import { CSS } from '@dnd-kit/utilities';
-import { useState, useEffect, useMemo } from 'react';
-
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { useMemo, useState, useEffect } from 'react';
+import { useSensor, DndContext, useSensors, closestCenter, PointerSensor } from '@dnd-kit/core';
 import {
+  arrayMove,
+  useSortable,
   SortableContext,
   verticalListSortingStrategy,
-  useSortable,
-  arrayMove,
 } from '@dnd-kit/sortable';
-
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
+  LineChart,
+  CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
 
@@ -34,10 +32,11 @@ import {
   CircularProgress,
 } from '@mui/material';
 
-import Iconify from 'src/components/iconify';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeAppointments } from 'src/api';
+
+import Iconify from 'src/components/iconify';
 
 const navy = '#1e2a5a';
 const teal = '#38b2ac';
