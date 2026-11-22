@@ -38,7 +38,6 @@ const RESOURCE_FEATURE_MAP = {
   accounting: 'accounting',
   claims: 'claims',
   hr: 'hr',
-  dental_chart: 'dental_chart',
   quality_control: 'quality_control',
   offers: 'products',
 };

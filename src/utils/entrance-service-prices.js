@@ -3,8 +3,8 @@
  *
  * A visit's `Service_types` is a flat list of service ids and the price was always re-derived
  * from the catalogue's `Price_per_unit`. That is wrong whenever a clinician typed a different
- * figure — a dental treatment added at a quoted rate, a discount, a longer procedure. The typed
- * price was stored on the dental chart and then silently ignored by both the invoice and the
+ * figure — a treatment added at a quoted rate, a discount, a longer procedure. The typed
+ * price was silently ignored by both the invoice and the
  * appointment view, which each showed the catalogue price instead.
  *
  * `Service_prices` on the entrance carries those overrides as `{ service_type, price }` entries.

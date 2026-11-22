@@ -68,39 +68,6 @@ const red = {
   contrastText: '#FFFFFF',
 };
 
-// Hakeemna Dental brand — not offered in the settings drawer; the dental experience
-// always uses it (see src/experience/use-experience.js).
-const dentalPrimary = {
-  lighter: '#CCF7F1',
-  light: '#5FD3C6',
-  main: '#0E9F96',
-  dark: '#0A6E6A',
-  darker: '#053F42',
-  contrastText: '#FFFFFF',
-};
-
-const dentalSecondary = {
-  lighter: '#FFE6DE',
-  light: '#FFAE96',
-  main: '#F2785C',
-  dark: '#B4473A',
-  darker: '#781F21',
-  contrastText: '#FFFFFF',
-};
-
-export function createDentalPresets() {
-  return {
-    palette: {
-      primary: dentalPrimary,
-      secondary: dentalSecondary,
-    },
-    customShadows: {
-      primary: `0 8px 16px 0 ${alpha(dentalPrimary.main, 0.24)}`,
-      secondary: `0 8px 16px 0 ${alpha(dentalSecondary.main, 0.24)}`,
-    },
-  };
-}
-
 export const presetOptions = [
   { name: 'default', value: primary.main },
   { name: 'cyan', value: cyan.main },

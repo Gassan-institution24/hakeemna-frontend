@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
 import CompactLayout from 'src/layouts/compact';
@@ -27,8 +27,6 @@ const BookAppointment = lazy(() => import('src/pages/home/book'));
 const DoctorPage = lazy(() => import('src/pages/home/doctor-page'));
 const ViewBlogs = lazy(() => import('src/pages/home/view-blog'));
 const DigitalTrust = lazy(() => import('src/pages/home/DigitalTrust'));
-// Public page a dental lab opens from a shared link — no login, no site chrome.
-const SharedLabRequestPage = lazy(() => import('src/pages/lab-request/shared'));
 
 // ----------------------------------------------------------------------
 
@@ -60,14 +58,9 @@ export const mainRoutes = [
       { path: 'serviceunit/:id', element: <ServiceUnitPage /> },
     ],
   },
-  {
-    path: 'lab-request/:token',
-    element: (
-      <Suspense fallback={<SplashScreen />}>
-        <SharedLabRequestPage />
-      </Suspense>
-    ),
-  },
+  // Old product entry URLs; kept as redirects so existing links still work.
+  { path: 'medicine', element: <Navigate to="/" replace /> },
+  { path: 'medicine/dashboard', element: <Navigate to="/dashboard" replace /> },
   {
     element: (
       <CompactLayout>

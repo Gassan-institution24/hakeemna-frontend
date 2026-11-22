@@ -219,7 +219,7 @@ export const endpoints = {
     many: '/api/specialities/many',
     one: (id) => (!id ? null : `/api/specialities/${id}`),
   },
-  // Superadmin catalogue of services per speciality (e.g. Dentistry → D001 Comprehensive exam).
+  // Superadmin catalogue of services per speciality (e.g. Cardiology → C001 ECG).
   specialityServices: {
     all: '/api/specialityservices',
     import: '/api/specialityservices/import',
@@ -516,69 +516,6 @@ export const endpoints = {
       !uspId ? null : `/api/questionnaires/responses/patient/${uspId}`,
     responses: '/api/questionnaires/responses',
     response: (id) => `/api/questionnaires/responses/${id}`,
-  },
-  labRequests: {
-    create: '/api/lab-requests',
-    byPatient: (uspId) => (!uspId ? null : `/api/lab-requests/patient/${uspId}`),
-    one: (id) => (!id ? null : `/api/lab-requests/${id}`),
-    images: (id) => `/api/lab-requests/${id}/images`,
-    image: (id, imageId) => `/api/lab-requests/${id}/images/${imageId}`,
-    messages: (id) => `/api/lab-requests/${id}/messages`,
-    regenerate: (id) => `/api/lab-requests/${id}/share/regenerate`,
-    // Public — the lab opens these through the shared link, without an account.
-    shared: (token) => (!token ? null : `/api/lab-requests/shared/${token}`),
-    sharedMessages: (token) => `/api/lab-requests/shared/${token}/messages`,
-    sharedImages: (token) => `/api/lab-requests/shared/${token}/images`,
-  },
-  dentalDiagnoses: {
-    // Clinic-defined diagnoses, added from the tooth dialog's "Add new" button.
-    byUnitService: (unitServiceId) =>
-      !unitServiceId ? null : `/api/dental-diagnoses/unit-service/${unitServiceId}`,
-    create: '/api/dental-diagnoses',
-    remove: (id) => `/api/dental-diagnoses/${id}`,
-  },
-  dentalChart: {
-    one: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}`),
-    updateTooth: (patientId, toothNumber) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}`,
-    clearTooth: (patientId, toothNumber) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/clear`,
-    bulk: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/bulk`),
-    periodontal: (patientId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/periodontal`,
-    addProcedure: (patientId, toothNumber) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure`,
-    updateProcedure: (patientId, toothNumber, procedureId) =>
-      !patientId
-        ? null
-        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
-    deleteProcedure: (patientId, toothNumber, procedureId) =>
-      !patientId
-        ? null
-        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}`,
-    procedurePayment: (patientId, toothNumber, procedureId) =>
-      !patientId
-        ? null
-        : `/api/dental-chart/${patientId}/tooth/${toothNumber}/procedure/${procedureId}/payment`,
-    note: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/note`),
-    deleteNote: (patientId, noteId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/note/${noteId}`,
-    chiefComplaint: (patientId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/chief-complaint`,
-    deleteChiefComplaint: (patientId, complaintId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/chief-complaint/${complaintId}`,
-    xray: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/xray`),
-    deleteXray: (patientId, xrayId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/xray/${xrayId}`,
-    snapshot: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshot`),
-    snapshots: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/snapshots`),
-    restore: (patientId, snapshotId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/restore/${snapshotId}`,
-    chartType: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/chart-type`),
-    export: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/export`),
-    bridge: (patientId) => (!patientId ? null : `/api/dental-chart/${patientId}/bridge`),
-    deleteBridge: (patientId, bridgeId) =>
-      !patientId ? null : `/api/dental-chart/${patientId}/bridge/${bridgeId}`,
   },
   history: {
     all: '/api/history',

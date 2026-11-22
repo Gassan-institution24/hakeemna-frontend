@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Chip, Stack, Button, Tooltip, IconButton } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -81,43 +81,26 @@ export default function FileItem({ one, refetch }) {
     }
   });
 
-  const isDentalChartLog = one.source === 'dental_chart';
-
   return (
     <RecordCard
-      icon={
-        isDentalChartLog ? 'solar:health-bold-duotone' : 'solar:folder-with-files-bold-duotone'
-      }
-      color={isDentalChartLog ? 'info' : 'primary'}
+      icon="solar:folder-with-files-bold-duotone"
+      color="primary"
       title={editting ? t('patient record') : fDate(one.created_at)}
       footer={!editting ? <RecordAttachments files={one.file} fallbackLabel={t('file')} /> : null}
-      badge={
-        isDentalChartLog ? (
-          <Chip
-            label={one.name || t('dental chart log')}
-            size="small"
-            color="info"
-            sx={{ fontWeight: 600, height: 24 }}
-          />
-        ) : null
-      }
       actions={
-        // A dental chart log is written by the chart, not by hand, so it has no
-        // edit affordance at all.
-        // eslint-disable-next-line no-nested-ternary
         editting ? (
           <Tooltip title={t('cancel')}>
             <IconButton onClick={() => setEditting(false)}>
               <Iconify icon="mingcute:close-fill" />
             </IconButton>
           </Tooltip>
-        ) : !isDentalChartLog ? (
+        ) : (
           <Tooltip title={t('edit')}>
             <IconButton onClick={() => setEditting(true)}>
               <Iconify icon="solar:pen-bold" />
             </IconButton>
           </Tooltip>
-        ) : null
+        )
       }
     >
       {editting ? (

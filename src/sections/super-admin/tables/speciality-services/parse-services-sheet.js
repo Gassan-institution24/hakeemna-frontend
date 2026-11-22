@@ -1,10 +1,10 @@
 // Turns a services spreadsheet into { code, name_english, name_arabic } rows.
 //
 // Sheets arrive in whatever shape the clinic made them, e.g.
-//   | D000 | SERVICE                       | SEPCILTY          |
-//   | D001 | Comprehensive oral examination | General Dentistry |
+//   | C000 | SERVICE | SEPCILTY   |
+//   | C001 | ECG     | Cardiology |
 // so columns are found by their header text, with the code column also recognised by its values
-// ("D001"). A sub-speciality column like SEPCILTY is detected and ignored — the speciality is the
+// ("C001"). A sub-speciality column like SEPCILTY is detected and ignored — the speciality is the
 // one picked on the page, not the one written in the sheet.
 
 const SERVICE_HEADER = /service|procedure|treatment|description|الخدم|الإجراء|الاجراء/i;

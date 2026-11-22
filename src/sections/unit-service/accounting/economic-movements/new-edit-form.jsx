@@ -195,7 +195,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       items: currentInvoice?.Provided_services ||
         (entranceInfo?.Service_types?.length > 0 &&
           (() => {
-            // A price recorded during the visit wins over the catalogue's. A dental treatment
+            // A price recorded during the visit wins over the catalogue's. A treatment
             // added at a price the clinician typed used to be re-priced from the catalogue here,
             // so the figure they entered never reached the bill. Built once per pass because the
             // resolver consumes overrides in order.

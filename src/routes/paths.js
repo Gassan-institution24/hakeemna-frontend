@@ -13,16 +13,6 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-  // Product entry points. Both share the same backend and records; see
-  // src/experience/use-experience.js.
-  dental: {
-    root: '/dental',
-    dashboard: '/dental/dashboard',
-  },
-  medicine: {
-    root: '/medicine',
-    dashboard: '/medicine/dashboard',
-  },
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',
@@ -659,10 +649,6 @@ export const paths = {
       salary: `${ROOTS.SUPERADMIN}/us/hr/salary`,
       employeeSalary: (id) => `${ROOTS.SUPERADMIN}/us/hr/salary/${id}`,
       employee: (id) => `${ROOTS.SUPERADMIN}/us/hr/${id}`,
-    },
-    dental: {
-      root: `${ROOTS.SUPERADMIN}/us/dental`,
-      patient: (id) => `${ROOTS.SUPERADMIN}/us/dental/${id}`,
     },
     acl: {
       root: `${ROOTS.SUPERADMIN}/us/acl`,

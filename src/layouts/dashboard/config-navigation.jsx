@@ -12,7 +12,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import useUSTypeGuard from 'src/auth/guard/USType-guard';
 import { useSubscriptionGuard } from 'src/auth/guard/subscription-guard';
-import useExperience, { EXPERIENCE } from 'src/experience/use-experience';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -34,7 +33,6 @@ export function useNavData() {
     [checkAcl, hasFeature]
   );
   const { isMedLab } = useUSTypeGuard();
-  const experience = useExperience();
   const { messages, refetch } = useGetUnreadMsgs(user?._id);
 
   useEffect(() => {
@@ -579,13 +577,6 @@ export function useNavData() {
         ],
       },
       {
-        show: checkAccess('dental_chart:read', 'dental_chart'),
-        title: t('dental chart'),
-        path: paths.unitservice.dental.root,
-        icon: <Iconify icon="mdi:tooth-outline" />,
-        'data-test': 'us-nav-item-dental',
-      },
-      {
         show: checkAccess('hr:read', 'hr'),
         title: t('human resource'),
         path: paths.unitservice.hr.root,
@@ -918,54 +909,6 @@ export function useNavData() {
       },
     ];
 
-    // Dental product: its own group on top, pointing at the same screens with the same
-    // rules as the items below. The full menu stays underneath so nothing goes missing.
-    const dentalItems = [
-      {
-        show: true,
-        title: t('dental dashboard'),
-        path: paths.dental.dashboard,
-        icon: <Iconify icon="mdi:tooth-outline" />,
-        'data-test': 'dental-nav-item-dashboard',
-      },
-      {
-        show:
-          (checkAcl('entrance:appointment') ||
-            checkAcl('entrance:rooms') ||
-            checkAcl('entrance:finished')) &&
-          !isMedLab,
-        title: t('Appointments Today'),
-        path: paths.employee.appointmentsToday,
-        icon: <Iconify icon="material-symbols:work-history-rounded" />,
-        'data-test': 'dental-nav-item-appointmenttoday',
-      },
-      {
-        show: checkAccess('dental_chart:read', 'dental_chart'),
-        title: t('dental chart'),
-        path: paths.unitservice.dental.root,
-        icon: <Iconify icon="mdi:tooth" />,
-        'data-test': 'dental-nav-item-chart',
-      },
-      {
-        show: checkAccess('appointments:read', 'appointments'),
-        title: t('my patients'),
-        path: paths.employee.patients.all,
-        icon: <Iconify icon="streamline:health-care-2-solid" />,
-        'data-test': 'dental-nav-item-patients',
-      },
-      {
-        show: true,
-        title: t('calender'),
-        path: paths.employee.calender,
-        icon: <Iconify icon="simple-line-icons:calender" />,
-        'data-test': 'dental-nav-item-calendar',
-      },
-    ];
-    const dentalDashboard =
-      experience === EXPERIENCE.DENTAL
-        ? [{ subheader: t('dental clinic'), items: dentalItems.filter((item) => item.show) }]
-        : [];
-
     const userItems = [
       {
         subheader: t('dashboard'),
@@ -1172,10 +1115,10 @@ export function useNavData() {
       return superAdminItems2;
     }
     if (user?.role === 'admin' && !isMedLab) {
-      return [...dentalDashboard, ...employeeDashboard, ...unitServicesDashboars];
+      return [...employeeDashboard, ...unitServicesDashboars];
     }
     if (user?.role === 'employee' && !isMedLab) {
-      return [...dentalDashboard, ...employeeDashboard, ...unitServicesDashboars];
+      return [...employeeDashboard, ...unitServicesDashboars];
     }
     if (user?.role === 'employee') {
       return [...unitServicesDashboars];
@@ -1184,6 +1127,6 @@ export function useNavData() {
       return stakeholderItems;
     }
     return [...userItems];
-  }, [t, user, router, checkAcl, checkAccess, employees_number, messages, isMedLab, experience]);
+  }, [t, user, router, checkAcl, checkAccess, employees_number, messages, isMedLab]);
   return data;
 }

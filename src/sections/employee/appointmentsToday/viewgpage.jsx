@@ -314,7 +314,7 @@ export default function ViewPage() {
     const catalogue = new Map(
       (Array.isArray(serviceTypesData) ? serviceTypesData : []).map((s) => [String(s._id), s])
     );
-    // Prefers a price recorded for this visit over the catalogue's — a dental treatment added at
+    // Prefers a price recorded for this visit over the catalogue's — a treatment added at
     // a price the clinician typed is charged at that price, and this view has to agree with the
     // invoice about what it is. Stateful, so it must be built fresh for each pass over the rows.
     const priceFor = createPriceResolver(Entrance?.Service_prices);

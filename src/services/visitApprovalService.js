@@ -13,7 +13,7 @@ import axiosInstance from '../utils/axios';
 //   patientNID: string,          // Patient national ID
 //   memberID: string,            // Insurance member ID
 //   visitType: string,           // "gp" | "specialist" | "consultant"
-//   benefitType: string,         // "outpatient" | "maternity" | "dental"
+//   benefitType: string,         // "outpatient" | "maternity"
 //   idPayer?: string,            // From eligibility response (required for WATANIA)
 //   diagnosisCode?: string,      // Override default diagnosis
 //   extraActivities?: array      // Additional procedures (WATANIA only)

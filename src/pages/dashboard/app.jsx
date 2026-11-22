@@ -7,7 +7,6 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
-import useSpecialityGuard from 'src/auth/guard/speciality-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -17,8 +16,6 @@ import OverviewAppView from 'src/sections/user/profile-home';
 
 export default function OverviewAppPage() {
   const { user } = useAuthContext();
-  // Dentists start in the dental product; everyone else lands where they always did.
-  const { isDentist } = useSpecialityGuard();
   const router = useRouter();
   const loading = useBoolean(true);
 
@@ -32,12 +29,12 @@ export default function OverviewAppPage() {
       router.replace(paths.superadmin.users.root);
     }
     } else if (user.role === 'admin') {
-      router.push(isDentist ? paths.dental.dashboard : paths.employee.calender);
+      router.push(paths.employee.calender);
     } else if (user.role === 'employee') {
-      router.push(isDentist ? paths.dental.dashboard : paths.employee.calender);
+      router.push(paths.employee.calender);
     }
     loading.onFalse();
-  }, [user.role, router, loading, user.superadmin_level, isDentist]);
+  }, [user.role, router, loading, user.superadmin_level]);
   return (
     <>
       <Helmet>

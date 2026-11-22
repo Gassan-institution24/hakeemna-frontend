@@ -311,7 +311,6 @@ export default function VisitApprovalForm({
                   >
                     <MenuItem value="outpatient">Outpatient</MenuItem>
                     <MenuItem value="maternity">Maternity</MenuItem>
-                    <MenuItem value="dental">Dental</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

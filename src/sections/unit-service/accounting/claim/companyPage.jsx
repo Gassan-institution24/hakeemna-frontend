@@ -49,7 +49,6 @@ const VISIT_TYPES = [
 const BENEFIT_TYPES = [
   { value: 'outpatient', label: 'Outpatient' },
   { value: 'maternity', label: 'Maternity' },
-  { value: 'dental', label: 'Dental' },
 ];
 
 const STATUS_COLOR = { approved: 'success', pending: 'warning', rejected: 'error' };
@@ -261,7 +260,7 @@ export default function CompanyPage({ companyId: propCompanyId }) {
         // WATANIA/DELTA authorise against the encounter eligibility already gave them.
         // Islamic / MedNet / Solidarity have none yet — this request is what asks the insurer
         // to open the visit and answer with the e-Form number, and benefitType picks the
-        // mapped diagnosis MedNet/Solidarity require (Outpatient · Maternity · Dental).
+        // mapped diagnosis MedNet/Solidarity require (Outpatient · Maternity).
         encounterId: formNumber,
         visitType,
         benefitType,

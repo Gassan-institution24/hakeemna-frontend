@@ -8,7 +8,6 @@ import { SplashScreen } from 'src/components/loading-screen';
 import { authRoutes } from './auth';
 import { userRoutes } from './user';
 import { mainRoutes } from './main';
-import { experienceRoutes } from './experience';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { stakeholderDashboardRoutes } from './stakeholder-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
@@ -61,9 +60,6 @@ export default function Router() {
 
     // stakeholder dashboard routes
     ...stakeholderDashboardRoutes,
-
-    // Dental / General Medicine entry pages
-    ...experienceRoutes,
 
     // Main routes
     ...mainRoutes,

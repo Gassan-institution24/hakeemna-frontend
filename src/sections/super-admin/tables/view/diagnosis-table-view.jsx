@@ -4,10 +4,7 @@ import { useRef, useState, useCallback } from 'react';
 
 import {
   Box,
-  Tab,
   Card,
-  Chip,
-  Tabs,
   Stack,
   Table,
   Button,
@@ -51,7 +48,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'icd_code', label: 'ICD Code' },
-  { id: 'category', label: 'Category' },
   { id: 'name', label: 'Name' },
   { id: 'description', label: 'Description' },
   { id: 'created_at', label: 'Date' },
@@ -62,14 +58,6 @@ const defaultFilters = {
   name: '',
 };
 
-// Dentists are offered `dental` diagnoses (tooth dialog, dental encounters);
-// every other specialty is offered `general` ones.
-const CATEGORIES = [
-  { value: 'dental', label: 'Dental', color: 'info' },
-  { value: 'general', label: 'General', color: 'default' },
-];
-const categoryOf = (row) => (row?.category === 'dental' ? 'dental' : 'general');
-const categoryLabel = (value) => CATEGORIES.find((c) => c.value === value)?.label || 'General';
 
 // ── Excel import ────────────────────────────────────────────────────────────
 // A header row is recognised by its labels; without one the sheet is read as
@@ -152,13 +140,12 @@ export default function DiagnosisTableView() {
     category: 'general',
     _id: null,
   });
-  const [categoryTab, setCategoryTab] = useState('all'); // 'all' | 'dental' | 'general'
   const editRow = (row) => {
     setForm({
       name: row.name,
       description: row.description,
       icd_code: row.icd_code,
-      category: categoryOf(row),
+      category: 'general',
       _id: row._id,
     });
     setOpenDialog(true);
@@ -185,10 +172,7 @@ export default function DiagnosisTableView() {
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
-  })?.filter((row) => categoryTab === 'all' || categoryOf(row) === categoryTab);
-
-  const countOf = (value) =>
-    (diagnosisData || []).filter((row) => value === 'all' || categoryOf(row) === value).length;
+  });
   const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
@@ -239,7 +223,7 @@ export default function DiagnosisTableView() {
         }
         setImportPreview({
           fileName: file.name,
-          category: categoryTab === 'all' ? 'general' : categoryTab,
+          category: 'general',
           ...result,
         });
       } catch (err) {
@@ -261,7 +245,7 @@ export default function DiagnosisTableView() {
         ? ` · ${data.skipped_duplicates} already existed`
         : '';
       enqueueSnackbar(
-        `Imported ${data.inserted} ${categoryLabel(importPreview.category).toLowerCase()} diagnoses${already}`,
+        `Imported ${data.inserted} diagnoses${already}`,
         { variant: 'success' }
       );
       setImportPreview(null);
@@ -278,17 +262,13 @@ export default function DiagnosisTableView() {
       (dataFiltered || []).map((row) => ({
         Code: row.code,
         'ICD Code': row.icd_code || '',
-        Category: categoryLabel(categoryOf(row)),
         Name: row.name,
         Description: row.description || '',
       }))
     );
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, sheet, 'Diagnoses');
-    XLSX.writeFile(
-      workbook,
-      categoryTab === 'all' ? 'diagnoses.xlsx' : `diagnoses-${categoryTab}.xlsx`
-    );
+    XLSX.writeFile(workbook, 'diagnoses.xlsx');
   };
 
   const handleSubmit = async () => {
@@ -356,7 +336,7 @@ export default function DiagnosisTableView() {
                   name: '',
                   description: '',
                   icd_code: '',
-                  category: categoryTab === 'all' ? 'general' : categoryTab,
+                  category: 'general',
                   _id: null,
                 });
                 setOpenDialog(true);
@@ -373,25 +353,6 @@ export default function DiagnosisTableView() {
         />
 
         <Card>
-          <Tabs
-            value={categoryTab}
-            onChange={(_e, value) => {
-              setCategoryTab(value);
-              table.onResetPage();
-            }}
-            sx={{ px: 2.5, boxShadow: (theme) => `inset 0 -2px 0 0 ${theme.palette.divider}` }}
-          >
-            {[{ value: 'all', label: 'All' }, ...CATEGORIES].map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                iconPosition="end"
-                label={tab.label}
-                icon={<Chip size="small" label={countOf(tab.value)} />}
-              />
-            ))}
-          </Tabs>
-
           <TableDetailToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -429,10 +390,6 @@ export default function DiagnosisTableView() {
                       {
                         label: 'ICD Code',
                         value: row?.icd_code,
-                      },
-                      {
-                        label: 'Category',
-                        value: categoryLabel(categoryOf(row)),
                       },
                       {
                         label: 'name',
@@ -491,14 +448,6 @@ export default function DiagnosisTableView() {
                             <Box>{row.code}</Box>
                           </TableCell>
                           <TableCell align="center">{row.icd_code}</TableCell>
-                          <TableCell align="center">
-                            <Chip
-                              size="small"
-                              variant="soft"
-                              color={categoryOf(row) === 'dental' ? 'info' : 'default'}
-                              label={categoryLabel(categoryOf(row))}
-                            />
-                          </TableCell>
                           <TableCell align="center">{row.name}</TableCell>
                           <TableCell align="center">{row.description}</TableCell>
                           <TableCell align="center">
@@ -586,22 +535,6 @@ export default function DiagnosisTableView() {
             sx={{ mb: 2 }}
           />
 
-          <TextField
-            select
-            label="Category"
-            fullWidth
-            value={form.category || 'general'}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            helperText="Dental: shown to dentists only · General: shown to all other specialties"
-            sx={{ mb: 3 }}
-          >
-            {CATEGORIES.map((c) => (
-              <MenuItem key={c.value} value={c.value}>
-                {c.label}
-              </MenuItem>
-            ))}
-          </TextField>
-
           <Button fullWidth variant="contained" onClick={handleSubmit}>
             Save
           </Button>
@@ -623,24 +556,8 @@ export default function DiagnosisTableView() {
               {importPreview.fileName} — {importPreview.rows.length} diagnoses ready
               {importPreview.repeated ? ` · ${importPreview.repeated} repeated rows ignored` : ''}
               {importPreview.skipped ? ` · ${importPreview.skipped} rows without a code ignored` : ''}.
-              Codes already in this category are skipped.
+              Codes already in the table are skipped.
             </Typography>
-
-            <TextField
-              select
-              size="small"
-              label="Import as"
-              value={importPreview.category}
-              onChange={(e) => setImportPreview({ ...importPreview, category: e.target.value })}
-              helperText="Dental: shown to dentists only · General: shown to all other specialties"
-              sx={{ mb: 2, minWidth: 260 }}
-            >
-              {CATEGORIES.map((c) => (
-                <MenuItem key={c.value} value={c.value}>
-                  {c.label}
-                </MenuItem>
-              ))}
-            </TextField>
 
             <TableContainer sx={{ maxHeight: 360, mb: 2 }}>
               <Table size="small" stickyHeader>
@@ -668,7 +585,7 @@ export default function DiagnosisTableView() {
               <Button variant="contained" onClick={handleImport} disabled={importing}>
                 {importing
                   ? 'Importing…'
-                  : `Import ${importPreview.rows.length} as ${categoryLabel(importPreview.category)}`}
+                  : `Import ${importPreview.rows.length}`}
               </Button>
             </Stack>
           </Box>
