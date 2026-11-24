@@ -137,7 +137,7 @@ export default function NewEditManyForm() {
           <Box sx={{ px: 5, pb: 2 }}>
             <Upload
               name="excel"
-              accept=".xlsx, .xls"
+              accept=".xlsx,.xlsm,.xlsb,.xls,.ods"
               label="upload excel"
               onDrop={(info) => handleDrop(info)}
             />

@@ -141,7 +141,7 @@ export default function CitiesNewEditForm() {
           >
             <Upload
               name="excel"
-              accept=".xlsx, .xls"
+              accept=".xlsx,.xlsm,.xlsb,.xls,.ods"
               label="upload excel"
               onDrop={(data) => handleDrop(data)}
             />

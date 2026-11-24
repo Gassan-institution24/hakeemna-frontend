@@ -471,7 +471,7 @@ function ImportDialog({ speciality, existingCodes, onClose, onImported }) {
               <input
                 hidden
                 type="file"
-                accept=".xlsx,.xls,.csv"
+                accept=".xlsx,.xlsm,.xlsb,.xls,.ods,.csv"
                 onChange={(e) => {
                   handleFile(e.target.files?.[0]);
                   e.target.value = '';

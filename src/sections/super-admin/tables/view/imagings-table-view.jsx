@@ -216,7 +216,7 @@ export default function ImagingsTableView() {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".xlsx,.xls,.csv"
+              accept=".xlsx,.xlsm,.xlsb,.xls,.ods,.csv"
               hidden
               onChange={handleFileChange}
             />
