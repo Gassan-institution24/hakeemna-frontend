@@ -508,6 +508,7 @@ const ProductCatEditPage = lazy(
 );
 
 // BLOGS
+const GassanOnlyPage = lazy(() => import('src/pages/super-admin/gassan-only'));
 const BlogsPage = lazy(() => import('src/pages/super-admin/blogs/table'));
 const BlogsNewPage = lazy(() => import('src/pages/super-admin/blogs/new'));
 const BlogsEditPage = lazy(() => import('src/pages/super-admin/blogs/edit'));
@@ -874,6 +875,14 @@ export const dashboardRoutes = [
             children: [{ path: ':inid/info', element: <PatientPaymentInfoPage /> }],
           },
         ],
+      },
+      {
+        path: 'gassan-only',
+        element: (
+          <SuperAdminDenyGuard permission="gassan_only">
+            <GassanOnlyPage />
+          </SuperAdminDenyGuard>
+        ),
       },
       {
         path: 'super-admin-permissions',

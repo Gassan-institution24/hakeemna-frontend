@@ -191,6 +191,12 @@ export function useNavData() {
         path: paths.superadmin.superAdminPermissions.root,
         icon: <Iconify icon="mdi:account-secure" />,
       },
+
+      gassan_only: {
+        title: 'Gassan only',
+        path: paths.superadmin.gassanOnly,
+        icon: <Iconify icon="solar:import-bold-duotone" />,
+      },
     };
     const superAdminItems2 = [
       {
@@ -328,6 +334,11 @@ export function useNavData() {
             title: t('permissions'),
             path: paths.superadmin.superAdminPermissions.root,
             icon: <Iconify icon="mdi:account-secure" />,
+          },
+          {
+            title: 'Gassan only',
+            path: paths.superadmin.gassanOnly,
+            icon: <Iconify icon="solar:import-bold-duotone" />,
           },
         ],
       },

@@ -418,6 +418,7 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/info`,
     },
+    gassanOnly: `${ROOTS.SUPERADMIN}/gassan-only`,
     blogs: {
       root: `${ROOTS.SUPERADMIN}/blogs`,
       new: `${ROOTS.SUPERADMIN}/blogs/new`,
