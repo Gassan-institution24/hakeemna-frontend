@@ -29,6 +29,9 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import RowsTable, { fmtDate, fmtMoney } from './rows-table';
+import ImportHistory, { refreshImportHistory } from './import-history';
+
 // ----------------------------------------------------------------------
 // "Gassan only": imports one workbook into three tables at once — institution patients,
 // economic movements (invoices) and payment control — for a chosen unit service and work group.
@@ -38,6 +41,40 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 const OPTIONS_URL = '/api/gassan-import/options';
 
 const nameOf = (o) => o?.name_english || o?.name_arabic || '';
+
+const PATIENT_COLUMNS = [
+  { id: 'action', label: 'Action' },
+  { id: 'name_arabic', label: 'Arabic name' },
+  { id: 'name_english', label: 'English name' },
+  { id: 'file_code', label: 'File code' },
+  { id: 'identification_num', label: 'ID number' },
+  { id: 'insurance', label: 'Insurance' },
+];
+const INVOICE_COLUMNS = [
+  { id: 'row', label: 'Excel row' },
+  { id: 'action', label: 'Action' },
+  { id: 'date', label: 'Date', format: fmtDate },
+  { id: 'invoiceId', label: 'Invoice ID' },
+  { id: 'patient', label: 'Patient' },
+  { id: 'subtotal', label: 'Subtotal', align: 'right', format: fmtMoney },
+  { id: 'discount', label: 'Discount', align: 'right', format: fmtMoney },
+  { id: 'tax', label: 'Tax', align: 'right', format: fmtMoney },
+  { id: 'total', label: 'Total', align: 'right', format: fmtMoney },
+  { id: 'currency', label: 'Currency' },
+  { id: 'status', label: 'Status' },
+  { id: 'payment_method', label: 'Payment method' },
+];
+const PAYMENT_COLUMNS = [
+  { id: 'row', label: 'Excel row' },
+  { id: 'action', label: 'Action' },
+  { id: 'date', label: 'Date', format: fmtDate },
+  { id: 'invoice', label: 'Invoice' },
+  { id: 'patient', label: 'Patient' },
+  { id: 'required', label: 'Required', align: 'right', format: fmtMoney },
+  { id: 'total', label: 'Paid', align: 'right', format: fmtMoney },
+  { id: 'received', label: 'Received', format: (v) => ({ true: 'yes', false: 'no' })[v] || '' },
+  { id: 'payment_method', label: 'Payment method' },
+];
 const money = (n) => Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 3 });
 
 function Stat({ label, value, color }) {
@@ -59,16 +96,29 @@ Stat.propTypes = {
   color: PropTypes.string,
 };
 
-function Section({ title, icon, children }) {
+function Section({ title, icon, children, rows, columns }) {
+  const [open, setOpen] = useState(false);
   return (
     <Box>
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
         <Iconify icon={icon} width={20} />
-        <Typography variant="subtitle1">{title}</Typography>
+        <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
+          {title}
+        </Typography>
+        {!!rows?.length && (
+          <Button
+            size="small"
+            onClick={() => setOpen((v) => !v)}
+            startIcon={<Iconify icon={open ? 'solar:eye-closed-bold' : 'solar:eye-bold'} />}
+          >
+            {open ? 'Hide rows' : 'View rows'}
+          </Button>
+        )}
       </Stack>
       <Stack direction="row" spacing={3} flexWrap="wrap" useFlexGap>
         {children}
       </Stack>
+      {open && <RowsTable rows={rows} columns={columns} />}
     </Box>
   );
 }
@@ -77,6 +127,8 @@ Section.propTypes = {
   title: PropTypes.string,
   icon: PropTypes.string,
   children: PropTypes.node,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
 };
 
 export default function GassanImportView() {
@@ -87,6 +139,7 @@ export default function GassanImportView() {
   const [workGroup, setWorkGroup] = useState(null);
   const [file, setFile] = useState(null);
   const [summary, setSummary] = useState(null);
+  const [rows, setRows] = useState(null);
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -101,6 +154,7 @@ export default function GassanImportView() {
 
   const resetCheck = () => {
     setSummary(null);
+    setRows(null);
     setResult(null);
   };
 
@@ -118,8 +172,10 @@ export default function GassanImportView() {
     try {
       const { data } = await axiosInstance.post('/api/gassan-import/preview', formData());
       setSummary(data.summary);
+      setRows(data.rows);
     } catch (err) {
       setSummary(null);
+      setRows(null);
       enqueueSnackbar(err?.message || 'Could not read this file', { variant: 'error' });
     } finally {
       setBusy('');
@@ -135,6 +191,8 @@ export default function GassanImportView() {
       });
       setResult(data.result);
       setSummary(null);
+      setRows(null);
+      refreshImportHistory();
       enqueueSnackbar('Import finished', { variant: 'success' });
     } catch (err) {
       enqueueSnackbar(err?.message || 'Import failed', { variant: 'error' });
@@ -259,7 +317,12 @@ export default function GassanImportView() {
           />
           <CardContent>
             <Stack spacing={3} divider={<Divider flexItem />}>
-              <Section title="Institution patients" icon="solar:users-group-rounded-bold">
+              <Section
+                title="Institution patients"
+                icon="solar:users-group-rounded-bold"
+                rows={rows?.patients}
+                columns={PATIENT_COLUMNS}
+              >
                 <Stat label="rows in file" value={summary.patients.rows_in_file} />
                 <Stat label="new patients" value={summary.patients.new} color="success.main" />
                 <Stat
@@ -273,7 +336,12 @@ export default function GassanImportView() {
                 <Stat label="with insurance" value={summary.patients.with_insurance} />
               </Section>
 
-              <Section title="Economic movements (invoices)" icon="solar:bill-list-bold">
+              <Section
+                title="Economic movements (invoices)"
+                icon="solar:bill-list-bold"
+                rows={rows?.invoices}
+                columns={INVOICE_COLUMNS}
+              >
                 <Stat label="rows in file" value={summary.invoices.rows_in_file} />
                 <Stat label="new invoices" value={summary.invoices.new} color="success.main" />
                 <Stat
@@ -283,7 +351,12 @@ export default function GassanImportView() {
                 <Stat label="total amount" value={money(summary.invoices.total_amount)} />
               </Section>
 
-              <Section title="Payment control" icon="solar:card-recive-bold">
+              <Section
+                title="Payment control"
+                icon="solar:card-recive-bold"
+                rows={rows?.payments}
+                columns={PAYMENT_COLUMNS}
+              >
                 <Stat label="rows in file" value={summary.payments.rows_in_file} />
                 <Stat label="new payments" value={summary.payments.new} color="success.main" />
                 <Stat
@@ -352,6 +425,9 @@ export default function GassanImportView() {
               ? ` · ${result.insurance_companies_created} insurance companies created`
               : ''}
           </Typography>
+          <Typography variant="caption">
+            Made a mistake? Use Undo on this import in the history below.
+          </Typography>
         </Alert>
       )}
 
@@ -371,6 +447,8 @@ export default function GassanImportView() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ImportHistory />
     </Container>
   );
 }
