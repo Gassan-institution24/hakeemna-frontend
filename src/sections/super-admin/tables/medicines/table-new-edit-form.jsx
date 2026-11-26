@@ -25,6 +25,24 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 
 // ----------------------------------------------------------------------
 
+// Jordan / Rational drug-list fields (free text), also filled by the Excel import.
+const EXTRA_FIELDS = [
+  'Jordan_Sequence',
+  'Specialty_Status',
+  'Medical_Specialty_EN',
+  'Medical_Specialty_AR',
+  'Rational_Drug_Class',
+  'Rational_Item_Code',
+  'Rational_Generic_Name',
+  'Rational_Dosage_Form',
+  'Rational_Unit',
+  'Package',
+  'Category_1',
+  'Category_2',
+  'Category_3',
+  'Category_4',
+];
+
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
@@ -72,6 +90,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       barcode: currentSelected?.barcode || '',
       side_effects: currentSelected?.side_effects?.map((disease, idx) => disease?._id) || [],
       family: currentSelected?.family?._id || '',
+      ...Object.fromEntries(EXTRA_FIELDS.map((f) => [f, currentSelected?.[f] || ''])),
     }),
     [currentSelected]
   );
@@ -133,6 +152,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
               <RHFTextField name="ATCCODE" label="ATCCODE" />
               <RHFTextField name="packaging" label="packaging" />
               <RHFTextField name="barcode" label="barcode" />
+              {EXTRA_FIELDS.map((f) => (
+                <RHFTextField key={f} name={f} label={f.replace(/_/g, ' ')} />
+              ))}
             </Box>
             <Box
               sx={{ my: 3 }}

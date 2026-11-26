@@ -10,7 +10,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetSpecialties, useGetPatientFeedbacks } from 'src/api';
 
-import Image from 'src/components/image/image';
+import Iconify from 'src/components/iconify';
 
 import RatingRoomDialog from './rating-dialog';
 
@@ -27,6 +27,9 @@ export default function Specialities() {
   };
 
   const [filterforspecialties, setFilterforspecialties] = useState();
+  // Specialities whose picture failed to load (e.g. a file lost from the server) show an icon
+  // instead of a broken image.
+  const [brokenImages, setBrokenImages] = useState({});
 
   const dataFiltered = applyFilter({
     inputData: specialtiesData,
@@ -107,9 +110,22 @@ export default function Specialities() {
             variant="outlined"
             onClick={() => handleViewRow(data?._id)}
           >
-            {/* {data?.specialitiesimge && ( */}
-            <Image src={data?.speciality_image} sx={{ width: 70, height: 70, mb: 2 }} />
-            {/* // )} */}
+            {data?.speciality_image && !brokenImages[data?._id] ? (
+              <Box
+                component="img"
+                src={data.speciality_image}
+                alt={data?.name_english || ''}
+                loading="lazy"
+                onError={() => setBrokenImages((prev) => ({ ...prev, [data?._id]: true }))}
+                sx={{ width: 70, height: 70, mb: 2, mx: 'auto', display: 'block', objectFit: 'contain' }}
+              />
+            ) : (
+              <Iconify
+                icon="healthicons:doctor-male"
+                width={70}
+                sx={{ mb: 2, mx: 'auto', display: 'block', color: 'primary.main' }}
+              />
+            )}
             <Typography sx={{ fontWeight: 600 }}>
               {curLangAr ? data?.name_arabic : data?.name_english}
             </Typography>

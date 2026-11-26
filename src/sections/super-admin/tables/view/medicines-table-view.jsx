@@ -50,6 +50,7 @@ import CustomPopover from 'src/components/custom-popover';
 import TableDetailRow from '../medicines/table-details-row'; /// edit
 import MobileRow from '../../mobile-row';
 import TableDetailToolbar from '../table-details-toolbar';
+import MedicinesImport from '../medicines/medicines-import';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
@@ -244,14 +245,17 @@ export default function MedicinesTableView() {
             { name: 'Medicines' }, /// edit
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.tables.medicines.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Medicine
-            </Button> /// edit
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <MedicinesImport onImported={refetch} />
+              <Button
+                component={RouterLink}
+                href={paths.superadmin.tables.medicines.new} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Medicine
+              </Button>
+            </Box>
           }
           sx={{
             mb: { xs: 3, md: 5 },
