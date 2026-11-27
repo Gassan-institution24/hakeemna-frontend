@@ -16,6 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { fDate } from 'src/utils/format-time';
+import { medicineLabel } from 'src/utils/medicine-label';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -208,7 +209,7 @@ export default function Medication() {
                     { label: t('name arabic'), value: row.favorite_name_ar },
                     {
                       label: t('medicines'),
-                      value: row.medicines?.map((i) => i?.medicine?.trade_name).join(', '),
+                      value: row.medicines?.map((i) => medicineLabel(i?.medicine)).join(', '),
                     },
                   ]}
                   actions={[

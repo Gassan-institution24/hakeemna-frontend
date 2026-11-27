@@ -2358,5 +2358,12 @@
   "Create your own questionnaires or switch on ready-made ones. Every questionnaire that is on appears in each patient file, pre-filled from the patient record.": "أنشئ استبياناتك الخاصة أو فعّل الجاهزة منها. كل استبيان مفعّل يظهر في ملف كل مريض معبأً مسبقاً من سجله.",
   "Create your own questionnaire, or check back for ready-made forms per speciality.": "أنشئ استبيانك الخاص، أو تحقق لاحقاً من النماذج الجاهزة لكل تخصص.",
   "Welcome": "مرحباً",
-  "Billing and insurance claims": "الفوترة ومطالبات التأمين"
+  "Billing and insurance claims": "الفوترة ومطالبات التأمين",
+  "speciality medicines": "أدوية التخصص",
+  "the lists below show only this speciality": "القوائم أدناه تعرض أدوية هذا التخصص فقط",
+  "choose a speciality to pick from its medicines": "اختر تخصصاً لاختيار الأدوية منه",
+  "add all": "إضافة الكل",
+  "medicines in this favorite": "دواء في هذه المفضلة",
+  "no medicines found for this speciality": "لا توجد أدوية لهذا التخصص",
+  "frequency must be a number": "يجب أن يكون التكرار رقماً"
 }

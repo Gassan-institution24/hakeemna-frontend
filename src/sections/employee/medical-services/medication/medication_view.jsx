@@ -5,6 +5,7 @@ import { Box, Card, Stack, Button, Typography } from '@mui/material';
 import { paths } from 'src/routes/paths';
 
 import { fDate } from 'src/utils/format-time';
+import { medicineLabel } from 'src/utils/medicine-label';
 
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetOneFavoriteMedication } from 'src/api/doctor_favorite';
@@ -61,7 +62,7 @@ export default function MedicationViewPage() {
                         }}
                       >
                         <Typography variant="subtitle1" fontWeight={600}>
-                          {item.medicine.trade_name}
+                          {medicineLabel(item.medicine)}
                         </Typography>
 
                         <Typography variant="body2" color="text.secondary">

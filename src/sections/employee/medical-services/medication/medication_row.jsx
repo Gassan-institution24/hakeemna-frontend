@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
 import { fDate } from 'src/utils/format-time';
+import { medicineLabel } from 'src/utils/medicine-label';
 
 import { useTranslate } from 'src/locales';
 
@@ -71,7 +72,7 @@ export default function MedicationTableRow({ row, onEditRow, onViewRow }) {
       </TableCell>
       <TableCell align="center">
         {medicines
-          ?.map((i) => i?.medicine?.trade_name)
+          ?.map((i) => medicineLabel(i?.medicine))
           .filter(Boolean)
           .join(', ')}
       </TableCell>
