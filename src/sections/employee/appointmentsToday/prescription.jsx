@@ -27,6 +27,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { medicineLabel, MEDICINE_LABEL_SELECT } from 'src/utils/medicine-label';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -43,7 +44,7 @@ export default function Prescription({ Entrance }) {
   const prescriptionDialog = useBoolean();
 
   const { medicinesData } = useGetMedicines({
-    select: 'trade_name concentration scientific_name',
+    select: `${MEDICINE_LABEL_SELECT} scientific_name`,
     rowsPerPage: 5000,
   });
 
@@ -356,7 +357,7 @@ export default function Prescription({ Entrance }) {
           <Box sx={{ flex: 1 }}>
             {info?.medicines?.map((medicineName, index) => (
               <Typography key={index} variant="body2" color="text.secondary">
-                {medicineName?.medicines?.trade_name}
+                {medicineLabel(medicineName?.medicines)}
               </Typography>
             ))}
           </Box>
@@ -482,9 +483,7 @@ export default function Prescription({ Entrance }) {
                     setValue(`prescriptions[${index}].medicines`, newValue)
                   }
                   isOptionEqualToValue={(option, value) => option?._id === value?._id}
-                  getOptionLabel={(option) =>
-                    option?.trade_name ? `${option.trade_name} ${option.concentration || ''}`.trim() : ''
-                  }
+                  getOptionLabel={(option) => medicineLabel(option)}
                   filterOptions={(options, { inputValue }) => {
                     const q = inputValue.toLowerCase();
                     if (!q) return options;

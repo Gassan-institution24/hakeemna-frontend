@@ -90,6 +90,7 @@ export default function TablesListView() {
       { tableName: 'added_value_tax_GD', documents: [] },
       // { tableName: 'departments', documents: [] }, //
       { tableName: 'medicines', documents: [] }, //
+      { tableName: 'speciality_medicines', documents: [] },
       // { tableName: 'unit_services', documents: [] }, //
       { tableName: 'appointment_types', documents: [] }, //
       { tableName: 'free_subscriptions', documents: [] }, //

@@ -24,6 +24,7 @@ import { useParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance from 'src/utils/axios';
+import { medicineLabel } from 'src/utils/medicine-label';
 import { fDateTime, fDateAndTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -232,7 +233,7 @@ export default function PrescriptionPage() {
             >
               {/* Medicine Name */}
               <Typography variant="h6" fontWeight={700} mb={2}>
-                {item?.medicines?.trade_name}
+                {medicineLabel(item?.medicines)}
               </Typography>
 
               {/* Frequency */}
@@ -318,7 +319,7 @@ export default function PrescriptionPage() {
             >
               {medicinesData?.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.trade_name}
+                  {medicineLabel(test)}
                 </MenuItem>
               ))}
             </RHFSelect>

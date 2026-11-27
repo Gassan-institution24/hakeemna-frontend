@@ -63,6 +63,9 @@ const MedFamilyEditPage = lazy(
 );
 // MEDICINES
 const MedicinesTablePage = lazy(() => import('src/pages/super-admin/tables/medicines/table'));
+const SpecialityMedicinesPage = lazy(
+  () => import('src/pages/super-admin/tables/speciality-medicines/table')
+);
 const MedicineCreatePage = lazy(() => import('src/pages/super-admin/tables/medicines/new'));
 const MedicineEditPage = lazy(() => import('src/pages/super-admin/tables/medicines/edit'));
 // SYMPTOMS
@@ -1074,6 +1077,7 @@ export const dashboardRoutes = [
               { path: ':id/edit', element: <MedCatEditPage2 /> },
             ],
           },
+          { path: 'speciality_medicines', element: <SpecialityMedicinesPage /> },
           {
             path: 'medicines',
             children: [

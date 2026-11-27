@@ -41,6 +41,8 @@ const EXTRA_FIELDS = [
   'Category_2',
   'Category_3',
   'Category_4',
+  'Concentration_source',
+  'pakage_for_unit',
 ];
 
 export default function CountriesNewEditForm({ currentSelected }) {

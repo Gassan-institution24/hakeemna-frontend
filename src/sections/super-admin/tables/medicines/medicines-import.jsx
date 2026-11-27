@@ -51,6 +51,8 @@ export const MEDICINE_TEMPLATE_FIELDS = [
   'Category_2',
   'Category_3',
   'Category_4',
+  'Concentration_source',
+  'pakage_for_unit',
   'public_price_with_tax',
   'hospital_price_with_tax',
   'public_price',
